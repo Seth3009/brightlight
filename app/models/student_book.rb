@@ -27,6 +27,7 @@ class StudentBook < ActiveRecord::Base
   accepts_nested_attributes_for :book_loan
 
   scope :current_year, lambda { where(academic_year:AcademicYear.current) }
+
   scope :standard_books, lambda { |grade_level_id, grade_section_id, year_id, category_id|
     if [11,12].include? grade_level_id
       joins("JOIN standard_books ON student_books.book_edition_id = standard_books.book_edition_id
@@ -39,6 +40,9 @@ class StudentBook < ActiveRecord::Base
       AND standard_books.book_category_id = #{category_id}
       AND standard_books.academic_year_id = #{year_id}")
     end
+    .joins('LEFT JOIN book_editions ON student_books.book_edition_id = book_editions.id')
+    .where(academic_year_id:year_id)
+    .select('student_books.*, book_editions.title as title')
   }
 
   # Fine is applied if end condition is 2 steps worser than the initial condition, of if the book is missing
@@ -56,42 +60,46 @@ class StudentBook < ActiveRecord::Base
   # Create student book records for a specific student and year, from Book Receipt
   def self.initialize_from_book_receipts(gss:, year:)
     student = gss.student
-    grade_section = student.grade_section_with_academic_year_id(year.id)
-    roster_no = student.roster_no_with_academic_year_id(year.id)
-    if BookReceipt.where(grade_section:grade_section, roster_no:roster_no, academic_year:year).count > 0
-      # Create StudentBook record
-      StudentBook.create(
-        BookReceipt.where(grade_section:grade_section, roster_no:roster_no, academic_year:year).map { |receipt|
-          receipt.attributes
-          .except('id', 'created_at', 'updated_at', 'notes', 'roster_no', 'active', 'initial_condition_id', 'return_condition_id')
-          .merge('roster_no' => receipt.roster_no.to_s, 'student_id' => student.id, 'issue_date' => receipt.created_at,
-                  'deleted_flag' => false, 'student_no' => student.student_no,
-                  'initial_copy_condition_id' => receipt.initial_condition_id)
-        } 
-      ) do |sb|
-        book_title_id = sb.book_edition.try(:book_title_id)
-        book_title = BookTitle.find book_title_id
-        standard_book = StandardBook.where(book_title_id: book_title_id, academic_year_id:sb.academic_year_id).take
-        book_category = standard_book.try(:book_category_id)
+    if student.present?
+      grade_section = student.grade_section_with_academic_year_id(year.id)
+      roster_no = student.roster_no_with_academic_year_id(year.id)
+      if BookReceipt.where(grade_section:grade_section, roster_no:roster_no, academic_year:year).count > 0
+        # Create StudentBook record
+        StudentBook.create(
+          BookReceipt.where(grade_section:grade_section, roster_no:roster_no, academic_year:year).map { |receipt|
+            receipt.attributes
+            .except('id', 'created_at', 'updated_at', 'notes', 'roster_no', 'active', 'initial_condition_id', 'return_condition_id')
+            .merge('roster_no' => receipt.roster_no.to_s, 'student_id' => student.id, 'issue_date' => receipt.created_at,
+                    'deleted_flag' => false, 'student_no' => student.student_no,
+                    'initial_copy_condition_id' => receipt.initial_condition_id)
+          } 
+        ) do |sb|
+          book_title_id = sb.book_edition.try(:book_title_id)
+          book_title = BookTitle.find book_title_id
+          standard_book = StandardBook.where(book_title_id: book_title_id, academic_year_id:sb.academic_year_id).take
+          book_category = standard_book.try(:book_category_id)
 
-        # Create BookLoan record
-        BookLoan.create({
-          academic_year_id: sb.academic_year_id,
-          barcode:          sb.barcode,
-          book_edition_id:  sb.book_edition_id,
-          book_title_id:    book_title_id,
-          book_category_id: book_category,
-          bkudid:           book_title.try(:bkudid),
-          book_copy_id:     sb.book_copy_id,
-          out_date:         sb.issue_date,
-          loan_status:      'B',
-          refno:            sb.book_edition.try(:refno),
-          roster_no:        sb.roster_no,
-          student_id:       sb.student_id,
-          student_no:       sb.student_no,
-          deleted_flag:     false
-        })
+          # Create BookLoan record
+          BookLoan.create({
+            academic_year_id: sb.academic_year_id,
+            barcode:          sb.barcode,
+            book_edition_id:  sb.book_edition_id,
+            book_title_id:    book_title_id,
+            book_category_id: book_category,
+            bkudid:           book_title.try(:bkudid),
+            book_copy_id:     sb.book_copy_id,
+            out_date:         sb.issue_date,
+            loan_status:      'B',
+            refno:            sb.book_edition.try(:refno),
+            roster_no:        sb.roster_no,
+            student_id:       sb.student_id,
+            student_no:       sb.student_no,
+            deleted_flag:     false
+          })
+        end
       end
+    else
+      logger.error "Preparing StudentBook. Student not found for #{gss.grade_section.name} no. #{gss.order_no} #{gss.student_id}"
     end
   end
 

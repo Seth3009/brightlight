@@ -57,8 +57,8 @@ class BookCopy < ActiveRecord::Base
     end
   }
 
-  scope :with_active_loans, lambda {
-    joins('left join book_loans l on l.book_copy_id = book_copies.id and l.return_status is null')
+  scope :with_active_loans, lambda { |year|
+    joins("left join book_loans l on l.book_copy_id = book_copies.id and l.return_status is null and l.academic_year_id = #{year}")
     .joins('left join employees e on e.id = l.employee_id')
     .joins('left join students s on s.id = l.student_id')
     .select('e.name as teacher_name, e.id as teacher_id, s.name as student_name, s.id as student_id')
@@ -104,7 +104,8 @@ class BookCopy < ActiveRecord::Base
   end
 
   def start_condition_in_year(academic_year_id)
-    copy_conditions.where(academic_year_id:academic_year_id).where(post:0).order('created_at DESC').first.try(:book_condition)
+    copy_conditions.where(academic_year_id:academic_year_id).where(post:0).order(created_at: :desc)
+      .first.try(:book_condition)
   end
 
   def return_condition_in_year(academic_year_id)
