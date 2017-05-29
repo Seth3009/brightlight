@@ -32,8 +32,8 @@ class Carpool < ActiveRecord::Base
     where('carpools.updated_at > ?', Time.at((time.to_i/1000).to_i))
     .order('carpools.created_at')
   }
-  scope :private_cars, lambda { where(category:'PrivateCar') }
-  scope :shuttle_cars, lambda { where(category:'Shuttle') }
+  scope :private_cars, lambda { where(category:'private') }
+  scope :shuttle_cars, lambda { where(category:'shuttle') }
   scope :active, lambda { where.not(status:'done') }
   scope :inactive, lambda { where(status:'done') }
   scope :today_am, lambda { where('created_at > ? and created_at < ?', Date.today.beginning_of_day, Date.today.noon) }
@@ -58,7 +58,7 @@ class Carpool < ActiveRecord::Base
       if barcode.present?
         transport = SmartCard.find_by_code(barcode).try(:transport)
       elsif transport_name.present?
-        transport = Transport.find_by_name transport_name.upcase
+        transport = Transport.find_by_name transport_name.upcase        
       end 
       unless transport.present?
         return false

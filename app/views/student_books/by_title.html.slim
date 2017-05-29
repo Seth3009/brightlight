@@ -11,10 +11,10 @@ ul#section-options.dropdown-content
     li
       = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterTitleOptions(#{section.grade_level_id}, #{section.id}, '#{section.name}', #{@year_id});"
 ul#title-options.dropdown-content
-  - if @standard_books.present?
-    li = link_to 'All', by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id)
-    - @standard_books.each do |standard_book|
-      li = link_to standard_book.book_title.title, by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id, t:standard_book.book_title_id)
+  /- if @standard_books.present?
+  /li = link_to 'All', by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id)
+  - @standard_books.each do |standard_book|
+    li = link_to standard_book.title, by_title_student_books_path(year:@year_id, s:@grade_section.id, g:@grade_level.id, t:standard_book.book_title_id)
 
 ul#year-options.dropdown-content
   li  
@@ -36,7 +36,7 @@ javascript:
   }
   function filterTitleOptions(grade_level_id, grade_section_id, section_name, year) {
     $("#section").html(section_name);
-    $.getJSON("/standard_books.json?grade_level_id="+grade_level_id+"&section="+grade_section_id+"&category="+"TB"+"&year="+year, null, function (data) {
+    $.getJSON("/standard_books.json?grade_level_id="+grade_level_id+"&category="+"TB"+"&year="+year, null, function (data) {
       var list = "<li><a href='/student_books/by_title?s="+grade_section_id+"&g="+grade_level_id+"&year="+year+"'>All</a></li>";
       $.each(data, function(i,item){
           list += "<li><a href='/student_books/by_title?s="+grade_section_id+"&g="+item.grade_level_id+"&t="+item.id+"&year="+year+"'>"+item.title+"</a></li>";
@@ -45,7 +45,6 @@ javascript:
     });
   }
 
-/= form_for :student_book, url: update_multiple_student_books_path do |f|
 = form_tag update_multiple_student_books_path, method: :put do
   nav
     .nav-wrapper
@@ -75,8 +74,8 @@ javascript:
             
   - if @book_titles.present?
     - @book_titles.each do |book_title|
-      h4 = book_title[:title].title
-      = render partial: 'book_title_table', locals: {book_title: book_title}
+      h4 = book_title[:edition_title]
+      = render partial: 'book_title_table', locals: {student_books: book_title[:student_books]}
       .page-break    
     - if !@disable_edit
       .toolbar.z-depth-1
@@ -84,3 +83,23 @@ javascript:
   - else
     #message.card-panel.grey.lighten-1
       .center.white-text Please choose Grade Level, Class and Book Title
+
+  = hidden_field_tag :grade_section_id, @grade_section.try(:id)
+  = hidden_field_tag :grade_level_id, @grade_level.try(:id)
+  = hidden_field_tag :title, @book_title_id
+
+javascript:
+  var setCheck; 
+  $("input:radio").click(function(){
+    var id = $(this).closest("tr").attr("id");
+    var condition = $(this).prop("value");    
+    if(setCheck!=this){
+      setCheck=this;
+      $("#student_books_"+id+"_end_copy_condition_id").prop("value", condition);
+    } else { 
+      $(this).prop("checked", false);
+      $("#student_books_"+id+"_end_copy_condition_id").prop("value", null);
+      setCheck=null;
+    }
+    console.log("Setting: "+id+" to "+condition);
+  });

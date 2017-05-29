@@ -85,7 +85,7 @@ Rails.application.routes.draw do
     resources :standard_books, shallow: true
   end
 
-  resources :standard_books, only:[:index] do
+  resources :standard_books, only:[:index,:update] do
     collection do
       post 'prepare'
     end
@@ -198,6 +198,20 @@ Rails.application.routes.draw do
   }
   resources :users, only: [:index, :show, :edit, :update]
 
+  # API
+  namespace :api, :defaults => {:format => :json} do
+    as :user do
+      post   "/sign-in"       => "sessions#create"
+      delete "/sign-out"      => "sessions#destroy"
+    end
+    resources :carpools do
+      collection do
+        get 'poll'
+        put 'reorder'
+      end
+    end
+  end
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

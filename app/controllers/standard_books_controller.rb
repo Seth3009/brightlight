@@ -14,7 +14,7 @@ class StandardBooksController < ApplicationController
 
     if params[:grade_level_id].present?
       @grade_level = GradeLevel.find params[:grade_level_id]
-      @standard_books = StandardBook.where(grade_level:@grade_level).includes([:book_title])
+      @standard_books = StandardBook.where(grade_level:@grade_level).includes([:book_title,:book_edition,:academic_year,:book_category])
 
       if params[:track].present?
         if params[:track].upcase != 'ALL'
@@ -37,6 +37,13 @@ class StandardBooksController < ApplicationController
 
       @standard_books = @standard_books.paginate(page: params[:page], per_page: @items_per_page)
     end
+
+    respond_to do |format|
+      format.html
+      format.json do
+        @standard_books = @standard_books.to_a.uniq {|x| x.book_edition_id }
+      end
+    end 
   end
 
   # GET /standard_books/1
@@ -91,7 +98,11 @@ class StandardBooksController < ApplicationController
         format.html { redirect_to grade_level_standard_books_path(grade_level_id:@standard_book.grade_level_id,year:@standard_book.academic_year.id, track:@standard_book.track), notice: 'Standard book was successfully updated.' }
         format.json { render :show, status: :ok, location: @standard_book }
       else
-        format.html { render :edit }
+        format.html { 
+          @grade_level = @standard_book.grade_level
+          @academic_year = @standard_book.academic_year
+          render :edit 
+        }
         format.json { render json: @standard_book.errors, status: :unprocessable_entity }
       end
     end
