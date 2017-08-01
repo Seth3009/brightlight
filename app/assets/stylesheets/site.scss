@@ -978,11 +978,11 @@ ul {
 		.reorder-button { display: none };
 		.entry-wrapper {
 			.entry {			
-				border-radius: 10px;
+				border-radius: 4px;
 				.done-wrapper { display: none };
 				.wait-wrapper { display: none };
 				.middle-wrapper {
-					height: 233px;
+					height: 230px;
 					a {
 						font-size: 15em;
 						font-weight: bold;
@@ -993,7 +993,7 @@ ul {
 		}
 		ul {
 			li {  
-				height: 253px; 
+				height: 250px; 
 			}
 		}
 
