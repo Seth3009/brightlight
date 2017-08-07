@@ -36,8 +36,8 @@ class Carpool < ActiveRecord::Base
   scope :shuttle_cars, lambda { where(category:'shuttle') }
   scope :active, lambda { where.not(status:'done') }
   scope :inactive, lambda { where(status:'done') }
-  scope :today_am, lambda { where('created_at > ? and created_at < ?', Date.today.beginning_of_day, Carpool.end_of_morning_period) }
-  scope :today_pm, lambda { where('created_at > ?', Carpool.end_of_morning_period) }
+  scope :today_am, lambda { where(period: 0).where('created_at > ? and created_at < ?', Date.today.beginning_of_day, Carpool.end_of_morning_period) }
+  scope :today_pm, lambda { where(period: 1).where('created_at > ?', Carpool.end_of_morning_period) }
   scope :today, lambda { where('created_at > ?', Date.today.beginning_of_day) }
 
   before_create :fill_in_details
