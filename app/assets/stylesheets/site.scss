@@ -1006,7 +1006,11 @@ ul {
 			-webkit-column-rule-style: solid; /* Chrome, Safari, Opera */
     	-moz-column-rule-style: solid; /* Firefox */
 			column-rule-style: solid;
+			-webkit-column-gap: 0px; /* Chrome, Safari, Opera */
+    	-moz-column-gap: 0px; /* Firefox */
+			column-gap: 0px;
 		
+			.col { padding: 0 5px }
 			li { height: 150px }
 			.entry-wrapper {
 				width: inherit !important;
@@ -1015,9 +1019,9 @@ ul {
 			.wait-wrapper { display: none };
 			.middle-wrapper {
 				height: 140px;
-				padding: 0 10px;
+				padding: 0 4px;
 				a {
-					font-size: 10em;
+					font-size: 9em;
 					font-weight: bold;
 					line-height: 1.0em;
 				}
