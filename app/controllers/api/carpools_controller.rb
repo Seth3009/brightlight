@@ -12,12 +12,11 @@ class Api::CarpoolsController < Api::BaseController
   # GET /carpools/poll
   def poll
     @carpools = Carpool.all.order(:sort_order,:updated_at)
-    if params[:am]
+    now = Time.now    
+    if now < Carpool.end_of_morning_period
       @carpools = @carpools.today_am
-    elsif params[:pm]
-      @carpools = @carpools.today_pm
     else
-      @carpools = @carpools.today
+      @carpools = @carpools.today_pm
     end
 
     @timestamp = @carpools.present? ? (@carpools.last.updated_at.to_f*1000).to_i : nil
@@ -26,9 +25,7 @@ class Api::CarpoolsController < Api::BaseController
     if params[:since]      
       @carpools = @carpools.since params[:since] unless params[:since].to_i < @reorder
     end 
-    if params[:period]
-      @carpools = @carpools.where(period: params[:period])
-    end
+
     respond_to :json
   end
 
