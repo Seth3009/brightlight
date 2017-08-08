@@ -16,7 +16,7 @@ var CarpoolApp = (function(){
       transport.transportName = car.transport_name;
       transport.carpoolId = car.id;
       transport.arrival = new Date(car.arrival);
-      transport.late = (transport.category == 'shuttle' && transport.arrival > Carpool.shuttleTimeLimit) ? true : false;
+      transport.late = transport.notes == "late" || (transport.category == 'shuttle' && transport.arrival > Carpool.shuttleTimeLimit) ? true : false;
       return transport;
     },
 
@@ -196,6 +196,7 @@ var CarpoolApp = (function(){
       $("#cancel-settings").on("click", Carpool.resetSettings);
       $(".carpool").on("click", ".reorder-button", Carpool.handleEdit.bind(this));
       $(".carpool").on("click", ".reorder-done-button", Carpool.handleDoneEditing.bind(this));
+      $(".carpool").on("click", ".close-shuttle", Carpool.handleCloseShuttle.bind(this));
     },
 
     handleScan: function (el, rfid_uid) {
@@ -326,6 +327,10 @@ var CarpoolApp = (function(){
       $("#passenger-list").html('');
       transport.getPassengers();
       $('#show-modal').openModal();
+    },
+
+    handleCloseShuttle: function(e) {
+
     },
 
     poll: function() {      
