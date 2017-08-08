@@ -2,11 +2,10 @@ namespace :data do
 	desc "Import new students"
 	task import_new_students: :environment do
 
-    xl = Roo::Spreadsheet.open('lib/tasks/Class Composition 2016-2017.xlsx')
-    sheet = xl.sheet('new_students_2016-2017')
+    xl = Roo::Spreadsheet.open('lib/tasks/new students 2017-2018.xlsx')
+    sheet = xl.sheet('new20172018')
 
-    header = {no:'No',name:'Name',student_no:'School UD ID', family_no:'Family UD ID', roster_no:'Roster No',
-              track:'Track', gender:'Gender', grade_level_id:'Grade Level', section_name:'Section Name'}
+    header = {name:'Name',student_no:'School UD ID', family_no:'Family UD ID', gender:'Gender'}
 
     sheet.each_with_index(header) do |row,i|
 			next if i < 1
