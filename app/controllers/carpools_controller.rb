@@ -73,6 +73,7 @@ class CarpoolsController < ApplicationController
   def create
     authorize! :update, Carpool
     @carpool = Carpool.new(carpool_params)
+    # check_shuttle_closing_time
 
     respond_to do |format|
       if @carpool.save
@@ -156,4 +157,7 @@ class CarpoolsController < ApplicationController
       end
     end
 
+    def check_shuttle_closing_time
+      closing_time = session[:closing_time]
+    end
 end
