@@ -23,7 +23,7 @@ class CarpoolsController < ApplicationController
   # GET /carpools/poll
   def poll
     authorize! :read, Carpool
-    @carpools = Carpool.all.order(:sort_order,:updated_at)
+    @carpools = Carpool.all.order(:sort_order, :updated_at)
     now = Time.now
     if now < Carpool.end_of_morning_period
       @carpools = @carpools.today_am
@@ -31,7 +31,7 @@ class CarpoolsController < ApplicationController
       @carpools = @carpools.today_pm
     end
 
-    @timestamp = @carpools.present? ? (@carpools.last.updated_at.to_f*1000).to_i : nil
+    @timestamp = @carpools.present? ? (@carpools.last.updated_at.to_f * 1000).to_i : nil
     @reorder = @@reorder
     
     if params[:since]      
@@ -73,6 +73,7 @@ class CarpoolsController < ApplicationController
   def create
     authorize! :update, Carpool
     @carpool = Carpool.new(carpool_params)
+    # check_shuttle_closing_time
 
     respond_to do |format|
       if @carpool.save
@@ -156,4 +157,7 @@ class CarpoolsController < ApplicationController
       end
     end
 
+    def check_shuttle_closing_time
+      closing_time = session[:closing_time]
+    end
 end

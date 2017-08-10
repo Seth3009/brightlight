@@ -2,12 +2,12 @@ namespace :data do
 	desc "Import new class composition"
 	task import_new_class_composition: :environment do
 
-    xl = Roo::Spreadsheet.open('lib/tasks/Class Composition 2016-2017.xlsx')
-    sheet = xl.sheet('class-composition-2016-2017')
+    xl = Roo::Spreadsheet.open('lib/tasks/new students 2017-2018.xlsx')
+    sheet = xl.sheet('composition20172018')
 
     header = {no:'No',name:'Name',student_no:'School UD ID', family_no:'Family UD ID', roster_no:'Roster No',
               track:'Track', gender:'Gender', grade_level_id:'Grade Level', section_name:'Section Name'}
-    academic_year = AcademicYear.find_by_name '2016-2017'
+    academic_year = AcademicYear.find_by_name '2017-2018'
 
     sheet.each_with_index(header) do |row,i|
 			next if i < 1
