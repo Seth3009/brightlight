@@ -30,7 +30,6 @@ class Carpool < ActiveRecord::Base
 
   scope :since, lambda { |time| 
     where('carpools.updated_at > ?', Time.at((time.to_i/1000).to_i))
-    .order('carpools.created_at')
   }
   scope :private_cars, lambda { where(category:'private') }
   scope :shuttle_cars, lambda { where(category:'shuttle') }
