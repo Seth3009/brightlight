@@ -52,7 +52,14 @@ var CarpoolApp = (function(){
         } else {
           container = $("#data-error");
         }
-        container.append(this.htmlStr());
+
+        if (this.status == 'waiting') {
+          container.prepend(this.htmlStr());
+          console.log("Rendering waiting car " + this.transportName);
+        } else {
+          container.append(this.htmlStr());
+        }
+        
         this.doneCheckBox().prop("checked", this.status == 'done');
         this.waitCheckBox().prop("checked", this.status == 'waiting');        
       }
