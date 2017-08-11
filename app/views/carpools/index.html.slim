@@ -94,6 +94,11 @@ script#carpool-template type="text/x-custom-template"
       .middle-wrapper
         a.modal-trigger.black-text href="#show-modal" data-id="__transport.id_" 
           = "__transport.name_"
+      .loading-wrapper data-id="__transport.id_"
+        .input-field.load-button
+          .cb-label Ready 
+          = check_box_tag "car-load-__carpool.id_", 1, false
+          = label_tag "car-load-__carpool.id_", ""
       .wait-wrapper data-id="__transport.id_"
         .input-field.wait-button
           .cb-label Wait 
