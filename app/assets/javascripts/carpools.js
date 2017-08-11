@@ -32,6 +32,7 @@ var CarpoolApp = (function(){
     node: function() { return $("#car-" + this.carpoolId) },
     
     doneCheckBox: function() { return $("#car-done-" + this.carpoolId) },
+    loadCheckBox: function() { return $("#car-load-" + this.carpoolId) },
     waitCheckBox: function() { return $("#car-wait-" + this.carpoolId) },
     
     render: function() {      
@@ -39,7 +40,7 @@ var CarpoolApp = (function(){
         var container;
         if (this.status == 'done') {
           container = $("#exit-carpool");
-        } else if (this.status == 'waiting') {
+        } else if (this.status == 'waiting' || this.status == 'loading') {
           container = $("#waiting-cars");
         } else if (this.category == 'private') {
           container = $("#private-cars");
@@ -53,14 +54,14 @@ var CarpoolApp = (function(){
           container = $("#data-error");
         }
 
-        if (this.status == 'waiting') {
+        if (this.status == 'waiting' || this.status == 'loading') {
           container.prepend(this.htmlStr());
-          console.log("Rendering waiting car " + this.transportName);
         } else {
           container.append(this.htmlStr());
         }
         
         this.doneCheckBox().prop("checked", this.status == 'done');
+        this.loadCheckBox().prop("checked", this.status == 'loading');        
         this.waitCheckBox().prop("checked", this.status == 'waiting');        
       }
     },
@@ -72,7 +73,7 @@ var CarpoolApp = (function(){
         this.node().removeClass('ready leaving loading waiting done')
           .addClass(this._status);
         var transport = this;
-        this.node().fadeOut('slow', function(){ 
+        this.node().fadeOut(function(){ 
           this.remove(); 
           transport.render();
         });
@@ -198,6 +199,7 @@ var CarpoolApp = (function(){
         }
       });
       $(".carpool").on("click", ".done-button", Carpool.handleDone.bind(this));
+      $(".carpool").on("click", ".load-button", Carpool.handleLoad.bind(this));
       $(".carpool").on("click", ".wait-button", Carpool.handleWait.bind(this));
       $("#settings").on("submit", Carpool.saveSettings.bind(this));
       $("#cancel-settings").on("click", Carpool.resetSettings);
@@ -300,6 +302,14 @@ var CarpoolApp = (function(){
       var transportId = $el.closest(".done-wrapper").data('id');
       var transport = Carpool.getTransport(transportId);
       if (transport) transport.status = transport.status != 'done' ? "done" : "ready";
+    },
+
+    handleLoad: function(e) {
+      var $el = $(e.target);
+      if ($el.prop('tagName') == 'LABEL') return;  
+      var transportId = $el.closest(".loading-wrapper").data('id');
+      var transport = Carpool.getTransport(transportId);
+      if (transport) transport.status = transport.status != 'loading' ? "loading" : "ready";
     },
 
     handleWait: function(e) {
