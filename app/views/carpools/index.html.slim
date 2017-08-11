@@ -2,9 +2,18 @@
   .card.carpool
     .row
       ul#shuttle-cars
+      ul#private-cars style="display:none"
+      ul#waiting-cars style="display:none"
+- if params['waiting'].present?
+  .card.carpool
+    .row
+      ul#waiting-cars
+      ul#private-cars style="display:none"
+      ul#shuttle-cars style="display:none"
 - elsif params['cars'].present?
   .card.carpool
     .row
+      ul#shuttle-cars style="display:none"
       ul#private-cars
       .fixed-footer
         .scroll-text 
