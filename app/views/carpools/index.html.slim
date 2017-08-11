@@ -2,9 +2,7 @@
   .card.carpool
     .row
       ul#shuttle-cars
-      ul#private-cars style="display:none"
-      ul#waiting-cars style="display:none"
-- if params['waiting'].present?
+- elsif params['waiting'].present?
   .card.carpool
     .row
       ul#waiting-cars
