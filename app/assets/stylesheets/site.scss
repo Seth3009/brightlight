@@ -1027,6 +1027,24 @@ ul {
 				}
 			}
 		}
+
+		ul#waiting-cars {	
+			li { height: 150px }
+			.entry-wrapper {
+				width: 25% !important;
+			}
+			.done-wrapper { display: none };
+			.wait-wrapper { display: none };
+			.middle-wrapper {
+				height: 140px;
+				padding: 0 4px;
+				a {
+					font-size: 10em;
+					font-weight: bold;
+					line-height: 1.0em;
+				}
+			}
+		}
 	}
 }
 
