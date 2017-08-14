@@ -11,6 +11,7 @@ class EmployeesController < ApplicationController
         items_per_page = 20
         @employees = Employee
             .joins('LEFT JOIN departments ON departments.id = employees.department_id')
+            .where(is_active: true)
             .select('employees.*, departments.name as department')
             .order("#{sort_column} #{sort_direction}")
             .order('name')
@@ -21,7 +22,7 @@ class EmployeesController < ApplicationController
         end
       }
       format.csv {
-        @employees = Employee.all
+        @employees = Employee.all.where(is_active: true)
         render text: @employees.to_csv
       }
     end

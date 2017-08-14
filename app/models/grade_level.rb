@@ -1,9 +1,9 @@
 class GradeLevel < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   validates :code, presence: true, uniqueness: true
-  has_many :grade_sections, dependent: :destroy
+  has_many :grade_sections,  -> { order(:id) }, dependent: :destroy
   has_many :book_labels
-  has_many :grade_section_histories
+  has_many :grade_section_histories,  -> { order(:id) }
   belongs_to :school_level
 
   # slug :name
