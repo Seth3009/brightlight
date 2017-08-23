@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170613074207) do
+ActiveRecord::Schema.define(version: 20170823072020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -330,6 +330,8 @@ ActiveRecord::Schema.define(version: 20170613074207) do
     t.string   "notes"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.boolean  "in_transit"
+    t.boolean  "late"
   end
 
   add_index "carpools", ["barcode"], name: "index_carpools_on_barcode", using: :btree
@@ -1161,7 +1163,7 @@ ActiveRecord::Schema.define(version: 20170613074207) do
               loan_checks.academic_year_id,
               max(loan_checks.created_at) AS max_date
              FROM loan_checks
-            GROUP BY loan_checks.loaned_to, loan_checks.matched, loan_checks.book_loan_id, loan_checks.academic_year_id) max_dates ON ((max_dates.book_loan_id = book_loans.id)))
+            GROUP BY loan_checks.loaned_to, loan_checks.matched, loan_checks.book_loan_id, loan_checks.academic_year_id) max_dates ON (((max_dates.book_loan_id = book_loans.id) AND (max_dates.academic_year_id = book_loans.academic_year_id))))
        LEFT JOIN loan_checks l ON (((l.book_loan_id = book_loans.id) AND (l.academic_year_id = book_loans.academic_year_id) AND (l.loaned_to = book_loans.employee_id) AND (l.matched = true) AND (max_dates.book_loan_id = l.book_loan_id) AND (max_dates.max_date = l.created_at))));
   SQL
 
