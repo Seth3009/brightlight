@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     end
     member do
       get 'update_metadata'
+      get 'edit_subject'
     end
   end
 

@@ -1,0 +1,29 @@
+= form_for book_edition, html: {class:'col s12'} do |f|
+  .modal-content
+    h4 Edit book subject
+
+    .row
+      .input-field.col.s6
+        = f.label :tags, class: 'active'
+        = f.text_field :tags
+      .input-field.col.s6
+        = f.label :subjects, class: 'active'
+        = f.collection_select :subjects, Subject.all.order(:name),  :id, :name, prompt: true
+    hr
+    .row
+      .input-field.col.s12
+        = f.label :title, class: 'active'
+        = f.text_field :title, disabled:true
+    .row
+      .input-field.col.s12
+        = f.label :subtitle, class: 'active'
+        = f.text_field :subtitle, disabled:true
+      .input-field.col.s4
+        = f.label :authors, class: 'active'
+        = f.text_field :authors, disabled:true
+      .input-field.col.s4
+        = f.label :publisher, class: 'active'
+        = f.text_field :publisher, disabled:true
+  
+  .modal-footer
+    = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"

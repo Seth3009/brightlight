@@ -169,6 +169,7 @@
                                                PUT      /book_copies/:id(.:format)                                        book_copies#update
                                                DELETE   /book_copies/:id(.:format)                                        book_copies#destroy
                   update_metadata_book_edition GET      /book_editions/:id/update_metadata(.:format)                      book_editions#update_metadata
+                     edit_subject_book_edition GET      /book_editions/:id/edit_subject(.:format)                         book_editions#edit_subject
                                  book_editions GET      /book_editions(.:format)                                          book_editions#index
                                                POST     /book_editions(.:format)                                          book_editions#create
                               new_book_edition GET      /book_editions/new(.:format)                                      book_editions#new
@@ -182,6 +183,7 @@
                     create_book_copy_condition PUT      /book_copies/:id/copy_conditions/create(.:format)                 copy_conditions#create
                           book_copy_conditions GET      /book_copies/:id/conditions(.:format)                             book_copies#conditions
                                book_copy_loans GET      /book_copies/:id/loans(.:format)                                  book_copies#loans
+                              book_copy_checks GET      /book_copies/:id/checks(.:format)                                 book_copies#checks
                        book_copy_check_barcode GET      /book_copies/:id/check_barcode(.:format)                          book_copies#check_barcode
                            dispose_book_copies POST     /book_copies/dispose(.:format)                                    book_copies#dispose
                    update_multiple_book_copies POST     /book_copies/update_multiple(.:format)                            book_copies#update_multiple
@@ -234,6 +236,8 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                DELETE   /grade_levels/:id(.:format)                                       grade_levels#destroy
                         prepare_standard_books POST     /standard_books/prepare(.:format)                                 standard_books#prepare
                                 standard_books GET      /standard_books(.:format)                                         standard_books#index
+                                               PATCH    /standard_books/:id(.:format)                                     standard_books#update
+                                               PUT      /standard_books/:id(.:format)                                     standard_books#update
                      edit_labels_grade_section GET      /grade_sections/:id/edit_labels(.:format)                         grade_sections#edit_labels
                        grade_section_histories GET      /grade_section_histories(.:format)                                grade_section_histories#index
                          grade_section_history GET      /grade_section_histories/:id(.:format)                            grade_section_histories#show
@@ -263,6 +267,7 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                  update_multiple_student_books PUT      /student_books/update_multiple(.:format)                          student_books#update_multiple
                          missing_student_books GET      /student_books/missing(.:format)                                  student_books#missing
                            pnnrb_student_books GET      /student_books/pnnrb(.:format)                                    student_books#pnnrb
+                          titles_student_books GET      /student_books/titles(.:format)                                   student_books#titles
                         finalize_student_books POST     /student_books/finalize(.:format)                                 student_books#finalize
                          prepare_student_books POST     /student_books/prepare_student_books(.:format)                    student_books#prepare
                          student_student_books GET      /students/:student_id/student_books(.:format)                     student_books#index
@@ -317,7 +322,7 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                        new_employee_loan_check GET      /employees/:employee_id/loan_check/new(.:format)                  loan_checks#new
                                                POST     /employees/:employee_id/loan_check(.:format)                      loan_checks#create
                                                DELETE   /employees/:employee_id/loan_check(.:format)                      loan_checks#delete
-                          calculate_book_fines GET      /book_fines/calculate(.:format)                                   book_fines#calculate
+                          calculate_book_fines POST     /book_fines/calculate(.:format)                                   book_fines#calculate
                             current_book_fines GET      /book_fines/current(.:format)                                     book_fines#current
           autocomplete_student_name_book_fines GET      /book_fines/autocomplete_student_name(.:format)                   book_fines#autocomplete_student_name
                        notification_book_fines GET      /book_fines/notification(.:format)                                book_fines#notification
@@ -389,6 +394,8 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PUT      /users/:id(.:format)                                              users#update
                                    api_sign_in POST     /api/sign-in(.:format)                                            api/sessions#create {:format=>:json}
                                   api_sign_out DELETE   /api/sign-out(.:format)                                           api/sessions#destroy {:format=>:json}
+                             poll_api_carpools GET      /api/carpools/poll(.:format)                                      api/carpools#poll {:format=>:json}
+                          reorder_api_carpools PUT      /api/carpools/reorder(.:format)                                   api/carpools#reorder {:format=>:json}
                                   api_carpools GET      /api/carpools(.:format)                                           api/carpools#index {:format=>:json}
                                                POST     /api/carpools(.:format)                                           api/carpools#create {:format=>:json}
                                new_api_carpool GET      /api/carpools/new(.:format)                                       api/carpools#new {:format=>:json}
@@ -397,7 +404,7 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PATCH    /api/carpools/:id(.:format)                                       api/carpools#update {:format=>:json}
                                                PUT      /api/carpools/:id(.:format)                                       api/carpools#update {:format=>:json}
                                                DELETE   /api/carpools/:id(.:format)                                       api/carpools#destroy {:format=>:json}
+                       settings_inventory_mtce GET      /settings/inventory_mtce(.:format)                                settings#inventory_mtce
                                           root GET      /                                                                 welcome#index
                                      dashboard GET      /dashboard(.:format)                                              welcome#dashboard
-                                inventory_mtce GET      /inventory_mtce(.:format)                                         welcome#inventory_mtce
                                                GET      /auth/:provider/callback(.:format)                                sessions#create
