@@ -1,0 +1,34 @@
+= form_for book_title do |f|
+  .modal-content
+    h4 Add tags and subject
+    .row
+      .input-field.col.s6
+        = f.label :tags, class: 'active'
+        = f.text_field :tags
+      .input-field.col.s6
+        = f.label :subject, class: 'active'
+        = f.collection_select :subject_id, Subject.all.order(:name), :id, :name, prompt: true
+    .row
+      .input-field.col.s6
+        = f.label :grade_level, class: 'active'
+        = f.collection_select :grade_level_id, GradeLevel.all.order(:name), :id, :name, prompt: true
+      .input-field.col.s6
+        = f.label :track, class: 'active'
+        = f.text_field :track
+    .card-panel
+      .row
+        .input-field.col.s12
+          = f.label :title, class: 'active'
+          = f.text_field :title, disabled:true
+      .row
+        .input-field.col.s4
+          = f.label :authors, class: 'active'
+          = f.text_field :authors, disabled:true
+        .input-field.col.s4
+          = f.label :publisher, class: 'active'
+          = f.text_field :publisher, disabled:true
+    - if teacher_id
+      = hidden_field_tag :return_url, employee_book_loans_path(teacher_id)
+  .modal-footer
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to "Cancel", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"

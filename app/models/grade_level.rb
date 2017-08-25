@@ -3,6 +3,7 @@ class GradeLevel < ActiveRecord::Base
   validates :code, presence: true, uniqueness: true
   has_many :grade_sections,  -> { order(:id) }, dependent: :destroy
   has_many :book_labels
+  has_many :book_titles
   has_many :grade_section_histories,  -> { order(:id) }
   belongs_to :school_level
 

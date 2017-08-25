@@ -1,5 +1,5 @@
 class BookEditionsController < ApplicationController
-  before_action :set_book_edition, only: [:show, :edit, :edit_subject, :update, :destroy, :update_metadata]
+  before_action :set_book_edition, only: [:show, :edit, :update, :destroy, :update_metadata]
 
   # GET /book_editions
   # GET /book_editions.json
@@ -55,11 +55,6 @@ class BookEditionsController < ApplicationController
 
   # GET /book_editions/1/edit
   def edit
-    authorize! :update, @book_edition
-  end
-
-  # GET /book_editions/1/edit_subject
-  def edit_subject
     authorize! :update, @book_edition
   end
 

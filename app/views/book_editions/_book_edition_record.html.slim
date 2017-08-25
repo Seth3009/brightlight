@@ -25,7 +25,10 @@ table
             .item = book_edition.published_date || 'N/A'
           dd.col.s6
             .label Reference No
-            .item = book_edition.refno || 'N/A'
+            .item = book_edition.refno || 'N/A'             
+          dd.col.s6
+            .label Subject
+            .item = book_edition.subjects || 'N/A'
           dd.col.s6
             .label Page count
             .item = book_edition.page_count || 'N/A'            

@@ -1,0 +1,5 @@
+$("#show-modal").html("<%=j render(partial: 'edit_subject', locals: {book_title: @book_title, teacher_id: params[:eid]})%>");
+$('#show-modal').openModal();
+$('select').material_select();
+$('#book_title_tags').tagsInput({
+   'autocomplete_url': '/book_titles/tags.json'});

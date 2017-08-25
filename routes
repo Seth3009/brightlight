@@ -169,7 +169,6 @@
                                                PUT      /book_copies/:id(.:format)                                        book_copies#update
                                                DELETE   /book_copies/:id(.:format)                                        book_copies#destroy
                   update_metadata_book_edition GET      /book_editions/:id/update_metadata(.:format)                      book_editions#update_metadata
-                     edit_subject_book_edition GET      /book_editions/:id/edit_subject(.:format)                         book_editions#edit_subject
                                  book_editions GET      /book_editions(.:format)                                          book_editions#index
                                                POST     /book_editions(.:format)                                          book_editions#create
                               new_book_edition GET      /book_editions/new(.:format)                                      book_editions#new
@@ -191,10 +190,12 @@
                              merge_book_titles POST     /book_titles/merge(.:format)                                      book_titles#merge
                             delete_book_titles POST     /book_titles/delete(.:format)                                     book_titles#delete
                        search_isbn_book_titles POST     /book_titles/search_isbn(.:format)                                book_titles#search_isbn
+                              tags_book_titles GET      /book_titles/tags(.:format)                                       book_titles#tags
                            editions_book_title GET      /book_titles/:id/editions(.:format)                               book_titles#editions
               add_existing_editions_book_title POST     /book_titles/:id/add_existing_editions(.:format)                  book_titles#add_existing_editions
                            add_isbn_book_title POST     /book_titles/:id/add_isbn(.:format)                               book_titles#add_isbn
                     update_metadata_book_title POST     /book_titles/:id/update_metadata(.:format)                        book_titles#update_metadata
+                       edit_subject_book_title GET      /book_titles/:id/edit_subject(.:format)                           book_titles#edit_subject
                                    book_titles GET      /book_titles(.:format)                                            book_titles#index
                                                POST     /book_titles(.:format)                                            book_titles#create
                                 new_book_title GET      /book_titles/new(.:format)                                        book_titles#new
