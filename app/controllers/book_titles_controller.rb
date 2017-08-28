@@ -72,6 +72,7 @@ class BookTitlesController < ApplicationController
   # GET /book_editions/1/edit_subject
   def edit_subject
     authorize! :update, @book_title
+    puts "Edit subject for #{@book_title.title}"
   end
 
   def editions
@@ -279,7 +280,12 @@ class BookTitlesController < ApplicationController
 
   # GET /tags.json
   def tags
-    respond_with BookTitle.all.where.not(tags:nil).map{|t| t.tags.split(",")}.flatten.uniq #.map {|t| {value:t}}
+    term = params[:term].try(:downcase)
+    respond_with BookTitle.all
+                  .where.not(tags:nil)
+                  .where('LOWER(tags) like ?',"%#{term}%")
+                  .map{|t| t.tags.split(",")}
+                  .flatten.uniq
   end
   
   private

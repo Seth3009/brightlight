@@ -1372,6 +1372,7 @@ td.barby-cell.on { background: #000; }
 
 .ui-autocomplete {
 	width:  480px;
+	z-index:1030 !important;
 	font-family: Roboto, Arial, sans-serif;
 	font-size: 1em;
     max-height: 350px;

@@ -3,7 +3,8 @@
     h4 Add tags and subject
     .row
       .input-field.col.s6
-        = f.label :tags, class: 'active'
+        = f.label "", class: 'active'
+          | Tags <span class="green-text">(separate with a comma)</span>
         = f.text_field :tags
       .input-field.col.s6
         = f.label :subject, class: 'active'

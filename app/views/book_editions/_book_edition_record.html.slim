@@ -25,25 +25,31 @@ table
             .item = book_edition.published_date || 'N/A'
           dd.col.s6
             .label Reference No
-            .item = book_edition.refno || 'N/A'             
-          dd.col.s6
-            .label Subject
-            .item = book_edition.subjects || 'N/A'
-          dd.col.s6
-            .label Page count
-            .item = book_edition.page_count || 'N/A'            
-          dd.col.s6
-            .label Legacy Code
-            .item = book_edition.legacy_code || 'N/A'
+            .item = book_edition.refno || 'N/A'                         
           dd.col.s6
             .label Price
             .item = book_edition.price.present? ? "#{book_edition.currency} #{book_edition.price.to_digits}" : 'N/A'
           dd.col.s6
-            .label Language
-            .item = book_edition.show_language || 'N/A'
-          dd.col.s12
-            .label Description
-            .item = strip_tags(book_edition.description) || 'N/A'
-          dd.col.s6
-            .label Title group
-            .item = book_edition.book_title ? link_to(book_edition.book_title.title, book_edition.book_title) : "--" 
+            .label Legacy Code
+            .item = book_edition.legacy_code || 'N/A'
+        
+        - if book_edition.book_title
+          hr
+          dl.row
+            dd.col.s12
+              .label Title group
+              .item = link_to(book_edition.book_title.title, book_edition.book_title)
+            dd.col.s6
+              .label Tags
+              .item
+                - if book_edition.book_title.tags
+                  - book_edition.book_title.tags.split(",").each do |x| 
+                    = "<span class='tag'>#{x}</span>".html_safe
+                - else 
+                  = "--"
+            dd.col.s3
+              .label Grade
+              .item = book_edition.book_title.grade_level.try(:name) || '--'
+            dd.col.s3
+              .label Track
+              .item = book_edition.book_title.track || '--'
