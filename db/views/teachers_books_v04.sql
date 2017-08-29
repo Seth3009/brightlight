@@ -10,7 +10,7 @@ LEFT JOIN employees ON employees.id = book_loans.employee_id
 LEFT JOIN ( select book_loan_id, loaned_to, matched, academic_year_id, max(created_at) max_date 
 		from loan_checks 
 		group by loaned_to, matched, book_loan_id, academic_year_id ) max_dates 
-	ON max_dates.book_loan_id = book_loans.id
+	ON max_dates.book_loan_id = book_loans.id AND max_dates.academic_year_id = book_loans.academic_year_id
 LEFT JOIN loan_checks l ON l.book_loan_id = book_loans.id
 	and l.academic_year_id = book_loans.academic_year_id
 	and l.loaned_to = book_loans.employee_id
