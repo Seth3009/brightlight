@@ -46,6 +46,7 @@ class BookTitlesController < ApplicationController
   # GET /book_titles/1.json
   def show
     authorize! :read, BookTitle
+    @teacher = Employee.find params[:teacher_id] if params[:teacher_id]
   end
 
   # GET /book_titles/new
@@ -127,7 +128,7 @@ class BookTitlesController < ApplicationController
     authorize! :update, @book_title
     respond_to do |format|
       if @book_title.update(book_title_params)
-        format.html { redirect_to book_title_path(@book_title, return_url: params[:return_url]), notice: 'Book title was successfully updated.' }
+        format.html { redirect_to book_title_path(@book_title, teacher_id: params[:teacher_id], return_url: params[:return_url]), notice: 'Book title was successfully updated.' }
         format.json { render :show, status: :ok, location: @book_title }
       else
         format.html { render :edit }
