@@ -4,9 +4,9 @@ class LoanCheck < ActiveRecord::Base
   belongs_to :user
   belongs_to :academic_year
 
-  validate :academic_year, presence: true
-  validate :book_loan, presence: true
-  validate :book_copy, presence: true
+  validates :academic_year, presence: true
+  validates :book_loan, presence: true
+  validates :book_copy, presence: true
 
   scope :for_year, lambda {|year| where(academic_year_id: year) }
   scope :current, lambda { where(academic_year_id: AcademicYear.current_id) }
