@@ -372,6 +372,21 @@ h6 {
 	color: #eee;
 }
 
+span.tag {
+	background-color: #85bb85;
+	padding: 2px 10px;
+	border-radius: 15px;
+	margin-right: 4px;
+}
+
+div.tagsinput {
+	margin-top: 10px;
+}
+
+input[type=text]:disabled, input[type=text][readonly="readonly"], input[type=password]:disabled, input[type=password][readonly="readonly"], input[type=email]:disabled, input[type=email][readonly="readonly"], input[type=url]:disabled, input[type=url][readonly="readonly"], input[type=time]:disabled, input[type=time][readonly="readonly"], input[type=date]:disabled, input[type=date][readonly="readonly"], input[type=datetime-local]:disabled, input[type=datetime-local][readonly="readonly"], input[type=tel]:disabled, input[type=tel][readonly="readonly"], input[type=number]:disabled, input[type=number][readonly="readonly"], input[type=search]:disabled, input[type=search][readonly="readonly"], textarea.materialize-textarea:disabled, textarea.materialize-textarea[readonly="readonly"] {
+	color: rgba(0, 0, 0, 0.58);
+}
+
 // ============================================ Buttons =============================================
 
 .btn-small {
@@ -1357,6 +1372,7 @@ td.barby-cell.on { background: #000; }
 
 .ui-autocomplete {
 	width:  480px;
+	z-index:1030 !important;
 	font-family: Roboto, Arial, sans-serif;
 	font-size: 1em;
     max-height: 350px;

@@ -1,7 +1,8 @@
 require 'isbndb_client/api.rb'
 
 class BookTitlesController < ApplicationController
-  before_action :set_book_title, only: [:show, :edit, :update, :destroy, :editions, :add_existing_editions, :add_isbn, :update_metadata]
+  before_action :set_book_title, only: [:show, :edit, :edit_subject, :update, :destroy, :editions, :add_existing_editions, :add_isbn, :update_metadata]
+  respond_to :html, :json, :js 
 
   # GET /book_titles
   # GET /book_titles.json
@@ -68,6 +69,12 @@ class BookTitlesController < ApplicationController
     authorize! :update, @book_title
   end
 
+  # GET /book_editions/1/edit_subject
+  def edit_subject
+    authorize! :update, @book_title
+    puts "Edit subject for #{@book_title.title}"
+  end
+
   def editions
     authorize! :update, @book_title
     @filterrific = initialize_filterrific(
@@ -120,7 +127,7 @@ class BookTitlesController < ApplicationController
     authorize! :update, @book_title
     respond_to do |format|
       if @book_title.update(book_title_params)
-        format.html { redirect_to @book_title, notice: 'Book title was successfully updated.' }
+        format.html { redirect_to book_title_path(@book_title, return_url: params[:return_url]), notice: 'Book title was successfully updated.' }
         format.json { render :show, status: :ok, location: @book_title }
       else
         format.html { render :edit }
@@ -270,6 +277,16 @@ class BookTitlesController < ApplicationController
       format.js
     end
   end
+
+  # GET /tags.json
+  def tags
+    term = params[:term].try(:downcase)
+    respond_with BookTitle.all
+                  .where.not(tags:nil)
+                  .where('LOWER(tags) like ?',"%#{term}%")
+                  .map{|t| t.tags.split(",")}
+                  .flatten.uniq
+  end
   
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -279,7 +296,7 @@ class BookTitlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_title_params
-      params.require(:book_title).permit(:title, :authors, :publisher, :image_url, :subject_id,
+      params.require(:book_title).permit(:title, :authors, :publisher, :image_url, :subject_id, :tags, :grade_level_id, :track,
                                           {book_editions_attributes: [:id, :google_book_id, :isbndb_id, :title, :subtitle, :authors, :publisher, :published_date,
                                                                       :description, :isbn10, :isbn13, :refno, :legacy_code, :page_count, :small_thumbnail, :thumbnail, 
                                                                       :language, :edition_info, :tags, :subjects, :currency, :price, :book_title_id, :_destroy]
