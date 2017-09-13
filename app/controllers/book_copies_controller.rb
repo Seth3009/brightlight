@@ -168,12 +168,10 @@ class BookCopiesController < ApplicationController
   def dispose
     authorize! :destroy, BookCopy
     if params[:book_copy]
-      @book_copies = params[:book_copy].map {|id,on| BookCopy.find(id)}
-      @book_copies.each do |book_copy|
-        # book_copy.destroy
-        puts "Deleting #{book_copy.barcode}"    
-      end
+      @book_copies = BookCopy.where(id: params[:book_copy].map{|id, on| id})
       book_edition = @book_copies.last.book_edition
+      @book_copies.update_all(disposed: true)
+      
       redirect_to book_edition_book_copies_path(book_edition), notice: 'Selected book copies were successfully deleted.'
     else
       redirect_to book_edition_book_copies_path(book_edition)
