@@ -14,7 +14,7 @@ class BookCopiesController < ApplicationController
       @total_by_status = @by_status.reduce(0) {|r,x| r + (x[:total] || 0)}
       @condition = BookCondition.where(id:params[:condition]).take if params[:condition].present? and params[:condition] != 'all' and params[:condition] != 'na'
       @status = Status.where(id:params[:status]).take if params[:status].present? and params[:status] != 'all' and params[:status] != 'na'
-      @book_copies = @book_edition.book_copies
+      @book_copies = @book_edition.book_copies.where('disposed = false OR disposed is null')
         .with_condition(params[:condition]).with_status(params[:status]).with_active_loans(AcademicYear.current_id)
     else
       @book_copies = BookCopy.all.order(:copy_no)
