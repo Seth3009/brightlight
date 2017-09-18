@@ -21,6 +21,8 @@ class BookCopy < ActiveRecord::Base
     where('disposed = false OR disposed is null')
   end
 
+  scope :not_disposed, lambda { where.not(disposed: true) }
+
   scope :standard_books, lambda { |grade_level_id, grade_section_id, year_id|
     if grade_level_id <= 10
       joins("JOIN standard_books ON book_copies.book_edition_id = standard_books.book_edition_id

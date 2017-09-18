@@ -20,6 +20,12 @@ class BookReceipt < ActiveRecord::Base
 
   after_save :update_book_copy_condition
 
+  scope :not_disposed, lambda { 
+    where('book_receipts.book_copy_id NOT IN (
+        select id from book_copies where disposed = true
+      )')
+  }
+
   def self.initialize_book_receipts(previous_year_id, new_year_id, grade_levels)
     n = 0
     GradeSection.where("grade_level_id in (?)", grade_levels).each do |grade_section|
