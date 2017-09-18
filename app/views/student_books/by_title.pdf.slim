@@ -28,30 +28,31 @@
         - book_list = @student_books.where(book_edition_id:edition.id)
         - if book_list.present?
           - book_list.each_with_index do |book, i|
-            - initial_condition = book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
-            tr.nobreak style='border-bottom:1px solid gainsboro'
-              td.wd5 = i+1
-              td.wd20 style='text-align:center'
-                - Barcode.new(book.barcode).write_image
-                = wicked_pdf_image_tag  "/assets/images/#{book.barcode.upcase}.PNG"
-                = book.barcode
-              td.wd10 style='text-align:center;'
-                span = book.book_copy.try(:book_label).try(:name) || 'N/A'
-              td.wd10 style='text-align:center;' 
-                = initial_condition.try(:code)
-              td.wd5 style='text-align:center;' 
-                = book.end_copy_condition_id == 1 ? '&#9745;'.html_safe : '&#9744;'.html_safe
-              td.wd5 style='text-align:center;' 
-                = book.end_copy_condition_id == 2 ? '&#9745;'.html_safe : '&#9744;'.html_safe
-              td.wd5 style='text-align:center;' 
-                = book.end_copy_condition_id == 3 ? '&#9745;'.html_safe : '&#9744;'.html_safe
-              td.wd5 style='text-align:center;' 
-                = book.end_copy_condition_id == 4 ? '&#9745;'.html_safe : '&#9744;'.html_safe
-              td.wd5 style='text-align:center;' 
-                = book.end_copy_condition_id == 5 ? '&#9745;'.html_safe : '&#9744;'.html_safe
-              td.wd5 style='text-align:center;' 
-                = book.needs_rebinding == 1 ? '&#9745;'.html_safe : '&#9744;'.html_safe
-              td.wd25
-                = book.notes
+            - if book.book_copy.present?
+              - initial_condition = book.book_copy.start_condition_in_year(@year_id) 
+              tr.nobreak style='border-bottom:1px solid gainsboro'
+                td.wd5 = i+1
+                td.wd20 style='text-align:center'
+                  - Barcode.new(book.barcode).write_image
+                  = wicked_pdf_image_tag  "/assets/images/#{book.barcode.upcase}.PNG"
+                  = book.barcode
+                td.wd10 style='text-align:center;'
+                  span = book.book_copy.try(:book_label).try(:name) || 'N/A'
+                td.wd10 style='text-align:center;' 
+                  = initial_condition.try(:code)
+                td.wd5 style='text-align:center;' 
+                  = book.end_copy_condition_id == 1 ? '&#9745;'.html_safe : '&#9744;'.html_safe
+                td.wd5 style='text-align:center;' 
+                  = book.end_copy_condition_id == 2 ? '&#9745;'.html_safe : '&#9744;'.html_safe
+                td.wd5 style='text-align:center;' 
+                  = book.end_copy_condition_id == 3 ? '&#9745;'.html_safe : '&#9744;'.html_safe
+                td.wd5 style='text-align:center;' 
+                  = book.end_copy_condition_id == 4 ? '&#9745;'.html_safe : '&#9744;'.html_safe
+                td.wd5 style='text-align:center;' 
+                  = book.end_copy_condition_id == 5 ? '&#9745;'.html_safe : '&#9744;'.html_safe
+                td.wd5 style='text-align:center;' 
+                  = book.needs_rebinding == 1 ? '&#9745;'.html_safe : '&#9744;'.html_safe
+                td.wd25
+                  = book.notes
     - if i < @num_titles - 1
       .page-break

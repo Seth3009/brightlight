@@ -120,7 +120,7 @@ h4 = @book_edition.title
       thead
         tr
           th
-            input.allcheckboxes type="checkbox" id="book_copy-all" name="book_copy[all]" data-total="#{@total_copies}"
+            input.allcheckboxes type="checkbox" id="book_copy-all" name="book_copy[all]"
             = label_tag "book_copy-all", ""
           th No
           th = sort_link :barcode

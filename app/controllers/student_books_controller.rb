@@ -32,18 +32,21 @@ class StudentBooksController < ApplicationController
                           .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, textbook_category_id)
                           .where(roster_no:@roster_no.to_s)
                           .where(academic_year_id:@year_id)
+                          .not_disposed
                           .includes([:book_copy, book_copy: [:book_edition]])
       end
     elsif params[:s].present?
       @students = @grade_section.current_students
       @student_books = StudentBook.where(grade_section:@grade_section)
                         .where(academic_year_id:@year_id)
+                        .not_disposed
                         .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, textbook_category_id)
                         .order('roster_no ASC, standard_books.id ASC')
                         .includes([:book_copy, book_copy: [:book_edition]])
     else
       @student_books = StudentBook.includes([:book_copy, book_copy: [:book_edition]])
                         .where(academic_year_id:@year_id)
+                        .not_disposed
                         .paginate(page: params[:page], per_page: items_per_page)
     end
 
@@ -200,12 +203,14 @@ class StudentBooksController < ApplicationController
                         .where(academic_year_id: @year_id)
                         .where(end_copy_condition: missing)
                         .where(grade_section:@grade_section)
+                        .not_disposed
                         .order('CAST(roster_no AS int)')
       @students = Student.in_section_having_books_with_condition missing, section:@grade_section
     else
       @students = Student.having_books_with_condition missing
       @student_books = StudentBook
                         .where(academic_year_id: @year_id)
+                        .not_disposed
                         .where(end_copy_condition: missing)
                         .order('grade_section_id ASC' ,'CAST(roster_no AS int)')
     end
@@ -254,6 +259,7 @@ class StudentBooksController < ApplicationController
       @student_books = StudentBook
                         .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, @textbook_category_id)
                         .where(academic_year_id: @year_id)
+                        .not_disposed
                         .where("end_copy_condition_id = ? OR needs_rebinding = true", poor.id)
                         .where(grade_section:@grade_section)
                         .order(:book_edition_id, 'CAST(roster_no AS int)')
@@ -261,6 +267,7 @@ class StudentBooksController < ApplicationController
     else
       @student_books = StudentBook
                         .where(academic_year_id: @year_id)
+                        .not_disposed
                         .where("end_copy_condition_id = ? OR needs_rebinding = true", poor.id)
                         .order(:book_edition_id, 'CAST(roster_no AS int)')
     end
@@ -301,7 +308,7 @@ class StudentBooksController < ApplicationController
       @grade_section = GradeSection.find(params[:s])
       @grade_level = @grade_section.grade_level
                     
-      all_books = StudentBook.where(academic_year_id:@year_id,grade_section: @grade_section)
+      all_books = StudentBook.where(academic_year_id:@year_id,grade_section: @grade_section).not_disposed
       @all_titles = all_books.joins(:book_edition)
                       .group('book_edition_id, book_editions.title')
                       .select('book_edition_id as id, book_editions.title as title')
@@ -314,7 +321,7 @@ class StudentBooksController < ApplicationController
         @book_titles = @all_titles.where(book_edition_id: @book_edition_id)
         @student_books = all_books.where(book_edition_id: @book_edition_id)
                           .joins(:book_edition)   
-                          .order('book_editions.title')
+                          .order('book_editions.title, CAST(roster_no as INT)')
                           .includes([:book_copy])
       else
         # No book title is selected, here we load ALL book titles for the grade_section
@@ -365,7 +372,8 @@ class StudentBooksController < ApplicationController
       gss = @student_list.take
       @grade_section = gss.try(:grade_section)
       @roster_no = gss.order_no
-      @student_books = @student.student_books         
+      @student_books = @student.student_books
+                          .not_disposed         
                           .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, @textbook_category_id)    
                           .order('standard_books.id')
                           .includes([:book_copy])
@@ -373,6 +381,7 @@ class StudentBooksController < ApplicationController
       # No student is selected, here we load ALL for the grade_section   
       @student_list = @all_students   
       @student_books = StudentBook.where(grade_section:@grade_section)
+                        .not_disposed
                         .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, @textbook_category_id)      
                         .order('roster_no ASC, standard_books.id ASC')
                         .includes([:book_copy])
@@ -443,6 +452,7 @@ class StudentBooksController < ApplicationController
     year = params[:year]
     all_books = StudentBook.joins(:book_edition)
                   .where(academic_year_id: year, grade_section: grade_section)
+                  .not_disposed
     book_titles = all_books.group('book_edition_id, book_editions.title')
                   .select('book_edition_id, book_editions.title as title')
                   .order('book_editions.title')
@@ -454,7 +464,7 @@ class StudentBooksController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_student_book
-      @student_book = StudentBook.find(params[:id])
+      @student_book = StudentBook.not_disposed.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

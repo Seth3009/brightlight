@@ -14,6 +14,7 @@ class BookReceiptsController < ApplicationController
       @grade_section_name = @grade_section.name
       @book_labels = BookLabel.where(grade_section:@grade_section).order(:book_no)
       @book_copies = BookReceipt.where(academic_year:@academic_year,grade_section:@grade_section)
+                      .not_disposed
                       .joins(:book_edition)
                       .select('book_receipts.*, book_editions.title as title')
                       .order("#{sort_column} #{sort_direction}")
@@ -226,7 +227,7 @@ class BookReceiptsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_receipt
-      @book_receipt = BookReceipt.find(params[:id])
+      @book_receipt = BookReceipt.not_disposed.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
