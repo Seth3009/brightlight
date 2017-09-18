@@ -9,11 +9,17 @@ class BookFine < ActiveRecord::Base
   belongs_to :grade_level
   
   validates :book_copy, uniqueness: {scope: [:student_id, :academic_year_id]}
+  
+  scope :not_disposed, lambda { 
+    where('book_fines.book_copy_id NOT IN (
+        select id from book_copies where disposed = true
+      )')
+  }
 
   # collect_current will read student_books table and look for book that are applicable for book fine
   # for the current academic year and then save them in book_fines table
   def self.collect_fines(year)
-    BookFine.create(StudentBook.where(academic_year:year).fine_applies.map do |b|
+    BookFine.create(StudentBook.not_disposed.where(academic_year:year).fine_applies.map do |b|
       pct = FineScale.fine_percentage_for_condition_change(b.initial_copy_condition_id,b.end_copy_condition_id)
       price = b.try(:book_copy).try(:book_edition).try(:price).try(:to_f) || 0.0
       {

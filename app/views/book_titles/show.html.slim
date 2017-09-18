@@ -16,17 +16,38 @@
                   .item = @book_title.authors
                 dd.col.s6
                   .label Subject
-                  .item = @book_title.subject.try(:name) || "---"
+                  .item = @book_title.subject.try(:name) || "--"
+              dl.row
+                dd.col.s6 
+                  .label Tags                  
+                  .item 
+                    - if @book_title.tags
+                      - @book_title.tags.split(",").each do |x| 
+                        = "<span class='tag'>#{x}</span>".html_safe
+                    - else 
+                      = "--"
+                dd.col.s3
+                  .label Grade
+                  .item = @book_title.grade_level.try(:name) || '--'
+                dd.col.s3
+                  .label Track
+                  .item = @book_title.track || '--'
+                  = link_to edit_subject_book_title_path(@book_title), remote: true, class: "btn-floating right btn-large waves-effect waves-light red"
+                    i.material-icons.tooltipped data-position="top" data-delay="50" data-tooltip="Add subjects, tags, etc"  edit
 
 nav
  .nav-wrapper
-    .brand-logo style="margin-left: 20px; font-size:1.5em"
-      ul.left
-        li
+    //.brand-logo style="margin-left: 20px; font-size:1.5em"
+    ul.left
+      - if params[:return_url]
+        li.tooltipped data-position="bottom" data-delay="50" data-tooltip="Return to teacher's books list"
+          = link_to params[:return_url]
+            = @teacher.name.truncate 10, separator: ' '
+            i.material-icons.left chevron_left
+      - else          
+        li.tooltipped data-position="bottom" data-delay="50" data-tooltip="All book titles"
           = link_to book_titles_path
-            i.material-icons.center home
-        li
-          | Editions
+            i.material-icons.center book
     ul.right
       li
         = form_tag({controller:'book_titles', action:'add_isbn'}, {method: "post", class: "col s6"}) do
@@ -45,6 +66,7 @@ nav
             | Edit
 
 .card-panel
+  h5 Book Editions
   table.striped
     thead
       th Title
@@ -67,4 +89,4 @@ nav
           = link_to book_edition_book_copies_path(edition)
             span.box = edition.number_of_copies
 
-  
+#show-modal.modal.modal-fixed-footer

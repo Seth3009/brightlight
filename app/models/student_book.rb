@@ -31,6 +31,11 @@ class StudentBook < ActiveRecord::Base
   accepts_nested_attributes_for :book_loan
 
   scope :current_year, lambda { where(academic_year:AcademicYear.current) }
+  scope :not_disposed, lambda { 
+    where('student_books.book_copy_id NOT IN (
+        select id from book_copies where disposed = true
+      )')
+  }
 
   # SQL version:
   # SELECT * FROM student_books

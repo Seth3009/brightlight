@@ -54,12 +54,14 @@ Rails.application.routes.draw do
       post 'merge'      # merges several book titles together
       post 'delete'     # deletes several book titles at the same time
       post 'search_isbn'
+      get 'tags'
     end
     member do
       get 'editions'
       post 'add_existing_editions'
       post 'add_isbn'
       post 'update_metadata'
+      get 'edit_subject'
     end
   end
 

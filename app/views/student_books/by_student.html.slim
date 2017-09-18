@@ -20,7 +20,7 @@ ul#year-options.dropdown-content
   li  
   - AcademicYear.list_for_menu.each do |year|
     li 
-      = link_to year.name, by_student_student_books_path(params.merge(year:year.id).symbolize_keys)
+      = link_to year.name, by_student_student_books_path(year:year.id)
       
 = form_tag update_multiple_student_books_path, method: :put do
   nav
@@ -86,57 +86,58 @@ ul#year-options.dropdown-content
               th style='text-align:center;' Notes
           tbody                          
             - student_books.each_with_index do |book, i|
-              = fields_for "book_loans[]", book do |f|
-                = f.hidden_field :grade_section_id, value: @grade_section.id 
-                = f.hidden_field :grade_level_id, value: @grade_level.id 
-                = f.hidden_field :academic_year_id, value: @current_year
-                = f.hidden_field :book_copy_id, value: book.book_copy_id 
-                = f.hidden_field :book_edition_id, value: book.book_edition_id
-                = f.hidden_field :book_title_id, value: @book_title_id
-                = f.hidden_field :out_date, value: book.issue_date
-                = f.hidden_field :return_date, value: Date.today
-                = f.hidden_field :student_id, value: book.student_id
-                = f.hidden_field :book_category, value: @book_category
-                = f.hidden_field :student_no, value: book.student_no 
-                = f.hidden_field :roster_no, value: book.roster_no 
-                = f.hidden_field :barcode, value: book.barcode  
-                = f.hidden_field :grade_section_code, value: book.grade_section_code
-                = f.hidden_field :grade_subject_code, value: book.grade_subject_code
-                = f.hidden_field :notes, value: book.notes 
-                = f.hidden_field :prev_academic_year_id, value: AcademicYear.current_id-1 
-                = f.hidden_field :user_id, value: current_user.id if current_user
-              = fields_for "student_books[]", book do |f|
-                - initial_condition = book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
-                - end_condition = book.end_copy_condition_id
-                tr id=book.id
-                  td.wd3 = i+1                  
-                  td.wd20 = book.try(:title).truncate(45) 
-                  td.wd5 style='text-align:center;' 
-                    span = link_to book.barcode, book.try(:book_copy)
-                  td.wd5 style='text-align:center;' 
-                    span.box class="#{initial_condition.try(:color) || 'beige'}"
-                      = initial_condition.try(:code) || '?'
-                  = f.hidden_field :end_copy_condition_id
-                  td.wd3 style='text-align:center;' 
-                    = radio_button_tag "book[#{book.id}][condition]", 1, end_condition==1, disabled:@disable_edit
-                    = label_tag "book[#{book.id}][condition]_1", "New", class:'small-radio-label'
-                  td.wd3 style='text-align:center;' 
-                    = radio_button_tag "book[#{book.id}][condition]", 2, end_condition==2, disabled:@disable_edit
-                    = label_tag "book[#{book.id}][condition]_2", "Good", class:'small-radio-label'
-                  td.wd3 style='text-align:center;' 
-                    = radio_button_tag "book[#{book.id}][condition]", 3, end_condition==3, disabled:@disable_edit
-                    = label_tag "book[#{book.id}][condition]_3", "Fair", class:'small-radio-label'
-                  td.wd3 style='text-align:center;' 
-                    = radio_button_tag "book[#{book.id}][condition]", 4, end_condition==4, disabled:@disable_edit
-                    = label_tag "book[#{book.id}][condition]_4", "Poor", class:'small-radio-label'
-                  td.wd3 style='text-align:center;' 
-                    = radio_button_tag "book[#{book.id}][condition]", 5, end_condition==5, disabled:@disable_edit
-                    = label_tag "book[#{book.id}][condition]_5", "Missing", class:'small-radio-label'
-                  td.wd5 style='text-align:center;' 
-                    = f.check_box :needs_rebinding, disabled:@disable_edit
-                    = f.label :needs_rebinding, 'NR', class:'small-radio-label;font-size:2px'
-                  td.wd20
-                    = f.text_field :notes, disabled:@disable_edit
+              - if book.book_copy.present?
+                = fields_for "book_loans[]", book do |f|
+                  = f.hidden_field :grade_section_id, value: @grade_section.id 
+                  = f.hidden_field :grade_level_id, value: @grade_level.id 
+                  = f.hidden_field :academic_year_id, value: @current_year
+                  = f.hidden_field :book_copy_id, value: book.book_copy_id 
+                  = f.hidden_field :book_edition_id, value: book.book_edition_id
+                  = f.hidden_field :book_title_id, value: @book_title_id
+                  = f.hidden_field :out_date, value: book.issue_date
+                  = f.hidden_field :return_date, value: Date.today
+                  = f.hidden_field :student_id, value: book.student_id
+                  = f.hidden_field :book_category, value: @book_category
+                  = f.hidden_field :student_no, value: book.student_no 
+                  = f.hidden_field :roster_no, value: book.roster_no 
+                  = f.hidden_field :barcode, value: book.barcode  
+                  = f.hidden_field :grade_section_code, value: book.grade_section_code
+                  = f.hidden_field :grade_subject_code, value: book.grade_subject_code
+                  = f.hidden_field :notes, value: book.notes 
+                  = f.hidden_field :prev_academic_year_id, value: AcademicYear.current_id-1 
+                  = f.hidden_field :user_id, value: current_user.id if current_user
+                = fields_for "student_books[]", book do |f|
+                  - initial_condition = book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
+                  - end_condition = book.end_copy_condition_id
+                  tr id=book.id
+                    td.wd3 = i+1                  
+                    td.wd20 = book.try(:title).truncate(45) 
+                    td.wd5 style='text-align:center;' 
+                      span = link_to book.barcode, book.try(:book_copy)
+                    td.wd5 style='text-align:center;' 
+                      span.box class="#{initial_condition.try(:color) || 'beige'}"
+                        = initial_condition.try(:code) || '?'
+                    = f.hidden_field :end_copy_condition_id
+                    td.wd3 style='text-align:center;' 
+                      = radio_button_tag "book[#{book.id}][condition]", 1, end_condition==1, disabled:@disable_edit
+                      = label_tag "book[#{book.id}][condition]_1", "New", class:'small-radio-label'
+                    td.wd3 style='text-align:center;' 
+                      = radio_button_tag "book[#{book.id}][condition]", 2, end_condition==2, disabled:@disable_edit
+                      = label_tag "book[#{book.id}][condition]_2", "Good", class:'small-radio-label'
+                    td.wd3 style='text-align:center;' 
+                      = radio_button_tag "book[#{book.id}][condition]", 3, end_condition==3, disabled:@disable_edit
+                      = label_tag "book[#{book.id}][condition]_3", "Fair", class:'small-radio-label'
+                    td.wd3 style='text-align:center;' 
+                      = radio_button_tag "book[#{book.id}][condition]", 4, end_condition==4, disabled:@disable_edit
+                      = label_tag "book[#{book.id}][condition]_4", "Poor", class:'small-radio-label'
+                    td.wd3 style='text-align:center;' 
+                      = radio_button_tag "book[#{book.id}][condition]", 5, end_condition==5, disabled:@disable_edit
+                      = label_tag "book[#{book.id}][condition]_5", "Missing", class:'small-radio-label'
+                    td.wd5 style='text-align:center;' 
+                      = f.check_box :needs_rebinding, disabled:@disable_edit
+                      = f.label :needs_rebinding, 'NR', class:'small-radio-label;font-size:2px'
+                    td.wd20
+                      = f.text_field :notes, disabled:@disable_edit
 
       .page-break    
     - if !@disable_edit

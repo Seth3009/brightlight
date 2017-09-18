@@ -28,10 +28,18 @@ class BookLoan < ActiveRecord::Base
             .joins('LEFT JOIN subjects ON book_titles.subject_id = subjects.id')                       
             .select('book_loans.*, book_editions.title as title, subjects.name as subject') }
 
+  
+  scope :not_disposed, lambda { 
+    where('book_loans.book_copy_id NOT IN (
+        select id from book_copies where disposed = true
+      )')
+  }
+
   def self.list_for_teacher(teacher_id, year)
     loans = BookLoan.includes([:employee,:book_copy,:book_edition,:academic_year])
                 .joins('LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id')
                 .joins("LEFT JOIN subjects ON subjects.id = book_titles.subject_id")
+                .not_disposed
                 .select('book_loans.*, subjects.name as subject, book_titles.title as title')
     if year.present? && year.downcase != 'all' 
       loans = loans.where(academic_year_id:year)
@@ -47,6 +55,7 @@ class BookLoan < ActiveRecord::Base
         'subjects.name','book_editions.title','book_editions.authors','book_editions.publisher', 
         'book_editions.isbn13','book_editions.isbn10', 'book_loans.notes'])
       .where('book_loans.academic_year_id = ? AND book_loans.employee_id = ?', year_id, teacher_id)      
+      .not_disposed
       .joins("LEFT JOIN book_editions ON book_editions.id = book_loans.book_edition_id")
       .joins("LEFT JOIN book_titles ON book_titles.id = book_loans.book_title_id")
       .joins("LEFT JOIN subjects ON subjects.id = book_titles.subject_id")
@@ -59,7 +68,7 @@ class BookLoan < ActiveRecord::Base
                 :out_date, :due_date, :academic_year_id, :user_id, :barcode, :refno,
                 :prev_academic_year_id, :loan_status, :bkudid, :employee_id, :deleted_flag]
     values = []
-    BookLoan.where(academic_year_id: previous_year_id).where.not(employee_id: nil).each do |bl|
+    BookLoan.not_disposed.where(academic_year_id: previous_year_id).where.not(employee_id: nil).each do |bl|
       data = [bl.book_copy_id, bl.book_edition_id, bl.book_title_id, bl.person_id, bl.book_category_id, bl.loan_type_id,
                 Date.today, Date.today+360, new_year_id, user_id, bl.barcode, bl.refno,
                 previous_year_id, 'B', bl.bkudid, bl.employee_id, false]
@@ -69,18 +78,18 @@ class BookLoan < ActiveRecord::Base
   end
 
   # BookLoan.move_all_books(from:Employee.find(3),to:Employee.find(4),from_year:AcademicYear.current_id-1,to_year:AcademicYear.current, current_user)
-  def self.move_all_books(from:, to:, from_year:, to_year:, user_id:)
+  def self.move_all_books(from:, to:, from_year:, to_year:, exclude_unreturned_books: true, user_id:)
     source = Employee.find(from.id)
     destination = Employee.find(to.id)
 
     # This would be efficient, but it doesn't update the updated_at field
     # BookLoan.where(employee:source,academic_year:from_year).update_all(employee_id:to.id, academic_year_id:to_year.id)
 
-    tmp = source.book_loans.where(academic_year:from_year).map { |x|
+    tmp = source.book_loans.not_disposed.where(academic_year:from_year).map { |x|
             x.attributes.except('created_at', 'updated_at', 'id', 'return_status', 'return_date', 'out_date', 'due_date', 'user_id')
             .merge('academic_year_id'=>to_year, 'out_date'=>Date.today, 'due_date'=>Date.today+360, 'user_id'=>user_id)
-          }
-    source.book_loans.where(academic_year:from_year).delete_all if from_year == to_year
+          } 
+    source.book_loans.not_disposed.where(academic_year:from_year).delete_all if from_year == to_year
     destination.book_loans.create(tmp)
   end
 

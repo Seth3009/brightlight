@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170823072020) do
+ActiveRecord::Schema.define(version: 20170913043039) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -303,16 +303,20 @@ ActiveRecord::Schema.define(version: 20170823072020) do
     t.string   "authors"
     t.string   "publisher"
     t.string   "image_url"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.integer  "bkudid"
     t.integer  "subject_id"
     t.string   "subject_code"
     t.string   "slug"
     t.string   "subject_level"
     t.string   "grade_code"
+    t.integer  "grade_level_id"
+    t.string   "track"
+    t.string   "tags"
   end
 
+  add_index "book_titles", ["grade_level_id"], name: "index_book_titles_on_grade_level_id", using: :btree
   add_index "book_titles", ["slug"], name: "index_book_titles_on_slug", unique: true, using: :btree
   add_index "book_titles", ["subject_id"], name: "index_book_titles_on_subject_id", using: :btree
 
@@ -330,13 +334,32 @@ ActiveRecord::Schema.define(version: 20170823072020) do
     t.string   "notes"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
-    t.boolean  "in_transit"
-    t.boolean  "late"
   end
 
   add_index "carpools", ["barcode"], name: "index_carpools_on_barcode", using: :btree
   add_index "carpools", ["sort_order"], name: "index_carpools_on_sort_order", using: :btree
   add_index "carpools", ["transport_id"], name: "index_carpools_on_transport_id", using: :btree
+
+  create_table "cars", force: :cascade do |t|
+    t.string   "transport_name", limit: 255
+    t.string   "uid",            limit: 255
+    t.string   "family_no",      limit: 255
+    t.integer  "period"
+    t.string   "status",         limit: 255
+    t.string   "category",       limit: 255
+    t.datetime "arrival"
+    t.datetime "departure"
+    t.boolean  "loading",                    default: false, null: false
+    t.float    "sort_order"
+    t.string   "notes",          limit: 255
+    t.integer  "transport_id"
+    t.datetime "inserted_at",                                null: false
+    t.datetime "updated_at",                                 null: false
+    t.string   "period_hash",    limit: 32
+  end
+
+  add_index "cars", ["transport_id", "period_hash"], name: "transport_period_index", unique: true, using: :btree
+  add_index "cars", ["transport_id"], name: "cars_transport_id_index", using: :btree
 
   create_table "copy_conditions", force: :cascade do |t|
     t.integer  "book_copy_id"
@@ -803,6 +826,10 @@ ActiveRecord::Schema.define(version: 20170823072020) do
   add_index "rosters", ["course_section_id"], name: "index_rosters_on_course_section_id", using: :btree
   add_index "rosters", ["student_id"], name: "index_rosters_on_student_id", using: :btree
 
+  create_table "schema_versions", primary_key: "version", force: :cascade do |t|
+    t.datetime "inserted_at"
+  end
+
   create_table "school_levels", force: :cascade do |t|
     t.string   "name"
     t.string   "code"
@@ -1079,7 +1106,9 @@ ActiveRecord::Schema.define(version: 20170823072020) do
   add_foreign_key "book_fines", "grade_levels"
   add_foreign_key "book_fines", "grade_sections"
   add_foreign_key "book_fines", "student_books"
+  add_foreign_key "book_titles", "grade_levels"
   add_foreign_key "carpools", "transports"
+  add_foreign_key "cars", "transports", name: "cars_transport_id_fkey"
   add_foreign_key "course_section_histories", "employees", column: "instructor_id"
   add_foreign_key "currencies", "users"
   add_foreign_key "family_members", "families"
@@ -1136,6 +1165,7 @@ ActiveRecord::Schema.define(version: 20170823072020) do
       book_loans.student_id,
       book_loans.deleted_flag,
       subjects.name AS subject,
+      book_titles.subject_id,
       e.id AS edition_id,
       e.title,
       e.authors,
@@ -1152,7 +1182,8 @@ ActiveRecord::Schema.define(version: 20170823072020) do
       l.notes AS check_notes,
       employees.id AS emp_id,
       employees.name AS emp_name
-     FROM ((((((book_loans
+     FROM (((((((book_loans
+       JOIN book_copies ON (((book_copies.id = book_loans.book_copy_id) AND ((book_copies.disposed = false) OR (book_copies.disposed IS NULL)))))
        LEFT JOIN book_titles ON ((book_titles.id = book_loans.book_title_id)))
        LEFT JOIN book_editions e ON ((e.id = book_loans.book_edition_id)))
        LEFT JOIN subjects ON ((subjects.id = book_titles.subject_id)))

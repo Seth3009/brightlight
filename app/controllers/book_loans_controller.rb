@@ -199,7 +199,7 @@ class BookLoansController < ApplicationController
   def show_tm
     authorize! :read, BookLoan
     @teacher = Employee.find params[:employee_id]
-    @book_loan = BookLoan.find params[:id]
+    @book_loan = BookLoan.not_disposed.find params[:id]
     @last_check = @book_loan.loan_checks.order(updated_at: :desc).take
   end
 
@@ -226,7 +226,7 @@ class BookLoansController < ApplicationController
   def update_tm
     authorize! :scan, BookLoan
     @teacher = Employee.find params[:employee_id]
-    @book_loan = BookLoan.find params[:id]
+    @book_loan = BookLoan.not_disposed.find params[:id]
     borrower_matched = @teacher == @book_loan.employee
 
     respond_to do |format|
@@ -245,7 +245,7 @@ class BookLoansController < ApplicationController
     @current_year = AcademicYear.current_id
 
     params[:book_loans].each do |key, values|
-      book_loan = BookLoan.where(academic_year_id:@current_year).where(book_copy_id:values[:book_copy_id]).take
+      book_loan = BookLoan.not_disposed.where(academic_year_id:@current_year).where(book_copy_id:values[:book_copy_id]).take
       book_loan.update_attribute(:return_date, values[:return_date])
       book_loan.update_attribute(:user_id, values[:user_id])
       book_loan.update_attribute(:notes, values[:notes])
@@ -265,7 +265,7 @@ class BookLoansController < ApplicationController
 
     respond_to do |format|
       format.js do
-        if BookLoan.where(academic_year_id:academic_year_id).where.not(employee_id:nil).count > 0
+        if BookLoan.not_disposed.where(academic_year_id:academic_year_id).where.not(employee_id:nil).count > 0
           @error = "Error: records are not empty for the academic year #{AcademicYear.find(academic_year_id).name}"
         else
           BookLoan.initialize_teacher_loans_from_previous_year academic_year_id-1, academic_year_id, current_user.id
@@ -282,13 +282,13 @@ class BookLoansController < ApplicationController
     to = Employee.find params[:to_teacher].to_i
     from_year = params[:from_year].to_i
     to_year = params[:to_year].to_i
-    count = BookLoan.where(academic_year:from_year, employee_id:from).count
+    count = BookLoan.not_disposed.where(academic_year:from_year, employee_id:from).count
 
     BookLoan.move_all_books(from:from,to:to, from_year:from_year, to_year:to_year, user_id: current_user.id)
 
     respond_to do |format|
       format.js do
-        if BookLoan.where(academic_year:to_year, employee_id:to).count == count
+        if BookLoan.not_disposed.where(academic_year:to_year, employee_id:to).count == count
           @message = "Move completed successfully."
         else
           @error = "Error: Failed to move some or all of the books"
@@ -307,19 +307,19 @@ class BookLoansController < ApplicationController
     completed = []
     ids_to_remove = []
     if params[:move]
-      BookLoan.where(id:loan_ids).each do |loan|
+      BookLoan.not_disposed.where(id:loan_ids).each do |loan|
         success = loan.move_book to:target, to_year:year
         completed << loan.id.to_s if success
         ids_to_remove << loan.id.to_s if success and year == loan.academic_year
       end
       failed = loan_ids - completed
     elsif params[:delete]
-      BookLoan.where(id:loan_ids).delete_all
+      BookLoan.not_disposed.where(id:loan_ids).delete_all
       ids_to_remove = loan_ids
     end
     ids_to_uncheck = completed - ids_to_remove
     @rows_to_remove = ids_to_remove.present? ? ids_to_remove.map{|id| '#row-'+id.to_s}.join(', ') : ""
-    @failed_barcodes = failed.present? ? failed.map {|x| BookLoan.where(id:x).take.try(:barcode)} : ""
+    @failed_barcodes = failed.present? ? failed.map {|x| BookLoan.not_disposed.where(id:x).take.try(:barcode)} : ""
     @rows_to_uncheck = ids_to_uncheck.present? ? ids_to_uncheck.map{|id| '#add_'+id.to_s}.join(', ') : ""
     respond_to :js
   end
@@ -356,7 +356,7 @@ class BookLoansController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_loan
-      @book_loan = BookLoan.find(params[:id])
+      @book_loan = BookLoan.not_disposed.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

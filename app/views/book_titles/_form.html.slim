@@ -19,6 +19,17 @@
           .input-field.col.s8
             = f.label :authors, class: 'active'
             = f.text_field :authors
+          .input-field.col.s4
+            = f.label :tags, class: 'active', style:"font-size: 0.8rem;-webkit-transform: translateY(-140%);-moz-transform: translateY(-140%);-ms-transform: translateY(-140%);-o-transform: translateY(-140%);transform: translateY(-140%);"
+            = f.text_field :tags
+        
+          .input-field.col.s4
+            = f.label :grade_level, class: 'active'
+            = f.collection_select :grade_level_id, GradeLevel.all.order(:name), :id, :name, prompt: true
+          .input-field.col.s4
+            = f.label :track, class: 'active'
+            = f.select :track, options_for_select([['NS'],['SS','SS']], @book_title.track), {prompt:'Please select'}
+
 
           - if @book_title.has_cover?
             h6.grey-text Select cover image:
@@ -65,3 +76,4 @@ javascript:
       //$("#placemark").scrollTo();
       $('select').material_select();
     })
+  $('#book_title_tags').tagsInput();
