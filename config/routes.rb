@@ -177,12 +177,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :carpools do
-    collection do
-      get 'poll'
-      put 'reorder'
-    end
-  end
+  # resources :carpools do
+  #   collection do
+  #     get 'poll'
+  #     put 'reorder'
+  #   end
+  # end
 
   resources :transports do
     member do
@@ -208,12 +208,12 @@ Rails.application.routes.draw do
       post   "/sign-in"       => "sessions#create"
       delete "/sign-out"      => "sessions#destroy"
     end
-    resources :carpools do
-      collection do
-        get 'poll'
-        put 'reorder'
-      end
-    end
+    # resources :carpools do
+    #   collection do
+    #     get 'poll'
+    #     put 'reorder'
+    #   end
+    # end
   end
   
   get 'settings/inventory_mtce' => 'settings#inventory_mtce', as: :settings_inventory_mtce
