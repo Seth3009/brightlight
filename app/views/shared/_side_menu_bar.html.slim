@@ -133,12 +133,12 @@ li
 		.collapsible-body
 			ul
 				li
-					= link_to 'Carpool', carpools_path
-					= link_to 'TV Shuttle', carpools_path(shuttle:0)
-					= link_to 'TV Car Riders', carpools_path(waiting:0)
+					= link_to 'Carpool', "/phx"
+					= link_to 'TV Shuttle GS', "/phx?shuttle=gs"
+					= link_to 'TV Shuttle SOL/SOR', "/phx?shuttle=sol"
+					= link_to 'TV Car Riders', "/phx?ready=1"
 				- if can? :manage, Carpool
-					li
-						= link_to 'Transports', transports_path(type:'shuttle')
+					= link_to 'Transports', transports_path(type:'shuttle')
 
 - if signed_in? and current_user.admin?
 	li
