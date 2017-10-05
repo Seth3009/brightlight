@@ -164,6 +164,12 @@ class BookLoansController < ApplicationController
       @academic_year = AcademicYear.current      
     end 
     @book_loans = TeachersBook.for(@teacher).year(@academic_year)
+
+    if params[:book_catg].present? && params[:book_catg].downcase != 'all'
+      @book_catg = BookCategory.find params[:book_catg]
+      @book_loans = @book_loans.where(book_category: @book_catg)
+    end
+
     @count = @book_loans.count
 
     respond_to do |format|
@@ -313,6 +319,8 @@ class BookLoansController < ApplicationController
         ids_to_remove << loan.id.to_s if success and year == loan.academic_year
       end
       failed = loan_ids - completed
+    elsif params[:category]
+      BookLoan.not_disposed.where(id:loan_ids).update_all book_category_id: params[:book_catg] 
     elsif params[:delete]
       BookLoan.not_disposed.where(id:loan_ids).delete_all
       ids_to_remove = loan_ids

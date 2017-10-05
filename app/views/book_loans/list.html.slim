@@ -10,34 +10,56 @@ ul#year-options.dropdown-content
     = link_to 'All', employee_book_loans_path(params.merge(year:'all').symbolize_keys)
   - AcademicYear.list_for_menu.each do |year|
     li 
-      = link_to year.name, employee_book_loans_path(params.merge(year:year.id).symbolize_keys)
+      = link_to year.name, employee_book_loans_path(params.merge(year: year.id).symbolize_keys)
+ul#catg-options.dropdown-content
+  li 
+    = link_to 'All', employee_book_loans_path(params.merge(book_catg:'all').symbolize_keys)
+  - BookCategory.all.each do |catg|
+    li
+      = link_to catg.name, employee_book_loans_path(params.merge(book_catg: catg.id).symbolize_keys)
 
 div
   = form_tag list_action_book_loans_path(employee_id:params[:employee_id]), remote:true do 
     nav
       .nav-wrapper
-        ul
-          li
-            a#borrowers-menu.dropdown-button href="#!" data-activates="borrowers-options" data-year="#{@academic_year.id}" data-beloworigin="true" 
-              span#teacher = @teacher.present? ? "#{@teacher.name}" : "Teacher name" 
-              i.material-icons.right arrow_drop_down
-          li
-            a.dropdown-button href="#!" data-activates="year-options" data-beloworigin="true" 
-              span#year = params[:year].present? && params[:year].downcase == 'all' ? 'All' : (@academic_year.present? ? "#{@academic_year.name}" : "Academic Year") 
-              i.material-icons.right arrow_drop_down
         #context-buttons style="display:none;"
-          ul.right     
-            li  
-              button.btn type='submit' name='move' Move to:
-            li
-              = select_tag :to_teacher, options_from_collection_for_select(Employee.all.order(:name),:id,:name)
-            li style="width:110px" class="text-align:center"
-              = select_tag :to_year, options_from_collection_for_select(AcademicYear.list_for_menu,:id,:name,AcademicYear.current_id)
+          ul.left  
+            - if can? :manage, BookLoan      
+              li 
+                .cat Move to:
+              li style="width:200px"             
+                = select_tag :to_teacher, options_from_collection_for_select(Employee.all.order(:name),:id,:name)
+              li style="width:110px" class="text-align:center"
+                = select_tag :to_year, options_from_collection_for_select(AcademicYear.list_for_menu,:id,:name,AcademicYear.current_id)
+              li  
+                button.btn type='submit' name='move' Go!
+          ul.right
+            - if can? :update, BookLoan
+              li 
+                .cat Edit:
+              li 
+                = select_tag :book_catg, options_from_collection_for_select(BookCategory.all, :id, :name), prompt: "Select Category"
+              li 
+                button.btn type='submit' name='category' Submit
             - if can? :delete, BookLoan
-              li
-                button.btn.red type='submit' name='delete' data-confirm="Are you sure?"
-                  i.material-icons delete
+              li style="height: 54px"
+                button.icon type='submit' name='delete' data-confirm="Are you sure?"
+                  i.material-icons.red-text delete
         #default-buttons
+          ul
+            li
+              a#borrowers-menu.dropdown-button href="#!" data-activates="borrowers-options" data-year="#{@academic_year.id}" data-beloworigin="true" 
+                span#teacher = @teacher.present? ? "#{@teacher.name}" : "Teacher name" 
+                i.material-icons.right arrow_drop_down
+            li
+              a.dropdown-button href="#!" data-activates="year-options" data-beloworigin="true" 
+                span#year = params[:year].present? && params[:year].downcase == 'all' ? 'All' : (@academic_year.present? ? "#{@academic_year.name}" : "Academic Year") 
+                i.material-icons.right arrow_drop_down
+            li
+              a.dropdown-button href="#!" data-activates="catg-options" data-beloworigin="true" 
+                span#catg = @book_catg.present? ? "#{@book_catg.name}" : "Category" 
+                i.material-icons.right arrow_drop_down
+
           ul.right.hide-on-med-and-down
             li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Book Receipt"
               = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id)
@@ -136,9 +158,7 @@ div
                   - if can? :update, BookLoan
                     = link_to edit_employee_book_loans_path(book_loan.emp_id, book_loan, year: @academic_year.id)
                       i.material-icons edit
-                  - if can? :delete, BookLoan
-                    = link_to book_loan_path(book_loan.id), data: {id: book_loan.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
-                      i.material-icons delete
+
       - else 
         = @error
 
