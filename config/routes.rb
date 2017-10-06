@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resources :templates
   resources :currencies
   resources :people
-  resources :book_categories
+  resources :book_categories, except: :show
   resources :subjects
   resources :fine_scales
   resources :book_labels
