@@ -3,7 +3,7 @@
     .card-content
       - if @book_category.errors.any?
         #error_explanation
-          h2 = "#{pluralize(@book_category.errors.count, "error")} prohibited this book_category from being saved:"
+          h2 = "#{pluralize(@book_category.errors.count, "error")} prohibited this book category from being saved:"
           ul
             - @book_category.errors.full_messages.each do |message|
               li = message
@@ -17,4 +17,4 @@
 
     .card-action
       button.btn.waves-effect.waves-light type="submit" Save
-      = link_to 'Cancel', book_conditions_path, class: "waves-effect waves-teal btn-flat"
+      = link_to 'Cancel', book_categories_path, class: "waves-effect waves-teal btn-flat"

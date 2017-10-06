@@ -23,8 +23,8 @@ class BookCategoriesController < ApplicationController
 
     respond_to do |format|
       if @book_category.save
-        format.html { redirect_to @book_category, notice: 'Book category was successfully created.' }
-        format.json { render :show, status: :created, location: @book_category }
+        format.html { redirect_to book_categories_path, notice: 'Book category was successfully created.' }
+        format.json { render @book_category.to_json }
       else
         format.html { render :new }
         format.json { render json: @book_category.errors, status: :unprocessable_entity }
@@ -37,7 +37,7 @@ class BookCategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @book_category.update(book_category_params)
-        format.html { redirect_to @book_category, notice: 'Book category was successfully updated.' }
+        format.html { redirect_to book_categories_path, notice: 'Book category was successfully updated.' }
         format.json { render :show, status: :ok, location: @book_category }
       else
         format.html { render :edit }
