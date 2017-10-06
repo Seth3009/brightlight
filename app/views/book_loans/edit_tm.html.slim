@@ -1,6 +1,6 @@
 = form_for [@teacher, @book_loan], url: "/employees/#{@teacher.id}/book_loans/#{@book_loan.id}" do |f|
   - book_loan = f.object  
-  h5 Editing Teacher's Book Loan Record
+  h5 Editing Book Loan Record
   - if @book_loan.errors.any?
     #error_explanation
       h2 = "#{pluralize(@book_loan.errors.count, "error")} prohibited this book loan from being saved:"
@@ -52,6 +52,9 @@
         .input_field.col.s3
           = f.label :return_status
           = f.select :return_status, options_for_select([['None', nil],['Returned','R'],['Return to Inventory','RI']], book_loan.return_status)
+        .input_field.col.s3
+          = f.label :book_category
+          = f.collection_select :book_category_id, BookCategory.all, :id, :name, prompt: true
 
   .toolbar.action
     button.btn.waves-effect.waves-light type='Submit' Save

@@ -1,27 +1,30 @@
 .modal-content
-  h5 Book Loan
+  h5 Book Loan Record
   .list_description
     dl.row
-      dd.col.s12
-        .label Book Title:
-        .item = book_loan.try(:book_edition).try(:title) || '--'
+      dd.col.s4
+        - thumbnail = book_loan.try(:book_edition).small_thumbnail.present? ? book_loan.try(:book_edition).small_thumbnail : 'book-icon.png' 
+        = image_tag(thumbnail, class: 'list_image')
+      dd.col.s8
+        h4 = book_loan.try(:book_edition).try(:title) || '--'
       dd.col.s3
         .label Barcode:
-        .item = book_loan.barcode || '--'            
+        .item = book_loan.barcode || '--' 
+      dd.col.s3
+        .label Category:
+        .item = book_loan.book_category.try(:name) || '--'
+    dl.row          
       - if book_loan.employee.present?
         dd.col.s6
           .label Borrower:
           .item = book_loan.employee.name  || '--'
-        dd.col.s3
-          .label Employee No:
-          .item = book_loan.employee.employee_number || '--'
       - if book_loan.student.present?
         dd.col.s6
           .label Borrower:
           .item = book_loan.student.name  || '--'
         dd.col.s3
-          .label Student No:
-          .item = book_loan.student_no || '--'
+          .label Grade:
+          .item = book_loan.student.current_grade_section.try(:name) || '--'
     dl.row
       dd.col.s3
         .label Academic year:
@@ -42,6 +45,9 @@
     /   dd.col.s3
     /     .label Return status:
     /     .item = book_loan.return_status || '--'
+    
+    hr style="border: 0; border-top: 1px solid #ccc"
+    
     dl.row
       dd.col.s6 
         .label Last checked:

@@ -387,6 +387,13 @@ input[type=text]:disabled, input[type=text][readonly="readonly"], input[type=pas
 	color: rgba(0, 0, 0, 0.58);
 }
 
+.cat {
+	margin-left: 20px;
+	margin-right: 10px;
+	font-size: 1.3em;
+	color: $kuning-podang;
+}
+
 // ============================================ Buttons =============================================
 
 .btn-small {
@@ -436,6 +443,16 @@ nav {
 			li {
 				button {
 					margin: 0 15px;
+				}
+				button.icon {
+					outline: none;
+					background-color: transparent;
+					border: 0;
+					height: 52px;
+					padding-top: 10px;
+					i {
+						height: 40px;
+					}
 				}
 				a.btn {
 					i {
