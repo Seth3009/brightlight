@@ -6,6 +6,7 @@ class BookTitle < ActiveRecord::Base
   has_many :standard_books
   belongs_to :subject
   belongs_to :grade_level
+  belongs_to :book_category
 
   accepts_nested_attributes_for :book_editions, reject_if: :all_blank, allow_destroy: true
 
