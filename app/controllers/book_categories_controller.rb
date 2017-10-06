@@ -7,11 +7,6 @@ class BookCategoriesController < ApplicationController
     @book_categories = BookCategory.all
   end
 
-  # GET /book_categories/1
-  # GET /book_categories/1.json
-  def show
-  end
-
   # GET /book_categories/new
   def new
     @book_category = BookCategory.new

@@ -120,7 +120,7 @@ class StudentBook < ActiveRecord::Base
     end
   end
 
-  def create_book_loan(sb = nil)
+  def self.create_book_loan(sb = nil)
     sb ||= self
     book_title_id = sb.book_edition.try(:book_title_id)
     book_title = BookTitle.where(id: book_title_id).take
@@ -144,7 +144,7 @@ class StudentBook < ActiveRecord::Base
       student_no:       sb.student_no,
       deleted_flag:     false
     })
-    sb.update_column :book_loan_id, book_loan.id
+    sb.book_loan_id = book_loan.id
   end
 
   private

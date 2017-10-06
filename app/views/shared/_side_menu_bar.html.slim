@@ -79,6 +79,9 @@ li
 					= link_to 'Textbook Fines', book_fines_path
 				li
 					= link_to 'Book Subjects', subjects_path
+				li
+					= link_to 'Book Category', book_categories_path
+
 - if can? :manage, BookFine
 	li 
 		.collapsible-header.waves-effect.waves-cyan
@@ -154,8 +157,6 @@ li
 					a href="/book_labels" Book Labels
 				li
 					a href="/book_conditions" Book Condition
-				li
-					a href="/book_categories" Book Category
 				li
 					a href="/users" 
 						| Users
