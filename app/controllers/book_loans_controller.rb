@@ -321,6 +321,7 @@ class BookLoansController < ApplicationController
       failed = loan_ids - completed
     elsif params[:category]
       BookLoan.not_disposed.where(id:loan_ids).update_all book_category_id: params[:book_catg] 
+      completed = loan_ids
     elsif params[:delete]
       BookLoan.not_disposed.where(id:loan_ids).delete_all
       ids_to_remove = loan_ids
