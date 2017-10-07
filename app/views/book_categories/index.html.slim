@@ -22,8 +22,6 @@ table.compact.striped
         td = book_category.code
         td = book_category.name
         td.actions
-          = link_to book_category
-            i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
           - if can? :update, book_category
             = link_to edit_book_category_path(book_category)
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
