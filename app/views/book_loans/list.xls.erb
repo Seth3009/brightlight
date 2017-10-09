@@ -50,6 +50,7 @@
         <Cell ss:StyleID="s64"><Data ss:Type="String">Barcode</Data></Cell>
         <Cell ss:StyleID="s64"><Data ss:Type="String">Title</Data></Cell>
         <Cell ss:StyleID="s64"><Data ss:Type="String">Subject</Data></Cell>
+        <Cell ss:StyleID="s64"><Data ss:Type="String">Tags</Data></Cell>
         <Cell ss:StyleID="s64"><Data ss:Type="String">Return Date</Data></Cell>
         <Cell ss:StyleID="s64"><Data ss:Type="String">Return?</Data></Cell>
         <Cell ss:StyleID="s64"><Data ss:Type="String">Checked?</Data></Cell>
@@ -66,6 +67,7 @@
         <Cell><Data ss:Type="String"><%= book_loan.barcode %></Data></Cell>
         <Cell><Data ss:Type="String"><%= book_loan.title %></Data></Cell>
         <Cell><Data ss:Type="String"><%= book_loan.subject %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= book_loan.tags %></Data></Cell>
         <Cell><Data ss:Type="String"><%= book_loan.return_date %></Data></Cell>
         <Cell><Data ss:Type="String"><%= book_loan.return_status ? 'Yes' : 'No' %></Data></Cell>
         <Cell><Data ss:Type="String"><%= book_loan.check_id.present? ? 'Yes' : 'No' %></Data></Cell>
