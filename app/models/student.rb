@@ -12,7 +12,8 @@ class Student < ActiveRecord::Base
  	belongs_to :person
 	belongs_to :family
 
-  validates :name, :student_no, presence: true
+  validates :name, presence: true
+	validates :student_no, uniqueness: true, presence: true
 
 	accepts_nested_attributes_for :student_books, allow_destroy: true, reject_if: :all_blank
 	accepts_nested_attributes_for :book_loans, allow_destroy: true, reject_if: :all_blank
