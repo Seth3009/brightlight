@@ -10,7 +10,7 @@
             | Print
             i.material-icons.left print
         li
-          = link_to payment_book_fines_path(st:@student.id, format: :pdf), target: '_blank'
+          = link_to payment_book_fines_path(st:@student.id, year:@academic_year.id, format: :pdf), target: '_blank'
             | PDF
             i.material-icons.left description
       ul.right
