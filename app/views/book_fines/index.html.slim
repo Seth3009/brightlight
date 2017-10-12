@@ -107,7 +107,7 @@ nav
 - if @student.present?
   .toolbar.z-depth-1
     = link_to 'Notification', notification_book_fines_path(st:@student.id, year:@academic_year.id), class: "btn btn-default waves-effect waves-light"
-    = link_to 'Payment', payment_book_fines_path(st:@student), class: "btn btn-default waves-effect waves-light"  
+    = link_to 'Payment', payment_book_fines_path(st:@student, year:@academic_year.id), class: "btn btn-default waves-effect waves-light"  
     - if @paid 
       .notes.right.green-text
         | Paid

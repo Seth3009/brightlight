@@ -156,7 +156,7 @@ class BookFinesController < ApplicationController
   # GET /book_fines/payment?st=1
   def payment
     authorize! :manage, BookFine
-    @academic_year = AcademicYear.current
+    @academic_year = AcademicYear.find params[:year] || AcademicYear.current
     @student = Student.where(id:params[:st]).includes(:grade_sections_students).take
     @book_fines = BookFine.where(academic_year:@academic_year).where(student_id:params[:st]).includes([:book_copy, :old_condition, :new_condition])
     @currency = "Rp"
