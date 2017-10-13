@@ -1,0 +1,45 @@
+p#notice = notice
+
+p
+  strong Delivery:
+  = @delivery_item.delivery
+p
+  strong Order item:
+  = @delivery_item.order_item
+p
+  strong Quantity:
+  = @delivery_item.quantity
+p
+  strong Unit,:
+  = @delivery_item.unit,
+p
+  strong Accepted by:
+  = @delivery_item.accepted_by
+p
+  strong Accepted date:
+  = @delivery_item.accepted_date
+p
+  strong Checked by:
+  = @delivery_item.checked_by
+p
+  strong Checked date,:
+  = @delivery_item.checked_date,
+p
+  strong Notes,:
+  = @delivery_item.notes,
+p
+  strong Is accepted:
+  = @delivery_item.is_accepted
+p
+  strong Is rejected:
+  = @delivery_item.is_rejected
+p
+  strong Reject notes,:
+  = @delivery_item.reject_notes,
+p
+  strong Accept notes:
+  = @delivery_item.accept_notes
+
+= link_to 'Edit', edit_delivery_item_path(@delivery_item)
+'|
+= link_to 'Back', delivery_items_path

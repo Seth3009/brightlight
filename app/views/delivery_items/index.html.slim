@@ -1,0 +1,45 @@
+h1 Listing delivery_items
+
+table
+  thead
+    tr
+      th Delivery
+      th Order item
+      th Quantity
+      th Unit,
+      th Accepted by
+      th Accepted date
+      th Checked by
+      th Checked date,
+      th Notes,
+      th Is accepted
+      th Is rejected
+      th Reject notes,
+      th Accept notes
+      th
+      th
+      th
+
+  tbody
+    - @delivery_items.each do |delivery_item|
+      tr
+        td = delivery_item.delivery
+        td = delivery_item.order_item
+        td = delivery_item.quantity
+        td = delivery_item.unit,
+        td = delivery_item.accepted_by
+        td = delivery_item.accepted_date
+        td = delivery_item.checked_by
+        td = delivery_item.checked_date,
+        td = delivery_item.notes,
+        td = delivery_item.is_accepted
+        td = delivery_item.is_rejected
+        td = delivery_item.reject_notes,
+        td = delivery_item.accept_notes
+        td = link_to 'Show', delivery_item
+        td = link_to 'Edit', edit_delivery_item_path(delivery_item)
+        td = link_to 'Destroy', delivery_item, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Delivery item', new_delivery_item_path

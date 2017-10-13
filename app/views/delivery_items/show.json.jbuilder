@@ -1,0 +1,1 @@
+json.extract! @delivery_item, :id, :delivery, :order_item, :quantity, :unit,, :accepted_by, :accepted_date, :checked_by, :checked_date,, :notes,, :is_accepted, :is_rejected, :reject_notes,, :accept_notes, :created_at, :updated_at

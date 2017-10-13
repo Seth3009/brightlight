@@ -1,0 +1,55 @@
+h1 Listing req_line_items
+
+table
+  thead
+    tr
+      th Requisition
+      th Description,
+      th Qty reqd
+      th Unit,
+      th Est price
+      th Actual price
+      th Currency,
+      th Notes,
+      th Qty ordered
+      th Order date
+      th Qty delivered
+      th Delivery date
+      th Qty accepted
+      th Acceptance date
+      th Qty rejected
+      th Needed by date
+      th Acceptance notes,
+      th Reject notes
+      th
+      th
+      th
+
+  tbody
+    - @req_line_items.each do |req_line_item|
+      tr
+        td = req_line_item.requisition
+        td = req_line_item.description,
+        td = req_line_item.qty_reqd
+        td = req_line_item.unit,
+        td = req_line_item.est_price
+        td = req_line_item.actual_price
+        td = req_line_item.currency,
+        td = req_line_item.notes,
+        td = req_line_item.qty_ordered
+        td = req_line_item.order_date
+        td = req_line_item.qty_delivered
+        td = req_line_item.delivery_date
+        td = req_line_item.qty_accepted
+        td = req_line_item.acceptance_date
+        td = req_line_item.qty_rejected
+        td = req_line_item.needed_by_date
+        td = req_line_item.acceptance_notes,
+        td = req_line_item.reject_notes
+        td = link_to 'Show', req_line_item
+        td = link_to 'Edit', edit_req_line_item_path(req_line_item)
+        td = link_to 'Destroy', req_line_item, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Req line item', new_req_line_item_path
