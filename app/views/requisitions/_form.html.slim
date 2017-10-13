@@ -7,12 +7,11 @@
           li = message
 
   .field
-<<<<<<< HEAD
-    = f.label :req_no,
-    = f.text_field :req_no,
+    = f.label :req_no
+    = f.text_field :req_no
   .field
-    = f.label :description,
-    = f.text_field :description,
+    = f.label :description
+    = f.text_field :description
   .field
     = f.label :is_budgeted
     = f.text_field :is_budgeted
@@ -28,10 +27,6 @@
   .field
     = f.label :date_requested
     = f.text_field :date_requested
-=======
-    = f.label :req_no
-    = f.text_field :req_no
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
   .field
     = f.label :department
     = f.text_field :department
@@ -39,21 +34,20 @@
     = f.label :requester
     = f.text_field :requester
   .field
-<<<<<<< HEAD
     = f.label :supervisor
     = f.text_field :supervisor
   .field
     = f.label :supv_approval
     = f.text_field :supv_approval
   .field
-    = f.label :notes,
-    = f.text_field :notes,
+    = f.label :notes
+    = f.text_field :notes
   .field
-    = f.label :appvl_notes,
-    = f.text_field :appvl_notes,
+    = f.label :appvl_notes
+    = f.text_field :appvl_notes
   .field
-    = f.label :total_amt,
-    = f.text_field :total_amt,
+    = f.label :total_amt
+    = f.text_field :total_amt
   .field
     = f.label :is_budget_approved
     = f.text_field :is_budget_approved
@@ -76,61 +70,9 @@
     = f.label :is_rejected
     = f.text_field :is_rejected
   .field
-    = f.label :reject_reason,
-    = f.text_field :reject_reason,
+    = f.label :reject_reason
+    = f.text_field :reject_reason
   .field
     = f.label :active
     = f.check_box :active
-=======
-    = f.label :supv_approved
-    = f.check_box :supv_approved
-  .field
-    = f.label :supv_notes
-    = f.text_field :supv_notes
-  .field
-    = f.label :notes
-    = f.text_field :notes
-  .field
-    = f.label :budgetted
-    = f.check_box :budgetted
-  .field
-    = f.label :budget_approved
-    = f.check_box :budget_approved
-  .field
-    = f.label :bdgt_appvd_by
-    = f.text_field :bdgt_appvd_by
-  .field
-    = f.label :bdgt_appvd_name
-    = f.text_field :bdgt_appvd_name
-  .field
-    = f.label :bdgt_appv_notes
-    = f.text_field :bdgt_appv_notes
-  .field
-    = f.label :sent_purch
-    = f.check_box :sent_purch
-  .field
-    = f.label :sent_supv
-    = f.check_box :sent_supv
-  .field
-    = f.label :date_sent_supv
-    = f.date_select :date_sent_supv
-  .field
-    = f.label :sent_bdgt_appv
-    = f.check_box :sent_bdgt_appv
-  .field
-    = f.label :date_sent_bdgt
-    = f.date_select :date_sent_bdgt
-  .field
-    = f.label :date_supv_appvl
-    = f.date_select :date_supv_appvl
-  .field
-    = f.label :date_bdgt_appvl
-    = f.date_select :date_bdgt_appvl
-  .field
-    = f.label :notes
-    = f.text_field :notes
-  .field
-    = f.label :origin
-    = f.text_field :origin
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
   .actions = f.submit

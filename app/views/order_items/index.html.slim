@@ -4,7 +4,6 @@ table
   thead
     tr
       th Purchase order
-<<<<<<< HEAD
       th Stock item
       th Quantity
       th Unit,
@@ -20,17 +19,6 @@ table
       th Line num
       th Extra1,
       th Extra2
-=======
-      th No
-      th Order date
-      th Supplier
-      th Supplier
-      th Req line
-      th Invoice amt
-      th Dp amount
-      th Dp date
-      th Notes
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
       th
       th
       th
@@ -39,7 +27,6 @@ table
     - @order_items.each do |order_item|
       tr
         td = order_item.purchase_order
-<<<<<<< HEAD
         td = order_item.stock_item
         td = order_item.quantity
         td = order_item.unit,
@@ -55,17 +42,6 @@ table
         td = order_item.line_num
         td = order_item.extra1,
         td = order_item.extra2
-=======
-        td = order_item.no
-        td = order_item.order_date
-        td = order_item.supplier
-        td = order_item.supplier_id
-        td = order_item.req_line
-        td = order_item.invoice_amt
-        td = order_item.dp_amount
-        td = order_item.dp_date
-        td = order_item.notes
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
         td = link_to 'Show', order_item
         td = link_to 'Edit', edit_order_item_path(order_item)
         td = link_to 'Destroy', order_item, data: {:confirm => 'Are you sure?'}, :method => :delete
