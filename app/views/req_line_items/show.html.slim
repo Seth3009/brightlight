@@ -1,0 +1,60 @@
+p#notice = notice
+
+p
+  strong Requisition:
+  = @req_line_item.requisition
+p
+  strong Description,:
+  = @req_line_item.description,
+p
+  strong Qty reqd:
+  = @req_line_item.qty_reqd
+p
+  strong Unit,:
+  = @req_line_item.unit,
+p
+  strong Est price:
+  = @req_line_item.est_price
+p
+  strong Actual price:
+  = @req_line_item.actual_price
+p
+  strong Currency,:
+  = @req_line_item.currency,
+p
+  strong Notes,:
+  = @req_line_item.notes,
+p
+  strong Qty ordered:
+  = @req_line_item.qty_ordered
+p
+  strong Order date:
+  = @req_line_item.order_date
+p
+  strong Qty delivered:
+  = @req_line_item.qty_delivered
+p
+  strong Delivery date:
+  = @req_line_item.delivery_date
+p
+  strong Qty accepted:
+  = @req_line_item.qty_accepted
+p
+  strong Acceptance date:
+  = @req_line_item.acceptance_date
+p
+  strong Qty rejected:
+  = @req_line_item.qty_rejected
+p
+  strong Needed by date:
+  = @req_line_item.needed_by_date
+p
+  strong Acceptance notes,:
+  = @req_line_item.acceptance_notes,
+p
+  strong Reject notes:
+  = @req_line_item.reject_notes
+
+= link_to 'Edit', edit_req_line_item_path(@req_line_item)
+'|
+= link_to 'Back', req_line_items_path

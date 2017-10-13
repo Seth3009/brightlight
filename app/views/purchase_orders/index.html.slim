@@ -1,0 +1,49 @@
+h1 Listing purchase_orders
+
+table
+  thead
+    tr
+      th Order num,
+      th Requestor
+      th Order date
+      th Due date
+      th Total amount
+      th Is active
+      th Currency,
+      th Deleted
+      th Notes,
+      th Completed date
+      th Supplier
+      th Contact,
+      th Phone contact,
+      th User
+      th Status
+      th
+      th
+      th
+
+  tbody
+    - @purchase_orders.each do |purchase_order|
+      tr
+        td = purchase_order.order_num,
+        td = purchase_order.requestor
+        td = purchase_order.order_date
+        td = purchase_order.due_date
+        td = purchase_order.total_amount
+        td = purchase_order.is_active
+        td = purchase_order.currency,
+        td = purchase_order.deleted
+        td = purchase_order.notes,
+        td = purchase_order.completed_date
+        td = purchase_order.supplier
+        td = purchase_order.contact,
+        td = purchase_order.phone_contact,
+        td = purchase_order.user
+        td = purchase_order.status
+        td = link_to 'Show', purchase_order
+        td = link_to 'Edit', edit_purchase_order_path(purchase_order)
+        td = link_to 'Destroy', purchase_order, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Purchase order', new_purchase_order_path

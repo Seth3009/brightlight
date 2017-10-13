@@ -1,0 +1,60 @@
+p#notice = notice
+
+p
+  strong Company name,:
+  = @supplier.company_name,
+p
+  strong Contact name,:
+  = @supplier.contact_name,
+p
+  strong Address1,:
+  = @supplier.address1,
+p
+  strong Address2,:
+  = @supplier.address2,
+p
+  strong City,:
+  = @supplier.city,
+p
+  strong Province,:
+  = @supplier.province,
+p
+  strong Post code,:
+  = @supplier.post_code,
+p
+  strong Country,:
+  = @supplier.country,
+p
+  strong Phone,:
+  = @supplier.phone,
+p
+  strong Mobile,:
+  = @supplier.mobile,
+p
+  strong Email,:
+  = @supplier.email,
+p
+  strong Website,:
+  = @supplier.website,
+p
+  strong Notes,:
+  = @supplier.notes,
+p
+  strong Logo,:
+  = @supplier.logo,
+p
+  strong Category,:
+  = @supplier.category,
+p
+  strong Status,:
+  = @supplier.status,
+p
+  strong Type,:
+  = @supplier.type,
+p
+  strong Group:
+  = @supplier.group
+
+= link_to 'Edit', edit_supplier_path(@supplier)
+'|
+= link_to 'Back', suppliers_path

@@ -1,0 +1,99 @@
+p#notice = notice
+
+p
+  strong Department:
+  = @budget.department
+p
+<<<<<<< HEAD
+=======
+  strong Owner:
+  = @budget.owner
+p
+>>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
+  strong Grade level:
+  = @budget.grade_level
+p
+  strong Grade section:
+  = @budget.grade_section
+p
+<<<<<<< HEAD
+  strong Budget holder:
+  = @budget.budget_holder
+p
+  strong Academic year:
+  = @budget.academic_year
+p
+  strong Is submitted:
+  = @budget.is_submitted
+=======
+  strong Academic year:
+  = @budget.academic_year
+p
+  strong Submitted:
+  = @budget.submitted
+>>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
+p
+  strong Submit date:
+  = @budget.submit_date
+p
+<<<<<<< HEAD
+  strong Is approved:
+  = @budget.is_approved
+p
+  strong Approved date:
+  = @budget.approved_date
+=======
+  strong Approved:
+  = @budget.approved
+p
+  strong Apprv date:
+  = @budget.apprv_date
+>>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
+p
+  strong Approver:
+  = @budget.approver
+p
+<<<<<<< HEAD
+  strong Is received:
+  = @budget.is_received
+p
+  strong Receiver:
+  = @budget.receiver
+p
+  strong Received date:
+  = @budget.received_date
+p
+  strong Total amt:
+  = @budget.total_amt
+p
+  strong Notes,:
+  = @budget.notes,
+p
+  strong Category,:
+  = @budget.category,
+p
+  strong Type,:
+  = @budget.type,
+p
+  strong Group,:
+  = @budget.group,
+p
+  strong Version,:
+  = @budget.version,
+=======
+  strong Type:
+  = @budget.type
+p
+  strong Category:
+  = @budget.category
+p
+  strong Active:
+  = @budget.active
+p
+  strong Notes:
+  = @budget.notes
+>>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
+
+= link_to 'Edit', edit_budget_path(@budget)
+'|
+= link_to 'Back', budgets_path

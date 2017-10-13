@@ -1,0 +1,49 @@
+FactoryGirl.define do
+  factory :requisition do
+    req_no "MyString"
+<<<<<<< HEAD
+    description "MyString"
+    is_budgeted ""
+    budget ""
+    budget_line ""
+    date_required ""
+    date_requested ""
+    department ""
+    requester ""
+    supervisor ""
+    supv_approval ""
+    notes "MyString"
+    appvl_notes "MyString"
+    total_amt "MyString"
+    is_budget_approved ""
+    is_submitted ""
+    is_approved ""
+    is_sent_to_supv ""
+    is_sent_to_purchasing ""
+    is_sent_for_bgt_approval ""
+    is_rejected ""
+    reject_reason "MyString"
+    active false
+=======
+    department nil
+    requester nil
+    supv_approved false
+    supv_notes "MyString"
+    notes "MyString"
+    budgetted false
+    budget_approved false
+    bdgt_appvd_by nil
+    bdgt_appvd_name "MyString"
+    bdgt_appv_notes "MyString"
+    sent_purch false
+    sent_supv false
+    date_sent_supv "2017-05-24"
+    sent_bdgt_appv false
+    date_sent_bdgt "2017-05-24"
+    date_supv_appvl "2017-05-24"
+    date_bdgt_appvl "2017-05-24"
+    notes "MyString"
+    origin "MyString"
+>>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
+  end
+end
