@@ -1,2 +1,2 @@
-module ReqLineItemsHelper
+module ReqItemsHelper
 end

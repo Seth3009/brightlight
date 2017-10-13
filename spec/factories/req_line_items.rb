@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :req_line_item do
+  factory :req_item do
     requisition ""
     description "MyString"
     qty_reqd ""

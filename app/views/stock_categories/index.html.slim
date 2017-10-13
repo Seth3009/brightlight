@@ -1,0 +1,31 @@
+h1 Listing stock_categories
+
+table
+  thead
+    tr
+      th Name,
+      th Code,
+      th Description,
+      th Type,
+      th Is active
+      th Location
+      th
+      th
+      th
+
+  tbody
+    - @stock_categories.each do |stock_category|
+      tr
+        td = stock_category.name,
+        td = stock_category.code,
+        td = stock_category.description,
+        td = stock_category.type,
+        td = stock_category.is_active
+        td = stock_category.location
+        td = link_to 'Show', stock_category
+        td = link_to 'Edit', edit_stock_category_path(stock_category)
+        td = link_to 'Destroy', stock_category, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Stock category', new_stock_category_path

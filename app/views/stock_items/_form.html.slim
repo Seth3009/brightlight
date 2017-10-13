@@ -1,0 +1,51 @@
+= form_for @stock_item do |f|
+  - if @stock_item.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@stock_item.errors.count, "error")} prohibited this stock_item from being saved:"
+      ul
+        - @stock_item.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :name,
+    = f.text_field :name,
+  .field
+    = f.label :code,
+    = f.text_field :code,
+  .field
+    = f.label :description,
+    = f.text_field :description,
+  .field
+    = f.label :tags,
+    = f.text_field :tags,
+  .field
+    = f.label :short_desc,
+    = f.text_field :short_desc,
+  .field
+    = f.label :is_active
+    = f.text_field :is_active
+  .field
+    = f.label :unit_price
+    = f.text_field :unit_price
+  .field
+    = f.label :image
+    = f.text_field :image
+  .field
+    = f.label :stock_category
+    = f.text_field :stock_category
+  .field
+    = f.label :class,
+    = f.text_field :class,
+  .field
+    = f.label :group,
+    = f.text_field :group,
+  .field
+    = f.label :weight,
+    = f.text_field :weight,
+  .field
+    = f.label :extra1,
+    = f.text_field :extra1,
+  .field
+    = f.label :extra2
+    = f.text_field :extra2
+  .actions = f.submit

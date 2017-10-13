@@ -1,9 +1,9 @@
-= form_for @req_line_item do |f|
-  - if @req_line_item.errors.any?
+= form_for @req_item do |f|
+  - if @req_item.errors.any?
     #error_explanation
-      h2 = "#{pluralize(@req_line_item.errors.count, "error")} prohibited this req_line_item from being saved:"
+      h2 = "#{pluralize(@req_item.errors.count, "error")} prohibited this req_item from being saved:"
       ul
-        - @req_line_item.errors.full_messages.each do |message|
+        - @req_item.errors.full_messages.each do |message|
           li = message
 
   .field

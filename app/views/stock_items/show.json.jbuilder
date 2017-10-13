@@ -1,0 +1,1 @@
+json.extract! @stock_item, :id, :name,, :code,, :description,, :tags,, :short_desc,, :is_active, :unit_price, :image, :stock_category, :class,, :group,, :weight,, :extra1,, :extra2, :created_at, :updated_at

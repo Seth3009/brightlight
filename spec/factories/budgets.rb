@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :budget do
-<<<<<<< HEAD
     department ""
     grade_level ""
     grade_section ""
@@ -20,21 +19,5 @@ FactoryGirl.define do
     type "MyString"
     group "MyString"
     version "MyString"
-=======
-    department nil
-    owner nil
-    grade_level nil
-    grade_section nil
-    academic_year nil
-    submitted false
-    submit_date "2017-05-24"
-    approved false
-    apprv_date "2017-05-24"
-    approver nil
-    type ""
-    category "MyString"
-    active false
-    notes "MyString"
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
   end
 end
