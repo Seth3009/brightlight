@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe "req_line_items/show", type: :view do
+RSpec.describe "req_items/show", type: :view do
   before(:each) do
-    @req_line_item = assign(:req_line_item, ReqLineItem.create!(
+    @req_item = assign(:req_item, ReqItem.create!(
       :requisition => "",
       :description, => "Description,",
       :qty_reqd => "",

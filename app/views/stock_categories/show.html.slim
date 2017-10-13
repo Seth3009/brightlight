@@ -1,0 +1,24 @@
+p#notice = notice
+
+p
+  strong Name,:
+  = @stock_category.name,
+p
+  strong Code,:
+  = @stock_category.code,
+p
+  strong Description,:
+  = @stock_category.description,
+p
+  strong Type,:
+  = @stock_category.type,
+p
+  strong Is active:
+  = @stock_category.is_active
+p
+  strong Location:
+  = @stock_category.location
+
+= link_to 'Edit', edit_stock_category_path(@stock_category)
+'|
+= link_to 'Back', stock_categories_path

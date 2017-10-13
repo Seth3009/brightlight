@@ -18,10 +18,10 @@ require 'rails_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-RSpec.describe ReqLineItemsController, type: :controller do
+RSpec.describe ReqItemsController, type: :controller do
 
   # This should return the minimal set of attributes required to create a valid
-  # ReqLineItem. As you add validations to ReqLineItem, be sure to
+  # ReqItem. As you add validations to ReqItem, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
     skip("Add a hash of attributes valid for your model")
@@ -33,68 +33,68 @@ RSpec.describe ReqLineItemsController, type: :controller do
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
-  # ReqLineItemsController. Be sure to keep this updated too.
+  # ReqItemsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
   describe "GET #index" do
-    it "assigns all req_line_items as @req_line_items" do
-      req_line_item = ReqLineItem.create! valid_attributes
+    it "assigns all req_items as @req_items" do
+      req_item = ReqItem.create! valid_attributes
       get :index, params: {}, session: valid_session
-      expect(assigns(:req_line_items)).to eq([req_line_item])
+      expect(assigns(:req_items)).to eq([req_item])
     end
   end
 
   describe "GET #show" do
-    it "assigns the requested req_line_item as @req_line_item" do
-      req_line_item = ReqLineItem.create! valid_attributes
-      get :show, params: {id: req_line_item.to_param}, session: valid_session
-      expect(assigns(:req_line_item)).to eq(req_line_item)
+    it "assigns the requested req_item as @req_item" do
+      req_item = ReqItem.create! valid_attributes
+      get :show, params: {id: req_item.to_param}, session: valid_session
+      expect(assigns(:req_item)).to eq(req_item)
     end
   end
 
   describe "GET #new" do
-    it "assigns a new req_line_item as @req_line_item" do
+    it "assigns a new req_item as @req_item" do
       get :new, params: {}, session: valid_session
-      expect(assigns(:req_line_item)).to be_a_new(ReqLineItem)
+      expect(assigns(:req_item)).to be_a_new(ReqItem)
     end
   end
 
   describe "GET #edit" do
-    it "assigns the requested req_line_item as @req_line_item" do
-      req_line_item = ReqLineItem.create! valid_attributes
-      get :edit, params: {id: req_line_item.to_param}, session: valid_session
-      expect(assigns(:req_line_item)).to eq(req_line_item)
+    it "assigns the requested req_item as @req_item" do
+      req_item = ReqItem.create! valid_attributes
+      get :edit, params: {id: req_item.to_param}, session: valid_session
+      expect(assigns(:req_item)).to eq(req_item)
     end
   end
 
   describe "POST #create" do
     context "with valid params" do
-      it "creates a new ReqLineItem" do
+      it "creates a new ReqItem" do
         expect {
-          post :create, params: {req_line_item: valid_attributes}, session: valid_session
-        }.to change(ReqLineItem, :count).by(1)
+          post :create, params: {req_item: valid_attributes}, session: valid_session
+        }.to change(ReqItem, :count).by(1)
       end
 
-      it "assigns a newly created req_line_item as @req_line_item" do
-        post :create, params: {req_line_item: valid_attributes}, session: valid_session
-        expect(assigns(:req_line_item)).to be_a(ReqLineItem)
-        expect(assigns(:req_line_item)).to be_persisted
+      it "assigns a newly created req_item as @req_item" do
+        post :create, params: {req_item: valid_attributes}, session: valid_session
+        expect(assigns(:req_item)).to be_a(ReqItem)
+        expect(assigns(:req_item)).to be_persisted
       end
 
-      it "redirects to the created req_line_item" do
-        post :create, params: {req_line_item: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(ReqLineItem.last)
+      it "redirects to the created req_item" do
+        post :create, params: {req_item: valid_attributes}, session: valid_session
+        expect(response).to redirect_to(ReqItem.last)
       end
     end
 
     context "with invalid params" do
-      it "assigns a newly created but unsaved req_line_item as @req_line_item" do
-        post :create, params: {req_line_item: invalid_attributes}, session: valid_session
-        expect(assigns(:req_line_item)).to be_a_new(ReqLineItem)
+      it "assigns a newly created but unsaved req_item as @req_item" do
+        post :create, params: {req_item: invalid_attributes}, session: valid_session
+        expect(assigns(:req_item)).to be_a_new(ReqItem)
       end
 
       it "re-renders the 'new' template" do
-        post :create, params: {req_line_item: invalid_attributes}, session: valid_session
+        post :create, params: {req_item: invalid_attributes}, session: valid_session
         expect(response).to render_template("new")
       end
     end
@@ -106,53 +106,53 @@ RSpec.describe ReqLineItemsController, type: :controller do
         skip("Add a hash of attributes valid for your model")
       }
 
-      it "updates the requested req_line_item" do
-        req_line_item = ReqLineItem.create! valid_attributes
-        put :update, params: {id: req_line_item.to_param, req_line_item: new_attributes}, session: valid_session
-        req_line_item.reload
+      it "updates the requested req_item" do
+        req_item = ReqItem.create! valid_attributes
+        put :update, params: {id: req_item.to_param, req_item: new_attributes}, session: valid_session
+        req_item.reload
         skip("Add assertions for updated state")
       end
 
-      it "assigns the requested req_line_item as @req_line_item" do
-        req_line_item = ReqLineItem.create! valid_attributes
-        put :update, params: {id: req_line_item.to_param, req_line_item: valid_attributes}, session: valid_session
-        expect(assigns(:req_line_item)).to eq(req_line_item)
+      it "assigns the requested req_item as @req_item" do
+        req_item = ReqItem.create! valid_attributes
+        put :update, params: {id: req_item.to_param, req_item: valid_attributes}, session: valid_session
+        expect(assigns(:req_item)).to eq(req_item)
       end
 
-      it "redirects to the req_line_item" do
-        req_line_item = ReqLineItem.create! valid_attributes
-        put :update, params: {id: req_line_item.to_param, req_line_item: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(req_line_item)
+      it "redirects to the req_item" do
+        req_item = ReqItem.create! valid_attributes
+        put :update, params: {id: req_item.to_param, req_item: valid_attributes}, session: valid_session
+        expect(response).to redirect_to(req_item)
       end
     end
 
     context "with invalid params" do
-      it "assigns the req_line_item as @req_line_item" do
-        req_line_item = ReqLineItem.create! valid_attributes
-        put :update, params: {id: req_line_item.to_param, req_line_item: invalid_attributes}, session: valid_session
-        expect(assigns(:req_line_item)).to eq(req_line_item)
+      it "assigns the req_item as @req_item" do
+        req_item = ReqItem.create! valid_attributes
+        put :update, params: {id: req_item.to_param, req_item: invalid_attributes}, session: valid_session
+        expect(assigns(:req_item)).to eq(req_item)
       end
 
       it "re-renders the 'edit' template" do
-        req_line_item = ReqLineItem.create! valid_attributes
-        put :update, params: {id: req_line_item.to_param, req_line_item: invalid_attributes}, session: valid_session
+        req_item = ReqItem.create! valid_attributes
+        put :update, params: {id: req_item.to_param, req_item: invalid_attributes}, session: valid_session
         expect(response).to render_template("edit")
       end
     end
   end
 
   describe "DELETE #destroy" do
-    it "destroys the requested req_line_item" do
-      req_line_item = ReqLineItem.create! valid_attributes
+    it "destroys the requested req_item" do
+      req_item = ReqItem.create! valid_attributes
       expect {
-        delete :destroy, params: {id: req_line_item.to_param}, session: valid_session
-      }.to change(ReqLineItem, :count).by(-1)
+        delete :destroy, params: {id: req_item.to_param}, session: valid_session
+      }.to change(ReqItem, :count).by(-1)
     end
 
-    it "redirects to the req_line_items list" do
-      req_line_item = ReqLineItem.create! valid_attributes
-      delete :destroy, params: {id: req_line_item.to_param}, session: valid_session
-      expect(response).to redirect_to(req_line_items_url)
+    it "redirects to the req_items list" do
+      req_item = ReqItem.create! valid_attributes
+      delete :destroy, params: {id: req_item.to_param}, session: valid_session
+      expect(response).to redirect_to(req_items_url)
     end
   end
 

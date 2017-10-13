@@ -1,0 +1,48 @@
+p#notice = notice
+
+p
+  strong Name,:
+  = @stock_item.name,
+p
+  strong Code,:
+  = @stock_item.code,
+p
+  strong Description,:
+  = @stock_item.description,
+p
+  strong Tags,:
+  = @stock_item.tags,
+p
+  strong Short desc,:
+  = @stock_item.short_desc,
+p
+  strong Is active:
+  = @stock_item.is_active
+p
+  strong Unit price:
+  = @stock_item.unit_price
+p
+  strong Image:
+  = @stock_item.image
+p
+  strong Stock category:
+  = @stock_item.stock_category
+p
+  strong Class,:
+  = @stock_item.class,
+p
+  strong Group,:
+  = @stock_item.group,
+p
+  strong Weight,:
+  = @stock_item.weight,
+p
+  strong Extra1,:
+  = @stock_item.extra1,
+p
+  strong Extra2:
+  = @stock_item.extra2
+
+= link_to 'Edit', edit_stock_item_path(@stock_item)
+'|
+= link_to 'Back', stock_items_path

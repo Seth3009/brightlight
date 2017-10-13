@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
-<<<<<<< HEAD
+  resources :stock_categories
+  resources :stock_items
   resources :suppliers
   resources :delivery_items
   resources :deliveries
@@ -8,13 +9,7 @@ Rails.application.routes.draw do
   resources :purchase_orders
   resources :budget_items
   resources :budgets
-  resources :req_line_items
-=======
-  resources :order_items
-  resources :budget_items
-  resources :budgets
   resources :req_items
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
   resources :requisitions
   resources :template_targets
   resources :templates

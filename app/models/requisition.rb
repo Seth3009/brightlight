@@ -1,8 +1,9 @@
 class Requisition < ActiveRecord::Base
-<<<<<<< HEAD
-=======
   belongs_to :department
   belongs_to :requester
-  belongs_to :bdgt_appvd_by
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
+  belongs_to :supervisor
+  belongs_to :budget
+  belongs_to :budget_item
+  belongs_to :created_by, class_name: 'User'
+  belongs_to :last_updated_by, class_name: 'User'
 end

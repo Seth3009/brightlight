@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe "req_line_items/index", type: :view do
+RSpec.describe "req_items/index", type: :view do
   before(:each) do
-    assign(:req_line_items, [
-      ReqLineItem.create!(
+    assign(:req_items, [
+      ReqItem.create!(
         :requisition => "",
         :description, => "Description,",
         :qty_reqd => "",
@@ -23,7 +23,7 @@ RSpec.describe "req_line_items/index", type: :view do
         :acceptance_notes, => "Acceptance Notes,",
         :reject_notes => "Reject Notes"
       ),
-      ReqLineItem.create!(
+      ReqItem.create!(
         :requisition => "",
         :description, => "Description,",
         :qty_reqd => "",
@@ -46,7 +46,7 @@ RSpec.describe "req_line_items/index", type: :view do
     ])
   end
 
-  it "renders a list of req_line_items" do
+  it "renders a list of req_items" do
     render
     assert_select "tr>td", :text => "".to_s, :count => 2
     assert_select "tr>td", :text => "Description,".to_s, :count => 2
