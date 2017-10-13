@@ -4,13 +4,13 @@ table
   thead
     tr
       th Requisition
-      th Description,
+      th Description
       th Qty reqd
-      th Unit,
+      th Unit
       th Est price
       th Actual price
-      th Currency,
-      th Notes,
+      th Currency
+      th Notes
       th Qty ordered
       th Order date
       th Qty delivered
@@ -19,7 +19,7 @@ table
       th Acceptance date
       th Qty rejected
       th Needed by date
-      th Acceptance notes,
+      th Acceptance notes
       th Reject notes
       th
       th
@@ -29,13 +29,13 @@ table
     - @req_items.each do |req_item|
       tr
         td = req_item.requisition
-        td = req_item.description,
+        td = req_item.description
         td = req_item.qty_reqd
-        td = req_item.unit,
+        td = req_item.unit
         td = req_item.est_price
         td = req_item.actual_price
-        td = req_item.currency,
-        td = req_item.notes,
+        td = req_item.currency
+        td = req_item.notes
         td = req_item.qty_ordered
         td = req_item.order_date
         td = req_item.qty_delivered
@@ -44,7 +44,7 @@ table
         td = req_item.acceptance_date
         td = req_item.qty_rejected
         td = req_item.needed_by_date
-        td = req_item.acceptance_notes,
+        td = req_item.acceptance_notes
         td = req_item.reject_notes
         td = link_to 'Show', req_item
         td = link_to 'Edit', edit_req_item_path(req_item)

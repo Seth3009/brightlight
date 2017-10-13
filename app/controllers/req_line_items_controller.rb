@@ -69,6 +69,6 @@ class ReqItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def req_item_params
-      params.require(:req_item).permit(:requisition, :description,, :qty_reqd, :unit,, :est_price, :actual_price, :currency,, :notes,, :qty_ordered, :order_date, :qty_delivered, :delivery_date, :qty_accepted, :acceptance_date, :qty_rejected, :needed_by_date, :acceptance_notes,, :reject_notes)
+      params.require(:req_item).permit(:requisition_id, :description, :qty_reqd, :unit, :est_price, :actual_price, :currency, :notes, :qty_ordered, :order_date, :qty_delivered, :delivery_date, :qty_accepted, :acceptance_date, :qty_rejected, :needed_by_date, :acceptance_notes, :reject_notes)
     end
 end

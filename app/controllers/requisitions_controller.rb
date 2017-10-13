@@ -69,10 +69,6 @@ class RequisitionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def requisition_params
-<<<<<<< HEAD
-      params.require(:requisition).permit(:req_no,, :description,, :is_budgeted, :budget, :budget_line, :date_required, :date_requested, :department, :requester, :supervisor, :supv_approval, :notes,, :appvl_notes,, :total_amt,, :is_budget_approved, :is_submitted, :is_approved, :is_sent_to_supv, :is_sent_to_purchasing, :is_sent_for_bgt_approval, :is_rejected, :reject_reason,, :active)
-=======
-      params.require(:requisition).permit(:req_no, :department_id, :requester_id, :supv_approved, :supv_notes, :notes, :budgetted, :budget_approved, :bdgt_appvd_by_id, :bdgt_appvd_name, :bdgt_appv_notes, :sent_purch, :sent_supv, :date_sent_supv, :sent_bdgt_appv, :date_sent_bdgt, :date_supv_appvl, :date_bdgt_appvl, :notes, :origin)
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
+      params.require(:requisition).permit(:req_no, :description, :is_budgeted, :budget_id, :budget_item_id, :date_required, :date_requested, :department_id, :requester_id, :supervisor_id, :supv_approval, :notes, :appvl_notes, :total_amt, :is_budget_approved, :is_submitted, :is_approved, :is_sent_to_supv, :is_sent_to_purchasing, :is_sent_for_bgt_approval, :is_rejected, :reject_reason, :active)
     end
 end

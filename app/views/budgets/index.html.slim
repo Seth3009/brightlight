@@ -4,7 +4,6 @@ table
   thead
     tr
       th Department
-<<<<<<< HEAD
       th Grade level
       th Grade section
       th Budget holder
@@ -23,21 +22,6 @@ table
       th Type,
       th Group,
       th Version,
-=======
-      th Owner
-      th Grade level
-      th Grade section
-      th Academic year
-      th Submitted
-      th Submit date
-      th Approved
-      th Apprv date
-      th Approver
-      th Type
-      th Category
-      th Active
-      th Notes
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
       th
       th
       th
@@ -46,7 +30,6 @@ table
     - @budgets.each do |budget|
       tr
         td = budget.department
-<<<<<<< HEAD
         td = budget.grade_level
         td = budget.grade_section
         td = budget.budget_holder
@@ -60,26 +43,11 @@ table
         td = budget.receiver
         td = budget.received_date
         td = budget.total_amt
-        td = budget.notes,
-        td = budget.category,
-        td = budget.type,
-        td = budget.group,
-        td = budget.version,
-=======
-        td = budget.owner
-        td = budget.grade_level
-        td = budget.grade_section
-        td = budget.academic_year
-        td = budget.submitted
-        td = budget.submit_date
-        td = budget.approved
-        td = budget.apprv_date
-        td = budget.approver
-        td = budget.type
-        td = budget.category
-        td = budget.active
         td = budget.notes
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
+        td = budget.category
+        td = budget.type
+        td = budget.group
+        td = budget.version
         td = link_to 'Show', budget
         td = link_to 'Edit', edit_budget_path(budget)
         td = link_to 'Destroy', budget, data: {:confirm => 'Are you sure?'}, :method => :delete

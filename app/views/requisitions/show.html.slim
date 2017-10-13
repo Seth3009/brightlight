@@ -1,12 +1,11 @@
 p#notice = notice
 
 p
-<<<<<<< HEAD
   strong Req no,:
-  = @requisition.req_no,
+  = @requisition.req_no
 p
   strong Description,:
-  = @requisition.description,
+  = @requisition.description
 p
   strong Is budgeted:
   = @requisition.is_budgeted
@@ -22,10 +21,6 @@ p
 p
   strong Date requested:
   = @requisition.date_requested
-=======
-  strong Req no:
-  = @requisition.req_no
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
 p
   strong Department:
   = @requisition.department
@@ -33,7 +28,6 @@ p
   strong Requester:
   = @requisition.requester
 p
-<<<<<<< HEAD
   strong Supervisor:
   = @requisition.supervisor
 p
@@ -41,13 +35,13 @@ p
   = @requisition.supv_approval
 p
   strong Notes,:
-  = @requisition.notes,
+  = @requisition.notes
 p
   strong Appvl notes,:
-  = @requisition.appvl_notes,
+  = @requisition.appvl_notes
 p
   strong Total amt,:
-  = @requisition.total_amt,
+  = @requisition.total_amt
 p
   strong Is budget approved:
   = @requisition.is_budget_approved
@@ -71,62 +65,10 @@ p
   = @requisition.is_rejected
 p
   strong Reject reason,:
-  = @requisition.reject_reason,
+  = @requisition.reject_reason
 p
   strong Active:
   = @requisition.active
-=======
-  strong Supv approved:
-  = @requisition.supv_approved
-p
-  strong Supv notes:
-  = @requisition.supv_notes
-p
-  strong Notes:
-  = @requisition.notes
-p
-  strong Budgetted:
-  = @requisition.budgetted
-p
-  strong Budget approved:
-  = @requisition.budget_approved
-p
-  strong Bdgt appvd by:
-  = @requisition.bdgt_appvd_by
-p
-  strong Bdgt appvd name:
-  = @requisition.bdgt_appvd_name
-p
-  strong Bdgt appv notes:
-  = @requisition.bdgt_appv_notes
-p
-  strong Sent purch:
-  = @requisition.sent_purch
-p
-  strong Sent supv:
-  = @requisition.sent_supv
-p
-  strong Date sent supv:
-  = @requisition.date_sent_supv
-p
-  strong Sent bdgt appv:
-  = @requisition.sent_bdgt_appv
-p
-  strong Date sent bdgt:
-  = @requisition.date_sent_bdgt
-p
-  strong Date supv appvl:
-  = @requisition.date_supv_appvl
-p
-  strong Date bdgt appvl:
-  = @requisition.date_bdgt_appvl
-p
-  strong Notes:
-  = @requisition.notes
-p
-  strong Origin:
-  = @requisition.origin
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
 
 = link_to 'Edit', edit_requisition_path(@requisition)
 '|

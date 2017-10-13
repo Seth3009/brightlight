@@ -69,6 +69,6 @@ class StockCategoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def stock_category_params
-      params.require(:stock_category).permit(:name,, :code,, :description,, :type,, :is_active, :location)
+      params.require(:stock_category).permit(:name, :code, :description, :type, :is_active, :location)
     end
 end
