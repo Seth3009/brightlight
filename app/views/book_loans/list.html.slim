@@ -125,7 +125,7 @@ div
               th No
               th = sort_link :barcode
               th = sort_link :title, 'Book title'
-              td = sort_link :return_status, "Returned?"
+              td = sort_link :book_category_id, "Category"
               th = sort_link :return_date 
               th = sort_link :subject
               th = sort_link :check_id, "Checked?"       
@@ -141,16 +141,21 @@ div
                 td = link_to book_loan.barcode, book_copy_path(book_loan.book_copy_id)
                 td 
                   = link_to book_loan.title.truncate(50), book_edition_path(book_loan.edition_id), remote: true
-                td style='text-align:center' 
+                td = book_loan.book_category.try(:code)
+                td 
                   - if book_loan.return_status == 'RI'
-                    = '&#9745;'.html_safe + ' Inventory'
+                    - str = '&#9745;'.html_safe + ' Inventory'
                   - elsif  book_loan.return_status == 'R' 
-                    = '&#9745;'.html_safe
+                    - str = '&#9745;'.html_safe
                   - else
-                    = ''
-                td = book_loan.return_date 
-                td = link_to book_loan.subject || "N/A", edit_subject_book_title_path(book_loan.book_title, eid: @teacher.id), remote: true
-                td style='text-align:center'                 
+                    - str = ''
+                  = str + ' ' + book_loan.return_date.to_s
+                td
+                  - if book_loan.book_title 
+                    = link_to book_loan.subject || "N/A", edit_subject_book_title_path(book_loan.book_title, eid: @teacher.id), remote: true
+                  - else
+                    = "N/A"
+                td                 
                   = book_loan.check_id.present? ? '&#9745;'.html_safe : ''
                 td 
                   = link_to employee_book_loan_path(employee_id: book_loan.emp_id, id:book_loan.id), remote:true

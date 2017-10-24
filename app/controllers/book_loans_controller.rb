@@ -321,7 +321,8 @@ class BookLoansController < ApplicationController
       failed = loan_ids - completed
     elsif params[:category]
       BookLoan.not_disposed.where(id:loan_ids).update_all book_category_id: params[:book_catg] 
-      completed = loan_ids
+      #redirect_to employee_book_loans_path(employee_id: params[:employee_id])
+      #return
     elsif params[:delete]
       BookLoan.not_disposed.where(id:loan_ids).delete_all
       ids_to_remove = loan_ids
@@ -375,7 +376,7 @@ class BookLoansController < ApplicationController
     end
 
     def sortable_columns 
-      [:subject, :title, :barcode, :return_status, :out_date, :return_date, :academic_year_id, :check_id]
+      [:subject, :title, :barcode, :return_status, :out_date, :return_date, :academic_year_id, :check_id, :book_category_id]
     end    
 
 end
