@@ -141,7 +141,7 @@ div
                 td = link_to book_loan.barcode, book_copy_path(book_loan.book_copy_id)
                 td 
                   = link_to book_loan.title.truncate(50), book_edition_path(book_loan.edition_id), remote: true
-                td = book_loan.book_category.try(:code)
+                td = book_loan.catg_code
                 td 
                   - if book_loan.return_status == 'RI'
                     - str = '&#9745;'.html_safe + ' Inventory'
@@ -151,8 +151,8 @@ div
                     - str = ''
                   = str + ' ' + book_loan.return_date.to_s
                 td
-                  - if book_loan.book_title 
-                    = link_to book_loan.subject || "N/A", edit_subject_book_title_path(book_loan.book_title, eid: @teacher.id), remote: true
+                  - if book_loan.title_id 
+                    = link_to book_loan.subject || "N/A", edit_subject_book_title_path(id: book_loan.title_id, eid: @teacher.id), remote: true
                   - else
                     = "N/A"
                 td                 
