@@ -25,6 +25,8 @@ h4 New Book Loan
 
   .card-panel
     .row
+      .input-field 
+        .label Book Category: #{@category_name}
       table.compact
         thead
           th Barcode
@@ -33,6 +35,7 @@ h4 New Book Loan
         tbody#book_loans
           = f.fields_for :book_loans, @teacher.book_loans.build do |book_loan|
             = render partial: 'book_loan_fields', locals: { f: book_loan, employee: @teacher, user: current_user }
+          = hidden_field_tag :book_catg, @category_id
 
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save

@@ -16,6 +16,7 @@ tr.nested-fields
     = f.hidden_field :bkudid, class:'bkudids'
     = f.hidden_field :loan_status, class:'loan_statuses', value: 'B'
     = f.hidden_field :user_id, class:'user_ids', value: user.id
+    = f.hidden_field :book_category_id, class:'book_category_ids', value: @category_id
     
   td
     = link_to_remove_association "Remove", f, class: "waves-effect waves-teal btn btn-flat red-text btn-small"
