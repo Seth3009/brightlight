@@ -1,12 +1,15 @@
 class BookTitle < ActiveRecord::Base
   validates :title, presence: true
-  has_many :course_texts
-  has_many :courses, through: :course_texts
+  
+  # has_many :course_texts
+  # has_many :courses, through: :course_texts
   has_many :book_editions
   has_many :standard_books
+  has_many :book_loans
+  has_many :book_loan_histories
+
   belongs_to :subject
   belongs_to :grade_level
-  belongs_to :book_category
 
   accepts_nested_attributes_for :book_editions, reject_if: :all_blank, allow_destroy: true
 

@@ -261,6 +261,10 @@ class BookTitlesController < ApplicationController
           edition.subjects = @book_title.subject_code
           edition.save
         end
+        title.standard_books.update_all book_title_id: @book_title.id
+        title.book_loans book_title_id: @book_title.id
+        title.book_loan_histories book_title_id: @book_title.id
+        
         title.destroy
         # TODO: check dependencies on COURSE_TEXTS table
       end
