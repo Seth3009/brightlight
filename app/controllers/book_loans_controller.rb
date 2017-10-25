@@ -214,7 +214,7 @@ class BookLoansController < ApplicationController
     @teacher = Employee.find params[:employee_id]
     @academic_year_id = params[:year] || AcademicYear.current_id
     @category_id = params[:book_catg]
-    @category_name = BookCategory.find(@category_id).try(:name)
+    @category_name = BookCategory.find(@category_id).try(:name) if @category_id.present?
     @book_loan = BookLoan.new
   end
 
