@@ -25,8 +25,9 @@ h4 New Book Loan
 
   .card-panel
     .row
-      .input-field 
-        .label Book Category: #{@category_name}
+      - if @category_name.present?
+        .input-field 
+          .label Book Category: #{@category_name}
       table.compact
         thead
           th Barcode
