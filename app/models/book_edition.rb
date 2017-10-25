@@ -253,4 +253,8 @@ group by s.id, s.name order by s.id) f full outer join statuses ss on ss.id = f.
     .select('book_editions.id,title,subtitle,description,google_book_id,isbndb_id,isbn10,isbn13,refno,currency,price,authors,publisher,published_date,page_count,language,edition_info,tags,subjects,small_thumbnail,thumbnail,book_title_id, count(book_copies.id) as copies')
     .group('book_editions.id,title,subtitle,description,google_book_id,isbndb_id,isbn10,isbn13,refno,currency,price,authors,publisher,published_date,page_count,language,edition_info,tags,subjects,small_thumbnail,thumbnail,book_title_id')
   }
+
+  def has_disposed_copies?
+    BookCopy.unscoped.where(book_edition: self).all.count > 0
+  end 
 end

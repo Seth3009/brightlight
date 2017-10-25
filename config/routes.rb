@@ -30,7 +30,8 @@ Rails.application.routes.draw do
     end
     resources :book_copies, shallow: true do
       collection do
-        get 'edit_labels'        
+        get 'edit_labels'
+        get 'disposed'   
       end
     end
     member do

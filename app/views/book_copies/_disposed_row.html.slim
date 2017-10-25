@@ -1,0 +1,19 @@
+tr id="row-#{book_copy.id}"
+  td
+    input.checkbox type="checkbox" id="book_copy-#{book_copy.id}" name="book_copy[#{book_copy.id}]" disabled=true
+    = label_tag "book_copy-#{book_copy.id}", ""
+  td = nr
+  td = book_copy.barcode
+  td = book_copy.label
+  td style="text-align: center" 
+    - badge_color = book_copy.cond_color || 'black'
+    span.box class="#{badge_color}"
+      = book_copy.cond_code.try(:capitalize) || 'N/A'  
+  td = book_copy.status_name || 'N/A'
+
+  td.actions
+    = link_to book_copy_path(book_copy, disposed: true), remote: true
+      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
+    / - if can? :destroy, book_copy
+    /   = link_to book_copy, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+    /     i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
