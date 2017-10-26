@@ -1,65 +1,58 @@
-h1 Listing requisitions
+h4 Requisitions
 
-table
-  thead
-    tr
-      th Req no
-      th Description
-      th Is budgeted
-      th Budget
-      th Budget line
-      th Date required
-      th Date requested
-      th Department
-      th Requester
-      th Supervisor
-      th Supv approval
-      th Notes
-      th Appvl notes
-      th Total amt
-      th Is budget approved
-      th Is submitted
-      th Is approved
-      th Is sent to supv
-      th Is sent to purchasing
-      th Is sent for bgt approval
-      th Is rejected
-      th Reject reason
-      th Active
-      th
-      th
-      th
+nav
+  .nav-wrapper
+    ul
+      li
+        a.dropdown-button href="#!" data-activates="dept-options"
+          span#dept = @department.present? ? "#{@department.name}" : "Department" 
+          i.material-icons.right arrow_drop_down
+    ul.right
+      li
+        = link_to new_requisition_path
+          | New
+          i.material-icons.left add
 
-  tbody
-    - @requisitions.each do |requisition|
+ul#dept-options.dropdown-content
+  li  
+    = link_to 'All', requisitions_path(params.merge(dept:'all').symbolize_keys)
+  - Department.all.each do |dept|
+    li 
+      = link_to dept.name, requisitions_path(params.merge(dept: dept.code).symbolize_keys)    
+
+.card-panel
+  table.compact.striped
+    thead
       tr
-        td = requisition.req_no
-        td = requisition.description
-        td = requisition.is_budgeted
-        td = requisition.budget
-        td = requisition.budget_line
-        td = requisition.date_required
-        td = requisition.date_requested
-        td = requisition.department
-        td = requisition.requester
-        td = requisition.supervisor
-        td = requisition.supv_approval
-        td = requisition.notes
-        td = requisition.appvl_notes
-        td = requisition.total_amt
-        td = requisition.is_budget_approved
-        td = requisition.is_submitted
-        td = requisition.is_approved
-        td = requisition.is_sent_to_supv
-        td = requisition.is_sent_to_purchasing
-        td = requisition.is_sent_for_bgt_approval
-        td = requisition.is_rejected
-        td = requisition.reject_reason
-        td = requisition.active
-        td = link_to 'Show', requisition
-        td = link_to 'Edit', edit_requisition_path(requisition)
-        td = link_to 'Destroy', requisition, data: {:confirm => 'Are you sure?'}, :method => :delete
+        th Req no
+        th Description
+        th Required
+        th Requested
+        th Requester
+        th Approval
+        th Total
+        th Actions
 
-br
+    tbody
+      - @requisitions.each do |requisition|
+        tr
+          td = requisition.req_no
+          td = requisition.description
+          td = requisition.date_required
+          td = requisition.date_requested
+          td = requisition.requester
+          td = requisition.supv_approval
+          td = requisition.total_amt
+          td 
+            = link_to requisition, remote: true
+              i.material-icons visibility
+            = link_to edit_requisition_path(requisition)
+              i.material-icons edit
+            = link_to requisition, data: {id: requisition.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
+              i.material-icons delete
 
-= link_to 'New Requisition', new_requisition_path
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

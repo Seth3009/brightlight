@@ -1,0 +1,20 @@
+.card-panel.nested-fields
+  .row
+    .input-field.col.s4
+      = f.label :description
+      = f.text_field :description
+    .input-field.col.s1
+      = f.label :qty
+      = f.text_field :qty_reqd
+    .input-field.col.s1
+      = f.label :unit
+      = f.text_field :unit
+    .input-field.col.s2
+      = f.label :est_price
+      = f.text_field :est_price
+    .input-field.col.s2
+      = f.label :notes
+      = f.text_field :notes
+    .input-field.col.s2
+      = f.label 'Date Reqd', class: 'active'
+      = f.date_field :needed_by_date

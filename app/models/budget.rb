@@ -8,4 +8,6 @@ class Budget < ActiveRecord::Base
   belongs_to :receiver, class_name: 'User'
   belongs_to :created_by, class_name: 'User'
   belongs_to :last_updated_by, class_name: 'User'
+
+  has_many :budget_items
 end
