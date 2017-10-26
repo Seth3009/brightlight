@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     resources :course_sections, except: :new, shallow: true
   end
 
+  get  'book_copies/disposed_index' => 'book_copies#disposed_index', as: :book_copies_disposed_index
   resources :book_editions do
     collection do
       get 'summary'
@@ -39,13 +40,13 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'book_copies/:id/copy_conditions/check' => 'copy_conditions#check', as: :check_copy_condition
+  get  'book_copies/:id/copy_conditions/check' => 'copy_conditions#check', as: :check_copy_condition
   post 'book_copies/:id/copy_conditions/check_update' => 'copy_conditions#check_update'
-  put 'book_copies/:id/copy_conditions/create' => 'copy_conditions#create', as: :create_book_copy_condition
-  get 'book_copies/:id/conditions' => 'book_copies#conditions', as: :book_copy_conditions
-  get 'book_copies/:id/loans' => 'book_copies#loans', as: :book_copy_loans
-  get 'book_copies/:id/checks' => 'book_copies#checks', as: :book_copy_checks
-  get 'book_copies/:id/check_barcode' => 'book_copies#check_barcode', as: :book_copy_check_barcode
+  put  'book_copies/:id/copy_conditions/create' => 'copy_conditions#create', as: :create_book_copy_condition
+  get  'book_copies/:id/conditions' => 'book_copies#conditions', as: :book_copy_conditions
+  get  'book_copies/:id/loans' => 'book_copies#loans', as: :book_copy_loans
+  get  'book_copies/:id/checks' => 'book_copies#checks', as: :book_copy_checks
+  get  'book_copies/:id/check_barcode' => 'book_copies#check_barcode', as: :book_copy_check_barcode
   post 'book_copies/dispose' => 'book_copies#dispose', as: :dispose_book_copies
   post 'book_copies/update_multiple' => 'book_copies#update_multiple', as: :update_multiple_book_copies
 

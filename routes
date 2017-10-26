@@ -186,6 +186,7 @@
                        book_copy_check_barcode GET      /book_copies/:id/check_barcode(.:format)                          book_copies#check_barcode
                            dispose_book_copies POST     /book_copies/dispose(.:format)                                    book_copies#dispose
                    update_multiple_book_copies POST     /book_copies/update_multiple(.:format)                            book_copies#update_multiple
+                    book_copies_disposed_index GET      /book_copies/disposed_index(.:format)                             book_copies#disposed_index
                         edit_merge_book_titles POST     /book_titles/edit_merge(.:format)                                 book_titles#edit_merge
                              merge_book_titles POST     /book_titles/merge(.:format)                                      book_titles#merge
                             delete_book_titles POST     /book_titles/delete(.:format)                                     book_titles#delete

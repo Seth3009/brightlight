@@ -202,8 +202,28 @@ class BookCopiesController < ApplicationController
     @last_loan = @copy_loans.first
   end
 
-  def disposed
+  # GET /book_copies/1/checks
+  def checks
     authorize! :read, BookCopy
+    @book_edition = @book_copy.book_edition
+    @checks = @book_copy.loan_checks.details
+              
+  end
+
+  # GET /book_copies/disposed_index
+  def disposed_index
+    authorize! :manage, BookCopy
+    # Output of the following statement is a hash in this format
+    #  {[1303, "Children's Picture Atlas", "Ruth Brocklehurst, Linda Edwards"]=>2, [1582, "Caps for sale", "Esphyr Slobodkina"]=>4}
+    @edition_list = BookCopy.unscoped.where(disposed: true)
+                      .group(:book_edition_id, 'book_editions.title', 'book_editions.authors')
+                      .joins(:book_edition)
+                      .count
+  end
+
+  # GET /book_editions/1/book_copies/disposed
+  def disposed
+    authorize! :manage, BookCopy
     if params[:book_edition_id].present?
       @book_edition = BookEdition.find(params[:book_edition_id])      
       @book_copies = BookCopy.unscoped.where(disposed: true).where(book_edition: @book_edition)
@@ -212,14 +232,6 @@ class BookCopiesController < ApplicationController
       @book_copies = BookCopy.unscoped.where(disposed: true).order(:copy_no)
     end
     @book_copies = @book_copies.order("#{sort_column} #{sort_direction}")
-  end
-
-  # GET /book_copies/1/checks
-  def checks
-    authorize! :read, BookCopy
-    @book_edition = @book_copy.book_edition
-    @checks = @book_copy.loan_checks.details
-              
   end
 
   private

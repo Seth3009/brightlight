@@ -1,0 +1,32 @@
+- title "Disposed Books"
+
+h4 Disposed Books
+
+nav class="brown lighten-1"
+  .nav-wrapper
+    .brand-logo.nav-menu.left style="margin-left: 20px; font-size:1.5em"
+      | Disposed Book Copies    
+
+.card-panel  
+  table.compact.striped
+    thead
+      tr
+        th No
+        th Title
+        th Author
+        th Copies
+
+    tbody
+      - @edition_list.each.with_index(1) do |edition, idx|
+        tr
+          - count = edition.last
+          - edition_id = edition.first.first
+          - edition_title = edition.first.second
+          - edition_author = edition.first.third
+          td = idx
+          td = edition_title
+          td = edition_author
+          td 
+            = link_to disposed_book_edition_book_copies_path(book_edition_id: edition_id)
+              .copies.left = count
+              i.material-icons chevron_right
