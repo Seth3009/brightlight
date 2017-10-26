@@ -210,12 +210,38 @@ class BookCopiesController < ApplicationController
               
   end
 
+  # GET /book_copies/disposed_index
+  def disposed_index
+    authorize! :manage, BookCopy
+    # Output of the following statement is a hash in this format
+    #  {[1303, "Children's Picture Atlas", "Ruth Brocklehurst, Linda Edwards"]=>2, [1582, "Caps for sale", "Esphyr Slobodkina"]=>4}
+    @edition_list = BookCopy.unscoped.where(disposed: true)
+                      .group(:book_edition_id, 'book_editions.title', 'book_editions.authors')
+                      .joins(:book_edition)
+                      .count
+  end
+
+  # GET /book_editions/1/book_copies/disposed
+  def disposed
+    authorize! :manage, BookCopy
+    if params[:book_edition_id].present?
+      @book_edition = BookEdition.find(params[:book_edition_id])      
+      @book_copies = BookCopy.unscoped.where(disposed: true).where(book_edition: @book_edition)
+        .with_condition(params[:condition]).with_status(params[:status])
+    else
+      @book_copies = BookCopy.unscoped.where(disposed: true).order(:copy_no)
+    end
+    @book_copies = @book_copies.order("#{sort_column} #{sort_direction}")
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_copy
       if params[:id].strip[0..2] == 'INV'
         @book_copy = BookCopy.find_by_barcode(params[:id])
-      else
+      elsif params[:disposed]
+        @book_copy = BookCopy.unscoped.find(params[:id])
+      else 
         @book_copy = BookCopy.find(params[:id])
       end
     end

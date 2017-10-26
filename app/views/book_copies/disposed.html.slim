@@ -1,0 +1,61 @@
+- title "Disposed book copies (#{@book_edition.title})"
+
+h4 = @book_edition.title
+
+.card-panel
+  table
+    tr
+      td style="vertical-align:top"
+        - thumbnail = @book_edition.small_thumbnail.present? ? @book_edition.small_thumbnail : 'book-icon.png' 
+        div style="position:relative"
+          = image_tag(thumbnail, class: 'list_image')
+          = link_to @book_edition, class: "btn-floating btn-medium waves-effect waves-light red", style: "position:absolute; left: 0; bottom: 0"
+              i.material-icons.tooltipped data-position="top" data-delay="50" data-tooltip="View Book Edition" visibility
+      td
+        .list_description
+          dl.row
+            dd.col.s8
+              .label Author
+              .item = @book_edition.authors || "--"
+            dd.col.s4
+              .label Publisher
+              .item = @book_edition.publisher || "--"
+            dd.col.s4
+              .label ISBN 13
+              .item = @book_edition.isbn13 || "--"
+            dd.col.s4
+              .label ISBN 10
+              .item = @book_edition.isbn10 || "--"
+            dd.col.s4
+              .label Reference No
+              .item = @book_edition.refno || "--"
+
+
+= form_tag do    
+  nav class="brown lighten-1"
+    .nav-wrapper
+      .brand-logo.nav-menu.left style="margin-left: 20px; font-size:1.5em"
+        | Disposed Book Copies    
+
+  .card-panel  
+    table.compact.striped
+      thead
+        tr
+          th
+            input.allcheckboxes type="checkbox" id="book_copy-all" name="book_copy[all]" disabled=true
+            = label_tag "book_copy-all", ""
+          th No
+          th = sort_link :barcode
+          th = sort_link :book_label_id, 'Label'
+          th style="text-align: center" = sort_link :condition_id, 'Condition'
+          th = sort_link :status_id, 'Status'      
+          th Actions
+
+      tbody
+        - @book_copies.each.with_index(1) do |book_copy, idx|
+          = render partial: 'disposed_row', locals: {book_copy: book_copy, nr: idx}        
+
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content
+#show-modal.modal.modal-fixed-footer
+  #show-modal-content

@@ -7,7 +7,10 @@ h4 = @book_edition.title
     tr
       td style="vertical-align:top"
         - thumbnail = @book_edition.small_thumbnail.present? ? @book_edition.small_thumbnail : 'book-icon.png' 
-        = image_tag(thumbnail, class: 'list_image')
+        div style="position:relative"
+          = image_tag(thumbnail, class: 'list_image')
+          = link_to @book_edition, class: "btn-floating btn-medium waves-effect waves-light red", style: "position:absolute; left: 0; bottom: 0"
+            i.material-icons.tooltipped data-position="top" data-delay="50" data-tooltip="View Book Edition" visibility
       td
         .list_description
           dl.row
@@ -26,7 +29,7 @@ h4 = @book_edition.title
             dd.col.s4
               .label Reference No
               .item = @book_edition.refno || "--"
-      
+          
   table.compact
     tr.header-shade
       td.wd12-5
@@ -114,6 +117,11 @@ h4 = @book_edition.title
             = link_to new_book_edition_book_copy_path(@book_edition)
               | New
               i.material-icons.left add
+          - if @book_edition.has_disposed_copies?
+            li
+              = link_to disposed_book_edition_book_copies_path(@book_edition), class: "brown lighten-1"
+                | Disposed
+                i.material-icons.right chevron_right
 
   .card-panel  
     table.compact.striped

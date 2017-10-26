@@ -81,7 +81,9 @@ li
 					= link_to 'Book Subjects', subjects_path
 				li
 					= link_to 'Book Category', book_categories_path
-
+				li
+					= link_to 'Disposed Books', book_copies_disposed_index_path
+					
 - if can? :manage, BookFine
 	li 
 		.collapsible-header.waves-effect.waves-cyan
