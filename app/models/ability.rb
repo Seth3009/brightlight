@@ -46,6 +46,8 @@ class Ability
     can :manage, StudentBook
     can :manage, StandardBook
     can [:create,:read,:update,:destroy], Carpool
+    can [:approve], Requisition
+    can [:manage], Budget, budget_holder: @user.employee
     can :read, :all
 	end
 
@@ -59,6 +61,8 @@ class Ability
     can :read, BookLoan
     can [:read,:create], LoanCheck
     can [:create,:read,:update,:destroy], Carpool
+    can [:manage], Requisition, requester: @user.employee
+    can [:manage], ReqItem, requester: @user.employee
     can :read, :all
   end
 
@@ -71,6 +75,14 @@ class Ability
   def carpool
     can [:manage], Carpool
     can :read, :all
+  end
+
+  def purchasing
+    can [:manage], Requisition
+    can [:manage], ReqItem
+    can [:manage], PurchaseOrder
+    can [:manage], OrderItem
+    can [:manage], Supplier
   end
 
   def student

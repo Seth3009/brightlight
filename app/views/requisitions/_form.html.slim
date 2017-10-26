@@ -6,73 +6,89 @@
         - @requisition.errors.full_messages.each do |message|
           li = message
 
-  .field
-    = f.label :req_no
-    = f.text_field :req_no
-  .field
-    = f.label :description
-    = f.text_field :description
-  .field
-    = f.label :is_budgeted
-    = f.text_field :is_budgeted
-  .field
-    = f.label :budget
-    = f.text_field :budget
-  .field
-    = f.label :budget_line
-    = f.text_field :budget_line
-  .field
-    = f.label :date_required
-    = f.text_field :date_required
-  .field
-    = f.label :date_requested
-    = f.text_field :date_requested
-  .field
-    = f.label :department
-    = f.text_field :department
-  .field
-    = f.label :requester
-    = f.text_field :requester
-  .field
-    = f.label :supervisor
-    = f.text_field :supervisor
-  .field
-    = f.label :supv_approval
-    = f.text_field :supv_approval
-  .field
-    = f.label :notes
-    = f.text_field :notes
-  .field
-    = f.label :appvl_notes
-    = f.text_field :appvl_notes
-  .field
-    = f.label :total_amt
-    = f.text_field :total_amt
-  .field
-    = f.label :is_budget_approved
-    = f.text_field :is_budget_approved
-  .field
-    = f.label :is_submitted
-    = f.text_field :is_submitted
-  .field
-    = f.label :is_approved
-    = f.text_field :is_approved
-  .field
-    = f.label :is_sent_to_supv
-    = f.text_field :is_sent_to_supv
-  .field
-    = f.label :is_sent_to_purchasing
-    = f.text_field :is_sent_to_purchasing
-  .field
-    = f.label :is_sent_for_bgt_approval
-    = f.text_field :is_sent_for_bgt_approval
-  .field
-    = f.label :is_rejected
-    = f.text_field :is_rejected
-  .field
-    = f.label :reject_reason
-    = f.text_field :reject_reason
-  .field
-    = f.label :active
-    = f.check_box :active
-  .actions = f.submit
+  .card-panel
+    .row  
+      .input-field.col.m3
+        = f.label :req_no
+        = f.text_field :req_no
+      .input-field.col.m9
+        = f.label :description
+        = f.text_field :description
+      .input-field.col.m3
+        = f.check_box :is_budgeted
+        = f.label :is_budgeted, 'Budgeted?'
+      .input-field.col.m3
+        = f.label :department, class: 'active'
+        = f.collection_select :department, Department.all, :id, :name, prompt: "Select..."
+      .input-field.col.m3
+        = f.label :budget
+        = f.text_field :budget
+      .input-field.col.m3
+        = f.label :budget_item
+        = f.text_field :budget_item
+      .input-field.col.m3
+        = f.label :date_required, class: 'active'
+        = f.date_field :date_required
+      .input-field.col.m3
+        = f.label :requester
+        = f.text_field :requester
+      .input-field.col.m6
+        = f.label :notes
+        = f.text_field :notes
+
+    - if @requisition.persisted?
+      .row
+        .input-field.col.m4
+          = f.label :supervisor
+          = f.text_field :supervisor
+        .input-field.col.m4
+          = f.label :supv_approval
+          = f.text_field :supv_approval
+        .input-field.col.m4
+          = f.label :appvl_notes
+          = f.text_field :appvl_notes
+        .input-field.col.m4
+          = f.label :is_budget_approved
+          = f.text_field :is_budget_approved
+        .input-field.col.m4
+          = f.label :is_submitted
+          = f.text_field :is_submitted
+        .input-field.col.m4
+          = f.label :is_approved
+          = f.text_field :is_approved
+        .input-field.col.m4
+          = f.label :is_sent_to_supv
+          = f.text_field :is_sent_to_supv
+        .input-field.col.m4
+          = f.label :is_sent_to_purchasing
+          = f.text_field :is_sent_to_purchasing
+        .input-field.col.m4
+          = f.label :is_sent_for_bgt_approval
+          = f.text_field :is_sent_for_bgt_approval
+        .input-field.col.m4
+          = f.label :is_rejected
+          = f.text_field :is_rejected
+        .input-field.col.m4
+          = f.label :reject_reason
+          = f.text_field :reject_reason
+        .input-field.col.m4
+          = f.label :active
+          = f.check_box :active
+
+  nav
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Items
+      ul.right
+        li
+          = link_to_add_association f, :req_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#requisition'
+            ' Add Item
+            i.material-icons.left playlist_add
+
+  #requisition
+  = f.fields_for :req_items do |req_item|
+    = render 'req_item_fields', f: req_item
+
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"

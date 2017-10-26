@@ -1,75 +1,148 @@
-p#notice = notice
+- title 'Requisition'
 
-p
-  strong Req no,:
-  = @requisition.req_no
-p
-  strong Description,:
-  = @requisition.description
-p
-  strong Is budgeted:
-  = @requisition.is_budgeted
-p
-  strong Budget:
-  = @requisition.budget
-p
-  strong Budget line:
-  = @requisition.budget_line
-p
-  strong Date required:
-  = @requisition.date_required
-p
-  strong Date requested:
-  = @requisition.date_requested
-p
-  strong Department:
-  = @requisition.department
-p
-  strong Requester:
-  = @requisition.requester
-p
-  strong Supervisor:
-  = @requisition.supervisor
-p
-  strong Supv approval:
-  = @requisition.supv_approval
-p
-  strong Notes,:
-  = @requisition.notes
-p
-  strong Appvl notes,:
-  = @requisition.appvl_notes
-p
-  strong Total amt,:
-  = @requisition.total_amt
-p
-  strong Is budget approved:
-  = @requisition.is_budget_approved
-p
-  strong Is submitted:
-  = @requisition.is_submitted
-p
-  strong Is approved:
-  = @requisition.is_approved
-p
-  strong Is sent to supv:
-  = @requisition.is_sent_to_supv
-p
-  strong Is sent to purchasing:
-  = @requisition.is_sent_to_purchasing
-p
-  strong Is sent for bgt approval:
-  = @requisition.is_sent_for_bgt_approval
-p
-  strong Is rejected:
-  = @requisition.is_rejected
-p
-  strong Reject reason,:
-  = @requisition.reject_reason
-p
-  strong Active:
-  = @requisition.active
+nav
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.2em"
+      | Requisition
+    ul.right
+      li
+        = link_to edit_requisition_path @requisition
+          i.material-icons edit
+.card-panel
+  .row 
+    .list-description 
+      dl
+        dd.col.m3
+          .label Req. No.
+          .item = @requisition.req_no
+        dd.col.m9
+          .label Description
+          .item = @requisition.description
+        dd.col.m3
+          = check_box_tag :is_budgeted, checked: @requisition.is_budgeted
+          .label :is_budgeted, 'Budgeted?'
+        dd.col.m3
+          .label Department
+          .item = @requisition.department
+        dd.col.m3
+          .label Budget
+          .item = @requisition.budget
+        dd.col.m3
+          .label Budget Item
+          .item = @requisition.budget_item
+        dd.col.m3
+          .label Req. Date
+          .item = @requisition.date_required
+        dd.col.m3
+          .label Requester
+          .item = @requisition.requester
+        dd.col.m3
+          .label Notes
+          .item = @requisition.notes
 
-= link_to 'Edit', edit_requisition_path(@requisition)
-'|
-= link_to 'Back', requisitions_path
+      dl
+        dd.col.m3
+          .label Supervisor
+          .item = @requisition.supervisor
+        dd.col.m3
+          .label Supv Approval
+          .item = @requisition.supv_approval
+        dd.col.m3
+          .label Appvl Notes
+          .item = @requisition.appvl_notes
+        / dd
+        /   .label = @requisition.is_budget_approved
+        /   .item = @requisition.is_budget_approved
+        / dd
+        /   .label = @requisition.is_submitted
+        /   .item = @requisition.is_submitted
+        / dd
+        /   .label = @requisition.is_approved
+        /   .item = @requisition.is_approved
+        / dd
+        /   .label = @requisition.is_sent_to_supv
+        /   .item = @requisition.is_sent_to_supv
+        / dd
+        /   .label = @requisition.is_sent_to_purchasing
+        /   .item = @requisition.is_sent_to_purchasing
+        / dd
+        /   .label = @requisition.is_sent_for_bgt_approval
+        /   .item = @requisition.is_sent_for_bgt_approval
+        / dd
+        /   .label = @requisition.is_rejected
+        /   .item = @requisition.is_rejected
+        / dd
+        /   .label = @requisition.reject_reason
+        /   .item = @requisition.reject_reason
+        / dd
+        /   .label = @requisition.active
+        /   .check_box = @requisition.active
+/ p
+/   strong Req no,:
+/   = = @requisition.req_no
+/ p
+/   strong Description,:
+/   = = @requisition.description
+/ p
+/   strong Is budgeted:
+/   = = @requisition.is_budgeted
+/ p
+/   strong Budget:
+/   = = @requisition.budget
+/ p
+/   strong Budget line:
+/   = = @requisition.budget_line
+/ p
+/   strong Date required:
+/   = = @requisition.date_required
+/ p
+/   strong Date requested:
+/   = = @requisition.date_requested
+/ p
+/   strong Department:
+/   = = @requisition.department
+/ p
+/   strong Requester:
+/   = = @requisition.requester
+/ p
+/   strong Supervisor:
+/   = = @requisition.supervisor
+/ p
+/   strong Supv approval:
+/   = = @requisition.supv_approval
+/ p
+/   strong Notes,:
+/   = = @requisition.notes
+/ p
+/   strong Appvl notes,:
+/   = = @requisition.appvl_notes
+/ p
+/   strong Total amt,:
+/   = = @requisition.total_amt
+/ p
+/   strong Is budget approved:
+/   = = @requisition.is_budget_approved
+/ p
+/   strong Is submitted:
+/   = = @requisition.is_submitted
+/ p
+/   strong Is approved:
+/   = = @requisition.is_approved
+/ p
+/   strong Is sent to supv:
+/   = = @requisition.is_sent_to_supv
+/ p
+/   strong Is sent to purchasing:
+/   = = @requisition.is_sent_to_purchasing
+/ p
+/   strong Is sent for bgt approval:
+/   = = @requisition.is_sent_for_bgt_approval
+/ p
+/   strong Is rejected:
+/   = = @requisition.is_rejected
+/ p
+/   strong Reject reason,:
+/   = = @requisition.reject_reason
+/ p
+/   strong Active:
+/   = = @requisition.active
