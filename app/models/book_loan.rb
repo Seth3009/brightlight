@@ -2,8 +2,12 @@ class BookLoan < ActiveRecord::Base
 
   validates :book_copy, presence: true
   validates :academic_year, presence: true
-  validates :book_copy_id, uniqueness: {scope: [:academic_year_id, :return_status]}
-             # if: Proc.new { |record| record.return_status == nil }
+  validates :book_copy_id, uniqueness: {scope: [:academic_year_id, :return_status]},
+              if: Proc.new { |record| !record.return_status },
+              on: :create
+  # validates :book_copy_id, uniqueness: {scope: [:academic_year_id]},
+  #             if: Proc.new { |record| record.return_status },
+  #             on: :update
 
   belongs_to :book_copy
   belongs_to :book_edition
