@@ -82,7 +82,8 @@ javascript:
     minEntryChars: 11,
     onScan: function($element, input) {
       var barcode = input.trim();
-      $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}+"&year="+#{@academic_year_id}, null, function (data) {
+      var acad_year = $("#acad_year option:selected").val();
+      $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}+"&year="+acad_year, null, function (data) {
         if ($("#return").is(':checked')) {
           update_book_loan(data);
         } else {
@@ -94,10 +95,11 @@ javascript:
     }
   });
   $(".input-field").on("keypress", $("#barcode"), function (e) {
+    var acad_year = $("#acad_year option:selected").val();
     if (e.keyCode == 13) {
       e.stopPropagation();
       var barcode = $("#barcode").val().trim();
-      $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}+"&year="+#{@academic_year_id}, null, function (data) {
+      $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}+"&year="+acad_year, null, function (data) {
         if ($("#return").is(':checked') || $("#return_to_inventory").is(':checked')) {
           update_book_loan(data);
         } else {

@@ -39,10 +39,10 @@ class BookCopiesController < ApplicationController
           @student = Student.find params[:st] if params[:st].present?
           @employee = Employee.find params[:empl] if params[:empl].present?
           if params[:year] == 'any'
-            @loan = @book_copy.book_loans.order('academic_year_id DESC, created_at DESC').take
+            @loan = @book_copy.book_loans.order('academic_year_id DESC, updated_at DESC').take
           else
             @year = params[:year].present? ? AcademicYear.find(params[:year]) : AcademicYear.current
-            @loan = @book_copy.book_loans.where(academic_year_id:@year.id).order('created_at DESC').take
+            @loan = @book_copy.book_loans.where(academic_year_id:@year.id).order('updated_at DESC').take
           end
         else
           render json: {errors:"Invalid barcode"}, status: :unprocessable_entity

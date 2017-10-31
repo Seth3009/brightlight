@@ -49,26 +49,39 @@ javascript:
   $("[name$='[barcode]']").codeScanner({
     minEntryChars: 11,
     onScan: function($element, barcode) {
-      $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}, null, function (data) {
+      var acad_year = $("#acad_year option:selected").val();
+      $.getJSON("/book_copies/"+barcode+".json?empl=" + #{@teacher.id} + "?year=" + acad_year, null, function (data) {
         if ($("tr:last").find("[name$='[barcode]']").val() != "") {
           $(".add_fields").trigger('click');
         } else if (!$("tr:last").is(":visible")) {
           $("tr:last").show();
         }
-        insert_values(data, $("tr:last"));
+        var book = data.book_copy;
+        if (book.loans !== undefined && book.loans.return_status !== "R") {
+          Materialize.toast("Book is borrowed by " + book.loans.employee_name || book.loans.student_name, 5000, 'red');
+        } else {
+          insert_values(data, $("tr:last"));
+        }
       }).fail(function(xhr){
         Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
       });            
     }
   });
   $("tbody#book_loans").on("keypress", "tr", function (e) {
+    var acad_year = $("#acad_year option:selected").val();
     if (e.keyCode == 13) {
       e.preventDefault();
       e.stopPropagation();
       var barcode = $(this).find("[name$='[barcode]']").val().trim();
       var element = $(this);
-      $.getJSON("/book_copies/"+barcode+".json", null, function (data) {
-        insert_values(data, element);
+      console.log(element);
+      $.getJSON("/book_copies/"+barcode+".json" + "?year=" + acad_year, null, function (data) {
+        var book = data.book_copy;
+        if (book.loans !== undefined && book.loans.return_status !== "R") {
+          Materialize.toast("Book is borrowed by " + book.loans.employee_name || book.loans.student_name, 5000, 'red');
+        } else {
+          insert_values(data, element);
+        }          
       }).fail(function(xhr){
         $(e.target).val('');
         Materialize.toast($.parseJSON(xhr.responseText).errors, 5000, 'red');
