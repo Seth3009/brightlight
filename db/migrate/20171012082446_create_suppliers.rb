@@ -19,6 +19,7 @@ class CreateSuppliers < ActiveRecord::Migration
       t.string :status
       t.string :type
       t.string :group
+      t.string :code
       t.references :created_by, references: :users, index: true
       t.references :last_updated_by, references: :users, index: true
 

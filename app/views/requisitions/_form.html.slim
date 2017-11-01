@@ -15,65 +15,63 @@
         = f.label :description
         = f.text_field :description
       .input-field.col.m3
+        = f.label :requester, class: 'active'
+        = f.collection_select :requester, Employee.active.all, :id, :name, prompt: "Select employee", selected: @employee.id
+      .input-field.col.m9
+        = f.label :notes
+        = f.text_field :notes
+      .input-field.col.m3
+        = f.label :department, class: 'active'
+        = f.collection_select :department, Department.all, :id, :name, prompt: "Select...", selected: @employee.department_id
+      .input-field.col.m3
         = f.check_box :is_budgeted
         = f.label :is_budgeted, 'Budgeted?'
       .input-field.col.m3
-        = f.label :department, class: 'active'
-        = f.collection_select :department, Department.all, :id, :name, prompt: "Select..."
-      .input-field.col.m3
-        = f.label :budget
-        = f.text_field :budget
-      .input-field.col.m3
-        = f.label :budget_item
-        = f.text_field :budget_item
+        = f.label :budget_item, class: 'active'
+        = f.collection_select :budget_item, BudgetItem.all, :id, :description, prompt: "Select budget"
       .input-field.col.m3
         = f.label :date_required, class: 'active'
         = f.date_field :date_required
-      .input-field.col.m3
-        = f.label :requester
-        = f.text_field :requester
-      .input-field.col.m6
-        = f.label :notes
-        = f.text_field :notes
 
     - if @requisition.persisted?
       .row
-        .input-field.col.m4
-          = f.label :supervisor
-          = f.text_field :supervisor
-        .input-field.col.m4
-          = f.label :supv_approval
-          = f.text_field :supv_approval
-        .input-field.col.m4
+        .input-field.col.m3
+          = f.label :supervisor, class: 'active'
+          = f.collection_select :requester, @supervisors, :id, :name, prompt: "Select employee", selected: @employee.supervisor_id
+        .input-field.col.m3
+          = f.check_box :supv_approval
+          = f.label :supv_approval, 'Supv. Approved?'
+        .input-field.col.m6
           = f.label :appvl_notes
           = f.text_field :appvl_notes
-        .input-field.col.m4
+        .input-field.col.m3
+          = f.check_box :is_budget_approved
           = f.label :is_budget_approved
-          = f.text_field :is_budget_approved
-        .input-field.col.m4
+        .input-field.col.m3
+          = f.check_box :is_submitted
           = f.label :is_submitted
-          = f.text_field :is_submitted
-        .input-field.col.m4
+        .input-field.col.m3
+          = f.check_box :is_approved
           = f.label :is_approved
-          = f.text_field :is_approved
-        .input-field.col.m4
+        .input-field.col.m3
+          = f.check_box :is_sent_to_supv
           = f.label :is_sent_to_supv
-          = f.text_field :is_sent_to_supv
-        .input-field.col.m4
+        .input-field.col.m3
+          = f.check_box :is_sent_to_purchasing
           = f.label :is_sent_to_purchasing
-          = f.text_field :is_sent_to_purchasing
-        .input-field.col.m4
+        .input-field.col.m3
+          = f.check_box :is_sent_for_bgt_approval
           = f.label :is_sent_for_bgt_approval
-          = f.text_field :is_sent_for_bgt_approval
-        .input-field.col.m4
+        .input-field.col.m3
+          = f.check_box :active
+          = f.label :active
+        .input-field.col.m3
+          = f.check_box :is_rejected
           = f.label :is_rejected
-          = f.text_field :is_rejected
-        .input-field.col.m4
+        .input-field.col.m6
           = f.label :reject_reason
           = f.text_field :reject_reason
-        .input-field.col.m4
-          = f.label :active
-          = f.check_box :active
+
 
   nav
     .nav-wrapper
@@ -85,9 +83,10 @@
             ' Add Item
             i.material-icons.left playlist_add
 
-  #requisition
-  = f.fields_for :req_items do |req_item|
-    = render 'req_item_fields', f: req_item
+  .card-panel
+    #requisition
+      = f.fields_for :req_items do |req_item|
+        = render 'req_item_fields', f: req_item
 
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save

@@ -3,6 +3,7 @@ class CreateStockItems < ActiveRecord::Migration
     create_table :stock_items do |t|
       t.string :name
       t.string :code
+      t.string :uuid
       t.string :description
       t.string :tags
       t.string :short_desc

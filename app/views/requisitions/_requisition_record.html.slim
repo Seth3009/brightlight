@@ -1,26 +1,24 @@
-.card-panel
-  h4 Requisition
-  .row
-    .list-description 
-      dl
-        dd.col.m3
-          = check_box_tag :is_budgeted, checked: @requisition.is_budgeted
-          .label :is_budgeted, 'Budgeted?'
-        dd.col.m3
-          .label Department
-          .item = @requisition.department
-        dd.col.m3
-          .label Budget
-          .item = @requisition.budget
-        dd.col.m3
-          .label Budget Item
-          .item = @requisition.budget_item
-        dd.col.m3
-          .label Req. Date
-          .item = @requisition.date_required
-        dd.col.m3
-          .label Requester
-          .item = @requisition.requester
-        dd.col.m3
-          .label Notes
-          .item = @requisition.notes
+.row
+  .list-description 
+    dl
+      dd.col.m3
+        .label Req. Date
+        .item = @requisition.date_required
+      dd.col.m3
+        .label Requester
+        .item = @requisition.requester
+      dd.col.m3
+        .label Department
+        .item = @requisition.department
+      dd.col.m3
+        = check_box_tag :is_budgeted, true, checked: @requisition.is_budgeted
+        .label :is_budgeted
+      dd.col.m3
+        .label Budget
+        .item = @requisition.budget
+      dd.col.m3
+        .label Budget Item
+        .item = @requisition.budget_item
+      dd.col.m3
+        .label Notes
+        .item = @requisition.notes

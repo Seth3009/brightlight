@@ -4,15 +4,15 @@ class CreateBudgets < ActiveRecord::Migration
       t.belongs_to :department, index: true
       t.belongs_to :grade_level
       t.belongs_to :grade_section
-      t.belongs_to :budget_holder, references: :users, index: true
+      t.belongs_to :budget_holder, references: :employees, index: true
       t.belongs_to :academic_year, index: true
       t.boolean :is_submitted
       t.date :submit_date
       t.boolean :is_approved
       t.date :approved_date
-      t.references :approver, references: :users, index: true
+      t.references :approver, references: :employees, index: true
       t.boolean :is_received
-      t.references :receiver, references: :users, index: true
+      t.references :receiver, references: :employees, index: true
       t.date :received_date
       t.decimal :total_amt
       t.string :notes
