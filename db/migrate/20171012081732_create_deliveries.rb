@@ -4,9 +4,9 @@ class CreateDeliveries < ActiveRecord::Migration
       t.references :purchase_order, index: true
       t.date :delivery_date
       t.string :address
-      t.references :accepted_by, references: :users, index: true
+      t.references :accepted_by, references: :employees, index: true
       t.date :accepted_date
-      t.references :checked_by, references: :users, index: true
+      t.references :checked_by, references: :employees, index: true
       t.date :checked_date
       t.string :notes
       t.string :delivery_method

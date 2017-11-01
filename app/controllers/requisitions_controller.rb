@@ -23,6 +23,8 @@ class RequisitionsController < ApplicationController
   # GET /requisitions/1/edit
   def edit
     authorize! :update, @requisition
+    @employee = current_user.employee
+    @supervisors = Employee.where('id in (select supervisor_id from employees where supervisor_id is not null)').all
   end
 
   # POST /requisitions

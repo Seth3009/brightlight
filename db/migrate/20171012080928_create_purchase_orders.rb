@@ -3,8 +3,8 @@ class CreatePurchaseOrders < ActiveRecord::Migration
     create_table :purchase_orders do |t|
       t.string :order_num
       t.references :department
-      t.references :requestor, references: :users, index: true
-      t.references :approver, references: :users, index: true
+      t.references :requestor, references: :employees, index: true
+      t.references :approver, references: :employees, index: true
       t.date :order_date
       t.date :due_date
       t.decimal :total_amount
@@ -12,6 +12,7 @@ class CreatePurchaseOrders < ActiveRecord::Migration
       t.string :currency
       t.boolean :deleted
       t.string :notes
+      t.string :appvl_notes
       t.date :completed_date
       t.references :supplier
       t.string :contact

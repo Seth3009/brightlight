@@ -5,9 +5,9 @@ class CreateDeliveryItems < ActiveRecord::Migration
       t.references :order_item, index: true
       t.float :quantity
       t.string :unit
-      t.references :accepted_by, references: :users, index: true
+      t.references :accepted_by, references: :employees, index: true
       t.date :accepted_date
-      t.references :checked_by, references: :users, index: true
+      t.references :checked_by, references: :employees, index: true
       t.string :checked_date
       t.string :notes
       t.boolean :is_accepted
