@@ -1,45 +1,50 @@
-h5 Requisition No. #{@requisition.req_no}
+h5 Requisition No. #{requisition.req_no}
+strong = requisition.description
 
 .list-description.row
   dl
     dd.col.m3
       .label Req. Date
-      .item = @requisition.date_required
+      .item = requisition.date_required
     dd.col.m3
       .label Requester
-      .item = @requisition.requester
+      .item = requisition.requester
     dd.col.m3
       .label Department
-      .item = @requisition.department
+      .item = requisition.department
     dd.col.m6
       .label Notes
-      .item = @requisition.notes || "--"
+      .item = requisition.notes || "--"
 
 .row
-  ul.collection.with-header
-    li.collection-header Budget
+  ul.collection
     li.collection-item.row
+      /li.collection-item.row
+      .col.m2 
+        strong Budget
       .col.m3
-        = check_box_tag :is_budgeted, true, checked: @requisition.is_budgeted
+        = check_box_tag :is_budgeted, true, requisition.is_budgeted
         = label_tag 'Budgeted'
       .col.m3
         .label Budget
-        .item = @requisition.budget || "--"
+        .item = requisition.budget || "--"
       .col.m3
         .label Budget Item
-        .item = @requisition.budget_item || "--"
-    li.collection-header Approval
+        .item = requisition.budget_item || "--"
     li.collection-item.row
+      .col.m2 
+        strong Approval
       .col.m3
-        = check_box_tag :supv_app, true, checked: @requisition.is_budgeted
-        = label_tag 'Budgeted'
+        = check_box_tag :supv_app, nil, requisition.supv_approval
+        = label_tag 'Supv. Approval'
       .col.m3
-        .label Budget
-        .item = @requisition.budget || "--"
+        = check_box_tag :is_budget_approved, nil, requisition.is_budget_approved
+        = label_tag 'Budget Approval'
       .col.m3
-        .label Budget Item
-        .item = @requisition.budget_item || "--"
-    li.collection-header Items
+        = check_box_tag :is_approved, nil,  requisition.is_approved
+        = label_tag 'Approved'
+    li.collection-item.collection-header
+      strong Items
     li.collection-item
       table.compact.striped
         thead
@@ -51,7 +56,7 @@ h5 Requisition No. #{@requisition.req_no}
             th Notes 
             th Req'd Date
         tbody
-          - @req_items.each do |req_item|
+          - req_items.each do |req_item|
             tr
               td = req_item.description
               td.right-align = req_item.qty_reqd

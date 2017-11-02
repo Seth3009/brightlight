@@ -55,6 +55,10 @@ ul#dept-options.dropdown-content
               i.material-icons check_box
             - else
               i.material-icons check_box_outline_blank
+            - if requisition.is_approved
+              i.material-icons check_box
+            - else
+              i.material-icons check_box_outline_blank
           td = requisition.total_amt
           td 
             = link_to requisition, remote: true

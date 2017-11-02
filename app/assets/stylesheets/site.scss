@@ -897,11 +897,26 @@ ul {
 	padding-left: 10px;
 }
 
-#modal-content {
+.card-panel, #modal-content {
 	.collection-header {
 		font-weight: bold;
 		color: #333;
 		background-color: #ccc;
+	}
+}
+
+// ======================================== Collapsible =========================================
+.card-panel {
+	.collapsible-header {
+		background-color: #fff;
+		color: #444;
+	}
+	.collapsible-header.active {
+		color: #222;
+		font-weight: bold;
+	}
+	.collapsible-body {
+		background-color: #fff;
 	}
 }
 
