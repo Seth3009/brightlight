@@ -12,4 +12,5 @@ class Requisition < ActiveRecord::Base
   
   has_many :req_items, -> { order(:id) }
   accepts_nested_attributes_for :req_items, reject_if: :all_blank, allow_destroy: true
+
 end

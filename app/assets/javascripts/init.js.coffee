@@ -19,4 +19,9 @@ $(document).on 'click', '.delete-record', ->
   $(this).closest("tr").hide()
     .find("[name$='[_destroy]']").val(true)
 
-  
+ # The following callback function will turn select elements in the dynamically created row 
+# into MaterializeCSS style selects.
+$(document).on 'cocoon:after-insert', ->
+  $('select').material_select()
+
+

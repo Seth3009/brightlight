@@ -888,6 +888,34 @@ ul {
 	box-sizing: border-box;
 }
  
+// ======================================== Collection =========================================
+.collection .collection-item {
+	padding: 10px 10px;
+}
+
+.collection.with-header .collection-item {
+	padding-left: 10px;
+}
+
+#modal-content {
+	.collection-header {
+		font-weight: bold;
+		color: #333;
+		background-color: #ccc;
+	}
+}
+
+// =========================================== Modal =========================================
+.modal {
+	max-height: 80%;
+	width: 75%;
+}
+
+.modal.modal-fixed-footer {
+	padding: 0;
+	height: 80%;
+}
+
 // =========================================== Carpool =========================================
 .carpool {
 	.entry-wrapper {

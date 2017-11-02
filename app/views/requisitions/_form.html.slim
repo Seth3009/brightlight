@@ -16,19 +16,19 @@
         = f.text_field :description
       .input-field.col.m3
         = f.label :requester, class: 'active'
-        = f.collection_select :requester, Employee.active.all, :id, :name, prompt: "Select employee", selected: @employee.id
+        = f.collection_select :requester_id, Employee.active.all, :id, :name, prompt: "Select employee", selected: @employee.id
       .input-field.col.m9
         = f.label :notes
         = f.text_field :notes
       .input-field.col.m3
         = f.label :department, class: 'active'
-        = f.collection_select :department, Department.all, :id, :name, prompt: "Select...", selected: @employee.department_id
+        = f.collection_select :department_id, Department.all, :id, :name, prompt: "Select...", selected: @employee.department_id
       .input-field.col.m3
         = f.check_box :is_budgeted
         = f.label :is_budgeted, 'Budgeted?'
       .input-field.col.m3
         = f.label :budget_item, class: 'active'
-        = f.collection_select :budget_item, BudgetItem.all, :id, :description, prompt: "Select budget"
+        = f.collection_select :budget_item_id, BudgetItem.all, :id, :description, prompt: "Select budget"
       .input-field.col.m3
         = f.label :date_required, class: 'active'
         = f.date_field :date_required
@@ -42,8 +42,8 @@
           = f.check_box :supv_approval
           = f.label :supv_approval, 'Supv. Approved?'
         .input-field.col.m6
-          = f.label :appvl_notes
-          = f.text_field :appvl_notes
+          = f.label :req_appvl_notes, "Supv Notes"
+          = f.text_field :req_appvl_notes
         .input-field.col.m3
           = f.check_box :is_budget_approved
           = f.label :is_budget_approved
@@ -84,7 +84,16 @@
             i.material-icons.left playlist_add
 
   .card-panel
-    #requisition
+    .row
+      strong.col.s3 Description
+      strong.col.s1 Qty
+      strong.col.s1 Unit
+      strong.col.s1 Currency
+      strong.col.s1 Est.price
+      strong.col.s2 Notes
+      strong.col.s2 Date Req'd
+      strong.col.s1 Action
+    .row#requisition
       = f.fields_for :req_items do |req_item|
         = render 'req_item_fields', f: req_item
 
