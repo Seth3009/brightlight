@@ -1,2 +1,4 @@
-$("#show-modal").html("<%=j render(partial: 'requisition_record', locals: {req_item: @req_item})%>");
-$('#show-modal').openModal();
+$("#modal-content").html("<%=j render(partial: 'requisition_record', locals: {req_item: @req_item})%>");
+$('#show-modal').openModal({
+  startingTop: '4%'
+});

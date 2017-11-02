@@ -49,7 +49,7 @@ nav
           .item = @requisition.supv_approval
         dd.col.m3
           .label Appvl Notes
-          .item = @requisition.appvl_notes
+          .item = @requisition.req_appvl_notes
         / dd
         /   .label = @requisition.is_budget_approved
         /   .item = @requisition.is_budget_approved
@@ -78,3 +78,27 @@ nav
         /   .label = @requisition.active
         /   .check_box = @requisition.active
 
+nav
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.2em"
+      | Items
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Description
+        th Qty
+        th Unit
+        th Est. Price
+        th Notes 
+        th Req'd Date
+    tbody
+      - @req_items.each do |req_item|
+        tr
+          td = req_item.description
+          td = req_item.qty_reqd
+          td = req_item.unit
+          td = "#{req_item.currency}#{req_item.est_price}"
+          td = req_item.notes
+          td = req_item.needed_by_date

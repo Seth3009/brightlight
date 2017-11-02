@@ -7,6 +7,9 @@ nav
         a.dropdown-button href="#!" data-activates="dept-options"
           span#dept = @department.present? ? "#{@department.name}" : "Department" 
           i.material-icons.right arrow_drop_down
+      li style="padding: 0 10px"
+        = check_box_tag :active, 1, checked: true
+        = label_tag :active
     ul.right
       li
         = link_to new_requisition_path
@@ -26,10 +29,9 @@ ul#dept-options.dropdown-content
       tr
         th Req no
         th Description
-        th Required
-        th Requested
+        th Required date
         th Requester
-        th Approval
+        th Approval *
         th Total
         th Actions
 
@@ -39,9 +41,20 @@ ul#dept-options.dropdown-content
           td = requisition.req_no
           td = requisition.description
           td = requisition.date_required
-          td = requisition.date_requested
           td = requisition.requester
-          td = requisition.supv_approval
+          td 
+            - if requisition.is_budgeted
+              i.material-icons check_box
+            - else
+              i.material-icons check_box_outline_blank
+            - if requisition.supv_approval
+              i.material-icons check_box
+            - else
+              i.material-icons check_box_outline_blank
+            - if requisition.is_budget_approved
+              i.material-icons check_box
+            - else
+              i.material-icons check_box_outline_blank
           td = requisition.total_amt
           td 
             = link_to requisition, remote: true
@@ -50,6 +63,7 @@ ul#dept-options.dropdown-content
               i.material-icons edit
             = link_to requisition, data: {id: requisition.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
               i.material-icons delete
+.right-align style="font-size:0.8em" colspan=8 = "*) Budgeted // Supv. Approval // Addl. Budget Approval"
 
 #show-modal.modal.modal-fixed-footer
   .modal-content
