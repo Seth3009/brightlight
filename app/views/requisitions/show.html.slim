@@ -9,50 +9,67 @@ nav
         = link_to edit_requisition_path @requisition
           i.material-icons edit
 .card-panel
-  .row 
-    .list-description 
-      dl
-        dd.col.m3
-          .label Req. No.
-          .item = @requisition.req_no
-        dd.col.m9
-          .label Description
-          .item = @requisition.description
-        dd.col.m3
-          .label Requester
-          .item = @requisition.requester
-        dd.col.m3
-          .label Notes
-          .item = @requisition.notes
-        dd.col.m3
-          .label Department
-          .item = @requisition.department        
-        dd.col.m3
-          = check_box_tag :is_budgeted, checked: @requisition.is_budgeted
-          .label :is_budgeted, 'Budgeted?'
-        dd.col.m3
-          .label Budget
-          .item = @requisition.budget
-        dd.col.m3
-          .label Budget Item
-          .item = @requisition.budget_item
-        dd.col.m3
-          .label Req. Date
-          .item = @requisition.date_required
+  ul.collapsible data-collapsible="expandable"
+    li
+      .collapsible-header.active
+        | Detail
+      .collapsible-body.container
+        .row
+          .col.m3
+            .label Req. No.
+            .item = @requisition.req_no
+          .col.m9
+            .label Description
+            .item = @requisition.description
+          .col.m3
+            .label Requester
+            .item = @requisition.requester
+          .col.m3
+            .label Notes
+            .item = @requisition.notes
+          .col.m3
+            .label Department
+            .item = @requisition.department        
+          .col.m3
+            .label Req. Date
+            .item = @requisition.date_required
+          .col.m3
+            = check_box_tag :is_budgeted, true, @requisition.is_budgeted
+            = label_tag 'Budgeted'
+          .col.m3
+            .label Budget
+            .item = @requisition.budget || "--"
+          .col.m3
+            .label Budget Item
+            .item = @requisition.budget_item || "--"
+    li
+      .collapsible-header
+        | Approval
+      .collapsible-body.container
+        .row
+          .col.m3
+            .label Supervisor
+            .item = @requisition.supervisor
+          .col.m3
+            = check_box_tag :supv_app, nil, @requisition.supv_approval
+            = label_tag 'Supv. Approval'
+          .col.m3
+            .label Appvl Notes
+            .item = @requisition.req_appvl_notes
 
-      dl
-        dd.col.m3
-          .label Supervisor
-          .item = @requisition.supervisor
-        dd.col.m3
-          .label Supv Approval
-          .item = @requisition.supv_approval
-        dd.col.m3
-          .label Appvl Notes
-          .item = @requisition.req_appvl_notes
-        / dd
-        /   .label = @requisition.is_budget_approved
-        /   .item = @requisition.is_budget_approved
+          .col.m3
+            = check_box_tag :is_sent_for_bgt_approval, nil, @requisition.is_sent_for_bgt_approval
+            = label_tag 'Sent for Budget Approval'
+          .col.m3
+            = check_box_tag :is_budget_approved, nil, @requisition.is_budget_approved
+            = label_tag 'Budget Approval'
+
+          .col.m3
+            = check_box_tag :is_sent_to_purchasing, nil, @requisition.is_sent_to_purchasing
+            = label_tag 'Sent to Purchasing'
+          .col.m3
+            = check_box_tag :is_approved, nil,  @requisition.is_approved
+            = label_tag 'Approved'
         / dd
         /   .label = @requisition.is_submitted
         /   .item = @requisition.is_submitted
@@ -62,12 +79,6 @@ nav
         / dd
         /   .label = @requisition.is_sent_to_supv
         /   .item = @requisition.is_sent_to_supv
-        / dd
-        /   .label = @requisition.is_sent_to_purchasing
-        /   .item = @requisition.is_sent_to_purchasing
-        / dd
-        /   .label = @requisition.is_sent_for_bgt_approval
-        /   .item = @requisition.is_sent_for_bgt_approval
         / dd
         /   .label = @requisition.is_rejected
         /   .item = @requisition.is_rejected
