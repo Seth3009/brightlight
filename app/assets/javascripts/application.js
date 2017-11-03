@@ -16,7 +16,7 @@
 //= require jquery-ui
 //= require jquery.ui.touch-punch.min.js
 //= require jquery.tagsinput
-//= require materialize-sprockets
+//= require materialize
 //= require materialize/extras/nouislider
 //= require cocoon
 //= require filterrific/filterrific-jquery
