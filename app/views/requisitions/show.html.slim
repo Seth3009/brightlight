@@ -8,68 +8,73 @@ nav
       li
         = link_to edit_requisition_path @requisition
           i.material-icons edit
-.card-panel
+
+.panel
   ul.collapsible data-collapsible="expandable"
     li
       .collapsible-header.active
         | Detail
-      .collapsible-body.container
-        .row
-          .col.m3
-            .label Req. No.
-            .item = @requisition.req_no
-          .col.m9
-            .label Description
-            .item = @requisition.description
-          .col.m3
-            .label Requester
-            .item = @requisition.requester
-          .col.m3
-            .label Notes
-            .item = @requisition.notes
-          .col.m3
-            .label Department
-            .item = @requisition.department        
-          .col.m3
-            .label Req. Date
-            .item = @requisition.date_required
-          .col.m3
-            = check_box_tag :is_budgeted, true, @requisition.is_budgeted
-            = label_tag 'Budgeted'
-          .col.m3
-            .label Budget
-            .item = @requisition.budget || "--"
-          .col.m3
-            .label Budget Item
-            .item = @requisition.budget_item || "--"
+      .collapsible-body
+        ul.collection
+          li.collection-item.row
+            .col.m3
+              .label Req. No.
+              .item = @requisition.req_no
+            .col.m9
+              .label Description
+              .item = @requisition.description
+          li.collection-item.row
+            .col.m3
+              .label Requester
+              .item = @requisition.requester
+            .col.m3
+              .label Notes
+              .item = @requisition.notes
+            .col.m3
+              .label Department
+              .item = @requisition.department        
+            .col.m3
+              .label Req. Date
+              .item = @requisition.date_required
+          li.collection-item.row
+            .col.m3
+              = check_box_tag :is_budgeted, true, @requisition.is_budgeted
+              = label_tag 'Budgeted'
+            .col.m3
+              .label Budget
+              .item = @requisition.budget || "--"
+            .col.m3
+              .label Budget Item
+              .item = @requisition.budget_item || "--"
     li
       .collapsible-header
         | Approval
-      .collapsible-body.container
-        .row
-          .col.m3
-            .label Supervisor
-            .item = @requisition.supervisor
-          .col.m3
-            = check_box_tag :supv_app, nil, @requisition.supv_approval
-            = label_tag 'Supv. Approval'
-          .col.m3
-            .label Appvl Notes
-            .item = @requisition.req_appvl_notes
+      .collapsible-body.container-padding
+        ul.collection
+          li.collection-item.row
+            .col.m3
+              .label Supervisor
+              .item = @requisition.supervisor || "--"
+            .col.m3
+              = check_box_tag :supv_app, nil, @requisition.supv_approval
+              = label_tag 'Supv. Approval'
+            .col.m6
+              .label Appvl Notes
+              .item = @requisition.req_appvl_notes || "--"
+          li.collection-item.row
+            .col.m3
+              = check_box_tag :is_sent_for_bgt_approval, nil, @requisition.is_sent_for_bgt_approval
+              = label_tag 'Sent for Budget Approval'
+            .col.m3
+              = check_box_tag :is_budget_approved, nil, @requisition.is_budget_approved
+              = label_tag 'Budget Approval'
 
-          .col.m3
-            = check_box_tag :is_sent_for_bgt_approval, nil, @requisition.is_sent_for_bgt_approval
-            = label_tag 'Sent for Budget Approval'
-          .col.m3
-            = check_box_tag :is_budget_approved, nil, @requisition.is_budget_approved
-            = label_tag 'Budget Approval'
-
-          .col.m3
-            = check_box_tag :is_sent_to_purchasing, nil, @requisition.is_sent_to_purchasing
-            = label_tag 'Sent to Purchasing'
-          .col.m3
-            = check_box_tag :is_approved, nil,  @requisition.is_approved
-            = label_tag 'Approved'
+            .col.m3
+              = check_box_tag :is_sent_to_purchasing, nil, @requisition.is_sent_to_purchasing
+              = label_tag 'Sent to Purchasing'
+            .col.m3
+              = check_box_tag :is_approved, nil,  @requisition.is_approved
+              = label_tag 'Approved'
         / dd
         /   .label = @requisition.is_submitted
         /   .item = @requisition.is_submitted
@@ -113,3 +118,10 @@ nav
           td = "#{req_item.currency}#{req_item.est_price}"
           td = req_item.notes
           td = req_item.needed_by_date
+
+javascript:
+  $('.collapsible').collapsible({
+    accordion: false, // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    onOpen: function(el) { console.log(el); }, // Callback for Collapsible open
+    onClose: function(el) { console.log(el); } // Callback for Collapsible close
+  });
