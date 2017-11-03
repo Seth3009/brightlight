@@ -7,7 +7,7 @@ class CopyCondition < ActiveRecord::Base
   validates :academic_year, :start_date, :book_copy_id, :book_condition, :barcode, presence: true
 
   scope :current_year, lambda { where(academic_year:AcademicYear.current) }
-  scope :active, lambda { where('deleted_flag = false OR deleted_flag is NULL') }
+  scope :active, lambda { where('deleted_flag = false OR deleted_flag is NULL').where.not(academic_year_id:nil) }
 
   scope :for_label, lambda { |label|
     joins(:book_copy).where(book_copies: {book_label_id: label})
@@ -23,20 +23,23 @@ class CopyCondition < ActiveRecord::Base
 
   def update_book_copy_condition
     old_condition_id = book_condition_id
+    old_copy_condition = book_copy.latest_copy_condition
 
     yield
-
+    
+    old_copy_condition.update(end_date: Date.today) if old_copy_condition.present?
     if old_condition_id != book_condition_id
       synchronize_book_copy_condition
     end
   end
 
   def synchronize_book_copy_condition
-    book_copy.update_attribute :book_condition_id, book_condition_id
+    puts "Synchronizing"
+    book_copy.update_column :book_condition_id, book_condition_id
   end
 
   def revert_book_copy_condition
-    book_copy.update_attribute :book_condition_id, book_copy.copy_conditions.order(:updated_at).take.try(:book_condition_id)
+    book_copy.update_column :book_condition_id, book_copy.copy_conditions.order(:updated_at).take.try(:book_condition_id)
   end
 
 end
