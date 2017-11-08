@@ -116,8 +116,6 @@ class StudentsController < ApplicationController
 
     def update_book_loans(student,params)
       params.each do |key, values|
-        puts key
-        puts values
         next if values[:_destroy] != "false"
         next if values.delete_if{|k,v| k=="_destroy" || v==""}.empty?
         book_loan = BookLoan.new(
@@ -144,6 +142,7 @@ class StudentsController < ApplicationController
         {student_books_attributes: [:id, :student_id, :book_copy_id, :academic_year_id, :course_text_id, :copy_no, :grade_section_id,
             :grade_level_id, :course_id, :issue_date, :return_date, :initial_copy_condition_id, :end_copy_condition_id, :created_at,
             :updated_at, :barcode, :student_no, :roster_no, :grade_section_code, :grade_subject_code, :notes, :prev_academic_year_id,
-            :book_edition_id, :_destroy]})
+            :book_edition_id, :_destroy]},
+        {book_loans_attributes: [:id, book_copy_id, :book_edition_id, :loan_status, :return_status, :barcode]})
     end
 end

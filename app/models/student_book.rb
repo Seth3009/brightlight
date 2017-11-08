@@ -10,7 +10,7 @@ class StudentBook < ActiveRecord::Base
   belongs_to :course
   belongs_to :initial_copy_condition, class_name: "BookCondition"
   belongs_to :end_copy_condition, class_name: "BookCondition"
-  belongs_to :book_loan, dependent: :destroy
+  belongs_to :book_loan
 
   has_many :book_fines
   
@@ -27,6 +27,7 @@ class StudentBook < ActiveRecord::Base
   after_save :update_book_copy_condition
   after_update :sync_book_loan
   after_create :create_book_loan
+  after_destroy lambda { self.book_loan.try(:destroy) }
 
   accepts_nested_attributes_for :book_loan
 
