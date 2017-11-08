@@ -1,4 +1,4 @@
-namespace :db do
+namespace :data do
 	desc "Populate database with missing passengers"
 	task fill_in_missing_passengers: :environment do
     Transport.joins('left join passengers p on transports.id = p.transport_id')
