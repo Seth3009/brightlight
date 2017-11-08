@@ -14,6 +14,7 @@ $('#edit-modal').openModal({
           .append( "<div>" + item.title + " ISBN: " + (item.isbn13 ? item.isbn13 : item.isbn10 ? item.isbn10 : "-" )+"</div>" )
           .appendTo( ul );
       };
+      $('select').material_select();
     }
   });
 

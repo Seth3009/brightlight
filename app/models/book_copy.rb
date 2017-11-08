@@ -38,7 +38,8 @@ class BookCopy < ActiveRecord::Base
   
   scope :with_condition, lambda { |condition_id|
     query = self.joins('left join copy_conditions c on c.book_copy_id = book_copies.id and c.id = (select id from copy_conditions 
-                    where book_copy_id = book_copies.id order by academic_year_id desc, created_at desc limit 1)')   
+                    where book_copy_id = book_copies.id and (deleted_flag = false or deleted_flag is null) and academic_year_id is not null 
+                    order by academic_year_id desc, created_at desc limit 1)')   
                 .joins('left join book_labels on book_copies.book_label_id = book_labels.id')                                
                 .joins('left join book_conditions bc on bc.id = c.book_condition_id')
                 .select('book_copies.barcode, book_copies.id, book_copies.status_id, book_copies.notes, book_copies.book_label_id, book_copies.book_condition_id, book_labels.name as label, c.book_condition_id as condition_id, bc.code as cond_code, bc.color as cond_color')

@@ -22,7 +22,8 @@ class BookLoan < ActiveRecord::Base
 
   has_many :loan_checks
 
-  before_update :sync_book_copy_status, if: :return_status_changed?
+  before_save :sync_status_available, if: :return_status_changed? 
+  before_save :sync_status_onloan,   if: :loan_status_changed?
 
   scope :current, lambda { where(academic_year: AcademicYear.current) }
   scope :returned, lambda { where(return_status:'R') }
@@ -115,19 +116,16 @@ class BookLoan < ActiveRecord::Base
 
   # Whenever return status is changed, also change book_copy status
   # TODO: loan status and return status should be combined into 1 field
-  def sync_book_copy_status
-    case self.return_status 
-    when nil
-      if self.loan_status == 'B'
-        self.book_copy.status_id = 2   # Status: on loan
-        self.book_copy.save
-      end
-    when 'R'
+  def sync_status_available
+    if self.return_status == 'R' or self.return_status == 'RI'
       self.loan_status = nil
-    when 'RI'
-      self.loan_status = nil
-      self.book_copy.status_id = 1    # Status: available
-      self.book_copy.save
+      self.book_copy.update_column :status_id, 1   # Status: available
     end
   end 
+
+  def sync_status_onloan
+    if self.loan_status == 'B'
+      self.book_copy.update_column :status_id, 2   # Status: on loan
+    end
+  end
 end
