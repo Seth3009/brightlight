@@ -26,7 +26,11 @@ class BookCopiesController < ApplicationController
   # GET /book_copies/1.json
   def show
     authorize! :read, BookCopy
-    @book_copy = BookCopy.unscoped.find(params[:id])
+    if params[:id].strip[0..2] == 'INV'
+      @book_copy = BookCopy.unscoped.find_by_barcode(params[:id])
+    else
+      @book_copy = BookCopy.unscoped.find(params[:id])
+    end
     respond_to do |format|
       format.html do
         Barcode.new(@book_copy.barcode).write_image if @book_copy.present?
