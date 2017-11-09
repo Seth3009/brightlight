@@ -55,7 +55,7 @@ class BookLoan < ActiveRecord::Base
   end
 
   def self.list_for_teachers_receipt(year_id, teacher_id)
-    BookLoan.select(['COUNT (book_loans.loan_status) AS loan_qty',
+    BookLoan.select(['COUNT (book_loans.id) AS loan_qty',
         "COUNT (case when book_loans.return_status = 'R' then 1 else null end) AS return_qty",
         'subjects.name','book_editions.title','book_editions.authors','book_editions.publisher', 
         'book_editions.isbn13','book_editions.isbn10', 'book_loans.notes'])
