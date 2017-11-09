@@ -26,9 +26,9 @@ class BookCopiesController < ApplicationController
   # GET /book_copies/1.json
   def show
     authorize! :read, BookCopy
+    @book_copy = BookCopy.unscoped.find(params[:id])
     respond_to do |format|
       format.html do
-        set_book_copy
         Barcode.new(@book_copy.barcode).write_image if @book_copy.present?
       end
       format.json do
@@ -120,7 +120,7 @@ class BookCopiesController < ApplicationController
   # PATCH/PUT /book_copies/1.json
   def update
     authorize! :update, BookCopy
-    @book_copy = BookCopy.find(params[:id])
+    @book_copy = BookCopy.unscoped.find(params[:id])
     respond_to do |format|
       if @book_copy.update(book_copy_params)        
         format.html { redirect_to @book_copy, notice: 'Book copy was successfully updated.' }
