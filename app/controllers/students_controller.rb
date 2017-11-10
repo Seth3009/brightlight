@@ -74,6 +74,13 @@ class StudentsController < ApplicationController
   def update
     authorize! :update, Student
     respond_to do |format|
+      # @student.force_callbacks if student_params[:student_books_attributes].present?
+      # results = @student.update(student_params)
+      # byebug
+      # sba = student_params[:student_books_attributes]
+      # ar = sba.map &:last 
+      # ar.delete_if {|x| x["_destroy"] == "true"}
+      # ar.delete_if 
       if @student.update(student_params)
         format.html {
           if student_params[:student_books_attributes].present?
@@ -143,6 +150,6 @@ class StudentsController < ApplicationController
             :grade_level_id, :course_id, :issue_date, :return_date, :initial_copy_condition_id, :end_copy_condition_id, :created_at,
             :updated_at, :barcode, :student_no, :roster_no, :grade_section_code, :grade_subject_code, :notes, :prev_academic_year_id,
             :book_edition_id, :_destroy]},
-        {book_loans_attributes: [:id, book_copy_id, :book_edition_id, :loan_status, :return_status, :barcode]})
+        {book_loans_attributes: [:id, :book_copy_id, :book_edition_id, :loan_status, :return_status, :barcode]})
     end
 end

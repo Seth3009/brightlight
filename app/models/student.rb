@@ -157,4 +157,8 @@ class Student < ActiveRecord::Base
 	def guardians
 		FamilyMember.where(family_id:self.family_id).guardians.includes(:guardian)
 	end
+
+	def force_callbacks
+		name_will_change!
+	end
 end

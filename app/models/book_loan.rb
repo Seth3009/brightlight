@@ -25,6 +25,7 @@ class BookLoan < ActiveRecord::Base
   after_destroy :sync_status_available
   before_save :sync_status_available, if: :return_status_changed? 
   before_save :sync_status_onloan,    if: :loan_status_changed?
+  before_create :sync_status_onloan
 
   scope :current, lambda { where(academic_year: AcademicYear.current) }
   scope :returned, lambda { where(return_status:'R') }
