@@ -74,17 +74,10 @@ class StudentsController < ApplicationController
   def update
     authorize! :update, Student
     respond_to do |format|
-      # @student.force_callbacks if student_params[:student_books_attributes].present?
-      # results = @student.update(student_params)
-      # byebug
-      # sba = student_params[:student_books_attributes]
-      # ar = sba.map &:last 
-      # ar.delete_if {|x| x["_destroy"] == "true"}
-      # ar.delete_if 
       if @student.update(student_params)
         format.html {
           if student_params[:student_books_attributes].present?
-            update_book_loans @student, student_params[:student_books_attributes]
+            # update_book_loans @student, student_params[:student_books_attributes]
             redirect_to student_student_books_path(@student), notice: 'Student book was successfully created.'
           else
             redirect_to @student, notice: 'Student was successfully created.'
@@ -125,18 +118,27 @@ class StudentsController < ApplicationController
       params.each do |key, values|
         next if values[:_destroy] != "false"
         next if values.delete_if{|k,v| k=="_destroy" || v==""}.empty?
+        book_title_id = BookEdition.find(values["book_edition_id"].to_i).try(:book_title_id)
+        standard_book = StandardBook.where(book_title_id: book_title_id, academic_year_id: values["academic_year_id"]).take
+        book_category = standard_book.try(:book_category_id)
         book_loan = BookLoan.new(
           book_copy_id: values["book_copy_id"],
           book_edition_id: values["book_edition_id"],
-          book_title_id: BookEdition.find(values["book_edition_id"].to_i).try(:book_title_id),
+          book_title_id: book_title_id,
           out_date: Date.today,
           academic_year_id: values["academic_year_id"],
+          student_id: student.id,
           student_no: values["student_no"],
           roster_no: values["roster_no"],
           barcode: values["barcode"],
-          student_id: student.id
+          loan_status: 'B',
+          book_category_id: book_category,
+          deleted_flag: false
         )
         book_loan.save
+        if book_copy = BookCopy.where(id: values["book_copy_id"]).take
+          book_copy.update_column :status_id, 2    # (Status on loan)
+        end
       end
     end
 

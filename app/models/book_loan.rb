@@ -21,8 +21,9 @@ class BookLoan < ActiveRecord::Base
   belongs_to :user
 
   has_many :loan_checks
+  has_one  :student_book
 
-  after_destroy :sync_status_available
+  around_destroy :make_book_status_available
   before_save :sync_status_available, if: :return_status_changed? 
   before_save :sync_status_onloan,    if: :loan_status_changed?
   before_create :sync_status_onloan
@@ -129,5 +130,11 @@ class BookLoan < ActiveRecord::Base
     if self.loan_status == 'B'
       self.book_copy.update_column :status_id, 2   # Status: on loan
     end
+  end
+
+  def make_book_status_available
+    book_copy = self.book_copy
+    yield
+    book_copy.update_column :status_id, 1   # Status: available
   end
 end

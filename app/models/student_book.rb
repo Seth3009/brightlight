@@ -26,8 +26,8 @@ class StudentBook < ActiveRecord::Base
 
   after_save :update_book_copy_condition
   after_update :sync_book_loan
-  after_create :create_book_loan
-  after_destroy lambda { self.book_loan.try(:destroy) }
+  after_validation :create_associated_book_loan, on: [:create]
+  around_destroy :destroy_associated_book_loan
 
   accepts_nested_attributes_for :book_loan
 
@@ -122,6 +122,7 @@ class StudentBook < ActiveRecord::Base
   end
 
   def self.create_book_loan(sb = nil)
+    logger.debug "Creating associated book_loan"
     sb ||= self
     book_title_id = sb.book_edition.try(:book_title_id)
     book_title = BookTitle.where(id: book_title_id).take
@@ -145,10 +146,38 @@ class StudentBook < ActiveRecord::Base
       student_no:       sb.student_no,
       deleted_flag:     false
     })
-    sb.book_loan_id = book_loan.id
+    sb.update_column :book_loan_id, book_loan.id
+    sb.book_copy.update_column :status_id, 2    # (Status on loan)
   end
 
   private
+    def create_associated_book_loan
+      logger.debug "Creating associated book_loan"
+      book_title_id = self.book_edition.try(:book_title_id)
+      book_title = BookTitle.where(id: book_title_id).take
+      standard_book = StandardBook.where(book_title_id: book_title_id, academic_year_id:self.academic_year_id).take
+      book_category = standard_book.try(:book_category_id)
+
+      # Create BookLoan record
+      book_loan = BookLoan.create({
+        academic_year_id: self.academic_year_id,
+        barcode:          self.barcode,
+        book_edition_id:  self.book_edition_id,
+        book_title_id:    book_title_id,
+        book_category_id: book_category,
+        bkudid:           book_title.try(:bkudid),
+        book_copy_id:     self.book_copy_id,
+        out_date:         self.issue_date,
+        loan_status:      'B',
+        refno:            self.book_edition.try(:refno),
+        roster_no:        self.roster_no,
+        student_id:       self.student_id,
+        student_no:       self.student_no,
+        deleted_flag:     false
+      })
+      self.book_loan_id = book_loan.id
+      self.book_copy.update_column :status_id, 2    # (Status on loan)
+    end
 
     def sync_book_loan
       book_loan = self.book_loan
@@ -169,5 +198,11 @@ class StudentBook < ActiveRecord::Base
       unless book_copy.book_condition_id == end_copy_condition_id
         book_copy.update(book_condition_id: end_copy_condition_id)
       end
+    end
+
+    def destroy_associated_book_loan
+      book_loan = self.book_loan
+      yield
+      book_loan.destroy
     end
 end

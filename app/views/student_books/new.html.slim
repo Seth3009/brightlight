@@ -28,20 +28,7 @@ h4 Book Assignment
         tbody#student_book
           = f.fields_for :student_books, @student.student_books.build do |student_book|
             = render 'student_book_fields', {f: student_book, form: f}
-          = f.fields_for :book_loans, @student.book_loans.build do |book_loan|
-            = book_loan.hidden_field :book_copy_id, class:'book_loan_book_copy_ids'
-            = book_loan.hidden_field :book_edition_id, class:'book_loan_book_edition_ids'
-            = book_loan.hidden_field :barcode, class:'book_loan_barcodes'
-            = book_loan.hidden_field :loan_status, class:'book_loan_loan_statuses'
-            = book_loan.hidden_field :return_status, class:'book_loan_return_statuses'
-      
-          / book_title_id: BookEdition.find(values["book_edition_id"].to_i).try(:book_title_id),
-          / out_date: Date.today,
-          / academic_year_id: values["academic_year_id"],
-          / student_no: values["student_no"],
-          / roster_no: values["roster_no"],
-          / barcode: values["barcode"],
-          / student_id: student.id
+
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
     = link_to 'Cancel', student_student_books_path(@student), class: "waves-effect waves-light btn btn-flat"
