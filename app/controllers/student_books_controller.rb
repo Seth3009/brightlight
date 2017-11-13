@@ -91,6 +91,7 @@ class StudentBooksController < ApplicationController
     authorize! :create, @student_book
 
     respond_to do |format|
+      # @student.name_will_change!
       if @student.save
         format.html { redirect_to student_student_books_path(@student), notice: 'Student book was successfully created.' }
         format.json { render :show, status: :created, location: @student_book }

@@ -1,0 +1,14 @@
+    = form.fields_for :book_loans, @student.book_loans.build do |book_loan|
+      = form.hidden_field :book_copy_id, class:'book_loan_book_copy_ids'
+      = form.hidden_field :book_edition_id, class:'book_loan_book_edition_ids'
+      = form.hidden_field :barcode, class:'book_loan_barcodes'
+      = form.hidden_field :loan_status, class:'book_loan_loan_statuses'
+      = form.hidden_field :return_status, class:'book_loan_return_statuses'
+      
+          / book_title_id: BookEdition.find(values["book_edition_id"].to_i).try(:book_title_id),
+          / out_date: Date.today,
+          / academic_year_id: values["academic_year_id"],
+          / student_no: values["student_no"],
+          / roster_no: values["roster_no"],
+          / barcode: values["barcode"],
+          / student_id: student.id
