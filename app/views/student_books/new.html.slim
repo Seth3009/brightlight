@@ -27,7 +27,7 @@ h4 Book Assignment
           th
         tbody#student_book
           = f.fields_for :student_books, @student.student_books.build do |student_book|
-            = render 'student_book_fields', f: student_book
+            = render 'student_book_fields', {f: student_book, form: f}
 
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save

@@ -1,4 +1,5 @@
 class Student < ActiveRecord::Base
+
   has_many :grade_sections_students
 	has_many :grade_sections, through: :grade_sections_students
 	has_many :course_sections, through: :rosters
@@ -156,5 +157,9 @@ class Student < ActiveRecord::Base
 
 	def guardians
 		FamilyMember.where(family_id:self.family_id).guardians.includes(:guardian)
+	end
+
+	def force_callbacks
+		name_will_change!
 	end
 end

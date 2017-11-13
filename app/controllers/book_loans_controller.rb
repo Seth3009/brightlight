@@ -325,7 +325,7 @@ class BookLoansController < ApplicationController
       BookLoan.not_disposed.where(id:loan_ids).update_all book_category_id: params[:book_catg] 
       @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id])}" 
     elsif params[:delete]
-      BookLoan.not_disposed.where(id:loan_ids).delete_all
+      BookLoan.not_disposed.where(id:loan_ids).destroy_all
       ids_to_remove = loan_ids
     end
     ids_to_uncheck = completed - ids_to_remove
