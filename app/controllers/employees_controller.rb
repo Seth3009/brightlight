@@ -98,10 +98,14 @@ class EmployeesController < ApplicationController
   # DELETE /employees/1.json
   def destroy
     authorize! :destroy, Employee
-    @employee.destroy
     respond_to do |format|
-      format.html { redirect_to employees_url, notice: 'Employee was successfully destroyed.' }
-      format.json { head :no_content }
+      if @employee.destroy
+        format.html { redirect_to employees_url, notice: 'Employee was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to employees_url, alert: @employee.errors.full_messages.join('. ') }
+        format.json { render json: @employee.errors, status: :unprocessable_entity }
+      end
     end
   end
 

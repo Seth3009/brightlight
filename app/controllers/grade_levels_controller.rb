@@ -133,11 +133,15 @@ class GradeLevelsController < ApplicationController
   # DELETE /grade_levels/1
   # DELETE /grade_levels/1.json
   def destroy
-    authorize! :destroy, @grade_level
-    @grade_level.destroy
+    authorize! :destroy, @grade_level    
     respond_to do |format|
-      format.html { redirect_to grade_levels_url, notice: 'Grade level was successfully destroyed.' }
-      format.json { head :no_content }
+      if @grade_level.destroy
+        format.html { redirect_to grade_levels_url, notice: 'Grade level was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to grade_levels_url, alert: @grade_level.errors.full_messages.join('. ') }
+        format.json { render json: @grade_level.errors, status: :unprocessable_entity }
+      end 
     end
   end
 

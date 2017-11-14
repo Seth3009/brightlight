@@ -110,10 +110,15 @@ class BookEditionsController < ApplicationController
   # DELETE /book_editions/1.json
   def destroy
     authorize! :destroy, @book_edition
-    @book_edition.destroy
+    
     respond_to do |format|
-      format.html { redirect_to book_editions_url, notice: 'Book edition was successfully destroyed.' }
-      format.json { head :no_content }
+      if @book_edition.destroy
+        format.html { redirect_to book_editions_url, notice: 'Book edition was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to book_editions_url, alert: @book_edition.errors.full_messages.join('. ') }
+        format.json { render json: @book_edition.errors, status: :unprocessable_entity }
+      end
     end
   end
 

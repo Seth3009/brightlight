@@ -157,10 +157,14 @@ class GradeSectionsController < ApplicationController
   # DELETE /grade_sections/1.json
   def destroy
     authorize! :destroy, @grade_section
-    @grade_section.destroy
     respond_to do |format|
-      format.html { redirect_to grade_sections_url, notice: 'Grade section was successfully destroyed.' }
-      format.json { head :no_content }
+      if @grade_section.destroy
+        format.html { redirect_to grade_sections_url, notice: 'Grade section was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to grade_sections_url, alert: @grade_section.errors.full_messages.join('. ') }
+        format.json { render json: @grade_section.errors, status: :unprocessable_entity }
+      end
     end
   end
 

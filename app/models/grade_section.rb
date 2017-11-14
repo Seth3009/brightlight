@@ -8,7 +8,7 @@ class GradeSection < ActiveRecord::Base
   belongs_to :academic_year
 
   has_many :course_sections
-  has_many :grade_sections_students, dependent: :destroy
+  has_many :grade_sections_students, dependent: :restrict_with_error
   has_many :students, through: :grade_sections_students
   has_many :student_books
   has_many :book_labels, -> { order("cast(substring(name from position('#' in name)+1)  as integer)")}
