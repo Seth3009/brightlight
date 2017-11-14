@@ -71,23 +71,20 @@
 
 javascript:
   $(document).ready(function() {
-
-    $("#pax_autocomplete").easyAutocomplete({
-      url: function(name) {
-        return "/students?term=" + name + "&format=json";
-      },
-      getValue: 'name',
-      list: {
-        maxNumberOfElements: 10,
-        onClickEvent: function() {
-          var student = $("#pax_autocomplete").getSelectedItemData();
-          insert_row(student);
-        },
-        onChooseEvent: function() {
-          $("#pax_autocomplete").val();
+    $("#pax_autocomplete").autocomplete({
+      source: "/students?term=" + name + "&format=json",
+        max: 20,
+        minLength: 3,
+        select: function( event, ui ) {
+          insert_row(ui.item);
         }
-      }
-    });
+    })
+    .autocomplete( "instance" )._renderItem = function( ul, student ) {
+      return $( "<li>" )
+        .append( "<div>" + student.name + " - " + student.grade +"</div>" )
+        .appendTo( ul );
+    };
+    $('select').material_select();
 
     function insert_row(student) {      
       $("#members")
@@ -101,9 +98,5 @@ javascript:
         +"'</input></td>"
         +"<td><a class='waves-effect waves-teal red-text remove_fields dynamic' href='#'><i class='material-icons'>delete</i></a>");
     };
-
-    function log(item) {
-      console.log(item);
-    }
   });
       
