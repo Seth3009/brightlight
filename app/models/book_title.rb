@@ -3,9 +3,9 @@ class BookTitle < ActiveRecord::Base
   
   # has_many :course_texts
   # has_many :courses, through: :course_texts
-  has_many :book_editions
-  has_many :standard_books
-  has_many :book_loans
+  has_many :book_editions, dependent: :restrict_with_error
+  has_many :standard_books, dependent: :restrict_with_error
+  has_many :book_loans, dependent: :restrict_with_error
   has_many :book_loan_histories
 
   belongs_to :subject

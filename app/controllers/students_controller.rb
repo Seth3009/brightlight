@@ -77,7 +77,6 @@ class StudentsController < ApplicationController
       if @student.update(student_params)
         format.html {
           if student_params[:student_books_attributes].present?
-            # update_book_loans @student, student_params[:student_books_attributes]
             redirect_to student_student_books_path(@student), notice: 'Student book was successfully created.'
           else
             redirect_to @student, notice: 'Student was successfully created.'
@@ -100,11 +99,15 @@ class StudentsController < ApplicationController
   # DELETE /students/1
   # DELETE /students/1.json
   def destroy
-    authorize! :destroy, Student
-    @student.destroy
+    authorize! :destroy, Student    
     respond_to do |format|
-      format.html { redirect_to students_url, notice: 'Student was successfully destroyed.' }
-      format.json { head :no_content }
+      if @student.destroy
+        format.html { redirect_to students_url, notice: 'Student record was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to students_url, alert: @student.errors.full_messages.join('. ') }
+        format.json { render json: @student.errors, status: :unprocessable_entity }
+      end 
     end
   end
 
@@ -112,34 +115,6 @@ class StudentsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_student
       @student = Student.where(id: params[:id]).includes([:student_admission_info]).first
-    end
-
-    def update_book_loans(student,params)
-      params.each do |key, values|
-        next if values[:_destroy] != "false"
-        next if values.delete_if{|k,v| k=="_destroy" || v==""}.empty?
-        book_title_id = BookEdition.find(values["book_edition_id"].to_i).try(:book_title_id)
-        standard_book = StandardBook.where(book_title_id: book_title_id, academic_year_id: values["academic_year_id"]).take
-        book_category = standard_book.try(:book_category_id)
-        book_loan = BookLoan.new(
-          book_copy_id: values["book_copy_id"],
-          book_edition_id: values["book_edition_id"],
-          book_title_id: book_title_id,
-          out_date: Date.today,
-          academic_year_id: values["academic_year_id"],
-          student_id: student.id,
-          student_no: values["student_no"],
-          roster_no: values["roster_no"],
-          barcode: values["barcode"],
-          loan_status: 'B',
-          book_category_id: book_category,
-          deleted_flag: false
-        )
-        book_loan.save
-        if book_copy = BookCopy.where(id: values["book_copy_id"]).take
-          book_copy.update_column :status_id, 2    # (Status on loan)
-        end
-      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

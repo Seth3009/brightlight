@@ -15,7 +15,6 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require jquery.ui.touch-punch.min.js
-//= require jquery.easy-autocomplete
 //= require jquery.tagsinput
 //= require materialize-sprockets
 //= require materialize/extras/nouislider

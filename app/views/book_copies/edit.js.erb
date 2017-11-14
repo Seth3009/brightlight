@@ -4,7 +4,7 @@ $('#edit-modal').openModal({
       $( "#title_autocomplete" ).autocomplete({
         source: "/book_editions?format=json",
         max: 30,
-        minLength: 5,
+        minLength: 4,
         select: function( event, ui ) {
           insert_row(ui.item);
         }

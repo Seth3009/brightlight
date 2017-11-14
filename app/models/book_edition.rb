@@ -4,7 +4,7 @@ class BookEdition < ActiveRecord::Base
   validates :isbn13, uniqueness: true, allow_blank: true, allow_nil: true
 
   belongs_to :book_title
-  has_many :book_copies
+  has_many :book_copies, dependent: :restrict_with_error
 
   accepts_nested_attributes_for :book_copies, allow_destroy: true, reject_if: proc { |attributes| attributes['barcode'].blank? }
 

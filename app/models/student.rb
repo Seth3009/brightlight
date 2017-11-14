@@ -5,9 +5,9 @@ class Student < ActiveRecord::Base
 	has_many :course_sections, through: :rosters
   has_many :rosters, dependent: :destroy
 	has_one  :student_admission_info, autosave: true
-	has_many :student_books
-	has_many :book_loans
-	has_many :book_fines
+	has_many :student_books, dependent: :restrict_with_error
+	has_many :book_loans, dependent: :restrict_with_error
+	has_many :book_fines, dependent: :restrict_with_error
 	has_one  :passenger
 	has_one  :transport, through: :passenger
  	belongs_to :person

@@ -161,10 +161,14 @@ class BookCopiesController < ApplicationController
   def destroy
     authorize! :destroy, @book_copy
     book_edition = @book_copy.book_edition
-    @book_copy.destroy
     respond_to do |format|
-      format.html { redirect_to book_edition_book_copies_path(book_edition), notice: 'Book copy was successfully destroyed.' }
-      format.json { head :no_content }
+      if @book_copy.destroy
+        format.html { redirect_to book_edition_book_copies_path(book_edition), notice: 'Book copy was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to book_edition_book_copies_path(book_edition), alert: @book_copy.errors.full_messages.join('. ') }
+        format.json { render json: @book_copy.errors, status: :unprocessable_entity }
+      end 
     end
   end
 

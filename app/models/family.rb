@@ -1,5 +1,5 @@
 class Family < ActiveRecord::Base
-  has_many :family_members
+  has_many :family_members, dependent: :restrict_with_error
   validates :family_number, uniqueness: true
   validates :family_no, uniqueness: true
 
