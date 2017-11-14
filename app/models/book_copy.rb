@@ -6,12 +6,12 @@ class BookCopy < ActiveRecord::Base
   validates :book_edition, presence: true
   validates :barcode, presence: true, uniqueness: true
   has_many :copy_conditions, dependent: :destroy
-  has_many :book_fines
-  has_many :book_loans
+  has_many :book_fines, dependent: :restrict_with_error
+  has_many :book_loans, dependent: :restrict_with_error
   has_many :book_loan_histories
-  has_many :book_receipts
-  has_many :student_books
-  has_many :loan_checks
+  has_many :book_receipts, dependent: :restrict_with_error
+  has_many :student_books, dependent: :restrict_with_error
+  has_many :loan_checks, dependent: :restrict_with_error
 
   after_create :create_initial_condition
   before_save :sync_book_label, if: :book_label_id_changed?
