@@ -1,99 +1,82 @@
-p#notice = notice
+- title 'Budget'
 
-p
-  strong Department:
-  = @budget.department
-p
-<<<<<<< HEAD
-=======
-  strong Owner:
-  = @budget.owner
-p
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
-  strong Grade level:
-  = @budget.grade_level
-p
-  strong Grade section:
-  = @budget.grade_section
-p
-<<<<<<< HEAD
-  strong Budget holder:
-  = @budget.budget_holder
-p
-  strong Academic year:
-  = @budget.academic_year
-p
-  strong Is submitted:
-  = @budget.is_submitted
-=======
-  strong Academic year:
-  = @budget.academic_year
-p
-  strong Submitted:
-  = @budget.submitted
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
-p
-  strong Submit date:
-  = @budget.submit_date
-p
-<<<<<<< HEAD
-  strong Is approved:
-  = @budget.is_approved
-p
-  strong Approved date:
-  = @budget.approved_date
-=======
-  strong Approved:
-  = @budget.approved
-p
-  strong Apprv date:
-  = @budget.apprv_date
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
-p
-  strong Approver:
-  = @budget.approver
-p
-<<<<<<< HEAD
-  strong Is received:
-  = @budget.is_received
-p
-  strong Receiver:
-  = @budget.receiver
-p
-  strong Received date:
-  = @budget.received_date
-p
-  strong Total amt:
-  = @budget.total_amt
-p
-  strong Notes,:
-  = @budget.notes,
-p
-  strong Category,:
-  = @budget.category,
-p
-  strong Type,:
-  = @budget.type,
-p
-  strong Group,:
-  = @budget.group,
-p
-  strong Version,:
-  = @budget.version,
-=======
-  strong Type:
-  = @budget.type
-p
-  strong Category:
-  = @budget.category
-p
-  strong Active:
-  = @budget.active
-p
-  strong Notes:
-  = @budget.notes
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to budgets_path
+          | All budgets
+          i.material-icons.left chevron_left
+    ul.right
+      li
+        = link_to edit_budget_path @budget
+          i.material-icons edit
 
-= link_to 'Edit', edit_budget_path(@budget)
-'|
-= link_to 'Back', budgets_path
+.panel
+  ul.collapsible data-collapsible="expandable"
+    li
+      .collapsible-header.active
+        | Detail
+      .collapsible-body
+        ul.collection
+          li.collection-item.row
+            .col.m3
+              .label Department
+              .item = @budget.department.try(:name)
+              - if @budget.grade_section
+                .label Section
+                .item = @budget.grade_section.try(:name)
+            .col.m3
+              .label Budget Holder
+              .item = @budget.budget_holder.try(:name)
+            .col.m3
+              .label Academic Year
+              .item = @budget.academic_year.try(:name)
+            .col.m3
+              .label Total Amount
+              .item = @budget.total_amt
+                
+          li.collection-item.row
+      .collapsible-header.active
+        | Approval
+      .collapsible-body
+        ul.collection
+          li.collection-item.row
+            .col.m3
+              .label Approved date
+              .item = @budget.approved_date
+            .col.m3
+              .label Approved by
+              .item = @budget.approver.try(:name)
+          li.collection-item.row 
+            .col.m12
+              .label Notes
+              .item = @budget.notes
+    li
+      .collapsible-header.active
+        | Items
+      .collapsible-body.container-padding
+        table.compact.striped
+          thead
+            tr
+              th Account
+              th Description
+              th Month
+              th Amount
+              th Notes 
+              
+          tbody
+            - @budget.budget_items.each do |budget_item|
+              tr
+                td = budget_item.account
+                td = budget_item.description
+                td = budget_item.month
+                td = budget_item.amount
+                td = budget_item.notes
+
+javascript:
+  $(document).on('ready page:load', function(){
+    $('.collapsible').collapsible({
+      accordion: false
+    });
+  });

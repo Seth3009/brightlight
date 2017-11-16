@@ -49,7 +49,7 @@ gem 'will_paginate', '~> 3.0.6'
 gem 'filterrific'
 
 # The Materialize UI framework
-gem 'materialize-sass'
+gem 'materialize-sass', '0.97.1'
 
 # jQuery UI
 gem 'jquery-ui-rails'
@@ -117,7 +117,7 @@ group :development, :test do
   gem 'byebug'
   gem 'forgery'
   gem 'populator'
-  gem 'letter_opener'
+  gem 'letter_opener_web'
   gem 'rspec-rails', '~> 3.5'
   gem 'capybara'
   gem 'factory_girl_rails'

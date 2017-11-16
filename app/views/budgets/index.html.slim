@@ -1,57 +1,113 @@
-h1 Listing budgets
+h4 Budgets
 
-table
-  thead
-    tr
-      th Department
-      th Grade level
-      th Grade section
-      th Budget holder
-      th Academic year
-      th Is submitted
-      th Submit date
-      th Is approved
-      th Approved date
-      th Approver
-      th Is received
-      th Receiver
-      th Received date
-      th Total amt
-      th Notes,
-      th Category,
-      th Type,
-      th Group,
-      th Version,
-      th
-      th
-      th
+nav
+  .nav-wrapper
+    ul
+      li
+        a.dropdown-button href="#!" data-activates="dept-options"
+          span#dept = @department.present? ? "#{@department.name}" : "Department" 
+          i.material-icons.right arrow_drop_down
+      li 
+        a.dropdown-button href="#!" data-activates="year-options"
+          span#year = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
+          i.material-icons.right arrow_drop_down
+    ul.right
+      li
+        = link_to new_budget_path
+          | New
+          i.material-icons.left add
 
-  tbody
-    - @budgets.each do |budget|
+ul#dept-options.dropdown-content
+  li  
+    = link_to 'All', requisitions_path(params.merge(dept:'all').symbolize_keys)
+  - Department.all.each do |dept|
+    li 
+      = link_to dept.name, requisitions_path(params.merge(dept: dept.code).symbolize_keys)    
+ul#year-options.dropdown-content
+  li  
+  - AcademicYear.list_for_menu.each do |year|
+    li 
+      = link_to year.name, budgets_path(params.merge(year:year.id).symbolize_keys) 
+
+.card-panel
+  table.compact.striped
+    thead
       tr
-        td = budget.department
-        td = budget.grade_level
-        td = budget.grade_section
-        td = budget.budget_holder
-        td = budget.academic_year
-        td = budget.is_submitted
-        td = budget.submit_date
-        td = budget.is_approved
-        td = budget.approved_date
-        td = budget.approver
-        td = budget.is_received
-        td = budget.receiver
-        td = budget.received_date
-        td = budget.total_amt
-        td = budget.notes
-        td = budget.category
-        td = budget.type
-        td = budget.group
-        td = budget.version
-        td = link_to 'Show', budget
-        td = link_to 'Edit', edit_budget_path(budget)
-        td = link_to 'Destroy', budget, data: {:confirm => 'Are you sure?'}, :method => :delete
+        th Department
+        th Budget Holder
+        th Approved
+        th Year
+        th Total
+        th Actions
 
-br
+    tbody
+      - @budgets.each do |budget|
+        tr
+          td = budget.department.try(:name) || '--'
+          td = budget.budget_holder.try(:name) || '--'
+          td = budget.is_approved ? '&#9745;'.html_safe : ''
+          td = budget.academic_year.name
+          td = budget.total_amt
+          td 
+            = link_to budget
+              i.material-icons visibility
+            - if can? :update, budget
+              = link_to edit_budget_path(budget)
+                i.material-icons edit
+            - if can? :destroy, budget
+              = link_to budget, data: {id: budget.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
+                i.material-icons delete
 
-= link_to 'New Budget', new_budget_path
+/ table
+/   thead
+/     tr
+/       th Department
+/       th Grade level
+/       th Grade section
+/       th Budget holder
+/       th Academic year
+/       th Is submitted
+/       th Submit date
+/       th Is approved
+/       th Approved date
+/       th Approver
+/       th Is received
+/       th Receiver
+/       th Received date
+/       th Total amt
+/       th Notes,
+/       th Category,
+/       th Type,
+/       th Group,
+/       th Version,
+/       th
+/       th
+/       th
+
+/   tbody
+/     - @budgets.each do |budget|
+/       tr
+/         td = budget.department
+/         td = budget.grade_level
+/         td = budget.grade_section
+/         td = budget.budget_holder
+/         td = budget.academic_year
+/         td = budget.is_submitted
+/         td = budget.submit_date
+/         td = budget.is_approved
+/         td = budget.approved_date
+/         td = budget.approver
+/         td = budget.is_received
+/         td = budget.receiver
+/         td = budget.received_date
+/         td = budget.total_amt
+/         td = budget.notes
+/         td = budget.category
+/         td = budget.type
+/         td = budget.group
+/         td = budget.version
+/         td = link_to 'Show', budget
+/         td = link_to 'Edit', edit_budget_path(budget)
+/         td = link_to 'Destroy', budget, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+

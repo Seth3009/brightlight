@@ -2,8 +2,11 @@
 
 nav
   .nav-wrapper
-    .brand-logo style="margin-left: 20px; font-size:1.2em"
-      | Requisition
+    ul
+      li
+        = link_to requisitions_path
+          | All requisitions
+          i.material-icons.left chevron_left
     ul.right
       li
         = link_to edit_requisition_path @requisition
@@ -47,7 +50,7 @@ nav
               .label Budget Item
               .item = @requisition.budget_item || "--"
     li
-      .collapsible-header
+      .collapsible-header.active
         | Approval
       .collapsible-body.container-padding
         ul.collection
@@ -94,34 +97,32 @@ nav
         /   .label = @requisition.active
         /   .check_box = @requisition.active
 
-nav
-  .nav-wrapper
-    .brand-logo style="margin-left: 20px; font-size:1.2em"
-      | Items
-
-.card-panel
-  table.compact.striped
-    thead
-      tr
-        th Description
-        th Qty
-        th Unit
-        th Est. Price
-        th Notes 
-        th Req'd Date
-    tbody
-      - @req_items.each do |req_item|
-        tr
-          td = req_item.description
-          td = req_item.qty_reqd
-          td = req_item.unit
-          td = "#{req_item.currency}#{req_item.est_price}"
-          td = req_item.notes
-          td = req_item.needed_by_date
+    li
+      .collapsible-header.active
+        | Items
+      .collapsible-body.container-padding
+        table.compact.striped
+          thead
+            tr
+              th Description
+              th Qty
+              th Unit
+              th Est. Price
+              th Notes 
+              th Req'd Date
+          tbody
+            - @req_items.each do |req_item|
+              tr
+                td = req_item.description
+                td = req_item.qty_reqd
+                td = req_item.unit
+                td = "#{req_item.currency}#{req_item.est_price}"
+                td = req_item.notes
+                td = req_item.needed_by_date
 
 javascript:
-  $('.collapsible').collapsible({
-    accordion: false, // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-    onOpen: function(el) { console.log(el); }, // Callback for Collapsible open
-    onClose: function(el) { console.log(el); } // Callback for Collapsible close
+  $(document).on('ready page:load', function(){
+    $('.collapsible').collapsible({
+      accordion: false
+    });
   });

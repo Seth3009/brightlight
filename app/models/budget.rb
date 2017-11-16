@@ -9,5 +9,7 @@ class Budget < ActiveRecord::Base
   belongs_to :created_by, class_name: 'User'
   belongs_to :last_updated_by, class_name: 'User'
 
-  has_many :budget_items
+  has_many :budget_items, -> { order(:id) }
+
+  accepts_nested_attributes_for :budget_items, reject_if: :all_blank, allow_destroy: true
 end

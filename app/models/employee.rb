@@ -21,7 +21,8 @@ class Employee < ActiveRecord::Base
     .where(book_loans: {academic_year_id: year || AcademicYear.current_id})
 		.order(:name).uniq
 	}
-	
+	scope :department_heads, lambda { joins('join departments on employees.id = departments.manager_id').order(:name) }
+
 	def to_s
 		name
 	end

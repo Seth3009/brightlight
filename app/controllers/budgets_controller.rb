@@ -1,5 +1,5 @@
 class BudgetsController < ApplicationController
-  before_action :set_budget, only: [:show, :edit, :update, :destroy]
+  before_action :set_budget, only: [:edit, :update, :destroy]
 
   # GET /budgets
   # GET /budgets.json
@@ -10,6 +10,7 @@ class BudgetsController < ApplicationController
   # GET /budgets/1
   # GET /budgets/1.json
   def show
+    @budget = Budget.includes([:budget_items]).find(params[:id])
   end
 
   # GET /budgets/new
@@ -69,6 +70,11 @@ class BudgetsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def budget_params
-      params.require(:budget).permit(:department_id, :grade_level_id, :grade_section_id, :budget_holder_id, :academic_year_id, :is_submitted, :submit_date, :is_approved, :approved_date, :approver_id, :is_received, :receiver_id, :received_date, :total_amt, :notes, :category, :type, :group, :version)
+      params.require(:budget).permit(:department_id, :grade_level_id, :grade_section_id, :budget_holder_id, :academic_year_id, :is_submitted, 
+                                     :submit_date, :is_approved, :approved_date, :approver_id, :is_received, :receiver_id, :received_date, :total_amt, 
+                                     :notes, :category, :type, :group, :version,
+                                     {budget_items_attributes: [:budget_id, :description, :account, :line, :notes, :academic_year_id, :month, :amount, 
+                                                                :actual_amt, :is_completed, :type, :category, :group, :_destroy]
+                                     })
     end
 end
