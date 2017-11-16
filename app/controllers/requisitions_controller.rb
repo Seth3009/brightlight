@@ -1,5 +1,5 @@
 class RequisitionsController < ApplicationController
-  before_action :set_requisition, only: [:show, :edit, :update, :destroy]
+  before_action :set_requisition, only: [:show, :edit, :update, :destroy, :send_to_supv]
 
   # GET /requisitions
   # GET /requisitions.json
@@ -42,7 +42,15 @@ class RequisitionsController < ApplicationController
     @requisition.last_updated_by = current_user
     respond_to do |format|
       if @requisition.save
-        format.html { redirect_to @requisition, notice: 'Requisition was successfully created.' }
+        format.html do 
+          # puts "Params name: #{params[:name]}"
+          if params[:send]
+            @requisition.send_to_supv
+            redirect_to @requisition, notice: 'Requisition was saved and sent for approval.' 
+          else
+            redirect_to @requisition, notice: 'Requisition was successfully created.' 
+          end 
+        end
         format.json { render :show, status: :created, location: @requisition }
       else
         format.html { render :new }
@@ -58,7 +66,15 @@ class RequisitionsController < ApplicationController
     @requisition.last_updated_by = current_user
     respond_to do |format|
       if @requisition.update(requisition_params)
-        format.html { redirect_to @requisition, notice: 'Requisition was successfully updated.' }
+        format.html do
+          puts "Params name: #{params[:send]}"
+          if params[:send]
+            @requisition.send_to_supv
+            redirect_to @requisition, notice: 'Requisition was saved and sent for approval.' 
+          else
+            redirect_to @requisition, notice: 'Requisition was successfully saved.' 
+          end 
+        end
         format.json { render :show, status: :ok, location: @requisition }
       else
         format.html { render :edit }

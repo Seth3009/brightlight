@@ -242,6 +242,10 @@ Rails.application.routes.draw do
   # For authorization with OmniAuth2
   get '/auth/:provider/callback', to: 'sessions#create'
 
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  end
+  
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

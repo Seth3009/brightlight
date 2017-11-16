@@ -13,4 +13,8 @@ class Requisition < ActiveRecord::Base
   has_many :req_items, -> { order(:id) }
   accepts_nested_attributes_for :req_items, reject_if: :all_blank, allow_destroy: true
 
+  def send_to_supv
+    puts "Sending notification to supervisor"
+    EmailNotification.req_supv_approval(self).deliver_now
+  end 
 end

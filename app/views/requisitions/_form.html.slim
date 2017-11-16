@@ -16,7 +16,7 @@
         = f.text_field :description
       .input-field.col.m3
         = f.label :requester, class: 'active'
-        = f.collection_select :requester_id, Employee.active.all, :id, :name, prompt: "Select employee", selected: @employee.id
+        = f.collection_select :requester_id, Employee.active.all, :id, :name, prompt: "Select employee", selected: f.object.requester_id || @employee.id
       .input-field.col.m9
         = f.label :notes
         = f.text_field :notes
@@ -37,7 +37,7 @@
       .row
         .input-field.col.m3
           = f.label :supervisor, class: 'active'
-          = f.collection_select :requester, @supervisors, :id, :name, prompt: "Select employee", selected: @employee.supervisor_id
+          = f.collection_select :supervisor_id, @supervisors, :id, :name, prompt: "Select employee", selected: @employee.supervisor_id
         .input-field.col.m3
           = f.check_box :supv_approval
           = f.label :supv_approval, 'Supv. Approved?'
@@ -98,6 +98,8 @@
         = render 'req_item_fields', f: req_item
 
   .toolbar.z-depth-1
-    button.btn.waves-effect.waves-light type="submit" Save
-    button.btn.waves-effect.waves-light type="submit" Send for Approval
+    / = f.submit "Save", name: :save, class:'btn waves-effect waves-light'
+    / = f.submit "Send for Approval", name: :send, class:'btn waves-effect waves-light'
+    button.btn.waves-effect.waves-light type="submit" name="save" Save
+    button.btn.waves-effect.waves-light type="submit" name="send" Send for Approval
     = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"

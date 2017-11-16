@@ -1,0 +1,39 @@
+doctype html
+html
+	head
+		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
+		meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+	body
+    div style="margin-left:30px; width=85%; font-size:16px"
+      p Dear #{@supv.name},
+
+      p You have a pending requisition that requires your approval.
+
+      table.compact
+        tbody
+          tr
+            td Requester
+            td = @requisition.requester.try(:name)
+          tr 
+            td Req no
+            td = @requisition.req_no
+          tr 
+            td Description
+            td = @requisition.description
+          tr 
+            td Required Date
+            td = @requisition.date_required
+
+      p You can access the requisition from the following link.
+      
+      div style="margin-top:20px; margin-bottom:40px"
+        = link_to "Requisition No. #{@requisition.req_no}", @requisition , style:"text-decoration:underline"
+
+      p Thank you for using <i>Brightlight</i>. 
+      
+      p Regards,
+      p CBCS Brightlight Team
+    
+    = render 'footer', to: @supv 
+

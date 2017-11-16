@@ -12,4 +12,10 @@ class EmailNotification < ActionMailer::Base
     mail(to: %("#{@user.name}" <#{@user.email}>), subject: 'Book scan completed.')
   end 
 
+  def req_supv_approval(requisition)
+    @supv = requisition.supervisor
+    @requisition = requisition
+    mail(to: %("#{@supv.name}" <#{@supv.email}>), subject: "Approval required: Requisition #{requisition.req_no}.")
+  end 
+
 end
