@@ -4,7 +4,8 @@
   .input-field.col.s4
     = f.text_field :description
   .input-field.col.s1
-    = f.select :month, 
+    /= f.date_select :month, {prompt: true, order: [:month]}
+    = f.select :month, options_for_select([['Jan',1],['Feb',2],['Mar',3],['Apr',4],['May',5],['Jun',6],['Jul',7],['Aug',8],['Sep',9],['Oct',10],['Nov',11],['Dec',12]])
   .input-field.col.s2
     = f.number_field :amount
   .input-field.col.s3
