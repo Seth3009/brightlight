@@ -301,7 +301,7 @@ class BookLoansController < ApplicationController
         else
           @error = "Error: Failed to move some or all of the books"
         end
-      end 
+      end
     end
   end
 

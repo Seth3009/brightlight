@@ -94,8 +94,8 @@ class BookLoan < ActiveRecord::Base
     # BookLoan.where(employee:source,academic_year:from_year).update_all(employee_id:to.id, academic_year_id:to_year.id)
 
     tmp = source.book_loans.not_disposed.where(academic_year:from_year).map { |x|
-            x.attributes.except('created_at', 'updated_at', 'id', 'return_status', 'return_date', 'out_date', 'due_date', 'user_id')
-            .merge('academic_year_id'=>to_year, 'out_date'=>Date.today, 'due_date'=>Date.today+360, 'user_id'=>user_id)
+            x.attributes.except('created_at', 'updated_at', 'id', 'loan_status', 'return_status', 'return_date', 'out_date', 'due_date', 'user_id')
+            .merge('academic_year_id'=>to_year, 'loan_status'=>'B', 'out_date'=>Date.today, 'due_date'=>Date.today+360, 'user_id'=>user_id)
           } 
     source.book_loans.not_disposed.where(academic_year:from_year).delete_all if from_year == to_year
     destination.book_loans.create(tmp)
@@ -106,7 +106,9 @@ class BookLoan < ActiveRecord::Base
       r = update_attribute :employee, to
       return !!r
     else
-      r = BookLoan.create attributes.except('created_at','updated_at','id').merge('employee_id'=>to.id,'academic_year_id'=>to_year.id)
+      r = BookLoan.create attributes
+            .except('created_at', 'updated_at', 'id', 'return_status', 'return_date', 'out_date', 'due_date', 'employee_id', 'user_id')
+            .merge('employee_id'=>to.id, 'academic_year_id'=>to_year.id, 'loan_status'=>'B', 'out_date'=>Date.today, 'due_date'=>Date.today+360, 'user_id'=>user_id)
       return r.valid?
     end
   end
