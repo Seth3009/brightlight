@@ -65,8 +65,9 @@ nav
 
         tbody
           - @book_loans.each do |book_loan|
-            tr id="row-#{book_loan.id}"
-              td = link_to book_loan.barcode, book_loan.book_copy
+            - book_copy = book_loan.book_copy || BookCopy.unscoped.where(id:book_loan.book_copy_id).take
+            tr id="row-#{book_loan.id}" class="#{book_copy.disposed ? 'disposed-book' : ''}"
+              td = link_to book_loan.barcode, book_copy
               td 
                 - if book_loan.book_edition.present?
                   = link_to book_loan.book_edition.try(:title).truncate(50), book_loan.book_edition, remote:true 

@@ -889,7 +889,11 @@ ul {
 }
 
 .disposed-book {
-	background-color: #8d6e63 !important;
+	background-color: #b38d81 !important;
+	color: white;
+	a {
+		color: $dark-grey;
+	}
 }
  
 // =========================================== Carpool =========================================

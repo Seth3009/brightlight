@@ -178,9 +178,12 @@ class BookCopiesController < ApplicationController
     if params[:book_copy]
       @book_copies = BookCopy.where(id: params[:book_copy].map{|id, on| id})
       book_edition = @book_copies.last.book_edition
-      @book_copies.update_all(disposed: true)
-      
-      redirect_to book_edition_book_copies_path(book_edition), notice: 'Selected book copies were successfully deleted.'
+      if @book_copies.map{|x| x.borrowed_in_year(AcademicYear.current_id)}.reject{|x| !x}.empty?
+        @book_copies.update_all(disposed: true)
+        redirect_to book_edition_book_copies_path(book_edition), notice: 'Selected book copies were successfully deleted.'
+      else
+        redirect_to book_edition_book_copies_path(book_edition), alert: 'Error: Some selected book copies are still borrowed.'
+      end
     else
       redirect_to book_edition_book_copies_path(book_edition)
     end
