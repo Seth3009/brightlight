@@ -887,6 +887,14 @@ ul {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
+
+.disposed-book {
+	background-color: #b38d81 !important;
+	color: white;
+	a {
+		color: $dark-grey;
+	}
+}
  
 // =========================================== Carpool =========================================
 .carpool {

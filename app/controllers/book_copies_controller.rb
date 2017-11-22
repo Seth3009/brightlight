@@ -178,12 +178,27 @@ class BookCopiesController < ApplicationController
     if params[:book_copy]
       @book_copies = BookCopy.where(id: params[:book_copy].map{|id, on| id})
       book_edition = @book_copies.last.book_edition
-      @book_copies.update_all(disposed: true)
-      
-      redirect_to book_edition_book_copies_path(book_edition), notice: 'Selected book copies were successfully deleted.'
+      if @book_copies.map{|x| x.borrowed_in_year(AcademicYear.current_id)}.reject{|x| !x}.empty?
+        @book_copies.update_all(disposed: true)
+        redirect_to book_edition_book_copies_path(book_edition), notice: 'Selected book copies were successfully deleted.'
+      else
+        redirect_to book_edition_book_copies_path(book_edition), alert: 'Error: Some selected book copies are still borrowed.'
+      end
     else
       redirect_to book_edition_book_copies_path(book_edition)
     end
+  end
+
+  # GET /book_copies/1/undispose
+  def undispose
+    authorize! :manage, BookCopy
+    @book_copy = BookCopy.unscoped.find params[:id]
+    @book_copy.disposed = false
+    if @book_copy.save
+      redirect_to @book_copy, notice: "Successfully changed disposed status of book #{@book_copy.barcode}"
+    else
+      redirect_to @book_copy, alert: "Failed to change disposed status of book #{@book_copy.barcode}"
+    end  
   end
 
   # GET /book_copies/1/conditions

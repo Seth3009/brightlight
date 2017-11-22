@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171025015219) do
+ActiveRecord::Schema.define(version: 20171122084851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -962,6 +962,7 @@ ActiveRecord::Schema.define(version: 20171025015219) do
     t.string   "currency"
     t.boolean  "deleted"
     t.string   "notes"
+    t.string   "appvl_notes"
     t.date     "completed_date"
     t.integer  "supplier_id"
     t.string   "contact"
@@ -1015,6 +1016,7 @@ ActiveRecord::Schema.define(version: 20171025015219) do
     t.boolean  "is_budgeted"
     t.integer  "budget_id"
     t.integer  "budget_item_id"
+    t.string   "budget_notes"
     t.date     "date_required"
     t.date     "date_requested"
     t.integer  "department_id"
@@ -1022,7 +1024,8 @@ ActiveRecord::Schema.define(version: 20171025015219) do
     t.integer  "supervisor_id"
     t.boolean  "supv_approval"
     t.string   "notes"
-    t.string   "appvl_notes"
+    t.string   "req_appvl_notes"
+    t.integer  "req_approver_id"
     t.string   "total_amt"
     t.boolean  "is_budget_approved"
     t.boolean  "is_submitted"
@@ -1030,8 +1033,12 @@ ActiveRecord::Schema.define(version: 20171025015219) do
     t.boolean  "is_sent_to_supv"
     t.boolean  "is_sent_to_purchasing"
     t.boolean  "is_sent_for_bgt_approval"
+    t.integer  "budget_approver_id"
+    t.string   "bgt_appvl_notes"
     t.boolean  "is_rejected"
     t.string   "reject_reason"
+    t.integer  "purch_receiver_id"
+    t.string   "receive_notes"
     t.boolean  "active"
     t.integer  "created_by_id"
     t.integer  "last_updated_by_id"
@@ -1039,11 +1046,14 @@ ActiveRecord::Schema.define(version: 20171025015219) do
     t.datetime "updated_at",               null: false
   end
 
+  add_index "requisitions", ["budget_approver_id"], name: "index_requisitions_on_budget_approver_id", using: :btree
   add_index "requisitions", ["budget_id"], name: "index_requisitions_on_budget_id", using: :btree
   add_index "requisitions", ["budget_item_id"], name: "index_requisitions_on_budget_item_id", using: :btree
   add_index "requisitions", ["created_by_id"], name: "index_requisitions_on_created_by_id", using: :btree
   add_index "requisitions", ["department_id"], name: "index_requisitions_on_department_id", using: :btree
   add_index "requisitions", ["last_updated_by_id"], name: "index_requisitions_on_last_updated_by_id", using: :btree
+  add_index "requisitions", ["purch_receiver_id"], name: "index_requisitions_on_purch_receiver_id", using: :btree
+  add_index "requisitions", ["req_approver_id"], name: "index_requisitions_on_req_approver_id", using: :btree
   add_index "requisitions", ["requester_id"], name: "index_requisitions_on_requester_id", using: :btree
   add_index "requisitions", ["supervisor_id"], name: "index_requisitions_on_supervisor_id", using: :btree
 
@@ -1148,6 +1158,7 @@ ActiveRecord::Schema.define(version: 20171025015219) do
   create_table "stock_items", force: :cascade do |t|
     t.string   "name"
     t.string   "code"
+    t.string   "uuid"
     t.string   "description"
     t.string   "tags"
     t.string   "short_desc"
@@ -1315,6 +1326,7 @@ ActiveRecord::Schema.define(version: 20171025015219) do
     t.string   "status"
     t.string   "type"
     t.string   "group"
+    t.string   "code"
     t.integer  "created_by_id"
     t.integer  "last_updated_by_id"
     t.datetime "created_at",         null: false
@@ -1410,24 +1422,24 @@ ActiveRecord::Schema.define(version: 20171025015219) do
   add_foreign_key "budget_items", "users", column: "last_updated_by_id"
   add_foreign_key "budgets", "academic_years"
   add_foreign_key "budgets", "departments"
-  add_foreign_key "budgets", "users", column: "approver_id"
-  add_foreign_key "budgets", "users", column: "budget_holder_id"
+  add_foreign_key "budgets", "employees", column: "approver_id"
+  add_foreign_key "budgets", "employees", column: "budget_holder_id"
+  add_foreign_key "budgets", "employees", column: "receiver_id"
   add_foreign_key "budgets", "users", column: "created_by_id"
   add_foreign_key "budgets", "users", column: "last_updated_by_id"
-  add_foreign_key "budgets", "users", column: "receiver_id"
   add_foreign_key "carpools", "transports"
   add_foreign_key "cars", "transports", name: "cars_transport_id_fkey"
   add_foreign_key "course_section_histories", "employees", column: "instructor_id"
   add_foreign_key "currencies", "users"
+  add_foreign_key "deliveries", "employees", column: "accepted_by_id"
+  add_foreign_key "deliveries", "employees", column: "checked_by_id"
   add_foreign_key "deliveries", "purchase_orders"
-  add_foreign_key "deliveries", "users", column: "accepted_by_id"
-  add_foreign_key "deliveries", "users", column: "checked_by_id"
   add_foreign_key "deliveries", "users", column: "created_by_id"
   add_foreign_key "deliveries", "users", column: "last_updated_by_id"
   add_foreign_key "delivery_items", "deliveries"
+  add_foreign_key "delivery_items", "employees", column: "accepted_by_id"
+  add_foreign_key "delivery_items", "employees", column: "checked_by_id"
   add_foreign_key "delivery_items", "order_items"
-  add_foreign_key "delivery_items", "users", column: "accepted_by_id"
-  add_foreign_key "delivery_items", "users", column: "checked_by_id"
   add_foreign_key "delivery_items", "users", column: "created_by_id"
   add_foreign_key "delivery_items", "users", column: "last_updated_by_id"
   add_foreign_key "family_members", "families"
@@ -1454,21 +1466,24 @@ ActiveRecord::Schema.define(version: 20171025015219) do
   add_foreign_key "passengers", "students"
   add_foreign_key "passengers", "transports"
   add_foreign_key "purchase_orders", "departments"
+  add_foreign_key "purchase_orders", "employees", column: "approver_id"
+  add_foreign_key "purchase_orders", "employees", column: "requestor_id"
   add_foreign_key "purchase_orders", "suppliers"
-  add_foreign_key "purchase_orders", "users", column: "approver_id"
   add_foreign_key "purchase_orders", "users", column: "created_by_id"
   add_foreign_key "purchase_orders", "users", column: "last_updated_by_id"
-  add_foreign_key "purchase_orders", "users", column: "requestor_id"
   add_foreign_key "req_items", "requisitions"
   add_foreign_key "req_items", "users", column: "created_by_id"
   add_foreign_key "req_items", "users", column: "last_updated_by_id"
   add_foreign_key "requisitions", "budget_items"
   add_foreign_key "requisitions", "budgets"
   add_foreign_key "requisitions", "departments"
+  add_foreign_key "requisitions", "employees", column: "budget_approver_id"
+  add_foreign_key "requisitions", "employees", column: "purch_receiver_id"
+  add_foreign_key "requisitions", "employees", column: "req_approver_id"
+  add_foreign_key "requisitions", "employees", column: "requester_id"
+  add_foreign_key "requisitions", "employees", column: "supervisor_id"
   add_foreign_key "requisitions", "users", column: "created_by_id"
   add_foreign_key "requisitions", "users", column: "last_updated_by_id"
-  add_foreign_key "requisitions", "users", column: "requester_id"
-  add_foreign_key "requisitions", "users", column: "supervisor_id"
   add_foreign_key "smart_cards", "transports"
   add_foreign_key "templates", "academic_years"
   add_foreign_key "templates", "users"
@@ -1533,11 +1548,10 @@ ActiveRecord::Schema.define(version: 20171025015219) do
        LEFT JOIN subjects ON ((subjects.id = book_titles.subject_id)))
        LEFT JOIN employees ON ((employees.id = book_loans.employee_id)))
        LEFT JOIN ( SELECT loan_checks.book_loan_id,
-              loan_checks.loaned_to,
-              loan_checks.matched,
               loan_checks.academic_year_id,
               max(loan_checks.created_at) AS max_date
              FROM loan_checks
+            WHERE (loan_checks.matched = true)
             GROUP BY loan_checks.loaned_to, loan_checks.matched, loan_checks.book_loan_id, loan_checks.academic_year_id) max_dates ON (((max_dates.book_loan_id = book_loans.id) AND (max_dates.academic_year_id = book_loans.academic_year_id))))
        LEFT JOIN loan_checks l ON (((l.book_loan_id = book_loans.id) AND (l.academic_year_id = book_loans.academic_year_id) AND (l.loaned_to = book_loans.employee_id) AND (l.matched = true) AND (max_dates.book_loan_id = l.book_loan_id) AND (max_dates.max_date = l.created_at))));
   SQL

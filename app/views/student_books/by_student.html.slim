@@ -12,7 +12,7 @@ ul#section-options.dropdown-content
 
 ul#student-options.dropdown-content
   - if @grade_section.present?
-    li = link_to 'All', by_student_student_books_path(params.merge(year:@year_id,s:@grade_section.id, g:@grade_level.id).symbolize_keys)
+    li = link_to 'All', by_student_student_books_path(params.except(:st).merge(year:@year_id,s:@grade_section.id, g:@grade_level.id).symbolize_keys)
     - @all_students.each do |gss| 
       li = link_to "#{gss.order_no}. #{gss.student.name}", by_student_student_books_path(params.merge(year:@year_id,st:gss.student.id,s:@grade_section.id).symbolize_keys)
 
@@ -86,7 +86,8 @@ ul#year-options.dropdown-content
               th style='text-align:center;' Notes
           tbody                          
             - student_books.each_with_index do |book, i|
-              - if book.book_copy.present?
+              - book_copy = book.book_copy || BookCopy.unscoped.where(id:book.book_copy_id).take
+              - if book_copy.present?
                 = fields_for "book_loans[]", book do |f|
                   = f.hidden_field :grade_section_id, value: @grade_section.id 
                   = f.hidden_field :grade_level_id, value: @grade_level.id 
@@ -107,13 +108,13 @@ ul#year-options.dropdown-content
                   = f.hidden_field :prev_academic_year_id, value: AcademicYear.current_id-1 
                   = f.hidden_field :user_id, value: current_user.id if current_user
                 = fields_for "student_books[]", book do |f|
-                  - initial_condition = book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
+                  - initial_condition = book.initial_copy_condition # book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
                   - end_condition = book.end_copy_condition_id
-                  tr id=book.id
+                  tr id=book.id class="#{book_copy.disposed ? 'disposed-book' : ''}"
                     td.wd3 = i+1                  
-                    td.wd20 = book.try(:title).truncate(45) 
+                    td.wd20 = book.book_edition.try(:title).try(:truncate, 45) 
                     td.wd5 style='text-align:center;' 
-                      span = link_to book.barcode, book.try(:book_copy)
+                      span = link_to book.barcode, book_copy
                     td.wd5 style='text-align:center;' 
                       span.box class="#{initial_condition.try(:color) || 'beige'}"
                         = initial_condition.try(:code) || '?'

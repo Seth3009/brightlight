@@ -32,14 +32,14 @@ class User < ActiveRecord::Base
       # puts "User found: #{user.id}"
       return user
     else
-      registered_user = User.where(:email => access_token.info.email).first
+      registered_user = User.where('LOWER(email) = ?', access_token.info.email.try(:downcase)).take
       # puts "User by email: #{registered_user}"
       if registered_user
         # puts "Found #{registered_user.id}"
         return registered_user
       else
         # puts "Not found in User DB, trying Employee"
-        employee = Employee.where(email: data["email"]).first
+        employee = Employee.where('LOWER(email) = ?', data["email"].try(:downcase)).take
         if employee.present?
           user = User.create(name: data["name"],
             provider:access_token.provider,
@@ -105,6 +105,8 @@ class User < ActiveRecord::Base
   end
 
   def self.roles_from_job_title(job_title)
-    job_title.split(',').map(&:strip).map(&:downcase).map(&:to_sym) & ROLES
+    if job_title
+      job_title.split(',').map(&:strip).map(&:downcase).map(&:to_sym) & ROLES
+    end
   end
 end

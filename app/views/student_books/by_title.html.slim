@@ -21,29 +21,6 @@ ul#year-options.dropdown-content
   - AcademicYear.list_for_menu.each do |year|
     li 
       = link_to year.name, by_title_student_books_path(params.merge(year:year.id).symbolize_keys)
-      
-javascript:
-  function filterSectionOptions(id, name) {
-    var grade_ids = #{raw @grade_level_ids};
-    $("#grade").html(name);
-    grade_ids.forEach(function(g){
-      if(id!=g) {
-        $(".grade-"+g).hide();
-      } else {
-        $(".grade-"+id).show();
-      }
-    })
-  }
-  function filterTitleOptions(grade_level_id, grade_section_id, section_name, year) {
-    $("#section").html(section_name);
-    $.getJSON("/student_books/titles.json?s="+grade_section_id+"&year="+year, null, function (data) {
-      var list = "<li><a href='/student_books/by_title?s="+grade_section_id+"&year="+year+"'>All</a></li>";
-      $.each(data, function(i,item){
-          list += "<li><a href='/student_books/by_title?s="+grade_section_id+"&t="+item.id+"&year="+year+"'>"+item.title+"</a></li>";
-      });
-      $("#title-options").html(list);
-    });
-  }
 
 = form_tag update_multiple_student_books_path, method: :put do
   nav
@@ -90,6 +67,27 @@ javascript:
   = hidden_field_tag :title, @book_title_id
 
 javascript:
+  function filterSectionOptions(id, name) {
+    var grade_ids = #{raw @grade_level_ids};
+    $("#grade").html(name);
+    grade_ids.forEach(function(g){
+      if(id!=g) {
+        $(".grade-"+g).hide();
+      } else {
+        $(".grade-"+id).show();
+      }
+    })
+  }
+  function filterTitleOptions(grade_level_id, grade_section_id, section_name, year) {
+    $("#section").html(section_name);
+    $.getJSON("/student_books/titles.json?s="+grade_section_id+"&year="+year, null, function (data) {
+      var list = "<li><a href='/student_books/by_title?s="+grade_section_id+"&year="+year+"'>All</a></li>";
+      $.each(data, function(i,item){
+          list += "<li><a href='/student_books/by_title?s="+grade_section_id+"&t="+item.id+"&year="+year+"'>"+item.title+"</a></li>";
+      });
+      $("#title-options").html(list);
+    });
+  }
   var setCheck; 
   $("input:radio").click(function(){
     var id = $(this).closest("tr").attr("id");
