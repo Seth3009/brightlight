@@ -13,19 +13,26 @@ h4 Book Copy
             = link_to @book_copy.disposed ? edit_book_copy_path(@book_copy, disposed:"y") : edit_book_copy_path(@book_copy)
               i.material-icons.left edit
               | Edit
-        li.right
-          = link_to book_copy_conditions_path(@book_copy)
-            | Conditions
-        li.right
-          = link_to book_copy_loans_path(@book_copy)
-            | Loans
-        li.right
-          = link_to book_copy_checks_path(@book_copy)
-            | Checks
+          - if @book_copy.disposed
+            li.right
+              = link_to undispose_book_copies_path(@book_copy)
+                i.material-icons.left undo
+                | Undelete
+        - unless @book_copy.disposed
+          li.right
+            = link_to book_copy_conditions_path(@book_copy)
+              | Conditions
+          li.right
+            = link_to book_copy_loans_path(@book_copy)
+              | Loans
+          li.right
+            = link_to book_copy_checks_path(@book_copy)
+              | Checks
   .card
     .card-content
       -if @book_copy.disposed
-        .brown.lighten-1.white-text.center This copy has been disposed
+        .brown.lighten-1.white-text.center 
+          | This copy has been disposed of
       table
         tr
           td style="vertical-align:top"

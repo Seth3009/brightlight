@@ -186,6 +186,18 @@ class BookCopiesController < ApplicationController
     end
   end
 
+  # GET /book_copies/1/undispose
+  def undispose
+    authorize! :manage, BookCopy
+    @book_copy = BookCopy.unscoped.find params[:id]
+    @book_copy.disposed = false
+    if @book_copy.save
+      redirect_to @book_copy, notice: "Successfully changed disposed status of book #{@book_copy.barcode}"
+    else
+      redirect_to @book_copy, alert: "Failed to change disposed status of book #{@book_copy.barcode}"
+    end  
+  end
+
   # GET /book_copies/1/conditions
   def conditions
     authorize! :read, BookCopy

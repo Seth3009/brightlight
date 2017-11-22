@@ -45,7 +45,7 @@
               = f.hidden_field :prev_academic_year_id, value: AcademicYear.current_id-1 
               = f.hidden_field :user_id, value: current_user.id if current_user
             = fields_for "student_books[]", book do |f|
-              - initial_condition = book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
+              - initial_condition = book.initial_copy_condition # book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
               - end_condition = book.end_copy_condition_id
               tr id=book.id
                 td.wd5 = i+1
