@@ -124,6 +124,10 @@ class BookCopy < ActiveRecord::Base
     BookLoan.where(book_copy_id: self.id, return_status: nil).take
   end
 
+  def borrowed_in_year(year_id)
+    !!book_loans.where(academic_year_id: year_id, return_status: nil).present?
+  end 
+
   # Create copy_conditions records based
   def self.update_conditions_from_student_books(academic_year_id, next_academic_year_id, grade_levels)
     category = BookCategory.find_by_code 'TB'

@@ -24,7 +24,8 @@
     tbody
       - if student_books.present?
         - student_books.each_with_index do |book, i|
-          - if book.book_copy.present?
+          - book_copy = book.book_copy || BookCopy.unscoped.where(id:book.book_copy_id).take
+          - if book_copy.present?
             = fields_for "book_loans[]", book do |f|
               = f.hidden_field :grade_section_id, value: @grade_section.id 
               = f.hidden_field :grade_level_id, value: @grade_level.id 
@@ -45,13 +46,13 @@
               = f.hidden_field :prev_academic_year_id, value: AcademicYear.current_id-1 
               = f.hidden_field :user_id, value: current_user.id if current_user
             = fields_for "student_books[]", book do |f|
-              - initial_condition = book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
+              - initial_condition = book.initial_copy_condition # book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
               - end_condition = book.end_copy_condition_id
-              tr id=book.id
+              tr id=book.id class="#{book_copy.disposed ? 'disposed-book' : ''}"
                 td.wd5 = i+1
-                td.wd10 = link_to book.barcode, book.try(:book_copy)
+                td.wd10 = link_to book.barcode, book_copy
                 td.wd5 style='text-align:center;' 
-                  span = book.book_copy.try(:book_label).try(:name) || 'N/A'
+                  span = book_copy.book_label.try(:name) || 'N/A'
                 td.wd10 style='text-align:center;' 
                   span.box class="#{initial_condition.try(:color) || 'white'}"
                     = initial_condition.try(:code) || '?'
