@@ -28,7 +28,7 @@
         = f.label :is_budgeted, 'Budgeted?'
       .input-field.col.m3
         = f.label :budget_item, class: 'active'
-        = f.collection_select :budget_item_id, BudgetItem.all, :id, :description, prompt: "Select budget"
+        = f.collection_select :budget_item_id, @employee.department.budget_items.all, :id, :description_with_month_and_year, prompt: "Select budget"
       .input-field.col.m3
         = f.label :date_required, class: 'active'
         = f.date_field :date_required
@@ -98,8 +98,6 @@
         = render 'req_item_fields', f: req_item
 
   .toolbar.z-depth-1
-    / = f.submit "Save", name: :save, class:'btn waves-effect waves-light'
-    / = f.submit "Send for Approval", name: :send, class:'btn waves-effect waves-light'
     button.btn.waves-effect.waves-light type="submit" name="save" Save
     button.btn.waves-effect.waves-light type="submit" name="send" Send for Approval
     = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"

@@ -23,13 +23,15 @@ class RequisitionsController < ApplicationController
   def new
     authorize! :create, Requisition
     @employee = current_user.employee
+    @department = @employee.department
+    @budget = @department.budgets.current
     @requisition = Requisition.new
   end
 
   # GET /requisitions/1/edit
   def edit
     authorize! :update, @requisition
-    @employee = current_user.employee
+    @employee = @requisition.requester || current_user.employee
     @supervisors = Employee.where('id in (select supervisor_id from employees where supervisor_id is not null)').all
   end
 
@@ -43,12 +45,11 @@ class RequisitionsController < ApplicationController
     respond_to do |format|
       if @requisition.save
         format.html do 
-          # puts "Params name: #{params[:name]}"
           if params[:send]
             @requisition.send_to_supv
-            redirect_to @requisition, notice: 'Requisition was saved and sent for approval.' 
+            redirect_to @requisition, notice: 'Requisition has been saved and sent for approval.' 
           else
-            redirect_to @requisition, notice: 'Requisition was successfully created.' 
+            redirect_to @requisition, notice: 'Requisition has been successfully created.' 
           end 
         end
         format.json { render :show, status: :created, location: @requisition }

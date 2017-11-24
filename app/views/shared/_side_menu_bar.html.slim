@@ -101,6 +101,18 @@ li
 						= link_to 'Templates Targets', template_targets_path
 				li
 					= link_to 'Maintenance', settings_inventory_mtce_path	
+- if can? :manage, Requisition
+	li 
+		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons shopping_basket
+			i.mdi-navigation-chevron-right.right
+			| Purchasing
+		.collapsible-body
+			ul
+				li
+					= link_to 'Purchase Requests', "/requisitions"
+					= link_to 'Budgets', "/budgets"
+					= link_to 'Receiving', "/deliveries"
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons school
