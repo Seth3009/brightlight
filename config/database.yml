@@ -39,5 +39,5 @@ production:
   database: brightlight
   username: brightlight
   password: <%= ENV['POSTIT_DATABASE_PASSWORD'] %>
-  host: localhost
+  host: <%= ENV['PRODUCTION_DATABASE_HOST'] %>
   port: 5432
