@@ -343,6 +343,20 @@ button.delete-button :hover {
 	}
 }
 
+.field_with_errors {
+	input {
+		border-color: rgb(163, 6, 6);
+		background-color: #ef9a9a;
+	}
+	label {
+		color: rgb(163, 6, 6);
+	}
+	label.active {
+    font-size: .8rem;
+    transform: translateY(-140%);
+  }
+}
+
 // ========================================= Typography =============================================
 
 .giant-letter {

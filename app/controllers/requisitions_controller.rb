@@ -32,7 +32,7 @@ class RequisitionsController < ApplicationController
   def edit
     authorize! :update, @requisition
     @employee = @requisition.requester || current_user.employee
-    @supervisors = Employee.where('id in (select supervisor_id from employees where supervisor_id is not null)').all
+    @supervisors = Employee.supervisors.all
   end
 
   # POST /requisitions
@@ -78,7 +78,11 @@ class RequisitionsController < ApplicationController
         end
         format.json { render :show, status: :ok, location: @requisition }
       else
-        format.html { render :edit }
+        format.html { 
+          @employee = @requisition.requester || current_user.employee
+          @supervisors = Employee.supervisors.all
+          render :edit 
+        }
         format.json { render json: @requisition.errors, status: :unprocessable_entity }
       end
     end

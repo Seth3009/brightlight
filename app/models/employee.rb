@@ -22,6 +22,7 @@ class Employee < ActiveRecord::Base
 		.order(:name).uniq
 	}
 	scope :department_heads, lambda { joins('join departments on employees.id = departments.manager_id').order(:name) }
+	scope :supervisors, lambda { where('id in (select supervisor_id from employees where supervisor_id is not null)') }
 
 	def to_s
 		name
