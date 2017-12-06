@@ -14,6 +14,7 @@ class BookCopy < ActiveRecord::Base
   has_many :loan_checks, dependent: :restrict_with_error
 
   after_create :create_initial_condition
+  before_save :ensure_no_spaces_in_barcode
   before_save :sync_book_label, if: :book_label_id_changed?
   before_save :sync_book_edition, if: :book_edition_id_changed?
 
@@ -236,5 +237,9 @@ class BookCopy < ActiveRecord::Base
       book_loan_histories.update_all book_edition_id: self.book_edition_id
       book_receipts.update_all book_edition_id: self.book_edition_id
       student_books.update_all book_edition_id: self.book_edition_id
+    end
+
+    def ensure_no_spaces_in_barcode
+      self.barcode = self.barcode.strip
     end
 end
