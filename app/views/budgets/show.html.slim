@@ -17,6 +17,7 @@ nav
     li
       .collapsible-header.active
         | Detail
+        i.material-icons.left.arrow chevron_right
       .collapsible-body
         ul.collection
           li.collection-item.row
@@ -37,8 +38,10 @@ nav
               .item = @budget.total_amt
                 
           li.collection-item.row
-      .collapsible-header.active
+    li
+      .collapsible-header
         | Approval
+        i.material-icons.left.arrow chevron_right
       .collapsible-body
         ul.collection
           li.collection-item.row
@@ -53,8 +56,9 @@ nav
               .label Notes
               .item = @budget.notes
     li
-      .collapsible-header.active
+      .collapsible-header
         | Items
+        i.material-icons.left.arrow chevron_right
       .collapsible-body.container-padding
         table.compact.striped
           thead

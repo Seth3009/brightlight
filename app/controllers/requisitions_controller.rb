@@ -54,7 +54,12 @@ class RequisitionsController < ApplicationController
         end
         format.json { render :show, status: :created, location: @requisition }
       else
-        format.html { render :new }
+        format.html { 
+          @employee = @requisition.requester || current_user.employee
+          @department = @employee.department
+          @budget = @department.budgets.current
+          render :new 
+        }
         format.json { render json: @requisition.errors, status: :unprocessable_entity }
       end
     end

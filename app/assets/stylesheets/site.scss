@@ -343,18 +343,24 @@ button.delete-button :hover {
 	}
 }
 
-.field_with_errors {
-	input {
-		border-color: rgb(163, 6, 6);
-		background-color: #ef9a9a;
-	}
-	label {
-		color: rgb(163, 6, 6);
-	}
-	label.active {
-    font-size: .8rem;
-    transform: translateY(-140%);
-  }
+// .field_with_errors {
+// 	input {
+// 		border-color: rgb(163, 6, 6);
+// 		background-color: #ef9a9a;
+// 	}
+// 	label {
+// 		color: rgb(163, 6, 6);
+// 	}
+// 	label.active {
+//     font-size: .8rem;
+//     transform: translateY(-140%);
+//   }
+// }
+
+input.invalid-input {
+	border-color: rgb(163, 6, 6);
+	border-width: 2px;
+	background-color: #f0bfbf;
 }
 
 // ========================================= Typography =============================================
@@ -942,6 +948,11 @@ ul {
 	.collapsible-body {
 		background-color: #fff;
 	}
+}
+.collapsible-header.active i.arrow {
+	-ms-transform: rotate(90deg) translateX(40%) translateY(-40%); /* IE 9 */
+	-webkit-transform: rotate(90deg) translateX(40%) translateY(-40%); /* Chrome, Safari, Opera */
+	transform: rotate(90deg) translateX(40%) translateY(-40%);
 }
 
 // =========================================== Modal =========================================

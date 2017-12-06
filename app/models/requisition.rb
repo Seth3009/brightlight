@@ -16,7 +16,6 @@ class Requisition < ActiveRecord::Base
   validates :department, presence: true
   validates :requester, presence: true
   validates :description, presence: true
-  validates :req_appvl_notes, presence: true
 
   def send_to_supv
     self.update_attribute :is_sent_to_supv, true

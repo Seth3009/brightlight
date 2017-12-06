@@ -11,6 +11,8 @@ class BudgetItem < ActiveRecord::Base
 
   scope :current, lambda { where(academic_year: AcademicYear.current) }
 
+  before_validation :ensure_academic_year_has_a_value
+
   def description_with_month_and_year
     "#{description} - #{month}/#{budget.academic_year.name}"
   end
@@ -18,4 +20,10 @@ class BudgetItem < ActiveRecord::Base
   def to_s
     "#{description}: #{month}/#{academic_year.name}"
   end
+
+  protected
+  
+  def ensure_academic_year_has_a_value
+    self.academic_year_id = budget.academic_year_id unless budget.academic_year_id.blank?
+  end 
 end
