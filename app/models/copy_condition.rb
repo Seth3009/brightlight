@@ -26,15 +26,14 @@ class CopyCondition < ActiveRecord::Base
     old_copy_condition = book_copy.latest_copy_condition
 
     yield
-    
-    old_copy_condition.update(end_date: Date.today) if old_copy_condition.present?
+
+    old_copy_condition.update_column(:end_date, Date.today) if old_copy_condition.present?
     if old_condition_id != book_condition_id
       synchronize_book_copy_condition
     end
   end
 
   def synchronize_book_copy_condition
-    puts "Synchronizing"
     book_copy.update_column :book_condition_id, book_condition_id
   end
 
