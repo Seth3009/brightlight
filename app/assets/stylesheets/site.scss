@@ -660,7 +660,8 @@ main {
 // ============================================ Side Menu ===========================================
 
 ul.side-nav.fixed {
-	background-color: #292c33
+	background-color: #292c33;
+	background: linear-gradient(45deg, #4d4b52 50%, #292d36 100%) !important;
 }
 
 ul.side-nav.fixed li.logo {
@@ -674,7 +675,27 @@ ul.side-nav.fixed li.logo:hover {
 }
 
 ul.side-nav.fixed {
-    overflow: hidden
+    overflow: hidden;
+}
+
+
+ul.side-nav.fixed:hover {
+	overflow-y: auto;
+}
+
+
+ul.side-nav::-webkit-scrollbar {
+	width: 6px;
+}
+
+ul.side-navbody::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+}
+
+ul.side-nav::-webkit-scrollbar-thumb {
+	background-color: rgba(114, 113, 113, 0.466);
+	outline: 1px solid slategrey;
+	border-radius: 3px;
 }
 
 ul.side-nav.fixed li {
@@ -696,11 +717,11 @@ ul.side-nav.fixed ul.collapsible-accordion {
 }
 
 ul.side-nav.fixed li.logo {
-	background-color: $darker-grey;
+	background-color: transparent;
 }
 
 ul.side-nav.fixed .collapsible-header {
-	background-color: $darker-grey;
+	background-color: transparent;
 	color: $lighter-grey;
 	border: none;
 	padding-right: 0;
@@ -726,9 +747,6 @@ ul.side-nav.fixed .collapsible-body {
 	}
 }
 
-ul.side-nav.fixed:hover {
-    overflow-y: auto
-}
 
 ul {
 	li {
