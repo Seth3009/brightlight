@@ -36,25 +36,6 @@ nav
             .col.m3
               .label Total Amount
               .item = @budget.total_amt
-                
-          li.collection-item.row
-    li
-      .collapsible-header
-        | Approval
-        i.material-icons.left.arrow chevron_right
-      .collapsible-body
-        ul.collection
-          li.collection-item.row
-            .col.m3
-              .label Approved date
-              .item = @budget.approved_date
-            .col.m3
-              .label Approved by
-              .item = @budget.approver.try(:name)
-          li.collection-item.row 
-            .col.m12
-              .label Notes
-              .item = @budget.notes
     li
       .collapsible-header
         | Items
@@ -77,7 +58,23 @@ nav
                 td = budget_item.month
                 td = budget_item.amount
                 td = budget_item.notes
-
+    li
+      .collapsible-header
+        | Approval
+        i.material-icons.left.arrow chevron_right
+      .collapsible-body
+        ul.collection
+          li.collection-item.row
+            .col.m3
+              .label Approved date
+              .item = @budget.approved_date
+            .col.m3
+              .label Approved by
+              .item = @budget.approver.try(:name)
+          li.collection-item.row 
+            .col.m12
+              .label Notes
+              .item = @budget.notes
 javascript:
   $(document).on('ready page:load', function(){
     $('.collapsible').collapsible({

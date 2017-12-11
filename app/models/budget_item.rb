@@ -4,8 +4,6 @@ class BudgetItem < ActiveRecord::Base
   belongs_to :created_by, class_name: 'User'
   belongs_to :last_updated_by, class_name: 'User'
 
-  validates :budget_id, presence: true
-  validates :academic_year_id, presence: true
   validates :description, presence: true
   validates :amount, presence: true
 
@@ -24,6 +22,6 @@ class BudgetItem < ActiveRecord::Base
   protected
   
   def ensure_academic_year_has_a_value
-    self.academic_year_id = budget.academic_year_id unless budget.academic_year_id.blank?
+    self.academic_year_id = budget.academic_year_id unless budget.try(:academic_year_id).blank?
   end 
 end

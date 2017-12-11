@@ -19,11 +19,19 @@ class Budget < ActiveRecord::Base
 
   scope :current, lambda { where(academic_year: AcademicYear.current) }
 
+  after_create :ensure_budget_items_have_academic_year
+
   def to_s
     if grade_section
       "#{grade_section.name} - #{academic_year.name}"
     else
       "#{department.name} - #{academic_year.name}"
     end
+  end
+
+  protected
+
+  def ensure_budget_items_have_academic_year
+    self.budget_items.update_all academic_year_id: self.academic_year_id
   end
 end

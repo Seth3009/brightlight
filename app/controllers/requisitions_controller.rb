@@ -32,7 +32,8 @@ class RequisitionsController < ApplicationController
   def edit
     authorize! :update, @requisition
     @employee = @requisition.requester || current_user.employee
-    @supervisors = Employee.supervisors.all
+    @manager = @employee.manager || @employee.supervisor
+    @supervisors = Employee.active.supervisors.all
   end
 
   # POST /requisitions

@@ -22,7 +22,7 @@
         = f.text_field :notes
       .input-field.col.m3
         = f.label :department, class: 'active'
-        = f.collection_select :department_id, Department.all, :id, :name, prompt: "Select...", selected: @employee.department_id
+        = f.collection_select :department_id, Department.all, :id, :name, prompt: "Select...", selected: f.object.department_id || @employee.department_id
       .input-field.col.m3
         = f.check_box :is_budgeted
         = f.label :is_budgeted, 'Budgeted?'
@@ -37,7 +37,7 @@
       .row
         .input-field.col.m3
           = f.label :supervisor, class: 'active'
-          = f.collection_select :supervisor_id, @supervisors, :id, :name, prompt: "Select employee", selected: @employee.supervisor_id
+          = f.collection_select :supervisor_id, @supervisors, :id, :name, prompt: "Select employee", selected: f.object.supervisor_id || @employee.supervisor_id
         .input-field.col.m3
           = f.check_box :supv_approval
           = f.label :supv_approval, 'Supv. Approved?'
