@@ -27,8 +27,8 @@
         = f.check_box :is_budgeted
         = f.label :is_budgeted, 'Budgeted?'
       .input-field.col.m3
-        = f.label :budget_item, class: 'active'
-        = f.collection_select :budget_item_id, @employee.department.budget_items.all, :id, :description_with_month_and_year, prompt: "Select budget"
+        = f.label :budget_notes, class: 'active'
+        = f.text_field :budget_notes, class: 'budget_item_autocomplete'
       .input-field.col.m3
         = f.label :date_required, class: 'active'
         = f.date_field :date_required
@@ -101,3 +101,26 @@
     button.btn.waves-effect.waves-light type="submit" name="save" Save
     button.btn.waves-effect.waves-light type="submit" name="send" Send for Approval
     = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"
+
+javascript:
+  $( function() {
+    var dept = $("#requisition_department_id").prop("value");
+    $( ".budget_item_autocomplete" ).autocomplete({
+      source: "/budget_items?format=json&dept="+dept,
+      max: 50,
+      minLength: 2,
+      select: function( event, ui ) {
+        select_item(ui.item);
+      }
+    })
+    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+      return $( "<li>" )
+        .append( "<div>" + item.description + " Month: " + item.month + "/" + item.academic_year_id +"</div>" )
+        .appendTo( ul );
+    };
+  } );
+
+  function select_item(item) {
+    console.log("Selected: "+item.description);
+    $("#requisition_budget_notes").val(item.description);
+  }

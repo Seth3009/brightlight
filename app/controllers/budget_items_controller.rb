@@ -5,6 +5,14 @@ class BudgetItemsController < ApplicationController
   # GET /budget_items.json
   def index
     @budget_items = BudgetItem.all.includes(budget: [:department])
+    if params[:dept]
+      @budget_items = @budget_items.joins(:budget).where(budgets: {department_id:params[:dept]})
+    end
+    if params[:term]
+      @budget_items = @budget_items.where('LOWER(description) like ?', "%#{params[:term].downcase}%")
+            .where(academic_year: AcademicYear.current)
+            .order(:month)
+    end
   end
 
   # GET /budget_items/1
