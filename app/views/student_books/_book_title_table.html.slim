@@ -29,7 +29,7 @@
             = fields_for "book_loans[]", book do |f|
               = f.hidden_field :grade_section_id, value: @grade_section.id 
               = f.hidden_field :grade_level_id, value: @grade_level.id 
-              = f.hidden_field :academic_year_id, value: @academic_year
+              = f.hidden_field :academic_year_id, value: @academic_year.id
               = f.hidden_field :book_copy_id, value: book.book_copy_id 
               = f.hidden_field :book_edition_id, value: book.book_edition_id
               = f.hidden_field :book_title_id, value: @book_title_id
