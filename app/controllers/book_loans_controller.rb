@@ -352,6 +352,10 @@ class BookLoansController < ApplicationController
       @teacher = Employee.find params[:employee_id]
       @book_loans = BookLoan.list_for_teachers_receipt params[:year], params[:employee_id]
 
+      if params[:book_catg].present? && params[:book_catg].downcase != 'all'
+        @book_loans = @book_loans.where(book_category_id: params[:book_catg])
+      end
+
       if @template
         @template.placeholders = {
           teacher_name: @teacher.name,
