@@ -5,35 +5,49 @@ table.loose style="width:100%"
       th colspan=4
         h4 style="margin:0" = "#{@teacher.name} (#{@academic_year.name})"
     tr
-      th.wd5 No
-      th.wd10 Barcode
-      th.wd25 Book title
-      th.wd20 Author
-      th.wd20 Publisher
-      th.wd10 ISBN
-      th.wd10 Subject
+      th.wd5
+        div No
+      th.wd10
+        div Barcode
+      th.wd25
+        div Book title
+      th.wd20
+        div Author
+      th.wd20
+        div Publisher
+      th.wd10
+        div ISBN
+      th.wd10
+        div Subject
 
   tbody
     - @book_loans.each.with_index(1) do |book_loan, i|      
       tr style='border-bottom:1px solid gainsboro'
-        td.wd5 = "#{i}."      
+        td.wd5
+          div = "#{i}."      
         td.wd10
           - if params[:barcode] == '1'
             - Barcode.new(book_loan.barcode).write_image
-            = wicked_pdf_image_tag  "/assets/images/#{book_loan.barcode.upcase}.PNG"
-          = book_loan.barcode.upcase
+            div = wicked_pdf_image_tag  "/assets/images/#{book_loan.barcode.upcase}.PNG"
+          div = book_loan.barcode.upcase
         - edition = book_loan.book_edition
         - if edition.present?
-          td.wd25 = edition.title ? edition.title.truncate(80) : '---'
-          td.wd20 = edition.authors ? edition.authors.truncate(45) : '---'
-          td.wd20 = edition.publisher ? edition.publisher.truncate(45) : '---'
-          td.wd10 = edition.isbn13 || edition.isbn10 || edition.refno
-          td.wd10 = edition.try(:book_title).try(:subject).try(:name) || '---'
+          td.wd25
+            div = edition.title ? edition.title.truncate(80) : '---'
+          td.wd20
+            div = edition.authors ? edition.authors.truncate(45) : '---'
+          td.wd20
+            div = edition.publisher ? edition.publisher.truncate(45) : '---'
+          td.wd10
+            div = edition.isbn13 || edition.isbn10 || edition.refno
+          td.wd10
+            div = edition.try(:book_title).try(:subject).try(:name) || '---'
     
 / Important to avoid overlapping text with repeated header 
 / See: https://github.com/wkhtmltopdf/wkhtmltopdf/issues/1524#issuecomment-85072480
 css:
-  tr {
-      page-break-inside: avoid;
+  tr, td, th {
+      page-break-inside: avoid !important;
   }
+
 
