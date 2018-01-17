@@ -62,7 +62,7 @@ div
 
           ul.right.hide-on-med-and-down
             li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Book Receipt"
-              = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id)
+              = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg])
                 i.material-icons.left receipt 
             li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Export to PDF"
               -if @academic_year.present?
@@ -88,7 +88,7 @@ div
 
         ul.side-nav#sidenav-menu
           li 
-            = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id)
+            = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg])
               | Book Receipt
               i.material-icons.left receipt
           li 
