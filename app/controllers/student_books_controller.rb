@@ -276,7 +276,7 @@ class StudentBooksController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        render pdf:         "List of Poor Book or Needs Rebinding#{('-'+@grade_section.name if @grade_section.present?)}",
+        render pdf:         "List of Poor Books or Need Rebinding#{('-'+@grade_section.name if @grade_section.present?)}",
                disposition: 'inline',
                template:    'student_books/pnnrb.pdf.slim',
                layout:      'pdf.html',
