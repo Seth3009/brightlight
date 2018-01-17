@@ -203,6 +203,6 @@ class StudentBook < ActiveRecord::Base
     def destroy_associated_book_loan
       book_loan = self.book_loan
       yield
-      book_loan.destroy
+      book_loan.destroy if book_loan
     end
 end
