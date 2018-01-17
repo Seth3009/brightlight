@@ -10,15 +10,24 @@ class Requisition < ActiveRecord::Base
   belongs_to :created_by, class_name: 'User'
   belongs_to :last_updated_by, class_name: 'User'
   
-  has_many :req_items, -> { order(:id) }
+  has_many :req_items, -> { order(:id) }, dependent: :destroy
   accepts_nested_attributes_for :req_items, reject_if: :all_blank, allow_destroy: true
 
   validates :department, presence: true
   validates :requester, presence: true
   validates :description, presence: true
 
-  def send_to_supv
-    self.update_attribute :is_sent_to_supv, true
-    EmailNotification.req_supv_approval(self).deliver_now
+  def send_for_approval(approver, type)
+    if approver
+      EmailNotification.req_approval(self, approver, type).deliver_now
+      if type == 'supv'
+        self.update_attributes is_sent_to_supv: true, supervisor: approver
+      elsif type == 'budget'
+        self.update_attributes is_sent_for_bgt_approval: true
+      end
+    else
+      return false
+    end
+    return true
   end 
 end

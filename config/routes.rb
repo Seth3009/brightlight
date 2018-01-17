@@ -10,7 +10,6 @@ Rails.application.routes.draw do
   resources :budget_items
   resources :budgets
   resources :req_items
-  resources :requisitions
   resources :template_targets
   resources :templates
   resources :currencies
@@ -206,6 +205,14 @@ Rails.application.routes.draw do
   end
 
   resources :smart_cards, only: [:show, :create, :destroy]
+
+  resources :requisitions do
+    member do
+      get 'approve'
+      post 'approve_requisition'
+      post 'approve_budget'
+    end
+  end 
 
   patch 'pax/:id' => 'late_passengers#update'
 

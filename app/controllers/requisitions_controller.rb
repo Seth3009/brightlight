@@ -1,5 +1,5 @@
 class RequisitionsController < ApplicationController
-  before_action :set_requisition, only: [:show, :edit, :update, :destroy, :send_to_supv]
+  before_action :set_requisition, only: [:show, :edit, :update, :destroy, :approve]
 
   # GET /requisitions
   # GET /requisitions.json
@@ -47,8 +47,12 @@ class RequisitionsController < ApplicationController
       if @requisition.save
         format.html do 
           if params[:send]
-            @requisition.send_to_supv
-            redirect_to @requisition, notice: 'Requisition has been saved and sent for approval.' 
+            approver = @requisition.supervisor || @requisition.requester.manager || @requisition.requester.supervisor
+            if @requisition.send_for_approval(approver, 'supv')
+              redirect_to @requisition, notice: 'Requisition has been saved and sent for approval.' 
+            else
+              redirect_to edit_requisition_path(@requisition), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
+            end
           else
             redirect_to @requisition, notice: 'Requisition has been successfully created.' 
           end 
@@ -74,24 +78,41 @@ class RequisitionsController < ApplicationController
     respond_to do |format|
       if @requisition.update(requisition_params)
         format.html do
-          puts "Params name: #{params[:send]}"
           if params[:send]
-            @requisition.send_to_supv
-            redirect_to @requisition, notice: 'Requisition was saved and sent for approval.' 
+            if params[:send] == 'supv'
+              approver = @requisition.supervisor || @requisition.requester.supervisor || @requisition.requester.manager
+            else
+              approver = @requisition.budget_approver
+            end
+            if @requisition.send_for_approval(approver, params[:send])
+              redirect_to @requisition, notice: 'Requisition has been saved and sent for approval.' 
+            else
+              redirect_to edit_requisition_path(@requisition), alert: "Cannot send for approval. Maybe approver field is blank?"
+            end
           else
             redirect_to @requisition, notice: 'Requisition was successfully saved.' 
           end 
         end
         format.json { render :show, status: :ok, location: @requisition }
       else
-        format.html { 
+        format.html do 
           @employee = @requisition.requester || current_user.employee
           @supervisors = Employee.supervisors.all
           render :edit 
-        }
+        end
         format.json { render json: @requisition.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  # GET /requisitions/1/approve
+  def approve
+    authorize! :approve, @requisition
+    authorize! :approve_budget, @requisition if params[:appvl] = 'budget'
+    @employee = @requisition.requester || current_user.employee
+    @manager = @employee.manager || @employee.supervisor
+    @supervisors = Employee.active.supervisors.all
+    @button_state = !@requisition.is_budgeted && !@requisition.is_sent_for_bgt_approval && @requisition.budget_approver_id
   end
 
   # DELETE /requisitions/1
@@ -117,7 +138,7 @@ class RequisitionsController < ApplicationController
                                           :department_id, :requester_id, :supervisor_id, :supv_approval, :notes, :req_appvl_notes, :total_amt, 
                                           :is_budget_approved, :is_submitted, :is_approved, :is_sent_to_supv, :is_sent_to_purchasing, 
                                           :is_sent_for_bgt_approval, :is_rejected, :reject_reason, :active,
-                                          :bdgt_approver_id, :bgt_appvl_notes, :purch_receiver_id, :receive_notes,
+                                          :budget_approver_id, :bgt_appvl_notes, :purch_receiver_id, :receive_notes,
                                           :created_by, :last_updated_by,
                                           {req_items_attributes: [:id, :requisition_id, :description, :qty_reqd, :unit, :est_price, :actual_price, 
                                                                   :currency, :notes, :qty_ordered, :order_date, :qty_delivered, :delivery_date,

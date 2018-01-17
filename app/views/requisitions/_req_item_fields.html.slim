@@ -7,11 +7,11 @@
     = f.text_field :unit
   .input-field.col.s1
     = f.select :currency, [['IDR', 'IDR'], ['USD', 'USD'], ['SGD', 'SGD'], ['AUD', 'AUD'], ['GBP', 'GBP']]
-  .input-field.col.s1
+  .input-field.col.s2
     = f.number_field :est_price
   .input-field.col.s2
     = f.text_field :notes
-  .input-field.col.s2
+  .input-field.col.s1
     = f.date_field :needed_by_date
   .input-field.col.s1 style="padding-top:8px"
     = link_to_remove_association f, class: "waves-effect waves-teal red-text"

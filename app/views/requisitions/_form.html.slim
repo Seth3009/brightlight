@@ -6,72 +6,7 @@
         - @requisition.errors.full_messages.each do |message|
           li = message
 
-  .card-panel
-    .row  
-      .input-field.col.m3
-        = f.label :req_no
-        = f.text_field :req_no
-      .input-field.col.m9
-        = f.label :description
-        = f.text_field :description
-      .input-field.col.m3
-        = f.label :requester, class: 'active'
-        = f.collection_select :requester_id, Employee.active.all, :id, :name, prompt: "Select employee", selected: f.object.requester_id || @employee.id
-      .input-field.col.m9
-        = f.label :notes
-        = f.text_field :notes
-      .input-field.col.m3
-        = f.label :department, class: 'active'
-        = f.collection_select :department_id, Department.all, :id, :name, prompt: "Select...", selected: f.object.department_id || @employee.department_id
-      .input-field.col.m3
-        = f.check_box :is_budgeted
-        = f.label :is_budgeted, 'Budgeted?'
-      .input-field.col.m3
-        = f.label :budget_notes, class: 'active'
-        = f.text_field :budget_notes, class: 'budget_item_autocomplete'
-      .input-field.col.m3
-        = f.label :date_required, class: 'active'
-        = f.date_field :date_required
-
-    - if @requisition.persisted?
-      .row
-        .input-field.col.m3
-          = f.label :supervisor, class: 'active'
-          = f.collection_select :supervisor_id, @supervisors, :id, :name, prompt: "Select employee", selected: f.object.supervisor_id || @employee.supervisor_id
-        .input-field.col.m3
-          = f.check_box :supv_approval
-          = f.label :supv_approval, 'Supv. Approved?'
-        .input-field.col.m6
-          = f.label :req_appvl_notes, "Supv Notes"
-          = f.text_field :req_appvl_notes
-        .input-field.col.m3
-          = f.check_box :is_budget_approved
-          = f.label :is_budget_approved
-        .input-field.col.m3
-          = f.check_box :is_submitted
-          = f.label :is_submitted
-        .input-field.col.m3
-          = f.check_box :is_approved
-          = f.label :is_approved
-        .input-field.col.m3
-          = f.check_box :is_sent_to_supv
-          = f.label :is_sent_to_supv
-        .input-field.col.m3
-          = f.check_box :is_sent_to_purchasing
-          = f.label :is_sent_to_purchasing
-        .input-field.col.m3
-          = f.check_box :is_sent_for_bgt_approval
-          = f.label :is_sent_for_bgt_approval
-        .input-field.col.m3
-          = f.check_box :active
-          = f.label :active
-        .input-field.col.m3
-          = f.check_box :is_rejected
-          = f.label :is_rejected
-        .input-field.col.m6
-          = f.label :reject_reason
-          = f.text_field :reject_reason
-
+  = render 'req_detail', f: f
 
   nav
     .nav-wrapper
@@ -82,25 +17,15 @@
           = link_to_add_association f, :req_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#requisition'
             ' Add Item
             i.material-icons.left playlist_add
+  
+  = render 'req_items', f: f
 
-  .card-panel
-    .row
-      strong.col.s3 Description
-      strong.col.s1 Qty
-      strong.col.s1 Unit
-      strong.col.s1 Currency
-      strong.col.s1 Est.price
-      strong.col.s2 Notes
-      strong.col.s2 Date Req'd
-      strong.col.s1 Action
-    .row#requisition
-      = f.fields_for :req_items do |req_item|
-        = render 'req_item_fields', f: req_item
-
-  .toolbar.z-depth-1
-    button.btn.waves-effect.waves-light type="submit" name="save" Save
-    button.btn.waves-effect.waves-light type="submit" name="send" Send for Approval
-    = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"
+  - if params[:appvl].blank?
+    .toolbar.z-depth-1
+      button.btn.waves-effect.waves-light type="submit" name="save" Save
+      - unless f.object.is_sent_to_supv
+        button.btn.waves-effect.waves-light type="submit" name="send" value="supv" Send for Approval
+      = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"
 
 javascript:
   $( function() {
@@ -119,6 +44,15 @@ javascript:
         .appendTo( ul );
     };
   } );
+ 
+  $("#requisition_is_budgeted").on("change", function() {
+    $(".budget-approval").toggle(600);
+    $("button[name='approve']").prop('disabled', !$("#requisition_is_budgeted").prop('checked'));
+  }.bind(this));
+
+  $("#requisition_supv_approval").on("change", function() {
+    $("button[name='send']").toggle($("#requisition_supv_approval").prop('checked') && !$("#requisition_is_budgeted").prop('checked'));
+  }.bind(this));
 
   function select_item(item) {
     console.log("Selected: "+item.description);

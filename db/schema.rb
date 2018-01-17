@@ -806,6 +806,29 @@ ActiveRecord::Schema.define(version: 20171122084851) do
   add_index "late_passengers", ["student_id"], name: "index_late_passengers_on_student_id", using: :btree
   add_index "late_passengers", ["transport_id"], name: "index_late_passengers_on_transport_id", using: :btree
 
+  create_table "leave_requests", force: :cascade do |t|
+    t.integer  "employee_id"
+    t.date     "lr_start_date"
+    t.date     "lr_end_date"
+    t.string   "lr_hours"
+    t.string   "lr_type"
+    t.string   "lr_note"
+    t.boolean  "lr_substitute"
+    t.string   "lr_substitute_notes"
+    t.boolean  "lr_spv_approve"
+    t.date     "lr_spv_date"
+    t.string   "lr_spv_notes"
+    t.boolean  "lr_hr_approve"
+    t.date     "lr_hr_date"
+    t.string   "lr_hr_notes"
+    t.date     "form_submitted_date"
+    t.string   "lr_attachment"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "leave_requests", ["employee_id"], name: "index_leave_requests_on_employee_id", using: :btree
+
   create_table "line_items", force: :cascade do |t|
     t.string   "description"
     t.string   "quantity"
@@ -1452,6 +1475,7 @@ ActiveRecord::Schema.define(version: 20171122084851) do
   add_foreign_key "late_passengers", "grade_sections"
   add_foreign_key "late_passengers", "students"
   add_foreign_key "late_passengers", "transports"
+  add_foreign_key "leave_requests", "employees"
   add_foreign_key "line_items", "book_fines"
   add_foreign_key "line_items", "invoices"
   add_foreign_key "loan_checks", "academic_years"
