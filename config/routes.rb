@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :order_items
   resources :purchase_orders
   resources :req_items
+  resources :item_units
   resources :template_targets
   resources :templates
   resources :currencies

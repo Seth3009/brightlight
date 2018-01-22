@@ -1,0 +1,21 @@
+= form_for @item_unit do |f|
+  .card
+    .card-content
+      - if @item_unit.errors.any?
+        #error_explanation
+          h2 = "#{pluralize(@item_unit.errors.count, "error")} prohibited this item_unit from being saved:"
+          ul
+            - @item_unit.errors.full_messages.each do |message|
+              li = message
+
+      .row
+        .input-field      
+          = f.label :abbreviation
+          = f.text_field :abbreviation
+        .input-field      
+          = f.label :name
+          = f.text_field :name      
+
+    .card-action
+      button.btn.waves-effect.waves-light type="submit" Save
+      = link_to 'Cancel', item_units_path, class: "waves-effect waves-teal btn-flat"

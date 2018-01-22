@@ -1,0 +1,9 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @item_unit.name
+
+= link_to 'Edit', edit_item_unit_path(@item_unit)
+'|
+= link_to 'Back', item_units_path
