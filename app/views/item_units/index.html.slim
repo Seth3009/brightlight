@@ -1,0 +1,35 @@
+h4 Listing Item Unit
+
+nav
+  .nav-wrapper
+    ul.right
+      - if can? :manage, ItemUnit
+        li
+          = link_to new_item_unit_path
+            | Create new
+            i.material-icons.left add
+
+table.compact.striped
+  thead
+    tr
+      th Abbreviation
+      th Name
+      th
+      th
+
+  tbody
+    - @item_units.each do |item_unit|
+      tr
+        td = item_unit.abbreviation
+        td = item_unit.name
+        td.actions
+          - if can? :update, item_unit
+            = link_to edit_item_unit_path(item_unit)
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+          - if can? :destroy, item_unit
+            = link_to item_unit, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+
+
+
+
