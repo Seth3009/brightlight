@@ -661,6 +661,13 @@ ActiveRecord::Schema.define(version: 20180213022739) do
   add_index "invoices", ["student_id"], name: "index_invoices_on_student_id", using: :btree
   add_index "invoices", ["user_id"], name: "index_invoices_on_user_id", using: :btree
 
+  create_table "item_categories", force: :cascade do |t|
+    t.string   "code"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "item_units", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at",   null: false
