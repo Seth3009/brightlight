@@ -32,13 +32,16 @@ h4 Editing User
         = label_tag :staff
       .input-field.col.s2
         = check_box_tag "user[roles][]", 'inventory', @user.roles.include?(:inventory), {id: :inventory, multiple: true}
-        = label_tag :inventory
+        = label_tag :inventory      
       .input-field.col.s2       
         = check_box_tag "user[roles][]", 'carpool', @user.roles.include?(:carpool), {id: :carpool, multiple: true}
         = label_tag :carpool  
       .input-field.col.s2       
         = check_box_tag "user[roles][]", 'student', @user.roles.include?(:student), {id: :student, multiple: true}
         = label_tag :student 
+      .input-field.col.s2
+        = check_box_tag "user[roles][]", 'hrd', @user.roles.include?(:hrd), {id: :hrd, multiple: true}
+        = label_tag :hrd
             
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save

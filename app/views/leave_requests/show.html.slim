@@ -1,0 +1,65 @@
+h4 = "Leave Request Form"
+nav
+  .nav-wrapper
+    ul
+      li 
+        = link_to leave_requests_path
+          i.material-icons chevron_left
+      li.right
+        - if @leave_request.employee_id == current_user.employee.id && @leave_request.spv_approval.nil? &&     @leave_request.hr_approval.nil?
+          = link_to edit_leave_request_path(@leave_request)
+            | Edit
+            i.material-icons.left edit
+      li.right
+        - if (can? :read_hr, LeaveRequest) && (can? :update , LeaveRequest) && @leave_request.employee_id != current_user.employee.id
+          = link_to approve_path(params[:id],"hr"), remote: true
+            | HR Approval
+      li.right
+        - if (can? :update , LeaveRequest) && @leave_request.hr_approval.nil? && @leave_request.employee.department.manager_id == current_user.employee.id && @leave_request.leave_type != 'Sick' && @leave_request.leave_type != 'Family Matter'
+          = link_to approve_path(params[:id],"spv"), remote: true
+            | SPV Approval
+
+
+.card-panel
+  .container
+      .row.t_form_lr_border
+        .col.s6.t_form_lr_border
+          p Employee Name: #{@leave_request.employee}
+        .col.s6.t_form_lr_border
+          p Department: #{@leave_request.employee.department}
+      .row.t_form_lr_border
+        .col.s6
+          p Reason for requested leave: #{@leave_request.leave_type}
+        .col.s6
+          p Notes: #{@leave_request.leave_note || "--"}
+      .row.no_margin_bottom.t_form_lr_border
+        .col.s6
+          p Dates Requested: Leave From: #{@leave_request.start_date} To: #{@leave_request.end_date}
+        .col.s4
+          p Of hours / of days: #{@leave_request.hour || "--"}
+      .row.t_form_lr_border
+        .col.s6 
+          p Action taken: #{if @leave_request.leave_subtitute == true then "Subtitute required" else "Subtitute not required"}
+        .col.s6
+          p Action notes: #{@leave_request.subtitute_notes.present? || "--"}
+      .row.t_form_lr_border
+        .col.s12
+          p Form submitted date: #{@leave_request.form_submit_date}
+      .row.t_form_lr_border
+        .col.s6
+         p  Principal / Dept. Head Approval: #{("APPROVED" if @leave_request.spv_approval == TRUE) || ("NOT APPROVED" if @leave_request.spv_approval == FALSE) || ("--" if @leave_request.spv_approval.blank?) }
+         p Principal / Dept. Head notes: #{@leave_request.spv_notes}
+        .col.s6
+          p Checked date: #{@leave_request.spv_date}
+          
+      .row.t_form_lr_border
+        .col.s6
+         p  HR Approval: #{("APPROVED" if @leave_request.hr_approval == TRUE) || ("NOT APPROVED" if @leave_request.hr_approval == FALSE) || ("--" if @leave_request.spv_approval.blank?) }
+         p HR notes: #{@leave_request.hr_notes}
+        .col.s6
+          p Checked date: #{@leave_request.hr_date}
+      
+        
+#show-modal.modal
+  .modal-content
+    #modal-content

@@ -61,6 +61,8 @@ class Ability
       budget_item.budget.budget_holder == @user.employee 
     end
     can :read, :all
+    can :submit, LeaveRequest, employee:@user.employee
+    can :update, LeaveRequest
 	end
 
   # Teacher
@@ -77,6 +79,7 @@ class Ability
     can [:manage], Requisition, requester: @user.employee
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
+    can :submit, LeaveRequest, employee:@user.employee
   end
 
   def staff
@@ -85,6 +88,11 @@ class Ability
     can [:manage], Requisition, requester: @user.employee
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
+    can :submit, LeaveRequest, employee:@user.employee 
+  end
+
+  def hrd
+    can :read_hr, LeaveRequest
   end
 
   def carpool

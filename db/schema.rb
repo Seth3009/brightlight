@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< 03c5da57c7ba3316a9fa2b9bb921609f4b4e0536
 ActiveRecord::Schema.define(version: 20180213022739) do
+=======
+ActiveRecord::Schema.define(version: 20180125015043) do
+>>>>>>> Create leave request model, controller, views
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -714,6 +718,29 @@ ActiveRecord::Schema.define(version: 20180213022739) do
   add_index "late_passengers", ["student_id"], name: "index_late_passengers_on_student_id", using: :btree
   add_index "late_passengers", ["transport_id"], name: "index_late_passengers_on_transport_id", using: :btree
 
+  create_table "leave_requests", force: :cascade do |t|
+    t.date     "start_date"
+    t.date     "end_date"
+    t.string   "hour"
+    t.string   "leave_type"
+    t.string   "leave_note"
+    t.boolean  "leave_subtitute"
+    t.text     "subtitute_notes"
+    t.boolean  "spv_approval"
+    t.date     "spv_date"
+    t.text     "spv_notes"
+    t.boolean  "hr_approval"
+    t.date     "hr_date"
+    t.text     "hr_notes"
+    t.date     "form_submit_date"
+    t.string   "leave_attachment"
+    t.integer  "employee_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "leave_requests", ["employee_id"], name: "index_leave_requests_on_employee_id", using: :btree
+
   create_table "line_items", force: :cascade do |t|
     t.string   "description"
     t.string   "quantity"
@@ -1362,6 +1389,7 @@ ActiveRecord::Schema.define(version: 20180213022739) do
   add_foreign_key "late_passengers", "grade_sections"
   add_foreign_key "late_passengers", "students"
   add_foreign_key "late_passengers", "transports"
+  add_foreign_key "leave_requests", "employees"
   add_foreign_key "line_items", "book_fines"
   add_foreign_key "line_items", "invoices"
   add_foreign_key "loan_checks", "academic_years"

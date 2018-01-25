@@ -1,0 +1,25 @@
+= form_for @leave_request do |f|
+ - if (can? :read_hr, LeaveRequest) && (can? :update, LeaveRequest) && @variable == "hr"
+     .row
+       .input-field.col.s4
+        = f.label :hr_approval, "HR Approval", class: 'active'
+        = f.select :hr_approval,[['APPROVED',true],['NOT APPROVED',false]], prompt:true
+     .row
+       .input-field.col.s12
+        = f.label 'Approval Notes', class: 'active'
+        = f.text_field :hr_notes
+        = f.hidden_field :hr_date, :value => Time.now.strftime('%Y-%m-%d')
+ - else
+     .row
+       .input-field.col.s4
+        = f.label 'Approval', class: 'active'
+        = f.select :spv_approval,[['APPROVED',true],['NOT APPROVED',false]], prompt:true
+     .row
+       .input-field.col.s12
+        = f.label 'Approval Notes', class: 'active'
+        = f.text_field :spv_notes
+        = f.hidden_field :spv_date, :value => Time.now.strftime('%Y-%m-%d')
+
+ .card-action
+    button.btn.waves-effect.waves-light type="submit" Save
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

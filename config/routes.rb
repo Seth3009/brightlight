@@ -27,6 +27,9 @@ Rails.application.routes.draw do
 
   resources :copy_conditions
   resources :book_conditions
+  
+  resources :leave_requests
+  get 'leave_requests/:id/approve/:page' => 'leave_requests#approve', as: :approve
 
   resources :courses do
     resources :course_texts, shallow: true
