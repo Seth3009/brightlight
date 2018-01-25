@@ -5,6 +5,8 @@ nav
       li 
         = link_to leave_requests_path
           i.material-icons chevron_left
+      li
+        strong #{@leave_request.employee} (#{@leave_request.employee.department})
       li.right
         - if @leave_request.employee_id == current_user.employee.id && @leave_request.spv_approval.nil? &&     @leave_request.hr_approval.nil?
           = link_to edit_leave_request_path(@leave_request)
@@ -22,11 +24,7 @@ nav
 
 .card-panel
   .container
-      .row.t_form_lr_border
-        .col.s6.t_form_lr_border
-          p Employee Name: #{@leave_request.employee}
-        .col.s6.t_form_lr_border
-          p Department: #{@leave_request.employee.department}
+      
       .row.t_form_lr_border
         .col.s6
           p Reason for requested leave: #{@leave_request.leave_type}
