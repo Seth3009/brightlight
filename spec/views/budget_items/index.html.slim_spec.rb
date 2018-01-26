@@ -38,7 +38,6 @@ RSpec.describe "budget_items/index", type: :view do
 
   it "renders a list of budget_items" do
     render
-<<<<<<< HEAD
     assert_select "tr>td", :text => "".to_s, :count => 2
     assert_select "tr>td", :text => "Description,".to_s, :count => 2
     assert_select "tr>td", :text => "Account,".to_s, :count => 2
@@ -52,17 +51,5 @@ RSpec.describe "budget_items/index", type: :view do
     assert_select "tr>td", :text => "Type,".to_s, :count => 2
     assert_select "tr>td", :text => "Category,".to_s, :count => 2
     assert_select "tr>td", :text => "Group".to_s, :count => 2
-=======
-    assert_select "tr>td", :text => nil.to_s, :count => 2
-    assert_select "tr>td", :text => "Description".to_s, :count => 2
-    assert_select "tr>td", :text => "Notes".to_s, :count => 2
-    assert_select "tr>td", :text => "9.99".to_s, :count => 2
-    assert_select "tr>td", :text => "Currency".to_s, :count => 2
-    assert_select "tr>td", :text => "9.99".to_s, :count => 2
-    assert_select "tr>td", :text => false.to_s, :count => 2
-    assert_select "tr>td", :text => "Appvl Notes".to_s, :count => 2
-    assert_select "tr>td", :text => false.to_s, :count => 2
-    assert_select "tr>td", :text => nil.to_s, :count => 2
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
   end
 end

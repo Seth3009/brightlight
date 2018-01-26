@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe "budgets/show", type: :view do
   before(:each) do
     @budget = assign(:budget, Budget.create!(
-<<<<<<< HEAD
       :department => "",
       :grade_level => "",
       :grade_section => "",
@@ -23,20 +22,6 @@ RSpec.describe "budgets/show", type: :view do
       :type, => "Type,",
       :group, => "Group,",
       :version, => "Version,"
-=======
-      :department => nil,
-      :owner => nil,
-      :grade_level => nil,
-      :grade_section => nil,
-      :academic_year => nil,
-      :submitted => false,
-      :approved => false,
-      :approver => nil,
-      :type => "Type",
-      :category => "Category",
-      :active => false,
-      :notes => "Notes"
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
     ))
   end
 
@@ -47,7 +32,6 @@ RSpec.describe "budgets/show", type: :view do
     expect(rendered).to match(//)
     expect(rendered).to match(//)
     expect(rendered).to match(//)
-<<<<<<< HEAD
     expect(rendered).to match(//)
     expect(rendered).to match(//)
     expect(rendered).to match(//)
@@ -62,14 +46,5 @@ RSpec.describe "budgets/show", type: :view do
     expect(rendered).to match(/Type,/)
     expect(rendered).to match(/Group,/)
     expect(rendered).to match(/Version,/)
-=======
-    expect(rendered).to match(/false/)
-    expect(rendered).to match(/false/)
-    expect(rendered).to match(//)
-    expect(rendered).to match(/Type/)
-    expect(rendered).to match(/Category/)
-    expect(rendered).to match(/false/)
-    expect(rendered).to match(/Notes/)
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
   end
 end

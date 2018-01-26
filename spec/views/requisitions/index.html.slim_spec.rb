@@ -4,7 +4,6 @@ RSpec.describe "requisitions/index", type: :view do
   before(:each) do
     assign(:requisitions, [
       Requisition.create!(
-<<<<<<< HEAD
         :req_no, => "Req No,",
         :description, => "Description,",
         :is_budgeted => "",
@@ -53,49 +52,12 @@ RSpec.describe "requisitions/index", type: :view do
         :is_rejected => "",
         :reject_reason, => "Reject Reason,",
         :active => false
-=======
-        :req_no => "Req No",
-        :department => nil,
-        :requester => nil,
-        :supv_approved => false,
-        :supv_notes => "Supv Notes",
-        :notes => "Notes",
-        :budgetted => false,
-        :budget_approved => false,
-        :bdgt_appvd_by => nil,
-        :bdgt_appvd_name => "Bdgt Appvd Name",
-        :bdgt_appv_notes => "Bdgt Appv Notes",
-        :sent_purch => false,
-        :sent_supv => false,
-        :sent_bdgt_appv => false,
-        :notes => "Notes",
-        :origin => "Origin"
-      ),
-      Requisition.create!(
-        :req_no => "Req No",
-        :department => nil,
-        :requester => nil,
-        :supv_approved => false,
-        :supv_notes => "Supv Notes",
-        :notes => "Notes",
-        :budgetted => false,
-        :budget_approved => false,
-        :bdgt_appvd_by => nil,
-        :bdgt_appvd_name => "Bdgt Appvd Name",
-        :bdgt_appv_notes => "Bdgt Appv Notes",
-        :sent_purch => false,
-        :sent_supv => false,
-        :sent_bdgt_appv => false,
-        :notes => "Notes",
-        :origin => "Origin"
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
       )
     ])
   end
 
   it "renders a list of requisitions" do
     render
-<<<<<<< HEAD
     assert_select "tr>td", :text => "Req No,".to_s, :count => 2
     assert_select "tr>td", :text => "Description,".to_s, :count => 2
     assert_select "tr>td", :text => "".to_s, :count => 2
@@ -119,23 +81,5 @@ RSpec.describe "requisitions/index", type: :view do
     assert_select "tr>td", :text => "".to_s, :count => 2
     assert_select "tr>td", :text => "Reject Reason,".to_s, :count => 2
     assert_select "tr>td", :text => false.to_s, :count => 2
-=======
-    assert_select "tr>td", :text => "Req No".to_s, :count => 2
-    assert_select "tr>td", :text => nil.to_s, :count => 2
-    assert_select "tr>td", :text => nil.to_s, :count => 2
-    assert_select "tr>td", :text => false.to_s, :count => 2
-    assert_select "tr>td", :text => "Supv Notes".to_s, :count => 2
-    assert_select "tr>td", :text => "Notes".to_s, :count => 2
-    assert_select "tr>td", :text => false.to_s, :count => 2
-    assert_select "tr>td", :text => false.to_s, :count => 2
-    assert_select "tr>td", :text => nil.to_s, :count => 2
-    assert_select "tr>td", :text => "Bdgt Appvd Name".to_s, :count => 2
-    assert_select "tr>td", :text => "Bdgt Appv Notes".to_s, :count => 2
-    assert_select "tr>td", :text => false.to_s, :count => 2
-    assert_select "tr>td", :text => false.to_s, :count => 2
-    assert_select "tr>td", :text => false.to_s, :count => 2
-    assert_select "tr>td", :text => "Notes".to_s, :count => 2
-    assert_select "tr>td", :text => "Origin".to_s, :count => 2
->>>>>>> cd6c4ee8f66d6b981d7fad34ac79bf7ca894e43d
   end
 end
