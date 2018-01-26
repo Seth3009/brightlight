@@ -5,7 +5,11 @@ class RequisitionsController < ApplicationController
   # GET /requisitions.json
   def index
     authorize! :read, Requisition
-    @requisitions = Requisition.all
+    if can? :manage, Requisition
+      @requisitions = Requisition.all
+    else
+      @requisitions = Requisition.where(department: current_user.department)
+    end
     if params[:dept].present? && params[:dept] != 'all'
       dept = Department.where(code: params[:dept]).take
       @requisitions = @requisitions.where(department: dept)
@@ -24,7 +28,9 @@ class RequisitionsController < ApplicationController
     authorize! :create, Requisition
     @employee = current_user.employee
     @department = @employee.department
+    @req_no = @department.code + "-" + Time.now.to_i.to_s
     @budget = @department.budgets.current
+    @manager = @employee.manager || @employee.supervisor
     @requisition = Requisition.new
   end
 
@@ -108,8 +114,8 @@ class RequisitionsController < ApplicationController
   # GET /requisitions/1/approve
   def approve
     authorize! :approve, @requisition
-    authorize! :approve_budget, @requisition if params[:appvl] = 'budget'
-    @employee = @requisition.requester || current_user.employee
+    authorize! :approve_budget, @requisition if params[:appvl] == 'budget'
+    @employee = @requisition.requester
     @manager = @employee.manager || @employee.supervisor
     @supervisors = Employee.active.supervisors.all
     @button_state = !@requisition.is_budgeted && !@requisition.is_sent_for_bgt_approval && @requisition.budget_approver_id

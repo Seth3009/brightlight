@@ -2,7 +2,7 @@
   .row  
     .input-field.col.m3
       = f.label :req_no
-      = f.text_field :req_no
+      = f.text_field :req_no, value: f.object.req_no || @req_no
     .input-field.col.m9
       = f.label :description
       = f.text_field :description
@@ -27,4 +27,4 @@
     -if params[:appvl].blank?
       .input-field.col.m3
         = f.label :supervisor, class: 'active'
-        = f.collection_select :supervisor_id, Employee.department_heads, :id, :name, prompt: "Select approver"    
+        = f.collection_select :supervisor_id, Employee.department_heads, :id, :name, selected: @manager.id, prompt: "Select approver"    

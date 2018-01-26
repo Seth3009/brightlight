@@ -3,10 +3,11 @@ h4 Purchase Requests
 nav
   .nav-wrapper
     ul
-      li
-        a.dropdown-button href="#!" data-activates="dept-options"
-          span#dept = @department.present? ? "#{@department.name}" : "Department" 
-          i.material-icons.right arrow_drop_down
+      - if can? :manage, Requisition
+        li
+          a.dropdown-button href="#!" data-activates="dept-options"
+            span#dept = @department.present? ? "#{@department.name}" : "Department" 
+            i.material-icons.right arrow_drop_down
       li style="padding: 0 10px"
         = check_box_tag :active, 1, checked: true
         = label_tag :active
@@ -63,10 +64,11 @@ ul#dept-options.dropdown-content
           td 
             = link_to requisition, remote: true
               i.material-icons visibility
-            = link_to edit_requisition_path(requisition)
-              i.material-icons edit
-            = link_to requisition, data: {id: requisition.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
-              i.material-icons delete
+            - unless requisition.is_submitted
+              = link_to edit_requisition_path(requisition)
+                i.material-icons edit
+              = link_to requisition, data: {id: requisition.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
+                i.material-icons delete
 .right-align style="font-size:0.8em" colspan=8 = "*) Budgeted // Supv. Approval // Addl. Budget Approval"
 
 #show-modal.modal.modal-fixed-footer

@@ -66,20 +66,18 @@ nav
             .col.m6
               .label Appvl Notes
               .item = @requisition.req_appvl_notes || "--"
-          li.collection-item.row
-            .col.m3
-              = check_box_tag :is_sent_for_bgt_approval, nil, @requisition.is_sent_for_bgt_approval
-              = label_tag 'Sent for Budget Approval'
-            .col.m3
-              = check_box_tag :is_budget_approved, nil, @requisition.is_budget_approved
-              = label_tag 'Budget Approval'
+          - unless @requisition.is_budgeted
+            li.collection-item.row
+              .col.m3
+                .label Budget Approver
+                .item = @requisition.budget_approver || "--"
+              .col.m3
+                = check_box_tag :is_budget_approved, nil, @requisition.is_budget_approved
+                = label_tag 'Budget Approval'
+              .col.m6
+                .label Budget Notes
+                .item = @requisition.bgt_appvl_notes || "--"
 
-            .col.m3
-              = check_box_tag :is_sent_to_purchasing, nil, @requisition.is_sent_to_purchasing
-              = label_tag 'Sent to Purchasing'
-            .col.m3
-              = check_box_tag :is_approved, nil,  @requisition.is_approved
-              = label_tag 'Approved'
         / dd
         /   .label = @requisition.is_submitted
         /   .item = @requisition.is_submitted
@@ -111,7 +109,6 @@ nav
               th Qty
               th Unit
               th Est. Price
-              th Notes 
               th Req'd Date
           tbody
             - @req_items.each do |req_item|
@@ -120,7 +117,6 @@ nav
                 td = req_item.qty_reqd
                 td = req_item.unit
                 td = "#{req_item.currency}#{req_item.est_price}"
-                td = req_item.notes
                 td = req_item.needed_by_date
 
 javascript:

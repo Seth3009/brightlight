@@ -21,9 +21,9 @@ class Requisition < ActiveRecord::Base
     if approver
       EmailNotification.req_approval(self, approver, type).deliver_now
       if type == 'supv'
-        self.update_attributes is_sent_to_supv: true, supervisor: approver
+        self.update_attributes is_submitted: true, is_sent_to_supv: true, supervisor: approver
       elsif type == 'budget'
-        self.update_attributes is_sent_for_bgt_approval: true
+        self.update_attributes is_submitted: true, is_sent_for_bgt_approval: true
       end
     else
       return false
