@@ -7,8 +7,10 @@ class RequisitionsController < ApplicationController
     authorize! :read, Requisition
     if can? :manage, Requisition
       @requisitions = Requisition.all
+    elsif current_user.employee.try(:is_manager?)
+      @requisitions = Requisition.where(department: current_user.employee.try(:department))
     else
-      @requisitions = Requisition.where(department: current_user.department)
+      @requisitions = Requisition.where(requester_id: current_user.employee_id)
     end
     if params[:dept].present? && params[:dept] != 'all'
       dept = Department.where(code: params[:dept]).take
@@ -118,7 +120,7 @@ class RequisitionsController < ApplicationController
     @employee = @requisition.requester
     @manager = @employee.manager || @employee.supervisor
     @supervisors = Employee.active.supervisors.all
-    @button_state = !@requisition.is_budgeted && !@requisition.is_sent_for_bgt_approval && @requisition.budget_approver_id
+    @button_state = !@requisition.is_budgeted && !@requisition.is_budget_approved && @requisition.budget_approver_id
   end
 
   # DELETE /requisitions/1

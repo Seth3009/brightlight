@@ -28,6 +28,10 @@ class Employee < ActiveRecord::Base
 		.select(:id, :name)
 	}
 
+	def is_manager?
+		Department.all.map(&:manager_id).include? self.id
+	end
+	
 	def to_s
 		name
 	end

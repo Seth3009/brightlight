@@ -46,7 +46,8 @@ class Ability
     can :manage, StudentBook
     can :manage, StandardBook
     can [:create,:read,:update,:destroy], Carpool
-    can [:approve], Requisition
+    can [:approve], Requisition, supervisor: @user.employee
+    can [:approve_budget], Requisition, budget_approver: @user.employee
     can [:manage], Budget, budget_holder: @user.employee
     can :read, :all
 	end
@@ -69,6 +70,8 @@ class Ability
   def staff
     can [:create,:read,:update,:destroy], Carpool
     can :manage, Transport
+    can [:manage], Requisition, requester: @user.employee
+    can [:manage], ReqItem, requester: @user.employee
     can :read, :all
   end
 
