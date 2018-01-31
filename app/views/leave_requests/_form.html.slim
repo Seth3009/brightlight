@@ -37,10 +37,10 @@
         = f.text_field :subtitute_notes
 
         = f.hidden_field :form_submit_date,  :value => Time.now.strftime('%Y-%m-%d')
- .toolbar.z-depth-1
-    button.btn.waves-effect.waves-light type="submit" Save
-    = link_to 'Cancel', leave_requests_path, class: "waves-effect waves-teal btn-flat"
-     / .field
-     /   = f.label :lr_attachment
-     /   = f.text_field :lr_attachment
-    /  .actions = f.submit
+ - if params[:appvl].blank?
+    .toolbar.z-depth-1
+      button.btn.waves-effect.waves-light type="submit" name="save" Save Draft
+      button.btn.waves-effect.waves-light type="submit" name="send" value="supv" Send for Approval
+      = link_to 'Cancel', leave_requests_path, class: "waves-effect waves-light btn-flat"       
+
+     
