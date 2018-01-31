@@ -13,16 +13,7 @@ nav
       li 
         = link_to 'Done', employee_book_loans_path(@teacher, year: params[:year])
 
-- unless can? :manage, BookLoan
-  ul.collapsible data-collapsible="expandable"
-    li
-      .collapsible-header 
-        | Scan bar code
-        = hidden_field_tag :barcode
-        .input-field.right-in-header
-          = check_box_tag :return 
-          = label_tag :return 
-- else
+- if can? :manage, BookLoan
   ul.collapsible data-collapsible="expandable"
     li
       .collapsible-header
@@ -43,6 +34,13 @@ nav
               = text_field_tag :barcode, nil
               | Enter barcode and press enter 
             .col.s8
+- else
+  ul.collapsible data-collapsible="expandable"
+    li
+      .collapsible-header 
+        | Scan bar code
+        = hidden_field_tag :barcode
+
               
 .card-panel#returns style="display:none"
   .row
