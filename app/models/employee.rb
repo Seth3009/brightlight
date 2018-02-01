@@ -10,6 +10,7 @@ class Employee < ActiveRecord::Base
   has_many :grade_sections, foreign_key: "homeroom_id"
 	has_many :course_sections, foreign_key: "instructor_id"
 	has_one :manager, through: :department
+	has_many :leave_requests
 
   accepts_nested_attributes_for :book_loans,
     allow_destroy: true,

@@ -7,6 +7,7 @@ class LeaveRequestsController < ApplicationController
     @department = Department.find_by_id(@employee.department_id) 
     @leave_requests = LeaveRequest.joins('left join employees on employees.id = leave_requests.employee_id') 
                                   .joins('left join departments on departments.id = employees.department_id')
+    
   end
 
   # GET /leave_requests/1

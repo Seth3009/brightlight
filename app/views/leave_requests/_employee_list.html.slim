@@ -17,9 +17,9 @@ nav
           th Approval (SPV,HR)                    
           th Actions
           
-
+          
       tbody#leave_requests
-        - @leave_requests.where('employee_id =?',@employee.id).each do |leave_request|
+        - @leave_requests.empl(@employee).each do |leave_request|
             tr
               td 
                 = leave_request.form_submit_date.nil? ? 'Draft' : leave_request.form_submit_date.strftime("%d/%m/%Y")
