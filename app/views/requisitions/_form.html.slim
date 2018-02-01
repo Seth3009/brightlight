@@ -28,10 +28,18 @@
       = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"
 
 javascript:
-  $( function() {
-    var dept = $("#requisition_department_id").prop("value");
+  $( function() { 
     $( ".budget_item_autocomplete" ).autocomplete({
-      source: "/budget_items?format=json&dept="+dept,
+      source: function(request, response) {
+        $.ajax({
+            url: "/budget_items",
+            dataType: "json",
+            data: {
+                dept: $("#requisition_requester_id").find(':selected').data('dept')
+            },
+            success: response
+        });
+      },
       max: 50,
       minLength: 2,
       select: function( event, ui ) {
@@ -44,7 +52,12 @@ javascript:
         .appendTo( ul );
     };
   } );
- 
+
+  function select_item(item) {
+    console.log("Selected: "+item.description);
+    $("#requisition_budget_notes").val(item.description);
+  }
+
   $("#requisition_is_budgeted").on("change", function() {
     $(".budget-approval").toggle(600);
     $("button[name='approve']").prop('disabled', !$("#requisition_is_budgeted").prop('checked'));
@@ -54,7 +67,5 @@ javascript:
     $("button[name='send']").toggle($("#requisition_supv_approval").prop('checked') && !$("#requisition_is_budgeted").prop('checked'));
   }.bind(this));
 
-  function select_item(item) {
-    console.log("Selected: "+item.description);
-    $("#requisition_budget_notes").val(item.description);
-  }
+
+

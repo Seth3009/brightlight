@@ -1,4 +1,84 @@
                                         Prefix Verb     URI Pattern                                                       Controller#Action
+                              stock_categories GET      /stock_categories(.:format)                                       stock_categories#index
+                                               POST     /stock_categories(.:format)                                       stock_categories#create
+                            new_stock_category GET      /stock_categories/new(.:format)                                   stock_categories#new
+                           edit_stock_category GET      /stock_categories/:id/edit(.:format)                              stock_categories#edit
+                                stock_category GET      /stock_categories/:id(.:format)                                   stock_categories#show
+                                               PATCH    /stock_categories/:id(.:format)                                   stock_categories#update
+                                               PUT      /stock_categories/:id(.:format)                                   stock_categories#update
+                                               DELETE   /stock_categories/:id(.:format)                                   stock_categories#destroy
+                                   stock_items GET      /stock_items(.:format)                                            stock_items#index
+                                               POST     /stock_items(.:format)                                            stock_items#create
+                                new_stock_item GET      /stock_items/new(.:format)                                        stock_items#new
+                               edit_stock_item GET      /stock_items/:id/edit(.:format)                                   stock_items#edit
+                                    stock_item GET      /stock_items/:id(.:format)                                        stock_items#show
+                                               PATCH    /stock_items/:id(.:format)                                        stock_items#update
+                                               PUT      /stock_items/:id(.:format)                                        stock_items#update
+                                               DELETE   /stock_items/:id(.:format)                                        stock_items#destroy
+                                     suppliers GET      /suppliers(.:format)                                              suppliers#index
+                                               POST     /suppliers(.:format)                                              suppliers#create
+                                  new_supplier GET      /suppliers/new(.:format)                                          suppliers#new
+                                 edit_supplier GET      /suppliers/:id/edit(.:format)                                     suppliers#edit
+                                      supplier GET      /suppliers/:id(.:format)                                          suppliers#show
+                                               PATCH    /suppliers/:id(.:format)                                          suppliers#update
+                                               PUT      /suppliers/:id(.:format)                                          suppliers#update
+                                               DELETE   /suppliers/:id(.:format)                                          suppliers#destroy
+                                delivery_items GET      /delivery_items(.:format)                                         delivery_items#index
+                                               POST     /delivery_items(.:format)                                         delivery_items#create
+                             new_delivery_item GET      /delivery_items/new(.:format)                                     delivery_items#new
+                            edit_delivery_item GET      /delivery_items/:id/edit(.:format)                                delivery_items#edit
+                                 delivery_item GET      /delivery_items/:id(.:format)                                     delivery_items#show
+                                               PATCH    /delivery_items/:id(.:format)                                     delivery_items#update
+                                               PUT      /delivery_items/:id(.:format)                                     delivery_items#update
+                                               DELETE   /delivery_items/:id(.:format)                                     delivery_items#destroy
+                                    deliveries GET      /deliveries(.:format)                                             deliveries#index
+                                               POST     /deliveries(.:format)                                             deliveries#create
+                                  new_delivery GET      /deliveries/new(.:format)                                         deliveries#new
+                                 edit_delivery GET      /deliveries/:id/edit(.:format)                                    deliveries#edit
+                                      delivery GET      /deliveries/:id(.:format)                                         deliveries#show
+                                               PATCH    /deliveries/:id(.:format)                                         deliveries#update
+                                               PUT      /deliveries/:id(.:format)                                         deliveries#update
+                                               DELETE   /deliveries/:id(.:format)                                         deliveries#destroy
+                                   order_items GET      /order_items(.:format)                                            order_items#index
+                                               POST     /order_items(.:format)                                            order_items#create
+                                new_order_item GET      /order_items/new(.:format)                                        order_items#new
+                               edit_order_item GET      /order_items/:id/edit(.:format)                                   order_items#edit
+                                    order_item GET      /order_items/:id(.:format)                                        order_items#show
+                                               PATCH    /order_items/:id(.:format)                                        order_items#update
+                                               PUT      /order_items/:id(.:format)                                        order_items#update
+                                               DELETE   /order_items/:id(.:format)                                        order_items#destroy
+                               purchase_orders GET      /purchase_orders(.:format)                                        purchase_orders#index
+                                               POST     /purchase_orders(.:format)                                        purchase_orders#create
+                            new_purchase_order GET      /purchase_orders/new(.:format)                                    purchase_orders#new
+                           edit_purchase_order GET      /purchase_orders/:id/edit(.:format)                               purchase_orders#edit
+                                purchase_order GET      /purchase_orders/:id(.:format)                                    purchase_orders#show
+                                               PATCH    /purchase_orders/:id(.:format)                                    purchase_orders#update
+                                               PUT      /purchase_orders/:id(.:format)                                    purchase_orders#update
+                                               DELETE   /purchase_orders/:id(.:format)                                    purchase_orders#destroy
+                                  budget_items GET      /budget_items(.:format)                                           budget_items#index
+                                               POST     /budget_items(.:format)                                           budget_items#create
+                               new_budget_item GET      /budget_items/new(.:format)                                       budget_items#new
+                              edit_budget_item GET      /budget_items/:id/edit(.:format)                                  budget_items#edit
+                                   budget_item GET      /budget_items/:id(.:format)                                       budget_items#show
+                                               PATCH    /budget_items/:id(.:format)                                       budget_items#update
+                                               PUT      /budget_items/:id(.:format)                                       budget_items#update
+                                               DELETE   /budget_items/:id(.:format)                                       budget_items#destroy
+                                       budgets GET      /budgets(.:format)                                                budgets#index
+                                               POST     /budgets(.:format)                                                budgets#create
+                                    new_budget GET      /budgets/new(.:format)                                            budgets#new
+                                   edit_budget GET      /budgets/:id/edit(.:format)                                       budgets#edit
+                                        budget GET      /budgets/:id(.:format)                                            budgets#show
+                                               PATCH    /budgets/:id(.:format)                                            budgets#update
+                                               PUT      /budgets/:id(.:format)                                            budgets#update
+                                               DELETE   /budgets/:id(.:format)                                            budgets#destroy
+                                     req_items GET      /req_items(.:format)                                              req_items#index
+                                               POST     /req_items(.:format)                                              req_items#create
+                                  new_req_item GET      /req_items/new(.:format)                                          req_items#new
+                                 edit_req_item GET      /req_items/:id/edit(.:format)                                     req_items#edit
+                                      req_item GET      /req_items/:id(.:format)                                          req_items#show
+                                               PATCH    /req_items/:id(.:format)                                          req_items#update
+                                               PUT      /req_items/:id(.:format)                                          req_items#update
+                                               DELETE   /req_items/:id(.:format)                                          req_items#destroy
                               template_targets GET      /template_targets(.:format)                                       template_targets#index
                                                POST     /template_targets(.:format)                                       template_targets#create
                            new_template_target GET      /template_targets/new(.:format)                                   template_targets#new
@@ -157,6 +237,7 @@
                                                PATCH    /courses/:id(.:format)                                            courses#update
                                                PUT      /courses/:id(.:format)                                            courses#update
                                                DELETE   /courses/:id(.:format)                                            courses#destroy
+                    book_copies_disposed_index GET      /book_copies/disposed_index(.:format)                             book_copies#disposed_index
                          summary_book_editions GET      /book_editions/summary(.:format)                                  book_editions#summary
           edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/book_copies/edit_labels(.:format) book_copies#edit_labels
              disposed_book_edition_book_copies GET      /book_editions/:book_edition_id/book_copies/disposed(.:format)    book_copies#disposed
@@ -185,8 +266,8 @@
                               book_copy_checks GET      /book_copies/:id/checks(.:format)                                 book_copies#checks
                        book_copy_check_barcode GET      /book_copies/:id/check_barcode(.:format)                          book_copies#check_barcode
                            dispose_book_copies POST     /book_copies/dispose(.:format)                                    book_copies#dispose
+                         undispose_book_copies GET      /book_copies/:id/undispose(.:format)                              book_copies#undispose
                    update_multiple_book_copies POST     /book_copies/update_multiple(.:format)                            book_copies#update_multiple
-                    book_copies_disposed_index GET      /book_copies/disposed_index(.:format)                             book_copies#disposed_index
                         edit_merge_book_titles POST     /book_titles/edit_merge(.:format)                                 book_titles#edit_merge
                              merge_book_titles POST     /book_titles/merge(.:format)                                      book_titles#merge
                             delete_book_titles POST     /book_titles/delete(.:format)                                     book_titles#delete
@@ -361,6 +442,17 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                    smart_cards POST     /smart_cards(.:format)                                            smart_cards#create
                                     smart_card GET      /smart_cards/:id(.:format)                                        smart_cards#show
                                                DELETE   /smart_cards/:id(.:format)                                        smart_cards#destroy
+                           approve_requisition GET      /requisitions/:id/approve(.:format)                               requisitions#approve
+               approve_requisition_requisition POST     /requisitions/:id/approve_requisition(.:format)                   requisitions#approve_requisition
+                    approve_budget_requisition POST     /requisitions/:id/approve_budget(.:format)                        requisitions#approve_budget
+                                  requisitions GET      /requisitions(.:format)                                           requisitions#index
+                                               POST     /requisitions(.:format)                                           requisitions#create
+                               new_requisition GET      /requisitions/new(.:format)                                       requisitions#new
+                              edit_requisition GET      /requisitions/:id/edit(.:format)                                  requisitions#edit
+                                   requisition GET      /requisitions/:id(.:format)                                       requisitions#show
+                                               PATCH    /requisitions/:id(.:format)                                       requisitions#update
+                                               PUT      /requisitions/:id(.:format)                                       requisitions#update
+                                               DELETE   /requisitions/:id(.:format)                                       requisitions#destroy
                                                PATCH    /pax/:id(.:format)                                                late_passengers#update
                               new_user_session GET      /users/sign_in(.:format)                                          users/sessions#new
                                   user_session POST     /users/sign_in(.:format)                                          users/sessions#create
@@ -390,3 +482,11 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                           root GET      /                                                                 welcome#index
                                      dashboard GET      /dashboard(.:format)                                              welcome#dashboard
                                                GET      /auth/:provider/callback(.:format)                                sessions#create
+                             letter_opener_web          /letter_opener                                                    LetterOpenerWeb::Engine
+
+Routes for LetterOpenerWeb::Engine:
+clear_letters DELETE /clear(.:format)                 letter_opener_web/letters#clear
+delete_letter DELETE /:id(.:format)                   letter_opener_web/letters#destroy
+      letters GET    /                                letter_opener_web/letters#index
+       letter GET    /:id(/:style)(.:format)          letter_opener_web/letters#show
+              GET    /:id/attachments/:file(.:format) letter_opener_web/letters#attachment

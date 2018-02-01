@@ -63,9 +63,16 @@ nav
             .col.m3
               = check_box_tag :supv_app, nil, @requisition.supv_approval
               = label_tag 'Supv. Approval'
-            .col.m6
-              .label Appvl Notes
-              .item = @requisition.req_appvl_notes || "--"
+            - if @requisition.is_sent_to_supv
+              .col.m6
+                .label Appvl Notes
+                .item = @requisition.req_appvl_notes || "--"
+            - else 
+              .col.m6
+                #submit-button
+                  = link_to requisition_path(@requisition, send:'supv'), , method: 'patch', remote: true, class: 'btn waves-effect waves-light'
+                    | Send for approval 
+
           - unless @requisition.is_budgeted
             li.collection-item.row
               .col.m3

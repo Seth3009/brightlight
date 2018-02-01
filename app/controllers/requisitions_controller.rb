@@ -29,10 +29,12 @@ class RequisitionsController < ApplicationController
   def new
     authorize! :create, Requisition
     @employee = current_user.employee
-    @department = @employee.department
-    @req_no = @department.code + "-" + Time.now.to_i.to_s
-    @budget = @department.budgets.current
-    @manager = @employee.manager || @employee.supervisor
+    if @employee.present?
+      @department = @employee.department
+      @req_no = "#{@department.try(:code)}-#{Time.now.to_i.to_s}"
+      @budget = @department.try(:budgets).try(:current)
+      @manager = @employee.manager || @employee.supervisor
+    end
     @requisition = Requisition.new
   end
 
@@ -93,15 +95,22 @@ class RequisitionsController < ApplicationController
               approver = @requisition.budget_approver
             end
             if @requisition.send_for_approval(approver, params[:send])
-              redirect_to @requisition, notice: 'Requisition has been saved and sent for approval.' 
+              redirect_to @requisition, notice: 'Purchase request has been saved and sent for approval.' 
             else
               redirect_to edit_requisition_path(@requisition), alert: "Cannot send for approval. Maybe approver field is blank?"
             end
           else
-            redirect_to @requisition, notice: 'Requisition was successfully saved.' 
+            redirect_to @requisition, notice: 'Purchase request was successfully saved.' 
           end 
         end
         format.json { render :show, status: :ok, location: @requisition }
+        format.js { 
+          if params[:send] 
+            @message = 'Purchase request has been sent for approval.'
+          else
+            @message = 'Purchase request was successfully saved.'
+          end
+        }
       else
         format.html do 
           @employee = @requisition.requester || current_user.employee
@@ -109,6 +118,9 @@ class RequisitionsController < ApplicationController
           render :edit 
         end
         format.json { render json: @requisition.errors, status: :unprocessable_entity }
+        format.js { 
+          @error = 'Error.'
+        }
       end
     end
   end

@@ -8,13 +8,13 @@
       = f.text_field :description
     .input-field.col.m3
       = f.label :requester, class: 'active'
-      = f.collection_select :requester_id, Employee.active.all, :id, :name, prompt: "Select employee", selected: f.object.requester_id || @employee.id
+      = f.select :requester_id, options_for_select(Employee.active.all.map { |e| [e.name, e.id, {'data-dept' => e.try(:department_id)}] }, f.object.requester_id || @employee.try(:id)), prompt: 'Select employee'
     .input-field.col.m9
       = f.label :notes
       = f.text_field :notes
     .input-field.col.m3
       = f.label :department, class: 'active'
-      = f.collection_select :department_id, Department.all, :id, :name, prompt: "Select...", selected: f.object.department_id || @employee.department_id
+      = f.collection_select :department_id, Department.all, :id, :name, prompt: "Select...", selected: f.object.department_id || @employee.try(:department_id)
     .input-field.col.m3
       = f.check_box :is_budgeted
       = f.label :is_budgeted, 'Budgeted?'
@@ -27,4 +27,4 @@
     -if params[:appvl].blank?
       .input-field.col.m3
         = f.label :supervisor, class: 'active'
-        = f.collection_select :supervisor_id, Employee.department_heads, :id, :name, selected: @manager.id, prompt: "Select approver"    
+        = f.collection_select :supervisor_id, Employee.department_heads, :id, :name, selected: @manager.try(:id), prompt: "Select approver"    
