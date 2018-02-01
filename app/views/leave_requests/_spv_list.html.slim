@@ -9,12 +9,9 @@ nav
           th Leave date 
           th Hours / Notes
           th Leave Type
-
           th Substitute
-          th Spv approved
-          th Hr approved
+          th Approval (SPV,HR)
           th Form Submit
-          th
 
       tbody#leave_requests
         - @leave_requests.where('departments.manager_id=?',@employee).each do |leave_request|
@@ -24,10 +21,17 @@ nav
             td = leave_request.hour
             td = leave_request.leave_type
             td = leave_request.leave_subtitute.present? ? leave_request.leave_subtitute : "--"
-            td.wd15 
-              span.box.fix.center class= "#{('green' if leave_request.spv_approval == TRUE || leave_request.leave_type == "Sick" || leave_request.leave_type == "Family Matter" ) || ('red' if    leave_request.spv_approval == FALSE)}"
-               = ("APPROVED" if leave_request.spv_approval == TRUE) || ("REJECTED" if    leave_request.spv_approval == FALSE) || ("--" if leave_request.spv_approval.blank?)
-            td.wd10 
-              span.box.fix.center class= "#{('green' if leave_request.hr_approval == TRUE) || ('red' if    leave_request.hr_approval == FALSE)}"
-                = ("APPROVED" if leave_request.hr_approval == TRUE) || ("REJECTED" if leave_request.hr_approval == FALSE) || ("--" if leave_request.hr_approval.blank?)
-            td = leave_request.form_submit_date.strftime("%d/%m/%Y")
+            td               
+               -  if leave_request.spv_approval.nil?
+                  i.material-icons check_box_outline_blank
+               -  elsif leave_request.spv_approval == true
+                  i.material-icons check_box
+               -  else
+                    i.material-icons cancel
+               -  if leave_request.hr_approval.nil?
+                  i.material-icons check_box_outline_blank
+               -  elsif leave_request.hr_approval == true
+                  i.material-icons check_box
+               -  else
+                    i.material-icons cancel 
+            td = leave_request.form_submit_date.nil? ? "--" : leave_request.form_submit_date.strftime("%d/%m/%Y")

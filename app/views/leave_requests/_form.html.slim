@@ -34,11 +34,9 @@
         = f.select :leave_subtitute, [['Subtitute not required',false],['Subtitute Required',true]], prompt: true 
       .input-field.col.s8
         = f.label :subtitute_notes
-        = f.text_field :subtitute_notes
-
-        = f.hidden_field :form_submit_date,  :value => Time.now.strftime('%Y-%m-%d')
- - if params[:appvl].blank?
-    .toolbar.z-depth-1
+        = f.text_field :subtitute_notes        
+ 
+  .toolbar.z-depth-1
       button.btn.waves-effect.waves-light type="submit" name="save" Save Draft
       button.btn.waves-effect.waves-light type="submit" name="send" value="supv" Send for Approval
       = link_to 'Cancel', leave_requests_path, class: "waves-effect waves-light btn-flat"       

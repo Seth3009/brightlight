@@ -20,26 +20,30 @@ nav
 
       tbody#leave_requests
         - @leave_requests.where('employee_id =?',@employee.id).each do |leave_request|
-          tr 
-            td 
-               = leave_request.form_submit_date.nil? ? 'Draft' : leave_request.form_submit_date.strftime("%d/%m/%Y")
-            td = leave_request.start_date.strftime("%d/%m/%Y") + " - " + leave_request.end_date.strftime("%d/%m/%Y")
-            td = leave_request.hour
-            td = leave_request.leave_type
-            td = leave_request.leave_subtitute.present? ? leave_request.leave_subtitute : "--"
-            td               
-               -  if leave_request.spv_approval.nil?
-                  i.material-icons check_box_outline_blank
-               -  elsif leave_request.spv_approval == true
-                  i.material-icons check_box
-               -  else
-                    i.material-icons cancel
-               -  if leave_request.hr_approval.nil?
-                  i.material-icons check_box_outline_blank
-               -  elsif leave_request.hr_approval == true
-                  i.material-icons check_box
-               -  else
-                    i.material-icons cancel            
-            td
-               = link_to leave_request
-                 i.material-icons visibility
+            tr
+              td 
+                = leave_request.form_submit_date.nil? ? 'Draft' : leave_request.form_submit_date.strftime("%d/%m/%Y")
+              td = leave_request.start_date.strftime("%d/%m/%Y") + " - " + leave_request.end_date.strftime("%d/%m/%Y")
+              td = leave_request.hour
+              td = leave_request.leave_type
+              td = leave_request.leave_subtitute.present? ? leave_request.leave_subtitute : "--"
+              td               
+                -  if leave_request.spv_approval.nil?
+                    i.material-icons check_box_outline_blank
+                -  elsif leave_request.spv_approval == true
+                    i.material-icons check_box
+                -  else
+                      i.material-icons cancel
+                -  if leave_request.hr_approval.nil?
+                    i.material-icons check_box_outline_blank
+                -  elsif leave_request.hr_approval == true
+                    i.material-icons check_box
+                -  else
+                      i.material-icons cancel            
+              td
+                = link_to leave_request
+                  i.material-icons visibility
+                - if leave_request.form_submit_date.nil? && (can? :manage, leave_request)
+                  = link_to leave_request, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+                    i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+  

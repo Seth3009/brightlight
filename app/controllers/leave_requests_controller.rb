@@ -30,6 +30,9 @@ class LeaveRequestsController < ApplicationController
 
     respond_to do |format|
       if @leave_request.save
+        if params[:send]
+          @leave_request.update(:form_submit_date => Time.now.strftime('%Y-%m-%d'))
+        end
         format.html { redirect_to @leave_request, notice: 'Leave request was successfully created.' }
         format.json { render :show, status: :created, location: @leave_request }
       else
@@ -44,6 +47,9 @@ class LeaveRequestsController < ApplicationController
   def update
     respond_to do |format|
       if @leave_request.update(leave_request_params)
+        if params[:send]
+          @leave_request.update(:form_submit_date => Time.now.strftime('%Y-%m-%d'))
+        end
         format.html { redirect_to @leave_request, notice: 'Leave request was successfully updated.' }
         format.json { render :show, status: :ok, location: @leave_request }
       else
