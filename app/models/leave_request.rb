@@ -5,9 +5,24 @@ class LeaveRequest < ActiveRecord::Base
   scope :spv, -> (employee_id) { where('departments.manager_id = ?', employee_id) }
   scope :hrlist, ->  { where('spv_approval = ? or leave_type = ? or leave_type =?','true','Sick', 'Family Matter').where.not('form_submit_date' => nil) }
 
-  def self.show_by_type  
-      self.joins('left join employees on employees.id = leave_requests.employee_id') 
-          .joins('left join departments on departments.id = employees.department_id')    
+  def send_for_approval(approver, type)
+    if approver
+      EmailNotification.leave_approval(self, approver, type).deliver_now
+      if type == 'empl_submit'
+        self.update_attributes form_submit_date: Time.now.strftime('%Y-%m-%d')
+      elsif type == 'spv-app'
+        self.update_attributes spv_approval: true, spv_date: Time.now.strftime('%Y-%m-%d')
+      elsif type == 'spv-den'
+        self.update_attributes spv_approval: false, spv_date: Time.now.strftime('%Y-%m-%d')
+      elsif type == 'hr-app'
+        self.update_attributes hr_approval: true, hr_date: Time.now.strftime('%Y-%m-%d')
+      elsif type == 'hr-den'
+        self.update_attributes hr_approval: false, hr_date: Time.now.strftime('%Y-%m-%d')
+      end
+    else
+      return false
+    end
+    return true
   end
   
 end

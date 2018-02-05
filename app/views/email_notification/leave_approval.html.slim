@@ -1,0 +1,38 @@
+doctype html
+html
+	head
+		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
+		meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+	body
+    div style="margin-left:30px; width=85%; font-size:16px"
+      p Dear #{@approver.name},
+
+      p You have a pending leave_request that requires your approval.
+
+      table.compact
+        tbody
+          tr
+            td Requester
+            td = @leave_request.employee.try(:name)
+          tr 
+            td Reason
+            td = @leave_request.leave_type
+          tr 
+            td Description
+            td = @leave_request.hour
+          tr 
+            td Required Date
+            td = @leave_request.form_submit_date
+
+      p You can access the leave_request from the following link.
+      
+      div style="margin-top:20px; margin-bottom:40px"
+        = link_to "leave_request No. #{@leave_request.form_submit_date}", "#", style:"text-decoration:underline"
+
+      p Thank you for using <i>Brightlight</i>. 
+      
+      p Regards,
+      p CBCS Brightlight Team
+    
+    = render 'footer', to: @approver 
