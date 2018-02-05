@@ -18,6 +18,6 @@ class EmailNotification < ActionMailer::Base
     @approver = approver
     @leave_request = leave_request
     @type = type
-    mail(to: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Purchase Request #{leave_request.form_submit_date}.")
+    mail(to: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
   end 
 end

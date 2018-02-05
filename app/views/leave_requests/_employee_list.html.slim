@@ -49,7 +49,9 @@ nav
               td
                 = link_to leave_request
                   i.material-icons visibility
-                - if leave_request.form_submit_date.nil? && (can? :manage, leave_request)
+                - if leave_request.form_submit_date.nil? && (can? :submit, leave_request)
+                  = link_to edit_leave_request_path(leave_request)
+                    i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
                   = link_to leave_request, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
                     i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
   

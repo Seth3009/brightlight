@@ -30,19 +30,19 @@ class LeaveRequestsController < ApplicationController
     @leave_request = LeaveRequest.new(leave_request_params)
     @employee = Employee.find_by_id(@leave_request.employee_id)
     @department = Department.find_by_id(@employee.department_id)
-    @supervisor = Employee.find_by_id(@department.manager_id)
+    #@supervisor = Employee.find_by_id(@department.manager_id)
     respond_to do |format|
       if @leave_request.save
         format.html do
           if params[:send]
             approver = Employee.find_by_id(@department.manager_id)            
             if @leave_request.send_for_approval(approver, 'empl_submit')              
-              redirect_to @leave_request, notice: 'Leave request has been saved and sent for approval.' 
+              redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.' 
             else
               redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
             end
           else
-            redirect_to @leave_request, notice: 'Leave request has been successfully created.' 
+            redirect_to leave_requests_url, notice: 'Leave request has been successfully created.' 
           end  
         end              
         format.json { render :show, status: :created, location: @leave_request }
@@ -50,18 +50,28 @@ class LeaveRequestsController < ApplicationController
         format.html { render :new }
         format.json { render json: @leave_request.errors, status: :unprocessable_entity }
       end
-    end
+    end    
   end
 
   # PATCH/PUT /leave_requests/1
   # PATCH/PUT /leave_requests/1.json
   def update
+    @employee = Employee.find_by_id(@leave_request.employee_id)
+    @department = Department.find_by_id(@employee.department_id)
     respond_to do |format|
       if @leave_request.update(leave_request_params)
-        if params[:send]
-          @leave_request.update(:form_submit_date => Time.now.strftime('%Y-%m-%d'))
-        end
-        format.html { redirect_to @leave_request, notice: 'Leave request was successfully updated.' }
+        format.html do
+          if params[:send]
+            approver = Employee.find_by_id(@department.manager_id)            
+            if @leave_request.send_for_approval(approver, 'empl_submit')              
+              redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.' 
+            else
+              redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
+            end
+          else
+            redirect_to leave_requests_url, notice: 'Leave request has been successfully created.' 
+          end  
+        end  
         format.json { render :show, status: :ok, location: @leave_request }
       else
         format.html { render :edit }

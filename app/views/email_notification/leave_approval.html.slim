@@ -44,7 +44,7 @@ html
             td = @leave_request.employee.try(:email)
           tr 
             td Form Submit
-            td = @leave_request.form_submit_date
+            td = LeaveRequest.last.form_submit_date.strftime("%d/%m/%Y")
 
       p You can access the leave request from the following link.
       
