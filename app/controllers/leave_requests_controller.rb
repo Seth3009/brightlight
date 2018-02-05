@@ -36,14 +36,13 @@ class LeaveRequestsController < ApplicationController
         format.html do
           if params[:send]
             approver = Employee.find_by_id(@department.manager_id)            
-            if @leave_request.send_for_approval(approver, 'supv')
-              @leave_request.update(:form_submit_date => Time.now.strftime('%Y-%m-%d'))
+            if @leave_request.send_for_approval(approver, 'empl_submit')              
               redirect_to @leave_request, notice: 'Leave request has been saved and sent for approval.' 
             else
               redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
             end
           else
-            redirect_to @leave_request, notice: '1111Leave request has been successfully created.' 
+            redirect_to @leave_request, notice: 'Leave request has been successfully created.' 
           end  
         end              
         format.json { render :show, status: :created, location: @leave_request }

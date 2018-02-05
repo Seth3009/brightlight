@@ -39,7 +39,7 @@ nav
         .col.s6 
           p Action taken: #{if @leave_request.leave_subtitute == true then "Subtitute required" else "Subtitute not required"}
         .col.s6
-          p Action notes: #{@leave_request.subtitute_notes.present? || "--"}
+          p Action notes: #{@leave_request.subtitute_notes || "--"}
       .row.t_form_lr_border
         .col.s12
           p Form submitted date: #{@leave_request.form_submit_date}

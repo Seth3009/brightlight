@@ -8,24 +8,45 @@ html
     div style="margin-left:30px; width=85%; font-size:16px"
       p Dear #{@approver.name},
 
-      p You have a pending leave_request that requires your approval.
+      p You have a pending leave request that requires your approval.
 
       table.compact
         tbody
           tr
             td Requester
             td = @leave_request.employee.try(:name)
+          tr
+            td Job Title
+            td = @leave_request.employee.try(:job_title)
+          tr
+            td Leave Date
+            td = @leave_request.start_date.strftime("%d/%m/%Y") + " - " + @leave_request.end_date.strftime("%d/%m/%Y")  
           tr 
-            td Reason
-            td = @leave_request.leave_type
-          tr 
-            td Description
+            td Time of leave
             td = @leave_request.hour
           tr 
-            td Required Date
+            td Type of leave
+            td = @leave_request.leave_type
+          tr 
+            td Leave Description
+            td = @leave_request.leave_note
+          tr 
+            td Action taken
+            td 
+               -  if @leave_request.leave_subtitute == true
+                  |Subtitute required
+               -  elsif @leave_request.leave_subtitute == false
+                  |Subtitute not required
+               -  else
+                  |--
+          tr
+            td Requester email
+            td = @leave_request.employee.try(:email)
+          tr 
+            td Form Submit
             td = @leave_request.form_submit_date
 
-      p You can access the leave_request from the following link.
+      p You can access the leave request from the following link.
       
       div style="margin-top:20px; margin-bottom:40px"
         = link_to "leave_request No. #{@leave_request.form_submit_date}", "#", style:"text-decoration:underline"

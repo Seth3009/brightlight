@@ -26,7 +26,13 @@ nav
               td = leave_request.start_date.strftime("%d/%m/%Y") + " - " + leave_request.end_date.strftime("%d/%m/%Y")
               td = leave_request.hour
               td = leave_request.leave_type
-              td = leave_request.leave_subtitute.present? ? leave_request.leave_subtitute : "--"
+              td 
+                 -  if leave_request.leave_subtitute == true
+                    |Required
+                 -  elsif leave_request.leave_subtitute == false
+                    |Not Required
+                 -  else
+                    |--
               td               
                 -  if leave_request.spv_approval.nil?
                     i.material-icons check_box_outline_blank
