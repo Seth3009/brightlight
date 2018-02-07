@@ -55,22 +55,6 @@
                                                PATCH    /purchase_orders/:id(.:format)                                    purchase_orders#update
                                                PUT      /purchase_orders/:id(.:format)                                    purchase_orders#update
                                                DELETE   /purchase_orders/:id(.:format)                                    purchase_orders#destroy
-                                  budget_items GET      /budget_items(.:format)                                           budget_items#index
-                                               POST     /budget_items(.:format)                                           budget_items#create
-                               new_budget_item GET      /budget_items/new(.:format)                                       budget_items#new
-                              edit_budget_item GET      /budget_items/:id/edit(.:format)                                  budget_items#edit
-                                   budget_item GET      /budget_items/:id(.:format)                                       budget_items#show
-                                               PATCH    /budget_items/:id(.:format)                                       budget_items#update
-                                               PUT      /budget_items/:id(.:format)                                       budget_items#update
-                                               DELETE   /budget_items/:id(.:format)                                       budget_items#destroy
-                                       budgets GET      /budgets(.:format)                                                budgets#index
-                                               POST     /budgets(.:format)                                                budgets#create
-                                    new_budget GET      /budgets/new(.:format)                                            budgets#new
-                                   edit_budget GET      /budgets/:id/edit(.:format)                                       budgets#edit
-                                        budget GET      /budgets/:id(.:format)                                            budgets#show
-                                               PATCH    /budgets/:id(.:format)                                            budgets#update
-                                               PUT      /budgets/:id(.:format)                                            budgets#update
-                                               DELETE   /budgets/:id(.:format)                                            budgets#destroy
                                      req_items GET      /req_items(.:format)                                              req_items#index
                                                POST     /req_items(.:format)                                              req_items#create
                                   new_req_item GET      /req_items/new(.:format)                                          req_items#new
@@ -453,6 +437,15 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PATCH    /requisitions/:id(.:format)                                       requisitions#update
                                                PUT      /requisitions/:id(.:format)                                       requisitions#update
                                                DELETE   /requisitions/:id(.:format)                                       requisitions#destroy
+                                import_budgets GET      /budgets/import(.:format)                                         budgets#import
+                                       budgets GET      /budgets(.:format)                                                budgets#index
+                                               POST     /budgets(.:format)                                                budgets#create
+                                    new_budget GET      /budgets/new(.:format)                                            budgets#new
+                                   edit_budget GET      /budgets/:id/edit(.:format)                                       budgets#edit
+                                        budget GET      /budgets/:id(.:format)                                            budgets#show
+                                               PATCH    /budgets/:id(.:format)                                            budgets#update
+                                               PUT      /budgets/:id(.:format)                                            budgets#update
+                                               DELETE   /budgets/:id(.:format)                                            budgets#destroy
                                                PATCH    /pax/:id(.:format)                                                late_passengers#update
                               new_user_session GET      /users/sign_in(.:format)                                          users/sessions#new
                                   user_session POST     /users/sign_in(.:format)                                          users/sessions#create

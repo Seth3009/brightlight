@@ -4,7 +4,9 @@ class BudgetsController < ApplicationController
   # GET /budgets
   # GET /budgets.json
   def index
-    @budgets = Budget.all
+    @academic_year = params[:year].present? ? AcademicYear.find(params[:year]) : AcademicYear.current
+    @department = params[:dept].present? ? Department.find_by_code(params[:dept]) : current_user.try(:employee).try(:department)
+    @budgets = Budget.where(department: @department, academic_year: @academic_year)
   end
 
   # GET /budgets/1
@@ -59,6 +61,21 @@ class BudgetsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to budgets_url, notice: 'Budget was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  # POST /import
+  def import
+    uploaded_io = params[:filename] 
+    path = Rails.root.join('public', 'uploads', uploaded_io.original_filename)
+    File.open(path, 'wb') do |file|
+      file.write(uploaded_io.read)
+      if uploaded_io.content_type =~ /office.xlsx/
+        budget = Budget.import_xlsx(file)
+        redirect_to budget, notice: "Import succeeded"
+      else
+        redirect_to budgets_path, alert: 'Import failed: selected file is not an Excel file'
+      end
     end
   end
 

@@ -7,8 +7,6 @@ Rails.application.routes.draw do
   resources :deliveries
   resources :order_items
   resources :purchase_orders
-  resources :budget_items
-  resources :budgets
   resources :req_items
   resources :template_targets
   resources :templates
@@ -213,6 +211,12 @@ Rails.application.routes.draw do
       post 'approve_budget'
     end
   end 
+
+  resources :budgets do
+    collection do
+      post 'import'
+    end 
+  end
 
   patch 'pax/:id' => 'late_passengers#update'
 
