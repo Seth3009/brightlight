@@ -93,7 +93,7 @@ class StudentBooksController < ApplicationController
     respond_to do |format|
       # @student.name_will_change!
       if @student.save
-        format.html { redirect_to student_student_books_path(@student), notice: 'Student book was successfully created.' }
+        format.html { redirect_to student_books_path(@student_book), notice: 'Student book was successfully created.' }
         format.json { render :show, status: :created, location: @student_book }
       else
         format.html { render :new }
@@ -108,7 +108,7 @@ class StudentBooksController < ApplicationController
     authorize! :update, @student_book
     respond_to do |format|
       if @student_book.update(student_book_params)
-        format.html { redirect_to student_student_books_path(@student), notice: 'Student book was successfully updated.' }
+        format.html { redirect_to student_student_books_path(@student_book.student), notice: 'Student book was successfully updated.' }
         format.json { render :show, status: :ok, location: @student_book }
       else
         format.html { render :edit }
