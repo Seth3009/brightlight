@@ -1,0 +1,45 @@
+.card-panel
+  .container 
+    p Employee : #{@leave_request.employee.try(:name)} ( #{@leave_request.employee.department} )
+    p Job Title : #{@leave_request.employee.try(:job_title)}    
+    hr    
+    .row
+      .col.s2
+        | Req'd date:
+      .col.s5
+        | #{@leave_request.start_date.strftime("%d %b %Y")} To: #{@leave_request.end_date.strftime("%d %b %Y")}
+    
+      .col.s2
+        | Time desc:
+      .col.3
+        | #{@leave_request.hour}
+    .row
+      .col.s2
+        | Leave for:
+      .col.s4
+        | #{@leave_request.leave_type}
+    
+      .col.s3
+        | Leave Descriptions:
+      .col.s3
+        | #{@leave_request.leave_note}
+    .row
+      .col.s2
+        | Subtitute:  
+      .col.s3    
+        -  if @leave_request.leave_subtitute == true
+            | Required
+        -  elsif @leave_request.leave_subtitute == false
+            | Not Required
+        -  else
+            | --
+      .col.s2
+        | Notes:
+      .col.s5
+        | #{@leave_request.subtitute_notes}
+    .row
+      .col
+        | Submit date:
+      .col
+        | #{@leave_request.form_submit_date}
+ 

@@ -8,7 +8,7 @@ class LeaveRequest < ActiveRecord::Base
   def send_for_approval(approver, type)
     if approver      
       if type == 'empl_submit'
-        self.update_attributes form_submit_date: Time.now.strftime('%Y-%m-%d')        
+        self.update_attributes form_submit_date: Time.now.strftime('%Y-%m-%d')              
       elsif type == 'spv-app'
         self.update_attributes spv_approval: true, spv_date: Time.now.strftime('%Y-%m-%d')
       elsif type == 'spv-den'
@@ -18,7 +18,11 @@ class LeaveRequest < ActiveRecord::Base
       elsif type == 'hr-den'
         self.update_attributes hr_approval: false, hr_date: Time.now.strftime('%Y-%m-%d')
       end
-      EmailNotification.leave_approval(self, approver, type).deliver_now
+      if type == 'empl_submit'
+        EmailNotification.leave_approval(self, approver, type).deliver_now  
+      else
+        EmailNotification.leave_spv_approve(self, approver, type).deliver_now  
+      end
     else
       return false
     end

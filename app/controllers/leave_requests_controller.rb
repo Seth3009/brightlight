@@ -57,17 +57,24 @@ class LeaveRequestsController < ApplicationController
   # PATCH/PUT /leave_requests/1.json
   def update
     @employee = Employee.find_by_id(@leave_request.employee_id)
-    @department = Department.find_by_id(@employee.department_id)
+    @department = Department.find_by_id(@employee.department_id)       
     respond_to do |format|
       if @leave_request.update(leave_request_params)
         format.html do
-          if params[:send]
-            approver = Employee.find_by_id(@department.manager_id)            
-            if @leave_request.send_for_approval(approver, 'empl_submit')              
-              redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.' 
-            else
-              redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
+          if params[:send] 
+            if params[:send] == 'empl-submit'           
+              approver = Employee.find_by_id(@department.manager_id)
+              @notice = 'Leave request has been saved and sent for approval.' 
+            else 
+              approver = @employee
+              @notice = 'Leave request approval has been saved and sent to the employee'
             end
+              if @leave_request.send_for_approval(approver, params[:send])              
+                redirect_to leave_requests_url, notice: @notice
+              else
+                redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
+              end
+            
           else
             redirect_to leave_requests_url, notice: 'Leave request has been successfully created.' 
           end  
@@ -108,6 +115,6 @@ class LeaveRequestsController < ApplicationController
     end
     # Never trust parameters from the scary internet, only allow the white list through.
     def leave_request_params
-      params.require(:leave_request).permit(:start_date, :end_date, :hour, :leave_type, :leave_note, :leave_subtitute, :subtitute_notes, :spv_approval, :spv_date, :spv_notes, :hr_approval, :hr_date, :hr_notes, :form_submit_date, :leave_attachment, :employee_id)
+      params.permit(:start_date, :end_date, :hour, :leave_type, :leave_note, :leave_subtitute, :subtitute_notes, :spv_approval, :spv_date, :spv_notes, :hr_approval, :hr_date, :hr_notes, :form_submit_date, :leave_attachment, :employee_id)
     end
 end

@@ -12,6 +12,7 @@ nav
           th Substitute
           th Approval (SPV,HR)
           th Form Submit
+          th Actions
           
 
       tbody#leave_requests
@@ -36,3 +37,5 @@ nav
                -  else
                     i.material-icons cancel 
             td = leave_request.form_submit_date.nil? ? "--" : leave_request.form_submit_date.strftime("%d/%m/%Y")
+            td = link_to approve_path(leave_request,"hr")
+                  i.material-icons visibility

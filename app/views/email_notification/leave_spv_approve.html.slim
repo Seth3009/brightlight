@@ -1,0 +1,35 @@
+doctype html
+html
+	head
+		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
+		meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+	body
+    div style="margin-left:30px; width=85%; font-size:16px"
+      p Dear #{@employee.name},
+
+      p Your leave request as bellow.
+
+      = render 'leave_request'
+
+      - if @leave_request.spv_approval == true
+        p
+          | is 
+          b Approved
+      - elsif @leave_request.spv_approval == false
+        p
+          | is 
+          b Rejected
+      
+        p Reason : #{@leave_request.spv_notes}
+      p Supervisor approval date: #{@leave_request.spv_date.strftime('%d %b %Y')}
+      - if @leave_request.spv_approval == true
+        div style="margin-top:20px; margin-bottom:40px"
+            = link_to "Leave Request : #{@employee.name}" ,approve_path(@leave_request,"hr"),  style:"text-decoration:underline"
+
+      p Thank you for using <i>Brightlight</i>. 
+      
+      p Regards,
+      p CBCS Brightlight Team
+    
+    = render 'footer', to: @employee 
