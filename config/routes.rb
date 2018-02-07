@@ -218,6 +218,8 @@ Rails.application.routes.draw do
     end 
   end
 
+  resources :budget_items, only: [:index, :show]
+
   patch 'pax/:id' => 'late_passengers#update'
 
   devise_for :users, controllers: {

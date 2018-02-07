@@ -13,7 +13,13 @@ class ApplicationController < ActionController::Base
   # Uncomment the next line to ensure authorization check for every single controller acion
   # check_authorization
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, :alert => exception.message
+    respond_to do |format|
+      format.json { render nothing: true, status: :forbidden }
+      format.html { redirect_to root_url, :alert => exception.message }
+      format.js   { 
+        render js: "Materialize.toast('You are not authorized to perform that operation.', 4000, 'red');"
+      }
+    end
   end
   before_action :configure_permitted_parameters, if: :devise_controller?
 

@@ -16,7 +16,10 @@ strong = requisition.description
       .label Budgeted
       .item 
         i.material-icons #{requisition.is_budgeted ? 'check_box' : 'check_box_outline_blank'}
-    dd.col.m6
+    dd.col.m9
+      .label Budget
+      .item = @budget_line
+    dd.col.m9
       .label Notes
       .item = requisition.notes || "--"
 
@@ -31,15 +34,17 @@ strong = requisition.description
       .col.m3
         = check_box_tag :supv_app, nil, requisition.supv_approval
         = label_tag 'Supv. Approval'
-      - if @requisition.is_sent_to_supv
+      - unless !@requisition.supv_approval || @requisition.is_sent_to_supv
         .col.m6
           .label Appvl Notes
           .item = @requisition.req_appvl_notes || "--"
-      - else 
-        .col.m6
-          #submit-button
-            = link_to requisition_path(@requisition, send:'supv'), data: {params: {requisition: {active: true}}}, method: 'patch', remote: true, class: 'btn waves-effect waves-light'
-              | Send for approval 
+      - else
+        - if can? :update, @requisition 
+          .col.m6
+            #submit-button
+              / The following data params is a hack to make the link working
+              = link_to requisition_path(@requisition, send:'supv'), data: {params: {requisition: {active: true}}}, method: 'patch', remote: true, class: 'btn waves-effect waves-light'
+                | Send for approval 
     - unless requisition.is_budgeted
       li.collection-item.row
         .col.m3

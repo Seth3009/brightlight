@@ -48,6 +48,8 @@ class Ability
     can [:create,:read,:update,:destroy], Carpool
     can [:approve], Requisition, supervisor: @user.employee
     can [:approve_budget], Requisition, budget_approver: @user.employee
+    can [:manage], Requisition, department: @user.employee.department
+    can [:manage], ReqItem, department: @user.employee.department
     can [:manage], Budget, budget_holder: @user.employee
     can :read, :all
 	end
@@ -62,6 +64,7 @@ class Ability
     can :read, BookLoan
     can [:read,:create], LoanCheck
     can [:create,:read,:update,:destroy], Carpool
+    can [:create], Requisition
     can [:manage], Requisition, requester: @user.employee
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all

@@ -8,7 +8,36 @@
 
   = render 'req_detail', f: f
 
-  nav
+  nav.light
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Approval
+  .card-panel
+    .row 
+      .input-field.col.m3
+        = f.label :supervisor, class: 'active'
+        = f.collection_select :supervisor_id, Employee.department_heads, :id, :name, prompt: "Select approver", selected: @manager.try(:id) 
+      - if can? :approve, @requisition
+        .input-field.col.m3
+          = f.check_box :supv_approval
+          = f.label :supv_approval, f.object.supv_approval ? 'Request approved' : 'Approve request'
+        .input-field.col.m6
+          = f.label :req_appvl_notes, "Approval Notes"
+          = f.text_field :req_appvl_notes
+    
+    .row.budget-approval 
+      .input-field.col.m3
+        = f.label :budget_approver, class: 'active'
+        = f.collection_select :budget_approver_id, Employee.department_heads, :id, :name, prompt: "Select budget approver"
+      - if can? :approve_budget, @requisition
+        .input-field.col.m3
+          = f.check_box :is_budget_approved
+          = f.label :is_budget_approved, 'Approve Budget'
+        .input-field.col.m6
+          = f.label :reject_reason, "Budget notes"
+          = f.text_field :reject_reason
+
+  nav.light
     .nav-wrapper
       .brand-logo style="margin-left: 20px; font-size:1.5em"
         | Items
@@ -20,52 +49,11 @@
   
   = render 'req_items', f: f
 
-  - if params[:appvl].blank?
-    .toolbar.z-depth-1
-      button.btn.waves-effect.waves-light type="submit" name="save" Save
-      - unless f.object.is_sent_to_supv
-        button.btn.waves-effect.waves-light type="submit" name="send" value="supv" Send for Approval
-      = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"
-
-javascript:
-  $( function() { 
-    $( ".budget_item_autocomplete" ).autocomplete({
-      source: function(request, response) {
-        $.ajax({
-            url: "/budget_items",
-            dataType: "json",
-            data: {
-                dept: $("#requisition_requester_id").find(':selected').data('dept')
-            },
-            success: response
-        });
-      },
-      max: 50,
-      minLength: 2,
-      select: function( event, ui ) {
-        select_item(ui.item);
-      }
-    })
-    .autocomplete( "instance" )._renderItem = function( ul, item ) {
-      return $( "<li>" )
-        .append( "<div>" + item.description + " Month: " + item.month + "/" + item.academic_year_id +"</div>" )
-        .appendTo( ul );
-    };
-  } );
-
-  function select_item(item) {
-    console.log("Selected: "+item.description);
-    $("#requisition_budget_notes").val(item.description);
-  }
-
-  $("#requisition_is_budgeted").on("change", function() {
-    $(".budget-approval").toggle(600);
-    $("button[name='approve']").prop('disabled', !$("#requisition_is_budgeted").prop('checked'));
-  }.bind(this));
-
-  $("#requisition_supv_approval").on("change", function() {
-    $("button[name='send']").toggle($("#requisition_supv_approval").prop('checked') && !$("#requisition_is_budgeted").prop('checked'));
-  }.bind(this));
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" name="save" Save
+    - unless f.object.is_sent_to_supv
+      button.btn.waves-effect.waves-light type="submit" id="send_supv" name="send" value="supv" Send for Approval
+    = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"
 
 
 

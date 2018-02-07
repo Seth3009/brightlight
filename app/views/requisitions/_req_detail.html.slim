@@ -19,12 +19,10 @@
       = f.check_box :is_budgeted
       = f.label :is_budgeted, 'Budgeted?'
     .input-field.col.m3
-      = f.label :budget_notes, class: 'active'
+      = f.label 'Budget', class: 'active'
       = f.text_field :budget_notes, class: 'budget_item_autocomplete'
+      = f.hidden_field :budget_item_id
+      = f.hidden_field :budget_id
     .input-field.col.m3
       = f.label :date_required, class: 'active'
-      = f.date_field :date_required
-    -if params[:appvl].blank?
-      .input-field.col.m3
-        = f.label :supervisor, class: 'active'
-        = f.collection_select :supervisor_id, Employee.department_heads, :id, :name, selected: @manager.try(:id), prompt: "Select approver"    
+      = f.date_field :date_required   

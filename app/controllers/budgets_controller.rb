@@ -4,6 +4,7 @@ class BudgetsController < ApplicationController
   # GET /budgets
   # GET /budgets.json
   def index
+    authorize! :read, Budget
     @academic_year = params[:year].present? ? AcademicYear.find(params[:year]) : AcademicYear.current
     @department = params[:dept].present? ? Department.find_by_code(params[:dept]) : current_user.try(:employee).try(:department)
     @budgets = Budget.where(department: @department, academic_year: @academic_year)
@@ -12,22 +13,26 @@ class BudgetsController < ApplicationController
   # GET /budgets/1
   # GET /budgets/1.json
   def show
+    authorize! :read, Budget
     @budget = Budget.includes([:budget_items]).find(params[:id])
   end
 
   # GET /budgets/new
   def new
+    authorize! :create, Budget
     @budget = Budget.new
   end
 
   # GET /budgets/1/edit
   def edit
+    authorize! :update, @budget
   end
 
   # POST /budgets
   # POST /budgets.json
   def create
     @budget = Budget.new(budget_params)
+    authorize! :create, @budget
 
     respond_to do |format|
       if @budget.save
@@ -43,6 +48,7 @@ class BudgetsController < ApplicationController
   # PATCH/PUT /budgets/1
   # PATCH/PUT /budgets/1.json
   def update
+    authorize! :update, @budget
     respond_to do |format|
       if @budget.update(budget_params)
         format.html { redirect_to @budget, notice: 'Budget was successfully updated.' }
@@ -57,15 +63,18 @@ class BudgetsController < ApplicationController
   # DELETE /budgets/1
   # DELETE /budgets/1.json
   def destroy
+    authorize! :destroy, @budget
     @budget.destroy
     respond_to do |format|
-      format.html { redirect_to budgets_url, notice: 'Budget was successfully destroyed.' }
+      format.html { redirect_to budgets_url, notice: 'Budget was successfully deleted.' }
       format.json { head :no_content }
+      format.js   { head :no_content }
     end
   end
 
   # POST /import
   def import
+    authorize! :create, Budget
     uploaded_io = params[:filename] 
     path = Rails.root.join('public', 'uploads', uploaded_io.original_filename)
     File.open(path, 'wb') do |file|

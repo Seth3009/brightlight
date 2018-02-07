@@ -23,6 +23,7 @@ class RequisitionsController < ApplicationController
   def show
     authorize! :read, @requisition
     @req_items = @requisition.req_items
+    @budget_line = "#{@requisition.budget_item.try(:description)} #{@requisition.budget_item.try(:month)}/#{@requisition.budget_item.try(:academic_year).try(:name)} "
   end
 
   # GET /requisitions/new
@@ -119,6 +120,7 @@ class RequisitionsController < ApplicationController
         end
         format.json { render json: @requisition.errors, status: :unprocessable_entity }
         format.js { 
+          head :no_content
           @error = 'Error.'
         }
       end
