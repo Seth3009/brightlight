@@ -1,6 +1,6 @@
 class LeaveRequestsController < ApplicationController
   before_action :set_leave_request, only: [:show, :edit, :update, :destroy, :approve]
-  before_action :set_user_id, only: [:index, :new, :edit, :create, :update]
+  before_action :set_user_id, only: [:index, :new, :edit, :create, :update, :approve]
   
   # GET /leave_requests
   # GET /leave_requests.json
@@ -98,6 +98,13 @@ class LeaveRequestsController < ApplicationController
     end
   end
 
+  def approve
+    @dept = Department.find_by_code('HR')              
+    @hrmanager = Employee.find_by_id(@dept.manager_id) 
+    @department = Department.find_by_id(@employee.department_id)
+    @supervisor = Employee.find_by_id(@department.manager_id)
+    
+  end
   # DELETE /leave_requests/1
   # DELETE /leave_requests/1.json
   def destroy

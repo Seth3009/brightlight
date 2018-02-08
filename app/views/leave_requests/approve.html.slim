@@ -5,7 +5,7 @@
       .brand-logo style="margin-left: 20px; font-size:1.5em"
         | Approval Action
  
-    - if params[:page] == 'spv'
+    - if @supervisor = @employee
         .card-panel
           = label_tag "label_note", "Approval Notes", class: 'label'
           = text_field_tag "notes", @leave_request.spv_notes, class: 'cat'
@@ -14,7 +14,7 @@
             | Approved  
           = button_tag class:"btn waves-effect waves-light right", type: "submit", name:"send", value:"spv-den"
             | Not Approved
-    - elsif params[:page] == 'hr'
+    - elsif @hrmanager = @employee && @supervisor != @employee
         .card-panel
           = label_tag "label_note", "Approval Notes", class: 'label'
           = text_field_tag "notes", @leave_request.hr_notes, class: 'cat'
