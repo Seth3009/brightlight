@@ -5,41 +5,71 @@
     hr    
     .row
       .col.s2
-        | Req'd date:
-      .col.s5
-        | #{@leave_request.start_date.strftime("%d %b %Y")} To: #{@leave_request.end_date.strftime("%d %b %Y")}
-    
-      .col.s2
-        | Time desc:
-      .col.3
-        | #{@leave_request.hour}
-    .row
-      .col.s2
-        | Leave for:
+        | Req'd date
       .col.s4
-        | #{@leave_request.leave_type}
+        | : #{@leave_request.start_date.strftime("%d %b %Y")} To: #{@leave_request.end_date.strftime("%d %b %Y")}
     
-      .col.s3
-        | Leave Descriptions:
-      .col.s3
-        | #{@leave_request.leave_note}
+      .col.s2
+        | Time desc
+      .col.4
+        | : #{@leave_request.hour}
     .row
       .col.s2
-        | Subtitute:  
-      .col.s3    
+        | Leave for
+      .col.s4
+        | : #{@leave_request.leave_type}
+    
+      .col.s2
+        | Leave notes
+      .col.s4
+        | : #{@leave_request.leave_note.nil? ? "--" : @leave_request.leave_note }
+    .row
+      .col.s2
+        | Subtitute  
+      .col.s4    
         -  if @leave_request.leave_subtitute == true
-            | Required
+            | : Required
         -  elsif @leave_request.leave_subtitute == false
-            | Not Required
+            | : Not Required
         -  else
-            | --
+            | : --
       .col.s2
-        | Notes:
-      .col.s5
-        | #{@leave_request.subtitute_notes}
+        | Notes
+      .col.s4
+        | : #{@leave_request.subtitute_notes}
     .row
-      .col
-        | Submit date:
-      .col
-        | #{@leave_request.form_submit_date}
- 
+      .col.s2
+        | Submit date
+      .col.s4
+        | : #{@leave_request.form_submit_date.strftime("%d %b %Y")}
+    .row
+      .col.s2
+        | SPV Approval
+      .col.s1                           
+        - if @leave_request.spv_approval.nil?
+          | : 
+          i.material-icons check_box_outline_blank
+        - elsif @leave_request.spv_approval == true
+          | : 
+          i.material-icons check_box
+        - else
+          | : 
+          i.material-icons cancel
+      .col.s9
+        | #{@leave_request.spv_notes}
+    .row   
+      .col.s2
+        | HR Approval   
+      .col.s1         
+        - if @leave_request.hr_approval.nil?
+          | : 
+          i.material-icons check_box_outline_blank
+        - elsif @leave_request.hr_approval == true
+          | : 
+          i.material-icons check_box
+        - else
+          | : 
+          i.material-icons cancel
+      .col.s9
+        | #{@leave_request.hr_notes}
+        
