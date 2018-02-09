@@ -1,0 +1,7 @@
+<% if @message %>
+    Materialize.toast(<%= @message %>, 4000, 'green');
+<% end %>
+<% if @error %>
+    Materialize.toast(<%= @error %>, 4000, 'red');
+<% end %>
+console.log('Message delivered');

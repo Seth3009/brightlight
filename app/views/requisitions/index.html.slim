@@ -32,34 +32,28 @@ ul#dept-options.dropdown-content
         th Description
         th Required date
         th Requester
-        th Approval *
+        th Approval
         th Total
         th Actions
 
     tbody
       - @requisitions.each do |requisition|
         tr
-          td = requisition.req_no
+          td = requisition.id
           td = requisition.description
           td = requisition.date_required
           td = requisition.requester
           td 
-            - if requisition.is_budgeted
+            - if requisition.is_supv_approved
               i.material-icons check_box
             - else
               i.material-icons check_box_outline_blank
-            - if requisition.supv_approval
-              i.material-icons check_box
-            - else
-              i.material-icons check_box_outline_blank
-            - if requisition.is_budget_approved
-              i.material-icons check_box
-            - else
-              i.material-icons check_box_outline_blank
-            - if requisition.is_approved
-              i.material-icons check_box
-            - else
-              i.material-icons check_box_outline_blank
+            - unless requisition.is_budgeted
+              - if requisition.is_budget_approved
+                i.material-icons check_box
+              - else
+                i.material-icons check_box_outline_blank
+
           td = requisition.total_amt
           td 
             = link_to requisition, remote: true

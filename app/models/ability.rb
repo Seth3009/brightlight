@@ -49,8 +49,13 @@ class Ability
     can [:approve], Requisition, supervisor: @user.employee
     can [:approve_budget], Requisition, budget_approver: @user.employee
     can [:manage], Requisition, department: @user.employee.department
-    can [:manage], ReqItem, department: @user.employee.department
+    can [:manage], ReqItem do |req_item| 
+      req_item.requisition.department == @user.employee.department 
+    end
     can [:manage], Budget, budget_holder: @user.employee
+    can [:manage], BudgetItem do |budget_item| 
+      budget_item.budget.budget_holder == @user.employee 
+    end
     can :read, :all
 	end
 

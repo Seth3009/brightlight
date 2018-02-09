@@ -32,8 +32,8 @@ class RequisitionsController < ApplicationController
     @employee = current_user.employee
     if @employee.present?
       @department = @employee.department
-      @req_no = "#{@department.try(:code)}-#{Time.now.to_i.to_s}"
-      @budget = @department.try(:budgets).try(:current)
+      @budget = @employee.department.budgets.current.take rescue nil
+      @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue nil
       @manager = @employee.manager || @employee.supervisor
     end
     @requisition = Requisition.new
@@ -45,6 +45,8 @@ class RequisitionsController < ApplicationController
     @employee = @requisition.requester || current_user.employee
     @manager = @employee.manager || @employee.supervisor
     @supervisors = Employee.active.supervisors.all
+    @budget = @employee.department.budgets.current.take rescue nil
+    @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue nil
   end
 
   # POST /requisitions
@@ -60,12 +62,12 @@ class RequisitionsController < ApplicationController
           if params[:send]
             approver = @requisition.supervisor || @requisition.requester.manager || @requisition.requester.supervisor
             if @requisition.send_for_approval(approver, 'supv')
-              redirect_to @requisition, notice: 'Requisition has been saved and sent for approval.' 
+              redirect_to @requisition, notice: 'Purchase request has been saved and sent for approval.' 
             else
               redirect_to edit_requisition_path(@requisition), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
             end
           else
-            redirect_to @requisition, notice: 'Requisition has been successfully created.' 
+            redirect_to @requisition, notice: 'Purchase request has been successfully created.' 
           end 
         end
         format.json { render :show, status: :created, location: @requisition }
@@ -73,7 +75,8 @@ class RequisitionsController < ApplicationController
         format.html { 
           @employee = @requisition.requester || current_user.employee
           @department = @employee.department
-          @budget = @department.budgets.current
+          @budget = @employee.department.budgets.current.take rescue nil
+          @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue nil
           render :new 
         }
         format.json { render json: @requisition.errors, status: :unprocessable_entity }
@@ -87,31 +90,33 @@ class RequisitionsController < ApplicationController
     authorize! :update, @requisition
     @requisition.last_updated_by = current_user
     respond_to do |format|
+      @requisition.supv_approved_date ||= Date.today if requisition_params["is_supv_approved"] == "1"
+      @requisition.budget_approved_date ||= Date.today if requisition_params["is_budget_approved"] == "1"
+      @requisition.budget = @requisition.budget_item.try(:budget)
       if @requisition.update(requisition_params)
-        format.html do
-          if params[:send]
-            if params[:send] == 'supv'
-              approver = @requisition.supervisor || @requisition.requester.supervisor || @requisition.requester.manager
-            else
-              approver = @requisition.budget_approver
-            end
-            if @requisition.send_for_approval(approver, params[:send])
-              redirect_to @requisition, notice: 'Purchase request has been saved and sent for approval.' 
-            else
-              redirect_to edit_requisition_path(@requisition), alert: "Cannot send for approval. Maybe approver field is blank?"
-            end
+        if params[:send]
+          if params[:send] == 'supv'
+            approver = @requisition.supervisor || @requisition.requester.supervisor || @requisition.requester.manager
           else
-            redirect_to @requisition, notice: 'Purchase request was successfully saved.' 
-          end 
-        end
-        format.json { render :show, status: :ok, location: @requisition }
-        format.js { 
-          if params[:send] 
-            @message = 'Purchase request has been sent for approval.'
-          else
-            @message = 'Purchase request was successfully saved.'
+            approver = @requisition.budget_approver
           end
-        }
+          if @requisition.send_for_approval(approver, params[:send])
+            @message = 'Purchase request has been sent for approval.'
+            format.html { redirect_to @requisition, notice: @message }
+            format.json { render :show, status: :ok, location: @requisition }
+            format.js
+          else
+            @error = 'Error: Purchase request cannot be sent for approval.'
+            format.html { redirect_to edit_requisition_path(@requisition), alert: @error }
+            format.json { render :show, status: :ok, location: @requisition }
+            format.js
+          end
+        else
+          @message = 'Purchase request was successfully saved.'
+          format.html { redirect_to @requisition, notice: @message }
+          format.json { render :show, status: :ok, location: @requisition }
+          format.js   { render partial: '/shared/message.js.erb' }
+        end
       else
         format.html do 
           @employee = @requisition.requester || current_user.employee
@@ -120,8 +125,8 @@ class RequisitionsController < ApplicationController
         end
         format.json { render json: @requisition.errors, status: :unprocessable_entity }
         format.js { 
-          head :no_content
-          @error = 'Error.'
+          @error = 'Error updating purchase order.'
+          render partial: '/shared/message.js.erb'
         }
       end
     end
@@ -134,6 +139,8 @@ class RequisitionsController < ApplicationController
     @employee = @requisition.requester
     @manager = @employee.manager || @employee.supervisor
     @supervisors = Employee.active.supervisors.all
+    @budget = @employee.department.budgets.current.take rescue nil
+    @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue []
     @button_state = !@requisition.is_budgeted && !@requisition.is_budget_approved && @requisition.budget_approver_id
   end
 
@@ -157,9 +164,10 @@ class RequisitionsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def requisition_params
       params.require(:requisition).permit(:id, :req_no, :description, :is_budgeted, :budget_id, :budget_item_id, :budget_notes, :date_required, :date_requested, 
-                                          :department_id, :requester_id, :supervisor_id, :supv_approval, :notes, :req_appvl_notes, :total_amt, 
-                                          :is_budget_approved, :is_submitted, :is_approved, :is_sent_to_supv, :is_sent_to_purchasing, 
-                                          :is_sent_for_bgt_approval, :is_rejected, :reject_reason, :active,
+                                          :department_id, :requester_id, :supervisor_id, :notes, :req_appvl_notes, :total_amt, 
+                                          :is_supv_approved, :is_budget_approved, :is_submitted, :sent_to_supv, :sent_to_purchasing, 
+                                          :sent_for_bgt_approval, :is_rejected, :reject_reason, :active,
+                                          :budget_approved_date, :supv_approved_date,
                                           :budget_approver_id, :bgt_appvl_notes, :purch_receiver_id, :receive_notes,
                                           :created_by, :last_updated_by,
                                           {req_items_attributes: [:id, :requisition_id, :description, :qty_reqd, :unit, :est_price, :actual_price, 

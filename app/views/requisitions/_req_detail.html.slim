@@ -2,27 +2,30 @@
   .row  
     .input-field.col.m3
       = f.label :req_no
-      = f.text_field :req_no, value: f.object.req_no || @req_no
-    .input-field.col.m9
+      - if @requisition.persisted?
+        = f.text_field :id
+    .input-field.col.m6
       = f.label :description
       = f.text_field :description
     .input-field.col.m3
+      = f.label :date_required, class: 'active'
+      = f.date_field :date_required 
+    .input-field.col.m3
       = f.label :requester, class: 'active'
-      = f.select :requester_id, options_for_select(Employee.active.all.map { |e| [e.name, e.id, {'data-dept' => e.try(:department_id)}] }, f.object.requester_id || @employee.try(:id)), prompt: 'Select employee'
+      = f.select :requester_id, options_for_select(Employee.active.all.map { |e| [e.name, e.id, {'data-dept' => e.try(:department_id)}] }, @requisition.requester_id || @employee.try(:id)), prompt: 'Select employee'
     .input-field.col.m9
       = f.label :notes
       = f.text_field :notes
     .input-field.col.m3
       = f.label :department, class: 'active'
-      = f.collection_select :department_id, Department.all, :id, :name, prompt: "Select...", selected: f.object.department_id || @employee.try(:department_id)
+      = f.collection_select :department_id, Department.all, :id, :name, prompt: "Select...", selected: @requisition.department_id || @employee.try(:department_id)
     .input-field.col.m3
       = f.check_box :is_budgeted
       = f.label :is_budgeted, 'Budgeted?'
-    .input-field.col.m3
+    .input-field.col.m6
       = f.label 'Budget', class: 'active'
-      = f.text_field :budget_notes, class: 'budget_item_autocomplete'
-      = f.hidden_field :budget_item_id
-      = f.hidden_field :budget_id
-    .input-field.col.m3
-      = f.label :date_required, class: 'active'
-      = f.date_field :date_required   
+      = f.collection_select :budget_item_id, @budget_items, :id, :to_s, prompt: "Select budget"
+    .input-field.col.offset-m3.m9
+      = f.label :budget_notes
+      = f.text_field :budget_notes
+  

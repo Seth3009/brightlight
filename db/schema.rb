@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171122084851) do
+ActiveRecord::Schema.define(version: 20180208052547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1022,17 +1022,10 @@ ActiveRecord::Schema.define(version: 20171122084851) do
     t.integer  "department_id"
     t.integer  "requester_id"
     t.integer  "supervisor_id"
-    t.boolean  "supv_approval"
     t.string   "notes"
     t.string   "req_appvl_notes"
     t.integer  "req_approver_id"
     t.string   "total_amt"
-    t.boolean  "is_budget_approved"
-    t.boolean  "is_submitted"
-    t.boolean  "is_approved"
-    t.boolean  "is_sent_to_supv"
-    t.boolean  "is_sent_to_purchasing"
-    t.boolean  "is_sent_for_bgt_approval"
     t.integer  "budget_approver_id"
     t.string   "bgt_appvl_notes"
     t.boolean  "is_rejected"
@@ -1042,8 +1035,16 @@ ActiveRecord::Schema.define(version: 20171122084851) do
     t.boolean  "active"
     t.integer  "created_by_id"
     t.integer  "last_updated_by_id"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.boolean  "is_budget_approved"
+    t.boolean  "is_submitted"
+    t.boolean  "is_supv_approved"
+    t.date     "budget_approved_date"
+    t.date     "supv_approved_date"
+    t.date     "sent_to_supv"
+    t.date     "sent_to_purchasing"
+    t.date     "sent_for_bgt_approval"
   end
 
   add_index "requisitions", ["budget_approver_id"], name: "index_requisitions_on_budget_approver_id", using: :btree

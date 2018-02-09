@@ -1,5 +1,8 @@
-h5 Purchase Request No. #{requisition.req_no}
-strong = requisition.description
+h5 Purchase Request 
+.row
+  .col.m3 = "No. #{requisition.id}"
+  .col.m9
+    strong = requisition.description
 
 .list-description.row
   dl
@@ -12,6 +15,10 @@ strong = requisition.description
     dd.col.m6
       .label Department
       .item = requisition.department
+    dd.col.offset-m3.m9
+      .label Notes
+      .item = requisition.notes || "--"
+  dl
     dd.col.m3 
       .label Budgeted
       .item 
@@ -19,43 +26,11 @@ strong = requisition.description
     dd.col.m9
       .label Budget
       .item = @budget_line
-    dd.col.m9
-      .label Notes
-      .item = requisition.notes || "--"
-
+    dd.col.offset-m3.m9
+      .label Budget notes
+      .item = @requisition.budget_notes
 .row
   ul.collection
-    li.collection-item.collection-header
-      strong Approval
-    li.collection-item.row
-      .col.m3
-        .label Supervisor
-        .item = requisition.supervisor || "--"
-      .col.m3
-        = check_box_tag :supv_app, nil, requisition.supv_approval
-        = label_tag 'Supv. Approval'
-      - unless !@requisition.supv_approval || @requisition.is_sent_to_supv
-        .col.m6
-          .label Appvl Notes
-          .item = @requisition.req_appvl_notes || "--"
-      - else
-        - if can? :update, @requisition 
-          .col.m6
-            #submit-button
-              / The following data params is a hack to make the link working
-              = link_to requisition_path(@requisition, send:'supv'), data: {params: {requisition: {active: true}}}, method: 'patch', remote: true, class: 'btn waves-effect waves-light'
-                | Send for approval 
-    - unless requisition.is_budgeted
-      li.collection-item.row
-        .col.m3
-          .label Budget Approver
-          .item = requisition.budget_approver || "--"
-        .col.m3
-          = check_box_tag :is_budget_approved, nil, requisition.is_budget_approved
-          = label_tag 'Budget Approval'
-        .col.m6
-          .label Budget Notes
-          .item = requisition.bgt_appvl_notes || "--"
     li.collection-item.collection-header
       strong Items
     li.collection-item
@@ -77,3 +52,58 @@ strong = requisition.description
               td.right-align = number_to_currency(req_item.est_price, precision: 0, unit: req_item.currency)
               td = req_item.notes
               td = req_item.needed_by_date
+.row
+  ul.collection
+    li.collection-item.collection-header
+      strong Approval
+    li.collection-item.row
+      .col.m3
+        .label Supervisor
+        .item = requisition.supervisor || "--"
+      .col.m3
+        = check_box_tag :supv_app, nil, requisition.is_supv_approved
+        = label_tag 'Supv. Approval'
+      - if @requisition.is_supv_approved || @requisition.sent_to_supv
+        .col.m6
+          .label Approval Notes
+          .item = @requisition.req_appvl_notes || "--"
+      - else
+        - if can? :update, @requisition 
+          .col.m6
+            #submit-button
+              = link_to requisition_path(@requisition, send:'supv'), data: {params: {requisition: {active: true}}}, method: 'patch', remote: true, class: 'btn waves-effect waves-light'
+                | Send for approval 
+    li.collection-item.row
+      .col.m3
+        .label Date sent to supervisor
+        .item = @requisition.sent_to_supv || "--"
+      .col.m3
+        .label Date approved by supervisor
+        .item = @requisition.supv_approved_date || "--"
+      - if @requisition.is_supv_approved
+        .col.m3
+          .label By
+          .item = @requisition.supervisor.try(:name) || "--"
+
+    - unless requisition.is_budgeted
+      li.collection-item.row
+        .col.m3
+          .label Budget Approver
+          .item = requisition.budget_approver || "--"
+        .col.m3
+          = check_box_tag :is_budget_approved, nil, requisition.is_budget_approved
+          = label_tag 'Budget Approval'
+        .col.m6
+          .label Budget Notes
+          .item = requisition.bgt_appvl_notes || "--"
+      li.collection-item.row
+        .col.m3
+          .label Date sent for budget approval
+          .item = @requisition.sent_for_bgt_approval || "--"
+        .col.m3
+          .label Date approved for budget
+          .item = @requisition.budget_approved_date || "--"
+        - if @requisition.is_budget_approved
+          .col.m3
+            .label By
+            .item = @requisition.budget_approver.try(:name) || "--"

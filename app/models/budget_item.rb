@@ -12,7 +12,7 @@ class BudgetItem < ActiveRecord::Base
   before_validation :ensure_academic_year_has_a_value
 
   def description_with_month_and_year
-    "#{description} - #{month}/#{budget.academic_year.name}"
+    "#{description} - #{month}/#{academic_year.name}"
   end
 
   def to_s

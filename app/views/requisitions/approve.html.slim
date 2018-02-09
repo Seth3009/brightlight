@@ -16,8 +16,8 @@ h4 Purchase Request Approval
         = f.label :supervisor, class: 'active'
         = f.text_field :supervisor, disabled: true
       .input-field.col.m3
-        = f.check_box :supv_approval, disabled: params[:appvl] != 'supv'
-        = f.label :supv_approval, f.object.supv_approval ? 'Request approved' : 'Approve request'
+        = f.check_box :is_supv_approved, disabled: params[:appvl] != 'supv'
+        = f.label :is_supv_approved, @requisition.is_supv_approved ? 'Request approved' : 'Approve request'
       .input-field.col.m6
         = f.label :req_appvl_notes, "Approval Notes"
         = f.text_field :req_appvl_notes, disabled: params[:appvl] != 'supv'
