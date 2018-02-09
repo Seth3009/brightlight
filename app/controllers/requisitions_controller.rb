@@ -115,19 +115,17 @@ class RequisitionsController < ApplicationController
           @message = 'Purchase request was successfully saved.'
           format.html { redirect_to @requisition, notice: @message }
           format.json { render :show, status: :ok, location: @requisition }
-          format.js   { render partial: '/shared/message.js.erb' }
+          format.js
         end
       else
+        @error = 'Error updating purchase order.'
         format.html do 
           @employee = @requisition.requester || current_user.employee
           @supervisors = Employee.supervisors.all
           render :edit 
         end
         format.json { render json: @requisition.errors, status: :unprocessable_entity }
-        format.js { 
-          @error = 'Error updating purchase order.'
-          render partial: '/shared/message.js.erb'
-        }
+        format.js
       end
     end
   end
@@ -141,7 +139,7 @@ class RequisitionsController < ApplicationController
     @supervisors = Employee.active.supervisors.all
     @budget = @employee.department.budgets.current.take rescue nil
     @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue []
-    @button_state = !@requisition.is_budgeted && !@requisition.is_budget_approved && @requisition.budget_approver_id
+    @button_state = !@requisition.is_budgeted && @requisition.is_supv_approved && !@requisition.is_budget_approved && @requisition.budget_approver_id
   end
 
   # DELETE /requisitions/1

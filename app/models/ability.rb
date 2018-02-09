@@ -46,14 +46,18 @@ class Ability
     can :manage, StudentBook
     can :manage, StandardBook
     can [:create,:read,:update,:destroy], Carpool
-    can [:approve], Requisition, supervisor: @user.employee
-    can [:approve_budget], Requisition, budget_approver: @user.employee
-    can [:manage], Requisition, department: @user.employee.department
-    can [:manage], ReqItem do |req_item| 
+    can [:create,:read,:update,:destroy], Requisition, department: @user.employee.department
+    can :manage, ReqItem do |req_item| 
       req_item.requisition.department == @user.employee.department 
     end
-    can [:manage], Budget, budget_holder: @user.employee
-    can [:manage], BudgetItem do |budget_item| 
+    can :approve, Requisition do |req|
+      req.supervisor == @user.employee          # User can only approve requisition that is sent to the respective user
+    end
+    can :approve_budget, Requisition do |req|
+      req.budget_approver == @user.employee     # User can only approve requisition that is sent to the respective user
+    end
+    can :manage, Budget, budget_holder: @user.employee
+    can :manage, BudgetItem do |budget_item| 
       budget_item.budget.budget_holder == @user.employee 
     end
     can :read, :all

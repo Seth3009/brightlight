@@ -21,15 +21,16 @@ $(document).on("ready page:load page:change", function() {
         //     };
             
 
-            var enabled_state = function() {
-                return $("#requisition_is_supv_approved").prop('checked') && 
-                            !$("#requisition_is_budgeted").prop('checked') &&
-                            $("#requisition_budget_approver_id").val() !== "";
-            }
+            // var enabled_state = function() {
+            //     return $("#requisition_is_supv_approved").prop('checked') && 
+            //                 !$("#requisition_is_budgeted").prop('checked') &&
+            //                 $("#requisition_budget_approver_id").val() !== "";
+            // }
 
-            var approval_state = function() {
-                return !$("#requisition_is_supv_approved").prop('checked') && 
-                            $("#requisition_supervisor_id").val() !== "";
+            var can_send_for_budget_approval = function() {
+                return $("#requisition_is_supv_approved").prop('checked') && 
+                            $("#requisition_supervisor_id").val() !== "" &&
+                            $("#requisition_budget_approver_id").val() !== "";
             }
 
             $("#requisition_is_budgeted").on("change", function() {
@@ -43,7 +44,7 @@ $(document).on("ready page:load page:change", function() {
                     $("#requisition_budget_id").val(null);
                     $("#requisition_budget_item_id").val(null);
                 }
-                if( enabled_state() ) {
+                if( can_send_for_budget_approval() ) {
                     $("button#send_budget").removeAttr('disabled');
                 } else {
                     $("button#send_budget").prop('disabled', "disabled");
@@ -51,15 +52,15 @@ $(document).on("ready page:load page:change", function() {
             }.bind(this));
 
             $("#requisition_is_supv_approved").on("change", function() {
-                if( approval_state() ) {
-                    $("button#send_supv").removeAttr('disabled');
+                if( can_send_for_budget_approval() ) {
+                    $("button#send_budget").removeAttr('disabled');
                 } else {
-                    $("button#send_supv").prop('disabled', "disabled");
+                    $("button#send_budget").prop('disabled', "disabled");
                 }
             }.bind(this));
 
             $("#requisition_budget_approver_id").on("change", function() {
-                if( enabled_state() ) {
+                if( can_send_for_budget_approval() ) {
                     $("button#send_budget").removeAttr('disabled');
                 } else {
                     $("button#send_budget").prop('disabled', "disabled");
@@ -67,7 +68,7 @@ $(document).on("ready page:load page:change", function() {
             }.bind(this));
 
             $("#requisition_budget_item_id").on("change", function() {
-                $("#requisition_is_budgeted").prop("checked", true);
+                $("#requisition_is_budgeted").prop("checked", $("#requisition_budget_item_id").val() !== "");
                 $("#requisition_is_budgeted").change(); 
             }.bind(this));
 

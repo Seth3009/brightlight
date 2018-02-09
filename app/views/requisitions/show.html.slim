@@ -1,4 +1,5 @@
 - title 'Purchase Request'
+h4 Purchase Request
 
 nav
   .nav-wrapper
@@ -8,9 +9,13 @@ nav
           | All requisitions
           i.material-icons.left chevron_left
     ul.right
-      li
-        = link_to edit_requisition_path @requisition
-          i.material-icons edit
+      - unless @requisition.sent_to_supv
+        li
+          = link_to edit_requisition_path @requisition
+            i.material-icons edit
+      - else
+        li
+          i.material-icons.left lock
 
 .panel
   ul.collapsible data-collapsible="expandable"
