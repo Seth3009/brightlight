@@ -431,7 +431,7 @@ nav.top-navbar {
 		}
 	}
 	form {
-		padding-top: 7px;
+		padding-top: 9px;
 		.input-field {
 			input[type=search] {
 				border: 1px solid #dfe2e4;
@@ -1378,6 +1378,29 @@ section {
 			margin: 0 1em;
 		}
 	}
+}
+
+.card.horizontal {
+	display: flex;
+	.card-stacked {
+		display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    position: relative;
+	}
+}
+
+.card .card-content .card-title {
+	display: block;
+	line-height: 32px;
+	margin-bottom: 8px;
 }
 
 // ============================================ Left Sidebar ===========================================
