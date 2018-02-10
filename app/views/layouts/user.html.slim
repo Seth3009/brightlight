@@ -26,12 +26,13 @@ html
 					section
 						= yield :layout
 		- else 
-			.container
-				= render 'shared/flash_messages'
-				section
-					.row
-						.col.s12.offset-m2.m8.offset-l4.l4
-							= yield :layout
+			main#main
+				.container
+					= render 'shared/flash_messages'
+					section
+						.row
+							.col.s12.offset-m2.m8.offset-l4.l4
+								= yield :layout
 
 		footer.page-footer style="padding-top:0"
 			//= render 'shared/layout/footer'

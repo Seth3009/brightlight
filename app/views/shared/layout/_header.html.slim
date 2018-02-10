@@ -1,9 +1,84 @@
+// Top Navbar
+nav.top-navbar
+  .nav-wrapper
+    ul
+      li
+        a href="#" data-activates="slide-out" id="sidenav-button"
+          i.material-icons menu
+    ul.right
+      li
+        form 
+          .input-field
+            input type="search"
+            /label class="label-icon" for="search"
+            i.material-icons.right search
+      li
+        a href="#" 
+          i.material-icons.right inbox
+          span.new.badge 4
+      li
+        a.dropdown-button href="#" data-activates="app-options" data-beloworigin="true" data-alignment="right"
+          i.material-icons apps
+      li
+        - if signed_in?
+          li
+            - if current_user
+              a.dropdown-button href="#" data-activates="user-profile-options" data-beloworigin="true" data-alignment="right"
+                - if current_user.image_url
+                  = image_tag current_user.image_url, alt: current_user.name, class: 'user-avatar-navbar circle'
+                - else
+                  i.material-icons.grey-text account_circle
+            - else
+              = link_to new_user_session_path
+                | Login
+                i.material-icons.left perm_identity
+        - else
+          li
+            = link_to new_user_session_path
+              | Login
+              i.material-icons.left perm_identity
+
+ul#user-profile-options.dropdown-content
+  - if current_user.employee
+    li 
+      = link_to current_user.employee
+        i.material-icons.left face
+        |Profile
+  li
+    = link_to current_user
+      |Account
+      i.material-icons.left perm_identity
+  li
+    = link_to 'Sign out', destroy_user_session_path, method: :delete
+
+ul#app-options.dropdown-content
+  li 
+    = link_to "#"
+      |Books
+      i.material-icons.left book
+  li 
+    = link_to "#"
+      |Inventory
+      i.material-icons.left library_books
+  li 
+    = link_to "#"
+      |Purchasing
+      i.material-icons.left shopping_basket
+  li 
+    = link_to "#"
+      |HR
+      i.material-icons.left people
+  li 
+    = link_to "#"
+      |Carpool
+      i.material-icons.left directions_car
+  
 // Sidebar menu
 .container
   a.sidebar-collapse.top-nav.hide-on-large-only.waves-effect.waves-light.btn-floating.btn-medium href="#" data-activates="nav-mobile"
     i.mdi-navigation-menu
 - style_color = current_user.try(:admin?) ? 'red darken-3' : ''
-ul#nav-mobile.side-nav.fixed class="#{style_color}"
+ul#slide-out.side-nav class="#{style_color}"
   li.logo
     a#logo-container.brand-logo href="#{dashboard_path}"  style="font-size:2em; color:white"
       = image_tag 'lightbulb-icon.png', class: "logo-icon"

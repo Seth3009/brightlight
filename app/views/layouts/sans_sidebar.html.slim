@@ -17,11 +17,11 @@ html
   body class="main-home #{controller.controller_name} white"
     header
     
-    main
+    main#main
       = render 'shared/flash_messages'
       = yield :layout
 
-    footer.fixed-footer style="padding:0"
+    footer.page-footer style="padding:0"
       = yield :bottom_footer
       
       = yield :javascript
