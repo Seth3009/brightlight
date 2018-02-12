@@ -21,7 +21,7 @@ html
           | is 
           b Rejected
       
-        p Reason : #{@leave_request.spv_notes}
+      p Reason : #{@leave_request.spv_notes}
       p Supervisor approval date: #{@leave_request.spv_date.strftime('%d %b %Y')}
       - if @leave_request.spv_approval == true
         div style="margin-top:20px; margin-bottom:40px"

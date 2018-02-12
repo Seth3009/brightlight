@@ -36,5 +36,5 @@ nav
                -  else
                     i.material-icons cancel 
             td = leave_request.form_submit_date.nil? ? "--" : leave_request.form_submit_date.strftime("%d/%m/%Y")
-            td = link_to approve_leave_request_path(leave_request)
-                  i.material-icons visibility
+            td = link_to approve_path(leave_request,"spv")
+                 i.material-icons visibility

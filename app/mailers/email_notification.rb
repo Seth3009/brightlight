@@ -21,9 +21,9 @@ class EmailNotification < ActionMailer::Base
     mail(to: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
   end 
 
-  def leave_spv_approve(leave_request, employee, approver, status, notes, type)
+  def leave_spv_approve(leave_request, employee, hrmanager, status, notes, type)
     @employee = employee
-    @hrmanager = approver
+    @hrmanager = hrmanager
     @leave_request = leave_request
     @type = type        
     if type == 'spv-app'
@@ -33,11 +33,11 @@ class EmailNotification < ActionMailer::Base
     end
   end
 
-  def leave_hr_approve(leave_request, employee, approver, status, notes, type)
-    @approver = approver
+  def leave_hr_approve(leave_request, employee, supervisor, status, notes, type)
+    @supervisor = supervisor
     @leave_request = leave_request
     @type = type
     @employee = Employee.find_by_id(leave_request.employee_id)
-    mail(to: %("#{@employee.name}" <#{@employee.email}>),cc: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
+    mail(to: %("#{@employee.name}" <#{@employee.email}>),cc: %("#{@supervisor.name}" <#{@supervisor.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
   end
 end

@@ -28,15 +28,15 @@ Rails.application.routes.draw do
   resources :copy_conditions
   resources :book_conditions
   
-  #resources :leave_requests
-  #get 'leave_requests/:id/approve/:page' => 'leave_requests#approve', as: :approve
-  resources :leave_requests do
-    member do
-      get 'approve'
-      post 'approve_spv'
-      post 'approve_hr'
-    end
-  end 
+  resources :leave_requests
+  get 'leave_requests/:id/approve/:page' => 'leave_requests#approve', as: :approve
+  #resources :leave_requests do
+    #member do
+     # get 'approve'
+     # post 'approve_spv'
+     # post 'approve_hr'
+    #end
+  #end 
   resources :courses do
     resources :course_texts, shallow: true
     resources :course_sections, except: :new, shallow: true

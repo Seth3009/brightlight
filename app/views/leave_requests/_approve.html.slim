@@ -1,14 +1,5 @@
 = form_for @leave_request do |f|
- = render 'detail_leave_request', :locals => { :f => f }
- - if params[:page] == 'spv'
-    = button_tag class:"btn btn-primary right", type: "submit", name:"send", value:"spv-app"
-      | Approved  
-    = button_tag class:"btn btn-danger right", type: "submit", name:"send", value:"spv-den"
-      | Not Approved
- - elsif params[:page] == 'hr'
-    = button_tag class:"btn btn-primary right", type: "submit", name:"send", value:"hr-app"
-      | Approved  
-    = button_tag class:"btn btn-danger right", type: "submit", name:"send", value:"hr-den"
-      | Not Approved
+ = render 'detail_leave_request'
+ 
 
  

@@ -55,15 +55,18 @@ class LeaveRequestsController < ApplicationController
 
   # PATCH/PUT /leave_requests/1
   # PATCH/PUT /leave_requests/1.json
-  def update
-    #@employee = Employee.find_by_id(@leave_request.employee_id)
-    @department = Department.find_by_id(@employee.department_id)       
+  def update         
+    @requester = Employee.find_by_id(@leave_request.employee_id)
+    @department = Department.find_by_id(@requester.department_id)    
+    @supervisor = Employee.find_by_id(@department.manager_id)
+    @dept = Department.find_by_code('HR')              
+    @hrmanager = Employee.find_by_id(@dept.manager_id)
     respond_to do |format|
       if @leave_request.update(leave_request_params)
         format.html do
           if params[:send] 
             if params[:send] == 'empl_submit'
-              approver = Employee.find_by_id(@department.manager_id)            
+              approver = @supervisor           
               if @leave_request.send_for_approval(approver, 'empl_submit')              
                 redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.' 
               else
@@ -71,19 +74,21 @@ class LeaveRequestsController < ApplicationController
               end                         
             elsif params[:send] == 'spv-app' || params[:send] == 'spv-den' 
               @dept = Department.find_by_code('HR')
-              employee = @employee
-              approver = Employee.find_by_id(@dept.manager_id)              
-              if params[:send] == 'spv-app' then status = true else status = false end
-                            
+              employee = @requester
+              hrmanager = @hrmanager              
+              if params[:send] == 'spv-app' then status = true else status = false end  
+              if @leave_request.send_approval(employee,hrmanager,status,@leave_request.spv_notes,params[:send])
+                redirect_to leave_requests_url, notice: 'Leave request approval has been saved and sent to HR Department'
+              end              
             elsif params[:send] == 'hr-app' || params[:send] == 'hr-den'
-              employee = @employee
-              approver = Employee.find_by_id(@department.manager_id)
-              if params[:send] == 'hr-app' then status = true else status = false end
-                          
+              employee = @requester
+              supervisor = @supervisor
+              if params[:send] == 'hr-app' then status = true else status = false end    
+              if @leave_request.send_approval(employee,supervisor,status,@leave_request.hr_notes,params[:send])
+                redirect_to leave_requests_url, notice: 'Leave request approval has been saved and sent to employee'
+              end
             end
-            if @leave_request.send_approval(employee,approver,status,params[:notes],params[:send])
-              redirect_to leave_requests_url, notice: 'Leave request approval has been saved and sent to the employee'
-            end
+            
             
             
           else
@@ -99,11 +104,16 @@ class LeaveRequestsController < ApplicationController
   end
 
   def approve
-    @dept = Department.find_by_code('HR')              
-    @hrmanager = Employee.find_by_id(@dept.manager_id) 
-    @department = Department.find_by_id(@employee.department_id)
+    @requester = Employee.find_by_id(@leave_request.employee_id)
+    @department = Department.find_by_id(@requester.department_id)    
     @supervisor = Employee.find_by_id(@department.manager_id)
-    
+    @dept = Department.find_by_code('HR')              
+    @hrmanager = Employee.find_by_id(@dept.manager_id)
+    if @employee != @supervisor && @employee != @hrmanager && @employee != @requester
+        redirect_to leave_requests_url, alert: "You are not permitted to access this page" 
+    elsif params[:page] != "spv" && params[:page] != "hr" && params[:page] != "employee"
+      redirect_to leave_requests_url, alert: "unavailable page"
+    end
   end
   # DELETE /leave_requests/1
   # DELETE /leave_requests/1.json

@@ -47,7 +47,7 @@ nav
                 -  else
                       i.material-icons cancel            
               td
-                = link_to leave_request
+                = link_to approve_path(leave_request,"employee")
                   i.material-icons visibility
                 - if leave_request.form_submit_date.nil? && (can? :submit, leave_request)
                   = link_to edit_leave_request_path(leave_request)
