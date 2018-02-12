@@ -436,10 +436,11 @@ nav.top-navbar {
 			input[type=search] {
 				border: 1px solid #dfe2e4;
 				border-radius: 3px;
-				width: 50px;
+				width: 60px;
+				padding-left: 0.5em;
 			}
 			input[type=search]:focus {
-				width: 400px;
+				width: calc(100% - 10px);
 			}
 			input[type=search] ~ .material-icons {
 				line-height: 40px;
@@ -447,7 +448,18 @@ nav.top-navbar {
 			}
 		}
 	}
-	
+	ul.flush-left {
+		float: left;
+	}
+	ul.flush-right {
+		width: auto;
+		overflow: hidden;
+	}
+	li.fill-space {
+		float: none;
+		width: auto;
+		overflow: hidden;
+	}
 }
 nav {
 	background-color: $dark-grey;

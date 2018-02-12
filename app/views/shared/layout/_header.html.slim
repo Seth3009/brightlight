@@ -1,43 +1,42 @@
 // Top Navbar
 nav.top-navbar
   .nav-wrapper
-    ul
-      li
+    ul.flush-left
+      li.left
         a href="#" data-activates="slide-out" id="sidenav-button"
           i.material-icons menu
-    ul.right
-      li
-        form 
-          .input-field
-            input type="search"
-            /label class="label-icon" for="search"
-            i.material-icons.right search
-      li
-        a href="#" 
-          i.material-icons.right inbox
-          span.new.badge 4
-      li
-        a.dropdown-button href="#" data-activates="app-options" data-beloworigin="true" data-alignment="right"
-          i.material-icons apps
-      li
-        - if signed_in?
-          li
-            - if current_user
-              a.dropdown-button href="#" data-activates="user-profile-options" data-beloworigin="true" data-alignment="right"
-                - if current_user.image_url
-                  = image_tag current_user.image_url, alt: current_user.name, class: 'user-avatar-navbar circle'
-                - else
-                  i.material-icons.grey-text account_circle
-            - else
-              = link_to new_user_session_path
-                | Login
-                i.material-icons.left perm_identity
-        - else
-          li
+      li 
+        a href="/"
+          i.material-icons home
+    ul.flush-right
+      - if signed_in?
+        li.right
+          - if current_user
+            a.dropdown-button href="#" data-activates="user-profile-options" data-beloworigin="true" data-alignment="right"
+              - if current_user.image_url
+                = image_tag current_user.image_url, alt: current_user.name, class: 'user-avatar-navbar circle'
+              - else
+                i.material-icons.grey-text account_circle
+          - else
             = link_to new_user_session_path
               | Login
               i.material-icons.left perm_identity
-
+      - else
+        li.right
+          = link_to new_user_session_path
+            | Login
+            i.material-icons.left perm_identity
+      li.right
+        a.dropdown-button href="#" data-activates="app-options" data-beloworigin="true" data-alignment="right"
+          i.material-icons apps
+      li.right
+        a href="#" 
+          i.material-icons.right inbox
+          span.new.badge 4
+      li.fill-space
+        form 
+          .input-field
+            input type="search" placeholder="Search for book titles, description, ISBN, people"
 ul#user-profile-options.dropdown-content
   - if current_user.employee
     li 
