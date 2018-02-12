@@ -439,7 +439,7 @@ nav.top-navbar {
 				width: 50px;
 			}
 			input[type=search]:focus {
-				width: 400px;
+				width: 300px;
 			}
 			input[type=search] ~ .material-icons {
 				line-height: 40px;
@@ -588,6 +588,27 @@ nav ul a.btn-floating {
 			padding: 0.2rem 1rem;
 		}
 	}
+}
+
+// ============================================ Badge =============================================
+
+span.inbox-badge {
+	background: orangered;
+	border-radius: 0.5em;
+	color: #ffffff;
+	line-height: 1.2em;
+	text-align: center;
+	font-size: 0.8em;
+	border: 2px solid white;
+	position: absolute;
+	top: 8px;
+	right: 10px;
+	padding: 0 2px;
+	display: inline-block;
+}
+
+span.new.nomer {
+	background: orangered;
 }
 
 // ============================================ Toolbar =============================================

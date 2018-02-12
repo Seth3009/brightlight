@@ -5,18 +5,20 @@ nav.top-navbar
       li
         a href="#" data-activates="slide-out" id="sidenav-button"
           i.material-icons menu
-    ul.right
       li
+        = link_to "/"
+          i.material-icons home
+    ul.right
+      li.hide-on-small-only
         form 
           .input-field
             input type="search"
-            /label class="label-icon" for="search"
             i.material-icons.right search
-      li
-        a href="#" 
-          i.material-icons.right inbox
-          span.new.badge 4
-      li
+      li.hide-on-small-only
+        a href="#" style="position: relative"
+          i.material-icons.right style="margin-left: 0px" inbox 
+          span.inbox-badge 14
+      li.hide-on-small-only
         a.dropdown-button href="#" data-activates="app-options" data-beloworigin="true" data-alignment="right"
           i.material-icons apps
       li
@@ -75,10 +77,7 @@ ul#app-options.dropdown-content
   
 // Sidebar menu
 .container
-  a.sidebar-collapse.top-nav.hide-on-large-only.waves-effect.waves-light.btn-floating.btn-medium href="#" data-activates="nav-mobile"
-    i.mdi-navigation-menu
-- style_color = current_user.try(:admin?) ? 'red darken-3' : ''
-ul#slide-out.side-nav class="#{style_color}"
+ul#slide-out.side-nav
   li.logo
     a#logo-container.brand-logo href="#{dashboard_path}"  style="font-size:2em; color:white"
       = image_tag 'lightbulb-icon.png', class: "logo-icon"
@@ -86,6 +85,6 @@ ul#slide-out.side-nav class="#{style_color}"
     li.no-padding
       ul.collapsible data-collapsible='accordion'
         = render "#{controller_name}/side_menu"
-  li.no-padding class="#{style_color}"
+  li.no-padding
     ul.collapsible data-collapsible='accordion'
       = render 'shared/side_menu_bar'
