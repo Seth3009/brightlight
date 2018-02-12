@@ -17,8 +17,15 @@ class EmailNotification < ActionMailer::Base
   def leave_approval(leave_request, approver, type)
     @approver = approver
     @leave_request = leave_request
+    @sendto = sendto
     @type = type
-    mail(to: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
+    @dept = Department.find_by_code('HR')              
+    @hrmanager = Employee.find_by_id(@dept.manager_id)
+    if @leave_request.leave_type != "Sick" && @leave_request.leave_type != "Family Matter"
+      mail(to: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
+    else
+      mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>),cc: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
+    end
   end 
 
   def leave_spv_approve(leave_request, employee, hrmanager, status, notes, type)

@@ -2,6 +2,7 @@ class LeaveRequestsController < ApplicationController
   before_action :set_leave_request, only: [:show, :edit, :update, :destroy, :approve]
   before_action :set_user_id, only: [:index, :new, :edit, :create, :update, :approve]
   
+  
   # GET /leave_requests
   # GET /leave_requests.json
   def index
@@ -35,9 +36,15 @@ class LeaveRequestsController < ApplicationController
       if @leave_request.save
         format.html do
           if params[:send]
-            approver = Employee.find_by_id(@department.manager_id)            
-            if @leave_request.send_for_approval(approver, 'empl_submit')              
-              redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.' 
+            approver = Employee.find_by_id(@department.manager_id)  
+            if @leave_request.leave_type == "Sick" || @leave_request.leave_type == "Family Matter"
+              @sendto = "hr"
+            else 
+              @sendto = "spv"
+            end          
+            if @leave_request.send_for_approval(approver,@sendto, 'empl_submit')  
+              LeaveRequest.auto_approve(@leave_request.id)             
+              redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.'               
             else
               redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
             end
@@ -67,8 +74,9 @@ class LeaveRequestsController < ApplicationController
           if params[:send] 
             if params[:send] == 'empl_submit'
               approver = @supervisor           
-              if @leave_request.send_for_approval(approver, 'empl_submit')              
-                redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.' 
+              if @leave_request.send_for_approval(approver, 'empl_submit') 
+                LeaveRequest.auto_approve(@leave_request.id)             
+                redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.'
               else
                 redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
               end                         
@@ -87,8 +95,7 @@ class LeaveRequestsController < ApplicationController
               if @leave_request.send_approval(employee,supervisor,status,@leave_request.hr_notes,params[:send])
                 redirect_to leave_requests_url, notice: 'Leave request approval has been saved and sent to employee'
               end
-            end
-            
+            end        
             
             
           else
@@ -109,7 +116,7 @@ class LeaveRequestsController < ApplicationController
     @supervisor = Employee.find_by_id(@department.manager_id)
     @dept = Department.find_by_code('HR')              
     @hrmanager = Employee.find_by_id(@dept.manager_id)
-    if @employee != @supervisor && @employee != @hrmanager && @employee != @requester
+    if @employee != @supervisor && @employee != @hrmanager
         redirect_to leave_requests_url, alert: "You are not permitted to access this page" 
     elsif params[:page] != "spv" && params[:page] != "hr" && params[:page] != "employee"
       redirect_to leave_requests_url, alert: "unavailable page"
@@ -138,6 +145,7 @@ class LeaveRequestsController < ApplicationController
           redirect_to root_path
       end
     end
+    
     # Never trust parameters from the scary internet, only allow the white list through.
     def leave_request_params
       params.require(:leave_request).permit(:start_date, :end_date, :hour, :leave_type, :leave_note, :leave_subtitute, :subtitute_notes, :spv_approval, :spv_date, :spv_notes, :hr_approval, :hr_date, :hr_notes, :form_submit_date, :leave_attachment, :employee_id )

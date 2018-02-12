@@ -3,10 +3,14 @@ html
 	head
 		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
 		meta name="viewport" content="width=device-width, initial-scale=1.0"
-
+    
 	body
-    div style="margin-left:30px; width=85%; font-size:16px"
-      p Dear #{@approver.name},
+    div style="margin-left:30px; width=85%; font-size:16px"      
+      p 
+        - if @sendto == "hr"
+          | Dear #{@hrmanager.name},
+        - else
+          | Dear #{@approver.name},
 
       p You have a pending leave request that requires your approval.
 
@@ -15,11 +19,13 @@ html
       p You can access the leave request from the following link.
       
       div style="margin-top:20px; margin-bottom:40px"
-        = link_to "leave_request No. #{@leave_request.form_submit_date}", "#", style:"text-decoration:underline"
+        = link_to "Leave Request (HR01): #{@leave_request.employee.try(:name)}", approve_path(@leave_request,@sendto), style:"text-decoration:underline"
 
       p Thank you for using <i>Brightlight</i>. 
       
       p Regards,
       p CBCS Brightlight Team
-    
-    = render 'footer', to: @approver 
+    - if @sendto == "hr"
+      = render 'footer', to: @hrmanager
+    - else
+      = render 'footer', to: @approver
