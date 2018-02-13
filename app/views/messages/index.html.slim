@@ -1,0 +1,39 @@
+h1 Listing messages
+
+table
+  thead
+    tr
+      th Subject
+      th Creator
+      th Body
+      th Parent
+      th Expiry date
+      th Is reminder
+      th Next remind date
+      th Remind frequency
+      th Tags
+      th Folder
+      th
+      th
+      th
+
+  tbody
+    - @messages.each do |message|
+      tr
+        td = message.subject
+        td = message.creator
+        td = message.body
+        td = message.parent
+        td = message.expiry_date
+        td = message.is_reminder
+        td = message.next_remind_date
+        td = message.remind_frequency
+        td = message.tags
+        td = message.folder
+        td = link_to 'Show', message
+        td = link_to 'Edit', edit_message_path(message)
+        td = link_to 'Destroy', message, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Message', new_message_path

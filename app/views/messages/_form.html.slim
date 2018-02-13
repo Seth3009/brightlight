@@ -1,0 +1,39 @@
+= form_for @message do |f|
+  - if @message.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@message.errors.count, "error")} prohibited this message from being saved:"
+      ul
+        - @message.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :subject
+    = f.text_field :subject
+  .field
+    = f.label :creator
+    = f.text_field :creator
+  .field
+    = f.label :body
+    = f.text_field :body
+  .field
+    = f.label :parent
+    = f.text_field :parent
+  .field
+    = f.label :expiry_date
+    = f.date_select :expiry_date
+  .field
+    = f.label :is_reminder
+    = f.check_box :is_reminder
+  .field
+    = f.label :next_remind_date
+    = f.date_select :next_remind_date
+  .field
+    = f.label :remind_frequency
+    = f.text_field :remind_frequency
+  .field
+    = f.label :tags
+    = f.text_field :tags
+  .field
+    = f.label :folder
+    = f.text_field :folder
+  .actions = f.submit

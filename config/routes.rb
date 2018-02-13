@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :messages
   resources :template_targets
   resources :templates
   resources :currencies
