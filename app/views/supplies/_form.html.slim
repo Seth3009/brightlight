@@ -1,0 +1,30 @@
+= form_for @supply do |f|
+  - if @supply.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@supply.errors.count, "error")} prohibited this supply from being saved:"
+      ul
+        - @supply.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :code
+    = f.text_field :code
+  .field
+    = f.label :name
+    = f.text_field :name
+ 
+  .field
+    = f.label :min_stock
+    = f.text_field :min_stock
+  .field
+    = f.label :max_stock
+    = f.text_field :max_stock
+  
+  .field
+    = f.label :item_unit
+    = f.text_field :item_unit_id
+  .field
+    = f.label :item_category
+    = f.text_field :item_category_id
+  
+  .actions = f.submit

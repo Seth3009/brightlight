@@ -1,0 +1,57 @@
+.row 
+  .col.s6
+    h4 Supplies
+  .col.s5
+    = form_tag({controller:'supplies', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{supplies_path(v:'list')}"
+      }
+
+nav
+  .nav-wrapper
+    ul.right
+      - if can? :manage, Supply
+        li
+          = link_to new_supply_path
+            | New Supply
+            i.material-icons.left add
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th = sort_link "code"
+        th = sort_link "name"
+        th Min stock
+        th Max stock
+        th Item unit
+        th Item category
+        th Status
+        th Actions
+
+    tbody#supplies
+      - @supplies.each do |supply|
+        tr id="row-#{supply.id}"
+            = render partial: 'index_row', locals: {supply: supply}
+          
+   
+.toolbar.z-index-1
+  
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content

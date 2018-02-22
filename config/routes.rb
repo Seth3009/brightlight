@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :supplies
   resources :item_categories
   resources :item_units
   resources :template_targets
