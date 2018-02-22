@@ -26,6 +26,7 @@
 //= require nprogress-turbolinks
 //= require nprogress-ajax
 //= require jquery-code-scanner
+//= require rails-timeago
 //= require init
 //= require carpools
 //= require turbolinks

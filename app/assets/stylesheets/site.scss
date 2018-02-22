@@ -344,6 +344,9 @@ button.delete-button :hover {
 }
 
 // ========================================= Typography =============================================
+html {
+  font-family: 'Open Sans', Roboto, sans-serif;
+}
 
 .giant-letter {
 	font-size: 3rem;
@@ -355,6 +358,10 @@ span.box {
   color: whitesmoke;
   min-width: 3rem;
   padding: 3px 15px;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 300;
 }
 
 h6 {
@@ -461,6 +468,7 @@ nav.top-navbar {
 		overflow: hidden;
 	}
 }
+
 nav {
 	background-color: $dark-grey;
 	ul {
@@ -599,6 +607,53 @@ nav ul a.btn-floating {
 			font-size: 1rem;
 			padding: 0.2rem 1rem;
 		}
+	}
+}
+
+// ============================================ Message =============================================
+
+#notification-list {
+	padding: 0;
+	li {
+		padding: 10px;
+		border-bottom: 1px solid lightgrey;
+	}
+	.from {
+		font-size: 0.8em;
+		color: grey;
+		line-height: 0.7em;
+		padding: 0;
+	}
+
+	.message-timeago {
+		margin-left: 5px;
+		font-size: 0.8em;
+		font-style: italic;
+		color: grey;
+		line-height: 0.9em;
+		padding: 0;
+	}
+
+	.subject {
+		font-size: 0.9em;
+		color: #585858;
+		font-weight: bold;
+		padding: 0;
+	}
+}
+
+#modal-message-content {
+	.message-address {
+    font-size: 0.8em;
+    border-bottom: 1px solid lightgrey;
+    .label {
+      color: #585858;
+    }
+	}
+
+	.message-subject {
+    font-size: 1.2em;
+    padding-top: 1em;
 	}
 }
 

@@ -2,6 +2,7 @@ class CreateReminders < ActiveRecord::Migration
   def change
     create_table :reminders do |t|
       t.references :recurring_type, index: true, foreign_key: true
+      t.references :message, index: true, foreign_key: true
       t.integer :separation_count
       t.integer :max_num
       t.integer :day_of_week

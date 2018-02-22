@@ -8,7 +8,6 @@ class CreateMessages < ActiveRecord::Migration
       t.date :expiry_date
       t.boolean :is_reminder
       t.date :next_remind_date
-      t.references :reminder, index: true
       t.string :tags
       t.references :msg_folder, index: true
 
@@ -16,7 +15,6 @@ class CreateMessages < ActiveRecord::Migration
     end
 
     add_foreign_key :messages, :users, column: :creator_id
-    add_foreign_key :messages, :messages, column: :parent_id
-    add_foreign_key :messages, :reminders, column: :reminder_id
+    
   end
 end

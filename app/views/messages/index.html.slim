@@ -1,39 +1,32 @@
-h1 Listing messages
+- title "Messages"
+h4 Messages
 
-table
-  thead
-    tr
-      th Subject
-      th Creator
-      th Body
-      th Parent
-      th Expiry date
-      th Is reminder
-      th Next remind date
-      th Remind frequency
-      th Tags
-      th Folder
-      th
-      th
-      th
+nav
+  .nav-wrapper
+    ul.right
+      li
+        = link_to new_message_path, remote: true
+          i.material-icons.left add
 
-  tbody
-    - @messages.each do |message|
+.card-panel
+  table
+    thead
       tr
-        td = message.subject
-        td = message.creator
-        td = message.body
-        td = message.parent
-        td = message.expiry_date
-        td = message.is_reminder
-        td = message.next_remind_date
-        td = message.remind_frequency
-        td = message.tags
-        td = message.folder
-        td = link_to 'Show', message
-        td = link_to 'Edit', edit_message_path(message)
-        td = link_to 'Destroy', message, data: {:confirm => 'Are you sure?'}, :method => :delete
+        th From
+        th Subject
+        th Date
+        th
+        th
 
-br
-
-= link_to 'New Message', new_message_path
+    tbody
+      - @messages.each do |message|
+        tr
+          td = message.creator.name          
+          td = message.subject
+          td = timeago_tag message.created_at, :nojs => true, :limit => 10.days.ago
+          td 
+            = link_to message
+              i.material-icons visibility
+          td
+            = link_to message, data: {id: message.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
+              i.material-icons delete

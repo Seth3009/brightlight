@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180213022332) do
+ActiveRecord::Schema.define(version: 20180213022739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -854,10 +854,10 @@ ActiveRecord::Schema.define(version: 20180213022332) do
     t.integer  "recipient_id"
     t.integer  "msg_group_id"
     t.integer  "message_id"
-    t.boolean  "is_read",      default: false
-    t.string   "type"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.boolean  "is_read",        default: false
+    t.string   "recipient_type"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   add_index "message_recipients", ["message_id"], name: "index_message_recipients_on_message_id", using: :btree
@@ -872,7 +872,6 @@ ActiveRecord::Schema.define(version: 20180213022332) do
     t.date     "expiry_date"
     t.boolean  "is_reminder"
     t.date     "next_remind_date"
-    t.integer  "reminder_id"
     t.string   "tags"
     t.integer  "msg_folder_id"
     t.datetime "created_at",       null: false
@@ -882,7 +881,6 @@ ActiveRecord::Schema.define(version: 20180213022332) do
   add_index "messages", ["creator_id"], name: "index_messages_on_creator_id", using: :btree
   add_index "messages", ["msg_folder_id"], name: "index_messages_on_msg_folder_id", using: :btree
   add_index "messages", ["parent_id"], name: "index_messages_on_parent_id", using: :btree
-  add_index "messages", ["reminder_id"], name: "index_messages_on_reminder_id", using: :btree
 
   create_table "msg_folders", force: :cascade do |t|
     t.string   "name"
@@ -1045,6 +1043,7 @@ ActiveRecord::Schema.define(version: 20180213022332) do
 
   create_table "reminders", force: :cascade do |t|
     t.integer  "recurring_type_id"
+    t.integer  "message_id"
     t.integer  "separation_count"
     t.integer  "max_num"
     t.integer  "day_of_week"
@@ -1055,6 +1054,7 @@ ActiveRecord::Schema.define(version: 20180213022332) do
     t.datetime "updated_at",        null: false
   end
 
+  add_index "reminders", ["message_id"], name: "index_reminders_on_message_id", using: :btree
   add_index "reminders", ["recurring_type_id"], name: "index_reminders_on_recurring_type_id", using: :btree
 
   create_table "req_items", force: :cascade do |t|
@@ -1550,8 +1550,6 @@ ActiveRecord::Schema.define(version: 20180213022332) do
   add_foreign_key "message_recipients", "messages"
   add_foreign_key "message_recipients", "msg_groups"
   add_foreign_key "message_recipients", "users", column: "recipient_id"
-  add_foreign_key "messages", "messages", column: "parent_id"
-  add_foreign_key "messages", "reminders"
   add_foreign_key "messages", "users", column: "creator_id"
   add_foreign_key "msg_folders", "msg_folders", column: "parent_id"
   add_foreign_key "msg_groups", "users", column: "creator_id"
@@ -1568,6 +1566,7 @@ ActiveRecord::Schema.define(version: 20180213022332) do
   add_foreign_key "purchase_orders", "suppliers"
   add_foreign_key "purchase_orders", "users", column: "created_by_id"
   add_foreign_key "purchase_orders", "users", column: "last_updated_by_id"
+  add_foreign_key "reminders", "messages"
   add_foreign_key "reminders", "recurring_types"
   add_foreign_key "req_items", "requisitions"
   add_foreign_key "req_items", "users", column: "created_by_id"

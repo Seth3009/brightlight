@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :messages
   resources :template_targets
   resources :templates
   resources :currencies
@@ -196,6 +195,12 @@ Rails.application.routes.draw do
   end
 
   resources :smart_cards, only: [:show, :create, :destroy]
+
+  resources :messages do 
+    member do
+      post 'mark_read'
+    end
+  end
 
   patch 'pax/:id' => 'late_passengers#update'
 

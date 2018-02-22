@@ -5,7 +5,7 @@ class CreateMessageRecipients < ActiveRecord::Migration
       t.references :msg_group, index: true
       t.references :message, index: true
       t.boolean :is_read, default: false
-      t.string :type
+      t.string :recipient_type
 
       t.timestamps null: false
     end

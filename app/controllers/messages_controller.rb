@@ -1,10 +1,10 @@
 class MessagesController < ApplicationController
-  before_action :set_message, only: [:show, :edit, :update, :destroy]
+  before_action :set_message, only: [:show, :edit, :update, :destroy, :mark_read]
 
   # GET /messages
   # GET /messages.json
   def index
-    @messages = Message.all.active.for(current_user)
+    @messages = Message.all.unread(current_user)
   end
 
   # GET /messages/1
@@ -58,6 +58,14 @@ class MessagesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to messages_url, notice: 'Message was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  # POST /message/1/mark_read
+  def mark_read
+    @message.message_recipients.where(recipient_id: params["user_id"]).update_all is_read: true
+    respond_to do |format|
+      format.json { render json: {unread: Message.unread(current_user).count} }
     end
   end
 
