@@ -1,0 +1,2 @@
+$("tbody#supplies").append("<%=j render partial:'index_row', locals: {supply: @supply}%>");
+Materialize.toast("Supply item <%= @supply.try(:name)%> created.", 4000, "green")

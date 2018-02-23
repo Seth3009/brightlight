@@ -21,7 +21,7 @@ nav
     ul.right
       - if can? :manage, Supply
         li
-          = link_to new_supply_path
+          = link_to new_supply_path, remote: true
             | New Supply
             i.material-icons.left add
 

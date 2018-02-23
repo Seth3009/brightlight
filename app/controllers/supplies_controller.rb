@@ -29,6 +29,7 @@ class SuppliesController < ApplicationController
 
   # GET /supplies/new
   def new
+    authorize! :manage, Supply
     @supply = Supply.new
   end
 
@@ -39,12 +40,14 @@ class SuppliesController < ApplicationController
   # POST /supplies
   # POST /supplies.json
   def create
+    authorize! :manage, Supply
     @supply = Supply.new(supply_params)
 
     respond_to do |format|
       if @supply.save
-        format.html { redirect_to @supply, notice: 'Supply was successfully created.' }
+        format.html { redirect_to supplies_url, notice: 'Supply was successfully created.' }
         format.json { render :show, status: :created, location: @supply }
+        format.js
       else
         format.html { render :new }
         format.json { render json: @supply.errors, status: :unprocessable_entity }
@@ -55,10 +58,12 @@ class SuppliesController < ApplicationController
   # PATCH/PUT /supplies/1
   # PATCH/PUT /supplies/1.json
   def update
+    authorize! :manage, Supply
     respond_to do |format|
       if @supply.update(supply_params)
-        format.html { redirect_to @supply, notice: 'Supply was successfully updated.' }
+        format.html { redirect_to supplies_url, notice: 'Supply was successfully updated.' }
         format.json { render :show, status: :ok, location: @supply }
+        format.js
       else
         format.html { render :edit }
         format.json { render json: @supply.errors, status: :unprocessable_entity }
@@ -69,9 +74,10 @@ class SuppliesController < ApplicationController
   # DELETE /supplies/1
   # DELETE /supplies/1.json
   def destroy
-    @supply.destroy
+    authorize! :manage, Supply
+    Supply.disable_item(@supply.id)
     respond_to do |format|
-      format.html { redirect_to supplies_url, notice: 'Supply was successfully destroyed.' }
+      format.html { redirect_to supplies_url, notice: 'Supply was successfully disabled.' }
       format.json { head :no_content }
     end
   end

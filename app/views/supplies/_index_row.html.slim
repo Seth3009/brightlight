@@ -15,5 +15,5 @@ tr id="row-#{supply.id}"
          = link_to supply, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
            i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
        - if can? :update, supply
-         = link_to edit_supply_path(supply)
+         = link_to edit_supply_path(supply), remote: true
            i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
