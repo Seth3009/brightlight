@@ -9,13 +9,15 @@
         
   .row.dashboard
     .col.m4.s6
-      .card.widget
+      .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
-          img.activator src="/assets/books.jpg"
-        .card-content
-          span.card-title.activator.grey-text.text-darken-4 
-            |Books
-            i.material-icons.right more_vert
+          img.activator src="/assets/book_loans.jpg"
+        .card-stacked
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |Books
+              i.material-icons.right more_vert
+            p Browse book titles, editions, standard books. Manage student book loans, teachers' manuals, check-in and check-out, update book conditions
         .card-reveal
           span.card-title.grey-text.text-darken-4
             |Books
@@ -30,13 +32,15 @@
                 = link_to 'Standard Books', standard_books_path
 
     .col.m4.s6
-      .card.widget
+      .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
-          img.activator src="/assets/books.jpg"
-        .card-content
-          span.card-title.activator.grey-text.text-darken-4 
-            |Book Loan
-            i.material-icons.right more_vert
+          img.activator src="/assets/textbooks.jpg"
+        .card-stacked
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |Book Loans
+              i.material-icons.right more_vert
+            p Manage student book loans, teachers' manuals, check-in and check-out, update book conditions
         .card-reveal
           span.card-title.grey-text.text-darken-4
             |Book Loan
@@ -63,15 +67,17 @@
                 li
                   = link_to 'List of books', teachers_book_loans_path
     .col.m4.s6
-      .card.widget
+      .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
-          img.activator src="/assets/upsc-500x500.png"
-        .card-content
-          span.card-title.activator.grey-text.text-darken-4 
-            |Inventory
-            i.material-icons.right more_vert
+          img.activator src="/assets/book_inventory.jpg"
+        .card-stacked
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |Inventory
+              i.material-icons.right more_vert
+            p Manage book inventory and book loans (for Inventory Department only)
         .card-reveal
-          span.card-title.grey-text.ext-darken-4
+          span.card-title.grey-text.text-darken-4
             |Inventory
             i.material-icons.right close
           .card-tabs
@@ -104,49 +110,53 @@
                 li
                   = link_to 'Disposed Books', book_copies_disposed_index_path
     .col.m4.s6
-      .card.widget
+      .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
           img.activator src="/assets/purchase-order.jpg"
-        .card-content
-          span.card-title.activator.grey-text.text-darken-4 
-            |Purchasing
-            i.activator.material-icons.right more_vert
+        .card-stacked
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |Purchasing
+              i.activator.material-icons.right more_vert
+            p Submit and manage your Purchase Requests
         .card-reveal
-          span.card-title.grey-text.ext-darken-4
-            Inventory
+          span.card-title.grey-text.text-darken-4
+            |Purchase Request
             i.material-icons.right close
-          = link_to 'Student books', student_books_path
-          = link_to "Teachers' manuals", book_loans_path
+          p Under construction
     .col.m4.s6
-      .card.widget
+      .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
-          img.activator src="/assets/two-people.jpg"
-        .card-content
-          span.card-title.activator.grey-text.text-darken-4 
-            |HR
-            i.material-icons.right more_vert
+          img.activator src="/assets/HR.jpg"
+        .card-stacked
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |HR
+              i.material-icons.right more_vert
+            p Submit and manage you Leave Requests
         .card-reveal
-          span.card-title.grey-text.ext-darken-4
-            Inventory
+          span.card-title.grey-text.text-darken-4
+            |Leave Request
             i.material-icons.right close
-          = link_to 'Student books', student_books_path
-          = link_to "Teachers' manuals", book_loans_path
+          p Under construction
     .col.m4.s6
-      .card.widget
+      .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
           img.activator src="/assets/schooldropoff.jpg"
-        .card-content
-          span.card-title.activator.grey-text.text-darken-4 
-            |Carpool
-            i.material-icons.right more_vert
+        .card-stacked
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |Carpool
+              i.material-icons.right more_vert
+            p Carpool app for callers and display for TV
         .card-reveal
-          span.card-title.grey-text.ext-darken-4
+          span.card-title.grey-text.text-darken-4
             |Carpool
             i.material-icons.right close
           .card-tabs
             ul.tabs.tabs-fixed-width.tabs-transparent
               li.tab
-                a.active href="#carpool1" Duties
+                a.active href="#carpool1" Tasks
               li.tab
                 a href="#carpool2" Display
           .card-content
@@ -166,18 +176,18 @@
                 li
                   = link_to 'TV Car Riders', "/phx?ready=1"
     .col.m4.s6
-      .card.widget
+      .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
-          img.activator src="/assets/helpdesk.jpg"
-        .card-content
-          span.card-title.activator.grey-text.text-darken-4 
-            |Service Order
-            i.material-icons.right more_vert
+          img.activator src="/assets/telephone.jpg"
+        .card-stacked
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |Service Order
+              i.material-icons.right more_vert
         .card-reveal
           span.card-title.grey-text.ext-darken-4
-            Inventory
+            |Service Order
             i.material-icons.right close
-          = link_to 'Student books', student_books_path
-          = link_to "Teachers' manuals", book_loans_path
+          p Under construction
 
 

@@ -4,7 +4,6 @@ class MessagesController < ApplicationController
   # GET /messages
   # GET /messages.json
   def index
-    @messages = Message.all.unread(current_user)
   end
 
   # GET /messages/1

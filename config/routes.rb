@@ -202,6 +202,9 @@ Rails.application.routes.draw do
     end
   end
 
+  get  '/search' => "search#index"
+  post '/search' => "search#index"
+
   patch 'pax/:id' => 'late_passengers#update'
 
   devise_for :users, controllers: {
