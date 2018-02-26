@@ -48,11 +48,11 @@
           .card-tabs
             ul.tabs.tabs-fixed-width.tabs-transparent
               li.tab
-                a.active href="#books1" Student
+                a.active href="#tab-settings" Student
               li.tab
-                a href="#books2" Teacher
+                a href="#tab-maintenance" Teacher
           .card-content
-            #books1
+            #tab-settings
               ul 
                 li
                   = link_to 'List by title', by_title_student_books_path
@@ -62,83 +62,93 @@
                   = link_to 'Missing books', missing_student_books_path
                 li 
                   = link_to "Poor/Need Rebinding", pnnrb_student_books_path
-            #books2
+            #tab-maintenance
               ul
                 li
                   = link_to 'List of books', teachers_book_loans_path
-    .col.m4.s6
-      .card.horizontal.widget
-        .card-image.waves-effect.waves-block.waves-light
-          img.activator src="/assets/book_inventory.jpg"
-        .card-stacked
-          .card-content
-            span.card-title.activator.grey-text.text-darken-4 
+
+    - if can? :manage, BookFine
+      .col.m4.s6
+        .card.horizontal.widget
+          .card-image.waves-effect.waves-block.waves-light
+            img.activator src="/assets/book_inventory.jpg"
+          .card-stacked
+            .card-content
+              span.card-title.activator.grey-text.text-darken-4 
+                |Inventory
+                i.material-icons.right more_vert
+              p Manage book inventory and book loans (for Inventory Department only)
+          .card-reveal
+            span.card-title.grey-text.text-darken-4
               |Inventory
-              i.material-icons.right more_vert
-            p Manage book inventory and book loans (for Inventory Department only)
-        .card-reveal
-          span.card-title.grey-text.text-darken-4
-            |Inventory
-            i.material-icons.right close
-          .card-tabs
-            ul.tabs.tabs-fixed-width.tabs-transparent
-              li.tab
-                a.active href="#inventory1" Book Loan
-              li.tab
-                a href="#inventory2" Properties
-          .card-content
-            #inventory1
-              ul
-                li
-                  = link_to 'Book Loan Status', book_loans_path 
-                li
-                  = link_to 'Textbook Fines', book_fines_path
-                li
-                  = link_to 'Book Receipt Form', book_receipts_path
-                li
-                  = link_to 'Student Books', student_books_path
-            #inventory2
-              ul
-                li
-                  = link_to 'Update Condition', new_copy_condition_path
-                li
-                  = link_to 'Condition Summary', summary_book_editions_path
-                li
-                  = link_to 'Book Subjects', subjects_path
-                li
-                  = link_to 'Book Category', book_categories_path
-                li
-                  = link_to 'Disposed Books', book_copies_disposed_index_path
-    .col.m4.s6
-      .card.horizontal.widget
-        .card-image.waves-effect.waves-block.waves-light
-          img.activator src="/assets/purchase-order.jpg"
-        .card-stacked
-          .card-content
-            span.card-title.activator.grey-text.text-darken-4 
-              |Purchasing
-              i.activator.material-icons.right more_vert
-            p Submit and manage your Purchase Requests
-        .card-reveal
-          span.card-title.grey-text.text-darken-4
-            |Purchase Request
-            i.material-icons.right close
-          p Under construction
-    .col.m4.s6
-      .card.horizontal.widget
-        .card-image.waves-effect.waves-block.waves-light
-          img.activator src="/assets/HR.jpg"
-        .card-stacked
-          .card-content
-            span.card-title.activator.grey-text.text-darken-4 
-              |HR
-              i.material-icons.right more_vert
-            p Submit and manage you Leave Requests
-        .card-reveal
-          span.card-title.grey-text.text-darken-4
-            |Leave Request
-            i.material-icons.right close
-          p Under construction
+              i.material-icons.right close
+            .card-tabs
+              ul.tabs.tabs-fixed-width.tabs-transparent
+                li.tab
+                  a.active href="#tab-inventory1" Book Loan
+                li.tab
+                  a href="#tab-inventory2" Properties
+            .card-content
+              #tab-inventory1
+                ul
+                  li
+                    = link_to 'Book Loan Status', book_loans_path 
+                  li
+                    = link_to 'Textbook Fines', book_fines_path
+                  li
+                    = link_to 'Book Receipt Form', book_receipts_path
+                  li
+                    = link_to 'Student Books', student_books_path
+              #tab-inventory2
+                ul
+                  li
+                    = link_to 'Update Condition', new_copy_condition_path
+                  li
+                    = link_to 'Condition Summary', summary_book_editions_path
+                  li
+                    = link_to 'Book Subjects', subjects_path
+                  li
+                    = link_to 'Book Category', book_categories_path
+                  li
+                    = link_to 'Disposed Books', book_copies_disposed_index_path
+
+    - if can? :manage, BookFine
+      .col.m4.s6
+        .card.horizontal.widget
+          .card-image.waves-effect.waves-block.waves-light
+            img.activator src="/assets/gears.jpg"
+          .card-stacked
+            .card-content
+              span.card-title.activator.grey-text.text-darken-4 
+                |Inventory Settings
+                i.material-icons.right more_vert
+              p Manage report templates, currency rates
+              p Access to yearly maintenance tasks
+          .card-reveal
+            span.card-title.grey-text.text-darken-4
+              |Inventory Settings
+              i.material-icons.right close
+            .card-tabs
+              ul.tabs.tabs-fixed-width.tabs-transparent
+                li.tab
+                  a.active href="#tabsettings" Settings
+                li.tab
+                  a href="#tabmtce" Maintenance
+            .card-content
+              #tabsettings
+                ul 
+                  li
+                    = link_to 'Currency Rates', currencies_path			
+                  li
+                    = link_to 'Templates', templates_path
+                  - if can? :manage, TemplateTarget
+                    li
+                      = link_to 'Template Targets', template_targets_path
+              #tabmtce
+                ul
+                  li
+                    = link_to 'Book Maintenance', settings_inventory_mtce_path	
+
     .col.m4.s6
       .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
@@ -156,18 +166,18 @@
           .card-tabs
             ul.tabs.tabs-fixed-width.tabs-transparent
               li.tab
-                a.active href="#carpool1" Tasks
+                a.active href="#tab-carpool1" Tasks
               li.tab
-                a href="#carpool2" Display
+                a href="#tab-carpool2" Display
           .card-content
-            #carpool1
+            #tab-carpool1
               ul
                 li
                   = link_to 'Manage Carpool', "/phx"
                 - if can? :manage, Carpool
                   li 
                     = link_to 'Manage Transports and Smartcards', transports_path(type:'shuttle')
-            #carpool2
+            #tab-carpool2
               ul
                 li
                   = link_to 'TV Shuttle GS', "/phx?shuttle=gs"
@@ -175,6 +185,76 @@
                   = link_to 'TV Shuttle SOL/SOR', "/phx?shuttle=sol"
                 li
                   = link_to 'TV Car Riders', "/phx?ready=1"
+
+    .col.m4.s6
+      .card.horizontal.widget
+        .card-image.waves-effect.waves-block.waves-light
+          img.activator src="/assets/cbcs-building.jpg"
+        .card-stacked
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |School
+              i.material-icons.right more_vert
+            p Manage Grade Levels and Students
+            p Manage Departments and Employees
+        .card-reveal
+          span.card-title.grey-text.text-darken-4
+            |School
+            i.material-icons.right close
+          .card-tabs
+            ul.tabs.tabs-fixed-width.tabs-transparent
+              li.tab
+                a.active href="#tab-grades" Grades
+              li.tab
+                a href="#tab-departments" Departments
+          .card-content
+            #tab-grades
+              ul
+                li
+                  = link_to 'Grade Levels', grade_levels_path
+                li 
+                  = link_to 'Students', students_path
+                li
+                  = link_to 'Guardians', guardians_path
+            #tab-departments
+              ul
+                li
+                  = link_to 'Departments', departments_path
+                li
+                  = link_to 'Employees', employees_path
+
+    .col.m4.s6
+      .card.horizontal.widget
+        .card-image.waves-effect.waves-block.waves-light
+          img.activator src="/assets/purchase-order.jpg"
+        .card-stacked
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |Purchasing
+              i.activator.material-icons.right more_vert
+            p Submit and manage your Purchase Requests
+        .card-reveal
+          span.card-title.grey-text.text-darken-4
+            |Purchase Request
+            i.material-icons.right close
+          p Under construction
+
+    .col.m4.s6
+      .card.horizontal.widget
+        .card-image.waves-effect.waves-block.waves-light
+          img.activator src="/assets/HR.jpg"
+        .card-stacked
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |HR
+              i.material-icons.right more_vert
+            p Submit and manage you Leave Requests
+        .card-reveal
+          span.card-title.grey-text.text-darken-4
+            |Leave Request
+            i.material-icons.right close
+          p Under construction
+
     .col.m4.s6
       .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light

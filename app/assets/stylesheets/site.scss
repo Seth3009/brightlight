@@ -701,7 +701,14 @@ span.new.nomer {
 			li:hover {
 				background-color: rgba(0, 0, 0, 0.1)
 			}
-		}
+    }
+    .card-reveal {
+      padding: 10px 20px !important;
+    }
+    .tabs, .tab {
+      height: 36px;
+      line-height: 36px;
+    }
 	}
 }
 

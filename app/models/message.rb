@@ -9,6 +9,14 @@ class Message < ActiveRecord::Base
 
   scope :unread, lambda { |user| joins(:message_recipients).where(message_recipients: {recipient_id: user.id, is_read: false}) }
   
+  def self.create_new(to, from, subject, body, cc = [], bcc = [])
+    msg = Message.new subject:subject, body:body, creator: from
+    msg.message_recipients << to.map  {|r| MessageRecipient.new(recipient_id: r.id, recipient_type: 'to')}
+    msg.message_recipients << cc.map  {|r| MessageRecipient.new(recipient_id: r.id, recipient_type: 'cc')}
+    msg.message_recipients << bcc.map {|r| MessageRecipient.new(recipient_id: r.id, recipient_type: 'bcc')}
+    msg.save
+  end 
+
   def reply(reply_message)
     reply_message.parent = self
     reply_message.subject = "RE: #{self.subject}"
