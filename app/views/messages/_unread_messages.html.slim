@@ -1,0 +1,6 @@
+= @messages.each do |message| 
+  li 
+    = link_to "#show-message-modal", class:'modal-trigger'
+      span.from = message.from
+      span.subject = message.subject
+      span.timeago = timeago_tag message.created_at, :nojs => true, :limit => 10.days.ago

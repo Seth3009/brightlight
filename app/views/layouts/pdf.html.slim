@@ -151,6 +151,10 @@ scss:
   table td.wd5 { width: 5%; }
   table td.wd3 { width: 3%; }
   table td.wd15 { width: 15%; }  
+
+  tr, td, th, tbody, thead, tfoot {
+    page-break-inside: avoid !important;
+  }
   
   .page-break { display:block; clear:both; page-break-after:always; }
   .alwaysbreak { page-break-before: always; }

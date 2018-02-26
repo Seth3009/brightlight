@@ -180,17 +180,20 @@ class StudentBook < ActiveRecord::Base
     end
 
     def sync_book_loan
-      book_loan = self.book_loan
-      book_loan.academic_year_id = self.academic_year_id
-      book_loan.barcode = self.barcode
-      book_loan.book_edition_id = self.book_edition_id
-      book_loan.book_title_id = self.book_edition.try(:book_title_id)
-      book_loan.book_copy_id = self.book_copy_id
-      book_loan.out_date = self.issue_date
-      book_loan.roster_no = self.roster_no
-      book_loan.student_id = self.student_id
-      book_loan.student_no = self.student_no
-      book_loan.save
+      if book_loan = self.book_loan
+        book_loan.academic_year_id = self.academic_year_id
+        book_loan.barcode = self.barcode
+        book_loan.book_edition_id = self.book_edition_id
+        book_loan.book_title_id = self.book_edition.try(:book_title_id)
+        book_loan.book_copy_id = self.book_copy_id
+        book_loan.out_date = self.issue_date
+        book_loan.roster_no = self.roster_no
+        book_loan.student_id = self.student_id
+        book_loan.student_no = self.student_no
+        book_loan.save
+      else
+        logger.error "Student Book #{self.id}: associated book_loan record not found"
+      end
     end  
 
     # This method is called by around_save
@@ -203,6 +206,6 @@ class StudentBook < ActiveRecord::Base
     def destroy_associated_book_loan
       book_loan = self.book_loan
       yield
-      book_loan.destroy
+      book_loan.destroy if book_loan
     end
 end

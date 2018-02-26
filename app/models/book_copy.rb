@@ -216,6 +216,17 @@ class BookCopy < ActiveRecord::Base
     self.save
   end 
 
+  def destroy_and_leave_no_trace!
+    self.copy_conditions.destroy_all     if self.copy_conditions
+    self.book_fines.destroy_all          if self.book_fines
+    self.loan_checks.destroy_all         if self.loan_checks
+    self.book_loans.destroy_all          if self.book_loans
+    self.book_loan_histories.destroy_all if self.book_loan_histories
+    self.book_receipts.destroy_all       if self.book_receipts
+    self.student_books.destroy_all       if self.student_books
+    self.destroy
+  end 
+
   protected
     def create_initial_condition
       self.copy_conditions << CopyCondition.new(

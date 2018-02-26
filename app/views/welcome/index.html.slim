@@ -1,7 +1,282 @@
-.valign-wrapper
-  .vertical-align
-    = image_tag 'cbcs-logo.jpg', class:'center-align'
-.brightlight
-  h1.orange-text 
-    = image_tag 'lightbulb-icon.png', class: "small-logo-icon"
-    | Brightlight
+.container style="margin-top: 20px"
+  .row
+    .col.m6
+      = image_tag 'cbcs-logo.jpg', class:'center-align', style:"height: 70px"
+    .col.m6
+      h4.orange-text 
+        = image_tag 'lightbulb-icon.png', class: "right small-logo-icon", style:"height: 50px"
+        span.right Brightlight
+        
+  .row.dashboard
+    .col.m4.s6
+      .card.horizontal.widget
+        .card-image.waves-effect.waves-block.waves-light
+          img.activator src="/assets/book_loans.jpg"
+        .card-stacked
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |Books
+              i.material-icons.right more_vert
+            p Browse book titles, editions, standard books. Manage student book loans, teachers' manuals, check-in and check-out, update book conditions
+        .card-reveal
+          span.card-title.grey-text.text-darken-4
+            |Books
+            i.material-icons.right close
+          .card-content
+            ul
+              li
+                = link_to 'Book Titles', book_titles_path
+              li
+                = link_to 'Book Editions', book_editions_path
+              li
+                = link_to 'Standard Books', standard_books_path
+
+    .col.m4.s6
+      .card.horizontal.widget
+        .card-image.waves-effect.waves-block.waves-light
+          img.activator src="/assets/textbooks.jpg"
+        .card-stacked
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |Book Loans
+              i.material-icons.right more_vert
+            p Manage student book loans, teachers' manuals, check-in and check-out, update book conditions
+        .card-reveal
+          span.card-title.grey-text.text-darken-4
+            |Book Loan
+            i.material-icons.right close
+          .card-tabs
+            ul.tabs.tabs-fixed-width.tabs-transparent
+              li.tab
+                a.active href="#tab-settings" Student
+              li.tab
+                a href="#tab-maintenance" Teacher
+          .card-content
+            #tab-settings
+              ul 
+                li
+                  = link_to 'List by title', by_title_student_books_path
+                li
+                  = link_to 'List by student', by_student_student_books_path
+                li
+                  = link_to 'Missing books', missing_student_books_path
+                li 
+                  = link_to "Poor/Need Rebinding", pnnrb_student_books_path
+            #tab-maintenance
+              ul
+                li
+                  = link_to 'List of books', teachers_book_loans_path
+
+    - if can? :manage, BookFine
+      .col.m4.s6
+        .card.horizontal.widget
+          .card-image.waves-effect.waves-block.waves-light
+            img.activator src="/assets/book_inventory.jpg"
+          .card-stacked
+            .card-content
+              span.card-title.activator.grey-text.text-darken-4 
+                |Inventory
+                i.material-icons.right more_vert
+              p Manage book inventory and book loans (for Inventory Department only)
+          .card-reveal
+            span.card-title.grey-text.text-darken-4
+              |Inventory
+              i.material-icons.right close
+            .card-tabs
+              ul.tabs.tabs-fixed-width.tabs-transparent
+                li.tab
+                  a.active href="#tab-inventory1" Book Loan
+                li.tab
+                  a href="#tab-inventory2" Properties
+            .card-content
+              #tab-inventory1
+                ul
+                  li
+                    = link_to 'Book Loan Status', book_loans_path 
+                  li
+                    = link_to 'Textbook Fines', book_fines_path
+                  li
+                    = link_to 'Book Receipt Form', book_receipts_path
+                  li
+                    = link_to 'Student Books', student_books_path
+              #tab-inventory2
+                ul
+                  li
+                    = link_to 'Update Condition', new_copy_condition_path
+                  li
+                    = link_to 'Condition Summary', summary_book_editions_path
+                  li
+                    = link_to 'Book Subjects', subjects_path
+                  li
+                    = link_to 'Book Category', book_categories_path
+                  li
+                    = link_to 'Disposed Books', book_copies_disposed_index_path
+
+    - if can? :manage, BookFine
+      .col.m4.s6
+        .card.horizontal.widget
+          .card-image.waves-effect.waves-block.waves-light
+            img.activator src="/assets/gears.jpg"
+          .card-stacked
+            .card-content
+              span.card-title.activator.grey-text.text-darken-4 
+                |Inventory Settings
+                i.material-icons.right more_vert
+              p Manage report templates, currency rates
+              p Access to yearly maintenance tasks
+          .card-reveal
+            span.card-title.grey-text.text-darken-4
+              |Inventory Settings
+              i.material-icons.right close
+            .card-tabs
+              ul.tabs.tabs-fixed-width.tabs-transparent
+                li.tab
+                  a.active href="#tabsettings" Settings
+                li.tab
+                  a href="#tabmtce" Maintenance
+            .card-content
+              #tabsettings
+                ul 
+                  li
+                    = link_to 'Currency Rates', currencies_path			
+                  li
+                    = link_to 'Templates', templates_path
+                  - if can? :manage, TemplateTarget
+                    li
+                      = link_to 'Template Targets', template_targets_path
+              #tabmtce
+                ul
+                  li
+                    = link_to 'Book Maintenance', settings_inventory_mtce_path	
+
+    .col.m4.s6
+      .card.horizontal.widget
+        .card-image.waves-effect.waves-block.waves-light
+          img.activator src="/assets/schooldropoff.jpg"
+        .card-stacked
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |Carpool
+              i.material-icons.right more_vert
+            p Carpool app for callers and display for TV
+        .card-reveal
+          span.card-title.grey-text.text-darken-4
+            |Carpool
+            i.material-icons.right close
+          .card-tabs
+            ul.tabs.tabs-fixed-width.tabs-transparent
+              li.tab
+                a.active href="#tab-carpool1" Tasks
+              li.tab
+                a href="#tab-carpool2" Display
+          .card-content
+            #tab-carpool1
+              ul
+                li
+                  = link_to 'Manage Carpool', "/phx"
+                - if can? :manage, Carpool
+                  li 
+                    = link_to 'Manage Transports and Smartcards', transports_path(type:'shuttle')
+            #tab-carpool2
+              ul
+                li
+                  = link_to 'TV Shuttle GS', "/phx?shuttle=gs"
+                li
+                  = link_to 'TV Shuttle SOL/SOR', "/phx?shuttle=sol"
+                li
+                  = link_to 'TV Car Riders', "/phx?ready=1"
+
+    .col.m4.s6
+      .card.horizontal.widget
+        .card-image.waves-effect.waves-block.waves-light
+          img.activator src="/assets/cbcs-building.jpg"
+        .card-stacked
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |School
+              i.material-icons.right more_vert
+            p Manage Grade Levels and Students
+            p Manage Departments and Employees
+        .card-reveal
+          span.card-title.grey-text.text-darken-4
+            |School
+            i.material-icons.right close
+          .card-tabs
+            ul.tabs.tabs-fixed-width.tabs-transparent
+              li.tab
+                a.active href="#tab-grades" Grades
+              li.tab
+                a href="#tab-departments" Departments
+          .card-content
+            #tab-grades
+              ul
+                li
+                  = link_to 'Grade Levels', grade_levels_path
+                li 
+                  = link_to 'Students', students_path
+                li
+                  = link_to 'Guardians', guardians_path
+            #tab-departments
+              ul
+                li
+                  = link_to 'Departments', departments_path
+                li
+                  = link_to 'Employees', employees_path
+
+    .col.m4.s6
+      .card.horizontal.widget
+        .card-image.waves-effect.waves-block.waves-light
+          img.activator src="/assets/purchase-order.jpg"
+        .card-stacked
+          = image_tag 'beta.jpg', size:'60x56', style:"position: absolute; right: 0"
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |Purchasing
+              i.activator.material-icons.right more_vert
+            p Submit and manage your Purchase Requests
+        .card-reveal
+          span.card-title.grey-text.text-darken-4
+            |Purchase Request
+            i.material-icons.right close
+          .card-content
+            ul
+              li
+                = link_to 'Purchase Request', requisitions_path
+              li
+                = link_to 'Budget', budgets_path
+
+
+    .col.m4.s6
+      .card.horizontal.widget
+        .card-image.waves-effect.waves-block.waves-light
+          img.activator src="/assets/HR.jpg"
+        .card-stacked
+          = image_tag 'beta.jpg', size:'60x56', style:"position: absolute; right: 0"
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |HR
+              i.material-icons.right more_vert
+            p Submit and manage you Leave Requests
+        .card-reveal
+          span.card-title.grey-text.text-darken-4
+            |Leave Request
+            i.material-icons.right close
+          p Under construction
+
+    .col.m4.s6
+      .card.horizontal.widget
+        .card-image.waves-effect.waves-block.waves-light
+          img.activator src="/assets/telephone.jpg"
+        .card-stacked
+          = image_tag 'beta.jpg', size:'60x56', style:"position: absolute; right: 0"
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |Service Order
+              i.material-icons.right more_vert
+        .card-reveal
+          span.card-title.grey-text.ext-darken-4
+            |Service Order
+            i.material-icons.right close
+          p Under construction
+
+

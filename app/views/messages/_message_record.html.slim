@@ -1,0 +1,30 @@
+.modal-content
+  .row.message-address
+    .col.m2
+      .label From:
+    .col.m7
+      = @message.creator.name
+    .col.m3
+      = timeago_tag @message.created_at, limit: 10.days.ago
+    .col.m2
+      .label To:
+    .col.m10
+      = @message.recipient_names_for_type 'to'
+    .col.m2
+      .label CC:
+    .col.m10
+      = @message.recipient_names_for_type 'cc' || '&nbsp;'
+    .col.m2
+      .label BCC:
+    .col.m10
+      = @message.recipient_names_for_type 'bcc' || '&nbsp;'
+    .col.m12
+      .message-subject
+        = @message.subject
+  .row.message-body 
+    .col.m12
+      = @message.body
+.modal-footer
+  a.modal-action.modal-close.waves-effect.waves-light.btn.btn-primary.mark-read href="#!" data-recipient=current_user.id data-id=@message.id OK
+  a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+

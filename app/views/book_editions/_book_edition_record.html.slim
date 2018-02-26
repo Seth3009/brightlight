@@ -32,7 +32,11 @@ table
           dd.col.s6
             .label Legacy Code
             .item = book_edition.legacy_code || 'N/A'
-        
+        dl.row
+          dd.col.s12
+            .label Description
+            .item = book_edition.description || "N/A"
+            
         - if book_edition.book_title
           hr
           dl.row

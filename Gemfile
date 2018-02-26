@@ -62,6 +62,9 @@ gem 'hashie'
 # To convert number to words
 gem 'numbers_and_words'
 
+# To display fuzzy time
+gem 'rails-timeago', '~> 2.0'
+
 # Login with Devise & OmniAuth Google+ OAuth2
 gem 'devise'
 gem 'omniauth'

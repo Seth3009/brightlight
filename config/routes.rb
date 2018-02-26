@@ -219,6 +219,14 @@ Rails.application.routes.draw do
   end
 
   resources :budget_items, only: [:index, :show]
+  resources :messages do 
+    member do
+      post 'mark_read'
+    end
+  end
+
+  get  '/search' => "search#index"
+  post '/search' => "search#index"
 
   patch 'pax/:id' => 'late_passengers#update'
 

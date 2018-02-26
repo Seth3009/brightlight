@@ -20,7 +20,7 @@ class BookLoan < ActiveRecord::Base
   belongs_to :prev_academic_year, class_name: "AcademicYear"
   belongs_to :user
 
-  has_many :loan_checks
+  has_many :loan_checks, dependent: :destroy
   has_one  :student_book
 
   around_destroy :make_book_status_available

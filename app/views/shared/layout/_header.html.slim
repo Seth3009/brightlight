@@ -1,9 +1,102 @@
+// Top Navbar
+nav.top-navbar
+  .nav-wrapper
+    ul.flush-left
+      li.left
+        a href="#" data-activates="slide-out" id="sidenav-button"
+          i.material-icons menu
+      li 
+        a href="/"
+          i.material-icons home
+    ul.flush-right
+      - if signed_in?
+        li.right
+          - if current_user
+            a.dropdown-button href="#" data-activates="user-profile-options" data-beloworigin="true" data-alignment="right"
+              - if current_user.image_url
+                = image_tag current_user.image_url, alt: current_user.name, class: 'user-avatar-navbar circle'
+              - else
+                i.material-icons.grey-text account_circle
+          - else
+            = link_to new_user_session_path
+              | Login
+              i.material-icons.left perm_identity
+      - else
+        li.right
+          = link_to new_user_session_path
+            | Login
+            i.material-icons.left perm_identity
+      / li.right
+      /   a.dropdown-button href="#" data-activates="app-options" data-beloworigin="true" data-alignment="right"
+      /     i.material-icons apps
+      li.right
+        a.dropdown-button href="#" data-activates="notification-list" data-beloworigin="true" data-alignment="right"  style="position: relative"
+          i.material-icons.right style="margin-left: 0px" inbox 
+          span.inbox-badge #{number_of_unread_message}
+      li.fill-space
+        = form_tag '/search', method: :get
+          .input-field
+            input type="search" name="search_term" id="search_term" placeholder="Search for book titles, description, ISBN, author, barcode, people"
+ul#user-profile-options.dropdown-content
+  - if current_user.employee
+    li 
+      = link_to current_user.employee
+        i.material-icons.left face
+        |Profile
+  li
+    = link_to current_user
+      |Account
+      i.material-icons.left perm_identity
+  li
+    = link_to destroy_user_session_path, method: :delete
+      |Sign out
+      = image_tag "logout.png", size:"30x40", class:"left"
+
+ul#app-options.dropdown-content
+  li 
+    = link_to "#"
+      |Books
+      i.material-icons.left book
+  li 
+    = link_to "#"
+      |Inventory
+      i.material-icons.left library_books
+  li 
+    = link_to "#"
+      |Purchasing
+      i.material-icons.left shopping_basket
+  li 
+    = link_to "#"
+      |HR
+      i.material-icons.left people
+  li 
+    = link_to "#"
+      |Carpool
+      i.material-icons.left directions_car
+
+ul#notification-list.dropdown-content
+  - if unread_messages.blank?
+    li
+      .subject You have no unread messages
+  - else
+    - unread_messages.each do |message| 
+      li.unread-message data-id=message.id id="msgrec-#{message.id}"
+        div.left
+          - if message.creator.image_url
+            = image_tag message.creator.image_url, alt: message.creator.name, class: 'user-avatar-navbar circle'
+          - else
+            i.material-icons.grey-text account_circle
+        = link_to message, remote: true
+          .from 
+            = message.creator.name
+            .message-timeago.right = timeago_tag message.created_at, :nojs => true, :limit => 10.days.ago
+          .subject = message.subject
+  
+
+  
 // Sidebar menu
 .container
-  a.sidebar-collapse.top-nav.hide-on-large-only.waves-effect.waves-light.btn-floating.btn-medium href="#" data-activates="nav-mobile"
-    i.mdi-navigation-menu
-/- style_color = current_user.try(:admin?) ? 'red darken-3' : ''
-ul#nav-mobile.side-nav.fixed
+ul#slide-out.side-nav
   li.logo
     a#logo-container.brand-logo href="#{dashboard_path}"  style="font-size:2em; color:white"
       = image_tag 'lightbulb-icon.png', class: "logo-icon"
@@ -11,6 +104,9 @@ ul#nav-mobile.side-nav.fixed
     li.no-padding
       ul.collapsible data-collapsible='accordion'
         = render "#{controller_name}/side_menu"
-  li.no-padding 
+  li.no-padding
     ul.collapsible data-collapsible='accordion'
       = render 'shared/side_menu_bar'
+
+#show-message-modal.modal.modal-fixed-footer
+  #modal-message-content

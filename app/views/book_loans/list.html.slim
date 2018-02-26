@@ -62,17 +62,17 @@ div
 
           ul.right.hide-on-med-and-down
             li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Book Receipt"
-              = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id)
+              = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg])
                 i.material-icons.left receipt 
             li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Export to PDF"
               -if @academic_year.present?
-                = link_to employee_book_loans_path(@teacher, year: @academic_year.id, format: :pdf), target: '_blank'
+                = link_to employee_book_loans_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg], format: :pdf), target: '_blank'
                   i.material-icons.left picture_as_pdf
               - else
                 = link_to employee_book_loans_path(@teacher, format: :pdf), target: '_blank'
                   i.material-icons.left picture_as_pdf
             li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Export to Excel"
-              = link_to employee_book_loans_path(@teacher, year: @academic_year.id, format: :xls), target: '_blank'
+              = link_to employee_book_loans_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg], format: :xls), target: '_blank'
                 = image_tag 'xls80-white.png'
             li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Scan book to check/return"
               = link_to scan_employee_book_loans_path(@teacher, year: @academic_year.id)              
@@ -88,12 +88,12 @@ div
 
         ul.side-nav#sidenav-menu
           li 
-            = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id)
+            = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg])
               | Book Receipt
               i.material-icons.left receipt
           li 
             -if @academic_year.present?
-              = link_to employee_book_loans_path(@teacher, year: @academic_year.id, format: :pdf), target: '_blank'
+              = link_to employee_book_loans_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg], format: :pdf), target: '_blank'
                 | Export to PDF
                 i.material-icons.left picture_as_pdf
             - else
@@ -101,7 +101,7 @@ div
                 | Export to PDF
                 i.material-icons.left picture_as_pdf
           li
-            = link_to employee_book_loans_path(@teacher, year: @academic_year.id, format: :xls), target: '_blank'            
+            = link_to employee_book_loans_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg], format: :xls), target: '_blank'            
               | Export to Excel
               = image_tag 'xls80-black.png', class:'left'
           li
