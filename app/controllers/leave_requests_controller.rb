@@ -73,8 +73,13 @@ class LeaveRequestsController < ApplicationController
         format.html do
           if params[:send] 
             if params[:send] == 'empl_submit'
-              approver = @supervisor           
-              if @leave_request.send_for_approval(approver, 'empl_submit') 
+              approver = @supervisor
+              if @leave_request.leave_type == "Sick" || @leave_request == "Family Matter"
+                send_to = @hrmanager
+              else
+                send_to = @supervisor
+              end
+              if @leave_request.send_for_approval(approver, send_to, 'empl_submit') 
                 LeaveRequest.auto_approve(@leave_request.id)             
                 redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.'
               else
