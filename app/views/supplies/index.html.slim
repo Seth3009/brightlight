@@ -1,6 +1,6 @@
 .row 
   .col.s6
-    h4 Supplies
+    h4 Supplies Items
   .col.s5
     = form_tag({controller:'supplies', action:'index'}, {method:'get'}) do 
       .input-field
@@ -43,9 +43,9 @@ nav
         tr id="row-#{supply.id}"
             = render partial: 'index_row', locals: {supply: supply}
           
-   
-.toolbar.z-index-1
-  
+-if @supplies.length > 20   
+  .toolbar.z-index-1
+    = will_paginate @supplies
 
 #show-modal.modal.modal-fixed-footer
   .modal-content
