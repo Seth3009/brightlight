@@ -17,6 +17,37 @@ class Message < ActiveRecord::Base
     msg.save
   end 
 
+  def self.new_from_email(email)
+    html = Nokogiri::HTML(email.body.to_s)
+    body = html.search('//body').to_s
+    message = Message.new subject: email.subject, creator: User.find_by_email(email.from), body: body
+    if email.to
+      email.to.each do |address|
+        recipient = User.find_by_email(address)
+        if recipient.present?
+          message.message_recipients << MessageRecipient.new(recipient: recipient, recipient_type:'to')
+        end
+      end
+    end
+    if email.cc
+      email.cc.each do |address|
+        recipient = User.find_by_email(address)
+        if recipient.present?
+          message.message_recipients << MessageRecipient.new(recipient: recipient, recipient_type:'cc')
+        end
+      end
+    end
+    if email.bcc
+      email.bcc.each do |address|
+        recipient = User.find_by_email(address)
+        if recipient.present?
+          message.message_recipients << MessageRecipient.new(recipient: recipient, recipient_type:'bcc')
+        end
+      end
+    end
+    message 
+  end
+
   def reply(reply_message)
     reply_message.parent = self
     reply_message.subject = "RE: #{self.subject}"
@@ -45,7 +76,5 @@ class Message < ActiveRecord::Base
   def recipient_names_for_type(type)
     self.message_recipients.where(recipient_type: type).map {|r| r.recipient.name}.join(', ')
   end
-
-
 
 end

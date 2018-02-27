@@ -19,7 +19,10 @@ class Requisition < ActiveRecord::Base
 
   def send_for_approval(approver, type)
     if approver
-      EmailNotification.req_approval(self, approver, type).deliver_now
+      email = EmailNotification.req_approval(self, approver, type)
+      email.deliver_now
+      notification = Message.new_from_email(email)
+      notification.save
       if type == 'supv'
         self.update_attributes sent_to_supv: Date.today, supervisor: approver
       elsif type == 'budget'
