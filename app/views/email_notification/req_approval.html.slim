@@ -8,16 +8,18 @@ html
     div style="margin-left:30px; width=85%; font-size:16px"
       p Dear #{@approver.name},
 
-      p You have a pending requisition that requires your approval.
+      p You have a pending purchase request that requires your approval.
 
-      table.compact
+      table.description-list
         tbody
           tr
             td Requester
-            td = @requisition.requester.try(:name)
+            td 
+              strong = @requisition.requester.try(:name)
           tr 
             td Req no
-            td = @requisition.id
+            td 
+              strong = @requisition.id
           tr 
             td Description
             td = @requisition.description
@@ -26,14 +28,9 @@ html
             td = @requisition.date_required
 
       p You can access the requisition from the following link.
-      
-      div style="margin-top:20px; margin-bottom:40px"
-        = link_to "Requisition No. #{@requisition.id}", approve_requisition_url(@requisition, appvl:@type) , style:"text-decoration:underline"
+      p = link_to "Requisition No. #{@requisition.id}", approve_requisition_url(@requisition, appvl:@type) , style:"text-decoration:underline"
 
       p Thank you for using <i>Brightlight</i>. 
-      
-      p Regards,
-      p CBCS Brightlight Team
     
     = render 'footer', to: @approver 
 

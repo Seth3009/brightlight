@@ -1,4 +1,5 @@
 .modal-content
+  h5 New message
   .row.message-address
     .col.m2
       .label From:
@@ -14,10 +15,6 @@
       .label CC:
     .col.m10
       = @message.recipient_names_for_type 'cc' || '&nbsp;'
-    .col.m2
-      .label BCC:
-    .col.m10
-      = @message.recipient_names_for_type 'bcc' || '&nbsp;'
     .col.m12
       .message-subject
         = @message.subject

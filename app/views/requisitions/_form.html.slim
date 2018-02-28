@@ -17,7 +17,7 @@
       .input-field.col.m3
         = f.label :supervisor, class: 'active'
         = f.collection_select :supervisor_id, Employee.department_heads, :id, :name, prompt: "Select approver", selected: @manager.try(:id) 
-      - if can? :approve, @requisition
+      - if @requisition.sent_to_supv && can?(:approve, @requisition)
         .input-field.col.m3
           = f.check_box :is_supv_approved
           = f.label :is_supv_approved, @requisition.is_supv_approved ? 'Request approved' : 'Approve request'
@@ -29,7 +29,7 @@
       .input-field.col.m3
         = f.label :budget_approver, class: 'active'
         = f.collection_select :budget_approver_id, Employee.department_heads, :id, :name, prompt: "Select budget approver"
-      - if can? :approve_budget, @requisition
+      - if @requisition.sent_for_bgt_approval && can?(:approve_budget, @requisition)
         .input-field.col.m3
           = f.check_box :is_budget_approved
           = f.label :is_budget_approved, 'Approve Budget'
