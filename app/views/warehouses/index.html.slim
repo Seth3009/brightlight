@@ -1,0 +1,36 @@
+.row 
+  .col.s6
+    h4 Warehouses
+
+nav
+  .nav-wrapper
+    ul.right
+      - if can? :manage, Warehouse
+        li
+          = link_to new_warehouse_path
+            | New Warehouse
+            i.material-icons.left add    
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Name
+        th Room number
+        th Actions        
+        
+
+    tbody
+      - @warehouses.each do |warehouse|
+        tr
+          td = warehouse.name
+          td = warehouse.room_number
+          td.actions
+              = link_to warehouse_path(warehouse)
+                i.material-icons visibility
+              - if can? :destroy, warehouse
+                = link_to warehouse, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+              - if can? :update, warehouse
+                = link_to edit_warehouse_path(warehouse)
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
