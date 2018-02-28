@@ -1,7 +1,7 @@
 class LeaveRequest < ActiveRecord::Base
   belongs_to :employee
   
-  validates_presence_of :hour, :message => "Leave periode can't be blank"
+  validates_presence_of :hour, :message => "Leave period can't be blank"
   validates_presence_of :leave_type, :message => "Choose your leave type"
   validates_presence_of :leave_note, :message => "Describe your leave"
   

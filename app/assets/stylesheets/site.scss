@@ -285,6 +285,10 @@ form {
 	}
 }
 
+.field_with_errors {
+	background-color: #fdc;
+}
+
 .section-header {
 	font-size: 1.1rem;
 	font-weight: bold;
@@ -372,6 +376,30 @@ input.invalid-input {
 	border-color: rgb(163, 6, 6);
 	border-width: 2px;
 	background-color: #f0bfbf;
+}
+
+// Leave request
+.leave-request-container {
+	border: 1px solid lightgray;
+	border-radius: 10px;
+	padding: 0px 10px;
+	.row {
+		border-top: 1px solid lightgray;
+		margin-bottom: 0px;
+		padding: 10px 0px;
+	}
+	.row:first-child {
+		border-top: none;
+	}
+	p {
+		-webkit-margin-before: 0.5em;
+    -webkit-margin-after: 0.5em;
+	}
+	.label-text {
+		font-size: 0.9rem;
+		color: #777;
+		text-transform: uppercase;
+	}
 }
 
 // ========================================= Typography =============================================

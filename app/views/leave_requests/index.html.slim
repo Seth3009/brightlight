@@ -1,38 +1,40 @@
-h4 Leave Request
+h4 Leave Requests
 
+nav
+  .nav-wrapper
+    ul.right
+      li        
+        = link_to new_leave_request_path
+          | New
+          i.material-icons.left add
 
 ul.tabs.z-depth-1
+  li.tab.col.s2
+    a href='#tab1' HR01 Form
+  - if can? :update, LeaveRequest    
       li.tab.col.s2
-        a href='#tab1' HR01 Form
-      - if can? :update, LeaveRequest    
-          li.tab.col.s2
-            a href='#tab2' SPV Approval
+        a href='#tab2' SPV Approval
+  - if can? :read_hr, LeaveRequest
       - if can? :read_hr, LeaveRequest
-          - if can? :read_hr, LeaveRequest
-              li.tab.col.s2
-                a href='#tab3' HR01 List    
+          li.tab.col.s2
+            a href='#tab3' HR01 List    
           
-
--if can? :submit, LeaveRequest
-  #tab1.tab-content.card-panel
-    == render 'employee_list'
-- if can? :update, LeaveRequest
-  #tab2.tab-content.card-panel
-    == render "spv_list"
-- if can? :read_hr, LeaveRequest
-  #tab3.tab-content.card-panel
-    == render "hr_list"
-
-
-
-         
+.card
+  -if can? :submit, LeaveRequest
+    #tab1.tab-content
+      == render 'employee_list'
+  - if can? :update, LeaveRequest
+    #tab2.tab-content
+      == render "spv_list"
+  - if can? :read_hr, LeaveRequest
+    #tab3.tab-content
+      == render "hr_list"
+      
 #show-modal.modal.modal-fixed-footer
   .modal-content
     #modal-content
   .modal-footer  
-    
     a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
-    
     
 #edit-modal.modal.modal-fixed-footer
   #edit-modal-content   

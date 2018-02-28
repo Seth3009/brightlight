@@ -1,57 +1,50 @@
-nav
-  .nav-wrapper
-      ul.right
-        li        
-          = link_to new_leave_request_path
-            | Add Form
-            i.material-icons.left add
-.card-panel
+
   table.compact.striped
-      thead
-        tr
-          th Submit on
-          th Leave date 
-          th Hours / Notes
-          th Leave Type
-          th Substitute
-          th Approval (SPV,HR)                    
-          th Actions
-          
-          
-      tbody#leave_requests
-        - @leave_requests.empl(@employee).each do |leave_request|
-            tr
-              td 
-                = leave_request.form_submit_date.nil? ? 'Draft' : leave_request.form_submit_date.strftime("%d/%m/%Y")
-              td = leave_request.start_date.strftime("%d/%m/%Y") + " - " + leave_request.end_date.strftime("%d/%m/%Y")
-              td = leave_request.hour
-              td = leave_request.leave_type
-              td 
-                 -  if leave_request.leave_subtitute == true
-                    |Required
-                 -  elsif leave_request.leave_subtitute == false
-                    |Not Required
-                 -  else
-                    |--
-              td               
-                -  if leave_request.spv_approval.nil?
-                    i.material-icons check_box_outline_blank
-                -  elsif leave_request.spv_approval == true
-                    i.material-icons check_box
+    thead
+      tr
+        th Submit on
+        th Leave date 
+        th Hours / Notes
+        th Leave Type
+        th Substitute
+        th Approval (SPV,HR)                    
+        th Actions
+        
+        
+    tbody#leave_requests
+      - @leave_requests.empl(@employee).each do |leave_request|
+          tr
+            td 
+              = leave_request.form_submit_date.nil? ? 'Draft' : leave_request.form_submit_date.strftime("%d/%m/%Y")
+            td = leave_request.start_date.strftime("%d/%m/%Y") + " - " + leave_request.end_date.strftime("%d/%m/%Y")
+            td = leave_request.hour
+            td = leave_request.leave_type
+            td 
+                -  if leave_request.leave_subtitute == true
+                  |Required
+                -  elsif leave_request.leave_subtitute == false
+                  |Not Required
                 -  else
-                      i.material-icons cancel
-                -  if leave_request.hr_approval.nil?
-                    i.material-icons check_box_outline_blank
-                -  elsif leave_request.hr_approval == true
-                    i.material-icons check_box
-                -  else
-                      i.material-icons cancel            
-              td
-                = link_to leave_request_path(leave_request)
-                  i.material-icons visibility
-                - if leave_request.form_submit_date.nil? && (can? :submit, leave_request)
-                  = link_to edit_leave_request_path(leave_request)
-                    i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
-                  = link_to leave_request, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
-                    i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+                  |--
+            td               
+              -  if leave_request.spv_approval.nil?
+                  i.material-icons check_box_outline_blank
+              -  elsif leave_request.spv_approval == true
+                  i.material-icons check_box
+              -  else
+                    i.material-icons cancel
+              -  if leave_request.hr_approval.nil?
+                  i.material-icons check_box_outline_blank
+              -  elsif leave_request.hr_approval == true
+                  i.material-icons check_box
+              -  else
+                    i.material-icons cancel            
+            td
+              = link_to leave_request_path(leave_request)
+                i.material-icons visibility
+              - if leave_request.form_submit_date.nil? && (can? :submit, leave_request)
+                = link_to edit_leave_request_path(leave_request)
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+                = link_to leave_request, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
   

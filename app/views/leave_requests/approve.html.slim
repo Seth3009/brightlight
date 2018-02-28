@@ -1,11 +1,11 @@
 = form_for @leave_request do |f|
- = render 'detail_leave_request' 
+  = render 'detail_leave_request' 
 
- nav
-  .nav-wrapper
-    .brand-logo style="margin-left: 20px; font-size:1.5em"
-      | Approval Action  
-  - if params[:page] == "spv" && @employee == @supervisor && @leave_request.spv_approval.nil? 
+  nav
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Approval Action  
+    - if params[:page] == "spv" && @employee == @supervisor && @leave_request.spv_approval.nil? 
       .card-panel        
         = label_tag "label_note", "Approval Notes", class: 'label'          
         = f.text_field :spv_notes, :value => @leave_request.spv_notes, class: 'cat'
@@ -14,7 +14,7 @@
           | Approved  
         = button_tag class:"btn waves-effect waves-light right", type: "submit", name:"send", value:"spv-den"
           | Not Approved
-  - elsif params[:page] == "hr" && @employee == @hrmanager && @leave_request.spv_approval.nil? == false && @leave_request.hr_approval.nil?
+    - elsif params[:page] == "hr" && @employee == @hrmanager && @leave_request.spv_approval.nil? == false && @leave_request.hr_approval.nil?
       .card-panel        
         = label_tag "label_note", "Approval Notes", class: 'label'
         = f.text_field :hr_notes,  class: 'cat'

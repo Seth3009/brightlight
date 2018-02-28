@@ -11,15 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< 170cebdd02615da9663a0c9703dcb9ddc4d26a97
-<<<<<<< 03c5da57c7ba3316a9fa2b9bb921609f4b4e0536
 ActiveRecord::Schema.define(version: 20180213022739) do
-=======
-ActiveRecord::Schema.define(version: 20180125015043) do
->>>>>>> Create leave request model, controller, views
-=======
-ActiveRecord::Schema.define(version: 20180222071400) do
->>>>>>> revision @leave_request controller
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -347,6 +339,12 @@ ActiveRecord::Schema.define(version: 20180222071400) do
   add_index "carpools", ["barcode"], name: "index_carpools_on_barcode", using: :btree
   add_index "carpools", ["sort_order"], name: "index_carpools_on_sort_order", using: :btree
   add_index "carpools", ["transport_id"], name: "index_carpools_on_transport_id", using: :btree
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "copy_conditions", force: :cascade do |t|
     t.integer  "book_copy_id"
@@ -677,6 +675,24 @@ ActiveRecord::Schema.define(version: 20180222071400) do
     t.string   "abbreviation"
   end
 
+  create_table "items", force: :cascade do |t|
+    t.string   "code"
+    t.string   "name"
+    t.decimal  "price"
+    t.float    "min_stock",             default: 0.0
+    t.float    "max_stock",             default: 100.0
+    t.integer  "unit_id"
+    t.integer  "purchase_threshold_id"
+    t.string   "stock_type"
+    t.integer  "category_id"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  add_index "items", ["category_id"], name: "index_items_on_category_id", using: :btree
+  add_index "items", ["purchase_threshold_id"], name: "index_items_on_purchase_threshold_id", using: :btree
+  add_index "items", ["unit_id"], name: "index_items_on_unit_id", using: :btree
+
   create_table "late_passengers", force: :cascade do |t|
     t.integer  "carpool_id"
     t.integer  "transport_id"
@@ -919,7 +935,6 @@ ActiveRecord::Schema.define(version: 20180222071400) do
     t.date     "received_date"
   end
 
-<<<<<<< 170cebdd02615da9663a0c9703dcb9ddc4d26a97
   create_table "purchase_orders", force: :cascade do |t|
     t.string   "order_num"
     t.integer  "department_id"
@@ -1046,8 +1061,6 @@ ActiveRecord::Schema.define(version: 20180222071400) do
     t.datetime "updated_at", null: false
   end
 
-=======
->>>>>>> revision @leave_request controller
   create_table "rosters", force: :cascade do |t|
     t.integer  "course_section_id"
     t.integer  "student_id"
@@ -1258,23 +1271,6 @@ ActiveRecord::Schema.define(version: 20180222071400) do
     t.datetime "updated_at",  null: false
   end
 
-  create_table "supplies", force: :cascade do |t|
-    t.string   "code"
-    t.string   "name"
-    t.decimal  "price",            default: 0.0
-    t.float    "min_stock",        default: 0.0
-    t.float    "max_stock",        default: 100.0
-    t.string   "stock_type"
-    t.integer  "item_unit_id"
-    t.integer  "item_category_id"
-    t.boolean  "supply_status",    default: true
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-  end
-
-  add_index "supplies", ["item_category_id"], name: "index_supplies_on_item_category_id", using: :btree
-  add_index "supplies", ["item_unit_id"], name: "index_supplies_on_item_unit_id", using: :btree
-
   create_table "template_targets", force: :cascade do |t|
     t.string   "name"
     t.string   "code"
@@ -1321,7 +1317,6 @@ ActiveRecord::Schema.define(version: 20180222071400) do
 
   add_index "transports", ["family_no"], name: "index_transports_on_family_no", using: :btree
 
-<<<<<<< 170cebdd02615da9663a0c9703dcb9ddc4d26a97
   create_table "user_mesg_groups", force: :cascade do |t|
     t.integer  "recipient_id"
     t.integer  "msg_group_id"
@@ -1340,8 +1335,6 @@ ActiveRecord::Schema.define(version: 20180222071400) do
     t.datetime "updated_at", null: false
   end
 
-=======
->>>>>>> revision @leave_request controller
   create_table "users", force: :cascade do |t|
     t.string   "provider"
     t.string   "uid"
@@ -1385,6 +1378,9 @@ ActiveRecord::Schema.define(version: 20180222071400) do
   add_foreign_key "invoices", "academic_years"
   add_foreign_key "invoices", "students"
   add_foreign_key "invoices", "users"
+  add_foreign_key "items", "categories"
+  add_foreign_key "items", "purchase_thresholds"
+  add_foreign_key "items", "units"
   add_foreign_key "late_passengers", "carpools"
   add_foreign_key "late_passengers", "grade_sections"
   add_foreign_key "late_passengers", "students"
@@ -1434,8 +1430,6 @@ ActiveRecord::Schema.define(version: 20180222071400) do
   add_foreign_key "passengers", "students"
   add_foreign_key "passengers", "transports"
   add_foreign_key "smart_cards", "transports"
-  add_foreign_key "supplies", "item_categories"
-  add_foreign_key "supplies", "item_units"
   add_foreign_key "templates", "academic_years"
   add_foreign_key "templates", "users"
   add_foreign_key "user_mesg_groups", "msg_groups"
