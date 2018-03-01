@@ -1,0 +1,27 @@
+p#notice = notice
+
+p
+  strong Trx date:
+  = @supplies_stock.trx_date
+p
+  strong Trx type:
+  = @supplies_stock.trx_type
+p
+  strong Qty:
+  = @supplies_stock.qty
+p
+  strong Trx notes:
+  = @supplies_stock.trx_notes
+p
+  strong Supply:
+  = @supplies_stock.supply
+p
+  strong User:
+  = @supplies_stock.user
+p
+  strong Warehouse:
+  = @supplies_stock.warehouse
+
+= link_to 'Edit', edit_supplies_stock_path(@supplies_stock)
+'|
+= link_to 'Back', supplies_stocks_path

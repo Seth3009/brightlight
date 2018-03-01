@@ -1,0 +1,2 @@
+module SuppliesStocksHelper
+end

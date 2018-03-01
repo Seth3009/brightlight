@@ -1,0 +1,33 @@
+h1 Listing supplies_stocks
+
+table
+  thead
+    tr
+      th Trx date
+      th Trx type
+      th Qty
+      th Trx notes
+      th Supply
+      th User
+      th Warehouse
+      th
+      th
+      th
+
+  tbody
+    - @supplies_stocks.each do |supplies_stock|
+      tr
+        td = supplies_stock.trx_date
+        td = supplies_stock.trx_type
+        td = supplies_stock.qty
+        td = supplies_stock.trx_notes
+        td = supplies_stock.supply
+        td = supplies_stock.user
+        td = supplies_stock.warehouse
+        td = link_to 'Show', supplies_stock
+        td = link_to 'Edit', edit_supplies_stock_path(supplies_stock)
+        td = link_to 'Destroy', supplies_stock, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Supplies stock', new_supplies_stock_path

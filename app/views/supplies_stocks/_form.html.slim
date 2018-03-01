@@ -1,0 +1,30 @@
+= form_for @supplies_stock do |f|
+  - if @supplies_stock.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@supplies_stock.errors.count, "error")} prohibited this supplies_stock from being saved:"
+      ul
+        - @supplies_stock.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :trx_date
+    = f.date_select :trx_date
+  .field
+    = f.label :trx_type
+    = f.text_field :trx_type
+  .field
+    = f.label :qty
+    = f.text_field :qty
+  .field
+    = f.label :trx_notes
+    = f.text_field :trx_notes
+  .field
+    = f.label :supply
+    = f.text_field :supply
+  .field
+    = f.label :user
+    = f.text_field :user
+  .field
+    = f.label :warehouse
+    = f.text_field :warehouse
+  .actions = f.submit
