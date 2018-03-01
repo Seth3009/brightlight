@@ -1,27 +1,20 @@
 doctype html
 html
-	head
-		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
-		meta name="viewport" content="width=device-width, initial-scale=1.0"
+  head
+    = stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
 
-	body
+  body
     div style="margin-left:30px; width=85%; font-size:16px"
       p Dear #{@employee.name},
 
-      p Your leave request as bellow.
-
-      = render 'leave_request'
-
-      - if @leave_request.spv_approval == true
-        p
-          | is 
-          b Approved
-      - elsif @leave_request.spv_approval == false
-        p
-          | is 
-          b Rejected
+      p Your leave request below has been <b>#{@leave_request.spv_approval ? 'approved' : 'rejected'}.</b>
       
       p Reason : #{@leave_request.spv_notes}
+
+      p Leave request detail:
+      = render 'leave_request'      
+      
       p Supervisor approval date: #{@leave_request.spv_date.strftime('%d %b %Y')}
       - if @leave_request.spv_approval == true
         div style="margin-top:20px; margin-bottom:40px"
@@ -29,7 +22,5 @@ html
 
       p Thank you for using <i>Brightlight</i>. 
       
-      p Regards,
-      p CBCS Brightlight Team
     
-    = render 'footer', to: @hrmanager
+    = render 'footer', to: @employee

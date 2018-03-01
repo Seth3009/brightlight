@@ -1,10 +1,10 @@
 doctype html
 html
-	head
-		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
-		meta name="viewport" content="width=device-width, initial-scale=1.0"
+  head
+    = stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
     
-	body
+  body
     div style="margin-left:30px; width=85%; font-size:16px"      
       p 
         - if @sendto == "hr"
@@ -23,8 +23,6 @@ html
 
       p Thank you for using <i>Brightlight</i>. 
       
-      p Regards,
-      p CBCS Brightlight Team
     - if @sendto == "hr"
       = render 'footer', to: @hrmanager
     - else

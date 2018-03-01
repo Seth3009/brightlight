@@ -1,32 +1,21 @@
 doctype html
 html
-	head
-		= stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
-		meta name="viewport" content="width=device-width, initial-scale=1.0"
+  head
+    = stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
 
-	body
+  body
     div style="margin-left:30px; width=85%; font-size:16px"
       p Dear #{@employee.name},
 
-      p Your leave request as bellow.
+      p Your leave request below has been <b>#{@leave_request.hr_approval ? 'approved' : 'rejected'}.</b>
+      p Reason: #{@leave_request.hr_notes}
 
+      p Leave request detail:
       = render 'leave_request'
 
-      - if @leave_request.hr_approval == true
-        p
-          | is 
-          b Approved
-      - elsif @leave_request.hr_approval == false
-        p
-          | is 
-          b Rejected
-      p Reason : #{@leave_request.hr_notes}
       p HRD approval date: #{@leave_request.hr_date.strftime('%d %b %Y')}
       
-
       p Thank you for using <i>Brightlight</i>. 
-      
-      p Regards,
-      p CBCS Brightlight Team
     
-    = render 'footer', to: @employee 
+    = render 'footer', to: @employee

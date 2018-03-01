@@ -1,14 +1,13 @@
 class LeaveRequestsController < ApplicationController
   before_action :set_leave_request, only: [:show, :edit, :update, :destroy, :approve]
-  before_action :set_user_id, only: [:index, :new, :edit, :create, :update, :approve]
+  before_action :set_employee, only: [:index, :new, :edit, :create, :update, :approve]
   
   
   # GET /leave_requests
   # GET /leave_requests.json
   def index
     @department = Department.find_by_id(@employee.department_id) 
-    @leave_requests = LeaveRequest.joins('left join employees on employees.id = leave_requests.employee_id') 
-                                  .joins('left join departments on departments.id = employees.department_id')
+    @leave_requests = LeaveRequest.with_employees_and_departments
     
   end
 
@@ -42,8 +41,8 @@ class LeaveRequestsController < ApplicationController
             else 
               @sendto = "spv"
             end          
-            if @leave_request.send_for_approval(approver,@sendto, 'empl_submit')  
-              LeaveRequest.auto_approve(@leave_request.id)             
+            if @leave_request.send_for_approval(approver, @sendto, 'empl_submit')  
+              @leave_request.auto_approve             
               redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.'               
             else
               redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
@@ -80,7 +79,7 @@ class LeaveRequestsController < ApplicationController
                 send_to = @supervisor
               end
               if @leave_request.send_for_approval(approver, send_to, 'empl_submit') 
-                LeaveRequest.auto_approve(@leave_request.id)             
+                @leave_request.auto_approve          
                 redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.'
               else
                 redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
@@ -143,7 +142,7 @@ class LeaveRequestsController < ApplicationController
     def set_leave_request
       @leave_request = LeaveRequest.find(params[:id])
     end
-    def set_user_id
+    def set_employee
       if current_user.present?
           @employee = Employee.find_by_id(current_user.employee) 
       else
