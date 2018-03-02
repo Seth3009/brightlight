@@ -11,14 +11,18 @@ class LeaveRequest < ActiveRecord::Base
   }
   scope :empl, -> (employee_id) { where employee_id: employee_id }
   scope :spv, -> (employee_id) { 
-    with_employees_and_departments.where('departments.manager_id = ?', employee_id) 
+    with_employees_and_departments
+    .where('departments.manager_id = ?', employee_id) 
+    .order(form_submit_date: :desc)
   }
-  scope :submitted, -> { where.not(form_submit_date: nil) }
-  scope :draft, -> { where(form_submit_date: nil) }
   scope :hrlist, ->  { 
     submitted
     .where("spv_approval = true or leave_type = 'Sick' or leave_type = 'Family Matter'")
+    .order(spv_date: :desc)
   }
+
+  scope :submitted, -> { where.not(form_submit_date: nil) }
+  scope :draft, -> { where(form_submit_date: nil) }
 
   def auto_approve
     if !self.requires_supervisor_approval?
@@ -63,4 +67,19 @@ class LeaveRequest < ActiveRecord::Base
     leave_type == 'Personal' || leave_type == 'School Related'
   end
 
+  def pending_spv_approval?
+    requires_supervisor_approval? && spv_approval.blank?
+  end
+
+  def pending_hr_approval?
+    !pending_spv_approval? && hr_approval.blank?
+  end
+
+  def draft?
+    !submitted?
+  end
+
+  def submitted?
+    form_submit_date.present?
+  end
 end

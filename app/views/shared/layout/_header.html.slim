@@ -42,10 +42,10 @@ ul#user-profile-options.dropdown-content
     li 
       = link_to current_user.employee
         i.material-icons.left face
-        |Profile
+        = current_user.employee.name
   li
     = link_to current_user
-      |Account
+      | Account
       i.material-icons.left perm_identity
   li
     = link_to destroy_user_session_path, method: :delete

@@ -8,12 +8,15 @@ class LeaveRequestsController < ApplicationController
   def index
     @department = Department.find_by_id(@employee.department_id) 
     @leave_requests = LeaveRequest.with_employees_and_departments
-    
+    @own_leave_requests = @leave_requests.empl(@employee)
+    @supv_approval_list = @leave_requests.spv(@employee)
+    @hr_approval_list = @leave_requests.hrlist
   end
 
   # GET /leave_requests/1
   # GET /leave_requests/1.json
   def show
+    authorize! :read, @leave_request
   end
 
   # GET /leave_requests/new
@@ -23,12 +26,15 @@ class LeaveRequestsController < ApplicationController
 
   # GET /leave_requests/1/edit
   def edit
+    authorize! :update, @leave_request
   end
 
   # POST /leave_requests
   # POST /leave_requests.json
   def create
-    @leave_request = LeaveRequest.new(leave_request_params)    
+    @leave_request = LeaveRequest.new(leave_request_params)
+    authorize! :create, @leave_request
+
     @department = Department.find_by_id(@employee.department_id)
     #@supervisor = Employee.find_by_id(@department.manager_id)
     respond_to do |format|
@@ -61,7 +67,9 @@ class LeaveRequestsController < ApplicationController
 
   # PATCH/PUT /leave_requests/1
   # PATCH/PUT /leave_requests/1.json
-  def update         
+  def update
+    authorize! :update, @leave_request
+
     @requester = Employee.find_by_id(@leave_request.employee_id)
     @department = Department.find_by_id(@requester.department_id)    
     @supervisor = Employee.find_by_id(@department.manager_id)
@@ -115,6 +123,9 @@ class LeaveRequestsController < ApplicationController
   end
 
   def approve
+    authorize! :approve, @leave_request if params[:page] == 'spv'
+    authorize! :validate, LeaveRequest if params[:page] == 'hr'
+
     @requester = Employee.find_by_id(@leave_request.employee_id)
     @department = Department.find_by_id(@requester.department_id)    
     @supervisor = Employee.find_by_id(@department.manager_id)
@@ -129,6 +140,7 @@ class LeaveRequestsController < ApplicationController
   # DELETE /leave_requests/1
   # DELETE /leave_requests/1.json
   def destroy
+    authorize! :destroy, @leave_request
     @leave_request.destroy
     respond_to do |format|
       format.html { redirect_to leave_requests_url, notice: 'Leave request was successfully destroyed.' }

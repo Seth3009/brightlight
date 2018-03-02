@@ -1,4 +1,3 @@
-
 table.compact.striped
   thead
     tr
@@ -12,7 +11,7 @@ table.compact.striped
       
       
   tbody#leave_requests
-    - @leave_requests.empl(@employee).each do |leave_request|
+    - @own_leave_requests.each do |leave_request|
       tr
         td 
           = leave_request.form_submit_date.nil? ? 'Draft' : leave_request.form_submit_date.strftime("%d/%m/%Y")
@@ -47,7 +46,7 @@ table.compact.striped
         td
           = link_to leave_request_path(leave_request)
             i.material-icons visibility
-          - if leave_request.form_submit_date.nil? && (can? :submit, leave_request)
+          - if leave_request.draft? && (can? :update, leave_request)
             = link_to edit_leave_request_path(leave_request)
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
             = link_to leave_request, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'

@@ -10,8 +10,9 @@ nav
 
 ul.tabs.z-depth-1
   li.tab.col.s2
-    a href='#tab1' HR01 Form
-  - if can? :update, LeaveRequest    
+    -if can? :read, @own_leave_requests.first
+      a href='#tab1' HR01 Form
+  - if can? :review, LeaveRequest    
     li.tab.col.s2
       a href='#tab2' SPV Approval
   - if can? :read_hr, LeaveRequest
@@ -20,10 +21,9 @@ ul.tabs.z-depth-1
           
 .card
   #tab1.tab-content
-    -if can? :submit, LeaveRequest
-      == render 'employee_list'
+    == render 'employee_list'
   #tab2.tab-content
-    - if can? :update, LeaveRequest
+    - if can? :review, LeaveRequest
       == render "spv_list"
   #tab3.tab-content
     - if can? :read_hr, LeaveRequest

@@ -61,10 +61,10 @@ class Ability
       budget_item.budget.budget_holder == @user.employee 
     end
     can :read, :all
-    can :submit, LeaveRequest, employee:@user.employee
-    can :update, LeaveRequest
-    can :approve, LeaveRequest do |lr|
-      lr.employee.try(:department).try(:manager) == @user.employee    # Manager can only approve leave requests of employees in his/her department
+    can_manage_own_leave_request
+    can :review, LeaveRequest
+    can [:approve, :read, :update], LeaveRequest do |lr|
+      lr.employee.try(:department).try(:manager) == @user.employee   # Manager can only approve leave requests of employees in his/her department
     end
 	end
 
@@ -82,7 +82,7 @@ class Ability
     can [:manage], Requisition, requester: @user.employee
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
-    can :submit, LeaveRequest, employee:@user.employee
+    can_manage_own_leave_request
   end
 
   def staff
@@ -91,11 +91,15 @@ class Ability
     can [:manage], Requisition, requester: @user.employee
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
-    can :submit, LeaveRequest, employee:@user.employee 
+    can_manage_own_leave_request
   end
 
   def hrd
-    can :read_hr, LeaveRequest
+    can :manage, Employee
+    can [:create, :update, :read, :read_hr, :destroy], LeaveRequest
+    can :validate, LeaveRequest do 
+      @user.employee == Department.find_by(code: 'HR').manager
+    end
   end
 
   def carpool
@@ -120,5 +124,13 @@ class Ability
 
 	# Guest, a non-signed in user, can only view public articles
 	def guest
-	end
+  end
+  
+  private 
+
+    def can_manage_own_leave_request
+      can [:create, :read], LeaveRequest, employee: @user.employee
+      can [:update, :destroy], LeaveRequest do |lr| lr.employee == @user.employee && lr.draft? end
+    end
+
 end

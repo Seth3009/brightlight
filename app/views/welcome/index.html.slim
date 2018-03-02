@@ -61,11 +61,11 @@
                 li
                   = link_to 'Missing books', missing_student_books_path
                 li 
-                  = link_to "Poor/Need Rebinding", pnnrb_student_books_path
+                  = link_to "Books in Poor Condition or Need Rebinding", pnnrb_student_books_path
             #tab-maintenance
               ul
                 li
-                  = link_to 'List of books', teachers_book_loans_path
+                  = link_to 'List of book loans', teachers_book_loans_path
 
     - if can? :manage, BookFine
       .col.m4.s6
@@ -75,12 +75,12 @@
           .card-stacked
             .card-content
               span.card-title.activator.grey-text.text-darken-4 
-                |Inventory
+                |Book Inventory
                 i.material-icons.right more_vert
               p Manage book inventory and book loans (for Inventory Department only)
           .card-reveal
             span.card-title.grey-text.text-darken-4
-              |Inventory
+              |Book Inventory
               i.material-icons.right close
             .card-tabs
               ul.tabs.tabs-fixed-width.tabs-transparent
@@ -256,12 +256,28 @@
             span.card-title.activator.grey-text.text-darken-4 
               |HR
               i.material-icons.right more_vert
-            p Submit and manage you Leave Requests
+            p Submit and manage your Leave Requests
         .card-reveal
           span.card-title.grey-text.text-darken-4
-            |Leave Request
+            |HR
             i.material-icons.right close
-          p Under construction
+          .card-tabs
+            ul.tabs.tabs-fixed-width.tabs-transparent
+              li.tab
+                a.active href="#tab-leave-requests" Leave Requests
+              -if can? :manage, Employee
+                li.tab
+                  a href="#tab-hrd" HR Department
+          .card-content
+            #tab-leave-requests
+              ul
+                li
+                  = link_to 'Leave Request', leave_requests_path
+            -if can? :manage, Employee
+              #tab-hrd
+                ul
+                  li 
+                    = link_to 'Employees', employees_path
 
     .col.m4.s6
       .card.horizontal.widget
