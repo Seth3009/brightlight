@@ -33,7 +33,7 @@ class RequisitionsController < ApplicationController
     if @employee.present?
       @department = @employee.department
       @budget = @employee.department.budgets.current.take rescue nil
-      @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current).includes(:academic_year) rescue nil
+      @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current).includes(:academic_year) rescue []
       @manager = @employee.manager || @employee.supervisor
     end
     @requisition = Requisition.new
@@ -46,7 +46,7 @@ class RequisitionsController < ApplicationController
     @manager = @employee.manager || @employee.supervisor
     @supervisors = Employee.active.supervisors.all
     @budget = @employee.department.budgets.current.take rescue nil
-    @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue nil
+    @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue []
   end
 
   # POST /requisitions

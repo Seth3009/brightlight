@@ -11,7 +11,7 @@ class EmailNotification < ActionMailer::Base
     @approver = approver
     @requisition = requisition
     @type = type
-    mail(to: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Purchase Request #{requisition.req_no}.")
+    mail(to: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Purchase Request #{requisition.id}.")
   end 
 
   def leave_approval(leave_request, approver, sendto, type)

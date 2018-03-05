@@ -62,11 +62,7 @@ class ApplicationController < ActionController::Base
     Message.all.unread(current_user)
   end
 
-  # kiki 164, mul 50, agnes 75, el 163
-  def current_user
-    User.find 50
-  end
-  
+
   protected
 
     def configure_permitted_parameters
