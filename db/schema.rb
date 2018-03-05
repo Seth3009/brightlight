@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171122084851) do
+ActiveRecord::Schema.define(version: 20180305005916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -785,6 +785,20 @@ ActiveRecord::Schema.define(version: 20171122084851) do
   add_index "invoices", ["student_id"], name: "index_invoices_on_student_id", using: :btree
   add_index "invoices", ["user_id"], name: "index_invoices_on_user_id", using: :btree
 
+  create_table "item_categories", force: :cascade do |t|
+    t.string   "code"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "item_units", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "abbreviation"
+  end
+
   create_table "late_passengers", force: :cascade do |t|
     t.integer  "carpool_id"
     t.integer  "transport_id"
@@ -805,6 +819,30 @@ ActiveRecord::Schema.define(version: 20171122084851) do
   add_index "late_passengers", ["grade_section_id"], name: "index_late_passengers_on_grade_section_id", using: :btree
   add_index "late_passengers", ["student_id"], name: "index_late_passengers_on_student_id", using: :btree
   add_index "late_passengers", ["transport_id"], name: "index_late_passengers_on_transport_id", using: :btree
+
+  create_table "leave_requests", force: :cascade do |t|
+    t.date     "start_date"
+    t.date     "end_date"
+    t.string   "hour"
+    t.string   "leave_type"
+    t.string   "leave_note"
+    t.boolean  "leave_subtitute"
+    t.text     "subtitute_notes"
+    t.boolean  "spv_approval"
+    t.date     "spv_date"
+    t.text     "spv_notes"
+    t.boolean  "hr_approval"
+    t.date     "hr_date"
+    t.text     "hr_notes"
+    t.date     "form_submit_date"
+    t.string   "leave_attachment"
+    t.integer  "employee_id"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.boolean  "is_canceled",      default: false
+  end
+
+  add_index "leave_requests", ["employee_id"], name: "index_leave_requests_on_employee_id", using: :btree
 
   create_table "line_items", force: :cascade do |t|
     t.string   "description"
@@ -849,6 +887,60 @@ ActiveRecord::Schema.define(version: 20171122084851) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "message_recipients", force: :cascade do |t|
+    t.integer  "recipient_id"
+    t.integer  "msg_group_id"
+    t.integer  "message_id"
+    t.boolean  "is_read",        default: false
+    t.string   "recipient_type"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "message_recipients", ["message_id"], name: "index_message_recipients_on_message_id", using: :btree
+  add_index "message_recipients", ["msg_group_id"], name: "index_message_recipients_on_msg_group_id", using: :btree
+  add_index "message_recipients", ["recipient_id"], name: "index_message_recipients_on_recipient_id", using: :btree
+
+  create_table "messages", force: :cascade do |t|
+    t.string   "subject"
+    t.integer  "creator_id"
+    t.string   "body"
+    t.integer  "parent_id"
+    t.date     "expiry_date"
+    t.boolean  "is_reminder"
+    t.date     "next_remind_date"
+    t.string   "tags"
+    t.integer  "msg_folder_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "messages", ["creator_id"], name: "index_messages_on_creator_id", using: :btree
+  add_index "messages", ["msg_folder_id"], name: "index_messages_on_msg_folder_id", using: :btree
+  add_index "messages", ["parent_id"], name: "index_messages_on_parent_id", using: :btree
+
+  create_table "msg_folders", force: :cascade do |t|
+    t.string   "name"
+    t.string   "tag"
+    t.integer  "parent_id"
+    t.string   "badge"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "msg_folders", ["parent_id"], name: "index_msg_folders_on_parent_id", using: :btree
+
+  create_table "msg_groups", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "creator_id"
+    t.boolean  "is_active",  default: true
+    t.string   "image_url"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "msg_groups", ["creator_id"], name: "index_msg_groups_on_creator_id", using: :btree
 
   create_table "order_items", force: :cascade do |t|
     t.integer  "purchase_order_id"
@@ -981,6 +1073,28 @@ ActiveRecord::Schema.define(version: 20171122084851) do
   add_index "purchase_orders", ["last_updated_by_id"], name: "index_purchase_orders_on_last_updated_by_id", using: :btree
   add_index "purchase_orders", ["requestor_id"], name: "index_purchase_orders_on_requestor_id", using: :btree
 
+  create_table "recurring_types", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reminders", force: :cascade do |t|
+    t.integer  "recurring_type_id"
+    t.integer  "message_id"
+    t.integer  "separation_count"
+    t.integer  "max_num"
+    t.integer  "day_of_week"
+    t.integer  "week_of_month"
+    t.integer  "day_of_month"
+    t.integer  "month_of_year"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "reminders", ["message_id"], name: "index_reminders_on_message_id", using: :btree
+  add_index "reminders", ["recurring_type_id"], name: "index_reminders_on_recurring_type_id", using: :btree
+
   create_table "req_items", force: :cascade do |t|
     t.integer  "requisition_id"
     t.string   "description"
@@ -1022,17 +1136,10 @@ ActiveRecord::Schema.define(version: 20171122084851) do
     t.integer  "department_id"
     t.integer  "requester_id"
     t.integer  "supervisor_id"
-    t.boolean  "supv_approval"
     t.string   "notes"
     t.string   "req_appvl_notes"
     t.integer  "req_approver_id"
     t.string   "total_amt"
-    t.boolean  "is_budget_approved"
-    t.boolean  "is_submitted"
-    t.boolean  "is_approved"
-    t.boolean  "is_sent_to_supv"
-    t.boolean  "is_sent_to_purchasing"
-    t.boolean  "is_sent_for_bgt_approval"
     t.integer  "budget_approver_id"
     t.string   "bgt_appvl_notes"
     t.boolean  "is_rejected"
@@ -1042,8 +1149,16 @@ ActiveRecord::Schema.define(version: 20171122084851) do
     t.boolean  "active"
     t.integer  "created_by_id"
     t.integer  "last_updated_by_id"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.boolean  "is_budget_approved"
+    t.boolean  "is_submitted"
+    t.boolean  "is_supv_approved"
+    t.date     "budget_approved_date"
+    t.date     "supv_approved_date"
+    t.date     "sent_to_supv"
+    t.date     "sent_to_purchasing"
+    t.date     "sent_for_bgt_approval"
   end
 
   add_index "requisitions", ["budget_approver_id"], name: "index_requisitions_on_budget_approver_id", using: :btree
@@ -1382,6 +1497,18 @@ ActiveRecord::Schema.define(version: 20171122084851) do
 
   add_index "transports", ["family_no"], name: "index_transports_on_family_no", using: :btree
 
+  create_table "user_mesg_groups", force: :cascade do |t|
+    t.integer  "recipient_id"
+    t.integer  "msg_group_id"
+    t.boolean  "is_admin",     default: false
+    t.boolean  "is_active",    default: true
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "user_mesg_groups", ["msg_group_id"], name: "index_user_mesg_groups_on_msg_group_id", using: :btree
+  add_index "user_mesg_groups", ["recipient_id"], name: "index_user_mesg_groups_on_recipient_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "provider"
     t.string   "uid"
@@ -1452,12 +1579,19 @@ ActiveRecord::Schema.define(version: 20171122084851) do
   add_foreign_key "late_passengers", "grade_sections"
   add_foreign_key "late_passengers", "students"
   add_foreign_key "late_passengers", "transports"
+  add_foreign_key "leave_requests", "employees"
   add_foreign_key "line_items", "book_fines"
   add_foreign_key "line_items", "invoices"
   add_foreign_key "loan_checks", "academic_years"
   add_foreign_key "loan_checks", "book_copies"
   add_foreign_key "loan_checks", "book_loans"
   add_foreign_key "loan_checks", "users"
+  add_foreign_key "message_recipients", "messages"
+  add_foreign_key "message_recipients", "msg_groups"
+  add_foreign_key "message_recipients", "users", column: "recipient_id"
+  add_foreign_key "messages", "users", column: "creator_id"
+  add_foreign_key "msg_folders", "msg_folders", column: "parent_id"
+  add_foreign_key "msg_groups", "users", column: "creator_id"
   add_foreign_key "order_items", "purchase_orders"
   add_foreign_key "order_items", "stock_items"
   add_foreign_key "order_items", "users", column: "created_by_id"
@@ -1471,6 +1605,8 @@ ActiveRecord::Schema.define(version: 20171122084851) do
   add_foreign_key "purchase_orders", "suppliers"
   add_foreign_key "purchase_orders", "users", column: "created_by_id"
   add_foreign_key "purchase_orders", "users", column: "last_updated_by_id"
+  add_foreign_key "reminders", "messages"
+  add_foreign_key "reminders", "recurring_types"
   add_foreign_key "req_items", "requisitions"
   add_foreign_key "req_items", "users", column: "created_by_id"
   add_foreign_key "req_items", "users", column: "last_updated_by_id"
@@ -1487,6 +1623,8 @@ ActiveRecord::Schema.define(version: 20171122084851) do
   add_foreign_key "smart_cards", "transports"
   add_foreign_key "templates", "academic_years"
   add_foreign_key "templates", "users"
+  add_foreign_key "user_mesg_groups", "msg_groups"
+  add_foreign_key "user_mesg_groups", "users", column: "recipient_id"
 
   create_view :teachers_books,  sql_definition: <<-SQL
       SELECT book_loans.id,

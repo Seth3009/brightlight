@@ -1,0 +1,12 @@
+.card-panel
+  .row
+    strong.col.s3 Description
+    strong.col.s1 Qty
+    strong.col.s1 Unit
+    strong.col.s1 Currency
+    strong.col.s2 Est.price
+    strong.col.s2 Date Req'd
+    strong.col.s1 Action
+  .row#requisition
+    = f.fields_for :req_items do |req_item|
+      = render 'req_item_fields', f: req_item

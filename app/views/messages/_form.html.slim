@@ -1,0 +1,13 @@
+.card-panel
+  = form_for @message do |f|
+    .input-field
+      = f.label :subject
+      = f.text_field :subject
+    .input-field
+      = f.label :creator
+      = f.text_field :creator
+    .input-field
+      = f.label :body
+      = f.text_field :body
+
+    .actions = f.submit

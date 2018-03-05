@@ -1,0 +1,95 @@
+-title 'Leave Request'
+h4 Leave Request
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to leave_requests_path
+          i.material-icons.left chevron_left  
+      -if can?(:update, @leave_request) && @leave_request.draft?
+        li.right
+          = link_to edit_leave_request_path(@leave_request)
+            i.material-icons edit
+.card-panel
+  .leave-request-container 
+    .row
+      .col.s2
+        .label-text Employee
+      .col.s10 #{@leave_request.employee.try(:name)} ( #{@leave_request.employee.department} )
+      .col.s2
+        .label-text Job Title
+      .col.s10 #{@leave_request.employee.try(:job_title)}    
+    .row
+      .col.s2
+        .label-text Req'd date
+      .col.s4
+        | : #{@leave_request.start_date.strftime("%d %b %Y")} To: #{@leave_request.end_date.strftime("%d %b %Y")}
+    
+      .col.s2
+        .label-text # of days/hours 
+      .col.4
+        | : #{@leave_request.hour}
+    .row
+      .col.s2
+        .label-text Leave for
+      .col.s4
+        | : #{@leave_request.leave_type}
+    
+      .col.s2
+        .label-text Leave notes
+      .col.s4
+        | : #{@leave_request.leave_note.nil? ? "--" : @leave_request.leave_note }
+    .row
+      .col.s2
+        .label-text Substitute  
+      .col.s4    
+        -if @leave_request.leave_subtitute == true
+          | : Required
+        -elsif @leave_request.leave_subtitute == false
+          | : Not Required
+        -else
+          | : --
+      .col.s2
+        .label-text Notes
+      .col.s4
+        | : #{@leave_request.subtitute_notes}
+    .row
+      .col.s2
+        .label-text Submit date
+      .col.s4
+        | : #{@leave_request.form_submit_date.try(:strftime, ("%d %b %Y")) || "Draft"}
+    .row
+      .col.s2
+        .label-text SPV Approval
+      .col.s1                           
+        - if @leave_request.spv_approval.nil?
+          | : 
+          i.material-icons check_box_outline_blank
+        - elsif @leave_request.spv_approval == true
+          | : 
+          i.material-icons check_box
+        - else
+          | : 
+          i.material-icons cancel
+      .col.s9
+        | #{@leave_request.spv_notes}
+    .row   
+      .col.s2
+        .label-text HR Approval   
+      .col.s1         
+        - if @leave_request.hr_approval.nil?
+          | : 
+          i.material-icons check_box_outline_blank
+        - elsif @leave_request.hr_approval == true
+          | : 
+          i.material-icons check_box
+        - else
+          | : 
+          i.material-icons cancel
+      .col.s9
+        | #{@leave_request.hr_notes}
+    -if @leave_request.is_canceled?
+      .row
+        .col.s12
+          h6.center-align.red-text This leave request has been canceled
+        

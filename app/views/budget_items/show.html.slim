@@ -1,0 +1,45 @@
+p#notice = notice
+
+p
+  strong Budget:
+  = @budget_item.budget
+p
+  strong Description,:
+  = @budget_item.description,
+p
+  strong Account,:
+  = @budget_item.account,
+p
+  strong Line:
+  = @budget_item.line
+p
+  strong Notes,:
+  = @budget_item.notes,
+p
+  strong Academic year:
+  = @budget_item.academic_year
+p
+  strong Month:
+  = @budget_item.month
+p
+  strong Amount:
+  = @budget_item.amount
+p
+  strong Actual amt:
+  = @budget_item.actual_amt
+p
+  strong Is completed:
+  = @budget_item.is_completed
+p
+  strong Type,:
+  = @budget_item.type,
+p
+  strong Category,:
+  = @budget_item.category,
+p
+  strong Group:
+  = @budget_item.group
+
+= link_to 'Edit', edit_budget_item_path(@budget_item)
+'|
+= link_to 'Back', budget_items_path

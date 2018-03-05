@@ -1,0 +1,1 @@
+json.extract! @order_item, :id, :purchase_order, :stock_item, :quantity, :unit,, :min_delivery_qty, :pending_qty, :type,, :line_amount, :unit_price, :currency,, :deleted, :description,, :status,, :line_num, :extra1, :extra2, :created_at, :updated_at

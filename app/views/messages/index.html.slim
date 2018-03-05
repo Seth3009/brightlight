@@ -1,0 +1,32 @@
+- title "Messages"
+h4 Messages
+
+nav
+  .nav-wrapper
+    ul.right
+      li
+        = link_to new_message_path, remote: true
+          i.material-icons.left add
+
+.card-panel
+  table
+    thead
+      tr
+        th From
+        th Subject
+        th Date
+        th
+        th
+
+    tbody
+      - @messages.each do |message|
+        tr
+          td = message.creator.name          
+          td = message.subject
+          td = timeago_tag message.created_at, :nojs => true, :limit => 10.days.ago
+          td 
+            = link_to message
+              i.material-icons visibility
+          td
+            = link_to message, data: {id: message.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
+              i.material-icons delete

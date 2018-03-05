@@ -49,7 +49,7 @@ gem 'will_paginate', '~> 3.0.6'
 gem 'filterrific'
 
 # The Materialize UI framework
-gem 'materialize-sass'
+gem 'materialize-sass', '0.97.1'
 
 # jQuery UI
 gem 'jquery-ui-rails'
@@ -61,6 +61,9 @@ gem 'hashie'
 
 # To convert number to words
 gem 'numbers_and_words'
+
+# To display fuzzy time
+gem 'rails-timeago', '~> 2.0'
 
 # Login with Devise & OmniAuth Google+ OAuth2
 gem 'devise'
@@ -117,7 +120,7 @@ group :development, :test do
   gem 'byebug'
   gem 'forgery'
   gem 'populator'
-  gem 'letter_opener'
+  gem 'letter_opener_web', '1.3.1'
   gem 'rspec-rails', '~> 3.5'
   gem 'capybara'
   gem 'factory_girl_rails'

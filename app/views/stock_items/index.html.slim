@@ -1,0 +1,47 @@
+h1 Listing stock_items
+
+table
+  thead
+    tr
+      th Name,
+      th Code,
+      th Description,
+      th Tags,
+      th Short desc,
+      th Is active
+      th Unit price
+      th Image
+      th Stock category
+      th Class,
+      th Group,
+      th Weight,
+      th Extra1,
+      th Extra2
+      th
+      th
+      th
+
+  tbody
+    - @stock_items.each do |stock_item|
+      tr
+        td = stock_item.name,
+        td = stock_item.code,
+        td = stock_item.description,
+        td = stock_item.tags,
+        td = stock_item.short_desc,
+        td = stock_item.is_active
+        td = stock_item.unit_price
+        td = stock_item.image
+        td = stock_item.stock_category
+        td = stock_item.class,
+        td = stock_item.group,
+        td = stock_item.weight,
+        td = stock_item.extra1,
+        td = stock_item.extra2
+        td = link_to 'Show', stock_item
+        td = link_to 'Edit', edit_stock_item_path(stock_item)
+        td = link_to 'Destroy', stock_item, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Stock item', new_stock_item_path

@@ -1,0 +1,14 @@
+.row.compact.nested-fields
+  .input-field.col.s1
+    = f.text_field :account
+  .input-field.col.s4
+    = f.text_field :description
+  .input-field.col.s1
+    = f.select :month, options_for_select([['Jan',1],['Feb',2],['Mar',3],['Apr',4],['May',5],['Jun',6],['Jul',7],['Aug',8],['Sep',9],['Oct',10],['Nov',11],['Dec',12]], selected: f.object.month)
+  .input-field.col.s2
+    = f.number_field :amount
+  .input-field.col.s3
+    = f.text_field :notes
+  .input-field.col.s1 style="padding-top:8px"
+    = link_to_remove_association f, class: "waves-effect waves-teal red-text"
+      i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete

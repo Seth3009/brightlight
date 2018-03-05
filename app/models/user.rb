@@ -66,7 +66,7 @@ class User < ActiveRecord::Base
   delegate :can?, :cannot?, :to => :ability
 
   # For authorization
-  ROLES = %i[admin manager student teacher staff employee inventory carpool librarian]
+  ROLES = %i[admin manager student teacher staff employee inventory carpool librarian hrd] 
 
   def roles=(roles)
     roles = [*roles].map { |r| r.to_sym }

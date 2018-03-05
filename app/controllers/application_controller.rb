@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   helper_method :sort_column, :sort_direction
   layout :layout_by_controller
   before_action :set_current_academic_year
+  helper_method :unread_messages
 
   # Authorization using CanCanCan gem
   include CanCan::ControllerAdditions
@@ -13,7 +14,13 @@ class ApplicationController < ActionController::Base
   # Uncomment the next line to ensure authorization check for every single controller acion
   # check_authorization
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, :alert => exception.message
+    respond_to do |format|
+      format.json { render nothing: true, status: :forbidden }
+      format.html { redirect_to root_url, :alert => exception.message }
+      format.js   { 
+        render js: "Materialize.toast('You are not authorized to perform that operation.', 4000, 'red');"
+      }
+    end
   end
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -50,6 +57,11 @@ class ApplicationController < ActionController::Base
   def sort_direction    
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end 
+
+  def unread_messages
+    Message.all.unread(current_user)
+  end
+
 
   protected
 

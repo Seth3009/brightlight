@@ -8,7 +8,9 @@ class Employee < ActiveRecord::Base
 	has_many :subordinates, class_name: "Employee", foreign_key: "supervisor_id", dependent: :restrict_with_error
   has_many :book_loans
   has_many :grade_sections, foreign_key: "homeroom_id"
-  has_many :course_sections, foreign_key: "instructor_id"
+	has_many :course_sections, foreign_key: "instructor_id"
+	has_one :manager, through: :department
+	has_many :leave_requests
 
   accepts_nested_attributes_for :book_loans,
     allow_destroy: true,
@@ -21,6 +23,15 @@ class Employee < ActiveRecord::Base
     .where(book_loans: {academic_year_id: year || AcademicYear.current_id})
 		.order(:name).uniq
 	}
+	scope :department_heads, lambda { joins('join departments on employees.id = departments.manager_id').order(:name) }
+	scope :supervisors, lambda { 
+		where('id in (select supervisor_id from employees where supervisor_id is not null)')
+		.select(:id, :name)
+	}
+
+	def is_manager?
+		Department.all.map(&:manager_id).include? self.id
+	end
 	
 	def to_s
 		name

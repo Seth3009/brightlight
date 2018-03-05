@@ -1,0 +1,16 @@
+.compact.nested-fields
+  .input-field.col.s3
+    = f.text_field :description
+  .input-field.col.s1
+    = f.number_field :qty_reqd
+  .input-field.col.s1
+    = f.text_field :unit
+  .input-field.col.s1
+    = f.select :currency, [['IDR', 'IDR'], ['USD', 'USD'], ['SGD', 'SGD'], ['AUD', 'AUD'], ['GBP', 'GBP']]
+  .input-field.col.s2
+    = f.number_field :est_price
+  .input-field.col.s2
+    = f.date_field :needed_by_date
+  .input-field.col.s1 style="padding-top:8px"
+    = link_to_remove_association f, class: "waves-effect waves-teal red-text"
+      i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete

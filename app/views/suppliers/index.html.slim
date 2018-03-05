@@ -1,0 +1,55 @@
+h1 Listing suppliers
+
+table
+  thead
+    tr
+      th Company name,
+      th Contact name,
+      th Address1,
+      th Address2,
+      th City,
+      th Province,
+      th Post code,
+      th Country,
+      th Phone,
+      th Mobile,
+      th Email,
+      th Website,
+      th Notes,
+      th Logo,
+      th Category,
+      th Status,
+      th Type,
+      th Group
+      th
+      th
+      th
+
+  tbody
+    - @suppliers.each do |supplier|
+      tr
+        td = supplier.company_name,
+        td = supplier.contact_name,
+        td = supplier.address1,
+        td = supplier.address2,
+        td = supplier.city,
+        td = supplier.province,
+        td = supplier.post_code,
+        td = supplier.country,
+        td = supplier.phone,
+        td = supplier.mobile,
+        td = supplier.email,
+        td = supplier.website,
+        td = supplier.notes,
+        td = supplier.logo,
+        td = supplier.category,
+        td = supplier.status,
+        td = supplier.type,
+        td = supplier.group
+        td = link_to 'Show', supplier
+        td = link_to 'Edit', edit_supplier_path(supplier)
+        td = link_to 'Destroy', supplier, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Supplier', new_supplier_path

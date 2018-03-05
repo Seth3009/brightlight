@@ -1,0 +1,48 @@
+= form_for @budget_item do |f|
+  - if @budget_item.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@budget_item.errors.count, "error")} prohibited this budget_item from being saved:"
+      ul
+        - @budget_item.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :budget
+    = f.text_field :budget
+  .field
+    = f.label :description,
+    = f.text_field :description,
+  .field
+    = f.label :account,
+    = f.text_field :account,
+  .field
+    = f.label :line
+    = f.text_field :line
+  .field
+    = f.label :notes,
+    = f.text_field :notes,
+  .field
+    = f.label :academic_year
+    = f.text_field :academic_year
+  .field
+    = f.label :month
+    = f.text_field :month
+  .field
+    = f.label :amount
+    = f.text_field :amount
+  .field
+    = f.label :actual_amt
+    = f.text_field :actual_amt
+  .field
+    = f.label :is_completed
+    = f.text_field :is_completed
+  .field
+    = f.label :type,
+    = f.text_field :type,
+  .field
+    = f.label :category,
+    = f.text_field :category,
+  .field
+    = f.label :group
+    = f.text_field :group
+  .actions = f.submit

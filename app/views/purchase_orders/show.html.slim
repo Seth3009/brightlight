@@ -1,0 +1,51 @@
+p#notice = notice
+
+p
+  strong Order num,:
+  = @purchase_order.order_num
+p
+  strong Requestor:
+  = @purchase_order.requestor
+p
+  strong Order date:
+  = @purchase_order.order_date
+p
+  strong Due date:
+  = @purchase_order.due_date
+p
+  strong Total amount:
+  = @purchase_order.total_amount
+p
+  strong Is active:
+  = @purchase_order.is_active
+p
+  strong Currency,:
+  = @purchase_order.currency
+p
+  strong Deleted:
+  = @purchase_order.deleted
+p
+  strong Notes,:
+  = @purchase_order.notes
+p
+  strong Completed date:
+  = @purchase_order.completed_date
+p
+  strong Supplier:
+  = @purchase_order.supplier
+p
+  strong Contact,:
+  = @purchase_order.contact
+p
+  strong Phone contact,:
+  = @purchase_order.phone_contact
+p
+  strong User:
+  = @purchase_order.user
+p
+  strong Status:
+  = @purchase_order.status
+
+= link_to 'Edit', edit_purchase_order_path(@purchase_order)
+
+= link_to 'Back', purchase_orders_path

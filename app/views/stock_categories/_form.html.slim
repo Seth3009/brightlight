@@ -1,0 +1,30 @@
+= form_for @stock_category do |f|
+  - if @stock_category.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@stock_category.errors.count, "error")} prohibited this stock_category from being saved:"
+      ul
+        - @stock_category.errors.full_messages.each do |message|
+          li = message
+
+  .row
+    .input-field.col.s4
+      = f.label :name
+      = f.text_field :name
+    .input-field.col.s4
+      = f.label :code
+      = f.text_field :code
+    .input-field.col.s4
+      = f.label :description
+      = f.text_field :description
+    .input-field.col.s4
+      = f.label :type
+      = f.text_field :type
+    .input-field.col.s4
+      = f.label :is_active
+      = f.text_field :is_active
+    .input-field.col.s4
+      = f.label :location
+      = f.text_field :location
+  
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save

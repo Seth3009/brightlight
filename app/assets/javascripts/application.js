@@ -16,7 +16,7 @@
 //= require jquery-ui
 //= require jquery.ui.touch-punch.min.js
 //= require jquery.tagsinput
-//= require materialize-sprockets
+//= require materialize
 //= require materialize/extras/nouislider
 //= require cocoon
 //= require filterrific/filterrific-jquery
@@ -26,9 +26,11 @@
 //= require nprogress-turbolinks
 //= require nprogress-ajax
 //= require jquery-code-scanner
+//= require rails-timeago
 //= require init
 //= require carpools
 //= require turbolinks
 //= require book_copies
 //= require book_fines
+//= require requisitions
 //= require settings

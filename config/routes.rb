@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
 
+  resources :stock_categories
+  resources :stock_items
+  resources :suppliers
+  resources :delivery_items
+  resources :deliveries
+  resources :order_items
+  resources :purchase_orders
+  resources :req_items
+  resources :item_units
   resources :template_targets
   resources :templates
   resources :currencies
@@ -18,6 +27,14 @@ Rails.application.routes.draw do
 
   resources :copy_conditions
   resources :book_conditions
+  
+  resources :leave_requests do
+    member do
+      delete :cancel
+    end
+  end 
+
+  get 'leave_requests/:id/approve/:page' => 'leave_requests#approve', as: :approve
 
   resources :courses do
     resources :course_texts, shallow: true
@@ -196,6 +213,30 @@ Rails.application.routes.draw do
 
   resources :smart_cards, only: [:show, :create, :destroy]
 
+  resources :requisitions do
+    member do
+      get 'approve'
+      post 'approve_requisition'
+      post 'approve_budget'
+    end
+  end 
+
+  resources :budgets do
+    collection do
+      post 'import'
+    end 
+  end
+
+  resources :budget_items, only: [:index, :show]
+  resources :messages do 
+    member do
+      post 'mark_read'
+    end
+  end
+
+  get  '/search' => "search#index"
+  post '/search' => "search#index"
+
   patch 'pax/:id' => 'late_passengers#update'
 
   devise_for :users, controllers: {
@@ -231,6 +272,10 @@ Rails.application.routes.draw do
   # For authorization with OmniAuth2
   get '/auth/:provider/callback', to: 'sessions#create'
 
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  end
+  
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

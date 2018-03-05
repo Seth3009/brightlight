@@ -1,0 +1,95 @@
+= form_for @budget do |f|
+  - if @budget.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@budget.errors.count, "error")} prohibited this budget from being saved:"
+      ul
+        - @budget.errors.full_messages.each do |message|
+          li = message
+
+  .card-panel
+    .row  
+      .input-field.col.m3
+        = f.label :department, class:'active'
+        = f.collection_select :department_id, Department.all, :id, :name, prompt: true
+      .input-field.col.m3
+        = f.label :grade_level, class:'active'
+        = f.collection_select :grade_level_id, GradeLevel.all, :id, :name, prompt: true
+      .input-field.col.m3
+        = f.label :grade_section, class:'active'
+        = f.collection_select :grade_section_id, GradeSection.all, :id, :name, prompt: true
+      .input-field.col.m3
+        = f.label :budget_holder, class:'active'
+        = f.collection_select :budget_holder_id, Employee.all.active.order(:name), :id, :name, prompt: true
+      .input-field.col.m3
+        = f.label :academic_year, class:'active'
+        = f.collection_select :academic_year_id, AcademicYear.all, :id, :name, prompt: true
+      .input-field.col.m3
+        = f.label :total_amt
+        = f.text_field :total_amt
+      .input-field.col.m3
+        = f.label :approved_date, class:'active'
+        = f.date_field :approved_date
+      .input-field.col.m3
+        = f.label "Approved by", class:'active'
+        = f.collection_select :approver_id, Employee.department_heads, :id, :name, prompt: true
+      .input-field.col.m12
+        = f.label :notes
+        = f.text_field :notes
+
+      / .input-field.col.m3
+      /   = f.label :is_approved
+      /   = f.text_field :is_approved
+      / .input-field.col.m3
+      /   = f.label :is_submitted
+      /   = f.text_field :is_submitted
+      / .input-field.col.m3
+      /   = f.label :submit_date
+      /   = f.text_field :submit_date
+      / .input-field.col.m3
+      /   = f.label :is_received
+      /   = f.text_field :is_received
+      / .input-field.col.m3
+      /   = f.label :receiver
+      /   = f.text_field :receiver
+      / .input-field.col.m3
+      /   = f.label :received_date
+      /   = f.text_field :received_date
+      / .input-field.col.m3
+      /   = f.label :category
+      /   = f.text_field :category
+      / .input-field.col.m3
+      /   = f.label :type
+      /   = f.text_field :type
+      / .input-field.col.m3
+      /   = f.label :group
+      /   = f.text_field :group
+      / .input-field.col.m3
+      /   = f.label :version
+      /   = f.text_field :version
+
+  nav
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Budget Items
+      ul.right
+        li
+          = link_to_add_association f, :budget_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#budget'
+            ' Add Item
+            i.material-icons.left playlist_add
+
+  .card-panel
+    .row
+      strong.col.s1 Account
+      strong.col.s4 Description
+      strong.col.s1 Month
+      strong.col.s2 Amount
+      strong.col.s3 Notes
+      strong.col.s1 Action
+    #budget
+      = f.fields_for :budget_items do |budget_item|
+        = render 'budget_item_fields', f: budget_item
+
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" name="save" Save
+    button.btn.waves-effect.waves-light type="submit" name="send" Send for Approval
+    = link_to 'Cancel', budgets_path, class: "waves-effect waves-light btn-flat"

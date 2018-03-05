@@ -1,0 +1,56 @@
+- title 'Purchase Request Approval'
+
+h4 Purchase Request Approval
+
+= form_for @requisition do |f|
+
+  = render 'req_detail', f: f
+
+  nav
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Approval Action
+  .card-panel
+    .row class="#{params[:appvl]=='supv' ? 'red lighten-4' : ''}"
+      .input-field.col.m3
+        = f.label :supervisor, class: 'active'
+        = f.text_field :supervisor, disabled: true
+      .input-field.col.m3
+        = f.check_box :is_supv_approved, disabled: params[:appvl] != 'supv'
+        = f.label :is_supv_approved, @requisition.is_supv_approved ? 'Request approved' : 'Approve request'
+      .input-field.col.m6
+        = f.label :req_appvl_notes, "Approval Notes"
+        = f.text_field :req_appvl_notes, disabled: params[:appvl] != 'supv'
+    
+    .row.budget-approval class="#{params[:appvl]=='budget' ? 'red lighten-4' : ''}" style="display:#{@requisition.is_budgeted ? 'none' : 'block'}"
+      .input-field.col.m3
+        = f.label :budget_approver, class: 'active'
+        = f.collection_select :budget_approver_id, @supervisors, :id, :name, prompt: "Select budget approver"
+      - if params[:appvl] == 'budget' && (can? :approve_budget, @requisition)
+        .input-field.col.m3
+          = f.check_box :is_budget_approved
+          = f.label :is_budget_approved, 'Approve Budget'
+        .input-field.col.m6
+          = f.label :reject_reason, "Budget notes"
+          = f.text_field :reject_reason
+        
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" name="approve" Submit      
+    - if params[:appvl] == 'supv'
+      = button_tag class:"btn waves-effect waves-light", type: "submit", name:"send", id:"send_budget", value:"budget", disabled: (@button_state ? false : true) 
+        | Send for Approval
+    = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"
+
+  nav
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Items
+      ul.right
+        li
+          = link_to_add_association f, :req_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#requisition'
+            ' Add Item
+            i.material-icons.left playlist_add
+  
+  = render 'req_items', f: f
+
+

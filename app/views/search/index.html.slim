@@ -1,0 +1,56 @@
+h4 Search results
+
+-if @books.present?
+  .card-panel
+    .row
+      h5 Books
+      table.compact.striped
+        tbody
+          - @books.each do |book|
+            tr
+              td 
+                = link_to book.title, book
+
+-if @tags.present?
+  .card-panel
+    .row
+      h5 Book Title Tags
+      table.compact.striped
+        tbody
+          - @tags.each do |book|
+            tr
+              td 
+                = link_to book.title, book
+
+-if @book_copies.present?
+  .card-panel
+    .row
+      h5 Book Copy
+      table.compact.striped
+        tbody
+          - @book_copies.each do |copy|
+            tr
+              td 
+                = link_to "#{copy.barcode} - #{copy.book_edition.try(:title)}", copy
+
+-if @students.present?
+  .card-panel
+    .row
+      h5 Students
+      table.compact.striped
+        tbody
+          - @students.each do |student|
+            tr
+              td 
+                = link_to student.name, student
+
+-if @employees.present?
+  .card-panel
+    .row
+      h5 Employees
+      table.compact.striped
+        tbody
+          - @employees.each do |employee|
+            tr
+              td 
+                = link_to employee.name, employee

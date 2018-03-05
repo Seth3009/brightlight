@@ -1,0 +1,83 @@
+- title 'Budget'
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to budgets_path
+          | All budgets
+          i.material-icons.left chevron_left
+    ul.right
+      li
+        = link_to edit_budget_path @budget
+          i.material-icons edit
+
+.panel
+  ul.collapsible data-collapsible="expandable"
+    li
+      .collapsible-header.active
+        | Detail
+        i.material-icons.left.arrow chevron_right
+      .collapsible-body
+        ul.collection
+          li.collection-item.row
+            .col.m3
+              .label Department
+              .item = @budget.department.try(:name)
+              - if @budget.grade_section
+                .label Section
+                .item = @budget.grade_section.try(:name)
+            .col.m3
+              .label Budget Holder
+              .item = @budget.budget_holder.try(:name)
+            .col.m3
+              .label Academic Year
+              .item = @budget.academic_year.try(:name)
+            .col.m3
+              .label Total Amount
+              .item = @budget.total_amt
+    li
+      .collapsible-header
+        | Items
+        i.material-icons.left.arrow chevron_right
+      .collapsible-body.container-padding
+        table.compact.striped
+          thead
+            tr
+              th Account
+              th Description
+              th Month
+              th Amount
+              th Notes 
+              
+          tbody
+            - @budget.budget_items.each do |budget_item|
+              tr
+                td = budget_item.account
+                td = budget_item.description
+                td = budget_item.month
+                td = budget_item.amount
+                td = budget_item.notes
+    li
+      .collapsible-header
+        | Approval
+        i.material-icons.left.arrow chevron_right
+      .collapsible-body
+        ul.collection
+          li.collection-item.row
+            .col.m3
+              .label Approved date
+              .item = @budget.approved_date
+            .col.m3
+              .label Approved by
+              .item = @budget.approver.try(:name)
+          li.collection-item.row 
+            .col.m12
+              .label Notes
+              .item = @budget.notes
+javascript:
+  $(document).on('ready page:load', function(){
+    $('.collapsible').collapsible({
+      accordion: false
+    });
+  });
