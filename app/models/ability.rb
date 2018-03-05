@@ -50,6 +50,9 @@ class Ability
     can :manage, ReqItem do |req_item| 
       req_item.requisition.department == @user.employee.department 
     end
+    can :update, Requisition do |req|
+      req.budget_approver == @user.employee     # User can only approve requisition that is sent to the respective user
+    end
     can :approve, Requisition do |req|
       req.supervisor == @user.employee          # User can only approve requisition that is sent to the respective user
     end
@@ -129,7 +132,7 @@ class Ability
   private 
 
     def can_manage_own_leave_request
-      can [:create, :read], LeaveRequest, employee: @user.employee
+      can [:create, :read, :cancel], LeaveRequest, employee: @user.employee
       can [:update, :destroy], LeaveRequest do |lr| lr.employee == @user.employee && lr.draft? end
     end
 

@@ -48,4 +48,11 @@ class EmailNotification < ActionMailer::Base
     @employee = Employee.find_by_id(leave_request.employee_id)
     mail(to: %("#{@employee.name}" <#{@employee.email}>), cc: %("#{@supervisor.name}" <#{@supervisor.email}>), subject: "[HRD] Leave Request #{leave_request.employee.try(:name)}.")
   end
+
+  def leave_canceled(leave_request, employee, cc_list)
+    @employee = employee
+    @leave_request = leave_request
+    cc = cc_list.map {|e| "#{e.name} <#{e.try(:email)}>"}.join(", ")
+    mail(to: %("#{@employee.name}" <#{@employee.email}>), cc: cc, subject: "Leave canceled (#{employee.name})")
+  end
 end

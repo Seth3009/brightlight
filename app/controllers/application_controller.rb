@@ -64,7 +64,7 @@ class ApplicationController < ActionController::Base
 
   # kiki 164, mul 50, agnes 75, el 163
   def current_user
-    User.find 164
+    User.find 50
   end
   
   protected

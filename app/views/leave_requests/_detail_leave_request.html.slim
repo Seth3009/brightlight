@@ -88,4 +88,8 @@ nav
           i.material-icons cancel
       .col.s9
         | #{@leave_request.hr_notes}
+    -if @leave_request.is_canceled?
+      .row
+        .col.s12
+          h6.center-align.red-text This leave request has been canceled
         

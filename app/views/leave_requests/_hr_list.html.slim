@@ -41,3 +41,5 @@ table.compact.striped
         td 
           = link_to approve_path(leave_request,"hr")
             i.material-icons visibility
+          = link_to cancel_leave_request_path(leave_request), data: {:confirm => 'This action will cancel a leave request that has already been submitted. Are you sure?'}, :method => :delete, class:'red-text'
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete

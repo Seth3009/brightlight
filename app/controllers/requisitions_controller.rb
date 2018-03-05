@@ -132,7 +132,7 @@ class RequisitionsController < ApplicationController
 
   # GET /requisitions/1/approve
   def approve
-    authorize! :approve, @requisition
+    authorize! :approve, @requisition if params[:appvl] == 'supv'
     authorize! :approve_budget, @requisition if params[:appvl] == 'budget'
     @employee = @requisition.requester
     @manager = @employee.manager || @employee.supervisor

@@ -1,5 +1,5 @@
 class LeaveRequestsController < ApplicationController
-  before_action :set_leave_request, only: [:show, :edit, :update, :destroy, :approve]
+  before_action :set_leave_request, only: [:show, :edit, :update, :destroy, :cancel, :approve]
   before_action :set_employee, only: [:index, :new, :edit, :create, :update, :approve]
   
   
@@ -8,9 +8,20 @@ class LeaveRequestsController < ApplicationController
   def index
     @department = Department.find_by_id(@employee.department_id) 
     @leave_requests = LeaveRequest.with_employees_and_departments
-    @own_leave_requests = @leave_requests.empl(@employee)
-    @supv_approval_list = @leave_requests.spv(@employee)
+    @own_leave_requests = @leave_requests.active.empl(@employee)
+    @supv_approval_list = @leave_requests.active.spv(@employee)
     @hr_approval_list = @leave_requests.hrlist
+    if params[:dept].present? && params[:dept] != 'all'
+      @dept_filter = Department.find_by(code: params[:dept])
+      @hr_approval_list = @hr_approval_list.where(departments: {code: params[:dept]})
+    end
+    if params[:canceled] == 'yes'
+      @hr_approval_list = @hr_approval_list.canceled
+      @status = 'Canceled'
+    else
+      @hr_approval_list = @hr_approval_list.active
+      @status = 'Active'
+    end
   end
 
   # GET /leave_requests/1
@@ -82,9 +93,9 @@ class LeaveRequestsController < ApplicationController
             if params[:send] == 'empl_submit'
               approver = @supervisor
               if @leave_request.leave_type == "Sick" || @leave_request == "Family Matter"
-                send_to = @hrmanager
+                send_to = 'hr'
               else
-                send_to = @supervisor
+                send_to = 'spv'
               end
               if @leave_request.send_for_approval(approver, send_to, 'empl_submit') 
                 @leave_request.auto_approve          
@@ -122,6 +133,7 @@ class LeaveRequestsController < ApplicationController
     end
   end
 
+  # GET /leave_requests/:id/approve/:page
   def approve
     authorize! :approve, @leave_request if params[:page] == 'spv'
     authorize! :validate, LeaveRequest if params[:page] == 'hr'
@@ -137,6 +149,14 @@ class LeaveRequestsController < ApplicationController
       redirect_to leave_requests_url, alert: "unavailable page"
     end
   end
+
+  # DELETE /leave_requests/1/cancel
+  def cancel
+    authorize! :cancel, @leave_request
+    @leave_request.cancel
+    redirect_to leave_requests_url, notice: 'Leave request has been successfully canceled.'
+  end
+
   # DELETE /leave_requests/1
   # DELETE /leave_requests/1.json
   def destroy

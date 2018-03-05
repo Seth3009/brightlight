@@ -5,16 +5,22 @@ class LeaveRequest < ActiveRecord::Base
   validates_presence_of :leave_type, :message => "Choose your leave type"
   validates_presence_of :leave_note, :message => "Describe your leave"
   
+  scope :active, -> { where(is_canceled: false) }
+  scope :canceled, -> { where(is_canceled: true) }
+
   scope :with_employees_and_departments, -> {
     joins('left join employees on employees.id = leave_requests.employee_id') 
     .joins('left join departments on departments.id = employees.department_id')
   }
+
   scope :empl, -> (employee_id) { where employee_id: employee_id }
+
   scope :spv, -> (employee_id) { 
     with_employees_and_departments
     .where('departments.manager_id = ?', employee_id) 
     .order(form_submit_date: :desc)
   }
+
   scope :hrlist, ->  { 
     submitted
     .where("spv_approval = true or leave_type = 'Sick' or leave_type = 'Family Matter'")
@@ -22,6 +28,7 @@ class LeaveRequest < ActiveRecord::Base
   }
 
   scope :submitted, -> { where.not(form_submit_date: nil) }
+
   scope :draft, -> { where(form_submit_date: nil) }
 
   def auto_approve
@@ -63,6 +70,15 @@ class LeaveRequest < ActiveRecord::Base
     return true    
   end
 
+  def cancel 
+    is_canceled = true
+    self.save
+    cc = [employee.try(:department).try(:manager), Department.find_by(code: 'HR').manager]
+    email = EmailNotification.leave_canceled(self, employee, cc)
+    notification = Message.new_from_email(email)
+    notification.save
+  end
+
   def requires_supervisor_approval?
     leave_type == 'Personal' || leave_type == 'School Related'
   end
@@ -82,4 +98,9 @@ class LeaveRequest < ActiveRecord::Base
   def submitted?
     form_submit_date.present?
   end
+
+  def is_canceled?
+    is_canceled
+  end
+
 end
