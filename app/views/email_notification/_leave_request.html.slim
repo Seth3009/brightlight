@@ -1,50 +1,42 @@
-.leave-request-container 
-  .row
-    .col.s2
-      .label-text Employee
-    .col.s10 #{@leave_request.employee.try(:name)} ( #{@leave_request.employee.department} )
-    .col.s2
-      .label-text Job Title
-    .col.s10 #{@leave_request.employee.try(:job_title)}    
-  .row
-    .col.s2
-      .label-text Req'd date
-    .col.s4
-      | : #{@leave_request.start_date.strftime("%d %b %Y")} To: #{@leave_request.end_date.strftime("%d %b %Y")}
-  
-    .col.s2
-      .label-text # of days/hours 
-    .col.4
-      | : #{@leave_request.hour}
-  .row
-    .col.s2
-      .label-text Leave for
-    .col.s4
-      | : #{@leave_request.leave_type}
-  
-    .col.s2
-      .label-text Leave notes
-    .col.s4
-      | : #{@leave_request.leave_note.nil? ? "--" : @leave_request.leave_note }
-  .row
-    .col.s2
-      .label-text Substitute  
-    .col.s4    
-      -  if @leave_request.leave_subtitute == true
-          | : Required
-      -  elsif @leave_request.leave_subtitute == false
-          | : Not Required
-      -  else
-          | : --
-    .col.s2
-      .label-text Notes
-    .col.s4
-      | : #{@leave_request.subtitute_notes}
-  .row
-    .col.s2
-      .label-text Submit date
-    .col.s4
-      | : #{@leave_request.form_submit_date.try(:strftime, ("%d %b %Y")) || "Draft"}
+table.description-list 
+  tbody
+    tr
+      td  Employee       
+      td  
+          strong  = ": #{@leave_request.employee.try(:name)} (#{@leave_request.employee.department})"
+      td  Job Title
+      td
+          strong  = ": #{@leave_request.employee.try(:job_title)}"
+    tr
+      td  Req'd date
+      td
+          strong  = ": #{@leave_request.start_date.strftime("%d %b %Y")} To: #{@leave_request.end_date.strftime("%d %b %Y")}"
+      td  # of days/hours
+      td
+          strong  = ": #{@leave_request.hour}"
+    tr
+      td  Leave for
+      td
+          strong  = ": #{@leave_request.leave_type}"
+      td  Leave notes
+      td
+          strong  = ": #{@leave_request.leave_note.nil? ? "--" : @leave_request.leave_note}"
+    tr
+      td  Substitute  
+      td
+          -  if @leave_request.leave_subtitute == true
+              | : Required
+          -  elsif @leave_request.leave_subtitute == false
+              | : Not Required
+          -  else
+              | : --
+      td  Notes
+      td
+          strong  = ": #{@leave_request.subtitute_notes}"
+    tr
+      td  Submit date
+      td
+          strong  = ": #{@leave_request.form_submit_date.try(:strftime, ("%d %b %Y")) || "Draft"}"
 / table.compact
 /         tbody
 /           tr

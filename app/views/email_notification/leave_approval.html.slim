@@ -19,7 +19,7 @@ html
       p You can access the leave request from the following link.
       
       div style="margin-top:20px; margin-bottom:40px"
-        = link_to "Leave Request (HR01): #{@leave_request.employee.try(:name)}", approve_path(@leave_request,@sendto), style:"text-decoration:underline"
+        = link_to "Leave Request (HR01): #{@leave_request.employee.try(:name)}", approve_url(@leave_request,@sendto), style:"text-decoration:underline"
 
       p Thank you for using <i>Brightlight</i>. 
       

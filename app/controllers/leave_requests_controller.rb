@@ -79,8 +79,8 @@ class LeaveRequestsController < ApplicationController
   # PATCH/PUT /leave_requests/1
   # PATCH/PUT /leave_requests/1.json
   def update
-    authorize! :update, @leave_request
-
+    #authorize! :update, @leave_request
+    
     @requester = Employee.find_by_id(@leave_request.employee_id)
     @department = Department.find_by_id(@requester.department_id)    
     @supervisor = Employee.find_by_id(@department.manager_id)
