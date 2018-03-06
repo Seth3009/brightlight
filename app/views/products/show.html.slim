@@ -1,24 +1,36 @@
-br
-.row
-	.col.s2
-		.card
-			.card-image
-				= image_tag @product.image_url, class: 'media-object show-image'
-			.card-content
-				p.small-text ISBN 92837291823
+p#notice = notice
 
-	.col.s10
-		h5.media-heading = @product.title
-		p
-			= @product.description
-	.col.s1 Expiry
-	.col.s2	
-		= @product.expiry_date
-	.col.s1 Received
-	.col.s2	
-		= @product.received_date
+p
+  strong Code:
+  = @product.code
+p
+  strong Name:
+  = @product.name
+p
+  strong Price:
+  = @product.price
+p
+  strong Min stock:
+  = @product.min_stock
+p
+  strong Max stock:
+  = @product.max_stock
+p
+  strong Stock type:
+  = @product.stock_type
+p
+  strong Item unit:
+  = @product.item_unit
+p
+  strong Item category:
+  = @product.item_category
+p
+  strong Is active:
+  = @product.is_active
+p
+  strong Img url:
+  = @product.img_url
 
-.toolbar.actions
-	= link_to 'Back', products_path, class: 'btn btn-default'
-	= link_to 'Edit', edit_product_path(@product), class: 'btn btn-primary'
-
+= link_to 'Edit', edit_product_path(@product)
+'|
+= link_to 'Back', products_path

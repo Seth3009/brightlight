@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180227051547) do
+ActiveRecord::Schema.define(version: 20180302052754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -819,15 +819,22 @@ ActiveRecord::Schema.define(version: 20180227051547) do
   add_index "people", ["user_id"], name: "index_people_on_user_id", using: :btree
 
   create_table "products", force: :cascade do |t|
-    t.string   "title"
-    t.text     "description"
-    t.string   "image_url"
-    t.decimal  "price"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.string   "expiry_date"
-    t.date     "received_date"
+    t.string   "code"
+    t.string   "name"
+    t.decimal  "price",            default: 0.0
+    t.float    "min_stock",        default: 0.0
+    t.float    "max_stock",        default: 100.0
+    t.string   "stock_type"
+    t.integer  "item_unit_id"
+    t.integer  "item_category_id"
+    t.boolean  "is_active",        default: true
+    t.string   "img_url"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
+
+  add_index "products", ["item_category_id"], name: "index_products_on_item_category_id", using: :btree
+  add_index "products", ["item_unit_id"], name: "index_products_on_item_unit_id", using: :btree
 
   create_table "rosters", force: :cascade do |t|
     t.integer  "course_section_id"
@@ -1166,6 +1173,8 @@ ActiveRecord::Schema.define(version: 20180227051547) do
   add_foreign_key "passengers", "grade_sections"
   add_foreign_key "passengers", "students"
   add_foreign_key "passengers", "transports"
+  add_foreign_key "products", "item_categories"
+  add_foreign_key "products", "item_units"
   add_foreign_key "smart_cards", "transports"
   add_foreign_key "supplies", "item_categories"
   add_foreign_key "supplies", "item_units"

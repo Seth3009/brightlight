@@ -1,0 +1,16 @@
+tr id="row-#{product.id}"    
+  td = product.code
+  td = product.name
+  td = product.price
+  td = product.min_stock
+  td = product.max_stock
+  td = product.item_unit.try(:name)
+  td = product.item_category.try(:name)
+  td = product.is_active  
+  td.actions
+    - if can? :destroy, product
+      = link_to product, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+        i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+    - if can? :update, product
+      = link_to edit_product_path(product), remote: true
+        i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
