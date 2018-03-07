@@ -4,7 +4,22 @@ class ProductsController < ApplicationController
   # GET /products
   # GET /products.json
   def index
-    @products = Product.all
+    authorize! :read, Product
+    respond_to do |format|
+      format.html {
+        items_per_page = 20
+        if params[:search]
+          @products = Product.all.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
+        else
+          @products = Product.all.paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
+        end
+      }
+      
+      format.csv {
+        @products = Product.all.order(:name)
+        render text: @products.to_csv
+      }
+    end    
   end
 
   # GET /products/1
@@ -14,6 +29,7 @@ class ProductsController < ApplicationController
 
   # GET /products/new
   def new
+    authorize! :manage, Product
     @product = Product.new
   end
 
@@ -24,15 +40,18 @@ class ProductsController < ApplicationController
   # POST /products
   # POST /products.json
   def create
+    authorize! :manage, Product
     @product = Product.new(product_params)
 
     respond_to do |format|
       if @product.save
-        format.html { redirect_to @product, notice: 'Product was successfully created.' }
+        format.html { redirect_to products_url, notice: 'Product was successfully created.' }
         format.json { render :show, status: :created, location: @product }
+        format.js
       else
         format.html { render :new }
         format.json { render json: @product.errors, status: :unprocessable_entity }
+        format.js { render :new, alert: 'Product Cannot be saved'}
       end
     end
   end
@@ -40,10 +59,12 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
+    authorize! :manage, Product
     respond_to do |format|
       if @product.update(product_params)
-        format.html { redirect_to @product, notice: 'Product was successfully updated.' }
+        format.html { redirect_to products_url, notice: 'Product was successfully updated.' }
         format.json { render :show, status: :ok, location: @product }
+        format.js
       else
         format.html { render :edit }
         format.json { render json: @product.errors, status: :unprocessable_entity }
@@ -54,7 +75,9 @@ class ProductsController < ApplicationController
   # DELETE /products/1
   # DELETE /products/1.json
   def destroy
-    @product.destroy
+    authorize! :manage, Product
+    Product.disable_item(@product.id)
+    #@product.destroy
     respond_to do |format|
       format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
       format.json { head :no_content }
@@ -62,6 +85,10 @@ class ProductsController < ApplicationController
   end
 
   private
+    # Enable Sort column
+    def sortable_columns 
+      [:code, :name]
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_product
       @product = Product.find(params[:id])

@@ -6,7 +6,7 @@
             h4 New Supply
         - if @product.errors.any?
             #error_explanation
-            h6 = "#{pluralize(@product.errors.count, "error")} prohibited this department from being saved:"
+            h6 = "#{pluralize(@product.errors.count, "error")} prohibited this product from being saved:"
             ul
                 - @product.errors.full_messages.each do |message|
                 li = message

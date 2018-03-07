@@ -2,7 +2,6 @@ Rails.application.routes.draw do
 
   resources :products
   resources :warehouses
-  resources :supplies
   resources :item_categories
   resources :item_units
   resources :template_targets
