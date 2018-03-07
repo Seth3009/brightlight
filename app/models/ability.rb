@@ -50,6 +50,8 @@ class Ability
     can :manage, ReqItem do |req_item| 
       req_item.requisition.department == @user.employee.department 
     end
+    can_manage_own_requisition
+    can :review, Requisition
     can :update, Requisition do |req|
       req.budget_approver == @user.employee     # User can only approve requisition that is sent to the respective user
     end
@@ -86,15 +88,16 @@ class Ability
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
     can_manage_own_leave_request
+    can_manage_own_requisition
   end
 
   def staff
     can [:create,:read,:update,:destroy], Carpool
     can :manage, Transport
-    can [:manage], Requisition, requester: @user.employee
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
     can_manage_own_leave_request
+    can_manage_own_requisition
   end
 
   def hrd
@@ -134,6 +137,11 @@ class Ability
     def can_manage_own_leave_request
       can [:create, :read, :cancel], LeaveRequest, employee: @user.employee
       can [:update, :destroy], LeaveRequest do |lr| lr.employee == @user.employee && lr.draft? end
+    end
+
+    def can_manage_own_requisition
+      can [:create, :read, :cancel], Requisition, requester: @user.employee
+      can [:update, :destroy], Requisition do |req| req.requester == @user.employee && req.draft? end
     end
 
 end

@@ -5,16 +5,22 @@ class RequisitionsController < ApplicationController
   # GET /requisitions.json
   def index
     authorize! :read, Requisition
+    
     if can? :manage, Requisition
-      @requisitions = Requisition.all
-    elsif current_user.employee.try(:is_manager?)
-      @requisitions = Requisition.where(department: current_user.employee.try(:department))
-    else
-      @requisitions = Requisition.where(requester_id: current_user.employee_id)
+      @all_requisitions = Requisition.all
+      if params[:dept].present? && params[:dept] != 'all'
+        dept = Department.where(code: params[:dept]).take
+        @all_requisitions = @all_requisitions.where(department: dept)
+      end
     end
-    if params[:dept].present? && params[:dept] != 'all'
-      dept = Department.where(code: params[:dept]).take
-      @requisitions = @requisitions.where(department: dept)
+    
+    @employee = current_user.employee
+    if @employee.try(:is_manager?)
+      @supv = current_user.employee
+      @requisitions = Requisition.where(department: @employee.try(:department))
+      @pending_approval = @requisitions.pending_supv_approval @supv
+    else
+      @requisitions = Requisition.where(requester_id: @employee.id)
     end
   end
 
