@@ -1,0 +1,10 @@
+.compact.nested-field
+    .input-field.col.s5
+        = f.text_field :product
+    .input-field.col.s2
+        = f.text_field :in_out
+    .input-field.col.s2
+        = f.number_field :qty
+    .input-field.col.s3 style="padding-top:8px"
+        = link_to_remove_association f, class: "waves-effect waves-teal red-text"
+          i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete

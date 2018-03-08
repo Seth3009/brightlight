@@ -1,25 +1,47 @@
-h1 Listing supplies_transactions
+.row 
+  .col.s6
+    h4 Supplies Transaction
+  .col.s5
+    = form_tag({controller:'supplies_transactions', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{supplies_transactions_path(v:'list')}"
+      }
 
-table
-  thead
-    tr
-      th Transaction date
-      th Employee
-      th Itemcount
-      th
-      th
-      th
+nav
+  .nav-wrapper
+    ul.right
+      - if can? :manage, SuppliesTransaction
+        li
+          = link_to new_supplies_transaction_path
+            | New Transaction
+            i.material-icons.left add
 
-  tbody
-    - @supplies_transactions.each do |supplies_transaction|
+.card-panel
+  table.compact.striped
+    thead
       tr
-        td = supplies_transaction.transaction_date
-        td = supplies_transaction.employee
-        td = supplies_transaction.itemcount
-        td = link_to 'Show', supplies_transaction
-        td = link_to 'Edit', edit_supplies_transaction_path(supplies_transaction)
-        td = link_to 'Destroy', supplies_transaction, data: {:confirm => 'Are you sure?'}, :method => :delete
+        th Transaction date
+        th Employee
+        th Item count
+        th
+        th
+        th
 
-br
-
-= link_to 'New Supplies transaction', new_supplies_transaction_path
+    tbody
+      - @supplies_transactions.each do |supplies_transaction|
+        tr
+          td = supplies_transaction.transaction_date
+          td = supplies_transaction.employee
+          td = supplies_transaction.itemcount
+          td = link_to 'Show', supplies_transaction
+          td = link_to 'Edit', edit_supplies_transaction_path(supplies_transaction)
+          td = link_to 'Destroy', supplies_transaction, data: {:confirm => 'Are you sure?'}, :method => :delete

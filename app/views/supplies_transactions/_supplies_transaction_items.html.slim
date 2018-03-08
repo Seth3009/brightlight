@@ -1,0 +1,9 @@
+.card-panel
+  .row
+    strong.col.s5 Product
+    strong.col.s2 Trx
+    strong.col.s2 Qty       
+    strong.col.s3 Action
+  .row#requisition
+    = f.fields_for :supplies_transaction_items do |supplies_transaction_item|
+      = render 'supplies_transaction_item_fields', f: supplies_transaction_item

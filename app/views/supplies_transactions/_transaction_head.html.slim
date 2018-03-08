@@ -1,0 +1,8 @@
+.card-panel
+    .row
+        .input-field.col.m3
+            = f.label :transaction_date, class: 'active'
+            = f.date_field :transaction_date, :value => Time.now.strftime('%Y-%m-%d')
+        .input-field.col.m6
+            = f.label :employee, class: 'active'
+            = f.collection_select :employee, Employee.active, :id, :name, prompt: true
