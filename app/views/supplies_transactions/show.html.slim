@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Transaction date:
+  = @supplies_transaction.transaction_date
+p
+  strong Employee:
+  = @supplies_transaction.employee
+p
+  strong Itemcount:
+  = @supplies_transaction.itemcount
+
+= link_to 'Edit', edit_supplies_transaction_path(@supplies_transaction)
+'|
+= link_to 'Back', supplies_transactions_path

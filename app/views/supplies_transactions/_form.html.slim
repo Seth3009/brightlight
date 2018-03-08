@@ -1,0 +1,18 @@
+= form_for @supplies_transaction do |f|
+  - if @supplies_transaction.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@supplies_transaction.errors.count, "error")} prohibited this supplies_transaction from being saved:"
+      ul
+        - @supplies_transaction.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :transaction_date
+    = f.datetime_select :transaction_date
+  .field
+    = f.label :employee
+    = f.text_field :employee
+  .field
+    = f.label :itemcount
+    = f.number_field :itemcount
+  .actions = f.submit

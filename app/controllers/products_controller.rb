@@ -50,8 +50,7 @@ class ProductsController < ApplicationController
         format.js
       else
         format.html { render :new }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
-        format.js { render :new, alert: 'Product Cannot be saved'}
+        format.json { render json: @product.errors, status: :unprocessable_entity }        
       end
     end
   end

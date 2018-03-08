@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :supplies_transaction_items
+  resources :supplies_transactions
   resources :products
   resources :warehouses
   resources :item_categories

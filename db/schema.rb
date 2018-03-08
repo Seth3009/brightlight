@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180307053909) do
+ActiveRecord::Schema.define(version: 20180308013749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1433,6 +1433,28 @@ ActiveRecord::Schema.define(version: 20180307053909) do
   add_index "suppliers", ["created_by_id"], name: "index_suppliers_on_created_by_id", using: :btree
   add_index "suppliers", ["last_updated_by_id"], name: "index_suppliers_on_last_updated_by_id", using: :btree
 
+  create_table "supplies_transaction_items", force: :cascade do |t|
+    t.integer  "supplies_transaction_id"
+    t.integer  "product_id"
+    t.string   "in_out",                  default: "OUT"
+    t.float    "qty"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
+
+  add_index "supplies_transaction_items", ["product_id"], name: "index_supplies_transaction_items_on_product_id", using: :btree
+  add_index "supplies_transaction_items", ["supplies_transaction_id"], name: "index_supplies_transaction_items_on_supplies_transaction_id", using: :btree
+
+  create_table "supplies_transactions", force: :cascade do |t|
+    t.datetime "transaction_date"
+    t.integer  "employee_id"
+    t.integer  "itemcount",        default: 0
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "supplies_transactions", ["employee_id"], name: "index_supplies_transactions_on_employee_id", using: :btree
+
   create_table "template_targets", force: :cascade do |t|
     t.string   "name"
     t.string   "code"
@@ -1611,6 +1633,9 @@ ActiveRecord::Schema.define(version: 20180307053909) do
   add_foreign_key "requisitions", "users", column: "created_by_id"
   add_foreign_key "requisitions", "users", column: "last_updated_by_id"
   add_foreign_key "smart_cards", "transports"
+  add_foreign_key "supplies_transaction_items", "products"
+  add_foreign_key "supplies_transaction_items", "supplies_transactions"
+  add_foreign_key "supplies_transactions", "employees"
   add_foreign_key "templates", "academic_years"
   add_foreign_key "templates", "users"
   add_foreign_key "user_mesg_groups", "msg_groups"
