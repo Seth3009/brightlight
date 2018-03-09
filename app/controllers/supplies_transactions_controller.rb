@@ -1,6 +1,6 @@
 class SuppliesTransactionsController < ApplicationController
   before_action :set_supplies_transaction, only: [:show, :edit, :update, :destroy]
-
+  after_action :set_count, only: [:create, :update]
   # GET /supplies_transactions
   # GET /supplies_transactions.json
   def index
@@ -62,6 +62,9 @@ class SuppliesTransactionsController < ApplicationController
   end
 
   private
+    def set_count
+      SuppliesTransaction.count_item(@supplies_transaction.id)
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_supplies_transaction
       @supplies_transaction = SuppliesTransaction.find(params[:id])
@@ -70,6 +73,6 @@ class SuppliesTransactionsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def supplies_transaction_params
       params.require(:supplies_transaction).permit(:transaction_date, :employee_id, :itemcount,
-                                                  {supplies_transaction_items_attributes: [:id, :supplies_transaction_id, :product_id, :in_out, :qty]})
+                                                  {supplies_transaction_items_attributes: [:id, :supplies_transaction_id, :product_id, :in_out, :qty, :_destroy, :id]})
     end
 end

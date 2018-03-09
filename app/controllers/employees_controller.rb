@@ -25,7 +25,8 @@ class EmployeesController < ApplicationController
         @employees = Employee.all.where(is_active: true)
         render text: @employees.to_csv
       }
-    end
+      format.json { @employees = Employee.search_query(params[:term]).active } 
+    end   
   end
 
   # GET /employees/1

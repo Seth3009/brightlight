@@ -5,6 +5,8 @@ class Product < ActiveRecord::Base
   validates_presence_of :code
   has_many :supplies_transaction_item
 
+  scope :active, lambda { where(is_active:true).order(:name) }
+  
   def self.disable_item(product)
     self.find(product).update(:is_active => false)
   end

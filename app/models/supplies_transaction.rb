@@ -4,4 +4,8 @@ class SuppliesTransaction < ActiveRecord::Base
   has_many :supplies_transaction_items, -> { order(:id) }, dependent: :destroy  
   accepts_nested_attributes_for :supplies_transaction_items, reject_if: :all_blank, allow_destroy: true
   
+  def self.count_item(supplies_transaction)
+    count_item = SuppliesTransactionItem.where(:supplies_transaction_id => supplies_transaction).count
+    SuppliesTransaction.find(supplies_transaction).update(itemcount: count_item)
+  end
 end
