@@ -1,6 +1,6 @@
 .compact.nested-fields
   .input-field.col.s7
-    = f.collection_select :product_id, Product.all, :id, :name, prompt: true
+    = f.collection_select :product_id, Product.all.active, :id, :name, prompt: true
   .input-field.col.s2
     = f.text_field :in_out
   .input-field.col.s2

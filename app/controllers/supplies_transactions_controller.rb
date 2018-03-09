@@ -10,6 +10,7 @@ class SuppliesTransactionsController < ApplicationController
   # GET /supplies_transactions/1
   # GET /supplies_transactions/1.json
   def show
+    @supplies_transaction_item = SuppliesTransactionItem.where(supplies_transaction_id: @supplies_transaction).all
   end
 
   # GET /supplies_transactions/new
@@ -28,7 +29,7 @@ class SuppliesTransactionsController < ApplicationController
 
     respond_to do |format|
       if @supplies_transaction.save
-        format.html { redirect_to @supplies_transaction, notice: 'Supplies transaction was successfully created.' }
+        format.html { redirect_to supplies_transactions_url, notice: 'Supplies transaction was successfully created.' }
         format.json { render :show, status: :created, location: @supplies_transaction }
       else
         format.html { render :new }
@@ -42,7 +43,7 @@ class SuppliesTransactionsController < ApplicationController
   def update
     respond_to do |format|
       if @supplies_transaction.update(supplies_transaction_params)
-        format.html { redirect_to @supplies_transaction, notice: 'Supplies transaction was successfully updated.' }
+        format.html { redirect_to supplies_transactions_url, notice: 'Supplies transaction was successfully updated.' }
         format.json { render :show, status: :ok, location: @supplies_transaction }
       else
         format.html { render :edit }

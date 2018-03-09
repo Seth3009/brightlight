@@ -10,6 +10,6 @@
             = f.hidden_field :employee_id
             = f.label :employee, class: 'active' 
             - if params[:action] =~ /new/            
-              = text_field_tag :employee, "", id: "title_autocomplete", placeholder: "Search by Employee Name or by Department Name or by Job Title"            
+              = text_field_tag :employee, "", id: "employee_autocomplete", placeholder: "Search by Employee Name or by Department Name or by Job Title"            
             - else
               = f.text_field :employee, disabled: true

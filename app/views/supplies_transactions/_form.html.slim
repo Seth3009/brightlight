@@ -27,13 +27,13 @@
 
 javascript:
   $(document).ready(function() {
-    $( "#title_autocomplete" ).autocomplete({
+    $( "#employee_autocomplete" ).autocomplete({
         source: "/employees?format=json",
         max: 30,
         minLength: 4,
         select: function( event, ui ) {
           insert_row(ui.item); 
-          $("#title_autocomplete").val(item.name)         
+          $("#employee_autocomplete").val(item.name)         
         }
       })
       .autocomplete( "instance" )._renderItem = function( ul, item ) {
@@ -45,7 +45,6 @@ javascript:
 
   function insert_row(employee) {
     $("#supplies_transaction_employee_id").val(employee.id);
-    $("#title_autocomplete").val(employee.name)  
-    $("#title_autocomplete").autocomplete("close")  
+    $("#employee_autocomplete").val(employee.name)  
+    $("#employee_autocomplete").autocomplete("close")  
     }
-  

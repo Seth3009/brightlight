@@ -1,0 +1,30 @@
+.modal-content
+  .card-panel
+    table
+      tr
+        td
+          .list_description
+            dl.row
+              dd.col.s6
+                .label Employee
+                .item = @supplies_transaction.employee.name            
+              dd.col.s6
+                .label Transaction Date
+                .item = @supplies_transaction.transaction_date.strftime("%d/%m/%Y")
+    
+  .card-panel
+    table.compact.striped
+      thead
+          th Product
+          th TRX
+          th Qty
+          th Unit
+      tbody
+        - @supplies_transaction_item.each do |item|
+          tr
+            td = item.product.name
+            td = item.in_out
+            td = item.qty.to_f
+            td = item.product.item_unit.name
+.modal-footer
+  a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

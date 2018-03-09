@@ -19,6 +19,7 @@ class ProductsController < ApplicationController
         @products = Product.all.order(:name)
         render text: @products.to_csv
       }
+      format.json { @products = Product.search_query(params[:term]).active } 
     end    
   end
 
