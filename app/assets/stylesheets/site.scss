@@ -705,21 +705,20 @@ nav.light {
 	}
 }
 
-#modal-message-content {
-	.message-address {
-    font-size: 0.8em;
-    border-bottom: 1px solid lightgrey;
-    .label {
-      color: #585858;
-    }
-	}
-
-	.message-subject {
-    font-size: 1.2em;
-		padding-top: 1em;
-		font-weight: bold;
+.message-address {
+	font-size: 0.8em;
+	border-bottom: 1px solid lightgrey;
+	.label {
+		color: #585858;
 	}
 }
+
+.message-subject {
+	font-size: 1.2em;
+	padding-top: 1em;
+	font-weight: bold;
+}
+
 
 // ============================================ Badge =============================================
 

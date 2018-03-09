@@ -4,6 +4,10 @@ class MessagesController < ApplicationController
   # GET /messages
   # GET /messages.json
   def index
+    respond_to do |format|
+      format.html { @messages = Message.for(current_user) } # from application_controller
+      format.json { @messages = Message.for(params[:id]) rescue [] }  
+    end
   end
 
   # GET /messages/1
@@ -64,6 +68,7 @@ class MessagesController < ApplicationController
   def mark_read
     @message.message_recipients.where(recipient_id: params["user_id"]).update_all is_read: true
     respond_to do |format|
+      format.html { redirect_to messages_path }
       format.json { render json: {unread: Message.unread(current_user).count} }
     end
   end

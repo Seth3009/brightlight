@@ -7,8 +7,8 @@ class Message < ActiveRecord::Base
   has_many :message_recipients, dependent: :destroy
   has_one  :reminder, dependent: :destroy
 
-  scope :unread, lambda { |user| joins(:message_recipients).where(message_recipients: {recipient_id: user.id, is_read: false}) }
-  scope :for, lambda { |user| joins(:message_recipients).where(message_recipients: {recipient_id: user.id}) }
+  scope :unread, lambda { |user| joins(:message_recipients).where(message_recipients: {recipient: user, is_read: false}) }
+  scope :for, lambda { |user| joins(:message_recipients).where(message_recipients: {recipient: user}) }
 
   def self.create_new(to, from, subject, body, cc = [], bcc = [])
     msg = Message.new subject:subject, body:body, creator: from
