@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   resources :copy_conditions
   resources :book_conditions
 
+  get 'products/supplies_stocks' => 'products#supplies_stocks', as: :supplies_stocks
+
   resources :courses do
     resources :course_texts, shallow: true
     resources :course_sections, except: :new, shallow: true

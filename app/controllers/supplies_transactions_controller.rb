@@ -4,7 +4,8 @@ class SuppliesTransactionsController < ApplicationController
   # GET /supplies_transactions
   # GET /supplies_transactions.json
   def index
-    @supplies_transactions = SuppliesTransaction.all
+    authorize! :read, SuppliesTransaction
+    @supplies_transactions = SuppliesTransaction.all    
   end
 
   # GET /supplies_transactions/1
@@ -63,6 +64,11 @@ class SuppliesTransactionsController < ApplicationController
   end
 
   private
+    # Enable Sort column
+    def sortable_columns 
+      [:transaction_date, :name]
+    end
+
     def set_count
       SuppliesTransaction.count_item(@supplies_transaction.id)
     end

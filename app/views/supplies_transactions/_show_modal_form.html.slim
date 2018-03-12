@@ -9,6 +9,10 @@
                 .label Employee
                 .item = @supplies_transaction.employee.name            
               dd.col.s6
+                .label Department
+                .item = @supplies_transaction.employee.department.try(:name)
+            dl.row
+              dd.col.s6
                 .label Transaction Date
                 .item = @supplies_transaction.transaction_date.strftime("%d/%m/%Y")
     
