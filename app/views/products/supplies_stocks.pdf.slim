@@ -1,0 +1,37 @@
+h4 Supplies Product Stock
+
+
+table.compact.striped
+  thead
+    tr style='text-align:center;background-color:LightGrey'
+      th Code
+      th Name        
+      th Stock
+      th Min stock
+      th DIFF
+      th Item unit
+      th Note        
+      th Min Buy
+      th Packs Unit        
+      th Status        
+  tbody
+    - @supplies_stocks.each do |supplies_stock|   
+      tr
+        td = supplies_stock.code
+        td = supplies_stock.name
+        td = supplies_stock.stock || 0.0
+        td = supplies_stock.min_stock
+        td = (supplies_stock.stock || 0.0) - supplies_stock.min_stock
+        td = supplies_stock.item_unit.name
+        td 
+          - if (supplies_stock.stock || 0.0) - supplies_stock.min_stock < 0
+            | Need to buy
+          - else
+            | --
+        td = supplies_stock.packs
+        td = supplies_stock.packs_unit
+        td 
+          - if supplies_stock.is_active
+            | Active
+          - else
+            | Not Active      

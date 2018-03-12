@@ -13,6 +13,7 @@
 
         .row
           .input-field.col.s4
+            = f.hidden_field :stock_type, value: "Supplies"
             = f.label :item_category_id, class: 'active'
             = f.collection_select :item_category_id, ItemCategory.all.order(:code), :id, :name_with_code, prompt: true
         .row

@@ -92,7 +92,20 @@ class ProductsController < ApplicationController
   #get products/supplies_stocks
   def supplies_stocks
     authorize! :read, Product
-    @supplies_stocks = Product.all
+    @supplies_stocks = Product.select('products.*, (sum(CASE WHEN in_out =' + "'IN'" + ' THEN qty ELSE 0 END) - sum(CASE WHEN in_out =' + "'OUT'" + ' THEN qty ELSE 0 END)) as stock')
+                      .joins('left join supplies_transaction_items on supplies_transaction_items.product_id = products.id')
+                      .group('products.id').order('code')
+                      
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf:         "Supplies_Stock_#{Date.current()}",
+               disposition: 'inline',
+               template:    'products/supplies_stocks.pdf.slim',
+               layout:      'pdf.html',
+               show_as_html: params.key?('screen')
+      end
+    end                  
   end
 
   private
