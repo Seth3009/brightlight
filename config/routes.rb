@@ -25,9 +25,13 @@ Rails.application.routes.draw do
   resources :copy_conditions
   resources :book_conditions
 
+  
   get 'products' => 'products#index'
   get 'products/new' => 'products#new', as: :new_product
-  delete 'products/:id' => 'products#destroy', as: :product
+  get 'products/:id' => 'products#show', as: :product
+  post 'products' => 'products#create'
+  patch 'products/:id' => 'products#update'
+  delete 'products/:id' => 'products#destroy'
   get 'products/:id/edit' => 'products#edit', as: :edit_product
   get 'products/supplies_stocks' => 'products#supplies_stocks', as: :supplies_stocks
   

@@ -5,6 +5,8 @@ tr id="row-#{product.id}"
   td = product.min_stock
   td = product.max_stock
   td = product.item_unit.try(:name)
+  td = product.packs || "--"
+  td = product.packs_unit || "--"
   td = product.item_category.try(:name)
   td = product.is_active  
   td.actions
