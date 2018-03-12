@@ -16,11 +16,11 @@ tr id="row-#{product.id}"
   td.actions
     - if can? :destroy, product
       - if product.is_active
-        = link_to product, data: {:confirm => 'Disable product?'}, :method => :delete, class:'red-text'
-          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Disable product" thumb_down
+        = link_to product, data: {:confirm => 'Inactive product?'}, :method => :delete, class:'red-text'
+          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Inactive" thumb_down
       - else
-        = link_to product, data: {:confirm => 'Enable product?'}, :method => :delete, class:'green-text'
-          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Enable product" thumb_up
+        = link_to product, data: {:confirm => 'Activate product?'}, :method => :delete, class:'green-text'
+          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Active" thumb_up
     - if can? :update, product
       = link_to edit_product_path(product), remote: true
         i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
