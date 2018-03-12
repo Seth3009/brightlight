@@ -1,0 +1,26 @@
+.row 
+  .col.s6
+    h4 Supplies Products Stocks
+nav
+  .nav-wrapper
+    ul.right
+      - if can? :manage, Product
+        li
+          = link_to new_product_path, remote: true
+            | New Product
+            i.material-icons.left add
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Code
+        th Name        
+        th Stock
+        th Min stock
+        th DIFF
+        th Note
+        th Item unit
+        th Min Buy
+        th Packs Unit        
+        th Is active        
+        

@@ -77,11 +77,22 @@ class ProductsController < ApplicationController
   def destroy
     authorize! :manage, Product
     Product.disable_item(@product.id)
+    if @product.is_active? 
+      @notice = 'Product was successfully disabled.' 
+    else 
+      @notice = 'Product was successfully enabled.'
+    end 
     #@product.destroy
     respond_to do |format|
-      format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
+      format.html { redirect_to products_url, notice: @notice}
       format.json { head :no_content }
     end
+  end
+
+  #get products/supplies_stocks
+  def supplies_stocks
+    authorize! :read, Product
+    @supplies_stocks = Product.all
   end
 
   private

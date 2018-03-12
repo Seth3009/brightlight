@@ -30,6 +30,10 @@ class Product < ActiveRecord::Base
   }
 
   def self.disable_item(product)
-    self.find(product).update(:is_active => false)
+    if self.find(product).is_active?
+      self.find(product).update(:is_active => false)
+    else
+      self.find(product).update(:is_active => true)
+    end
   end
 end

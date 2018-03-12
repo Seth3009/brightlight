@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   resources :supplies_transaction_items
   resources :supplies_transactions
-  resources :products
+  
   resources :warehouses
   resources :item_categories
   resources :item_units
@@ -25,8 +25,12 @@ Rails.application.routes.draw do
   resources :copy_conditions
   resources :book_conditions
 
+  get 'products' => 'products#index'
+  get 'products/new' => 'products#new', as: :new_product
+  delete 'products/:id' => 'products#destroy', as: :product
+  get 'products/:id/edit' => 'products#edit', as: :edit_product
   get 'products/supplies_stocks' => 'products#supplies_stocks', as: :supplies_stocks
-
+  
   resources :courses do
     resources :course_texts, shallow: true
     resources :course_sections, except: :new, shallow: true
