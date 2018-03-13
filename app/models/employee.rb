@@ -11,6 +11,7 @@ class Employee < ActiveRecord::Base
 	has_many :course_sections, foreign_key: "instructor_id"
 	has_one :manager, through: :department
 	has_many :leave_requests
+	has_many :supplies_transaction
 
   accepts_nested_attributes_for :book_loans,
     allow_destroy: true,
@@ -33,6 +34,30 @@ class Employee < ActiveRecord::Base
 		Department.all.map(&:manager_id).include? self.id
 	end
 	
+  
+  scope :search_query, lambda { |query|
+    return nil  if query.blank?   
+      # condition query, parse into individual keywords
+      terms = query.downcase.split(/\s+/)
+
+      # replace "*" with "%" for wildcard searches,
+      # append '%', remove duplicate '%'s
+      terms = terms.map { |e|
+        ('%' + e.gsub('*', '%') + '%').gsub(/%+/, '%')
+      }
+      # configure number of OR conditions for provision
+      # of interpolation arguments. Adjust this if you
+      # change the number of OR conditions.
+      num_or_conds = 3
+      joins('left join departments on departments.id = employees.department_id')
+      .where(
+        terms.map { |term|
+          "(LOWER(employees.name) LIKE ? OR LOWER(departments.name) LIKE ? OR LOWER(job_title) LIKE ?)"
+        }.join(' AND '),
+        *terms.map { |e| [e] * num_or_conds }.flatten
+      )
+  }
+
 	def to_s
 		name
 	end

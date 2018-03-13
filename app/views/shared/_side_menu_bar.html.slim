@@ -83,7 +83,25 @@ li
 					= link_to 'Book Category', book_categories_path
 				li
 					= link_to 'Disposed Books', book_copies_disposed_index_path
-					
+
+li 
+  .collapsible-header.waves-effect.waves-cyan
+    i.material-icons shopping_basket
+    i.mdi-navigation-chevron-right.right
+    | Products
+  .collapsible-body
+    ul
+      li
+        = link_to 'Product Category', item_categories_path
+      li
+        = link_to 'Product Unit', item_units_path
+      li
+        = link_to 'Products', products_path
+      li
+        = link_to 'Supplies Transaction', supplies_transactions_path
+      li
+        = link_to 'Supplies Stock', supplies_stocks_path
+
 - if can? :manage, BookFine
 	li 
 		.collapsible-header.waves-effect.waves-cyan

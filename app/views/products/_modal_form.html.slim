@@ -1,0 +1,50 @@
+= form_for @product, remote:true do |f|
+    .modal-content
+        - if @product.persisted?
+            h4 Editing #{@product.name} #{'('+@product.code+')' if @product.code.present?}
+        - else 
+            h4 New Supply
+        - if @product.errors.any?
+            #error_explanation
+            h6 = "#{pluralize(@product.errors.count, "error")} prohibited this product from being saved:"
+            ul
+                - @product.errors.full_messages.each do |message|
+                li = message
+
+        .row
+          .input-field.col.s4
+            = f.hidden_field :stock_type, value: "Supplies"
+            = f.label :item_category_id, class: 'active'
+            = f.collection_select :item_category_id, ItemCategory.all.order(:code), :id, :name_with_code, prompt: true
+        .row
+          .input-field.col.s2
+            = f.label 'Code', class: 'active'
+            = f.text_field :code
+          .input-field.col.s10
+            = f.label 'Item Name', class: 'active'
+            = f.text_field :name
+        .row
+          .input-field.col.s2
+            = f.label :price, 'Price', class: 'active'
+            = f.text_field :price
+          .input-field.col.s2
+            = f.label :min_stock, 'Min. Stock', class: 'active'
+            = f.number_field :min_stock
+          .input-field.col.s2
+            = f.label :max_stock, 'Max. Stock', class: 'active'
+            = f.number_field :max_stock
+          .input-field.col.s3
+            = f.label :item_unit_id, class: 'active'
+            = f.collection_select :item_unit_id, ItemUnit.all.order(:abbreviation), :id, :name_with_abbr, prompt: true
+        .row
+          .input-field.col.s2
+            = f.label :packs, 'Packs Size', class: 'active'
+            = f.number_field :packs
+          .input-field.col.s5
+            = f.label :packs_unit, class: 'active'
+            = f.text_field :packs_unit
+                
+
+    .modal-footer
+        button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" Save
+        a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

@@ -1,0 +1,15 @@
+.card-panel
+    .row
+        .input-field.col.m3
+            = f.label :transaction_date, class: 'active'
+            - if params[:action] =~ /new/ 
+              = f.date_field :transaction_date, :value =>  Time.now.strftime('%Y-%m-%d')
+            - else
+              = f.date_field :transaction_date, disabled: true
+        .input-field.col.m6
+            = f.hidden_field :employee_id
+            = f.label :employee, class: 'active' 
+            - if params[:action] =~ /new/            
+              = text_field_tag :employee, "", id: "employee_autocomplete", placeholder: "Search by Employee Name or by Department Name or by Job Title"            
+            - else
+              = f.text_field :employee, disabled: true

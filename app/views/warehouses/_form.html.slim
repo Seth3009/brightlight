@@ -1,0 +1,19 @@
+= form_for @warehouse do |f|
+  .card-panel
+    - if @warehouse.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@warehouse.errors.count, "error")} prohibited this warehouse from being saved:"
+        ul
+          - @warehouse.errors.full_messages.each do |message|
+            li = message
+
+    .row
+        .input-field.col.s6 
+          = f.label :name
+          = f.text_field :name
+        .input-field.col.s6 
+          = f.label :room_number
+          = f.text_field :room_number
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', warehouses_path, class: "waves-effect waves-teal btn-flat"

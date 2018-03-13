@@ -1,4 +1,4 @@
-h4 Listing Item Category
+h4 Item Categories
 
 nav
   .nav-wrapper
@@ -6,27 +6,27 @@ nav
       - if can? :manage, ItemCategory
         li
           = link_to new_item_category_path
-            | Create new
+            | New Category
             i.material-icons.left add
-
-table.compact.striped
-  thead
-    tr
-      th Code
-      th Name
-      th
-      th
-      th
-
-  tbody
-    - @item_categories.each do |item_category|
+.card-panel
+  table.compact.striped
+    thead
       tr
-        td = item_category.code
-        td = item_category.name
-        td.actions
-          - if can? :update, item_category
-            = link_to edit_item_category_path(item_category)
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
-          - if can? :destroy, item_category
-            = link_to item_category, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+        th Code
+        th Name
+        th Actions
+        
+
+    tbody
+      - @item_categories.each do |item_category|
+        tr
+          td = item_category.code
+          td = item_category.name
+          td.actions
+            - if can? :destroy, item_category
+                = link_to item_category, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+            - if can? :update, item_category
+              = link_to edit_item_category_path(item_category)
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+            
