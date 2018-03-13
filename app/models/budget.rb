@@ -9,7 +9,7 @@ class Budget < ActiveRecord::Base
   belongs_to :created_by, class_name: 'User'
   belongs_to :last_updated_by, class_name: 'User'
 
-  has_many :budget_items, -> { order(:id) }, dependent: :destroy
+  has_many  :budget_items, dependent: :destroy
   
   validates :department_id, presence: true
   validates :academic_year_id, presence: true
@@ -19,20 +19,12 @@ class Budget < ActiveRecord::Base
 
   scope :current, lambda { where(academic_year: AcademicYear.current) }
 
-  after_create :ensure_budget_items_have_academic_year
-
   def to_s
     if grade_section
       "#{grade_section.name} - #{academic_year.name}"
     else
       "#{department.name} - #{academic_year.name}"
     end
-  end
-
-  protected
-
-  def ensure_budget_items_have_academic_year
-    self.budget_items.update_all academic_year_id: self.academic_year_id
   end
 
   MONTHS = {jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12}
@@ -59,10 +51,10 @@ class Budget < ActiveRecord::Base
         puts "Department: #{row[:department]}"
         dept = Department.find_by_code(row[:department])
         budget_holder = dept.manager
-        year_id = AcademicYear.find_by_name(row[:year]).id
+        academic_year = AcademicYear.find_by_name(row[:year])
 
         budget = Budget.new(
-          academic_year_id: year_id,
+          academic_year_id: academic_year.id,
           department_id:    dept.id,
           budget_holder_id: dept.manager_id,
           total_amt:        0
@@ -75,7 +67,7 @@ class Budget < ActiveRecord::Base
         if row[month].present?
           budget_item = BudgetItem.new(
             account:            row[:account],
-            academic_year_id:   year_id,
+            year:               month_no < 7 ? academic_year.end_date.year : academic_year.start_date.year,
             description:        row[:description],
             month:              month_no,
             amount:             row[month],
@@ -88,5 +80,27 @@ class Budget < ActiveRecord::Base
     end
     budget.update_attributes total_amt: total
     return budget
+  end 
+
+  def pivot_table
+    PivotTable::Grid.new(sort: false) do |g|
+      g.source_data  = self.budget_items.order(:year, :month)
+      g.column_name  = :month
+      g.row_name     = :description
+      g.value_name   = :amount
+    end.build
+  end
+
+  def crosstab
+    pivot = budget_items.order(:id).pluck(:description).uniq
+    pivot.map { |description|
+      budget_items
+        .where(description: description)
+        .order(:year, :month)
+        .select(:year, :month, :amount)
+        .reduce([description]) { |memo, x| 
+          memo << [x.year, MONTHS.key(x.month).to_s.humanize, x.amount.to_f]
+        }
+    }
   end 
 end

@@ -35,7 +35,7 @@ nav
               .item = @budget.academic_year.try(:name)
             .col.m3
               .label Total Amount
-              .item = @budget.total_amt
+              .item = number_with_precision(@budget.total_amt, :precision => 0, :delimiter => ',') rescue "0"
     li
       .collapsible-header
         | Items
@@ -44,20 +44,19 @@ nav
         table.compact.striped
           thead
             tr
-              th Account
               th Description
-              th Month
-              th Amount
-              th Notes 
+              -@column_headers.each do |h|
+                th style="text-align: right"
+                  = Budget::MONTHS.key(h).to_s.humanize
               
           tbody
-            - @budget.budget_items.each do |budget_item|
+            - @budget_table.rows.each_with_index do |row, row_no|
               tr
-                td = budget_item.account
-                td = budget_item.description
-                td = budget_item.month
-                td = budget_item.amount
-                td = budget_item.notes
+                td = @budget_table.row_headers[row_no]
+
+                - row.data.each_with_index do |cell, i|
+                  td style="text-align: right"
+                    = number_with_precision(cell.amount, :precision => 0, :delimiter => ',') rescue "-"
     li
       .collapsible-header
         | Approval

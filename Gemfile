@@ -100,6 +100,9 @@ gem 'tinymce-rails'
 # jQuery Tags Input
 gem 'tagsinput-rails'
 
+# For creating Budget pivot table
+gem 'pivot_table'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

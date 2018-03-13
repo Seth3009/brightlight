@@ -15,6 +15,8 @@ class BudgetsController < ApplicationController
   def show
     authorize! :read, Budget
     @budget = Budget.includes([:budget_items]).find(params[:id])
+    @budget_table = @budget.pivot_table
+    @column_headers = @budget_table.column_headers
   end
 
   # GET /budgets/new
