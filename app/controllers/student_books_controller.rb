@@ -30,6 +30,7 @@ class StudentBooksController < ApplicationController
       @student_books = @student.student_books
                         .where(academic_year_id: @year_id)
                         .includes([:book_copy, book_copy: [:book_edition]])
+                        .order('book_editions.title')
         # Notes: Because of data errors in database, we search StudentBook without student_id
         # =>     but filter it with grade_section, year and roster_no
         # @student_books = StudentBook.where(grade_section:@grade_section)
@@ -263,7 +264,7 @@ class StudentBooksController < ApplicationController
                         .not_disposed
                         .where("end_copy_condition_id = ? OR needs_rebinding = true", poor.id)
                         .where(grade_section:@grade_section)
-                        .order(:book_edition_id, 'CAST(roster_no AS int)')
+                        .order('book_editions.title')
 
     else
       @student_books = StudentBook
