@@ -123,7 +123,7 @@ group :development, :test do
   gem 'byebug'
   gem 'forgery'
   gem 'populator'
-  gem 'letter_opener_web', '1.3.1'
+  gem 'letter_opener_web', '~> 1.3.1'
   gem 'rspec-rails', '~> 3.5'
   gem 'capybara'
   gem 'factory_girl_rails'
