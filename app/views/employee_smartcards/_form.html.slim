@@ -1,0 +1,15 @@
+= form_for @employee_smartcard do |f|
+  - if @employee_smartcard.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@employee_smartcard.errors.count, "error")} prohibited this employee_smartcard from being saved:"
+      ul
+        - @employee_smartcard.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :card
+    = f.text_field :card
+  .field
+    = f.label :employee
+    = f.text_field :employee_id
+  .actions = f.submit

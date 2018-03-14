@@ -10,12 +10,17 @@
   
   nav.light
     .nav-wrapper
-      .brand-logo style="margin-left: 20px; font-size:1.5em"
-        | Supplies Items
+      ul
+        li
+          = link_to supplies_transactions_path
+            i.material-icons.left chevron_left
+        li
+          .brand-logo style="margin-left: 20px; font-size:1.5em"
+            | Supplies Items
       ul.right
         li
           = link_to_add_association f, :supplies_transaction_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#supplies_transaction'
-            ' Add Item
+            ' Add row
             i.material-icons.left playlist_add
 
   = render 'supplies_transaction_items', f: f

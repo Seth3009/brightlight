@@ -63,6 +63,18 @@ class SuppliesTransactionsController < ApplicationController
     end
   end
 
+  def get_product
+    authorize! :read, Product
+    respond_to do |format|
+      format.json do
+        @product = Product.where('UPPER(barcode) = ?', params[:barcode].upcase).take
+        if @product.present?
+          
+        end
+      end
+    end
+  end
+
   private
     # Enable Sort column
     def sortable_columns 

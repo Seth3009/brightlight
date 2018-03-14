@@ -1,0 +1,12 @@
+p#notice = notice
+
+p
+  strong Card:
+  = @employee_smartcard.card
+p
+  strong Employee:
+  = @employee_smartcard.employee
+
+= link_to 'Edit', edit_employee_smartcard_path(@employee_smartcard)
+'|
+= link_to 'Back', employee_smartcards_path

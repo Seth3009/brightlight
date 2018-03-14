@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180312071335) do
+ActiveRecord::Schema.define(version: 20180314044320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -551,6 +551,15 @@ ActiveRecord::Schema.define(version: 20180312071335) do
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
 
+  create_table "employee_smartcards", force: :cascade do |t|
+    t.string   "card"
+    t.integer  "employee_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "employee_smartcards", ["employee_id"], name: "index_employee_smartcards_on_employee_id", using: :btree
+
   create_table "employees", force: :cascade do |t|
     t.string   "name"
     t.string   "first_name"
@@ -1024,6 +1033,7 @@ ActiveRecord::Schema.define(version: 20180312071335) do
     t.datetime "updated_at",                       null: false
     t.float    "packs"
     t.string   "packs_unit"
+    t.string   "barcode"
   end
 
   add_index "products", ["item_category_id"], name: "index_products_on_item_category_id", using: :btree
@@ -1579,6 +1589,7 @@ ActiveRecord::Schema.define(version: 20180312071335) do
   add_foreign_key "delivery_items", "order_items"
   add_foreign_key "delivery_items", "users", column: "created_by_id"
   add_foreign_key "delivery_items", "users", column: "last_updated_by_id"
+  add_foreign_key "employee_smartcards", "employees"
   add_foreign_key "family_members", "families"
   add_foreign_key "family_members", "guardians"
   add_foreign_key "family_members", "students"
