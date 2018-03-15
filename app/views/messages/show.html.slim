@@ -1,36 +1,30 @@
-p#notice = notice
+h5 New message
 
-p
-  strong Subject:
-  = @message.subject
-p
-  strong Creator:
-  = @message.creator
-p
-  strong Body:
-  = @message.body
-p
-  strong Parent:
-  = @message.parent
-p
-  strong Expiry date:
-  = @message.expiry_date
-p
-  strong Is reminder:
-  = @message.is_reminder
-p
-  strong Next remind date:
-  = @message.next_remind_date
-p
-  strong Remind frequency:
-  = @message.remind_frequency
-p
-  strong Tags:
-  = @message.tags
-p
-  strong Folder:
-  = @message.folder
+.card-panel
+  .row.message-address
+    .col.m2
+      .label From:
+    .col.m7
+      = @message.creator.name
+    .col.m3
+      = timeago_tag @message.created_at, limit: 10.days.ago
+    .col.m2
+      .label To:
+    .col.m10
+      = @message.recipient_names_for_type 'to'
+    .col.m2
+      .label CC:
+    .col.m10
+      = @message.recipient_names_for_type 'cc' || '&nbsp;'
+    .col.m12
+      .message-subject
+        = @message.subject
+  .row.message-body 
+    .col.m12
+      = @message.body.html_safe
 
-= link_to 'Edit', edit_message_path(@message)
-'|
-= link_to 'Back', messages_path
+.toolbar.z-depth-1
+  = form_tag mark_read_message_path(@message.id), method: :post do
+    = hidden_field_tag :user_id, current_user.id
+    button.btn.waves-effect.waves-light type="submit" OK
+  /a.btn.waves-effect.waves-light.mark-read href="#{message_path}" data-recipient=current_user.id data-id=@message.id OK

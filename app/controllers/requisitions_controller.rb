@@ -5,16 +5,22 @@ class RequisitionsController < ApplicationController
   # GET /requisitions.json
   def index
     authorize! :read, Requisition
+    
     if can? :manage, Requisition
-      @requisitions = Requisition.all
-    elsif current_user.employee.try(:is_manager?)
-      @requisitions = Requisition.where(department: current_user.employee.try(:department))
-    else
-      @requisitions = Requisition.where(requester_id: current_user.employee_id)
+      @all_requisitions = Requisition.all
+      if params[:dept].present? && params[:dept] != 'all'
+        dept = Department.where(code: params[:dept]).take
+        @all_requisitions = @all_requisitions.where(department: dept)
+      end
     end
-    if params[:dept].present? && params[:dept] != 'all'
-      dept = Department.where(code: params[:dept]).take
-      @requisitions = @requisitions.where(department: dept)
+    
+    @employee = current_user.employee
+    if @employee.try(:is_manager?)
+      @supv = current_user.employee
+      @requisitions = Requisition.where(department: @employee.try(:department))
+      @pending_approval = @requisitions.pending_supv_approval @supv
+    else
+      @requisitions = Requisition.where(requester_id: @employee.id)
     end
   end
 
@@ -33,7 +39,7 @@ class RequisitionsController < ApplicationController
     if @employee.present?
       @department = @employee.department
       @budget = @employee.department.budgets.current.take rescue nil
-      @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current).includes(:academic_year) rescue []
+      @budget_items = @budget.budget_items.order(:description, :year, :month) rescue []
       @manager = @employee.manager || @employee.supervisor
     end
     @requisition = Requisition.new
@@ -138,7 +144,7 @@ class RequisitionsController < ApplicationController
     @manager = @employee.manager || @employee.supervisor
     @supervisors = Employee.active.supervisors.all
     @budget = @employee.department.budgets.current.take rescue nil
-    @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue []
+    @budget_items = @budget.budget_items rescue []
     @button_state = !@requisition.is_budgeted && @requisition.is_supv_approved && !@requisition.is_budget_approved && @requisition.budget_approver_id
   end
 

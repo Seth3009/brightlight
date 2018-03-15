@@ -705,21 +705,20 @@ nav.light {
 	}
 }
 
-#modal-message-content {
-	.message-address {
-    font-size: 0.8em;
-    border-bottom: 1px solid lightgrey;
-    .label {
-      color: #585858;
-    }
-	}
-
-	.message-subject {
-    font-size: 1.2em;
-		padding-top: 1em;
-		font-weight: bold;
+.message-address {
+	font-size: 0.8em;
+	border-bottom: 1px solid lightgrey;
+	.label {
+		color: #585858;
 	}
 }
+
+.message-subject {
+	font-size: 1.2em;
+	padding-top: 1em;
+	font-weight: bold;
+}
+
 
 // ============================================ Badge =============================================
 
@@ -740,6 +739,17 @@ span.inbox-badge {
 
 span.new.nomer {
 	background: orangered;
+}
+
+span.emblem {
+	background: orangered;
+	color: white;
+	font-size: 0.8em;
+	padding: 2px 6px;
+	border-radius: 10px;
+	margin-left: 5px;
+	position: relative;
+	top: -8px;
 }
 
 // =========================================== Dashboard ============================================
@@ -1145,6 +1155,10 @@ ul {
 		color: #333;
 		background-color: #ccc;
 	}
+}
+
+.collection .no-bottom-border {
+	border-bottom: none !important;
 }
 
 // ======================================== Collapsible =========================================

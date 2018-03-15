@@ -1,3 +1,4 @@
+- title 'Purchase Requests'
 h4 Purchase Requests
 
 nav
@@ -8,9 +9,9 @@ nav
           a.dropdown-button href="#!" data-activates="dept-options"
             span#dept = @department.present? ? "#{@department.name}" : "Department" 
             i.material-icons.right arrow_drop_down
-      li style="padding: 0 10px"
-        = check_box_tag :active, 1, checked: true
-        = label_tag :active
+      / li style="padding: 0 10px"
+      /   = check_box_tag :active, 1, checked: true
+      /   = label_tag :active
     ul.right
       li
         = link_to new_requisition_path
@@ -24,45 +25,23 @@ ul#dept-options.dropdown-content
     li 
       = link_to dept.name, requisitions_path(params.merge(dept: dept.code).symbolize_keys)    
 
+-if can? :review, Requisition
+  ul.tabs.z-depth-1
+    li.tab.col.s2
+      a href='#tab1' Purchase Requests    
+    li.tab.col.s2
+      a href='#tab2' 
+        |Pending Approval
+        -if @pending_approval && @pending_approval.count > 0
+          span.emblem = @pending_approval.count
+
 .card-panel
-  table.compact.striped
-    thead
-      tr
-        th Req no
-        th Description
-        th Required date
-        th Requester
-        th Approval
-        th Total
-        th Actions
-
-    tbody
-      - @requisitions.each do |requisition|
-        tr
-          td = requisition.id
-          td = requisition.description
-          td = requisition.date_required
-          td = requisition.requester
-          td 
-            - if requisition.is_supv_approved
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor approval" check_box
-            - else
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor approval" check_box_outline_blank
-            - unless requisition.is_budgeted
-              - if requisition.is_budget_approved
-                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Budget approval" check_box
-              - else
-                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Budget approval" check_box_outline_blank
-
-          td = requisition.total_amt
-          td 
-            = link_to requisition, remote: true
-              i.material-icons visibility
-            - unless requisition.sent_to_supv
-              = link_to edit_requisition_path(requisition)
-                i.material-icons edit
-              = link_to requisition, data: {id: requisition.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
-                i.material-icons delete
+  #tab1.tab-content
+    == render partial: 'req_table', locals: { requisitions: @requisitions }
+      
+  #tab2.tab-content
+    -if @pending_approval
+      == render partial: 'req_table', locals: { requisitions: @pending_approval }
 
 #show-modal.modal.modal-fixed-footer
   .modal-content

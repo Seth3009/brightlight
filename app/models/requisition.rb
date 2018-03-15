@@ -17,6 +17,10 @@ class Requisition < ActiveRecord::Base
   validates :requester, presence: true
   validates :description, presence: true
 
+  scope :pending_supv_approval, lambda { |supv|
+    where.not(sent_to_supv: nil).where(is_supv_approved: nil).where(supervisor_id: supv.id)
+  }
+
   def send_for_approval(approver, type)
     if approver
       email = EmailNotification.req_approval(self, approver, type)
@@ -33,4 +37,21 @@ class Requisition < ActiveRecord::Base
     end
     return true
   end 
+
+  def pending_supv_approval?
+    sent_to_supv != nil && is_supv_approved == nil
+  end
+
+  def pending_budget_approval?
+    sent_for_bgt_approval != nil && is_budget_approved == nil
+  end
+
+  def draft?
+    !submitted?
+  end
+
+  def submitted?
+    sent_to_supv.present?
+  end
+
 end

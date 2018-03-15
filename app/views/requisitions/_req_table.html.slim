@@ -1,0 +1,50 @@
+-unless requisitions.blank?
+  table.compact.striped
+    thead
+      tr
+        th Req no
+        th Description
+        th Required date
+        th Requester
+        th Approval
+        th Total
+        th Actions
+
+    tbody
+      - requisitions.each do |requisition|
+        tr
+          td = requisition.id
+          td = requisition.description
+          td = requisition.date_required
+          td = requisition.requester
+          td 
+            - if requisition.is_supv_approved
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor approved" check_box
+            - elsif requisition.is_supv_approved == false
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor did not approve" cancel
+            - else
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor approval" check_box_outline_blank
+            - unless requisition.is_budgeted
+              - if requisition.is_budget_approved
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Budget approved" check_box
+              - elsif requisition.is_budget_approved == false
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Budget not approved" cancel
+              - else
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Budget approval" check_box_outline_blank
+
+          td = requisition.total_amt
+          td 
+            = link_to requisition, remote: true
+              i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="View" visibility
+            - if requisition.draft?
+              = link_to edit_requisition_path(requisition)
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+              = link_to requisition, data: {id: requisition.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+            |&nbsp;&nbsp;
+            - if requisition.pending_supv_approval? and can?(:approve, requisition)
+              = link_to approve_requisition_path(requisition, appvl: 'supv')
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Review approval"  thumbs_up_down
+            - if requisition.pending_budget_approval? and can?(:approve_budget, requisition)
+              = link_to approve_requisition_path(requisition, appvl: 'budget')
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Review approval" thumbs_up_down
