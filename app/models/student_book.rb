@@ -61,8 +61,12 @@ class StudentBook < ActiveRecord::Base
     .joins('LEFT JOIN book_editions ON student_books.book_edition_id = book_editions.id')
     .where(academic_year_id: year_id)
     .where(grade_level_id: grade_level_id)
-    .select('student_books.*, book_editions.title as title')
+    .select('student_books.*, book_editions.title as title, student_books.grade_section_id as book_no')
   }
+
+  scope :pnnrb_columns, lambda { joins('LEFT JOIN book_editions ON student_books.book_edition_id = book_editions.id')
+                        .joins('LEFT JOIN book_labels ON book_labels.student_id = student_books.student_id')
+                        .select('student_books.*, book_editions.title as title, student_books.grade_section_id as book_no')}
 
   scope :only_standard_books, lambda { |grade_level_id, grade_section_id, year_id, category_id|
     joins("LEFT JOIN grade_sections_students gss on gss.student_id = student_books.student_id 
