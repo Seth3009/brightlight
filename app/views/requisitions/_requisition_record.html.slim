@@ -56,52 +56,72 @@ h5 Purchase Request
   ul.collection
     li.collection-item.collection-header
       strong Approval
-    li.collection-item.row
+    li.collection-item.row.no-bottom-border
       .col.m3
         .label Supervisor
-        .item = requisition.supervisor || "--"
+        .item = @requisition.supervisor || "--"
       .col.m3
-        = check_box_tag :supv_app, nil, requisition.is_supv_approved
-        = label_tag 'Supv. Approval'
-      - if @requisition.is_supv_approved || @requisition.sent_to_supv
-        .col.m6
-          .label Approval Notes
-          .item = @requisition.req_appvl_notes || "--"
-      - else
-        - if can? :update, @requisition 
-          .col.m6
+        .label Supervisor Approval
+        - if @requisition.is_supv_approved
+          |Approved
+          i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor approved" check_box
+        - elsif @requisition.is_supv_approved == false
+          |Not approved
+          i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor did not approve" cancel
+        - else
+          i.material-icons.left check_box_outline_blank
+      .col.m6
+        - if @requisition.pending_supv_approval? && can?(:approve, @requisition)
+          .label Go to approval page
+          = link_to "Approval", approve_requisition_path(@requisition, appvl: 'supv'), class:"btn btn-small btn-flat waves-effect waves-light"
+        - else
+          - if @requisition.is_supv_approved || @requisition.sent_to_supv
+            .label Approval Notes
+            .item = @requisition.req_appvl_notes || "--"
+          - elsif can? :update, @requisition 
             #submit-button
               = link_to requisition_path(@requisition, send:'supv'), data: {params: {requisition: {active: true}}}, method: 'patch', remote: true, class: 'btn waves-effect waves-light'
                 | Send for approval 
     li.collection-item.row
       .col.m3
-        .label Date sent to supervisor
+        .label Date sent
         .item = @requisition.sent_to_supv || "--"
       .col.m3
-        .label Date approved by supervisor
+        .label Date
         .item = @requisition.supv_approved_date || "--"
       - if @requisition.is_supv_approved
         .col.m3
-          .label By
+          .label Approved By
           .item = @requisition.supervisor.try(:name) || "--"
 
     - unless requisition.is_budgeted
-      li.collection-item.row
+      li.collection-item.row.no-bottom-border
         .col.m3
           .label Budget Approver
           .item = requisition.budget_approver || "--"
         .col.m3
-          = check_box_tag :is_budget_approved, nil, requisition.is_budget_approved
-          = label_tag 'Budget Approval'
+          .label Budget Approval
+          - if requisition.is_budget_approved
+            |Approved
+            i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Budget approved" check_box
+          - elsif requisition.is_budget_approved == false
+            |Not approved
+            i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Budget not approved" cancel
+          - else
+            i.material-icons.left check_box_outline_blank
         .col.m6
-          .label Budget Notes
-          .item = requisition.bgt_appvl_notes || "--"
+          - if @requisition.pending_budget_approval? && can?(:approve_budget, @requisition)
+            .label Go to approval page
+            = link_to "Approval", approve_requisition_path(@requisition, appvl: 'budget'), class:"btn btn-small btn-flat waves-effect waves-light"
+          - else
+            .label Budget Notes
+            .item = requisition.bgt_appvl_notes || "--"
       li.collection-item.row
         .col.m3
-          .label Date sent for budget approval
+          .label Date sent
           .item = @requisition.sent_for_bgt_approval || "--"
         .col.m3
-          .label Date approved for budget
+          .label Date
           .item = @requisition.budget_approved_date || "--"
         - if @requisition.is_budget_approved
           .col.m3

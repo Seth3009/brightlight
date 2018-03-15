@@ -1,3 +1,4 @@
+- title 'Purchase Requests'
 h4 Purchase Requests
 
 nav
@@ -29,14 +30,18 @@ ul#dept-options.dropdown-content
     li.tab.col.s2
       a href='#tab1' Purchase Requests    
     li.tab.col.s2
-      a href='#tab2' Pending Approval
+      a href='#tab2' 
+        |Pending Approval
+        -if @pending_approval && @pending_approval.count > 0
+          span.emblem = @pending_approval.count
 
 .card-panel
   #tab1.tab-content
     == render partial: 'req_table', locals: { requisitions: @requisitions }
       
   #tab2.tab-content
-    == render partial: 'req_table', locals: { requisitions: @pending_approval }
+    -if @pending_approval
+      == render partial: 'req_table', locals: { requisitions: @pending_approval }
 
 #show-modal.modal.modal-fixed-footer
   .modal-content

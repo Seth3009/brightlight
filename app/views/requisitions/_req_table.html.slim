@@ -19,12 +19,16 @@
           td = requisition.requester
           td 
             - if requisition.is_supv_approved
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor approval" check_box
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor approved" check_box
+            - elsif requisition.is_supv_approved == false
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor did not approve" cancel
             - else
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor approval" check_box_outline_blank
             - unless requisition.is_budgeted
               - if requisition.is_budget_approved
-                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Budget approval" check_box
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Budget approved" check_box
+              - elsif requisition.is_budget_approved == false
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Budget not approved" cancel
               - else
                 i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Budget approval" check_box_outline_blank
 

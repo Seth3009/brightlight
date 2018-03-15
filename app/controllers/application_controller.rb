@@ -63,7 +63,7 @@ class ApplicationController < ActionController::Base
   end
 
   # def current_user
-  #   User.find 135
+  #   User.find 50
   # end
 
   protected

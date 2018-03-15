@@ -39,7 +39,7 @@ class RequisitionsController < ApplicationController
     if @employee.present?
       @department = @employee.department
       @budget = @employee.department.budgets.current.take rescue nil
-      @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current).includes(:academic_year) rescue []
+      @budget_items = @budget.budget_items.order(:description, :year, :month) rescue []
       @manager = @employee.manager || @employee.supervisor
     end
     @requisition = Requisition.new
@@ -144,7 +144,7 @@ class RequisitionsController < ApplicationController
     @manager = @employee.manager || @employee.supervisor
     @supervisors = Employee.active.supervisors.all
     @budget = @employee.department.budgets.current.take rescue nil
-    @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue []
+    @budget_items = @budget.budget_items rescue []
     @button_state = !@requisition.is_budgeted && @requisition.is_supv_approved && !@requisition.is_budget_approved && @requisition.budget_approver_id
   end
 
