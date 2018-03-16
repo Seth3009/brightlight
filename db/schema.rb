@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180314044320) do
+ActiveRecord::Schema.define(version: 20180316051335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1451,6 +1451,7 @@ ActiveRecord::Schema.define(version: 20180314044320) do
     t.float    "qty"
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
+    t.string   "barcode"
   end
 
   add_index "supplies_transaction_items", ["product_id"], name: "index_supplies_transaction_items_on_product_id", using: :btree

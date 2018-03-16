@@ -19,6 +19,7 @@
   .card-panel
     table.compact.striped
       thead
+          th Barcode
           th Product
           th TRX
           th Qty
@@ -26,6 +27,7 @@
       tbody
         - @supplies_transaction_item.each do |item|
           tr
+            td = item.product.barcode
             td = item.product.name
             td = item.in_out
             td = item.qty.to_f

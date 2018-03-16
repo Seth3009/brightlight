@@ -7,9 +7,11 @@ class SuppliesTransaction < ActiveRecord::Base
   scope :with_employee, lambda { joins('left join employees on employees.id = supplies_transactions.employee_id')}
 
   def self.count_item(supplies_transaction)
-    count_item = SuppliesTransactionItem.where(:supplies_transaction_id => supplies_transaction).count
-    if count_item
-      SuppliesTransaction.find(supplies_transaction).update(itemcount: count_item)
+    if supplies_transaction
+      count_item = SuppliesTransactionItem.where(:supplies_transaction_id => supplies_transaction).count
+      if count_item      
+        SuppliesTransaction.find(supplies_transaction).update(itemcount: count_item)
+      end
     end
   end
 end

@@ -16,7 +16,8 @@ class SuppliesTransactionsController < ApplicationController
 
   # GET /supplies_transactions/new
   def new
-    @supplies_transaction = SuppliesTransaction.new
+    @product = Product.all
+    @supplies_transaction = SuppliesTransaction.new   
   end
 
   # GET /supplies_transactions/1/edit

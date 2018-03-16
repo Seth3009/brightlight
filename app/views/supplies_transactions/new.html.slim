@@ -1,3 +1,39 @@
 h4 New Supplies Transaction
 
-== render 'form'
+= form_for @supplies_transaction do |f|
+  - if @supplies_transaction.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@supplies_transaction.errors.count, "error")} prohibited this supplies_transaction from being saved:"
+      ul
+        - @supplies_transaction.errors.full_messages.each do |message|
+          li = message
+
+  = render 'transaction_head', f: f
+  
+  nav.light
+    .nav-wrapper
+      ul
+        li
+          = link_to supplies_transactions_path
+            i.material-icons.left chevron_left
+        li
+          .brand-logo style="margin-left: 20px; font-size:1.5em"
+            | Supplies Items
+      ul.right#add-row
+        li
+          = link_to_add_association f, :supplies_transaction_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#supplies_transaction'
+            ' Add row
+            i.material-icons.left playlist_add
+  
+  ul.collapsible data-collapsible="expandable"
+    li
+      .collapsible-header                
+        div.right 
+          input.checkbox-toggle type="checkbox" id="use-scanner"
+          = label_tag "use-scanner", "Use scanner"
+
+  = render 'supplies_transaction_items', f: f
+
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" name="save" Save    
+    = link_to 'Cancel', supplies_transactions_path, class: "waves-effect waves-light btn-flat"

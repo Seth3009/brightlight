@@ -1,16 +1,18 @@
-.compact.nested-fields
-  .input-field.col.s7
-    = f.collection_select :product_id, Product.all.active, :id, :name, prompt: true
-  .input-field.col.s2
-    = f.text_field :in_out
-  .input-field.col.s2
-    = f.number_field :qty
-  .input-field.col.s1 style="padding-top:8px"
-    = link_to_remove_association f, class: "waves-effect waves-teal red-text"
-      i.material-icons delete
-
-
-javascript:
-  $('#supplies_transaction').on('cocoon:after-insert', function() {
-    $('select').material_select();
-  });
+tr.nested-fields
+  td
+    .input-field
+      
+      = f.text_field :barcode, class: 'barcode'
+  td
+    .input-field
+      = label_tag :name, '', class: 'active'
+      .names &nbsp;        
+    = f.hidden_field :product_id  , class: 'product_id' 
+    = f.hidden_field :in_out, class: 'trx_type'
+  td
+    .input-field
+      = f.number_field :qty
+  td
+    .input-field
+      = link_to_remove_association f, class: "waves-effect waves-teal red-text"
+        i.material-icons delete

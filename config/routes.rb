@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resources :purchase_orders
   resources :req_items
   resources :supplies_transaction_items
-  resources :supplies_transactions
+  
   resources :products
   resources :warehouses
   resources :item_categories
@@ -34,6 +34,12 @@ Rails.application.routes.draw do
   resources :copy_conditions
   resources :book_conditions
   
+  resources :supplies_transactions do
+    collection do      
+      get 'get_product'      
+    end
+  end
+
   resources :leave_requests do
     member do
       delete :cancel

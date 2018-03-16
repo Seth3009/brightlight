@@ -69,6 +69,6 @@ class SuppliesTransactionItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def supplies_transaction_item_params
-      params.require(:supplies_transaction_item).permit(:supplies_transaction_id, :product_id, :in_out, :qty)
+      params.require(:supplies_transaction_item).permit(:supplies_transaction_id, :product_id, :in_out, :qty, :barcode)
     end
 end
