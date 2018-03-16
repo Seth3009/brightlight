@@ -35,9 +35,9 @@ class EmailNotification < ActionMailer::Base
     @leave_request = leave_request
     @type = type        
     if type == 'spv-app'
-      mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>), cc: %("#{@employee.name}" <#{@employee.email}>), subject: "Leave Request #{leave_request.employee.try(:name)}.")
+      mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>), cc: %("#{@employee.name}" <#{@employee.email}>), subject: "[SPV] Leave Request Approved: #{leave_request.employee.try(:name)}.")
     elsif type == 'spv-den'
-      mail(to: %("#{@employee.name}" <#{@employee.email}>), subject: "Leave Request #{leave_request.employee.try(:name)}.")
+      mail(to: %("#{@employee.name}" <#{@employee.email}>), subject: "[SPV] Leave canceled: #{leave_request.employee.try(:name)}.")
     end
   end
 
@@ -46,7 +46,13 @@ class EmailNotification < ActionMailer::Base
     @leave_request = leave_request
     @type = type
     @employee = Employee.find_by_id(leave_request.employee_id)
-    mail(to: %("#{@employee.name}" <#{@employee.email}>), cc: %("#{@supervisor.name}" <#{@supervisor.email}>), subject: "[HRD] Leave Request #{leave_request.employee.try(:name)}.")
+    if type == 'hr-app'
+      @subject = "[HRD] Leave Request Approved: #{leave_request.employee.try(:name)}."
+    elsif type == 'hr-den'
+      @subject = "[HRD] Leave Request Canceled: #{leave_request.employee.try(:name)}."
+    end
+      mail(to: %("#{@employee.name}" <#{@employee.email}>), cc: %("#{@supervisor.name}" <#{@supervisor.email}>), subject: @subject)
+
   end
 
   def leave_canceled(leave_request, employee, cc_list)

@@ -6,21 +6,28 @@ html
 
   body
     div style="margin-left:30px; width=85%; font-size:16px"
-      p Dear #{@employee.name},
+      - if @leave_request.spv_approval
+        p Dear #{@hrmanager.name},
 
-      p Your leave request below has been <b>#{@leave_request.spv_approval ? 'approved' : 'rejected'}.</b>
+        p You have a pending leave request that requires your approval.
+      - else
+        p Dear #{@employee.name},
+        
+        p Your leave request below has been <b>#{@leave_request.spv_approval ? 'approved' : 'rejected'}.</b>
       
-      p Reason : #{@leave_request.spv_notes}
+        p Reason : #{@leave_request.spv_notes}
 
       p Leave request detail:
       = render 'leave_request'      
       
       p Supervisor approval date: #{@leave_request.spv_date.strftime('%d %b %Y')}
-      - if @leave_request.spv_approval == true
+      - if @leave_request.spv_approval
         div style="margin-top:20px; margin-bottom:40px"
-            = link_to "Leave Request : #{@employee.name}" ,approve_path(@leave_request,"hr"),  style:"text-decoration:underline"
+            = link_to "Leave Request : #{@employee.name}" ,approve_url(@leave_request,"hr"),  style:"text-decoration:underline"
 
       p Thank you for using <i>Brightlight</i>. 
       
-    
-    = render 'footer', to: @employee
+    - if @leave_request.spv_approval
+      = render 'footer', to: @hrmanager
+    - else
+      = render 'footer', to: @employee

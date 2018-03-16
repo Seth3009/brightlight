@@ -8,8 +8,8 @@ class LeaveRequestsController < ApplicationController
   def index
     @department = Department.find_by_id(@employee.department_id) 
     @leave_requests = LeaveRequest.with_employees_and_departments
-    @own_leave_requests = @leave_requests.active.empl(@employee)
-    @supv_approval_list = @leave_requests.active.spv(@employee)
+    @own_leave_requests = @leave_requests.active.empl(@employee).order(form_submit_date: :desc, updated_at: :desc)
+    @supv_approval_list = @leave_requests.active.spv(@employee).submitted
     @hr_approval_list = @leave_requests.hrlist
     if params[:dept].present? && params[:dept] != 'all'
       @dept_filter = Department.find_by(code: params[:dept])
@@ -79,8 +79,8 @@ class LeaveRequestsController < ApplicationController
   # PATCH/PUT /leave_requests/1
   # PATCH/PUT /leave_requests/1.json
   def update
-    authorize! :update, @leave_request
-
+    #authorize! :update, @leave_request
+    
     @requester = Employee.find_by_id(@leave_request.employee_id)
     @department = Department.find_by_id(@requester.department_id)    
     @supervisor = Employee.find_by_id(@department.manager_id)
