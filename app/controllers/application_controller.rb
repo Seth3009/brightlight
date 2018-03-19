@@ -62,9 +62,10 @@ class ApplicationController < ActionController::Base
     Message.all.unread(current_user)
   end
 
-  # def current_user
-  #   User.find 50
-  # end
+  # jim 174, mul 50, anita 61, nori 53
+  def current_user
+    User.find 53
+  end
 
   protected
 

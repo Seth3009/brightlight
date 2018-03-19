@@ -21,6 +21,21 @@ class Requisition < ActiveRecord::Base
     where.not(sent_to_supv: nil).where(is_supv_approved: nil).where(supervisor_id: supv.id)
   }
 
+  scope :pending_budget_approval, lambda { |employee|
+    where(is_supv_approved: true)
+    .where.not(sent_for_bgt_approval: nil).where(is_budget_approved: nil).where(budget_approver_id: employee.id)
+  }
+
+  scope :pending_approval, lambda {
+    where('(sent_to_supv is not null AND is_supv_approved is null)
+            OR (sent_for_bgt_approval is not null and is_budget_approved is null)')
+  }
+
+  scope :approved, lambda {
+    where('(is_supv_approved = true AND is_budget_approved = true)
+           OR (is_supv_approved = true AND is_budgeted = true)')
+  }
+
   def send_for_approval(approver, type)
     if approver
       email = EmailNotification.req_approval(self, approver, type)
@@ -52,6 +67,10 @@ class Requisition < ActiveRecord::Base
 
   def submitted?
     sent_to_supv.present?
+  end
+
+  def approved?
+    (is_supv_approved && is_budget_approved) || (is_supv_approved && is_budgeted)
   end
 
 end
