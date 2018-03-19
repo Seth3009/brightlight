@@ -7,18 +7,20 @@ class RequisitionsController < ApplicationController
     authorize! :read, Requisition
     
     if can? :manage, Requisition
-      @all_requisitions = Requisition.all
+      @approved_requisitions = Requisition.approved
       if params[:dept].present? && params[:dept] != 'all'
         dept = Department.where(code: params[:dept]).take
-        @all_requisitions = @all_requisitions.where(department: dept)
+        @approved_requisitions = @approved_requisitions.where(department: dept)
       end
+      @pending_approval = Requisition.pending_approval
     end
     
     @employee = current_user.employee
     if @employee.try(:is_manager?)
       @supv = current_user.employee
       @requisitions = Requisition.where(department: @employee.try(:department))
-      @pending_approval = @requisitions.pending_supv_approval @supv
+      @pending_supv_approval   = @requisitions.pending_supv_approval(@supv)
+      @pending_budget_approval = Requisition.pending_budget_approval(@supv)
     else
       @requisitions = Requisition.where(requester_id: @employee.id)
     end
