@@ -43,8 +43,8 @@ h4 Editing User
         = check_box_tag "user[roles][]", 'hrd', @user.roles.include?(:hrd), {id: :hrd, multiple: true}
         = label_tag :hrd
       .input-field.col.s2
-        = check_box_tag "user[roles][]", 'purchasing', @user.roles.include?(:hrd), {id: :purchasing, multiple: true}
-        = label_tag :hrd
+        = check_box_tag "user[roles][]", 'purchasing', @user.roles.include?(:purchasing), {id: :purchasing, multiple: true}
+        = label_tag :purchasing
 
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
