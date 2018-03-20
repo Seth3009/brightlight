@@ -9,6 +9,9 @@ p
 p
   strong Itemcount:
   = @supplies_transaction.itemcount
+p
+  strong card:
+  = @supplies_transaction.card
 
 = link_to 'Edit', edit_supplies_transaction_path(@supplies_transaction)
 '|

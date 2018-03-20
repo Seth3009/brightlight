@@ -2,22 +2,28 @@
   .row
     .input-field.col.m2
       = f.label :transaction_date, class: 'active'
-      - if params[:action] =~ /new/ 
-        = f.date_field :transaction_date, :value =>  Time.now.strftime('%Y-%m-%d')
+      - if params[:employee_id]
+        = f.date_field :transaction_date, value: Time.now.strftime('%Y-%m-%d'), disabled: true                                                
+      - elsif params[:action] =~ /edit/
+        = f.date_field :transaction_date, disabled: true                                                
       - else
-        = f.date_field :transaction_date, disabled: true
+        = f.date_field :transaction_date, value: Time.now.strftime('%Y-%m-%d')
     .input-field.col.m8
-      = f.hidden_field :employee_id
-      = f.label :employee, class: 'active' 
-      - if params[:action] =~ /new/            
-        = text_field_tag :employee, "", id: "employee_autocomplete", placeholder: "Search by Employee Name or by Department Name or by Job Title"            
+      - if params[:employee_id].present?
+        = f.hidden_field :employee_id,  value: params[:employee_id]
+        = f.text_field :employee, value: params[:name], disabled: true
       - else
-        = f.text_field :employee, disabled: true
+        = f.label :employee, class: 'active' 
+        - if params[:action] =~ /new/            
+          = text_field_tag :employee, "", id: "employee_autocomplete", placeholder: "Search by Employee Name or by Department Name or by Job Title"            
+        - else
+          = f.text_field :employee, disabled: true
     .input-field.col.m2 
       = f.label '', 'Transaction Type', class: 'active'     
       = select_tag 'in_out', options_for_select(["IN", "OUT"],"OUT"), id: "trx_type"
 
 javascript:
+  $('#trx_type').material_select();
   $(document).ready(function() {
     $( "#employee_autocomplete" ).autocomplete({
         source: "/employees?format=json",

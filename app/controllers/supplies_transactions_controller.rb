@@ -5,7 +5,8 @@ class SuppliesTransactionsController < ApplicationController
   # GET /supplies_transactions.json
   def index
     authorize! :read, SuppliesTransaction
-    @supplies_transactions = SuppliesTransaction.all    
+    @supplies_transactions = SuppliesTransaction.all 
+    @supplies_transaction = SuppliesTransaction.new  
   end
 
   # GET /supplies_transactions/1
@@ -76,6 +77,19 @@ class SuppliesTransactionsController < ApplicationController
     end
   end
 
+  def get_employee
+    authorize! :read, Employee    
+    respond_to do |format|
+      format.json do
+        @employee = Employee.joins('LEFT JOIN employee_smartcards on employee_smartcards.employee_id = employees.id')
+                    .where('employee_smartcards.card = ?', params[:card]).take
+        if @employee.present? 
+          
+        end
+      end      
+    end     
+  end
+
   private
     # Enable Sort column
     def sortable_columns 
@@ -86,13 +100,13 @@ class SuppliesTransactionsController < ApplicationController
       SuppliesTransaction.count_item(@supplies_transaction.id)
     end
     # Use callbacks to share common setup or constraints between actions.
-    def set_supplies_transaction
-      @supplies_transaction = SuppliesTransaction.find(params[:id])
+    def set_supplies_transaction      
+      @supplies_transaction = SuppliesTransaction.find(params[:id])      
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def supplies_transaction_params
-      params.require(:supplies_transaction).permit(:transaction_date, :employee_id, :itemcount,
+      params.require(:supplies_transaction).permit(:transaction_date, :employee_id, :card, :itemcount,
                                                   {supplies_transaction_items_attributes: [:id, :supplies_transaction_id, :product_id, :in_out, :qty, :_destroy, :id]})
     end
 end

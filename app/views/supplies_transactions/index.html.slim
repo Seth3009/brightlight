@@ -4,7 +4,7 @@
   
 
 nav
-  .nav-wrapper
+  .nav-wrapper    
     ul.right
       - if can? :manage, SuppliesTransaction
         li
@@ -30,10 +30,7 @@ nav
           td = supplies_transaction.itemcount
           td
             = link_to supplies_transaction, remote: true
-              i.material-icons visibility
-            - if can? :update, supplies_transaction
-              = link_to edit_supplies_transaction_path(supplies_transaction)
-                i.material-icons edit
+              i.material-icons visibility            
             - if can? :destroy, supplies_transaction
               = link_to supplies_transaction, data: {:confirm => 'Are you sure?'}, :method => :delete
                 i.material-icons.red-text delete
@@ -41,3 +38,21 @@ nav
 
 #show-modal.modal.modal-fixed-footer
   #show-modal-content         
+
+
+
+javascript:
+  $(window).codeScanner({
+      minEntryChars: 10,
+      maxEntryTime: 500,
+      onScan: function($element, input) {             
+        var card = input.trim();       
+        $.getJSON("/supplies_transactions/get_employee.json?card="+card, null, function (data) {
+        window.location.href= "/supplies_transactions/new?employee_id="+data.employee.id+"&name="+data.employee.name;    
+        }).fail(function(xhr){
+          Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
+        });            
+      }
+    });
+
+  

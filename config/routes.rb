@@ -36,7 +36,8 @@ Rails.application.routes.draw do
   
   resources :supplies_transactions do
     collection do      
-      get 'get_product'      
+      get 'get_product' 
+      get 'get_employee'     
     end
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180316051335) do
+ActiveRecord::Schema.define(version: 20180319031526) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1463,6 +1463,7 @@ ActiveRecord::Schema.define(version: 20180316051335) do
     t.integer  "itemcount",        default: 0
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.string   "card"
   end
 
   add_index "supplies_transactions", ["employee_id"], name: "index_supplies_transactions_on_employee_id", using: :btree
