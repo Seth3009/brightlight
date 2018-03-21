@@ -14,7 +14,8 @@
         = f.text_field :employee, value: params[:name], disabled: true
       - else
         = f.label :employee, class: 'active' 
-        - if params[:action] =~ /new/            
+        - if params[:action] =~ /new/  
+          = f.hidden_field :employee_id          
           = text_field_tag :employee, "", id: "employee_autocomplete", placeholder: "Search by Employee Name or by Department Name or by Job Title"            
         - else
           = f.text_field :employee, disabled: true

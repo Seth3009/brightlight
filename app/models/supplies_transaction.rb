@@ -5,7 +5,9 @@ class SuppliesTransaction < ActiveRecord::Base
   accepts_nested_attributes_for :supplies_transaction_items, reject_if: :all_blank, allow_destroy: true
   
   scope :with_employee, lambda { joins('left join employees on employees.id = supplies_transactions.employee_id')}
-
+  scope :filter_query, lambda { |m,y|
+    where('EXTRACT(MONTH from transaction_date) = ? and EXTRACT(YEAR from transaction_date) = ?', m, y)
+  }
   def self.count_item(supplies_transaction)
     if supplies_transaction
       count_item = SuppliesTransactionItem.where(:supplies_transaction_id => supplies_transaction).count

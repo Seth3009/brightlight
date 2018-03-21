@@ -4,7 +4,13 @@
   
 
 nav
-  .nav-wrapper    
+  .nav-wrapper 
+    ul
+      li  
+        = select_year(Date.today,{},name: 'trx_year')        
+      li
+        = select_month(Date.today,{},name: 'trx_month')
+
     ul.right
       - if can? :manage, SuppliesTransaction
         li
@@ -22,9 +28,9 @@ nav
         th Actions        
         
 
-    tbody
+    tbody#supplies_transaction
       - @supplies_transactions.each do |supplies_transaction|
-        tr
+        tr 
           td = supplies_transaction.employee
           td = supplies_transaction.transaction_date.strftime("%a, %d %b %Y")
           td = supplies_transaction.itemcount
@@ -53,6 +59,18 @@ javascript:
           Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
         });            
       }
+    });
+
+  $(function(){
+      // bind change event to select
+      $('#date_month').on('change', function () {          
+          var month = $('#date_month').val();
+          var year = $('#date_year').val();
+          if (month) { // require a URL
+              window.location = "supplies_transactions?m="+month+"&y="+year; // redirect                            
+          }
+          return false;
+      });
     });
 
   

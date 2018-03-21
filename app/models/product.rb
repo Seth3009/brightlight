@@ -36,4 +36,6 @@ class Product < ActiveRecord::Base
       self.find(product).update(:is_active => true)
     end
   end
+
+  
 end

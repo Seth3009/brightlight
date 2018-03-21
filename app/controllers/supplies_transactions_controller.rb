@@ -4,9 +4,16 @@ class SuppliesTransactionsController < ApplicationController
   # GET /supplies_transactions
   # GET /supplies_transactions.json
   def index
-    authorize! :read, SuppliesTransaction
-    @supplies_transactions = SuppliesTransaction.all 
-    @supplies_transaction = SuppliesTransaction.new  
+    authorize! :read, SuppliesTransaction    
+    respond_to do |format|
+      format.html {
+        if params[:m]
+          @supplies_transactions = SuppliesTransaction.filter_query(params[:m], params[:y])
+        else
+          @supplies_transactions = SuppliesTransaction.filter_query(Date.today.month, Date.today.year)
+        end
+      }
+    end
   end
 
   # GET /supplies_transactions/1
@@ -72,6 +79,8 @@ class SuppliesTransactionsController < ApplicationController
         @product = Product.where('UPPER(barcode) = ?', params[:barcode].upcase).take
         if @product.present?
           
+        else
+          render json: {errors:"Invalid barcode"}, status: :unprocessable_entity
         end
       end
     end
@@ -85,6 +94,8 @@ class SuppliesTransactionsController < ApplicationController
                     .where('employee_smartcards.card = ?', params[:card]).take
         if @employee.present? 
           
+        else
+          render json: {errors:"Invalid Card"}, status: :unprocessable_entity
         end
       end      
     end     

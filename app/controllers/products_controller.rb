@@ -1,5 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
+  
 
   # GET /products
   # GET /products.json
@@ -109,6 +110,7 @@ class ProductsController < ApplicationController
   end
 
   private
+   
     # Enable Sort column
     def sortable_columns 
       [:code, :name]

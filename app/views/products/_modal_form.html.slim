@@ -15,7 +15,7 @@
           .input-field.col.s4
             = f.hidden_field :stock_type, value: "Supplies"
             = f.label :item_category_id, class: 'active'
-            = f.collection_select :item_category_id, ItemCategory.all.order(:code), :id, :name_with_code, prompt: true
+            = f.collection_select :item_category_id, ItemCategory.all.order(:code), :id, :name_with_code, prompt: true          
         .row
           .input-field.col.s2
             = f.label 'Code', class: 'active'
@@ -42,8 +42,10 @@
             = f.number_field :packs
           .input-field.col.s5
             = f.label :packs_unit, class: 'active'
-            = f.text_field :packs_unit
-                
+            = f.text_field :packs_unit                
+          .input-field.col.s5
+            = f.label :barcode, class: 'active'
+            = f.text_field :barcode      
 
     .modal-footer
         button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" Save
