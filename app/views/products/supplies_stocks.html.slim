@@ -26,7 +26,7 @@ nav
       - @supplies_stocks.each do |supplies_stock|   
         tr
           td = supplies_stock.code
-          td = supplies_stock.name
+          td = link_to supplies_stock.name, stock_card_url(supplies_stock.id)
           td = supplies_stock.stock || 0.0
           td = supplies_stock.min_stock
           td = (supplies_stock.stock || 0.0) - supplies_stock.min_stock

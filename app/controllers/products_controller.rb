@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :stock_card]
   
 
   # GET /products
@@ -107,6 +107,16 @@ class ProductsController < ApplicationController
                show_as_html: params.key?('screen')
       end
     end                  
+  end
+
+  def stock_card
+    authorize! :read, Product
+    @products = Product.all
+    @stocks = Product.joins('left join supplies_transaction_items on supplies_transaction_items.product_id = products.id')
+                      .joins('left join supplies_transactions on supplies_transactions.id = supplies_transaction_items.supplies_transaction_id')
+                      .joins('left join employees on employees.id = supplies_transactions.employee_id')
+                      .select('employees.name, supplies_transactions.transaction_date as date, supplies_transaction_items.in_out as type, supplies_transaction_items.qty')
+                      .where('products.id = ?',params[:id]).order('date')                      
   end
 
   private

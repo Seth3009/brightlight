@@ -1,22 +1,32 @@
 .row 
   .col.s6
-    h4 Supplies Transaction
-  
+    - if params[:m].present? && params[:y].present?
+      h4 Supplies Transaction #{Date::MONTHNAMES[params[:m].to_i]} #{params[:y]}
+    - else
+      h4 Daily Supplies Transaction 
 
 nav
-  .nav-wrapper 
-    ul
-      li  
-        = select_year(Date.today,{},name: 'trx_year')        
-      li
-        = select_month(Date.today,{},name: 'trx_month')
-
+  .nav-wrapper    
     ul.right
       - if can? :manage, SuppliesTransaction
         li
           = link_to new_supplies_transaction_path
             | New Transaction
-            i.material-icons.left add
+            i.material-icons.left add  
+    - if params[:view] == 'daily' 
+      ul
+        li
+          |  Date : 
+        li
+          = date_field_tag 'trx_date', Date.today
+    - else
+      ul
+        li  
+          = select_year(Date.today,{},name: 'trx_year')        
+        li
+          = select_month(Date.today,{},name: 'trx_month')
+
+    
           
 .card-panel
   table.compact.striped
@@ -67,10 +77,23 @@ javascript:
           var month = $('#date_month').val();
           var year = $('#date_year').val();
           if (month) { // require a URL
-              window.location = "supplies_transactions?m="+month+"&y="+year; // redirect                            
+              window.location = "supplies_transactions?view=monthly&m="+month+"&y="+year; // redirect              
           }
           return false;
       });
     });
+
+  $(function(){
+      // bind change event to select
+      $('#trx_date').on('change', function () {          
+          var date = $('#trx_date').val();          
+          if (date) { // require a URL
+              window.location = "supplies_transactions?view=daily&trx_date="+date; // redirect              
+          }
+          return false;
+      });
+    });
+
+  
 
   

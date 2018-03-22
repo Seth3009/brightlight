@@ -7,10 +7,14 @@ class SuppliesTransactionsController < ApplicationController
     authorize! :read, SuppliesTransaction    
     respond_to do |format|
       format.html {
-        if params[:m]
+        if params[:m] && params[:y]
           @supplies_transactions = SuppliesTransaction.filter_query(params[:m], params[:y])
         else
-          @supplies_transactions = SuppliesTransaction.filter_query(Date.today.month, Date.today.year)
+          if params[:trx_date].present?
+            @supplies_transactions = SuppliesTransaction.where("transaction_date at time zone 'utc' at time zone 'localtime' = ?", DateTime.parse(params[:trx_date]))
+          else
+            redirect_to supplies_transactions_url(trx_date: Date.today,view:'daily')
+          end
         end
       }
     end

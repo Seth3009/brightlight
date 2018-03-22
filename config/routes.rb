@@ -51,6 +51,7 @@ Rails.application.routes.draw do
 
     
   get 'supplies_stocks' => 'products#supplies_stocks', as: :supplies_stocks
+  get 'products/:id/stock_card' => 'products#stock_card', as: :stock_card
   
   resources :courses do
     resources :course_texts, shallow: true

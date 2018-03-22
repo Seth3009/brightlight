@@ -92,15 +92,18 @@ li
   .collapsible-body
     ul
       li
-        = link_to 'Product Category', item_categories_path
+        = link_to 'Product Category', item_categories_url
       li
-        = link_to 'Product Unit', item_units_path
+        = link_to 'Product Unit', item_units_url
       li
-        = link_to 'Products', products_path
+        = link_to 'Products', products_url
       li
-        = link_to 'Supplies Transaction', supplies_transactions_path
+        = link_to 'Monthly Supplies Transaction', supplies_transactions_url(view:'monthly',m:Time.now.month,y:Time.now.year)
       li
-        = link_to 'Supplies Stock', supplies_stocks_path
+        = link_to 'Daily Supplies Transaction', supplies_transactions_url(view:'daily',trx_date: Date.today)
+      li
+        = link_to 'Supplies Stock', supplies_stocks_url
+      
 
 - if can? :manage, BookFine
 	li 
@@ -202,6 +205,3 @@ li
 				li
 					a href="/users" 
 						| Users
-
-
-
