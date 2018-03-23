@@ -3,7 +3,7 @@
     - if params[:m].present? && params[:y].present?
       h4 Supplies Transaction #{Date::MONTHNAMES[params[:m].to_i]} #{params[:y]}
     - else
-      h4 Daily Supplies Transaction 
+      h4 Supplies Transaction #{params[:trx_date].to_date.strftime('%d %b %Y')}
 
 nav
   .nav-wrapper    
@@ -14,9 +14,9 @@ nav
             | New Transaction
             i.material-icons.left add  
     - if params[:view] == 'daily' 
-      ul
-        li
-          |  Date : 
+      ul        
+        li          
+          | Date :
         li
           = date_field_tag 'trx_date', Date.today
     - else
@@ -30,26 +30,11 @@ nav
           
 .card-panel
   table.compact.striped
-    thead
-      tr
-        th Employee
-        th Transaction date        
-        th Item count
-        th Actions        
-        
-
-    tbody#supplies_transaction
-      - @supplies_transactions.each do |supplies_transaction|
-        tr 
-          td = supplies_transaction.employee
-          td = supplies_transaction.transaction_date.strftime("%a, %d %b %Y")
-          td = supplies_transaction.itemcount
-          td
-            = link_to supplies_transaction, remote: true
-              i.material-icons visibility            
-            - if can? :destroy, supplies_transaction
-              = link_to supplies_transaction, data: {:confirm => 'Are you sure?'}, :method => :delete
-                i.material-icons.red-text delete
+    - if params[:view] == 'monthly'
+      = render 'monthly_list'
+    - else
+      = render 'daily_list'
+      
 
 
 #show-modal.modal.modal-fixed-footer

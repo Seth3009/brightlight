@@ -103,6 +103,8 @@ li
         = link_to 'Daily Supplies Transaction', supplies_transactions_url(view:'daily',trx_date: Date.today)
       li
         = link_to 'Supplies Stock', supplies_stocks_url
+      li
+        = link_to 'Supplies Transaction Recap', supplies_transactions_recap_url(m:Time.now.month,y:Time.now.year)
       
 
 - if can? :manage, BookFine

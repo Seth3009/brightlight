@@ -1,0 +1,21 @@
+thead
+  tr
+    th Employee
+    th Product
+    th Transaction date 
+    th Type       
+    th Qty
+    th Actions    
+
+tbody#supplies_transaction
+  - @supplies_transaction_items.each do |supplies_transaction_item|
+    tr 
+      td = supplies_transaction_item.supplies_transaction.employee
+      td = supplies_transaction_item.product.name
+      td = supplies_transaction_item.supplies_transaction.transaction_date.strftime("%a, %d %b %Y")
+      td = supplies_transaction_item.in_out
+      td = supplies_transaction_item.qty
+      td               
+        - if can? :destroy, supplies_transaction_item
+          = link_to supplies_transaction_item, data: {:confirm => 'Are you sure?'}, :method => :delete
+            i.material-icons.red-text delete

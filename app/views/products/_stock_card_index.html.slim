@@ -18,6 +18,7 @@
             td = stock.qty if stock.type == "IN"
             td = stock.qty if stock.type == "OUT"
             td 
+              -if stock.qty.present?
                 - if stock.type == "IN"
                   = @total = @total.to_f + stock.qty
                 - else

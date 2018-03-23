@@ -37,10 +37,10 @@ Rails.application.routes.draw do
   resources :supplies_transactions do
     collection do      
       get 'get_product' 
-      get 'get_employee'     
+      get 'get_employee'           
     end
   end
-
+  
   resources :leave_requests do
     member do
       delete :cancel
@@ -52,6 +52,7 @@ Rails.application.routes.draw do
     
   get 'supplies_stocks' => 'products#supplies_stocks', as: :supplies_stocks
   get 'products/:id/stock_card' => 'products#stock_card', as: :stock_card
+  get 'supplies_transactions_recap' => 'products#supplies_transactions_recap', as: :supplies_transactions_recap
   
   resources :courses do
     resources :course_texts, shallow: true

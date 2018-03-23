@@ -1,0 +1,19 @@
+thead
+  tr
+    th Employee
+    th Transaction date        
+    th Item count
+    th Actions    
+
+tbody#supplies_transaction
+  - @supplies_transactions.each do |supplies_transaction|
+    tr 
+      td = supplies_transaction.employee
+      td = supplies_transaction.transaction_date.strftime("%a, %d %b %Y")
+      td = supplies_transaction.itemcount
+      td
+        = link_to supplies_transaction, remote: true
+          i.material-icons visibility            
+        - if can? :destroy, supplies_transaction
+          = link_to supplies_transaction, data: {:confirm => 'Are you sure?'}, :method => :delete
+            i.material-icons.red-text delete

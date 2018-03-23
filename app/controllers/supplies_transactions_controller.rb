@@ -11,7 +11,8 @@ class SuppliesTransactionsController < ApplicationController
           @supplies_transactions = SuppliesTransaction.filter_query(params[:m], params[:y])
         else
           if params[:trx_date].present?
-            @supplies_transactions = SuppliesTransaction.where("transaction_date at time zone 'utc' at time zone 'localtime' = ?", DateTime.parse(params[:trx_date]))
+            @supplies_transaction_items = SuppliesTransactionItem.joins('left join supplies_transactions on supplies_transactions.id = supplies_transaction_items.supplies_transaction_id')
+                                          .where("transaction_date at time zone 'utc' at time zone 'localtime' = ?", DateTime.parse(params[:trx_date]))
           else
             redirect_to supplies_transactions_url(trx_date: Date.today,view:'daily')
           end
@@ -28,6 +29,7 @@ class SuppliesTransactionsController < ApplicationController
 
   # GET /supplies_transactions/new
   def new
+    authorize! :read, SuppliesTransaction
     @product = Product.all
     @supplies_transaction = SuppliesTransaction.new   
   end
@@ -39,6 +41,7 @@ class SuppliesTransactionsController < ApplicationController
   # POST /supplies_transactions
   # POST /supplies_transactions.json
   def create
+    authorize! :manage, SuppliesTransaction
     @supplies_transaction = SuppliesTransaction.new(supplies_transaction_params)
 
     respond_to do |format|
@@ -55,6 +58,7 @@ class SuppliesTransactionsController < ApplicationController
   # PATCH/PUT /supplies_transactions/1
   # PATCH/PUT /supplies_transactions/1.json
   def update
+    authorize! :manage, SuppliesTransaction
     respond_to do |format|
       if @supplies_transaction.update(supplies_transaction_params)
         format.html { redirect_to supplies_transactions_url, notice: 'Supplies transaction was successfully updated.' }
@@ -69,9 +73,11 @@ class SuppliesTransactionsController < ApplicationController
   # DELETE /supplies_transactions/1
   # DELETE /supplies_transactions/1.json
   def destroy
+    authorize! :manage, SuppliesTransaction
+    authorize! :manage, SuppliesTransactionItem
     @supplies_transaction.destroy
     respond_to do |format|
-      format.html { redirect_to supplies_transactions_url, notice: 'Supplies transaction was successfully destroyed.' }
+      format.html { redirect_to :back, notice: 'Supplies transaction was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -104,6 +110,8 @@ class SuppliesTransactionsController < ApplicationController
       end      
     end     
   end
+
+  
 
   private
     # Enable Sort column

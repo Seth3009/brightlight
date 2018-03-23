@@ -4,6 +4,7 @@ class SuppliesTransactionItemsController < ApplicationController
   # GET /supplies_transaction_items
   # GET /supplies_transaction_items.json
   def index
+    authorize! :read, SuppliesTransactionItem
     @supplies_transaction_items = SuppliesTransactionItem.all
   end
 
@@ -24,6 +25,7 @@ class SuppliesTransactionItemsController < ApplicationController
   # POST /supplies_transaction_items
   # POST /supplies_transaction_items.json
   def create
+    authorize! :manage, SuppliesTransactionItem
     @supplies_transaction_item = SuppliesTransactionItem.new(supplies_transaction_item_params)
 
     respond_to do |format|
@@ -40,6 +42,7 @@ class SuppliesTransactionItemsController < ApplicationController
   # PATCH/PUT /supplies_transaction_items/1
   # PATCH/PUT /supplies_transaction_items/1.json
   def update
+    authorize! :manage, SuppliesTransactionItem
     respond_to do |format|
       if @supplies_transaction_item.update(supplies_transaction_item_params)
         format.html { redirect_to @supplies_transaction_item, notice: 'Supplies transaction item was successfully updated.' }
@@ -54,9 +57,12 @@ class SuppliesTransactionItemsController < ApplicationController
   # DELETE /supplies_transaction_items/1
   # DELETE /supplies_transaction_items/1.json
   def destroy
+    authorize! :manage, SuppliesTransactionItem
+    authorize! :manage, SuppliesTransaction
     @supplies_transaction_item.destroy
+    SuppliesTransaction.count_item(@supplies_transaction.id)
     respond_to do |format|
-      format.html { redirect_to supplies_transaction_items_url, notice: 'Supplies transaction item was successfully destroyed.' }
+      format.html { redirect_to supplies_transactions_url, notice: 'Supplies transaction item was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

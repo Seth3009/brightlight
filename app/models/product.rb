@@ -6,6 +6,8 @@ class Product < ActiveRecord::Base
   has_many :supplies_transaction_item
 
   scope :active, lambda { where(is_active:true).order(:name) }
+
+  
   
   scope :search_query, lambda { |query|
     return nil  if query.blank?   
