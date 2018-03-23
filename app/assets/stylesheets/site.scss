@@ -741,6 +741,17 @@ span.new.nomer {
 	background: orangered;
 }
 
+span.emblem {
+	background: orangered;
+	color: white;
+	font-size: 0.8em;
+	padding: 2px 6px;
+	border-radius: 10px;
+	margin-left: 5px;
+	position: relative;
+	top: -8px;
+}
+
 // =========================================== Dashboard ============================================
 
 .dashboard {
@@ -1144,6 +1155,10 @@ ul {
 		color: #333;
 		background-color: #ccc;
 	}
+}
+
+.collection .no-bottom-border {
+	border-bottom: none !important;
 }
 
 // ======================================== Collapsible =========================================

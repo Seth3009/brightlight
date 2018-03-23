@@ -30,6 +30,7 @@ class StudentBooksController < ApplicationController
       @student_books = @student.student_books
                         .where(academic_year_id: @year_id)
                         .includes([:book_copy, book_copy: [:book_edition]])
+                        .order('book_editions.title')
         # Notes: Because of data errors in database, we search StudentBook without student_id
         # =>     but filter it with grade_section, year and roster_no
         # @student_books = StudentBook.where(grade_section:@grade_section)
@@ -263,14 +264,14 @@ class StudentBooksController < ApplicationController
                         .not_disposed
                         .where("end_copy_condition_id = ? OR needs_rebinding = true", poor.id)
                         .where(grade_section:@grade_section)
-                        .order(:book_edition_id, 'CAST(roster_no AS int)')
+                        .order("#{sort_column} #{sort_direction}", 'CAST(roster_no AS int)')
 
     else
-      @student_books = StudentBook
+      @student_books = StudentBook.pnnrb_columns
                         .where(academic_year_id: @year_id)
-                        .not_disposed
+                        .not_disposed                        
                         .where("end_copy_condition_id = ? OR needs_rebinding = true", poor.id)
-                        .order(:book_edition_id, 'CAST(roster_no AS int)')
+                        .order("#{sort_column} #{sort_direction}", 'CAST(roster_no AS int)')
     end
 
     respond_to do |format|
@@ -467,6 +468,11 @@ class StudentBooksController < ApplicationController
   end 
 
   private
+    # enable sort column
+    def sortable_columns 
+      [:title,:book_no,:initial_copy_condition_id,:end_copy_condition_id]
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_student_book
       @student_book = StudentBook.not_disposed.find(params[:id])

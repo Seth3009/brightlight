@@ -7,18 +7,20 @@ class RequisitionsController < ApplicationController
     authorize! :read, Requisition
     
     if can? :manage, Requisition
-      @all_requisitions = Requisition.all
+      @approved_requisitions = Requisition.approved
       if params[:dept].present? && params[:dept] != 'all'
         dept = Department.where(code: params[:dept]).take
-        @all_requisitions = @all_requisitions.where(department: dept)
+        @approved_requisitions = @approved_requisitions.where(department: dept)
       end
+      @pending_approval = Requisition.pending_approval
     end
     
     @employee = current_user.employee
     if @employee.try(:is_manager?)
       @supv = current_user.employee
       @requisitions = Requisition.where(department: @employee.try(:department))
-      @pending_approval = @requisitions.pending_supv_approval @supv
+      @pending_supv_approval   = @requisitions.pending_supv_approval(@supv)
+      @pending_budget_approval = Requisition.pending_budget_approval(@supv)
     else
       @requisitions = Requisition.where(requester_id: @employee.id)
     end
@@ -39,7 +41,7 @@ class RequisitionsController < ApplicationController
     if @employee.present?
       @department = @employee.department
       @budget = @employee.department.budgets.current.take rescue nil
-      @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current).includes(:academic_year) rescue []
+      @budget_items = @budget.budget_items.order(:description, :year, :month) rescue []
       @manager = @employee.manager || @employee.supervisor
     end
     @requisition = Requisition.new
@@ -144,7 +146,7 @@ class RequisitionsController < ApplicationController
     @manager = @employee.manager || @employee.supervisor
     @supervisors = Employee.active.supervisors.all
     @budget = @employee.department.budgets.current.take rescue nil
-    @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue []
+    @budget_items = @budget.budget_items rescue []
     @button_state = !@requisition.is_budgeted && @requisition.is_supv_approved && !@requisition.is_budget_approved && @requisition.budget_approver_id
   end
 

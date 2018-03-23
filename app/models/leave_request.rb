@@ -17,14 +17,14 @@ class LeaveRequest < ActiveRecord::Base
 
   scope :spv, -> (employee_id) { 
     with_employees_and_departments
-    .where('departments.manager_id = ?', employee_id) 
-    .order(form_submit_date: :desc)
+    .where('departments.manager_id = ?', employee_id)
+    .order(form_submit_date: :desc, updated_at: :desc)
   }
 
   scope :hrlist, ->  { 
     submitted
     .where("spv_approval = true or leave_type = 'Sick' or leave_type = 'Family Matter'")
-    .order(spv_date: :desc)
+    .order(spv_date: :desc, form_submit_date: :desc, updated_at: :desc)
   }
 
   scope :submitted, -> { where.not(form_submit_date: nil) }
