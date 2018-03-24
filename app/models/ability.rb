@@ -114,11 +114,11 @@ class Ability
   end
 
   def purchasing
-    can [:manage], Requisition
-    can [:manage], ReqItem
-    can [:manage], PurchaseOrder
-    can [:manage], OrderItem
-    can [:manage], Supplier
+    can :manage, Requisition
+    can :manage, ReqItem
+    can :manage, PurchaseOrder
+    can :manage, OrderItem
+    can :manage, Supplier
   end
 
   def student

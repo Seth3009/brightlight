@@ -28,7 +28,7 @@ $(document).on("ready page:load page:change", function() {
             // }
 
             var can_send_for_budget_approval = function() {
-                return $("#requisition_is_supv_approved").prop('checked') && 
+                return $("#requisition_is_supv_approved").val() == "true" && 
                             $("#requisition_supervisor_id").val() !== "" &&
                             $("#requisition_budget_approver_id").val() !== "";
             }

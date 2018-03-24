@@ -66,7 +66,8 @@ class User < ActiveRecord::Base
   delegate :can?, :cannot?, :to => :ability
 
   # For authorization
-  ROLES = %i[admin manager student teacher staff employee inventory carpool librarian hrd] 
+  # Do not change the order! If you add an item, add at the end of the list.
+  ROLES = %i[admin manager student teacher staff employee inventory carpool librarian hrd purchasing] 
 
   def roles=(roles)
     roles = [*roles].map { |r| r.to_sym }
