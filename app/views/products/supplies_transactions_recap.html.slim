@@ -6,7 +6,12 @@
       h4 Supplies Transaction
 
 nav
-  .nav-wrapper    
+  .nav-wrapper  
+    ul
+        li  
+          = select_year(Date.today,{},name: 'trx_year')        
+        li
+          = select_month(Date.today,{},name: 'trx_month')  
     ul.right
       - if can? :read, SuppliesTransactionItem
         li
@@ -30,4 +35,15 @@ nav
             td = supplies_transaction_item.qty_out             
             td = supplies_transaction_item.unit
             
-      
+javascript:
+  $(function(){
+    // bind change event to select
+    $('#date_month').on('change', function () {          
+        var month = $('#date_month').val();
+        var year = $('#date_year').val();
+        if (month) { // require a URL
+            window.location = "supplies_transactions_recap?m="+month+"&y="+year; // redirect              
+        }
+        return false;
+    });
+  });
