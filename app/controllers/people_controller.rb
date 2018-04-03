@@ -4,8 +4,7 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.json
   def index
-    # @people = Person.all
-    EmailNotification.scan_completed(current_user).deliver_now
+    @people = Person.all
   end
 
   # GET /people/1
@@ -70,8 +69,6 @@ class PeopleController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def person_params
-      puts "PARAMS below"
-      puts params 
-      params.require(:person).permit(:full_name, :first_name, :last_name, :nick_name, :date_of_birth, :place_of_birth, :gender, :passport_no, :blood_type, :mobile_phone, :home_phone, :other_phone, :email, :other_email, :bbm_pin, :wm_twitter, :sm_facebook, :sm_line, :sm_path, :sm_instagram, :sm_google_plus, :sm_linked_in, :gravatar, :photo_uri, :nationality, :religion, :address_line1, :address_line2, :kecamatan, :kabupaten, :city, :postal_code, :state, :country)
+      params.require(:person).permit(:full_name, :first_name, :last_name, :nick_name, :date_of_birth, :place_of_birth, :gender)
     end
 end
