@@ -15,7 +15,7 @@ nav
             i.material-icons.left add  
     - if params[:view] == 'daily' 
       ul        
-        li          
+        li style="padding: 0 20px"         
           | Date :
         li
           = date_field_tag 'trx_date', Date.today
@@ -40,16 +40,15 @@ nav
 #show-modal.modal.modal-fixed-footer
   #show-modal-content         
 
-
-
 javascript:
   $(window).codeScanner({
       minEntryChars: 10,
       maxEntryTime: 500,
       onScan: function($element, input) {             
         var card = input.trim();       
-        $.getJSON("/supplies_transactions/get_employee.json?card="+card, null, function (data) {
-        window.location.href= "/supplies_transactions/new?employee_id="+data.employee.id+"&name="+data.employee.name;    
+        $.getJSON("/employees/" + card + ".json?card=1", null, function (employee) {
+          console.log("Scanned employee", employee);
+          window.location.href= "/supplies_transactions/new?employee_id=" + employee.id + "&name=" + employee.name;    
         }).fail(function(xhr){
           Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
         });            

@@ -12,7 +12,7 @@ class Employee < ActiveRecord::Base
 	has_one :manager, through: :department
 	has_many :leave_requests
   has_many :supplies_transaction
-  has_many :employee_smartcard
+  has_one :employee_smartcard
 
   accepts_nested_attributes_for :book_loans,
     allow_destroy: true,

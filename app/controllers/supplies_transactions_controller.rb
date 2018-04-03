@@ -82,36 +82,34 @@ class SuppliesTransactionsController < ApplicationController
     end
   end
 
-  def get_product
-    authorize! :read, Product
-    respond_to do |format|
-      format.json do
-        @product = Product.where('UPPER(barcode) = ?', params[:barcode].upcase).take
-        if @product.present?
-          
-        else
-          render json: {errors:"Invalid barcode"}, status: :unprocessable_entity
+  def recap       
+    authorize! :read, SuppliesTransaction
+    if params[:m].present? && params[:y].present?
+      @supplies_transaction_items = SuppliesTransactionItem
+        .joins("left join products on products.id = supplies_transaction_items.product_id")
+        .joins("left join item_units on item_units.id = products.item_unit_id")
+        .joins("left join (select product_id, sum(qty) as qty_in from supplies_transaction_items LEFT JOIN supplies_transactions ON supplies_transactions.id = supplies_transaction_items.supplies_transaction_id where in_out='IN' and EXTRACT(MONTH from transaction_date at time zone 'utc' at time zone 'localtime') = " + params[:m] + " and EXTRACT(YEAR from transaction_date at time zone 'utc' at time zone 'localtime') = " + params[:y] + " group by product_id) as a on a.product_id = supplies_transaction_items.product_id")
+        .joins("left join (select product_id, sum(qty) as qty_out from supplies_transaction_items LEFT JOIN supplies_transactions ON supplies_transactions.id = supplies_transaction_items.supplies_transaction_id where in_out='OUT' and EXTRACT(MONTH from transaction_date at time zone 'utc' at time zone 'localtime') = " + params[:m] + " and EXTRACT(YEAR from transaction_date at time zone 'utc' at time zone 'localtime') = " + params[:y] + " group by product_id) as b on b.product_id = supplies_transaction_items.product_id")
+        .joins('left join supplies_transactions on supplies_transactions.id = supplies_transaction_items.supplies_transaction_id')
+        .where("EXTRACT(MONTH from transaction_date at time zone 'utc' at time zone 'localtime') = ?",params[:m])
+        .where("EXTRACT(YEAR from transaction_date at time zone 'utc' at time zone 'localtime') = ?",params[:y])
+        .select('supplies_transaction_items.product_id as product_id,qty_in,products.name as product_name, qty_out, item_units.name as unit')
+        .group('supplies_transaction_items.product_id, qty_in,qty_out, product_name, unit')    
+
+      respond_to do |format|
+        format.html
+        format.pdf do
+          render pdf:         "Supplies_Transactions_Recap_#{Date.current()}",
+                 disposition: 'inline',
+                 template:    'supplies_transactions/recap.pdf.slim',
+                 layout:      'pdf.html',
+                 show_as_html: params.key?('debug')
         end
-      end
+      end     
+    else
+      redirect_to recap_supplies_transactions_url(m:Time.now.month,y:Time.now.year)
     end
   end
-
-  def get_employee
-    authorize! :read, Employee    
-    respond_to do |format|
-      format.json do
-        @employee = Employee.joins('LEFT JOIN employee_smartcards on employee_smartcards.employee_id = employees.id')
-                    .where('employee_smartcards.card = ?', params[:card]).take
-        if @employee.present? 
-          
-        else
-          render json: {errors:"Invalid Card"}, status: :unprocessable_entity
-        end
-      end      
-    end     
-  end
-
-  
 
   private
     # Enable Sort column

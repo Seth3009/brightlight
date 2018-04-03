@@ -119,36 +119,6 @@ class ProductsController < ApplicationController
                       .where('products.id = ?',params[:id]).order('date')                      
   end
 
-  def supplies_transactions_recap       
-    authorize! :read, SuppliesTransactionItem
-    if params[:m].present? && params[:y].present?
-      @supplies_transaction_items = SuppliesTransactionItem
-      .joins("left join products on products.id = supplies_transaction_items.product_id")
-      .joins("left join item_units on item_units.id = products.item_unit_id")
-      .joins("left join (select product_id, sum(qty) as qty_in from supplies_transaction_items LEFT JOIN supplies_transactions ON supplies_transactions.id = supplies_transaction_items.supplies_transaction_id where in_out='IN' and EXTRACT(MONTH from transaction_date at time zone 'utc' at time zone 'localtime') = " + params[:m] + " and EXTRACT(YEAR from transaction_date at time zone 'utc' at time zone 'localtime') = " + params[:y] + " group by product_id) as a on a.product_id = supplies_transaction_items.product_id")
-      .joins("left join (select product_id, sum(qty) as qty_out from supplies_transaction_items LEFT JOIN supplies_transactions ON supplies_transactions.id = supplies_transaction_items.supplies_transaction_id where in_out='OUT' and EXTRACT(MONTH from transaction_date at time zone 'utc' at time zone 'localtime') = " + params[:m] + " and EXTRACT(YEAR from transaction_date at time zone 'utc' at time zone 'localtime') = " + params[:y] + " group by product_id) as b on b.product_id = supplies_transaction_items.product_id")
-      .joins('left join supplies_transactions on supplies_transactions.id = supplies_transaction_items.supplies_transaction_id')
-      .where("EXTRACT(MONTH from transaction_date at time zone 'utc' at time zone 'localtime') = ?",params[:m])
-      .where("EXTRACT(YEAR from transaction_date at time zone 'utc' at time zone 'localtime') = ?",params[:y])
-      .select('supplies_transaction_items.product_id as product_id,qty_in,products.name as product_name, qty_out, item_units.name as unit')
-      .group('supplies_transaction_items.product_id, qty_in,qty_out, product_name, unit')    
-
-      respond_to do |format|
-        format.html
-        format.pdf do
-          render pdf:         "Supplies_Transactions_Recap_#{Date.current()}",
-                 disposition: 'inline',
-                 template:    'products/supplies_transactions_recap.pdf.slim',
-                 layout:      'pdf.html',
-                 show_as_html: params.key?('debug')
-        end
-      end     
-    else
-      redirect_to supplies_transactions_recap_url(m:Time.now.month,y:Time.now.year)
-    end
-      
-  end
-
   private
    
     # Enable Sort column
@@ -156,8 +126,8 @@ class ProductsController < ApplicationController
       [:code, :name]
     end
     # Use callbacks to share common setup or constraints between actions.
-    def set_product
-      @product = Product.find(params[:id])
+    def set_product 
+      @product = params[:barcode] ? Product.find_by(barcode:params[:id]) : Product.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

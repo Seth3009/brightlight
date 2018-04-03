@@ -15,7 +15,7 @@ nav
     ul.right
       - if can? :read, SuppliesTransactionItem
         li
-          = link_to 'Export PDF', supplies_transactions_recap_path(format: :pdf)
+          = link_to 'Export PDF', recap_supplies_transactions_path(format: :pdf), target: '_blank'
 
 .card-panel
   table.compact.striped
@@ -42,7 +42,7 @@ javascript:
         var month = $('#date_month').val();
         var year = $('#date_year').val();
         if (month) { // require a URL
-            window.location = "supplies_transactions_recap?m="+month+"&y="+year; // redirect              
+            window.location = "recap_supplies_transactions?m="+month+"&y="+year; // redirect              
         }
         return false;
     });

@@ -62,6 +62,10 @@ class ApplicationController < ActionController::Base
     Message.all.unread(current_user)
   end
 
+  def not_found
+    raise ActionController::RoutingError.new('Not Found')
+  end
+
   protected
 
     def configure_permitted_parameters

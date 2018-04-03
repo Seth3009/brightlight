@@ -1,18 +1,22 @@
 tr.nested-fields
-  td
+  td.wd20
     .input-field
       
       = f.text_field :barcode, class: 'barcode'
-  td
+  td.wd40
     .input-field
       = label_tag :name, '', class: 'active'
       .names &nbsp;        
-    = f.hidden_field :product_id  , class: 'product_id' 
+    = f.hidden_field :product_id, class: 'product_id' 
     = f.hidden_field :in_out, class: 'trx_type'
-  td
+    = f.hidden_field :price, class: 'price'
+  td.wd15
     .input-field
       = f.number_field :qty
-  td
+  td.wd15
+    .input-field
+      = f.collection_select :item_unit_id, ItemUnit.all, :id, :name, {prompt:true}, {class:'browser-default materialish'}
+  td.wd10
     .input-field
       = link_to_remove_association f, class: "waves-effect waves-teal red-text"
         i.material-icons delete

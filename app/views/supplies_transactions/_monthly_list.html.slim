@@ -14,6 +14,3 @@ tbody#supplies_transaction
       td
         = link_to supplies_transaction, remote: true
           i.material-icons visibility            
-        - if can? :destroy, supplies_transaction
-          = link_to supplies_transaction, data: {:confirm => 'Are you sure?'}, :method => :delete
-            i.material-icons.red-text delete

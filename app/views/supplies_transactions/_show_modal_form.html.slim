@@ -1,4 +1,5 @@
 .modal-content
+  h5 Supplies Transaction
   .card-panel
     table
       tr
@@ -22,15 +23,14 @@
           th Barcode
           th Product
           th TRX
-          th Qty
-          th Unit
+          th.right-align Qty
       tbody
         - @supplies_transaction_item.each do |item|
           tr
             td = item.product.barcode
             td = item.product.name
             td = item.in_out
-            td = item.qty.to_f
-            td = item.product.item_unit.name
+            td.right-align = item.qty.to_f
+            td = item.item_unit.abbreviation
 .modal-footer
   a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

@@ -1,5 +1,5 @@
 class EmployeesController < ApplicationController
-  before_action :set_employee, only: [:show, :edit, :update, :destroy]
+  before_action :set_employee, only: [:edit, :update, :destroy]
   before_action :sortable_columns, only: [:index]
 
   # GET /employees
@@ -33,6 +33,20 @@ class EmployeesController < ApplicationController
   # GET /employees/1.json
   def show
     authorize! :read, Employee
+    if params[:card]
+      @employee = Employee.joins(:employee_smartcard).where(employee_smartcards: {card: params[:id]}).take      
+      respond_to do |format|
+        if @employee
+          format.html
+          format.json
+        else
+          format.html { not_found }
+          format.json { render json: {errors:"Invalid Card"}, status: :unprocessable_entity }
+        end
+      end
+    else
+      set_employee
+    end
   end
 
   # GET /employees/new

@@ -5,6 +5,7 @@
         th  Barcode
         th  Product
         th  Qty
+        th  Unit
         th  Action
     
       tbody#supplies_transaction
@@ -17,7 +18,7 @@ javascript:
       onScan: function($element, input) {
         $("#use-scanner").prop("checked",true);
         var barcode = input.trim();
-        $.getJSON("/supplies_transactions/get_product.json?barcode="+barcode, null, function (data) {
+        $.getJSON("/products/"+barcode+".json?barcode=1", null, function (data) {
           if ($("tr:last").find("[name$='[barcode]']").val() != "") {
             $(".add_fields").trigger('click');
           } else if (!$("tr:last").is(":visible")) {
@@ -37,7 +38,7 @@ javascript:
       $("#use-scanner").prop("checked",false);
       var barcode = $(this).find("[name$='[barcode]']").val().trim();
       var element = $(this);
-      $.getJSON("/supplies_transactions/get_product.json?barcode="+barcode, null, function (data) {
+      $.getJSON("/products/"+barcode+".json?barcode=1", null, function (data) {
         insert_values(data,element);
       }).fail(function(xhr){
         $(e.target).val('');
@@ -48,12 +49,14 @@ javascript:
   });
 
   var insert_values = function (data, el) {
-    var product = data.product;
+    var product = data;
+    console.log (product);
     el.find("[name$='[barcode]']").val(product.barcode);
     el.find(".names").html("<p>"+product.name+"</p>");    
     el.find(".product_id").val(product.id);
-    el.find(".barcode").val(product.barcode)
-    el.find(".trx_type").val($( "select#trx_type").val())
+    el.find(".price").val(product.price);
+    el.find("[name$='[item_unit_id]']").val(product.item_unit_id);
+    el.find(".trx_type").val($( "select#trx_type").val());
   };
 
   $("#use-scanner").change(function() {

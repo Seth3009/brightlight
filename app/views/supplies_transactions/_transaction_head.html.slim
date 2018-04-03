@@ -11,12 +11,12 @@
     .input-field.col.m8
       - if params[:employee_id].present?
         = f.hidden_field :employee_id,  value: params[:employee_id]
-        = f.text_field :employee, value: params[:name], disabled: true
+        = f.text_field :employee, value: params[:name], disabled: true, class: "employee_autocomplete"
       - else
         = f.label :employee, class: 'active' 
         - if params[:action] =~ /new/  
           = f.hidden_field :employee_id          
-          = text_field_tag :employee, "", id: "employee_autocomplete", placeholder: "Search by Employee Name or by Department Name or by Job Title"            
+          = text_field_tag :employee, "", class: "employee_autocomplete", placeholder: "Search by Employee Name or by Department Name or by Job Title"            
         - else
           = f.text_field :employee, disabled: true
     .input-field.col.m2 
@@ -26,13 +26,13 @@
 javascript:
   $('#trx_type').material_select();
   $(document).ready(function() {
-    $( "#employee_autocomplete" ).autocomplete({
+    $( ".employee_autocomplete" ).autocomplete({
         source: "/employees?format=json",
         max: 30,
         minLength: 4,
         select: function( event, ui ) {
-          insert_row(ui.item); 
-          $("#employee_autocomplete").val(item.name)         
+          insert_input_values(ui.item); 
+          return false;
         }
       })
       .autocomplete( "instance" )._renderItem = function( ul, item ) {
@@ -42,9 +42,8 @@ javascript:
       };     
   });
 
-  function insert_row(employee) {
+  function insert_input_values(employee) {
     $("#supplies_transaction_employee_id").val(employee.id);
-    $("#employee_autocomplete").val(employee.name)  
-    $("#employee_autocomplete").autocomplete("close")  
-    }
+    $("#employee_autocomplete").val(employee.name);
+  }
       

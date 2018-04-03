@@ -10,8 +10,6 @@ Rails.application.routes.draw do
   resources :purchase_orders
   resources :req_items
   resources :supplies_transaction_items
-  
-  resources :products
   resources :warehouses
   resources :item_categories
   resources :item_units
@@ -34,13 +32,6 @@ Rails.application.routes.draw do
   resources :copy_conditions
   resources :book_conditions
   
-  resources :supplies_transactions do
-    collection do      
-      get 'get_product' 
-      get 'get_employee'           
-    end
-  end
-  
   resources :leave_requests do
     member do
       delete :cancel
@@ -48,11 +39,21 @@ Rails.application.routes.draw do
   end 
 
   get 'leave_requests/:id/approve/:page' => 'leave_requests#approve', as: :approve
-
-    
-  get 'supplies_stocks' => 'products#supplies_stocks', as: :supplies_stocks
-  get 'products/:id/stock_card' => 'products#stock_card', as: :stock_card
-  get 'supplies_transactions_recap' => 'products#supplies_transactions_recap', as: :supplies_transactions_recap
+  
+  resources :supplies_transactions do
+    collection do
+      get 'recap'
+    end
+  end
+  
+  resources :products do
+    collection do
+      get 'supplies_stocks'
+    end
+    member do
+      get 'stock_card'
+    end
+  end
   
   resources :courses do
     resources :course_texts, shallow: true

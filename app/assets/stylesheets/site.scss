@@ -189,6 +189,18 @@ tr.header-shade {
 	background-color:$lighter-grey;
 }
 
+td.right-align, th.right-align {
+	text-align: right;
+}
+
+td.left-align, th.left-align {
+	text-align: left;
+}
+
+td.center-align, th.center-align {
+	text-align: center;
+}
+
 
 
 // ========================================= Template  ==============================================
