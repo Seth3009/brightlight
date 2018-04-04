@@ -281,20 +281,47 @@
                   li 
                     = link_to 'Employees', employees_path
 
-    / .col.m4.s6
-    /   .card.horizontal.widget
-    /     .card-image.waves-effect.waves-block.waves-light
-    /       = image_tag 'telephone.jpg', class:'activator'
-    /     .card-stacked
-    /       = image_tag 'beta.jpg', size:'60x56', style:"position: absolute; right: 0"
-    /       .card-content
-    /         span.card-title.activator.grey-text.text-darken-4 
-    /           |Service Order
-    /           i.material-icons.right more_vert
-    /     .card-reveal
-    /       span.card-title.grey-text.ext-darken-4
-    /         |Service Order
-    /         i.material-icons.right close
-    /       p Under construction
+    .col.m4.s6
+      .card.horizontal.widget
+        .card-image.waves-effect.waves-block.waves-light
+          = image_tag 'stationery.jpg', class:'activator'
+        .card-stacked
+          = image_tag 'beta.jpg', size:'60x56', style:"position: absolute; right: 0"
+          .card-content
+            span.card-title.activator.grey-text.text-darken-4 
+              |Supplies
+              i.material-icons.right more_vert
+            p Inventory supplies transaction and reporting.
+            p.red-text This feature is in beta testing. You are welcome to try it. Please report any problems to IT.
+        .card-reveal
+          span.card-title.grey-text.ext-darken-4
+            |Supplies
+            i.material-icons.right close
+          .card-tabs
+            ul.tabs.tabs-fixed-width.tabs-transparent
+              li.tab
+                a.active href="#tab-supplies-txn" Transaction
+              li.tab
+                a href="#tab-supplies-mtce" Maintenance
+          .card-content
+            #tab-supplies-txn
+              ul
+                li
+                  = link_to 'Daily Transaction', supplies_transactions_url(view:'daily',trx_date: Date.today)
+                li
+                  = link_to 'Monthly Transaction', supplies_transactions_url(view:'monthly',m:Time.now.month,y:Time.now.year)
+                li
+                  = link_to 'Transaction Recap', recap_supplies_transactions_url(m:Time.now.month,y:Time.now.year)
+
+            #tab-supplies-mtce
+              ul
+                li
+                  = link_to 'Stock', supplies_stocks_products_url
+                li
+                  = link_to 'Category', item_categories_url
+                li
+                  = link_to 'Product Unit', item_units_url
+                li
+                  = link_to 'Products', products_url
 
 

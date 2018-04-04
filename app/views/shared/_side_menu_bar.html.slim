@@ -86,27 +86,26 @@ li
 
 li 
   .collapsible-header.waves-effect.waves-cyan
-    i.material-icons shopping_basket
+    i.material-icons work
     i.mdi-navigation-chevron-right.right
-    | Products
+    | Supplies
   .collapsible-body
     ul
       li
-        = link_to 'Product Category', item_categories_url
+        = link_to 'Daily Transaction', supplies_transactions_url(view:'daily',trx_date: Date.today)
+      li
+        = link_to 'Monthly Transaction', supplies_transactions_url(view:'monthly',m:Time.now.month,y:Time.now.year)
+      li
+        = link_to 'Transaction Recap', recap_supplies_transactions_url(m:Time.now.month,y:Time.now.year)
+      li
+        = link_to 'Stock', supplies_stocks_products_url
+      li
+        = link_to 'Category', item_categories_url
       li
         = link_to 'Product Unit', item_units_url
       li
         = link_to 'Products', products_url
-      li
-        = link_to 'Monthly Supplies Transaction', supplies_transactions_url(view:'monthly',m:Time.now.month,y:Time.now.year)
-      li
-        = link_to 'Daily Supplies Transaction', supplies_transactions_url(view:'daily',trx_date: Date.today)
-      li
-        = link_to 'Supplies Stock', supplies_stocks_products_url
-      li
-        = link_to 'Supplies Transaction Recap', recap_supplies_transactions_url(m:Time.now.month,y:Time.now.year)
       
-
 - if can? :manage, BookFine
 	li 
 		.collapsible-header.waves-effect.waves-cyan
