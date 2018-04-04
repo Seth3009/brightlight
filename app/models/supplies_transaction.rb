@@ -10,7 +10,7 @@ class SuppliesTransaction < ActiveRecord::Base
     .where("EXTRACT(YEAR from transaction_date at time zone 'utc' at time zone 'localtime') = ?",y)
   }
   def self.count_item(supplies_transaction)
-    if supplies_transaction
+    if supplies_transaction.present?
       count_item = SuppliesTransactionItem.where(:supplies_transaction_id => supplies_transaction).count
       if count_item      
         SuppliesTransaction.find(supplies_transaction).update(itemcount: count_item)

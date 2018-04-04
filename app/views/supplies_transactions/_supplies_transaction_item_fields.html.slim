@@ -15,7 +15,8 @@ tr.nested-fields
       = f.number_field :qty
   td.wd15
     .input-field
-      = f.collection_select :item_unit_id, ItemUnit.all, :id, :name, {prompt:true}, {class:'browser-default materialish'}
+      = label_tag :unit, '', class: 'active'
+      .units &nbsp;              
   td.wd10
     .input-field
       = link_to_remove_association f, class: "waves-effect waves-teal red-text"

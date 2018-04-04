@@ -27,6 +27,7 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
+    @product = Product.joins('left join item_units on item_units.id = products.item_unit_id').select('products.*,item_units.name as unit').first
   end
 
   # GET /products/new
@@ -115,7 +116,7 @@ class ProductsController < ApplicationController
     @stocks = Product.joins('left join supplies_transaction_items on supplies_transaction_items.product_id = products.id')
                       .joins('left join supplies_transactions on supplies_transactions.id = supplies_transaction_items.supplies_transaction_id')
                       .joins('left join employees on employees.id = supplies_transactions.employee_id')
-                      .select("employees.name, transaction_date at time zone 'utc' at time zone 'localtime' as date, supplies_transaction_items.in_out as type, supplies_transaction_items.qty")
+                      .select("employees.name, transaction_date at time zone 'utc' at time zone 'localtime' as date, supplies_transaction_items.in_out as type, supplies_transaction_items.qty, products.min_stock ")
                       .where('products.id = ?',params[:id]).order('date')                      
   end
 

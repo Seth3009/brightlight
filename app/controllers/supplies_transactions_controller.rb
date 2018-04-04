@@ -11,7 +11,7 @@ class SuppliesTransactionsController < ApplicationController
           @supplies_transactions = SuppliesTransaction.filter_query(params[:m], params[:y])
         else
           if params[:trx_date].present?
-            @supplies_transaction_items = SuppliesTransactionItem.joins('left join supplies_transactions on supplies_transactions.id = supplies_transaction_items.supplies_transaction_id')
+            @supplies_transactions = SuppliesTransactionItem.joins('left join supplies_transactions on supplies_transactions.id = supplies_transaction_items.supplies_transaction_id')
                                           .where("transaction_date at time zone 'utc' at time zone 'localtime' = ?", DateTime.parse(params[:trx_date]))
           else
             redirect_to supplies_transactions_url(trx_date: Date.today,view:'daily')
@@ -84,7 +84,7 @@ class SuppliesTransactionsController < ApplicationController
 
   def recap       
     authorize! :read, SuppliesTransaction
-    if params[:m].present? && params[:y].present?
+    if params[:m].present? && params[:y].present?     
       @supplies_transaction_items = SuppliesTransactionItem
         .joins("left join products on products.id = supplies_transaction_items.product_id")
         .joins("left join item_units on item_units.id = products.item_unit_id")

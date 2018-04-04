@@ -20,7 +20,7 @@
             td 
               -if stock.qty.present?
                 - if stock.type == "IN"
-                  = @total = @total.to_f + stock.qty
+                  = @total = @total.to_f + stock.qty - stock.min_stock
                 - else
-                  = @total = @total.to_f - stock.qty
+                  = @total = @total.to_f - stock.qty - stock.min_stock
               

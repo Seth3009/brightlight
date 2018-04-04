@@ -59,18 +59,20 @@ class SuppliesTransactionItemsController < ApplicationController
   def destroy
     authorize! :manage, SuppliesTransactionItem
     authorize! :manage, SuppliesTransaction
-    @supplies_transaction_item.destroy
-    SuppliesTransaction.count_item(@supplies_transaction.id)
-    respond_to do |format|
-      format.html { redirect_to supplies_transactions_url, notice: 'Supplies transaction item was successfully destroyed.' }
-      format.json { head :no_content }
+    if @supplies_transaction_item.present?      
+      @supplies_transaction_item.destroy
+      SuppliesTransaction.count_item(@supplies_transaction_item.supplies_transaction_id)   
+      respond_to do |format|
+        format.html { redirect_to supplies_transactions_url, notice: 'Supplies transaction item was successfully destroyed.' }
+        format.json { head :no_content }
+      end
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_supplies_transaction_item
-      @supplies_transaction_item = SuppliesTransactionItem.find(params[:id])
+    def set_supplies_transaction_item        
+      @supplies_transaction_item = SuppliesTransactionItem.find(params[:id])     
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

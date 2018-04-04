@@ -52,11 +52,13 @@ javascript:
     var product = data;
     console.log (product);
     el.find("[name$='[barcode]']").val(product.barcode);
-    el.find(".names").html("<p>"+product.name+"</p>");    
+    el.find(".names").html("<p>"+product.name+"</p>");
+    el.find(".units").html("<p>"+product.unit+"</p>");    
     el.find(".product_id").val(product.id);
     el.find(".price").val(product.price);
     el.find("[name$='[item_unit_id]']").val(product.item_unit_id);
     el.find(".trx_type").val($( "select#trx_type").val());
+    
   };
 
   $("#use-scanner").change(function() {

@@ -9,15 +9,15 @@ thead
     th.center-align Actions    
 
 tbody#supplies_transaction
-  - @supplies_transaction_items.each do |supplies_transaction_item|
+  - @supplies_transactions.each do |supplies_transaction|
     tr 
-      td = supplies_transaction_item.supplies_transaction.employee rescue nil
-      td = supplies_transaction_item.product.name
-      td = supplies_transaction_item.supplies_transaction.transaction_date.strftime("%a, %d %b %Y") rescue nil
-      td = supplies_transaction_item.in_out
-      td.right-align = supplies_transaction_item.qty
+      td = supplies_transaction.supplies_transaction.employee rescue nil
+      td = supplies_transaction.product.try(:name)
+      td = supplies_transaction.supplies_transaction.transaction_date.strftime("%a, %d %b %Y") rescue nil
+      td = supplies_transaction.try(:in_out)
+      td.right-align = supplies_transaction.try(:qty)
       td = supplies_transaction_item.item_unit.abbreviation rescue nil
       td.center-align      
-        - if can? :destroy, supplies_transaction_item
-          = link_to supplies_transaction_item, data: {:confirm => 'Are you sure?'}, :method => :delete
+        - if can? :destroy, supplies_transaction
+          = link_to supplies_transaction, data: {:confirm => 'Are you sure?'}, :method => :delete
             i.material-icons.red-text delete

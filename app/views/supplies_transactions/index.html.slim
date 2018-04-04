@@ -18,13 +18,13 @@ nav
         li style="padding: 0 20px"         
           | Date :
         li
-          = date_field_tag 'trx_date', Date.today
+          = date_field_tag 'trx_date', params[:trx_date]
     - else
       ul
         li  
-          = select_year(Date.today,{},name: 'trx_year')        
+          = select_year(Date.strptime("1-"+params[:m]+"-"+params[:y],"%d-%m-%Y"),{},name: 'trx_year')        
         li
-          = select_month(Date.today,{},name: 'trx_month')
+          = select_month(Date.strptime("1-"+params[:m]+"-"+params[:y],"%d-%m-%Y"),{},name: 'trx_month')
 
     
           
