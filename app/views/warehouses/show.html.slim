@@ -1,0 +1,24 @@
+- title "Warehouse #{@warehouse.name}"
+
+h4 = @warehouse.name
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to :back
+          i.material-icons chevron_left
+      li.right
+        - if can? :update, Warehouse
+          = link_to edit_warehouse_path(@warehouse)
+            | Edit
+            i.material-icons.left edit
+.card-panel
+  .list_description
+    dl.row
+      dd.col.s4
+        .label Warehouse Name
+        .item = @warehouse.name
+      dd.col.s4
+        .label Room Number:
+        .item = @warehouse.room_number

@@ -1,0 +1,18 @@
+h4 Supplies Transaction
+
+table.compact.striped
+  thead
+    tr        
+      th Product 
+      th IN
+      th OUT                      
+      th Unit
+        
+  - if @supplies_transaction_items.present?
+    tbody
+      - @supplies_transaction_items.each do |supplies_transaction_item|
+        tr           
+          td = supplies_transaction_item.product_name
+          td = supplies_transaction_item.qty_in 
+          td = supplies_transaction_item.qty_out             
+          td = supplies_transaction_item.unit

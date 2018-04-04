@@ -1,0 +1,83 @@
+.card-panel
+  .row
+    table.compact
+      thead
+        th  Barcode
+        th  Product
+        th  Qty
+        th  Unit
+        th  Action
+    
+      tbody#supplies_transaction
+        = f.fields_for :supplies_transaction_items, @supplies_transaction.supplies_transaction_items.build  do |supplies_transaction_item|
+          = render partial: 'supplies_transactions/supplies_transaction_item_fields', locals: { f: supplies_transaction_item }
+
+javascript:
+  $("[name$='[barcode]']").codeScanner({
+      minEntryChars: 11,
+      onScan: function($element, input) {
+        $("#use-scanner").prop("checked",true);
+        var barcode = input.trim();
+        $.getJSON("/products/"+barcode+".json?barcode=1", null, function (data) {
+          if ($("tr:last").find("[name$='[barcode]']").val() != "") {
+            $(".add_fields").trigger('click');
+          } else if (!$("tr:last").is(":visible")) {
+            $("tr:last").show();
+          }
+          insert_values(data,$("tr:last"));        
+        }).fail(function(xhr){
+          Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
+        });            
+      }
+    });
+
+  $("tbody#supplies_transaction").on("keypress", "tr", function (e) {
+    if (e.keyCode == 13) {
+      e.preventDefault();
+      e.stopPropagation();
+      $("#use-scanner").prop("checked",false);
+      var barcode = $(this).find("[name$='[barcode]']").val().trim();
+      var element = $(this);
+      $.getJSON("/products/"+barcode+".json?barcode=1", null, function (data) {
+        insert_values(data,element);
+      }).fail(function(xhr){
+        $(e.target).val('');
+        Materialize.toast($.parseJSON(xhr.responseText).errors, 5000, 'red');
+      });
+      return false;
+    }
+  });
+
+  var insert_values = function (data, el) {
+    var product = data;
+    console.log (product);
+    el.find("[name$='[barcode]']").val(product.barcode);
+    el.find(".names").html("<p>"+product.name+"</p>");
+    el.find(".units").html("<p>"+product.unit+"</p>");    
+    el.find(".product_id").val(product.id);
+    el.find(".price").val(product.price);
+    el.find("[name$='[item_unit_id]']").val(product.item_unit_id);
+    el.find(".trx_type").val($( "select#trx_type").val());
+    
+  };
+
+  $("#use-scanner").change(function() {
+    $("tr.nested-fields").each(function(){
+      v = $(this).find(".product_ids").attr('value');
+      if (v == undefined) {
+        if ($("#use-scanner").is(":checked")) {
+          $(this).hide();
+        } else {
+          $(this).show();
+        }
+      } 
+    });
+    if (!$("#use-scanner").is(":checked")) {
+      if ($("tr:last").find("[name$='[barcode]']").val() != "") {
+        $(".add_fields").trigger('click');
+      }
+      $("#add-row").show();
+    } else {
+      $("#add-row").hide();
+    }
+  });

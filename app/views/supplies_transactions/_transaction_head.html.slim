@@ -1,0 +1,49 @@
+.card-panel
+  .row
+    .input-field.col.m2
+      = f.label :transaction_date, class: 'active'
+      - if params[:employee_id]
+        = f.date_field :transaction_date, value: Time.now.strftime('%Y-%m-%d')                                               
+      - elsif params[:action] =~ /edit/
+        = f.date_field :transaction_date, disabled: true                                                
+      - else
+        = f.date_field :transaction_date, value: Time.now.strftime('%Y-%m-%d')
+    .input-field.col.m8
+      - if params[:employee_id].present?
+        = f.hidden_field :employee_id,  value: params[:employee_id]
+        = f.text_field :employee, value: params[:name], disabled: true, class: "employee_autocomplete"
+      - else
+        = f.label :employee, class: 'active' 
+        - if params[:action] =~ /new/  
+          = f.hidden_field :employee_id          
+          = text_field_tag :employee, "", class: "employee_autocomplete", placeholder: "Search by Employee Name or by Department Name or by Job Title"            
+        - else
+          = f.text_field :employee, disabled: true
+    .input-field.col.m2 
+      = f.label '', 'Transaction Type', class: 'active'     
+      = select_tag 'in_out', options_for_select(["IN", "OUT"],"OUT"), id: "trx_type"
+
+javascript:
+  $('#trx_type').material_select();
+  $(document).ready(function() {
+    $( ".employee_autocomplete" ).autocomplete({
+        source: "/employees?format=json",
+        max: 30,
+        minLength: 4,
+        select: function( event, ui ) {
+          insert_input_values(ui.item); 
+          return false;
+        }
+      })
+      .autocomplete( "instance" )._renderItem = function( ul, item ) {
+        return $( "<li>" )
+          .append( "<div>" + item.name +"</div>" )
+          .appendTo( ul );
+      };     
+  });
+
+  function insert_input_values(employee) {
+    $("#supplies_transaction_employee_id").val(employee.id);
+    $("#employee_autocomplete").val(employee.name);
+  }
+      

@@ -1,31 +1,62 @@
-h4 List of Products
+.row 
+  .col.s6
+    h4 Products
+  .col.s5
+    = form_tag({controller:'products', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{products_path(v:'list')}"
+      }
 
-.toolbar
-  = link_to 'New Product', new_product_path, class: "btn btn-primary"
+nav
+  .nav-wrapper
+    ul.right
+      - if can? :manage, Product
+        li
+          = link_to new_product_path, remote: true
+            | New Product
+            i.material-icons.left add
 
-table.responsive-table.striped
-  / thead
-  /   tr
-  /     th = link_to 'New Product', new_product_path, class: "btn btn-primary"
-  /     th Products
-  /     th ' 
-  tbody
-    - @products.each do |product|
+.card-panel
+  table.compact.striped
+    thead
       tr
-        td
-          = image_tag(product.image_url, class: 'list_image')
+        th Code
+        th Name
+        th Price
+        th Min stock
+        th Max stock
+        th Item unit
+        th Per Packs
+        th Packs Unit
+        th Item category
+        th Is active        
+        th Actions
+        
 
-        td.list_description
-          dl
-            dt = link_to product.title, product
-            dd = truncate(strip_tags(product.description), length: 80)
-            dd = product.price
-
-        td
-          = link_to 'Edit', edit_product_path(product), class: "btn waves-effect waves-teal btn-flat btn-small"
-          br
-          = link_to 'Delete', product, method: :delete, data: "{ confirm: 'Are you sure?' }", class: "btn waves-effect waves-teal red btn-small"
-
-br
+    tbody#products
+      - @products.each do |product|
+        tr id="row-#{product.id}"
+            = render partial: 'index_row', locals: {product: product}
 
 
+-if @products.length > 20   
+  .toolbar.z-index-1
+    = will_paginate @products
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :employee_smartcards
   resources :stock_categories
   resources :stock_items
   resources :suppliers
@@ -8,6 +9,9 @@ Rails.application.routes.draw do
   resources :order_items
   resources :purchase_orders
   resources :req_items
+  resources :supplies_transaction_items
+  resources :warehouses
+  resources :item_categories
   resources :item_units
   resources :template_targets
   resources :templates
@@ -35,7 +39,22 @@ Rails.application.routes.draw do
   end 
 
   get 'leave_requests/:id/approve/:page' => 'leave_requests#approve', as: :approve
-
+  
+  resources :supplies_transactions do
+    collection do
+      get 'recap'
+    end
+  end
+  
+  resources :products do
+    collection do
+      get 'supplies_stocks'
+    end
+    member do
+      get 'stock_card'
+    end
+  end
+  
   resources :courses do
     resources :course_texts, shallow: true
     resources :course_sections, except: :new, shallow: true
@@ -315,6 +334,5 @@ Rails.application.routes.draw do
   #   namespace :admin do
   #     # Directs /admin/products/* to Admin::ProductsController
   #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+  #     #   end
 end

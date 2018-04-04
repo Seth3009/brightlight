@@ -1,0 +1,23 @@
+h1 Listing employee_smartcards
+
+table
+  thead
+    tr
+      th Card
+      th Employee
+      th
+      th
+      th
+
+  tbody
+    - @employee_smartcards.each do |employee_smartcard|
+      tr
+        td = employee_smartcard.card
+        td = employee_smartcard.employee
+        td = link_to 'Show', employee_smartcard
+        td = link_to 'Edit', edit_employee_smartcard_path(employee_smartcard)
+        td = link_to 'Destroy', employee_smartcard, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Employee smartcard', new_employee_smartcard_path

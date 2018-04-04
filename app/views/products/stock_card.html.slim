@@ -1,0 +1,18 @@
+.row 
+  .col.s6
+    h4 Products Stock Card 
+
+
+nav
+  .nav-wrapper
+    ul
+      li  
+        = link_to supplies_stocks_products_url
+          i.material-icons.left chevron_left      
+      li
+        .brand-logo style="margin-left: 20px; font-size:1.5em"
+          | #{@product.name.present? ? @product.name : ""}      
+      li
+        
+
+= render partial: 'stock_card_index', locals: {product: @product.id}

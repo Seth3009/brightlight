@@ -1,4 +1,12 @@
                                         Prefix Verb     URI Pattern                                                       Controller#Action
+                           employee_smartcards GET      /employee_smartcards(.:format)                                    employee_smartcards#index
+                                               POST     /employee_smartcards(.:format)                                    employee_smartcards#create
+                        new_employee_smartcard GET      /employee_smartcards/new(.:format)                                employee_smartcards#new
+                       edit_employee_smartcard GET      /employee_smartcards/:id/edit(.:format)                           employee_smartcards#edit
+                            employee_smartcard GET      /employee_smartcards/:id(.:format)                                employee_smartcards#show
+                                               PATCH    /employee_smartcards/:id(.:format)                                employee_smartcards#update
+                                               PUT      /employee_smartcards/:id(.:format)                                employee_smartcards#update
+                                               DELETE   /employee_smartcards/:id(.:format)                                employee_smartcards#destroy
                               stock_categories GET      /stock_categories(.:format)                                       stock_categories#index
                                                POST     /stock_categories(.:format)                                       stock_categories#create
                             new_stock_category GET      /stock_categories/new(.:format)                                   stock_categories#new
@@ -63,6 +71,30 @@
                                                PATCH    /req_items/:id(.:format)                                          req_items#update
                                                PUT      /req_items/:id(.:format)                                          req_items#update
                                                DELETE   /req_items/:id(.:format)                                          req_items#destroy
+                    supplies_transaction_items GET      /supplies_transaction_items(.:format)                             supplies_transaction_items#index
+                                               POST     /supplies_transaction_items(.:format)                             supplies_transaction_items#create
+                 new_supplies_transaction_item GET      /supplies_transaction_items/new(.:format)                         supplies_transaction_items#new
+                edit_supplies_transaction_item GET      /supplies_transaction_items/:id/edit(.:format)                    supplies_transaction_items#edit
+                     supplies_transaction_item GET      /supplies_transaction_items/:id(.:format)                         supplies_transaction_items#show
+                                               PATCH    /supplies_transaction_items/:id(.:format)                         supplies_transaction_items#update
+                                               PUT      /supplies_transaction_items/:id(.:format)                         supplies_transaction_items#update
+                                               DELETE   /supplies_transaction_items/:id(.:format)                         supplies_transaction_items#destroy
+                                    warehouses GET      /warehouses(.:format)                                             warehouses#index
+                                               POST     /warehouses(.:format)                                             warehouses#create
+                                 new_warehouse GET      /warehouses/new(.:format)                                         warehouses#new
+                                edit_warehouse GET      /warehouses/:id/edit(.:format)                                    warehouses#edit
+                                     warehouse GET      /warehouses/:id(.:format)                                         warehouses#show
+                                               PATCH    /warehouses/:id(.:format)                                         warehouses#update
+                                               PUT      /warehouses/:id(.:format)                                         warehouses#update
+                                               DELETE   /warehouses/:id(.:format)                                         warehouses#destroy
+                               item_categories GET      /item_categories(.:format)                                        item_categories#index
+                                               POST     /item_categories(.:format)                                        item_categories#create
+                             new_item_category GET      /item_categories/new(.:format)                                    item_categories#new
+                            edit_item_category GET      /item_categories/:id/edit(.:format)                               item_categories#edit
+                                 item_category GET      /item_categories/:id(.:format)                                    item_categories#show
+                                               PATCH    /item_categories/:id(.:format)                                    item_categories#update
+                                               PUT      /item_categories/:id(.:format)                                    item_categories#update
+                                               DELETE   /item_categories/:id(.:format)                                    item_categories#destroy
                                     item_units GET      /item_units(.:format)                                             item_units#index
                                                POST     /item_units(.:format)                                             item_units#create
                                  new_item_unit GET      /item_units/new(.:format)                                         item_units#new
@@ -216,6 +248,25 @@
                                                PUT      /leave_requests/:id(.:format)                                     leave_requests#update
                                                DELETE   /leave_requests/:id(.:format)                                     leave_requests#destroy
                                        approve GET      /leave_requests/:id/approve/:page(.:format)                       leave_requests#approve
+                   recap_supplies_transactions GET      /supplies_transactions/recap(.:format)                            supplies_transactions#recap
+                         supplies_transactions GET      /supplies_transactions(.:format)                                  supplies_transactions#index
+                                               POST     /supplies_transactions(.:format)                                  supplies_transactions#create
+                      new_supplies_transaction GET      /supplies_transactions/new(.:format)                              supplies_transactions#new
+                     edit_supplies_transaction GET      /supplies_transactions/:id/edit(.:format)                         supplies_transactions#edit
+                          supplies_transaction GET      /supplies_transactions/:id(.:format)                              supplies_transactions#show
+                                               PATCH    /supplies_transactions/:id(.:format)                              supplies_transactions#update
+                                               PUT      /supplies_transactions/:id(.:format)                              supplies_transactions#update
+                                               DELETE   /supplies_transactions/:id(.:format)                              supplies_transactions#destroy
+                      supplies_stocks_products GET      /products/supplies_stocks(.:format)                               products#supplies_stocks
+                            stock_card_product GET      /products/:id/stock_card(.:format)                                products#stock_card
+                                      products GET      /products(.:format)                                               products#index
+                                               POST     /products(.:format)                                               products#create
+                                   new_product GET      /products/new(.:format)                                           products#new
+                                  edit_product GET      /products/:id/edit(.:format)                                      products#edit
+                                       product GET      /products/:id(.:format)                                           products#show
+                                               PATCH    /products/:id(.:format)                                           products#update
+                                               PUT      /products/:id(.:format)                                           products#update
+                                               DELETE   /products/:id(.:format)                                           products#destroy
                            course_course_texts GET      /courses/:course_id/course_texts(.:format)                        course_texts#index
                                                POST     /courses/:course_id/course_texts(.:format)                        course_texts#create
                         new_course_course_text GET      /courses/:course_id/course_texts/new(.:format)                    course_texts#new

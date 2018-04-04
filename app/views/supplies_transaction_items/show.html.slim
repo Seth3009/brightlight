@@ -1,0 +1,18 @@
+p#notice = notice
+
+p
+  strong Supplies transaction:
+  = @supplies_transaction_item.supplies_transaction
+p
+  strong Product:
+  = @supplies_transaction_item.product
+p
+  strong In out:
+  = @supplies_transaction_item.in_out
+p
+  strong Qty:
+  = @supplies_transaction_item.qty
+
+= link_to 'Edit', edit_supplies_transaction_item_path(@supplies_transaction_item)
+'|
+= link_to 'Back', supplies_transaction_items_path

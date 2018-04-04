@@ -54,10 +54,17 @@ class ItemUnitsController < ApplicationController
   # DELETE /item_units/1
   # DELETE /item_units/1.json
   def destroy
-    @item_unit.destroy
-    respond_to do |format|
-      format.html { redirect_to item_units_url, notice: 'Item unit was successfully destroyed.' }
-      format.json { head :no_content }
+    @product = Product.where('item_unit_id = ?',@item_unit.id).first
+    if @product.nil?
+      @item_unit.destroy
+      respond_to do |format|
+        format.html { redirect_to item_units_url, notice: 'Item unit was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to item_units_url, notice: 'Cannot delete this unit, used by some products' }
+      end
     end
   end
 

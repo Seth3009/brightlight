@@ -1,0 +1,26 @@
+- if @stocks.present?
+  .card-panel
+    table.compact
+      thead
+        tr
+          th No          
+          th Date
+          th Employee          
+          th IN
+          th OUT
+          th Stock      
+      tbody            
+        - @stocks.each_with_index do |stock, i|
+          tr
+            td = i+1
+            td = stock.date? ? stock.date.strftime("%d/%m/%Y") : ""
+            td = stock.name                            
+            td = stock.qty if stock.type == "IN"
+            td = stock.qty if stock.type == "OUT"
+            td 
+              -if stock.qty.present?
+                - if stock.type == "IN"
+                  = @total = @total.to_f + stock.qty - stock.min_stock
+                - else
+                  = @total = @total.to_f - stock.qty - stock.min_stock
+              

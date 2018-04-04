@@ -1,0 +1,46 @@
+.row 
+  .col.s6
+    h4 Product Stock
+nav
+  .nav-wrapper
+    ul.right
+      - if can? :read, Product
+        li
+          = link_to 'Export PDF', supplies_stocks_products_path(format: :pdf)
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Code
+        th Name        
+        th Stock
+        th Min stock
+        th DIFF
+        th Item unit
+        th Note        
+        th Min Buy
+        th Packs Unit        
+        th Is active        
+    tbody
+      - @supplies_stocks.each do |supplies_stock|   
+        tr
+          td = supplies_stock.code
+          td = link_to supplies_stock.name, stock_card_product_url(supplies_stock.id)
+          td = supplies_stock.stock || 0.0
+          td = supplies_stock.min_stock
+          td = (supplies_stock.stock || 0.0) - supplies_stock.min_stock
+          td = supplies_stock.item_unit.name
+          td 
+            - if (supplies_stock.stock || 0.0) - supplies_stock.min_stock < 0
+              | Need to buy
+            - else
+              | --
+          td = supplies_stock.packs
+          td = supplies_stock.packs_unit
+          td 
+            - if supplies_stock.is_active
+              i.material-icons check_box
+            - else
+              i.material-icons check_box_outline_blank
+          

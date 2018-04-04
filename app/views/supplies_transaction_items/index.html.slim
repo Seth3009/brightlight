@@ -1,0 +1,27 @@
+h1 Listing supplies_transaction_items
+
+table
+  thead
+    tr
+      th Supplies transaction
+      th Product
+      th In out
+      th Qty
+      th
+      th
+      th
+
+  tbody
+    - @supplies_transaction_items.each do |supplies_transaction_item|
+      tr
+        td = supplies_transaction_item.supplies_transaction
+        td = supplies_transaction_item.product
+        td = supplies_transaction_item.in_out
+        td = supplies_transaction_item.qty
+        td = link_to 'Show', supplies_transaction_item
+        td = link_to 'Edit', edit_supplies_transaction_item_path(supplies_transaction_item)
+        td = link_to 'Destroy', supplies_transaction_item, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Supplies transaction item', new_supplies_transaction_item_path

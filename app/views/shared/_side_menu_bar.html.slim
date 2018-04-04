@@ -83,7 +83,29 @@ li
 					= link_to 'Book Category', book_categories_path
 				li
 					= link_to 'Disposed Books', book_copies_disposed_index_path
-					
+
+li 
+  .collapsible-header.waves-effect.waves-cyan
+    i.material-icons work
+    i.mdi-navigation-chevron-right.right
+    | Supplies
+  .collapsible-body
+    ul
+      li
+        = link_to 'Daily Transaction', supplies_transactions_url(view:'daily',trx_date: Date.today)
+      li
+        = link_to 'Monthly Transaction', supplies_transactions_url(view:'monthly',m:Time.now.month,y:Time.now.year)
+      li
+        = link_to 'Transaction Recap', recap_supplies_transactions_url(m:Time.now.month,y:Time.now.year)
+      li
+        = link_to 'Stock', supplies_stocks_products_url
+      li
+        = link_to 'Category', item_categories_url
+      li
+        = link_to 'Product Unit', item_units_url
+      li
+        = link_to 'Products', products_url
+      
 - if can? :manage, BookFine
 	li 
 		.collapsible-header.waves-effect.waves-cyan
@@ -184,6 +206,3 @@ li
 				li
 					a href="/users" 
 						| Users
-
-
-

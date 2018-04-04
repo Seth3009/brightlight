@@ -54,11 +54,29 @@ class ItemCategoriesController < ApplicationController
   # DELETE /item_categories/1
   # DELETE /item_categories/1.json
   def destroy
-    @item_category.destroy
-    respond_to do |format|
-      format.html { redirect_to item_categories_url, notice: 'Item category was successfully destroyed.' }
-      format.json { head :no_content }
+    if @item_category.destroy
+      respond_to do |format|
+        format.html { redirect_to item_categories_url, notice: 'Item category was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to item_categories_url, alert: @item_category.errors.full_messages.join(" ") }
+        format.json { head :no_content }
+      end
     end
+    # @product = Product.where('item_unit_id = ?',@item_category.id).first
+    # if @product.nil?
+    #   @item_category.destroy
+    #   respond_to do |format|
+    #     format.html { redirect_to item_categories_url, notice: 'Item category was successfully destroyed.' }
+    #     format.json { head :no_content }
+    #   end
+    # else
+    #   respond_to do |format|
+    #     format.html { redirect_to item_categories_url, notice: 'Cannot delete this category, used by some products' }
+    #   end
+    # end
   end
 
   private

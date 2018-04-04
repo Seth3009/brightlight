@@ -1,0 +1,83 @@
+.row 
+  .col.s6
+    - if params[:m].present? && params[:y].present?
+      h4 Supplies Transaction #{Date::MONTHNAMES[params[:m].to_i]} #{params[:y]}
+    - else
+      h4 Supplies Transaction #{params[:trx_date].to_date.strftime('%d %b %Y')}
+
+nav
+  .nav-wrapper    
+    ul.right
+      - if can? :manage, SuppliesTransaction
+        li
+          = link_to new_supplies_transaction_path
+            | New Transaction
+            i.material-icons.left add  
+    - if params[:view] == 'daily' 
+      ul        
+        li style="padding: 0 20px"         
+          | Date :
+        li
+          = date_field_tag 'trx_date', params[:trx_date]
+    - else
+      ul
+        li  
+          = select_year(Date.strptime("1-"+params[:m]+"-"+params[:y],"%d-%m-%Y"),{},name: 'trx_year')        
+        li
+          = select_month(Date.strptime("1-"+params[:m]+"-"+params[:y],"%d-%m-%Y"),{},name: 'trx_month')
+
+    
+          
+.card-panel
+  table.compact.striped
+    - if params[:view] == 'monthly'
+      = render 'monthly_list'
+    - else
+      = render 'daily_list'
+      
+
+
+#show-modal.modal.modal-fixed-footer
+  #show-modal-content         
+
+javascript:
+  $(window).codeScanner({
+      minEntryChars: 10,
+      maxEntryTime: 500,
+      onScan: function($element, input) {             
+        var card = input.trim();       
+        $.getJSON("/employees/" + card + ".json?card=1", null, function (employee) {
+          console.log("Scanned employee", employee);
+          window.location.href= "/supplies_transactions/new?employee_id=" + employee.id + "&name=" + employee.name;    
+        }).fail(function(xhr){
+          Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
+        });            
+      }
+    });
+
+  $(function(){
+      // bind change event to select
+      $('#date_month').on('change', function () {          
+          var month = $('#date_month').val();
+          var year = $('#date_year').val();
+          if (month) { // require a URL
+              window.location = "supplies_transactions?view=monthly&m="+month+"&y="+year; // redirect              
+          }
+          return false;
+      });
+    });
+
+  $(function(){
+      // bind change event to select
+      $('#trx_date').on('change', function () {          
+          var date = $('#trx_date').val();          
+          if (date) { // require a URL
+              window.location = "supplies_transactions?view=daily&trx_date="+date; // redirect              
+          }
+          return false;
+      });
+    });
+
+  
+
+  
