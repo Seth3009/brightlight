@@ -64,7 +64,8 @@ class EmployeeSmartcardsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_employee_smartcard
-      @employee_smartcard = EmployeeSmartcard.find(params[:id])
+      #@employee_smartcard = EmployeeSmartcard.find(params[:id])
+      @employee_smartcard = params[:card] ? EmployeeSmartcard.find_by(card:params[:id]) : EmployeeSmartcard.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -27,7 +27,9 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
-    @product = Product.joins('left join item_units on item_units.id = products.item_unit_id').select('products.*,item_units.name as unit').first
+    @product = Product.joins('left join item_units on item_units.id = products.item_unit_id')
+              .where('products.barcode = ?', params[:barcode])
+              .select('products.*,item_units.name as unit').first
   end
 
   # GET /products/new

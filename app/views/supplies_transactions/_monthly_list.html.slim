@@ -13,4 +13,7 @@ tbody#supplies_transaction
       td = supplies_transaction.itemcount
       td
         = link_to supplies_transaction, remote: true
-          i.material-icons visibility            
+          i.material-icons visibility       
+        - if supplies_transaction.itemcount == 0
+          = link_to supplies_transaction, data: {:confirm => 'Are you sure?'}, :method => :delete
+            i.material-icons.red-text delete          
