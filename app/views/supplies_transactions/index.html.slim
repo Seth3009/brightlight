@@ -46,7 +46,7 @@ javascript:
       maxEntryTime: 500,
       onScan: function($element, input) {             
         var card = input.trim();       
-        $.getJSON("/employees/" + card + ".json?card=1", null, function (employee) {
+        $.getJSON("/employees/" + card + ".json", null, function (employee) {
           console.log("Scanned employee", employee);
           window.location.href= "/supplies_transactions/new?employee_id=" + employee.id + "&name=" + employee.name;    
         }).fail(function(xhr){

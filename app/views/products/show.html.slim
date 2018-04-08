@@ -20,7 +20,7 @@ p
   = @product.stock_type
 p
   strong Item unit:
-  = @product.item_unit
+  = @product.item_unit.try(:name)
 p
   strong Item category:
   = @product.item_category
