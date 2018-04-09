@@ -41,9 +41,13 @@ nav
           td = employee.job_title
           td = link_to employee.department || "--"
           - if can? :manage, Employee
-            td 
+            td.actions
               = link_to edit_employee_path(employee)
                 i.material-icons edit
+              = link_to new_badge_path(employee_id:employee.id, name: employee.name, kind:'Employee'), remote: true
+                i.material-icons card_membership
 
 .toolbar.z-depth-1
   = will_paginate @employees
+
+#scan-modal.modal.modal-fixed-footer

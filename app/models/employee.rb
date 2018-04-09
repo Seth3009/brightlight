@@ -13,6 +13,7 @@ class Employee < ActiveRecord::Base
 	has_many :leave_requests
   has_many :supplies_transaction
   has_one :employee_smartcard
+  has_one :badge
 
   accepts_nested_attributes_for :book_loans,
     allow_destroy: true,

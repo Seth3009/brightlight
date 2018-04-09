@@ -44,9 +44,14 @@ nav
           td = student.student_no
           td = student.family_no
           td = student.home_phone
-          td 
+          td.actions
             - if can? :update, User
-              = link_to 'Edit', edit_student_path(student), class: "btn waves-effect waves-teal btn-flat btn-small"
+              = link_to edit_student_path(student)
+                i.material-icons edit
+              = link_to new_badge_path(student_id:student.id, name: student.name, kind: 'Student' ), remote: true
+                i.material-icons card_membership
 
 .toolbar.z-index-1
   = will_paginate @students
+
+#scan-modal.modal.modal-fixed-footer

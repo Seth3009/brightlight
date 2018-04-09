@@ -1,0 +1,13 @@
+.modal-content
+  h4 Register New Badge
+  p Please scan smart card badge
+
+  -if student_id
+    .scan-code data-kind="Student" data-student-id=student_id data-name=name
+    h5 = name
+  -elsif employee_id
+    .scan-code data-kind="Employee" data-employee-id=employee_id data-name=name
+    h5 = name
+
+.modal-footer
+  a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
