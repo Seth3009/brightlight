@@ -127,7 +127,7 @@ class ProductsController < ApplicationController
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_product 
-      key = params[:id].length == 10 ? :barcode : :id
+      key = params[:id].length > 10 ? :barcode : :id
       @product = Product.includes(:item_unit).find_by(key => params[:id])
     end
 
