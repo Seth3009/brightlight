@@ -38,12 +38,20 @@ nav
       .col.s10
         .list_description
           dl
+            dd.col.s10
+              .label Full name:
+              .item = @employee.name
             dd.col.s5
               .label First name: 
               .item = @employee.first_name
             dd.col.s5
               .label Last name: 
               .item = @employee.last_name
+            dd.col.s5
+              .label Smart Card:
+              .item 
+                i.material-icons.left card_membership
+                = @employee.badge.try(:code) || 'N/A'
               
     #tab2.tab-content
       .list_description.col.s12

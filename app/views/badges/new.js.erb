@@ -18,7 +18,8 @@ function create_entry(el, input) {
     kind: el.data("kind"), 
     student_id: el.data("studentId"), 
     employee_id: el.data("employeeId"), 
-    name: el.data("name") 
+    name: el.data("name") ,
+    active: true
   }};
   let jsonData = JSON.stringify(dataToSend);
   let url = "/badges"
@@ -31,6 +32,8 @@ function create_entry(el, input) {
     dataType: 'json',
     success: function(r) {
       Materialize.toast('Card registered for ' + r.name, 5000, 'green');
+      $("#ref-"+r.id).find(".badge").html('&#9745;');
+      $('#scan-modal').closeModal();
       return false;
     },
     error: function(e) {

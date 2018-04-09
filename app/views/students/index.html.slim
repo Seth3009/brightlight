@@ -35,16 +35,20 @@ nav
         th Student no
         th Family no
         th Home phone
+        th Smart Card
         th
 
     tbody
       - @students.each do |student|
-        tr
+        tr id= "ref-#{student.id}"
           td = link_to student.name, student
           td = student.student_no
           td = student.family_no
           td = student.home_phone
+          td.badge = student.badge.present? ? '&#9745;'.html_safe : ''
           td.actions
+            = link_to student
+              i.material-icons visibility
             - if can? :update, User
               = link_to edit_student_path(student)
                 i.material-icons edit

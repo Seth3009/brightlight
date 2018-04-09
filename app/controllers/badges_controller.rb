@@ -24,7 +24,7 @@ class BadgesController < ApplicationController
 
     respond_to do |format|
       if @badge.save
-        format.json { render json: {name: @badge.name} }
+        format.json { render json: {code: @badge.code, name: @badge.name, id: @badge.kind=="Student" ? @badge.student_id : @badge.employee_id} }
       else
         format.json { render json: @badge.errors, status: :unprocessable_entity }
       end
