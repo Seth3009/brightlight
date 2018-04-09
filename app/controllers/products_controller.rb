@@ -27,9 +27,6 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
-    @product = Product.joins('left join item_units on item_units.id = products.item_unit_id')
-              .where('products.barcode = ?', params[:barcode])
-              .select('products.*,item_units.name as unit').first
   end
 
   # GET /products/new
@@ -130,7 +127,8 @@ class ProductsController < ApplicationController
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_product 
-      @product = params[:barcode] ? Product.find_by(barcode:params[:id]) : Product.find(params[:id])
+      key = params[:id].length > 10 ? :barcode : :id
+      @product = Product.includes(:item_unit).find_by(key => params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

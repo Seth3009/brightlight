@@ -246,8 +246,11 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :badges, only: [:new, :create, :edit, :update, :destroy]
+
   get  '/search' => "search#index"
   post '/search' => "search#index"
+
 
   patch 'pax/:id' => 'late_passengers#update'
 
