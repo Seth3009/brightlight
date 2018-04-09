@@ -246,8 +246,11 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :badges, only: [:new, :create, :edit, :update, :destroy]
+
   get  '/search' => "search#index"
   post '/search' => "search#index"
+
 
   patch 'pax/:id' => 'late_passengers#update'
 
@@ -270,6 +273,8 @@ Rails.application.routes.draw do
         put 'reorder'
       end
     end
+
+    post "/gates" => 'gates#create'
   end
   
   get 'settings/inventory_mtce' => 'settings#inventory_mtce', as: :settings_inventory_mtce

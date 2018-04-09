@@ -5,11 +5,26 @@ class EmployeeSmartcardsController < ApplicationController
   # GET /employee_smartcards.json
   def index
     @employee_smartcards = EmployeeSmartcard.all
+
   end
 
   # GET /employee_smartcards/1
   # GET /employee_smartcards/1.json
   def show
+    if params[:card]
+      @employee = Employee.joins(:employee_smartcard).where(employee_smartcards: {card: params[:id]}).take      
+      respond_to do |format|
+        if @employee
+          format.html
+          format.json 
+        else
+          format.html { not_found }
+          format.json { render json: {errors:"Invalid Card"}, status: :unprocessable_entity }
+        end
+      end
+    else
+      set_employee
+    end
   end
 
   # GET /employee_smartcards/new
@@ -64,7 +79,8 @@ class EmployeeSmartcardsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_employee_smartcard
-      @employee_smartcard = EmployeeSmartcard.find(params[:id])
+      #@employee_smartcard = EmployeeSmartcard.find(params[:id])
+      @employee_smartcard = params[:card] ? EmployeeSmartcard.find_by(card:params[:id]) : EmployeeSmartcard.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -5,8 +5,8 @@ thead
     th Transaction date 
     th Type       
     th.right-align Qty
-    th
-    th.center-align Actions    
+    th Unit
+     
 
 tbody#supplies_transaction
   - @supplies_transactions.each do |supplies_transaction|
@@ -16,8 +16,4 @@ tbody#supplies_transaction
       td = supplies_transaction.supplies_transaction.transaction_date.strftime("%a, %d %b %Y") rescue nil
       td = supplies_transaction.try(:in_out)
       td.right-align = supplies_transaction.try(:qty)
-      td = supplies_transaction_item.item_unit.abbreviation rescue nil
-      td.center-align      
-        - if can? :destroy, supplies_transaction
-          = link_to supplies_transaction, data: {:confirm => 'Are you sure?'}, :method => :delete
-            i.material-icons.red-text delete
+      td = supplies_transaction.product.item_unit.try(:abbreviation) rescue nil

@@ -18,7 +18,7 @@ javascript:
       onScan: function($element, input) {
         $("#use-scanner").prop("checked",true);
         var barcode = input.trim();
-        $.getJSON("/products/"+barcode+".json?barcode=1", null, function (data) {
+        $.getJSON("/products/"+barcode+".json", null, function (data) {
           if ($("tr:last").find("[name$='[barcode]']").val() != "") {
             $(".add_fields").trigger('click');
           } else if (!$("tr:last").is(":visible")) {
@@ -38,7 +38,7 @@ javascript:
       $("#use-scanner").prop("checked",false);
       var barcode = $(this).find("[name$='[barcode]']").val().trim();
       var element = $(this);
-      $.getJSON("/products/"+barcode+".json?barcode=1", null, function (data) {
+      $.getJSON("/products/"+barcode+".json", null, function (data) {
         insert_values(data,element);
       }).fail(function(xhr){
         $(e.target).val('');

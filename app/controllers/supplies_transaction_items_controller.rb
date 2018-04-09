@@ -56,14 +56,13 @@ class SuppliesTransactionItemsController < ApplicationController
 
   # DELETE /supplies_transaction_items/1
   # DELETE /supplies_transaction_items/1.json
-  def destroy
+  def destroy    
     authorize! :manage, SuppliesTransactionItem
-    authorize! :manage, SuppliesTransaction
     if @supplies_transaction_item.present?      
       @supplies_transaction_item.destroy
       SuppliesTransaction.count_item(@supplies_transaction_item.supplies_transaction_id)   
       respond_to do |format|
-        format.html { redirect_to supplies_transactions_url, notice: 'Supplies transaction item was successfully destroyed.' }
+        format.html { redirect_to :back, notice: 'Supplies transaction item was successfully destroyed.' }
         format.json { head :no_content }
       end
     end

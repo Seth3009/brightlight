@@ -8,7 +8,8 @@
           th Employee          
           th IN
           th OUT
-          th Stock      
+          th Stock
+          th Unit      
       tbody            
         - @stocks.each_with_index do |stock, i|
           tr
@@ -20,7 +21,8 @@
             td 
               -if stock.qty.present?
                 - if stock.type == "IN"
-                  = @total = @total.to_f + stock.qty - stock.min_stock
+                  = @total = (@total.to_f + stock.qty)
                 - else
-                  = @total = @total.to_f - stock.qty - stock.min_stock
+                  = @total = (@total.to_f - stock.qty)
+            td = stock.item_unit.name
               

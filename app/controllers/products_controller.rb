@@ -27,7 +27,6 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
-    @product = Product.joins('left join item_units on item_units.id = products.item_unit_id').select('products.*,item_units.name as unit').first
   end
 
   # GET /products/new
@@ -116,8 +115,14 @@ class ProductsController < ApplicationController
     @stocks = Product.joins('left join supplies_transaction_items on supplies_transaction_items.product_id = products.id')
                       .joins('left join supplies_transactions on supplies_transactions.id = supplies_transaction_items.supplies_transaction_id')
                       .joins('left join employees on employees.id = supplies_transactions.employee_id')
-                      .select("employees.name, transaction_date at time zone 'utc' at time zone 'localtime' as date, supplies_transaction_items.in_out as type, supplies_transaction_items.qty, products.min_stock ")
-                      .where('products.id = ?',params[:id]).order('date')                      
+                      .select("employees.name, transaction_date at time zone 'utc' at time zone 'localtime' as date, supplies_transaction_items.in_out as type, supplies_transaction_items.qty, products.min_stock, products.item_unit_id ")
+                      .where('products.id = ?',params[:id]).order('date') 
+    # respond_to do |format|
+    #   format.html {
+    #     items_per_page = 2       
+    #     @stocks = @stocks.all.paginate(page: params[:page], per_page: items_per_page)
+    #   }
+    # end
   end
 
   private
@@ -128,7 +133,8 @@ class ProductsController < ApplicationController
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_product 
-      @product = params[:barcode] ? Product.find_by(barcode:params[:id]) : Product.find(params[:id])
+      key = params[:id].length > 10 ? :barcode : :id
+      @product = Product.includes(:item_unit).find_by(key => params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

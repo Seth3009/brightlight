@@ -38,6 +38,11 @@ class Ability
     can :manage, Subject
     can :manage, LoanCheck
     can :read, :all
+    can :manage, SuppliesTransaction
+    can :manage, SuppliesTransactionItem
+    can :manage, Product
+    can :manage, ItemUnit
+    can :manage, ItemCategory
 	end
 
 	def manager
@@ -88,7 +93,7 @@ class Ability
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
     can_manage_own_leave_request
-    can_manage_own_requisition
+    can_manage_own_requisition    
   end
 
   def staff
@@ -97,7 +102,7 @@ class Ability
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
     can_manage_own_leave_request
-    can_manage_own_requisition
+    can_manage_own_requisition    
   end
 
   def hrd
@@ -143,5 +148,7 @@ class Ability
       can [:create, :read, :cancel], Requisition, requester: @user.employee
       can [:update, :destroy], Requisition do |req| req.requester == @user.employee && req.draft? end
     end
+
+    
 
 end

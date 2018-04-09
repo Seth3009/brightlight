@@ -10,7 +10,8 @@ class Student < ActiveRecord::Base
 	has_many :book_fines, dependent: :restrict_with_error
 	has_one  :passenger
 	has_one  :transport, through: :passenger
- 	belongs_to :person
+	has_one  :badge
+
 	belongs_to :family
 
   validates :name, presence: true
@@ -26,12 +27,7 @@ class Student < ActiveRecord::Base
 	scope :with_academic_year, lambda {|academic_year|
 		joins(:grade_sections_students)
 			.where(grade_sections_students: {academic_year: academic_year}) }
-	# scope :for_section, lambda {|section|
-	# 	joins(:grade_sections_students)
-	# 		.where(grade_sections_students: {grade_section: section, academic_year: AcademicYear.current})
-	# 		.select('students.id,students.name,grade_sections_students.grade_section_id,grade_sections_students.order_no')
-	# 		.order('grade_sections_students.order_no')
-	# }
+
 	scope :for_section, lambda {|section, year:AcademicYear.current|
 		joins('INNER JOIN "grade_sections_students" ON "grade_sections_students"."student_id" = "students"."id"	INNER JOIN "grade_sections" ON "grade_sections"."id" = "grade_sections_students"."grade_section_id"') 
 		.where(grade_sections_students: {grade_section: section, academic_year: year})

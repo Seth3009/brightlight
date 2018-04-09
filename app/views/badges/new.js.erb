@@ -1,0 +1,46 @@
+$("#scan-modal").html(
+  "<%=j render(partial: 'new', locals: {student_id: @student_id, employee_id: @employee_id, kind: @kind, name: @name})%>"
+);
+$('#scan-modal').openModal();
+$(".scan-code").codeScanner({
+    minEntryChars: 9,
+    maxEntryTime: 200,
+    onScan: function($element, input) {
+      create_entry($element, input);
+      $("#scan-modal").closeModal();
+    }
+  });
+
+function create_entry(el, input) {
+  let dataToSend = new Object();
+  dataToSend = { badge: { 
+    code: input, 
+    kind: el.data("kind"), 
+    student_id: el.data("studentId"), 
+    employee_id: el.data("employeeId"), 
+    name: el.data("name") ,
+    active: true
+  }};
+  let jsonData = JSON.stringify(dataToSend);
+  let url = "/badges"
+
+  $.ajax({
+    type: 'POST',
+    contentType: "application/json; charset=utf-8",
+    url: url,
+    data: jsonData,
+    dataType: 'json',
+    success: function(r) {
+      Materialize.toast('Card registered for ' + r.name, 5000, 'green');
+      $("#ref-"+r.id).find(".badge").html('&#9745;');
+      $('#scan-modal').closeModal();
+      return false;
+    },
+    error: function(e) {
+      let msg = e.responseJSON.code == 'has already been taken' ? 'Duplicate card.' : 'Registration failed.';
+      Materialize.toast('Error. '+msg, 5000, 'red');
+      $('#scan-modal').closeModal();
+      return false;
+    }
+  }); 
+};
