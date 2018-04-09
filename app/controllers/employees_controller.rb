@@ -129,8 +129,8 @@ class EmployeesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_employee
-      @employee = if params[:id].length > 10 
-                    Employee.joins(:employee_smartcard).where(employee_smartcards: {card: params[:id]}).take
+      @employee = if params[:id].length > 9 
+                    Employee.joins(:badge).where(badges: {code: params[:id]}).take
                   else
                     Employee.find(params[:id])
                   end

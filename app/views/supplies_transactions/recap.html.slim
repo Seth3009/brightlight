@@ -23,7 +23,8 @@ nav
       tr        
         th Product 
         th IN
-        th OUT                      
+        th OUT 
+        th Total                     
         th Unit
           
     - if @supplies_transaction_items.present?
@@ -32,7 +33,8 @@ nav
           tr           
             td = supplies_transaction_item.product_name
             td = supplies_transaction_item.qty_in 
-            td = supplies_transaction_item.qty_out             
+            td = supplies_transaction_item.qty_out  
+            td = (supplies_transaction_item.qty_in.present? ? supplies_transaction_item.qty_in : 0) - (supplies_transaction_item.qty_out.present? ? supplies_transaction_item.qty_out : 0)
             td = supplies_transaction_item.unit
             
 javascript:
