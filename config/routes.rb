@@ -270,6 +270,8 @@ Rails.application.routes.draw do
         put 'reorder'
       end
     end
+
+    post "/gates" => 'gates#create'
   end
   
   get 'settings/inventory_mtce' => 'settings#inventory_mtce', as: :settings_inventory_mtce
