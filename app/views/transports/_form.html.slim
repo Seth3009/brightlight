@@ -75,15 +75,17 @@ javascript:
       source: "/students?term=" + name + "&format=json",
         max: 20,
         minLength: 3,
+        create: function() {
+          $(this).data( "ui-autocomplete" )._renderItem = function( ul, student ) {
+            return $( "<li>" )
+              .append( "<div>" + student.name + " - " + student.grade +"</div>" )
+              .appendTo( ul );
+          }
+        },
         select: function( event, ui ) {
           insert_row(ui.item);
         }
-    })
-    .autocomplete( "instance" )._renderItem = function( ul, student ) {
-      return $( "<li>" )
-        .append( "<div>" + student.name + " - " + student.grade +"</div>" )
-        .appendTo( ul );
-    };
+    });
     $('select').material_select();
 
     function insert_row(student) {      
