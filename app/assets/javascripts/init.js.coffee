@@ -19,6 +19,10 @@ $(document).on 'click', '.delete-record', ->
   $(this).closest("tr").hide()
     .find("[name$='[_destroy]']").val(true)
 
+$(document).on 'ajax:complete', '.delete-badge', ->
+  $(this).parent().html("")
+  Materialize.toast "Badge removed", 4000, "green"
+
  # The following callback function will turn select elements in the dynamically created row 
 # into MaterializeCSS style selects.
 $(document).on 'cocoon:after-insert', ->

@@ -15,7 +15,7 @@ class EmployeesController < ApplicationController
             .select('employees.*, departments.name as department')
             .order("#{sort_column} #{sort_direction}")
             .order('name')
-            .includes(:department)
+            .includes(:department, :badge)
             .paginate(page: params[:page], per_page: items_per_page)
         if params[:search]
           @employees = @employees.where('UPPER(employees.name) LIKE ?', "%#{params[:search].upcase}%")       
