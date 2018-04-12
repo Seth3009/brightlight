@@ -5,9 +5,12 @@ class Product < ActiveRecord::Base
   validates_presence_of :code
   has_many :supplies_transaction_item
 
+  after_create :assign_barcode
+
   scope :active, lambda { where(is_active:true).order(:name) }
 
-  
+  scope :get_all, lambda { joins('left join item_units on item_units.id = item_unit_id')
+                      .joins('left join item_categories on item_categories.id = item_category_id')}
   
   scope :search_query, lambda { |query|
     return nil  if query.blank?   
@@ -39,5 +42,9 @@ class Product < ActiveRecord::Base
     end
   end
 
+  private 
+    def assign_barcode
+      update_columns barcode: sprintf("SPL-9%06i", id)
+    end
   
 end
