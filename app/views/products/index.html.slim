@@ -48,7 +48,7 @@ nav
             = render partial: 'index_row', locals: {product: product}
 
 
--if @products.length > 20   
+- if @products.length > 20   
   .toolbar.z-index-1
     = will_paginate @products
 
