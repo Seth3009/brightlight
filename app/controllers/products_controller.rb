@@ -22,8 +22,10 @@ class ProductsController < ApplicationController
       }
       format.json { @products = Product.search_query(params[:term]).active } 
       format.pdf do
-        @products = Product.all.order(:name)
-        render pdf:         "List of Products",
+        @products = Product.joins('left join item_categories on item_categories.id = products.item_category_id')
+                    .select('products.*, item_categories.name as catg')
+                    .order('catg ASC, name ASC')
+        render pdf:         "Products Catalog",
                disposition: 'inline',
                template:    'products/index.pdf.slim',
                layout:      'pdf.html',
