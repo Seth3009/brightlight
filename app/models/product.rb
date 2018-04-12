@@ -7,7 +7,8 @@ class Product < ActiveRecord::Base
 
   scope :active, lambda { where(is_active:true).order(:name) }
 
-  
+  scope :get_all, lambda { joins('left join item_units on item_units.id = item_unit_id')
+                      .joins('left join item_categories on item_categories.id = item_category_id')}
   
   scope :search_query, lambda { |query|
     return nil  if query.blank?   

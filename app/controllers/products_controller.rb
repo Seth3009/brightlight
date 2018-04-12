@@ -10,9 +10,9 @@ class ProductsController < ApplicationController
       format.html {
         items_per_page = 20
         if params[:search]
-          @products = Product.all.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
+          @products = Product.get_all.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
         else
-          @products = Product.all.paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
+          @products = Product.get_all.paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
         end
       }
       
@@ -137,7 +137,7 @@ class ProductsController < ApplicationController
    
     # Enable Sort column
     def sortable_columns 
-      [:code, :name]
+      [:code, :name, 'item_categories.name', :is_active]
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_product 
