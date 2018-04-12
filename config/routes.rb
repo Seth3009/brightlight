@@ -247,7 +247,7 @@ Rails.application.routes.draw do
   end
 
   resources :badges, only: [:new, :create, :edit, :update, :destroy]
-
+  resources :door_access_logs, only: [:index]
   get  '/search' => "search#index"
   post '/search' => "search#index"
 
@@ -260,7 +260,7 @@ Rails.application.routes.draw do
     registrations: "users/registrations"
   }
   resources :users, only: [:index, :show, :edit, :update]
-
+  
   # API
   namespace :api, :defaults => {:format => :json} do
     as :user do
