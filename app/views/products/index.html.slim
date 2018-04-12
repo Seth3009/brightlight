@@ -29,16 +29,16 @@ nav
   table.compact.striped
     thead
       tr
-        th Code
-        th Name
+        th = sort_link "code"
+        th = sort_link "name"
         th Price
         th Min stock
         th Max stock
-        th Item unit
+        th Item Unit
         th Per Packs
         th Packs Unit
-        th Item category
-        th Is active        
+        th = sort_link "item_categories.name", "Item Category"
+        th = sort_link "is_active"
         th Actions
         
 
@@ -48,7 +48,7 @@ nav
             = render partial: 'index_row', locals: {product: product}
 
 
-- if @products.length > 20   
+- if @products.length >= 20   
   .toolbar.z-index-1
     = will_paginate @products
 
