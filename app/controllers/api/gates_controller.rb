@@ -1,12 +1,30 @@
 class Api::GatesController < Api::BaseController
 
   def create
-    if params[:card] == "1234"
-      #response.header["X-result"] = '{"id":1,"card":"1037113638","employee_id":70,"created_at":"2018-03-14T11:20:26.436+07:00","updated_at":"2018-04-05T09:45:57.089+07:00"}'
-      render json: '{"id":1,"card":"1037113638","employee_id":70,"created_at":"2018-03-14T11:20:26.436+07:00","updated_at":"2018-04-05T09:45:57.089+07:00"}'
+    if params[:id].present?
+      @badge = Badge.find_by_code(params[:id])
+      if @badge.present?
+        if @badge.kind = "Employee"
+          @person = Employee.joins('left join badges on badges.employee_id = employees.id')
+                    .select('employees.*,badges.*').where(badges: {code: params[:id]}).first
+          if @person.present?
+            DoorAccessLog.insert_door_log(@person.employee_id, @badge.kind, params[:id],params[:loc],@person.name)
+            response.header["result"] = '{code:' + @person.code + ' name:' + @person.name + ' kind:' + @badge.kind + '}'          
+          end
+        elsif
+          @person = Student.joins('left join badges on badges.student_id = students.id')
+                    .select('students.*,badges.*').where(badges: {code: params[:id]}).first
+          if @person.present?
+            DoorAccessLog.insert_door_log(@person.student_id, @badge.kind, params[:id],params[:loc],@person.name)
+            response.header["result"] = '{code:' + @person.code + ' name:' + @person.name + ' kind:' + @badge.kind + '}'          
+          end
+        end
+      else
+        response.header["result"] = '{Invalid Card}'
+      end
+      
     else
-      #response.header["X-result"] = '{"error":"invalid"}'
-      render json: '{"error":"invalid"}'
+      #response.header["X-result"] = '{Invalid Card}'
     end
   end
 end

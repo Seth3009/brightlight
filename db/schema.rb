@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180406013559) do
+ActiveRecord::Schema.define(version: 20180411055422) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -562,6 +562,20 @@ ActiveRecord::Schema.define(version: 20180406013559) do
 
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
+
+  create_table "door_access_logs", force: :cascade do |t|
+    t.string   "location"
+    t.string   "card"
+    t.integer  "employee_id"
+    t.integer  "student_id"
+    t.string   "name"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "kind"
+  end
+
+  add_index "door_access_logs", ["employee_id"], name: "index_door_access_logs_on_employee_id", using: :btree
+  add_index "door_access_logs", ["student_id"], name: "index_door_access_logs_on_student_id", using: :btree
 
   create_table "employee_smartcards", force: :cascade do |t|
     t.string   "card"
@@ -1606,6 +1620,8 @@ ActiveRecord::Schema.define(version: 20180406013559) do
   add_foreign_key "delivery_items", "order_items"
   add_foreign_key "delivery_items", "users", column: "created_by_id"
   add_foreign_key "delivery_items", "users", column: "last_updated_by_id"
+  add_foreign_key "door_access_logs", "employees"
+  add_foreign_key "door_access_logs", "students"
   add_foreign_key "employee_smartcards", "employees"
   add_foreign_key "family_members", "families"
   add_foreign_key "family_members", "guardians"
