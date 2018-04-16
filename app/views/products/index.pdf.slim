@@ -2,19 +2,12 @@ h4 Products Catalog
 
 - catg_id = 0
 - @products.each do |product|
-  / - if product.item_category_id != catg_id
-  /   h6 = product.item_category.try(:name)
-  / .cell id="row-#{product.id}"
-  /   strong = product.name
-  /   /em = product.item_category.try(:name)
-  /   - Barcode.new(product.barcode).write_image 
-  /   div = wicked_pdf_image_tag "/assets/images/#{product.barcode.upcase}.PNG"
-  /   - catg_id = product.item_category_id
   .cell id="row-#{product.id}"
     em = product.item_category.try(:name)
     - Barcode.new(product.barcode).write_image 
     div = wicked_pdf_image_tag "/assets/images/#{product.barcode.upcase}.PNG"
-    strong = product.name
+    div = product.barcode
+    div = product.name
 
 
 css:
