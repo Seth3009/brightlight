@@ -12,7 +12,7 @@ class StudentsController < ApplicationController
         if params[:search]
           @students = Student.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").paginate(page: params[:page], per_page: items_per_page)
         else
-          @students = Student.paginate(page: params[:page], per_page: items_per_page)
+          @students = Student.includes(:badge).paginate(page: params[:page], per_page: items_per_page)
         end
       }
       format.json {

@@ -246,7 +246,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :badges, only: [:new, :create, :edit, :update, :destroy]
+  resources :badges, only: [:new, :create, :destroy]
 
   get  '/search' => "search#index"
   post '/search' => "search#index"

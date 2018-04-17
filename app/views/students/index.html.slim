@@ -35,20 +35,31 @@ nav
         th Student no
         th Family no
         th Home phone
+        th Smart Card
         th
 
     tbody
       - @students.each do |student|
-        tr
+        - ref = "ref-#{student.id}"
+        tr id="#{ref}" 
           td = link_to student.name, student
           td = student.student_no
           td = student.family_no
           td = student.home_phone
+          td.badge 
+            - if student.badge.present? 
+              = '&#9745;'.html_safe 
+              - if can? :manage, Badge
+                = link_to_delete_badge student.badge, class:'red-text'
+                  i.material-icons.left delete
           td.actions
+            = link_to student
+              i.material-icons visibility
             - if can? :update, User
               = link_to edit_student_path(student)
                 i.material-icons edit
-              = link_to new_badge_path(student_id:student.id, name: student.name, kind: 'Student' ), remote: true
+            - if can? :manage, Badge
+              = link_to new_badge_path(ref: ref, student_id:student.id, name: student.name, kind: 'Student' ), remote: true
                 i.material-icons card_membership
 
 .toolbar.z-index-1

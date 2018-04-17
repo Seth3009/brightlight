@@ -39,4 +39,9 @@
           .item = student.student_no
         dd.col.s5
           .label Grade: 
-          .item = @current_grade.try(:name)
+          .item = @current_grade.try(:name) || '--'
+        dd.col.s5
+          .label Smart Card:
+          .item 
+            i.material-icons.left card_membership
+            = student.badge.try(:code) || 'N/A'

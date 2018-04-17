@@ -32,16 +32,25 @@ nav
         th = sort_link "name"
         th = sort_link "job_title", "Job Title"
         th = sort_link "department"
+        th Smart Card
         th
 
     tbody
       - @employees.each do |employee|
-        tr
+        tr id="ref-#{employee.id}"
           td = link_to employee.name, employee
           td = employee.job_title
           td = link_to employee.department || "--"
+          td.badge 
+            - if employee.badge.present? 
+              = '&#9745;'.html_safe 
+              - if can? :manage, Badge
+                = link_to_delete_badge employee.badge, class:'red-text'
+                  i.material-icons.left delete
           - if can? :manage, Employee
             td.actions
+              = link_to employee
+                i.material-icons visibility
               = link_to edit_employee_path(employee)
                 i.material-icons edit
               = link_to new_badge_path(employee_id:employee.id, name: employee.name, kind:'Employee'), remote: true
