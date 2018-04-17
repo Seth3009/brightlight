@@ -42,6 +42,7 @@ class Budget < ActiveRecord::Base
 
     budget = Budget.new
     total = 0
+    academic_year = ""
 
     sheet.each_with_index(header) do |row,i|
       puts "#{i}, #{row}"
@@ -68,6 +69,7 @@ class Budget < ActiveRecord::Base
           budget_item = BudgetItem.new(
             account:            row[:account],
             year:               month_no < 7 ? academic_year.end_date.year : academic_year.start_date.year,
+            line:               i,
             description:        row[:description],
             month:              month_no,
             amount:             row[month],
@@ -84,7 +86,7 @@ class Budget < ActiveRecord::Base
 
   def pivot_table
     PivotTable::Grid.new(sort: false) do |g|
-      g.source_data  = self.budget_items.order(:year, :month)
+      g.source_data  = self.budget_items.order(:line, :year, :month)
       g.column_name  = :month
       g.row_name     = :description
       g.value_name   = :amount

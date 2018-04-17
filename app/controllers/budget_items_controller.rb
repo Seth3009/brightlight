@@ -4,7 +4,10 @@ class BudgetItemsController < ApplicationController
   # GET /budget_items
   # GET /budget_items.json
   def index
-    @budget_items = BudgetItem.all.includes(budget: [:department])
+    @budget_items = BudgetItem.all.includes(budget: [:department]).order(:id)
+    if params[:budget_id] && params[:line]
+      @budget_items = @budget_items.where(budget_id: params[:budget_id], line: params[:line])
+    end
     if params[:dept]
       @budget_items = @budget_items.joins(:budget).where(budgets: {department_id:params[:dept]})
     end

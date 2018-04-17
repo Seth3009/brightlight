@@ -1,45 +1,25 @@
-h1 Listing budget_items
+h4 Budget item details
 
-table
+h5 = "#{@budget_items.first.try(:account)} - #{@budget_items.first.try(:description)}"
+table.compact.striped
   thead
     tr
-      th Budget
-      th Description,
-      th Account,
-      th Line
-      th Notes,
-      th Academic year
       th Month
       th Amount
       th Actual amt
-      th Is completed
-      th Type,
-      th Category,
-      th Group
-      th
-      th
-      th
+      th Type
+      th Category
+      th Notes
 
   tbody
     - @budget_items.each do |budget_item|
       tr
-        td = budget_item.budget
-        td = budget_item.description,
-        td = budget_item.account,
-        td = budget_item.line
-        td = budget_item.notes,
-        td = budget_item.academic_year
         td = budget_item.month
         td = budget_item.amount
         td = budget_item.actual_amt
-        td = budget_item.is_completed
-        td = budget_item.type,
-        td = budget_item.category,
-        td = budget_item.group
-        td = link_to 'Show', budget_item
-        td = link_to 'Edit', edit_budget_item_path(budget_item)
-        td = link_to 'Destroy', budget_item, data: {:confirm => 'Are you sure?'}, :method => :delete
+        td = budget_item.type
+        td = budget_item.category
+        td = budget_item.notes
 
-br
 
-= link_to 'New Budget item', new_budget_item_path
+
