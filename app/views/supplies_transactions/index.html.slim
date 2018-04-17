@@ -2,9 +2,10 @@
   .col.s6
     - if params[:m].present? && params[:y].present?
       h4 Supplies Transaction #{Date::MONTHNAMES[params[:m].to_i]} #{params[:y]}
+      
     - else
       h4 Supplies Transaction #{params[:trx_date].to_date.strftime('%d %b %Y')}
-
+      
 nav
   .nav-wrapper    
     ul.right

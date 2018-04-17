@@ -13,6 +13,9 @@
           = render partial: 'supplies_transactions/supplies_transaction_item_fields', locals: { f: supplies_transaction_item }
 
 javascript:
+  $(document).ready(function(){    
+    $("#use-scanner").click();
+  });
   $("[name$='[barcode]']").codeScanner({
       minEntryChars: 11,
       onScan: function($element, input) {
@@ -30,22 +33,23 @@ javascript:
         });            
       }
     });
+  
 
   $("tbody#supplies_transaction").on("keypress", "tr", function (e) {
     if (e.keyCode == 13) {
       e.preventDefault();
       e.stopPropagation();
-      $("#use-scanner").prop("checked",false);
-      var barcode = $(this).find("[name$='[barcode]']").val().trim();
-      var element = $(this);
-      $.getJSON("/products/"+barcode+".json", null, function (data) {
-        insert_values(data,element);
-      }).fail(function(xhr){
-        $(e.target).val('');
-        Materialize.toast($.parseJSON(xhr.responseText).errors, 5000, 'red');
-      });
+      $("#use-scanner").prop("checked",false);          
+        var barcode = $(this).find("[name$='[barcode]']").val().trim();
+        var element = $(this);
+        $.getJSON("/products/"+barcode+".json", null, function (data) {
+          insert_values(data,element);
+        }).fail(function(xhr){
+          $(e.target).val('');
+          Materialize.toast($.parseJSON(xhr.responseText).errors, 5000, 'red');
+        });    
       return false;
-    }
+      }
   });
 
   var insert_values = function (data, el) {
@@ -76,8 +80,8 @@ javascript:
       if ($("tr:last").find("[name$='[barcode]']").val() != "") {
         $(".add_fields").trigger('click');
       }
-      $("#add-row").show();
+      $("#add-row").show();      
     } else {
-      $("#add-row").hide();
+      $("#add-row").hide();     
     }
   });
