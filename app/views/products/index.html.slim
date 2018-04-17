@@ -18,6 +18,10 @@
 
 nav
   .nav-wrapper
+    ul
+      li
+        = link_to 'PDF', products_path, format: 'pdf', target: '_blank'
+
     ul.right
       - if can? :manage, Product
         li
@@ -45,7 +49,7 @@ nav
     tbody#products
       - @products.each do |product|
         tr id="row-#{product.id}"
-            = render partial: 'index_row', locals: {product: product}
+          = render partial: 'index_row', locals: {product: product}
 
 
 -if @products.length > 20   

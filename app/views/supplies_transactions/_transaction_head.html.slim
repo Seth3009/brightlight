@@ -25,21 +25,23 @@
 
 javascript:
   $('#trx_type').material_select();
-  $(document).ready(function() {
+  $( function() {
     $( ".employee_autocomplete" ).autocomplete({
         source: "/employees?format=json",
         max: 30,
         minLength: 4,
+        create: function() {
+          $(this).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+            return $( "<li>" )
+              .append( "<div>" + item.name +"</div>" )
+              .appendTo( ul );
+          }
+        },
         select: function( event, ui ) {
           insert_input_values(ui.item); 
           return false;
         }
-      })
-      .autocomplete( "instance" )._renderItem = function( ul, item ) {
-        return $( "<li>" )
-          .append( "<div>" + item.name +"</div>" )
-          .appendTo( ul );
-      };     
+      });     
   });
 
   function insert_input_values(employee) {
