@@ -3,7 +3,7 @@
     .input-field.col.m2
       = f.label :transaction_date, class: 'active'
       - if params[:employee_id]
-        = f.date_field :transaction_date, value: Time.now.strftime('%Y-%m-%d')                                               
+        = f.date_field :transaction_date, value: Datetime.now.strftime('%Y-%m-%d')                                               
       - elsif params[:action] =~ /edit/
         = f.date_field :transaction_date, disabled: true                                                
       - else

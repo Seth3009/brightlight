@@ -11,8 +11,8 @@ class SuppliesTransactionsController < ApplicationController
           @supplies_transactions = SuppliesTransaction.filter_query(params[:m], params[:y])
         else
           if params[:trx_date].present?
-            @supplies_transactions = SuppliesTransactionItem.joins('left join supplies_transactions on supplies_transactions.id = supplies_transaction_items.supplies_transaction_id')
-                                          .where("transaction_date at time zone 'utc' at time zone 'localtime' = ?", DateTime.parse(params[:trx_date]))
+            @supplies_transactions = SuppliesTransactionItem.joins('left join supplies_transactions on supplies_transactions.id = supplies_transaction_items.supplies_transaction_id')                                          
+                                          .where("transaction_date = ?", Time.zone.parse(params[:trx_date]))
           else
             redirect_to supplies_transactions_url(trx_date: Date.today,view:'daily')
           end

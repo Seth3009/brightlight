@@ -6,8 +6,8 @@ class SuppliesTransaction < ActiveRecord::Base
   
   scope :with_employee, lambda { joins('left join employees on employees.id = supplies_transactions.employee_id')}
   scope :filter_query, lambda { |m,y|
-    where("EXTRACT(MONTH from transaction_date at time zone 'utc' at time zone 'localtime') = ?",m)
-    .where("EXTRACT(YEAR from transaction_date at time zone 'utc' at time zone 'localtime') = ?",y)
+    where("EXTRACT(MONTH from transaction_date at time zone 'utc' at time zone 'Asia/Bangkok') = ?",m)
+    .where("EXTRACT(YEAR from transaction_date at time zone 'utc' at time zone 'Asia/Bangkok') = ?",y)
   }
   def self.count_item(supplies_transaction)
     if supplies_transaction.present?
