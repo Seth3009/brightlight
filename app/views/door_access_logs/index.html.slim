@@ -33,7 +33,7 @@ nav
   table.compact.striped
     thead
       tr
-        th = sort_link "time"
+        th = sort_link "created_at", "Time"
         th = sort_link "location"
         th = sort_link "card"
         th = sort_link "name"
@@ -47,8 +47,9 @@ nav
           td = log.name
           td = log.kind
 
-.toolbar.z-depth-1
-  = will_paginate @logs
+- if @logs.count >= @item_per_pages
+  .toolbar.z-depth-1
+    = will_paginate @logs
 
 
   
