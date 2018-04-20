@@ -50,15 +50,17 @@ javascript:
       source: "/book_editions?format=json",
       max: 50,
       minLength: 2,
+      create: function() {
+        $(this).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+          return $( "<li>" )
+            .append( "<div>" + item.title + " ISBN: " + (item.isbn13 ? item.isbn13 : item.isbn10 ? item.isbn10 : "-" )+"</div>" )
+            .appendTo( ul );
+        }
+      },
       select: function( event, ui ) {
         insert_row(ui.item);
       }
-    })
-    .autocomplete( "instance" )._renderItem = function( ul, item ) {
-      return $( "<li>" )
-        .append( "<div>" + item.title + " ISBN: " + (item.isbn13 ? item.isbn13 : item.isbn10 ? item.isbn10 : "-" )+"</div>" )
-        .appendTo( ul );
-    };
+    });
   } );
 
   function insert_row(edition) {

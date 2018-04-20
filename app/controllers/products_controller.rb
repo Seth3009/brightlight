@@ -21,6 +21,14 @@ class ProductsController < ApplicationController
         render text: @products.to_csv
       }
       format.json { @products = Product.search_query(params[:term]).active } 
+      format.pdf do
+        @products = Product.all.order(:name)
+        render pdf:         "List of Products",
+               disposition: 'inline',
+               template:    'products/index.pdf.slim',
+               layout:      'pdf.html',
+               show_as_html: params.key?('screen')
+      end
     end    
   end
 
