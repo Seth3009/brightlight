@@ -12,20 +12,17 @@ class ActivitySchedulesController < ApplicationController
       @activity_schedules = ActivitySchedule.where(academic_year_id:params[:year]).all
     else
       redirect_to activity_schedules_url(year: @year_id)
-    end
-    @time = ActivitySchedule.filter_day.select('activity').first
-    now = Time.parse(Time.now.to_s)
-    if now < Time.parse("15:15")
-      @pas = Time.now.strftime("%A")
-    else
-      @pas = "Salah" + Time.now.strftime("%a")
-    end
+    end   
   end
 
   # GET /activity_schedules/1
   # GET /activity_schedules/1.json
-  def show
-    @student_activities = StudentActivity.includes(:student).where(activity_schedule:@activity_schedule).all
+  def show    
+    @student_activities = StudentActivity.student_query                         
+                          .where(activity_schedule_id:@activity_schedule)
+                          .where('grade_sections_students.academic_year_id = ?', params[:year])
+                          
+
   end
 
   # GET /activity_schedules/new

@@ -1,7 +1,7 @@
 class ActivitySchedule < ActiveRecord::Base
   has_many :students, through: :student_activities
 
-
+  
   scope :filter_day, lambda {
     where(academic_year_id:AcademicYear.current_id)
     case Time.now.strftime("%a")

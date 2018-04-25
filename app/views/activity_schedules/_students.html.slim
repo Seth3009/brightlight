@@ -1,11 +1,19 @@
-h4 Activity Members
+nav.light
+  .nav-wrapper
+    ul
+      li 
+        .brand-logo style="margin-left: 20px; font-size:1.5em"
+          | Members
+
 
 .card-panel
   table
     thead
       tr
         th Name
+        th Class
     tbody
       - @student_activities.each do |student|
         tr
-          td = student.student.name
+          td = student.name
+          td = student.grade

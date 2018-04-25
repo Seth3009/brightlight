@@ -1,5 +1,5 @@
 
-h4 Activity Schedules (jamnya #{@pas} #{AcademicYear.current_id} and #{Time.now.strftime("%R")})
+h4 Activity Schedules
 
 ul#year-options.dropdown-content
   li  
@@ -59,11 +59,11 @@ nav
               i.material-icons check_box_outline_blank
           td.center                    
             - if (can? :manage, ActivitySchedule) && @disable_edit == false
-              = link_to edit_activity_schedule_path(activity_schedule)
+              = link_to edit_activity_schedule_url(activity_schedule)
                 i.material-icons edit
               = link_to activity_schedule, data: {:confirm => 'Are you sure?'}, :method => :delete
                 i.material-icons.red-text delete
-            = link_to activity_schedule
+            = link_to activity_schedule_url(activity_schedule,year:params[:year])
               i.material-icons visibility
 
   
