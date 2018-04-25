@@ -4,7 +4,15 @@ class ActivitySchedulesController < ApplicationController
   # GET /activity_schedules
   # GET /activity_schedules.json
   def index
-    @activity_schedules = ActivitySchedule.all
+    authorize! :read, ActivitySchedule
+    @year_id = params[:year] || AcademicYear.current_id
+    @disable_edit = @year_id.to_i != AcademicYear.current_id
+    @academic_year = AcademicYear.find @year_id
+    if params[:year].present?
+      @activity_schedules = ActivitySchedule.where(academic_year_id:params[:year]).all
+    else
+      redirect_to activity_schedules_url(year: @year_id)
+    end
   end
 
   # GET /activity_schedules/1
@@ -70,6 +78,6 @@ class ActivitySchedulesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def activity_schedule_params
-      params.require(:activity_schedule).permit(:activity, :start_date, :end_date, :sun_start, :sun_end, :mon_start, :mon_end, :tue_start, :tue_end, :wed_start, :wed_end, :thu_start, :thu_end, :fri_start, :fri_end, :sat_start, :sat_end, :is_active)
+      params.require(:activity_schedule).permit(:activity, :start_date, :end_date, :sun_start, :sun_end, :mon_start, :mon_end, :tue_start, :tue_end, :wed_start, :wed_end, :thu_start, :thu_end, :fri_start, :fri_end, :sat_start, :sat_end, :is_active, :academic_year)
     end
 end

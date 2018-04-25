@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180425032045) do
+ActiveRecord::Schema.define(version: 20180425051337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,10 +64,13 @@ ActiveRecord::Schema.define(version: 20180425032045) do
     t.time     "fri_end"
     t.time     "sat_start"
     t.time     "sat_end"
-    t.boolean  "is_active",  default: true
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.boolean  "is_active",        default: true
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "academic_year_id"
   end
+
+  add_index "activity_schedules", ["academic_year_id"], name: "index_activity_schedules_on_academic_year_id", using: :btree
 
   create_table "attachment_types", force: :cascade do |t|
     t.string   "code"
@@ -1625,6 +1628,7 @@ ActiveRecord::Schema.define(version: 20180425032045) do
     t.datetime "updated_at",  null: false
   end
 
+  add_foreign_key "activity_schedules", "academic_years"
   add_foreign_key "book_fines", "grade_levels"
   add_foreign_key "book_fines", "grade_sections"
   add_foreign_key "book_fines", "student_books"

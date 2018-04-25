@@ -1,41 +1,69 @@
-h1 Listing activity_schedules
 
-table
-  thead
-    tr
-      th Activity
-      th Start date
-      th End date
-      th Sunday      
-      th Monday      
-      th Tuesday      
-      th Wednesday
-      th Thursday
-      th Friday
-      th Saturday
-      th Is active
-      th
-      th
-      th
+h4 Activity Schedules
 
-  tbody
-    - @activity_schedules.each do |activity_schedule|
+ul#year-options.dropdown-content
+  li  
+    - AcademicYear.list_for_menu.each do |year|
+      li 
+        = link_to year.name, activity_schedules_path(params.merge(year:year.id).symbolize_keys)
+
+nav
+  .nav-wrapper
+    ul
+      li
+        a.dropdown-button href="#!" data-activates="year-options"
+          span#year = @academic_year.name
+          i.material-icons.right arrow_drop_down
+    ul.right
+      li 
+        = link_to new_activity_schedule_path
+          | New Activity
+          i.material-icons.left add
+
+.card-panel
+  table.compact
+    thead
       tr
-        td = activity_schedule.activity
-        td = activity_schedule.start_date.strftime("%d/%m/%Y")
-        td = activity_schedule.end_date.strftime("%d/%m/%Y")
-        td = activity_schedule.sun_start.strftime("%R") + " - " + activity_schedule.sun_end.strftime("%R")
-        td = activity_schedule.mon_start.strftime("%R") + " - " + activity_schedule.mon_end.strftime("%R")
-        td = activity_schedule.tue_start.strftime("%R") + " - " + activity_schedule.tue_end.strftime("%R")
-        td = activity_schedule.wed_start.strftime("%R") + " - " + activity_schedule.wed_end.strftime("%R")
-        td = activity_schedule.thu_start.strftime("%R") + " - " + activity_schedule.thu_end.strftime("%R")
-        td = activity_schedule.fri_start.strftime("%R") + " - " + activity_schedule.fri_end.strftime("%R")
-        td = activity_schedule.sat_start.strftime("%R") + " - " + activity_schedule.sat_end.strftime("%R")
-        td = activity_schedule.is_active
-        td = link_to 'Show', activity_schedule
-        td = link_to 'Edit', edit_activity_schedule_path(activity_schedule)
-        td = link_to 'Destroy', activity_schedule, data: {:confirm => 'Are you sure?'}, :method => :delete
+        th No.
+        th Activity
+        th.center Start date
+        th.center End date
+        th.center Sunday      
+        th.center Monday      
+        th.center Tuesday      
+        th.center Wednesday
+        th.center thursday
+        th.center Friday
+        th.center Saturday
+        th.center Is active
+        th.center Action
+        
+    tbody
+      - @activity_schedules.each_with_index do |activity_schedule, index|
+        tr
+          td = index + 1 
+          td = activity_schedule.activity
+          td.center = activity_schedule.start_date.strftime("%d/%m/%Y")
+          td.center = activity_schedule.end_date.strftime("%d/%m/%Y")
+          td.center = activity_schedule.sun_start.strftime("%R") + " - " + activity_schedule.sun_end.strftime("%R")
+          td.center = activity_schedule.mon_start.strftime("%R") + " - " + activity_schedule.mon_end.strftime("%R")
+          td.center = activity_schedule.tue_start.strftime("%R") + " - " + activity_schedule.tue_end.strftime("%R")
+          td.center = activity_schedule.wed_start.strftime("%R") + " - " + activity_schedule.wed_end.strftime("%R")
+          td.center = activity_schedule.thu_start.strftime("%R") + " - " + activity_schedule.thu_end.strftime("%R")
+          td.center = activity_schedule.fri_start.strftime("%R") + " - " + activity_schedule.fri_end.strftime("%R")
+          td.center = activity_schedule.sat_start.strftime("%R") + " - " + activity_schedule.sat_end.strftime("%R")
+          td.center 
+            - if activity_schedule.is_active
+              i.material-icons check_box
+            - else
+              i.material-icons check_box_outline_blank
+          td.center                    
+            - if (can? :manage, ActivitySchedule) && @disable_edit == false
+              = link_to edit_activity_schedule_path(activity_schedule)
+                i.material-icons edit
+              = link_to activity_schedule, data: {:confirm => 'Are you sure?'}, :method => :delete
+                i.material-icons.red-text delete
+            = link_to activity_schedule
+              i.material-icons visibility
 
-br
-
-= link_to 'New Activity schedule', new_activity_schedule_path
+  
