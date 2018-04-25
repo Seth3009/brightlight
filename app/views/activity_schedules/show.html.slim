@@ -1,0 +1,60 @@
+p#notice = notice
+
+p
+  strong Activity:
+  = @activity_schedule.activity
+p
+  strong Start date:
+  = @activity_schedule.start_date
+p
+  strong End date:
+  = @activity_schedule.end_date
+p
+  strong Sun start:
+  = @activity_schedule.sun_start
+p
+  strong Sun end:
+  = @activity_schedule.sun_end
+p
+  strong Mon start:
+  = @activity_schedule.mon_start
+p
+  strong Mon end:
+  = @activity_schedule.mon_end
+p
+  strong Tue start:
+  = @activity_schedule.tue_start
+p
+  strong Tue end:
+  = @activity_schedule.tue_end
+p
+  strong Wed start:
+  = @activity_schedule.wed_start
+p
+  strong Wed end:
+  = @activity_schedule.wed_end
+p
+  strong Thu start:
+  = @activity_schedule.thu_start
+p
+  strong Thu end:
+  = @activity_schedule.thu_end
+p
+  strong Fri start:
+  = @activity_schedule.fri_start
+p
+  strong Fri end:
+  = @activity_schedule.fri_end
+p
+  strong Sat start:
+  = @activity_schedule.sat_start
+p
+  strong Sat end:
+  = @activity_schedule.sat_end
+p
+  strong Is active:
+  = @activity_schedule.is_active
+
+= link_to 'Edit', edit_activity_schedule_path(@activity_schedule)
+'|
+= link_to 'Back', activity_schedules_path

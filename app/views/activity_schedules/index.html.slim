@@ -1,0 +1,41 @@
+h1 Listing activity_schedules
+
+table
+  thead
+    tr
+      th Activity
+      th Start date
+      th End date
+      th Sunday      
+      th Monday      
+      th Tuesday      
+      th Wednesday
+      th Thursday
+      th Friday
+      th Saturday
+      th Is active
+      th
+      th
+      th
+
+  tbody
+    - @activity_schedules.each do |activity_schedule|
+      tr
+        td = activity_schedule.activity
+        td = activity_schedule.start_date.strftime("%d/%m/%Y")
+        td = activity_schedule.end_date.strftime("%d/%m/%Y")
+        td = activity_schedule.sun_start.strftime("%R") + " - " + activity_schedule.sun_end.strftime("%R")
+        td = activity_schedule.mon_start.strftime("%R") + " - " + activity_schedule.mon_end.strftime("%R")
+        td = activity_schedule.tue_start.strftime("%R") + " - " + activity_schedule.tue_end.strftime("%R")
+        td = activity_schedule.wed_start.strftime("%R") + " - " + activity_schedule.wed_end.strftime("%R")
+        td = activity_schedule.thu_start.strftime("%R") + " - " + activity_schedule.thu_end.strftime("%R")
+        td = activity_schedule.fri_start.strftime("%R") + " - " + activity_schedule.fri_end.strftime("%R")
+        td = activity_schedule.sat_start.strftime("%R") + " - " + activity_schedule.sat_end.strftime("%R")
+        td = activity_schedule.is_active
+        td = link_to 'Show', activity_schedule
+        td = link_to 'Edit', edit_activity_schedule_path(activity_schedule)
+        td = link_to 'Destroy', activity_schedule, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Activity schedule', new_activity_schedule_path

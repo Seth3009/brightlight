@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :activity_schedules
   resources :employee_smartcards
   resources :stock_categories
   resources :stock_items

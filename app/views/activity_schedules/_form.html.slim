@@ -1,0 +1,63 @@
+= form_for @activity_schedule do |f|
+  - if @activity_schedule.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@activity_schedule.errors.count, "error")} prohibited this activity_schedule from being saved:"
+      ul
+        - @activity_schedule.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :activity
+    = f.text_field :activity
+  .field
+    = f.label :start_date
+    = f.date_select :start_date
+  .field
+    = f.label :end_date
+    = f.date_select :end_date
+  .field
+    = f.label :sun_start
+    = f.time_select :sun_start
+  .field
+    = f.label :sun_end
+    = f.time_select :sun_end
+  .field
+    = f.label :mon_start
+    = f.time_select :mon_start
+  .field
+    = f.label :mon_end
+    = f.time_select :mon_end
+  .field
+    = f.label :tue_start
+    = f.time_select :tue_start
+  .field
+    = f.label :tue_end
+    = f.time_select :tue_end
+  .field
+    = f.label :wed_start
+    = f.time_select :wed_start
+  .field
+    = f.label :wed_end
+    = f.time_select :wed_end
+  .field
+    = f.label :thu_start
+    = f.time_select :thu_start
+  .field
+    = f.label :thu_end
+    = f.time_select :thu_end
+  .field
+    = f.label :fri_start
+    = f.time_select :fri_start
+  .field
+    = f.label :fri_end
+    = f.time_select :fri_end
+  .field
+    = f.label :sat_start
+    = f.time_select :sat_start
+  .field
+    = f.label :sat_end
+    = f.time_select :sat_end
+  .field
+    = f.label :is_active
+    = f.check_box :is_active
+  .actions = f.submit

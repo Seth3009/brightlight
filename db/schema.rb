@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180411055422) do
+ActiveRecord::Schema.define(version: 20180424055821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,29 @@ ActiveRecord::Schema.define(version: 20180411055422) do
   end
 
   add_index "academic_years", ["slug"], name: "index_academic_years_on_slug", unique: true, using: :btree
+
+  create_table "activity_schedules", force: :cascade do |t|
+    t.string   "activity"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.time     "sun_start"
+    t.time     "sun_end"
+    t.time     "mon_start"
+    t.time     "mon_end"
+    t.time     "tue_start"
+    t.time     "tue_end"
+    t.time     "wed_start"
+    t.time     "wed_end"
+    t.time     "thu_start"
+    t.time     "thu_end"
+    t.time     "fri_start"
+    t.time     "fri_end"
+    t.time     "sat_start"
+    t.time     "sat_end"
+    t.boolean  "is_active",  default: true
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
 
   create_table "attachment_types", force: :cascade do |t|
     t.string   "code"
