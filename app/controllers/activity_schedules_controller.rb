@@ -13,6 +13,13 @@ class ActivitySchedulesController < ApplicationController
     else
       redirect_to activity_schedules_url(year: @year_id)
     end
+    @time = ActivitySchedule.filter_day.select('activity').first
+    now = Time.parse(Time.now.to_s)
+    if now < Time.parse("15:15")
+      @pas = Time.now.strftime("%A")
+    else
+      @pas = "Salah" + Time.now.strftime("%a")
+    end
   end
 
   # GET /activity_schedules/1
