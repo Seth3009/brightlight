@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180424055821) do
+ActiveRecord::Schema.define(version: 20180425032045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1337,6 +1337,16 @@ ActiveRecord::Schema.define(version: 20180424055821) do
   add_index "stock_items", ["created_by_id"], name: "index_stock_items_on_created_by_id", using: :btree
   add_index "stock_items", ["last_updated_by_id"], name: "index_stock_items_on_last_updated_by_id", using: :btree
 
+  create_table "student_activities", force: :cascade do |t|
+    t.integer  "student_id"
+    t.integer  "activity_schedule_id"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "student_activities", ["activity_schedule_id"], name: "index_student_activities_on_activity_schedule_id", using: :btree
+  add_index "student_activities", ["student_id"], name: "index_student_activities_on_student_id", using: :btree
+
   create_table "student_admission_infos", force: :cascade do |t|
     t.integer  "student_id"
     t.integer  "academic_year_id"
@@ -1700,6 +1710,8 @@ ActiveRecord::Schema.define(version: 20180424055821) do
   add_foreign_key "requisitions", "users", column: "created_by_id"
   add_foreign_key "requisitions", "users", column: "last_updated_by_id"
   add_foreign_key "smart_cards", "transports"
+  add_foreign_key "student_activities", "activity_schedules"
+  add_foreign_key "student_activities", "students"
   add_foreign_key "supplies_transaction_items", "item_categories"
   add_foreign_key "supplies_transaction_items", "item_units"
   add_foreign_key "supplies_transaction_items", "products"

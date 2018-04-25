@@ -10,6 +10,7 @@ class ActivitySchedulesController < ApplicationController
   # GET /activity_schedules/1
   # GET /activity_schedules/1.json
   def show
+    @student_activities = StudentActivity.includes(:student).where(activity_schedule:@activity_schedule).all
   end
 
   # GET /activity_schedules/new

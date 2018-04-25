@@ -1,0 +1,11 @@
+h4 Activity Members
+
+.card-panel
+  table
+    thead
+      tr
+        th Name
+    tbody
+      - @student_activities.each do |student|
+        tr
+          td = student.student.name

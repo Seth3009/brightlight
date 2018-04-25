@@ -1,60 +1,57 @@
-p#notice = notice
+- title "#{@activity_schedule.activity}"
 
-p
-  strong Activity:
-  = @activity_schedule.activity
-p
-  strong Start date:
-  = @activity_schedule.start_date
-p
-  strong End date:
-  = @activity_schedule.end_date
-p
-  strong Sun start:
-  = @activity_schedule.sun_start
-p
-  strong Sun end:
-  = @activity_schedule.sun_end
-p
-  strong Mon start:
-  = @activity_schedule.mon_start
-p
-  strong Mon end:
-  = @activity_schedule.mon_end
-p
-  strong Tue start:
-  = @activity_schedule.tue_start
-p
-  strong Tue end:
-  = @activity_schedule.tue_end
-p
-  strong Wed start:
-  = @activity_schedule.wed_start
-p
-  strong Wed end:
-  = @activity_schedule.wed_end
-p
-  strong Thu start:
-  = @activity_schedule.thu_start
-p
-  strong Thu end:
-  = @activity_schedule.thu_end
-p
-  strong Fri start:
-  = @activity_schedule.fri_start
-p
-  strong Fri end:
-  = @activity_schedule.fri_end
-p
-  strong Sat start:
-  = @activity_schedule.sat_start
-p
-  strong Sat end:
-  = @activity_schedule.sat_end
-p
-  strong Is active:
-  = @activity_schedule.is_active
+h4 #{@activity_schedule.activity}
 
-= link_to 'Edit', edit_activity_schedule_path(@activity_schedule)
-'|
-= link_to 'Back', activity_schedules_path
+nav.light
+  .nav-wrapper
+    ul
+      li
+        = link_to activity_schedules_path
+          i.material-icons.left chevron_left
+      li
+        .brand-logo style="margin-left: 20px; font-size:1.5em"
+          | Date: #{@activity_schedule.start_date.strftime("%d %b %Y")} to #{@activity_schedule.end_date.strftime("%d %b %Y")}
+      li.right
+        = link_to edit_activity_schedule_path(@activity_schedule)
+          | Edit
+          i.material-icons.left edit
+h4 Schedule
+.card-panel
+  .row
+    .col.s1
+      | Sunday 
+    .col.s2.left
+      | : #{@activity_schedule.sun_start.strftime("%I:%M %p")} - #{@activity_schedule.sun_end.strftime("%I:%M %p")}
+    .col.s1
+      | Tuesday
+    .col.s2.left
+      | : #{@activity_schedule.tue_start.strftime("%I:%M %p")} - #{@activity_schedule.tue_end.strftime("%I:%M %p")}
+    .col.s1
+      | Thursday
+    .col.s2.left
+      | : #{@activity_schedule.thu_start.strftime("%I:%M %p")} - #{@activity_schedule.thu_end.strftime("%I:%M %p")}
+    .col.s1
+      | Saturday
+    .col.s2.left
+      | : #{@activity_schedule.sat_start.strftime("%I:%M %p")} - #{@activity_schedule.sat_end.strftime("%I:%M %p")}
+  .row
+    .col.s1
+      | Monday 
+    .col.s2.left
+      | : #{@activity_schedule.mon_start.strftime("%I:%M %p")} - #{@activity_schedule.mon_end.strftime("%I:%M %p")}
+    .col.s1
+      | Wednesday
+    .col.s2.left
+      | : #{@activity_schedule.wed_start.strftime("%I:%M %p")} - #{@activity_schedule.wed_end.strftime("%I:%M %p")}
+    .col.s1
+      | Friday
+    .col.s2.left
+      | : #{@activity_schedule.fri_start.strftime("%I:%M %p")} - #{@activity_schedule.fri_end.strftime("%I:%M %p")}  
+    .col.s1
+      | Status
+    .col.s2.left
+      - if @activity_schedule.is_active
+        | : Ongoing
+      - else
+        | : Ended 
+= render 'students'

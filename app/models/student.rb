@@ -10,7 +10,8 @@ class Student < ActiveRecord::Base
 	has_many :book_fines, dependent: :restrict_with_error
 	has_one  :passenger
 	has_one  :transport, through: :passenger
-	has_one  :badge
+  has_one  :badge
+  has_many :activity_schedules, through: :student_activities
 
 	belongs_to :family
 
