@@ -111,6 +111,13 @@ class StudentsController < ApplicationController
     end
   end
 
+  def get_students
+    @students = Student
+              .joins('left join grade_sections_students on grade_sections_students.student_id = students.id')
+              .joins('left join grade_sections on grade_sections.id = grade_sections_students.grade_section_id')
+              .where('grade_sections_students.academic_year_id=?',params[:year]).all
+              .select('students.id, students.name,students.gender, students.student_no, grade_sections.name as section')
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_student

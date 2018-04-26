@@ -3,7 +3,7 @@ class ActivitySchedule < ActiveRecord::Base
 
   
   scope :filter_day, lambda {
-    where(academic_year_id:AcademicYear.current_id)
+    where(academic_year_id:AcademicYear.current_id)    
     case Time.now.strftime("%a")
     when "Sun"
       where('sun_start <= ? AND sun_end >= ?',Time.now.strftime("%R"),Time.now.strftime("%R"))  
@@ -12,7 +12,7 @@ class ActivitySchedule < ActiveRecord::Base
     when "Tue"
       where('tue_start <= ? AND tue_end >= ?',Time.now.strftime("%R"),Time.now.strftime("%R"))
     when "Wed"
-      where('wed_start <= ? AND wed_end >= ?',Time.now.strftime("%R"),Time.now.strftime("%R"))
+      where('wed_start <= ? AND wed_end >= ?',Time.now.strftime("%R"),Time.now.strftime("%R"))      
     when "Thu"
       where('thu_start <= ? AND thu_end >= ?',Time.now.strftime("%R"),Time.now.strftime("%R"))
     when "Fri"
@@ -20,5 +20,6 @@ class ActivitySchedule < ActiveRecord::Base
     else
       where('sat_start <= ? AND sat_end >= ?',Time.now.strftime("%R"),Time.now.strftime("%R"))
     end
+    .where('start_date <= ? AND end_date >= ?',Date.today,Date.today)
   }
 end

@@ -40,7 +40,7 @@ Rails.application.routes.draw do
   end 
 
   get 'leave_requests/:id/approve/:page' => 'leave_requests#approve', as: :approve
-  
+  get 'get_students' => 'students#get_students', as: :get_students
   resources :supplies_transactions do
     collection do
       get 'recap'
@@ -157,6 +157,7 @@ Rails.application.routes.draw do
   get 'student_books/titles' => 'student_books#titles', as: :titles_student_books
   post 'student_books/finalize' => 'student_books#finalize', as: :finalize_student_books
   post 'student_books/prepare_student_books' => 'student_books#prepare', as: :prepare_student_books
+  post 'student_activities/insert_multiple_member' => 'student_activities#insert_multiple_member', as: :insert_multiple_member
 
   resources :students do
     resources :student_books, shallow: true

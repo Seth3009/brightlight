@@ -4,7 +4,11 @@ nav.light
       li 
         .brand-logo style="margin-left: 20px; font-size:1.5em"
           | Members
-
+    ul.right
+      li
+        = link_to get_students_url(year:params[:year])
+          | Add Member
+          i.material-icons.left add
 
 .card-panel
   table
@@ -17,3 +21,12 @@ nav.light
         tr
           td = student.name
           td = student.grade
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content
