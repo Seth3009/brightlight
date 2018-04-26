@@ -34,7 +34,7 @@ javascript:
       }
     });
   
-
+  /*
   $("tbody#supplies_transaction").on("keypress", "tr", function (e) {
     if (e.keyCode == 13) {
       e.preventDefault();
@@ -51,10 +51,11 @@ javascript:
       return false;
       }
   });
+  */
 
   var insert_values = function (data, el) {
     var product = data;
-    console.log (product);
+
     el.find("[name$='[barcode]']").val(product.barcode);
     el.find(".names").html("<p>"+product.name+"</p>");
     el.find(".units").html("<p>"+product.unit+"</p>");    
@@ -85,3 +86,29 @@ javascript:
       $("#add-row").hide();     
     }
   });
+
+  $(document).on('cocoon:after-insert', function() {
+    $( ".product_autocomplete" ).autocomplete({
+        source: "/products?format=json",
+        max: 30,
+        minLength: 4,
+        create: function() {
+          $(this).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+            return $( "<li>" )
+              .append( "<div>" + item.name +"</div>" )
+              .appendTo( ul );
+          }
+        },
+        select: function( event, ui ) {
+          insert_product_values(event.target, ui.item); 
+          return false;
+        }
+      });  
+    
+    function insert_product_values(el, product) {
+      let row = $(el).closest('tr');
+      $(el).val(product.name);
+      insert_values(product, row);
+    }   
+  });
+
