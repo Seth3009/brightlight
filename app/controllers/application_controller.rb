@@ -59,7 +59,7 @@ class ApplicationController < ActionController::Base
   end 
 
   def unread_messages
-    Message.all.unread(current_user)
+    Message.all.unread(current_user).includes(:creator)
   end
 
   def not_found

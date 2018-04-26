@@ -20,7 +20,7 @@ class ProductsController < ApplicationController
         @products = Product.all.order(:name)
         render text: @products.to_csv
       }
-      format.json { @products = Product.search_query(params[:term]).active } 
+      format.json { @products = Product.includes([:item_unit, :item_category]).search_query(params[:term]).active } 
       format.pdf do
         @products = Product.joins('left join item_categories on item_categories.id = products.item_category_id')
                     .select('products.*, item_categories.name as catg')
