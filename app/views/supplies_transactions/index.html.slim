@@ -29,14 +29,15 @@ nav
 
     
           
-.card-panel
-  table.compact.striped
-    - if params[:view] == 'monthly'
-      = render 'monthly_list'
-    - else
-      = render 'daily_list'
-      
 
+- if params[:view] == 'monthly'
+  = render 'monthly_list'
+- else
+  = render 'daily_list'
+      
+- if @supplies_transactions.count > 20
+  .toolbar.z-index-1
+    = will_paginate @supplies_transactions
 
 #show-modal.modal.modal-fixed-footer
   #show-modal-content         

@@ -10,17 +10,17 @@ class ProductsController < ApplicationController
       format.html {
         items_per_page = 20
         if params[:search]
-          @products = Product.all.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
+          @products = Product.get_all.where('UPPER(name) LIKE ?', "%#{params[:search].upcase}%").paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
         else
-          @products = Product.all.paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
+          @products = Product.get_all.paginate(page: params[:page], per_page: items_per_page).order("#{sort_column} #{sort_direction}")
         end
       }
       
       format.csv {
-        @products = Product.all.order(:name)
+        @products = Product.get_all.order(:name)
         render text: @products.to_csv
       }
-      format.json { @products = Product.search_query(params[:term]).active } 
+      format.json { @products = Product.get_all.search_query(params[:term]).active } 
       format.pdf do
         @products = Product.all.order(:name)
         render pdf:         "List of Products",
@@ -35,6 +35,7 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
+    
   end
 
   # GET /products/new
@@ -123,7 +124,7 @@ class ProductsController < ApplicationController
     @stocks = Product.joins('left join supplies_transaction_items on supplies_transaction_items.product_id = products.id')
                       .joins('left join supplies_transactions on supplies_transactions.id = supplies_transaction_items.supplies_transaction_id')
                       .joins('left join employees on employees.id = supplies_transactions.employee_id')
-                      .select("employees.name, transaction_date at time zone 'utc' at time zone 'localtime' as date, supplies_transaction_items.in_out as type, supplies_transaction_items.qty, products.min_stock, products.item_unit_id ")
+                      .select("employees.name, transaction_date as date, supplies_transaction_items.in_out as type, supplies_transaction_items.qty, products.min_stock, products.item_unit_id ")
                       .where('products.id = ?',params[:id]).order('date') 
     # respond_to do |format|
     #   format.html {
@@ -137,7 +138,7 @@ class ProductsController < ApplicationController
    
     # Enable Sort column
     def sortable_columns 
-      [:code, :name]
+      [:barcode, :name, :is_active]
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_product 

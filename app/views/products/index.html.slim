@@ -33,8 +33,8 @@ nav
   table.compact.striped
     thead
       tr
-        th Code
-        th Name
+        th = sort_link "barcode"
+        th = sort_link "name"
         th Price
         th Min stock
         th Max stock
@@ -42,7 +42,7 @@ nav
         th Per Packs
         th Packs Unit
         th Item category
-        th Is active        
+        th = sort_link "is_active", "Is active"
         th Actions
         
 

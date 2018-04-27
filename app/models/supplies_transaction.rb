@@ -4,17 +4,16 @@ class SuppliesTransaction < ActiveRecord::Base
   has_many :supplies_transaction_items, -> { order(:id) }, dependent: :destroy  
   accepts_nested_attributes_for :supplies_transaction_items, reject_if: :all_blank, allow_destroy: true
   
+  after_save :update_count_item
+
   scope :with_employee, lambda { joins('left join employees on employees.id = supplies_transactions.employee_id')}
   scope :filter_query, lambda { |m,y|
-    where("EXTRACT(MONTH from transaction_date at time zone 'utc' at time zone 'Asia/Bangkok') = ?",m)
-    .where("EXTRACT(YEAR from transaction_date at time zone 'utc' at time zone 'Asia/Bangkok') = ?",y)
+    where("EXTRACT(MONTH from transaction_date) = ?",m)
+    .where("EXTRACT(YEAR from transaction_date) = ?",y)
   }
-  def self.count_item(supplies_transaction)
-    if supplies_transaction.present?
-      count_item = SuppliesTransactionItem.where(:supplies_transaction_id => supplies_transaction).count
-      if count_item      
-        SuppliesTransaction.find(supplies_transaction).update(itemcount: count_item)
-      end
-    end
+
+  def update_count_item
+    
   end
+  
 end

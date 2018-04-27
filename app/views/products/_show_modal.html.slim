@@ -1,0 +1,38 @@
+
+.card-panel
+  .row
+    col.s10
+      .list_description
+        dl.row
+          dd.col.s4
+            .label Item Category
+            .item = @product.item_category.present? ? @product.item_category.name : "--"  
+        dl.row
+          dd.col.s2
+            .label Barcode
+            .item = @product.barcode
+          dd.col.s10
+            .label Item name
+            .item = @product.name
+        dl.row
+          dd.col.s2
+            .label price
+            .item = @product.price
+          dd.col.s2
+            .label min. stock
+            .item = @product.min_stock
+          dd.col.s2
+            .label max. stock
+            .item = @product.max_stock
+          dd.col.s3
+            .label item unit
+            .item = @product.item_unit.name
+        dl.row
+          dd.col.s2
+            .label packs size
+            .item = @product.packs
+          dd.col.s4
+            .label packs unit
+            .item = @product.packs_unit
+          
+     

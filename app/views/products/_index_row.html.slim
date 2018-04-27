@@ -1,6 +1,6 @@
 tr id="row-#{product.id}"    
-  td = product.code
-  td = product.name
+  td = product.barcode
+  td = link_to product.name, product, remote: true
   td = product.price
   td = product.min_stock
   td = product.max_stock
