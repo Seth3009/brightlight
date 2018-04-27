@@ -59,8 +59,7 @@ class SuppliesTransactionItemsController < ApplicationController
   def destroy    
     authorize! :manage, SuppliesTransactionItem
     if @supplies_transaction_item.present?      
-      @supplies_transaction_item.destroy
-      SuppliesTransaction.count_item(@supplies_transaction_item.supplies_transaction_id)   
+      @supplies_transaction_item.destroy      
       respond_to do |format|
         format.html { redirect_to :back, notice: 'Supplies transaction item was successfully destroyed.' }
         format.json { head :no_content }

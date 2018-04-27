@@ -17,10 +17,10 @@ class ProductsController < ApplicationController
       }
       
       format.csv {
-        @products = Product.all.order(:name)
+        @products = Product.get_all.order(:name)
         render text: @products.to_csv
       }
-      format.json { @products = Product.includes([:item_unit, :item_category]).search_query(params[:term]).active } 
+      format.json { @products = Product.get_all.search_query(params[:term]).active } 
       format.pdf do
         @products = Product.joins('left join item_categories on item_categories.id = products.item_category_id')
                     .select('products.*, item_categories.name as catg')
@@ -37,6 +37,7 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
+    
   end
 
   # GET /products/new
@@ -125,7 +126,7 @@ class ProductsController < ApplicationController
     @stocks = Product.joins('left join supplies_transaction_items on supplies_transaction_items.product_id = products.id')
                       .joins('left join supplies_transactions on supplies_transactions.id = supplies_transaction_items.supplies_transaction_id')
                       .joins('left join employees on employees.id = supplies_transactions.employee_id')
-                      .select("employees.name, transaction_date at time zone 'utc' at time zone 'localtime' as date, supplies_transaction_items.in_out as type, supplies_transaction_items.qty, products.min_stock, products.item_unit_id ")
+                      .select("employees.name, transaction_date as date, supplies_transaction_items.in_out as type, supplies_transaction_items.qty, products.min_stock, products.item_unit_id ")
                       .where('products.id = ?',params[:id]).order('date') 
     # respond_to do |format|
     #   format.html {
@@ -139,7 +140,7 @@ class ProductsController < ApplicationController
    
     # Enable Sort column
     def sortable_columns 
-      [:code, :name, 'item_categories.name', :is_active]
+      [:barcode, :name, :is_active]
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_product 

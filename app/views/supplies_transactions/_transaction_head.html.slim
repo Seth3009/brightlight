@@ -10,6 +10,10 @@
     .input-field.col.m2 
       = f.label '', 'Transaction Type', class: 'active'     
       = select_tag 'in_out', options_for_select(["IN", "OUT"],"OUT"), id: "trx_type"
+  .row
+    .input-field.col.m12
+      = f.label '', 'Transaction Notes', class: 'active'
+      = f.text_field :notes, placeholder: "You can fill notes for this transaction here"
 
 javascript:
   $('#trx_type').material_select();
