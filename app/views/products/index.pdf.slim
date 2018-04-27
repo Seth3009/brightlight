@@ -1,34 +1,22 @@
-h4 List of Products
+h4 Products Catalog
 
-table.compact.striped
-  thead
-    tr
-      th Code
-      th Name
-      th Price
-      th Min stock
-      th Max stock
-      th Item unit
-      th Per Packs
-      th Packs Unit
-      th Item category
-      th Is active        
-      th Barcode
-      
+- catg_id = 0
+- @products.each do |product|
+  .cell id="row-#{product.id}"
+    em = product.item_category.try(:name)
+    - Barcode.new(product.barcode).write_image 
+    div = wicked_pdf_image_tag "/assets/images/#{product.barcode.upcase}.PNG"
+    div = product.barcode
+    div = product.name
 
-  tbody#products
-    - @products.each do |product|
-      tr id="row-#{product.id}"    
-        td = product.code
-        td = product.name
-        td = product.price
-        td = product.min_stock
-        td = product.max_stock
-        td = product.item_unit.try(:name)
-        td = product.packs || "--"
-        td = product.packs_unit || "--"
-        td = product.item_category.try(:name)
-        td = product.is_active ? 'Yes' : 'No'     
-        td 
-          - Barcode.new(product.barcode).write_image 
-          div = wicked_pdf_image_tag  "/assets/images/#{product.barcode.upcase}.PNG"
+
+css:
+  .cell {
+    display: inline-block;
+    width: 200px;
+    padding: 5px 10px;
+  }
+  h6 {
+    margin: 5px 0px 0px 0px;
+    font-size: 1.4em;
+  }

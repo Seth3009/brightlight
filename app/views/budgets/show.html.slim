@@ -1,11 +1,11 @@
 - title 'Budget'
-
+h4 = "#{@budget.academic_year.try(:name)} Budget for #{@budget.department.try(:name)}"
 nav
   .nav-wrapper
     ul
       li
         = link_to budgets_path
-          | All budgets
+          | All Departments
           i.material-icons.left chevron_left
     ul.right
       li
@@ -16,6 +16,30 @@ nav
   ul.collapsible data-collapsible="expandable"
     li
       .collapsible-header.active
+        | Items
+        i.material-icons.left.arrow chevron_right
+      .collapsible-body.container-padding
+        table.compact.striped
+          thead
+            tr
+              th Description
+              -@column_headers.each do |h|
+                th style="text-align: right"
+                  = Budget::MONTHS.key(h).to_s.humanize
+              th style="text-align: right" Total
+              
+          tbody
+            - @budget_table.rows.each_with_index do |row, row_no|
+              tr
+                td = @budget_table.row_headers[row_no]
+                - row.data.each do |cell|
+                  td style="text-align: right"
+                    = number_with_precision(cell.amount, :precision => 0, :delimiter => ',') rescue "-"
+                
+                td style="font-weight: bold; text-align: right"
+                  = number_with_precision(@budget_table.rows[row_no].total, :precision => 0, :delimiter => ',') rescue "-"
+    li
+      .collapsible-header
         | Detail
         i.material-icons.left.arrow chevron_right
       .collapsible-body
@@ -38,27 +62,6 @@ nav
               .item = number_with_precision(@budget.total_amt, :precision => 0, :delimiter => ',') rescue "0"
     li
       .collapsible-header
-        | Items
-        i.material-icons.left.arrow chevron_right
-      .collapsible-body.container-padding
-        table.compact.striped
-          thead
-            tr
-              th Description
-              -@column_headers.each do |h|
-                th style="text-align: right"
-                  = Budget::MONTHS.key(h).to_s.humanize
-              
-          tbody
-            - @budget_table.rows.each_with_index do |row, row_no|
-              tr
-                td = @budget_table.row_headers[row_no]
-
-                - row.data.each_with_index do |cell, i|
-                  td style="text-align: right"
-                    = number_with_precision(cell.amount, :precision => 0, :delimiter => ',') rescue "-"
-    li
-      .collapsible-header
         | Approval
         i.material-icons.left.arrow chevron_right
       .collapsible-body
@@ -74,9 +77,3 @@ nav
             .col.m12
               .label Notes
               .item = @budget.notes
-javascript:
-  $(document).on('ready page:load', function(){
-    $('.collapsible').collapsible({
-      accordion: false
-    });
-  });

@@ -40,7 +40,7 @@ Rails.application.routes.draw do
 
   get 'leave_requests/:id/approve/:page' => 'leave_requests#approve', as: :approve
   
-  resources :supplies_transactions do
+  resources :supplies_transactions, except: [:edit, :update] do
     collection do
       get 'recap'
     end

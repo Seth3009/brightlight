@@ -20,7 +20,7 @@ nav
   .nav-wrapper
     ul
       li
-        = link_to 'PDF', products_path, format: 'pdf', target: '_blank'
+        = link_to 'Catalog (PDF)', products_path(format: 'pdf'), target: '_blank'
 
     ul.right
       - if can? :manage, Product
@@ -38,11 +38,11 @@ nav
         th Price
         th Min stock
         th Max stock
-        th Item unit
+        th Item Unit
         th Per Packs
         th Packs Unit
-        th Item category
-        th = sort_link "is_active", "Is active"
+        th = sort_link "item_categories.name", "Item Category"
+        th = sort_link "is_active"
         th Actions
         
 
@@ -52,7 +52,7 @@ nav
           = render partial: 'index_row', locals: {product: product}
 
 
--if @products.length > 20   
+- if @products.length >= 20   
   .toolbar.z-index-1
     = will_paginate @products
 
