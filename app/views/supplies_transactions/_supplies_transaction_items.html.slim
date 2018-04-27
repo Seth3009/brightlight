@@ -39,7 +39,7 @@ javascript:
     var product = data;
 
     el.find("[name$='[barcode]']").val(product.barcode);
-    el.find(".names").html("<p>"+product.name+"</p>");
+    el.find(".product_autocomplete").val(product.name);
     el.find(".units").html("<p>"+product.unit+"</p>");    
     el.find(".product_id").val(product.id);
     el.find("[name$='[item_unit_id]']").val(product.item_unit_id);
@@ -75,6 +75,7 @@ javascript:
     function insert_product_values(el, product) {
       let row = $(el).closest('tr');
       $(el).val(product.name);
+      console.log(product);
       insert_values(product, row);
     }   
   });
@@ -84,4 +85,3 @@ javascript:
       $(this).closest('tr').find(".product_id").val(null);
     }
   });
-
