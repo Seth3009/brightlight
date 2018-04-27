@@ -1,6 +1,6 @@
 class SuppliesTransactionsController < ApplicationController
-  before_action :set_supplies_transaction, only: [:show, :edit, :update, :destroy]
-  after_action :set_count, only: [:create, :update]
+  before_action :set_supplies_transaction, only: [:show, :destroy]
+
   # GET /supplies_transactions
   # GET /supplies_transactions.json
   def index
@@ -31,11 +31,7 @@ class SuppliesTransactionsController < ApplicationController
   def new
     authorize! :read, SuppliesTransaction
     @product = Product.all
-    @supplies_transaction = SuppliesTransaction.new   
-  end
-
-  # GET /supplies_transactions/1/edit
-  def edit
+    @supplies_transaction = SuppliesTransaction.new
   end
 
   # POST /supplies_transactions
@@ -50,21 +46,6 @@ class SuppliesTransactionsController < ApplicationController
         format.json { render :show, status: :created, location: @supplies_transaction }
       else
         format.html { render :new }
-        format.json { render json: @supplies_transaction.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /supplies_transactions/1
-  # PATCH/PUT /supplies_transactions/1.json
-  def update
-    authorize! :manage, SuppliesTransaction
-    respond_to do |format|
-      if @supplies_transaction.update(supplies_transaction_params)
-        format.html { redirect_to supplies_transactions_url, notice: 'Supplies transaction was successfully updated.' }
-        format.json { render :show, status: :ok, location: @supplies_transaction }
-      else
-        format.html { render :edit }
         format.json { render json: @supplies_transaction.errors, status: :unprocessable_entity }
       end
     end
@@ -117,9 +98,6 @@ class SuppliesTransactionsController < ApplicationController
       [:transaction_date, :name]
     end
 
-    def set_count
-      SuppliesTransaction.count_item(@supplies_transaction.id)
-    end
     # Use callbacks to share common setup or constraints between actions.
     def set_supplies_transaction      
       @supplies_transaction = SuppliesTransaction.find(params[:id])      
