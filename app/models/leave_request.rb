@@ -75,7 +75,7 @@ class LeaveRequest < ActiveRecord::Base
     self.is_canceled = true
     self.save
     cc = [self.employee.try(:department).try(:manager), Department.find_by(code: 'HR').manager]
-    email = EmailNotification.leave_canceled(self, self.employee, cc)
+    email = EmailNotification.leave_canceled(self, self.employee, cc).deliver_now
     notification = Message.new_from_email(email)
     notification.save
   end

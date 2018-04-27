@@ -5,8 +5,8 @@ class MessagesController < ApplicationController
   # GET /messages.json
   def index
     respond_to do |format|
-      format.html { @messages = Message.for(current_user) } # from application_controller
-      format.json { @messages = Message.for(params[:id]) rescue [] }  
+      format.html { @messages = Message.includes(:creator).for(current_user) } # from application_controller
+      format.json { @messages = Message.includes(:creator).for(params[:id]) rescue [] }  
     end
   end
 
