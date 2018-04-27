@@ -28,3 +28,6 @@ Gemfile.lock
 # Ignore vscode stuff
 /.vscode
 
+# Ignore rbenv's ruby version
+.ruby-version
+
