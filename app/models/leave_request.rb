@@ -23,6 +23,7 @@ class LeaveRequest < ActiveRecord::Base
 
   scope :hrlist, ->  { 
     submitted
+    .active
     .where("spv_approval = true or leave_type = 'Sick' or leave_type = 'Family Matter'")
     .order(spv_date: :desc, form_submit_date: :desc, updated_at: :desc)
   }
@@ -71,10 +72,10 @@ class LeaveRequest < ActiveRecord::Base
   end
 
   def cancel 
-    is_canceled = true
+    self.is_canceled = true
     self.save
-    cc = [employee.try(:department).try(:manager), Department.find_by(code: 'HR').manager]
-    email = EmailNotification.leave_canceled(self, employee, cc)
+    cc = [self.employee.try(:department).try(:manager), Department.find_by(code: 'HR').manager]
+    email = EmailNotification.leave_canceled(self, self.employee, cc)
     notification = Message.new_from_email(email)
     notification.save
   end
