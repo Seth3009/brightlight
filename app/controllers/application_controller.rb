@@ -35,8 +35,6 @@ class ApplicationController < ActionController::Base
   end
 
   def set_current_academic_year
-    # @current_academic_year = AcademicYear.find(session[:year_id] ||= AcademicYear.current_year.take.id)
-    # AcademicYear.current = @current_academic_year
     AcademicYear.current_id = session[:year_id] || AcademicYear.current.id
     AcademicYear.current_name = session[:year] || AcademicYear.current.name
     session[:year_id] ||= AcademicYear.current_id
