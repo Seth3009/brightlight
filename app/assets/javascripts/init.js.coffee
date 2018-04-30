@@ -1,7 +1,7 @@
 window.App ||= {}
 
 App.init = ->
-  $('select[data-dynamic-selectable-url][data-dynamic-selectable-target]').dynamicSelectable()
+  $('select').material_select()
 
 $(document).on "ready page:load", ->
   App.init()
