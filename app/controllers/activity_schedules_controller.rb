@@ -82,6 +82,6 @@ class ActivitySchedulesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def activity_schedule_params
-      params.require(:activity_schedule).permit(:activity, :start_date, :end_date, :sun_start, :sun_end, :mon_start, :mon_end, :tue_start, :tue_end, :wed_start, :wed_end, :thu_start, :thu_end, :fri_start, :fri_end, :sat_start, :sat_end, :is_active, :academic_year)
+      params.require(:activity_schedule).permit(:activity, :start_date, :end_date, :sun_start, :sun_end, :mon_start, :mon_end, :tue_start, :tue_end, :wed_start, :wed_end, :thu_start, :thu_end, :fri_start, :fri_end, :sat_start, :sat_end, :is_active, :academic_year_id)
     end
 end

@@ -1,6 +1,8 @@
 class ActivitySchedule < ActiveRecord::Base
   has_many :students, through: :student_activities
-
+  validates :activity, presence: true
+  validates :start_date, presence: true
+  validates :end_date, presence: true
   
   scope :filter_day, lambda {
     where(academic_year_id:AcademicYear.current_id)    

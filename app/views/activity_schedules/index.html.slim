@@ -16,7 +16,7 @@ nav
           i.material-icons.right arrow_drop_down
     ul.right
       li 
-        = link_to new_activity_schedule_path
+        = link_to new_activity_schedule_path(year:params[:year])
           | New Activity
           i.material-icons.left add
 
@@ -45,13 +45,55 @@ nav
           td = activity_schedule.activity
           td.center = activity_schedule.start_date.strftime("%d/%m/%Y")
           td.center = activity_schedule.end_date.strftime("%d/%m/%Y")
-          td.center = activity_schedule.sun_start.strftime("%R") + " - " + activity_schedule.sun_end.strftime("%R")
-          td.center = activity_schedule.mon_start.strftime("%R") + " - " + activity_schedule.mon_end.strftime("%R")
-          td.center = activity_schedule.tue_start.strftime("%R") + " - " + activity_schedule.tue_end.strftime("%R")
-          td.center = activity_schedule.wed_start.strftime("%R") + " - " + activity_schedule.wed_end.strftime("%R")
-          td.center = activity_schedule.thu_start.strftime("%R") + " - " + activity_schedule.thu_end.strftime("%R")
-          td.center = activity_schedule.fri_start.strftime("%R") + " - " + activity_schedule.fri_end.strftime("%R")
-          td.center = activity_schedule.sat_start.strftime("%R") + " - " + activity_schedule.sat_end.strftime("%R")
+          td.center 
+            - if activity_schedule.sun_start.strftime("%R") == "00:00"
+              span.box.black
+                | N/A
+            - else 
+              span.box.green
+                = activity_schedule.sun_start.strftime("%R") + " - " + activity_schedule.sun_end.strftime("%R")
+          td.center 
+            - if activity_schedule.mon_start.strftime("%R") == "00:00" 
+              span.box.black
+                | N/A
+            - else
+              span.box.green 
+                = activity_schedule.mon_start.strftime("%R") + " - " + activity_schedule.mon_end.strftime("%R")
+          td.center  
+            - if activity_schedule.tue_start.strftime("%R") == "00:00" 
+              span.box.black
+                | N/A
+            - else 
+              span.box.green
+                = activity_schedule.tue_start.strftime("%R") + " - " + activity_schedule.tue_end.strftime("%R")
+          td.center 
+            - if activity_schedule.wed_start.strftime("%R") == "00:00"
+              span.box.black
+                | N/A
+            - else 
+              span.box.green
+                = activity_schedule.wed_start.strftime("%R") + " - " + activity_schedule.wed_end.strftime("%R")
+          td.center 
+            - if activity_schedule.thu_start.strftime("%R") == "00:00"
+              span.box.black
+                | N/A
+            - else
+              span.box.green
+                = activity_schedule.thu_start.strftime("%R") + " - " + activity_schedule.thu_end.strftime("%R")
+          td.center 
+            - if activity_schedule.fri_start.strftime("%R") == "00:00"
+              span.box.black
+                | N/A
+            - else
+              span.box.green
+                = activity_schedule.fri_start.strftime("%R") + " - " + activity_schedule.fri_end.strftime("%R")
+          td.center
+            - if activity_schedule.sat_start.strftime("%R") == "00:00"
+              span.box.black
+                | N/A
+            - else
+              span.box.green
+                = activity_schedule.sat_start.strftime("%R") + " - " + activity_schedule.sat_end.strftime("%R")
           td.center 
             - if activity_schedule.is_active
               i.material-icons check_box
@@ -59,7 +101,7 @@ nav
               i.material-icons check_box_outline_blank
           td.center                    
             - if (can? :manage, ActivitySchedule) && @disable_edit == false
-              = link_to edit_activity_schedule_url(activity_schedule)
+              = link_to edit_activity_schedule_url(activity_schedule, year:params[:year])
                 i.material-icons edit
               = link_to activity_schedule, data: {:confirm => 'Are you sure?'}, :method => :delete
                 i.material-icons.red-text delete
