@@ -1576,10 +1576,9 @@ section {
 // ============================================ Print ===========================================
 
 @media print {
-	footer, nav  {
-		display: none;
-	}
-	header {
+	nav { box-shadow: none }
+	.nav-wrapper { display: none }
+	footer, header, nav {
 		display: table-header-group;
 	}
 	#main {
@@ -1587,7 +1586,7 @@ section {
 	}
 	html, body {
 		font: 10pt Roboto, Cambria, Arial, sans-serif;
-
+		line-height: 1.1;
 	}
 	.card, .card-panel {
 		border: 0 0 1px 0;
