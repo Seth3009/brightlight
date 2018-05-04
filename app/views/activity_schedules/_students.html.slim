@@ -6,27 +6,25 @@ nav.light
           | Members
     ul.right
       li
-        = link_to get_students_url(year:params[:year])
+        = link_to students_activity_schedule_url
           | Add Member
           i.material-icons.left add
 
-.card-panel
-  table
-    thead
-      tr
-        th Name
-        th Class
-    tbody
-      - @student_activities.each do |student|
-        tr
-          td = student.name
-          td = student.grade
+= form_for @activity_schedule do |f|
+  .card-panel
+    .label Student List
 
-#show-modal.modal.modal-fixed-footer
-  .modal-content
-    #modal-content
-  .modal-footer
-    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
-    
-#edit-modal.modal.modal-fixed-footer
-  #edit-modal-content
+    .row.header.compact
+      .col.s4 Name 
+      .col.s2 Grade
+      .col.s2.center Action
+    #students.row.compact
+      = f.fields_for :student_activities, @students do |student_activity|
+          .nested-fields
+            = render 'student_activities_fields', f: student_activity
+            
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', activity_schedules_path(year:params[:year]), class: "waves-effect waves-light btn-flat"
+  
+  = hidden_field_tag :year, params[:year]

@@ -1,9 +1,12 @@
 class StudentActivity < ActiveRecord::Base
   belongs_to :student
   belongs_to :activity_schedule
+  belongs_to :academic_year
 
   validates :student, presence: true
-  validates :activity_schedule, presence: true
+  validates :academic_year, presence: true
+  validates :activity_schedule, presence: true  
+  validates :student, uniqueness: {:scope => [:academic_year_id, :activity_schedule_id]}
 
 
   scope :student_query, lambda {

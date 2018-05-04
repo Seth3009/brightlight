@@ -21,32 +21,74 @@ nav.light
     .col.s1
       | Sunday 
     .col.s2.left
-      | : #{@activity_schedule.sun_start.strftime("%I:%M %p")} - #{@activity_schedule.sun_end.strftime("%I:%M %p")}
+      | : 
+      - if @activity_schedule.sun_start.strftime("%R") == "00:00"
+        span.box.black
+          | N/A
+      - else 
+        span.box.green
+          = @activity_schedule.sun_start.strftime("%R") + " - " + @activity_schedule.sun_end.strftime("%R")
     .col.s1
       | Tuesday
     .col.s2.left
-      | : #{@activity_schedule.tue_start.strftime("%I:%M %p")} - #{@activity_schedule.tue_end.strftime("%I:%M %p")}
+      | : 
+      - if @activity_schedule.tue_start.strftime("%R") == "00:00" 
+        span.box.black
+          | N/A
+      - else
+        span.box.green 
+          = @activity_schedule.tue_start.strftime("%R") + " - " + @activity_schedule.tue_end.strftime("%R")
     .col.s1
       | Thursday
     .col.s2.left
-      | : #{@activity_schedule.thu_start.strftime("%I:%M %p")} - #{@activity_schedule.thu_end.strftime("%I:%M %p")}
+      | : 
+      - if @activity_schedule.thu_start.strftime("%R") == "00:00" 
+        span.box.black
+          | N/A
+      - else
+        span.box.green 
+          = @activity_schedule.thu_start.strftime("%R") + " - " + @activity_schedule.thu_end.strftime("%R")
     .col.s1
       | Saturday
     .col.s2.left
-      | : #{@activity_schedule.sat_start.strftime("%I:%M %p")} - #{@activity_schedule.sat_end.strftime("%I:%M %p")}
+      | : 
+      - if @activity_schedule.sat_start.strftime("%R") == "00:00" 
+        span.box.black
+          | N/A
+      - else
+        span.box.green 
+          = @activity_schedule.sat_start.strftime("%R") + " - " + @activity_schedule.sat_end.strftime("%R")
   .row
     .col.s1
       | Monday 
     .col.s2.left
-      | : #{@activity_schedule.mon_start.strftime("%I:%M %p")} - #{@activity_schedule.mon_end.strftime("%I:%M %p")}
+      | : 
+      - if @activity_schedule.mon_start.strftime("%R") == "00:00" 
+        span.box.black
+          | N/A
+      - else
+        span.box.green 
+          = @activity_schedule.mon_start.strftime("%R") + " - " + @activity_schedule.mon_end.strftime("%R")
     .col.s1
       | Wednesday
     .col.s2.left
-      | : #{@activity_schedule.wed_start.strftime("%I:%M %p")} - #{@activity_schedule.wed_end.strftime("%I:%M %p")}
+      | : 
+      - if @activity_schedule.wed_start.strftime("%R") == "00:00" 
+        span.box.black
+          | N/A
+      - else
+        span.box.green 
+          = @activity_schedule.wed_start.strftime("%R") + " - " + @activity_schedule.wed_end.strftime("%R")
     .col.s1
       | Friday
     .col.s2.left
-      | : #{@activity_schedule.fri_start.strftime("%I:%M %p")} - #{@activity_schedule.fri_end.strftime("%I:%M %p")}  
+      | : 
+      - if @activity_schedule.fri_start.strftime("%R") == "00:00" 
+        span.box.black
+          | N/A
+      - else
+        span.box.green 
+          = @activity_schedule.fri_start.strftime("%R") + " - " + @activity_schedule.fri_end.strftime("%R")
     .col.s1
       | Status
     .col.s2.left

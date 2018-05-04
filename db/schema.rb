@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180430021434) do
+ActiveRecord::Schema.define(version: 20180503065754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,20 +50,20 @@ ActiveRecord::Schema.define(version: 20180430021434) do
     t.string   "activity"
     t.date     "start_date"
     t.date     "end_date"
-    t.time     "sun_start",        default: '2000-01-01 00:00:00'
-    t.time     "sun_end",          default: '2000-01-01 00:00:00'
-    t.time     "mon_start",        default: '2000-01-01 00:00:00'
-    t.time     "mon_end",          default: '2000-01-01 00:00:00'
-    t.time     "tue_start",        default: '2000-01-01 00:00:00'
-    t.time     "tue_end",          default: '2000-01-01 00:00:00'
-    t.time     "wed_start",        default: '2000-01-01 00:00:00'
-    t.time     "wed_end",          default: '2000-01-01 00:00:00'
-    t.time     "thu_start",        default: '2000-01-01 00:00:00'
-    t.time     "thu_end",          default: '2000-01-01 00:00:00'
-    t.time     "fri_start",        default: '2000-01-01 00:00:00'
-    t.time     "fri_end",          default: '2000-01-01 00:00:00'
-    t.time     "sat_start",        default: '2000-01-01 00:00:00'
-    t.time     "sat_end",          default: '2000-01-01 00:00:00'
+    t.time     "sun_start",        default: '2000-01-01 17:00:00'
+    t.time     "sun_end",          default: '2000-01-01 17:00:00'
+    t.time     "mon_start",        default: '2000-01-01 17:00:00'
+    t.time     "mon_end",          default: '2000-01-01 17:00:00'
+    t.time     "tue_start",        default: '2000-01-01 17:00:00'
+    t.time     "tue_end",          default: '2000-01-01 17:00:00'
+    t.time     "wed_start",        default: '2000-01-01 17:00:00'
+    t.time     "wed_end",          default: '2000-01-01 17:00:00'
+    t.time     "thu_start",        default: '2000-01-01 17:00:00'
+    t.time     "thu_end",          default: '2000-01-01 17:00:00'
+    t.time     "fri_start",        default: '2000-01-01 17:00:00'
+    t.time     "fri_end",          default: '2000-01-01 17:00:00'
+    t.time     "sat_start",        default: '2000-01-01 17:00:00'
+    t.time     "sat_end",          default: '2000-01-01 17:00:00'
     t.boolean  "is_active",        default: true
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
@@ -1373,8 +1373,10 @@ ActiveRecord::Schema.define(version: 20180430021434) do
     t.integer  "activity_schedule_id"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.integer  "academic_year_id"
   end
 
+  add_index "student_activities", ["academic_year_id"], name: "index_student_activities_on_academic_year_id", using: :btree
   add_index "student_activities", ["activity_schedule_id"], name: "index_student_activities_on_activity_schedule_id", using: :btree
   add_index "student_activities", ["student_id"], name: "index_student_activities_on_student_id", using: :btree
 
@@ -1742,6 +1744,7 @@ ActiveRecord::Schema.define(version: 20180430021434) do
   add_foreign_key "requisitions", "users", column: "created_by_id"
   add_foreign_key "requisitions", "users", column: "last_updated_by_id"
   add_foreign_key "smart_cards", "transports"
+  add_foreign_key "student_activities", "academic_years"
   add_foreign_key "student_activities", "activity_schedules"
   add_foreign_key "student_activities", "students"
   add_foreign_key "supplies_transaction_items", "item_categories"

@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :activity_schedules
+  
   resources :employee_smartcards
   resources :stock_categories
   resources :stock_items
@@ -32,7 +32,17 @@ Rails.application.routes.draw do
 
   resources :copy_conditions
   resources :book_conditions
+  resources :student_activities
   
+  resources :activity_schedules, shallow: true do
+    member do
+      get 'students'
+      post 'add_students'
+      delete 'remove_student'      
+    end
+  end
+ 
+
   resources :leave_requests do
     member do
       delete :cancel
@@ -156,8 +166,7 @@ Rails.application.routes.draw do
   get 'student_books/pnnrb' => 'student_books#pnnrb', as: :pnnrb_student_books
   get 'student_books/titles' => 'student_books#titles', as: :titles_student_books
   post 'student_books/finalize' => 'student_books#finalize', as: :finalize_student_books
-  post 'student_books/prepare_student_books' => 'student_books#prepare', as: :prepare_student_books
-  post 'student_activities/insert_multiple_member' => 'student_activities#insert_multiple_member', as: :insert_multiple_member
+  post 'student_books/prepare_student_books' => 'student_books#prepare', as: :prepare_student_books  
 
   resources :students do
     resources :student_books, shallow: true
