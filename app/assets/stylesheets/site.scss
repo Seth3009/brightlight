@@ -1576,15 +1576,18 @@ section {
 // ============================================ Print ===========================================
 
 @media print {
-	header, footer, nav  {
-		display:none
+	footer, nav  {
+		display: none;
+	}
+	header {
+		display: table-header-group;
 	}
 	#main {
 		padding-left: 0;
 	}
 	html, body {
-		font: 10pt "Cambria", Arial, sans-serif;
-		line-height: 1.1;
+		font: 10pt Roboto, Cambria, Arial, sans-serif;
+
 	}
 	.card, .card-panel {
 		border: 0 0 1px 0;
