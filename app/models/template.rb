@@ -41,6 +41,7 @@ class Template < ActiveRecord::Base
           text.gsub! img_match[1], "file:///#{Rails.root}/app/assets/images/#{url_match[1]}.#{url_match[3]}"
         end
       end
+      text = "<div class='template-#{section.to_s}'>#{text}</div>"    # wrap it in a <div>
       return text.html_safe
     end
   end

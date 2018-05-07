@@ -1576,9 +1576,9 @@ section {
 // ============================================ Print ===========================================
 
 @media print {
-	nav { box-shadow: none }
+	nav { box-shadow: none !important }
 	.nav-wrapper { display: none }
-	footer, header, nav {
+	header {
 		display: table-header-group;
 	}
 	#main {
@@ -1599,7 +1599,21 @@ section {
 	h4 {
 		font-size: 1.4rem;
 	}
+
+	.template-body {
+		tr { page-break-inside: avoid; }
+	}
+
+	.template-closing{
+		table { page-break-inside: avoid; }
+	}
+
+	@page {
+		@bottom-left { content: element(footer); }
+	}
+	
 }
+
 
 // ============================================ Card ===========================================
 
