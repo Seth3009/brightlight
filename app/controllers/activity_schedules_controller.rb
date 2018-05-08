@@ -1,6 +1,6 @@
 class ActivitySchedulesController < ApplicationController
   before_action :set_activity_schedule, only: [:show, :edit, :update, :destroy, :add_students, :students]
-  before_action :set_year, only: [:students, :add_students, :show, :index, :new]
+  before_action :set_year, only: [:students, :add_students, :show, :index, :new, :edit]
 
   # GET /activity_schedules
   # GET /activity_schedules.json

@@ -1,5 +1,5 @@
 class StudentActivity < ActiveRecord::Base
-  belongs_to :student
+  belongs_to :student  
   belongs_to :activity_schedule
   belongs_to :academic_year
 

@@ -12,7 +12,7 @@ class Student < ActiveRecord::Base
 	has_one  :transport, through: :passenger
   has_one  :badge
   has_many :activity_schedules, through: :student_activities
-  has_many :student_activities
+  has_many :student_activities, :dependent => :destroy
 
 	belongs_to :family
 

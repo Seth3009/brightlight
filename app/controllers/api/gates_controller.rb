@@ -6,28 +6,25 @@ class Api::GatesController < Api::BaseController
       if @badge.present?
         if @badge.kind = "Employee"
           @employee = Employee.joins('left join badges on badges.employee_id = employees.id')
-                    .select('employees.*,badges.*').where(badges: {code: params[:id]}).first
+                    .select('employees.name as nama,badges.*')
+                    .where(badges: {code: params[:id]}).first
           if @employee.present?
-            DoorAccessLog.insert_door_log(@employee.employee_id, @employee.kind, params[:id],params[:loc],@employee.name)
+            DoorAccessLog.insert_door_log(@employee.employee_id, @employee.kind, params[:id],params[:loc],@employee.nama)
             if params[:wifi].present?
-              render json: "code:"+@employee.code + " name:" + @employee.name + " kind:" + @employee.kind
+              render json: "code:"+@employee.code + " name:" + @employee.nama + " kind:" + @employee.kind
             else
-              response.header["result"] = '{code:' + @employee.code + ' name:' + @employee.name + ' kind:' + @employee.kind + '}'
+              response.header["result"] = '{code:' + @employee.code + ' name:' + @employee.nama + ' kind:' + @employee.kind + '}'
             end
           else
             now = Time.parse(Time.now.to_s)
-            @year_id = AcademicYear.current_id
-            if now < Time.parse("16:01")
-              @student = Student.joins('left join badges on badges.student_id = students.id')
-                        .select('students.name,badges.code, badges.student_id, badges.kind').where(badges: {code: params[:id]}).first
-            else
+            @year_id = AcademicYear.current_id           
               @student = ActivitySchedule.filter_day
                         .joins('left join student_activities on student_activities.activity_schedule_id = activity_schedules.id')
                         .joins('left join students on students.id = student_activities.student_id')
                         .joins('left join badges on badges.student_id = students.id')
-                        .select('students.name,badges.code, badges.student_id, badges.kind, activity_schedules.academic_year_id').where(badges: {code: params[:id]}).first                                                
-            end
-            
+                        .select('students.name,badges.code, badges.student_id, badges.kind, activity_schedules.academic_year_id')
+                        .where(is_active:true)
+                        .where(badges: {code: params[:id]}).first                                                                        
             if @student.present?
               DoorAccessLog.insert_door_log(@student.student_id, @student.kind, params[:id],params[:loc],@student.name)
               if params[:wifi].present?
