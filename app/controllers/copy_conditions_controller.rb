@@ -66,8 +66,6 @@ class CopyConditionsController < ApplicationController
 
     respond_to do |format|
       if @copy_condition.save
-        student_book = StudentBook.where(academic_year:AcademicYear.current_id).where(book_copy:@book_copy).take
-        student_book.update(initial_copy_condition_id: @copy_condition.book_condition_id) if student_book.present?  
         format.html { redirect_to book_copy_conditions_url(@book_copy.id), notice: 'Copy condition was successfully updated.' }
         format.json { render :show, status: :created, location: @copy_condition }
       else

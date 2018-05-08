@@ -209,7 +209,8 @@ class BookCopiesController < ApplicationController
     else
       @copy_conditions = CopyCondition.where(book_copy_id:params[:id]).where.not(deleted_flag:true).order('academic_year_id DESC, updated_at DESC')
     end
-    @book_copy = BookCopy.find(params[:id])
+    @copy_conditions = @copy_conditions.includes([:academic_year, :book_condition, :user])
+    @book_copy = BookCopy.includes([:book_edition]).find(params[:id])
     @book_edition = @book_copy.book_edition
     @last_condition = @copy_conditions.first
   end

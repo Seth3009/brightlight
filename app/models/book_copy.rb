@@ -145,35 +145,15 @@ class BookCopy < ActiveRecord::Base
                         .includes([:book_copy])
       if student_books.present?
         student_books.each_with_index do |sb, i|
-          # bc = sb.book_copy
-          # bc.copy_conditions << CopyCondition.new(
-          #   book_condition_id: sb.end_copy_condition_id,
-          #   academic_year_id: academic_year_id,
-          #   barcode: sb.barcode,
-          #   notes: 'Return condition',
-          #   start_date: sb.return_date || Date.today,
-          #   end_date: sb.return_date,
-          #   post: 1,
-          #   deleted_flag: false
-          # )
-          # bc.copy_conditions << CopyCondition.new(
-          #   book_condition_id: sb.end_copy_condition_id,
-          #   academic_year_id: next_academic_year_id,
-          #   barcode: sb.barcode,
-          #   notes: 'Starting condition',
-          #   start_date: sb.return_date || Date.today,
-          #   post: 0,
-          #   deleted_flag: false
-          # )
           return_condition = [sb.book_copy_id, sb.barcode, sb.end_copy_condition_id, sb.return_date || Date.today, sb.return_date, academic_year_id, 'Return condition', 1, false]
           return_conditions << return_condition
-          starting_condition = [sb.book_copy_id, sb.barcode, sb.end_copy_condition_id, sb.return_date || Date.today, nil, next_academic_year_id, 'Starting condition', 0, false]
-          starting_conditions << starting_condition
+          # starting_condition = [sb.book_copy_id, sb.barcode, sb.end_copy_condition_id, sb.return_date || Date.today, nil, next_academic_year_id, 'Starting condition', 0, false]
+          # starting_conditions << starting_condition
         end
 
         if return_conditions.count > 0
           CopyCondition.import columns, return_conditions, validates: false
-          CopyCondition.import columns, starting_conditions, validates: false
+          # CopyCondition.import columns, starting_conditions, validates: false
         end
       end
     end

@@ -1607,10 +1607,6 @@ section {
 	.template-closing{
 		table { page-break-inside: avoid; }
 	}
-
-	@page {
-		@bottom-left { content: element(footer); }
-	}
 	
 }
 
