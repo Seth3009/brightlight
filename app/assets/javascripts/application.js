@@ -20,7 +20,6 @@
 //= require materialize/extras/nouislider
 //= require cocoon
 //= require filterrific/filterrific-jquery
-//= require dynamic_selectable
 //= require material-init
 //= require nprogress
 //= require nprogress-turbolinks
@@ -28,10 +27,10 @@
 //= require jquery-code-scanner
 //= require rails-timeago
 //= require init
-//= require carpools
 //= require turbolinks
 //= require book_copies
 //= require book_fines
+//= require messages
 //= require requisitions
 //= require settings
 

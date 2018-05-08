@@ -26,10 +26,7 @@
                 td.t_receipt_border = loan.title
                 td.t_receipt_border = loan.authors
                 td.t_receipt_border = loan.publisher
-                - if loan.isbn13.present?
-                  td.t_receipt_border = loan.isbn13
-                - else
-                  td.t_receipt_border = loan.isbn10
+                td.t_receipt_border = loan.isbn13 || loan.isbn10 || loan.refno
                 td.t_receipt_border.text-align.center = loan.loan_qty
                 - if loan.return_qty == 0
                   td.t_receipt_border = " "

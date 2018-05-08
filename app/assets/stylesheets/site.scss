@@ -1576,14 +1576,16 @@ section {
 // ============================================ Print ===========================================
 
 @media print {
-	header, footer, nav  {
-		display:none
+	nav { box-shadow: none !important }
+	.nav-wrapper { display: none }
+	header {
+		display: table-header-group;
 	}
 	#main {
 		padding-left: 0;
 	}
 	html, body {
-		font: 10pt "Cambria", Arial, sans-serif;
+		font: 10pt Roboto, Cambria, Arial, sans-serif;
 		line-height: 1.1;
 	}
 	.card, .card-panel {
@@ -1597,7 +1599,21 @@ section {
 	h4 {
 		font-size: 1.4rem;
 	}
+
+	.template-body {
+		tr { page-break-inside: avoid; }
+	}
+
+	.template-closing{
+		table { page-break-inside: avoid; }
+	}
+
+	@page {
+		@bottom-left { content: element(footer); }
+	}
+	
 }
+
 
 // ============================================ Card ===========================================
 

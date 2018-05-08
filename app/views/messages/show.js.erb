@@ -1,18 +1,2 @@
 $("#modal-message-content").html("<%=j render 'message_record'%>");
 $('#show-message-modal').openModal();
-$(".mark-read").on("click", function(){
-    var id = $(this).data("id");
-    var recipient_id = $(this).data("recipient");
-    $("#msgrec-"+id).hide();
-    $.ajax({
-        url:    "/messages/"+id+"/mark_read/",
-        data:   {user_id: recipient_id},
-        method: 'post'
-    }).done(function(response){
-        if (response["unread"] === 0) {
-            $(".inbox-badge").hide();
-        } else {
-            $(".inbox-badge").html(response["unread"]);
-        }      
-    })
-})
