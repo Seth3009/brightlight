@@ -386,7 +386,7 @@ class StudentBooksController < ApplicationController
       @student_list = @all_students   
       @student_books = StudentBook.where(grade_section:@grade_section, academic_year_id:@year_id)
                         .includes({book_copy: :book_label}, :book_edition, :initial_copy_condition, :end_copy_condition)
-                        .order(:book_copy_id)
+                        .order('book_editions.title')
                         # .not_disposed
                         # .standard_books(@grade_section.grade_level.id, @grade_section.id, @year_id, @textbook_category_id)      
                         # .order('roster_no ASC, standard_books.id ASC')

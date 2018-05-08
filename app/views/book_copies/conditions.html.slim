@@ -60,8 +60,7 @@ nav
 
     tbody
       - @copy_conditions.each do |copy_condition|
-        - user = User.where(id:copy_condition.user_id).first
-        - user_name = user.name rescue 'N/A'
+        - user_name = copy_condition.user.name rescue 'N/A'
         tr
           td = copy_condition.start_date
           td.tooltipped data-position="bottom" data-delay="50" data-tooltip="Last update by: #{user_name} at #{copy_condition.updated_at}"

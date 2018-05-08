@@ -17,28 +17,24 @@ class CopyCondition < ActiveRecord::Base
   # NOTE: This assumes that we are NOT going to update old records, and we are NOT going 
   #       to create back date condition. Otherwise, the book_conditoin_id in BookCopy
   #       will be wrong 
-  around_save :update_book_copy_condition
-  after_create :synchronize_book_copy_condition
-  after_destroy :revert_book_copy_condition
 
-  def update_book_copy_condition
-    old_condition_id = book_condition_id
-    old_copy_condition = book_copy.latest_copy_condition
-
-    yield
-
-    old_copy_condition.update_column(:end_date, Date.today) if old_copy_condition.present?
-    if old_condition_id != book_condition_id
-      synchronize_book_copy_condition
-    end
-  end
+  after_save :synchronize_book_copy_condition
 
   def synchronize_book_copy_condition
+    # Update book_copy.book_condition_id
     book_copy.update_column :book_condition_id, book_condition_id
-  end
-
-  def revert_book_copy_condition
-    book_copy.update_column :book_condition_id, book_copy.copy_conditions.order(:updated_at).take.try(:book_condition_id)
+    
+    # Get related student_book record
+    student_book = StudentBook.where(academic_year:AcademicYear.current_id).where(book_copy:book_copy).take
+    # if the record exists, update either the student_book.initial_copy_condition_id
+    # of the end_copy_condition_id if it present
+    unless student_book.blank?
+      if student_book.end_copy_condition_id.present?
+        student_book.update_column :end_copy_condition_id, book_condition_id
+      else
+        student_book.update_column :initial_copy_condition_id, book_condition_id
+      end
+    end
   end
 
 end
