@@ -50,20 +50,20 @@ ActiveRecord::Schema.define(version: 20180503065754) do
     t.string   "activity"
     t.date     "start_date"
     t.date     "end_date"
-    t.time     "sun_start",        default: '2000-01-01 17:00:00'
-    t.time     "sun_end",          default: '2000-01-01 17:00:00'
-    t.time     "mon_start",        default: '2000-01-01 17:00:00'
-    t.time     "mon_end",          default: '2000-01-01 17:00:00'
-    t.time     "tue_start",        default: '2000-01-01 17:00:00'
-    t.time     "tue_end",          default: '2000-01-01 17:00:00'
-    t.time     "wed_start",        default: '2000-01-01 17:00:00'
-    t.time     "wed_end",          default: '2000-01-01 17:00:00'
-    t.time     "thu_start",        default: '2000-01-01 17:00:00'
-    t.time     "thu_end",          default: '2000-01-01 17:00:00'
-    t.time     "fri_start",        default: '2000-01-01 17:00:00'
-    t.time     "fri_end",          default: '2000-01-01 17:00:00'
-    t.time     "sat_start",        default: '2000-01-01 17:00:00'
-    t.time     "sat_end",          default: '2000-01-01 17:00:00'
+    t.time     "sun_start",        default: '2000-01-01 00:00:00'
+    t.time     "sun_end",          default: '2000-01-01 00:00:00'
+    t.time     "mon_start",        default: '2000-01-01 00:00:00'
+    t.time     "mon_end",          default: '2000-01-01 00:00:00'
+    t.time     "tue_start",        default: '2000-01-01 00:00:00'
+    t.time     "tue_end",          default: '2000-01-01 00:00:00'
+    t.time     "wed_start",        default: '2000-01-01 00:00:00'
+    t.time     "wed_end",          default: '2000-01-01 00:00:00'
+    t.time     "thu_start",        default: '2000-01-01 00:00:00'
+    t.time     "thu_end",          default: '2000-01-01 00:00:00'
+    t.time     "fri_start",        default: '2000-01-01 00:00:00'
+    t.time     "fri_end",          default: '2000-01-01 00:00:00'
+    t.time     "sat_start",        default: '2000-01-01 00:00:00'
+    t.time     "sat_end",          default: '2000-01-01 00:00:00'
     t.boolean  "is_active",        default: true
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
