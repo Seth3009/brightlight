@@ -1,0 +1,24 @@
+
+= form_tag insert_multiple_member_path, method: :post do
+  .card-panel 
+    table.compact.striped
+      thead
+        tr.compact-row
+          th Check
+          th Student no
+          th Name
+          th Gender
+          th Class
+          th Student Id
+
+      tbody
+        - @students.each do |student|
+          = fields_for "student_activities[]", student do |f|
+            tr
+              td.wd5 style='text-align:center;' 
+                = f.check_box :id, value: student.id
+              td = student.student_no
+              td = student.name
+              td = student.gender
+              td = student.section
+              td = student.id

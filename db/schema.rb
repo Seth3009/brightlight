@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180426071937) do
+ActiveRecord::Schema.define(version: 20180503065754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,32 @@ ActiveRecord::Schema.define(version: 20180426071937) do
   end
 
   add_index "academic_years", ["slug"], name: "index_academic_years_on_slug", unique: true, using: :btree
+
+  create_table "activity_schedules", force: :cascade do |t|
+    t.string   "activity"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.time     "sun_start",        default: '2000-01-01 17:00:00'
+    t.time     "sun_end",          default: '2000-01-01 17:00:00'
+    t.time     "mon_start",        default: '2000-01-01 17:00:00'
+    t.time     "mon_end",          default: '2000-01-01 17:00:00'
+    t.time     "tue_start",        default: '2000-01-01 17:00:00'
+    t.time     "tue_end",          default: '2000-01-01 17:00:00'
+    t.time     "wed_start",        default: '2000-01-01 17:00:00'
+    t.time     "wed_end",          default: '2000-01-01 17:00:00'
+    t.time     "thu_start",        default: '2000-01-01 17:00:00'
+    t.time     "thu_end",          default: '2000-01-01 17:00:00'
+    t.time     "fri_start",        default: '2000-01-01 17:00:00'
+    t.time     "fri_end",          default: '2000-01-01 17:00:00'
+    t.time     "sat_start",        default: '2000-01-01 17:00:00'
+    t.time     "sat_end",          default: '2000-01-01 17:00:00'
+    t.boolean  "is_active",        default: true
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+    t.integer  "academic_year_id"
+  end
+
+  add_index "activity_schedules", ["academic_year_id"], name: "index_activity_schedules_on_academic_year_id", using: :btree
 
   create_table "attachment_types", force: :cascade do |t|
     t.string   "code"
@@ -583,6 +609,20 @@ ActiveRecord::Schema.define(version: 20180426071937) do
 
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
+
+  create_table "door_access_logs", force: :cascade do |t|
+    t.string   "location"
+    t.string   "card"
+    t.integer  "employee_id"
+    t.integer  "student_id"
+    t.string   "name"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "kind"
+  end
+
+  add_index "door_access_logs", ["employee_id"], name: "index_door_access_logs_on_employee_id", using: :btree
+  add_index "door_access_logs", ["student_id"], name: "index_door_access_logs_on_student_id", using: :btree
 
   create_table "employee_smartcards", force: :cascade do |t|
     t.string   "card"
@@ -1328,6 +1368,18 @@ ActiveRecord::Schema.define(version: 20180426071937) do
   add_index "stock_items", ["created_by_id"], name: "index_stock_items_on_created_by_id", using: :btree
   add_index "stock_items", ["last_updated_by_id"], name: "index_stock_items_on_last_updated_by_id", using: :btree
 
+  create_table "student_activities", force: :cascade do |t|
+    t.integer  "student_id"
+    t.integer  "activity_schedule_id"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "academic_year_id"
+  end
+
+  add_index "student_activities", ["academic_year_id"], name: "index_student_activities_on_academic_year_id", using: :btree
+  add_index "student_activities", ["activity_schedule_id"], name: "index_student_activities_on_activity_schedule_id", using: :btree
+  add_index "student_activities", ["student_id"], name: "index_student_activities_on_student_id", using: :btree
+
   create_table "student_admission_infos", force: :cascade do |t|
     t.integer  "student_id"
     t.integer  "academic_year_id"
@@ -1607,6 +1659,7 @@ ActiveRecord::Schema.define(version: 20180426071937) do
     t.datetime "updated_at",  null: false
   end
 
+  add_foreign_key "activity_schedules", "academic_years"
   add_foreign_key "book_fines", "grade_levels"
   add_foreign_key "book_fines", "grade_sections"
   add_foreign_key "book_fines", "student_books"
@@ -1636,6 +1689,8 @@ ActiveRecord::Schema.define(version: 20180426071937) do
   add_foreign_key "delivery_items", "order_items"
   add_foreign_key "delivery_items", "users", column: "created_by_id"
   add_foreign_key "delivery_items", "users", column: "last_updated_by_id"
+  add_foreign_key "door_access_logs", "employees"
+  add_foreign_key "door_access_logs", "students"
   add_foreign_key "employee_smartcards", "employees"
   add_foreign_key "family_members", "families"
   add_foreign_key "family_members", "guardians"
@@ -1689,6 +1744,9 @@ ActiveRecord::Schema.define(version: 20180426071937) do
   add_foreign_key "requisitions", "users", column: "created_by_id"
   add_foreign_key "requisitions", "users", column: "last_updated_by_id"
   add_foreign_key "smart_cards", "transports"
+  add_foreign_key "student_activities", "academic_years"
+  add_foreign_key "student_activities", "activity_schedules"
+  add_foreign_key "student_activities", "students"
   add_foreign_key "supplies_transaction_items", "item_categories"
   add_foreign_key "supplies_transaction_items", "item_units"
   add_foreign_key "supplies_transaction_items", "products"
