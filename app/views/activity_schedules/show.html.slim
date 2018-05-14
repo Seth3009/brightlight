@@ -1,0 +1,99 @@
+- title "#{@activity_schedule.activity}"
+
+h4 #{@activity_schedule.activity}
+
+nav.light
+  .nav-wrapper
+    ul
+      li
+        = link_to activity_schedules_path
+          i.material-icons.left chevron_left
+      li
+        .brand-logo style="margin-left: 20px; font-size:1.5em"
+          | Activity Period: #{@activity_schedule.start_date.strftime("%d/%m/%Y")} to #{@activity_schedule.end_date.strftime("%d/%m/%Y")}
+      li.right
+        = link_to edit_activity_schedule_path(@activity_schedule)
+          | Edit
+          i.material-icons.left edit
+
+.card-panel
+  .row
+    .col.s1
+      | Sunday 
+    .col.s2.left
+      | : 
+      - if @activity_schedule.sun_start && @activity_schedule.sun_end
+        span.box.green
+          = @activity_schedule.sun_start.strftime("%R") + " - " + @activity_schedule.sun_end.strftime("%R")       
+      - else 
+        span.box.black
+          | N/A
+    .col.s1
+      | Tuesday
+    .col.s2.left
+      | : 
+      - if @activity_schedule.tue_start && @activity_schedule.tue_end
+        span.box.green 
+          = @activity_schedule.tue_start.strftime("%R") + " - " + @activity_schedule.tue_end.strftime("%R")        
+      - else
+        span.box.black
+          | N/A
+    .col.s1
+      | Thursday
+    .col.s2.left
+      | : 
+      - if @activity_schedule.thu_start && @activity_schedule.thu_end
+        span.box.green 
+          = @activity_schedule.thu_start.strftime("%R") + " - " + @activity_schedule.thu_end.strftime("%R")        
+      - else
+        span.box.black
+          | N/A
+    .col.s1
+      | Saturday
+    .col.s2.left
+      | : 
+      - if @activity_schedule.sat_start && @activity_schedule.sat_end
+        span.box.green 
+          = @activity_schedule.sat_start.strftime("%R") + " - " + @activity_schedule.sat_end.strftime("%R")        
+      - else
+        span.box.black
+          | N/A
+  .row
+    .col.s1
+      | Monday 
+    .col.s2.left
+      | : 
+      - if @activity_schedule.mon_start && @activity_schedule.mon_end
+        span.box.green 
+          = @activity_schedule.mon_start.strftime("%R") + " - " + @activity_schedule.mon_end.strftime("%R")        
+      - else
+        span.box.black
+          | N/A
+    .col.s1
+      | Wednesday
+    .col.s2.left
+      | : 
+      - if @activity_schedule.wed_start && @activity_schedule.wed_end
+        span.box.green 
+          = @activity_schedule.wed_start.strftime("%R") + " - " + @activity_schedule.wed_end.strftime("%R")        
+      - else
+        span.box.black
+          | N/A
+    .col.s1
+      | Friday
+    .col.s2.left
+      | : 
+      - if @activity_schedule.fri_start && @activity_schedule.fri_end
+        span.box.green 
+          = @activity_schedule.fri_start.strftime("%R") + " - " + @activity_schedule.fri_end.strftime("%R")        
+      - else
+        span.box.black
+          | N/A
+    .col.s1
+      | Status
+    .col.s2.left
+      - if @activity_schedule.is_active
+        | : Ongoing
+      - else
+        | : Ended 
+= render 'students'

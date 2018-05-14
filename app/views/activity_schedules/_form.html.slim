@@ -1,0 +1,68 @@
+= form_for @activity_schedule do |f|
+  .card-panel
+    - if @activity_schedule.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@activity_schedule.errors.count, "error")} prohibited this activity_schedule from being saved:"
+        ul
+          - @activity_schedule.errors.full_messages.each do |message|
+            li = message
+    .row
+      .input-field.col.s6
+        = f.label :activity, class: 'active'
+        = f.text_field :activity    
+      .input-field.col.s2
+        = f.label :start_date, class: 'active'
+        = f.text_field :start_date, type: 'date'      
+      .input-field.col.s2
+        = f.label :end_date, class: 'active'
+        = f.text_field :end_date, type: 'date'
+      .input-field.col.s2
+        - if params[:action] =~/edit/          
+          = f.check_box :is_active
+          = f.label :is_active 
+        
+  h5 Daily Schedule Hours
+  .card-panel
+    .row
+      .input-field.col.s2
+        = f.label 'Sunday', class: 'active'
+        = f.text_field :sun_start, type: 'time'
+      .input-field.col.s2
+        = f.text_field :sun_end, type: 'time'
+      .input-field.col.s2
+        = f.label 'Monday', class: 'active'
+        = f.text_field :mon_start, type: 'time'
+      .input-field.col.s2
+        = f.text_field :mon_end, type: 'time'    
+      .input-field.col.s2
+        = f.label 'Tuesday', class: 'active'
+        = f.text_field :tue_start, type: 'time'
+      .input-field.col.s2    
+        = f.text_field :tue_end, type: 'time'    
+    .row  
+      .input-field.col.s2
+        = f.label 'Wednesday', class: 'active'
+        = f.text_field :wed_start, type: 'time' 
+      .input-field.col.s2
+        = f.text_field :wed_end, type: 'time'     
+      .input-field.col.s2
+        = f.label 'Thursday', class: 'active'
+        = f.text_field :thu_start, type: 'time' 
+      .input-field.col.s2
+        = f.text_field :thu_end, type: 'time'     
+      .input-field.col.s2
+        = f.label 'Friday', class: 'active'
+        = f.text_field :fri_start, type: 'time' 
+      .input-field.col.s2
+        = f.text_field :fri_end, type: 'time' 
+    .row
+      .input-field.col.s2
+        = f.label 'Saturday', class: 'active'
+        = f.text_field :sat_start, type: 'time' 
+      .input-field.col.s2
+        = f.text_field :sat_end, type: 'time' 
+        = f.hidden_field :academic_year_id, value: @year_id  
+
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', activity_schedules_path, class: "waves-effect waves-teal btn-flat"

@@ -10,7 +10,9 @@ class Student < ActiveRecord::Base
 	has_many :book_fines, dependent: :restrict_with_error
 	has_one  :passenger
 	has_one  :transport, through: :passenger
-	has_one  :badge
+  has_one  :badge
+  has_many :activity_schedules, through: :student_activities
+  has_many :student_activities, :dependent => :destroy
 
 	belongs_to :family
 
@@ -41,7 +43,8 @@ class Student < ActiveRecord::Base
     default_filter_params: { sorted_by: 'created_at_desc' },
     available_filters: [
       :sorted_by,
-      :search_query
+      :search_query,
+      :filtered_by
     ]
   )
 
@@ -62,7 +65,7 @@ class Student < ActiveRecord::Base
     num_or_conds = 1
     where(
       terms.map { |term|
-        "(LOWER(name) LIKE ?)"
+        "(LOWER(students.name) LIKE ?)"
       }.join(' AND '),
       *terms.map { |e| [e] * num_or_conds }.flatten
     )
@@ -90,6 +93,10 @@ class Student < ActiveRecord::Base
       ['Family No', 'family_id_asc']
     ]
   end
+
+  scope :filtered_by, lambda { |filter_option|
+    where('grade_sections.id=?', filter_option)
+  }
 
   def self.to_csv
     CSV.generate do |csv|

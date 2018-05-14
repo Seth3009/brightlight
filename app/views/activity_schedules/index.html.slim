@@ -1,0 +1,115 @@
+
+h4 Activity Schedules
+
+ul#year-options.dropdown-content
+  li  
+    - AcademicYear.list_for_menu.each do |year|
+      li 
+        = link_to year.name, activity_schedules_path(params.merge(year:year.id).symbolize_keys)
+
+nav
+  .nav-wrapper
+    ul
+      li
+        a.dropdown-button href="#!" data-activates="year-options"
+          span#year = @academic_year.name
+          i.material-icons.right arrow_drop_down
+    ul.right
+      li 
+        = link_to new_activity_schedule_path(year:params[:year])
+          | New Activity
+          i.material-icons.left add
+
+.card-panel
+  table.compact
+    thead
+      tr
+        th No.
+        th Activity
+        th.center Start date
+        th.center End date
+        th.center Sunday      
+        th.center Monday      
+        th.center Tuesday      
+        th.center Wednesday
+        th.center Thursday
+        th.center Friday
+        th.center Saturday
+        th.center Is active
+        th.center Action
+        
+    tbody
+      - @activity_schedules.each_with_index do |activity_schedule, index|
+        tr
+          td style='white-space:nowrap;font-size:0.9rem' = index + 1 
+          td style='white-space:nowrap;font-size:0.9rem' = activity_schedule.activity
+          td style='text-align:center;white-space:nowrap;font-size:0.7rem' = activity_schedule.start_date.strftime("%d/%m/%Y")
+          td style='text-align:center;white-space:nowrap;font-size:0.7rem' = activity_schedule.end_date.strftime("%d/%m/%Y")
+          td style='text-align:center;white-space:nowrap;font-size:0.7rem'
+            - if activity_schedule.sun_start && activity_schedule.sun_end
+              span.box.green
+                = activity_schedule.sun_start.strftime("%R") + " - " + activity_schedule.sun_end.strftime("%R")       
+            - else 
+              span.box.black
+                | N/A
+          td style='text-align:center;white-space:nowrap;font-size:0.7rem' 
+            - if activity_schedule.mon_start && activity_schedule.mon_end
+              span.box.green 
+                = activity_schedule.mon_start.strftime("%R") + " - " + activity_schedule.mon_end.strftime("%R")        
+            - else
+              span.box.black
+                | N/A
+          td style='text-align:center;white-space:nowrap;font-size:0.7rem'  
+            - if activity_schedule.tue_start && activity_schedule.tue_end
+              span.box.green 
+                = activity_schedule.tue_start.strftime("%R") + " - " + activity_schedule.tue_end.strftime("%R")        
+            - else
+              span.box.black
+                | N/A
+          td style='text-align:center;white-space:nowrap;font-size:0.7rem' 
+            - if activity_schedule.wed_start && activity_schedule.wed_end
+              span.box.green 
+                = activity_schedule.wed_start.strftime("%R") + " - " + activity_schedule.wed_end.strftime("%R")        
+            - else
+              span.box.black
+                | N/A
+          td style='text-align:center;white-space:nowrap;font-size:0.7rem' 
+            - if activity_schedule.thu_start && activity_schedule.thu_end
+              span.box.green 
+                = activity_schedule.thu_start.strftime("%R") + " - " + activity_schedule.thu_end.strftime("%R")        
+            - else
+              span.box.black
+                | N/A
+          td style='text-align:center;white-space:nowrap;font-size:0.7rem' 
+            - if activity_schedule.fri_start && activity_schedule.fri_end
+              span.box.green 
+                = activity_schedule.fri_start.strftime("%R") + " - " + activity_schedule.fri_end.strftime("%R")        
+            - else
+              span.box.black
+                | N/A
+          td style='text-align:center;white-space:nowrap;font-size:0.7rem'
+            - if activity_schedule.sat_start && activity_schedule.sat_end
+              span.box.green 
+                = activity_schedule.sat_start.strftime("%R") + " - " + activity_schedule.sat_end.strftime("%R")        
+            - else
+              span.box.black
+                | N/A
+          td style='text-align:center;white-space:nowrap;font-size:0.5rem' 
+            - if activity_schedule.is_active
+              i.material-icons check_box
+            - else
+              i.material-icons check_box_outline_blank
+          td style='text-align:center;white-space:nowrap;font-size:0.5rem'                    
+            - if (can? :manage, ActivitySchedule) && @disable_edit == false
+              = link_to edit_activity_schedule_url(activity_schedule, year:params[:year])
+                i.material-icons edit
+              = link_to activity_schedule, data: {:confirm => 'Are you sure?'}, :method => :delete
+                i.material-icons.red-text delete
+            = link_to activity_schedule_url(activity_schedule,year:params[:year])
+              i.material-icons visibility
+
+css:
+  th {
+     white-space: nowrap !important;
+     font-size: 0.9rem !important;
+  }

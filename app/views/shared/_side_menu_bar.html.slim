@@ -192,6 +192,17 @@ li
 - if signed_in? and current_user.admin?
 	li
 		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons vpn_key
+			i.mdi-navigation-chevron-right.right
+			span Access Control
+		.collapsible-body
+			ul
+				li
+					a href="/door_access_logs" Door Access Logs
+				li
+					a href="/student_activities" Activity Schedules
+	li
+		.collapsible-header.waves-effect.waves-cyan
 			i.material-icons.red-text settings_applications
 			i.mdi-navigation-chevron-right.right
 			span.red-text Admin

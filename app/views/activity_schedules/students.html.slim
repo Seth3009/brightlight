@@ -1,0 +1,23 @@
+.card-panel
+  .list_description
+    dl.row
+      dd.col.s4
+        .label Activity
+        .item = @activity_schedule.activity
+      dd.col.s4
+        .label Academic Year
+        .item = @academic_year.name || "--"
+.card-panel
+  = form_for_filterrific @filterrific do |f|
+    .row.list_description
+      .col.s4
+        .label Search student's name
+        = f.text_field :search_query, class: 'filterrific-periodically-observed'
+      .col.s3
+        .label Filtered by
+        = f.collection_select :filtered_by, GradeSection.all.order(:grade_level_id,:name),:id,:name,prompt: true      
+      .col.s3
+        = link_to 'Reset filters', reset_filterrific_url, class:"btn waves-effect waves-teal btn-flat"
+
+= form_tag({controller: "activity_schedules", action: "add_students"}) do           
+  = render partial: 'students/list', locals: { students: @students, year_id: @year_id}   
