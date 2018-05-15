@@ -8,12 +8,23 @@ class BookFine < ActiveRecord::Base
   belongs_to :grade_section
   belongs_to :grade_level
   
-  validates :book_copy, uniqueness: {scope: [:student_id, :academic_year_id]}
+  validates :book_copy_id, presence: true, uniqueness: {scope: [:student_id, :academic_year_id]}
+  validates :student_id, presence: true
+  validates :academic_year_id, presence: true
+  validates :fine, presence: true
   
   scope :not_disposed, lambda { 
     where('book_fines.book_copy_id NOT IN (
         select id from book_copies where disposed = true
       )')
+  }
+
+  scope :for_grade_section_year, lambda { |grade_section_id, academic_year_id|
+    where("student_id in
+      (SELECT students.id FROM students INNER JOIN grade_sections_students
+      ON grade_sections_students.student_id = students.id
+      WHERE grade_sections_students.grade_section_id = ?
+      AND grade_sections_students.academic_year_id = ?)", grade_section_id, academic_year_id)
   }
 
   # collect_current will read student_books table and look for book that are applicable for book fine
@@ -36,30 +47,26 @@ class BookFine < ActiveRecord::Base
   end
 
   def self.collect_fines_for_grade_level grade_level, year: year
-    StudentBook.where(academic_year:year).where(grade_level:grade_level).each do |b|
-      if b.fine_applies?
-        pct = FineScale.fine_percentage_for_condition_change(b.initial_copy_condition_id,b.end_copy_condition_id)
-        price = b.try(:book_copy).try(:book_edition).try(:price).try(:to_f) || 0.0
-        book_copy = b.book_copy
-        if book_copy
-          book_fine = BookFine.find_or_create_by(academic_year: year, book_copy: book_copy)
-          book_fine.update_attributes(
-            book_copy_id:     b.book_copy_id,
-            old_condition_id: b.initial_copy_condition_id,
-            new_condition_id: b.end_copy_condition_id,
-            academic_year_id: b.academic_year_id,
-            student_id:       b.student_id,
-            grade_level_id:   b.grade_level_id,
-            grade_section_id: b.grade_section_id,
-            student_book_id:  b.id,
-            percentage:       pct,
-            fine:             pct * price,
-            currency:         b.book_copy.try(:book_edition).try(:currency)
-          )
-        end
-      else
-        BookFine.where(student_book: b).destroy_all
-      end 
+    StudentBook.where(academic_year:year).where(grade_level:grade_level).fine_applies.each do |b|
+      pct = FineScale.fine_percentage_for_condition_change(b.initial_copy_condition_id,b.end_copy_condition_id)
+      price = b.try(:book_copy).try(:book_edition).try(:price).try(:to_f) || 0.0
+      book_copy = b.book_copy
+      if book_copy
+        book_fine = BookFine.find_or_create_by(academic_year_id: year, book_copy_id: book_copy.id)
+        book_fine.update_attributes(
+          book_copy_id:     b.book_copy_id,
+          old_condition_id: b.initial_copy_condition_id,
+          new_condition_id: b.end_copy_condition_id,
+          academic_year_id: b.academic_year_id,
+          student_id:       b.student_id,
+          grade_level_id:   b.grade_level_id,
+          grade_section_id: b.grade_section_id,
+          student_book_id:  b.id,
+          percentage:       pct,
+          fine:             pct * price,
+          currency:         b.book_copy.try(:book_edition).try(:currency)
+        )
+      end
     end
   end
 
@@ -86,7 +93,7 @@ class BookFine < ActiveRecord::Base
       if invoice.valid?
         invoice.line_items.create(
           book_fines.map do |book_fine|
-            idr_amount = book_fine.currency==foreign_currency ? book_fine.fine * exchange_rate : book_fine.fine
+            idr_amount = book_fine.currency==foreign_currency ? book_fine.fine * exchange_rate : book_fine.fine rescue 0.0
             {
               description: book_fine.book_copy.try(:book_edition).try(:title),
               price: idr_amount,
