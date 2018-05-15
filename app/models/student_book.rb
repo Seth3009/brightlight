@@ -84,13 +84,10 @@ class StudentBook < ActiveRecord::Base
 
   # Fine is applied if end condition is 2 steps worser than the initial condition, of if the book is missing
   # Here 'missing' is hardcoded with id=5
-  def fine_applies?
-    if initial_copy_condition_id && end_copy_condition_id
-      (end_copy_condition_id - initial_copy_condition_id >= 2) || end_copy_condition_id == 5
-    else
-      false
-    end
-  end
+  scope :fine_applies, lambda {
+    where.not(initial_copy_condition_id:nil,end_copy_condition_id:nil)
+    .where('end_copy_condition_id - initial_copy_condition_id > 2 OR end_copy_condition_id = 5')
+  }
 
   def initial_condition
     initial_copy_condition #|| book_copy.current_start_condition

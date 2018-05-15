@@ -21,7 +21,7 @@ class BookFinesController < ApplicationController
       .where(book_fines: {academic_year: @academic_year})
       .uniq
       .eager_load(:grade_sections_students)
-      .where('grade_sections_students.academic_year_id = ?', @academic_year.id)
+      .where(grade_sections_students: {academic_year_id: @academic_year.id})
       .eager_load(:grade_sections)
       .order(:name)
     @grade_sections = GradeSection.joins(:grade_sections_students)
@@ -39,11 +39,7 @@ class BookFinesController < ApplicationController
     end
     if params[:s].present?
       @grade_section = GradeSection.where(id:params[:s]).take
-      @book_fines = @book_fines.where("student_id in
-          (SELECT students.id FROM students INNER JOIN grade_sections_students
-          ON grade_sections_students.student_id = students.id
-          WHERE grade_sections_students.grade_section_id = ?
-          AND grade_sections_students.academic_year_id = ?)", @grade_section.id, @academic_year.id)
+      @book_fines = @book_fines.for_grade_section_year @grade_section.id, @academic_year.id
     end
     @book_fines = @book_fines.includes([:student,:old_condition,:new_condition]).includes(:book_copy => :book_edition).includes(:book_copy => :book_label)
   end
@@ -86,7 +82,14 @@ class BookFinesController < ApplicationController
         format.html { redirect_to @book_fine, notice: 'Book fine was successfully created.' }
         format.json { render :show, status: :created, location: @book_fine }
       else
-        format.html { render :new }
+        format.html { 
+          @book_edition = @book_copy.try(:book_edition)
+          @book_title = @book_edition.try(:title)
+          @currency = @book_edition.try(:currency)
+          @price = @book_edition.try(:price)
+          @barcode = @book_copy.try(:barcode)
+          render :new 
+        }
         format.json { render json: @book_fine.errors, status: :unprocessable_entity }
       end
     end
@@ -161,7 +164,7 @@ class BookFinesController < ApplicationController
     @book_fines = BookFine.where(academic_year:@academic_year).where(student_id:params[:st]).includes([:book_copy, :old_condition, :new_condition])
     @currency = "Rp"
     @dollar_rate = Currency.dollar_rate
-    @total_idr_amount = @book_fines.reduce(BigDecimal.new("0")){|sum,f| sum + ( f.currency=="USD" ? f.fine * @dollar_rate : f.fine )}
+    @total_idr_amount = @book_fines.reduce(BigDecimal.new("0")){|sum,f| sum + ( f.currency=="USD" ? f.fine * @dollar_rate : f.fine rescue 0.0)}
     @invoice = BookFine.create_invoice_for student:@student,
                   total_amount: @total_idr_amount,
                   academic_year: @academic_year,

@@ -5,18 +5,18 @@ h4 Create New Book Fine
     .row
       - if @book_fine.errors.any?
         #error_explanation
-          h2 = "#{pluralize(@book_fine.errors.count, "error")} prohibited this book_fine from being saved:"
+          h2 = "#{pluralize(@book_fine.errors.count, "error")} prohibited this book fine from being saved:"
           ul
             - @book_fine.errors.full_messages.each do |message|
               li = message
     .row
       .input-field.col.s12
         = f.label :title, class:'active'
-        = text_field_tag nil, @book_title, disabled:true, id:'title'    
+        = text_field_tag nil, @book_title || f.object.book_copy.try(:book_edition).try(:title), disabled:true, id:'title'    
     .row
       .input-field.col.s4
         = f.label :barcode, class:'active'
-        = text_field_tag :barcode, @barcode
+        = text_field_tag :barcode, @barcode || f.object.book_copy.try(:barcode)
       .input-field.col.s1
         = f.label :currency, class:'active'
         = text_field_tag nil, @currency, disabled:true, id: 'currency'
@@ -45,12 +45,12 @@ h4 Create New Book Fine
         = f.label :academic_year, class:'active'
         = text_field_tag :year, AcademicYear.current.name, disabled:true
         = f.hidden_field :academic_year_id, value:AcademicYear.current_id
-      .input-field.col.s5
+      .input-field.col.s3
         = f.label :student_name, class:'active'
         = f.hidden_field :student_id
         = text_field_tag :student, "", id: "student_autocomplete", placeholder: "Search student name" 
-      .input-field.col.s5
-        = text_field_tag :student_name, "", disabled:true
+      .input-field.col.s7
+        = text_field_tag :student_name, f.object.student.try(:name), disabled:true, class: "red-text"
 
   .toolbar.z-depth-1
     .actions.col.s12 

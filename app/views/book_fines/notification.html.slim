@@ -17,9 +17,9 @@
         - total = 0.0
         - @book_fines.each do |book_fine|
           - if book_fine.currency == 'USD'
-            - fine = Currency.dollar_rate * book_fine.fine.try(:to_f) || 0.0  
+            - fine = Currency.dollar_rate * book_fine.fine.to_f rescue 0.0  
           - elsif book_fine.currency == 'IDR'
-            - fine = book_fine.fine.try(:to_f) || 0.0
+            - fine = book_fine.fine.to_f rescue 0.0
           - total += fine
           tr 
             td = book_fine.try(:book_copy).try(:book_edition).try(:title)
