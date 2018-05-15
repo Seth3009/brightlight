@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180503065754) do
+ActiveRecord::Schema.define(version: 20180515034032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1245,6 +1245,25 @@ ActiveRecord::Schema.define(version: 20180503065754) do
   add_index "requisitions", ["requester_id"], name: "index_requisitions_on_requester_id", using: :btree
   add_index "requisitions", ["supervisor_id"], name: "index_requisitions_on_supervisor_id", using: :btree
 
+  create_table "room_accesses", force: :cascade do |t|
+    t.integer  "room_id"
+    t.integer  "badge_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "room_accesses", ["badge_id"], name: "index_room_accesses_on_badge_id", using: :btree
+  add_index "room_accesses", ["room_id"], name: "index_room_accesses_on_room_id", using: :btree
+
+  create_table "rooms", force: :cascade do |t|
+    t.string   "room_code"
+    t.string   "room_name"
+    t.string   "location"
+    t.string   "ip_address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "rosters", force: :cascade do |t|
     t.integer  "course_section_id"
     t.integer  "student_id"
@@ -1743,6 +1762,8 @@ ActiveRecord::Schema.define(version: 20180503065754) do
   add_foreign_key "requisitions", "employees", column: "supervisor_id"
   add_foreign_key "requisitions", "users", column: "created_by_id"
   add_foreign_key "requisitions", "users", column: "last_updated_by_id"
+  add_foreign_key "room_accesses", "badges"
+  add_foreign_key "room_accesses", "rooms"
   add_foreign_key "smart_cards", "transports"
   add_foreign_key "student_activities", "academic_years"
   add_foreign_key "student_activities", "activity_schedules"

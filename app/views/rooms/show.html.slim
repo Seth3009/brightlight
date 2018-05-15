@@ -1,0 +1,35 @@
+- title "#{@room.room_name}"
+
+h4 #{@room.room_name} (#{@room.ip_address})
+
+nav.light
+  .nav-wrapper
+    ul
+      li
+        = link_to rooms_path
+          i.material-icons.left chevron_left
+      li
+        .brand-logo style="margin-left: 20px; font-size:1.5em"
+          | Locations: #{@room.location}
+    ul.right
+      li
+        = link_to badges_room_url
+          | Add Badge Card
+          i.material-icons.left add
+
+h5 Badges
+= form_for @room do |f|
+  .card-panel
+    .row.header.compact
+      .col.s4 Name 
+      .col.s2 Kind
+      .col.s2 Badge
+      .col.s2.center Action
+    #employees.row.compact
+      = f.fields_for :room_accesses, @badges do |room_access|
+          .nested-fields
+            = render 'room_accesses_fields', f: room_access
+            
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', rooms_path, class: "waves-effect waves-light btn-flat"
