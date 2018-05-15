@@ -9,12 +9,8 @@ class Api::GatesController < Api::BaseController
                     .select('employees.name as nama,badges.*')
                     .where(badges: {code: params[:id]}).first
           if @employee.present?
-            DoorAccessLog.insert_door_log(@employee.employee_id, @employee.kind, params[:id],params[:loc],@employee.nama)
-            if params[:wifi].present?
+            DoorAccessLog.insert_door_log(@employee.employee_id, @employee.kind, params[:id],params[:loc],@employee.nama)            
               render json: "code:"+@employee.code + " name:" + @employee.nama + " kind:" + @employee.kind
-            else
-              response.header["result"] = '{code:' + @employee.code + ' name:' + @employee.nama + ' kind:' + @employee.kind + '}'
-            end
           else
             now = Time.parse(Time.now.to_s)
             @year_id = AcademicYear.current_id           
@@ -27,26 +23,14 @@ class Api::GatesController < Api::BaseController
                         .where(badges: {code: params[:id]}).first                                                                        
             if @student.present?
               DoorAccessLog.insert_door_log(@student.student_id, @student.kind, params[:id],params[:loc],@student.name)
-              if params[:wifi].present?
                 render json: "code:"+@student.code + " name:" + @student.name + " kind:" + @student.kind
-              else
-                response.header["result"] = '{code:' + @student.code + ' name:' + @student.name + ' kind:' + @student.kind + '}'          
-              end
             else
-              if params[:wifi].present?
-                render json: "{Invalid Card}"
-              else
-                response.header["result"] = '{Invalid Card}'
-              end
+              render json: "{Invalid Card}"
             end
           end
         end
-      else
-        if params[:wifi].present?
+      else        
           render json: "{Invalid Card}"
-        else
-          response.header["result"] = '{Invalid Card}'
-        end
       end    
     end
   end
