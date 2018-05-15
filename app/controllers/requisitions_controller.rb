@@ -84,7 +84,7 @@ class RequisitionsController < ApplicationController
           @employee = @requisition.requester || current_user.employee
           @department = @employee.department
           @budget = @employee.department.budgets.current.take rescue nil
-          @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue nil
+          @budget_items = @budget.budget_items rescue nil
           render :new 
         }
         format.json { render json: @requisition.errors, status: :unprocessable_entity }

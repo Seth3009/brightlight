@@ -24,7 +24,7 @@
       = f.label :is_budgeted, 'Budgeted?'
     .input-field.col.m6
       = f.label 'Budget', class: 'active'
-      = f.collection_select :budget_item_id, @budget_items, :id, :to_s, prompt: "Select budget"
+      = f.collection_select :budget_item_id, @budget_items, :id, :to_s, prompt: "Select budget", selected: @requisition.budget_item_id
     .input-field.col.offset-m3.m9
       = f.label :budget_notes
       = f.text_field :budget_notes

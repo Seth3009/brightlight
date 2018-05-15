@@ -17,7 +17,7 @@ class Budget < ActiveRecord::Base
 
   accepts_nested_attributes_for :budget_items, reject_if: :all_blank, allow_destroy: true
 
-  scope :current, lambda { where(academic_year: AcademicYear.current) }
+  scope :current, lambda { where(academic_year_id: AcademicYear.current_id) }
 
   def to_s
     if grade_section
