@@ -126,7 +126,7 @@ class RequisitionsController < ApplicationController
           format.js
         end
       else
-        @error = 'Error updating purchase order.'
+        @error = 'Error updating purchase request.'
         format.html do 
           @employee = @requisition.requester || current_user.employee
           @supervisors = Employee.supervisors.all
@@ -156,7 +156,7 @@ class RequisitionsController < ApplicationController
     authorize! :destroy, @requisition
     @requisition.destroy
     respond_to do |format|
-      format.html { redirect_to requisitions_url, notice: 'Requisition was successfully destroyed.' }
+      format.html { redirect_to requisitions_url, notice: 'Purchase request was successfully deleted.' }
       format.json { head :no_content }
     end
   end
