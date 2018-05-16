@@ -11,7 +11,7 @@ class Api::GatesController < Api::BaseController
                     .select('employees.name as nama,badges.*')
                     .where(badges: {code: params[:id]}).first
           if (@employee.present? && @room_access.present?) || @room.public_access?
-            DoorAccessLog.insert_door_log(@employee.employee_id, @employee.kind, params[:id],params[:loc],@employee.nama)            
+            DoorAccessLog.insert_door_log(@employee.employee_id, @employee.kind, params[:id],@room.room_name,@employee.nama)            
             render json: "code:"+@employee.code + " name:" + @employee.nama + " kind:" + @employee.kind
           else
             render json: "denied"
@@ -27,7 +27,7 @@ class Api::GatesController < Api::BaseController
                     .where(is_active:true)
                     .where(badges: {code: params[:id]}).first                                                                        
           if (@student.present? && @room_access.present?) || @room.public_access?
-            DoorAccessLog.insert_door_log(@student.student_id, @student.kind, params[:id],params[:loc],@student.name)
+            DoorAccessLog.insert_door_log(@student.student_id, @student.kind, params[:id],@room.room_name,@student.name)
             render json: "code:"+@student.code + " name:" + @student.name + " kind:" + @student.kind
           else
             render json: "denied"
