@@ -1,0 +1,3 @@
+    $("tr#row-<%= @room.id%>").replaceWith("<%=j render partial:'index_row', locals: {room: @room}%>");    
+    Materialize.toast("Room <%= @room.room_name%> updated.", 4000, "green")        
+    

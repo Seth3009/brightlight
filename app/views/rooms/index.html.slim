@@ -1,0 +1,41 @@
+.row 
+  .col.s6
+    h4 Rooms
+
+nav
+  .nav-wrapper
+    ul.right
+      - if can? :manage, Room
+        li
+          = link_to new_room_path, remote: true
+            | New Room
+            i.material-icons.left add
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Room code
+        th Room name
+        th Location
+        th Ip address
+        th Public
+        th Actions
+        
+      
+      tbody#rooms
+      - @rooms.each do |room|
+        tr id="row-#{room.id}"
+            = render partial: 'index_row', locals: {room: room}
+
+    
+          
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content

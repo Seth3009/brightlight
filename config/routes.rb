@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   
+  
   resources :employee_smartcards
   resources :stock_categories
   resources :stock_items
@@ -39,6 +40,14 @@ Rails.application.routes.draw do
       get 'students'
       post 'add_students'
       delete 'remove_student'      
+    end
+  end
+
+  resources :rooms ,shallow: true do
+    member do
+      get 'badges'
+      post 'add_badges'
+      delete 'remove_badges'
     end
   end
  
