@@ -114,7 +114,7 @@ class RoomsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def room_params
-      params.require(:room).permit(:room_code, :room_name, :location, :ip_address,
+      params.require(:room).permit(:room_code, :room_name, :location, :ip_address, :public_access,
                           {:room_accesses_attributes => [:id, :badge_id, :room_id, :_destroy]})
     end
 end

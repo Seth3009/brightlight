@@ -3,6 +3,12 @@ tr id="row-#{room.id}"
   td = room.room_name
   td = room.location
   td = room.ip_address
+  td 
+    - if room.public_access
+      i.material-icons check_box
+    - else
+      i.material-icons check_box_outline_blank
+  
   td.action
     = link_to room_path(room), class: "waves-effect waves-teal"
       i.material-icons visibility
