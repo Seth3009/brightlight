@@ -1,0 +1,19 @@
+tr id="row-#{room.id}"
+  td = room.room_code  
+  td = room.room_name
+  td = room.location
+  td = room.ip_address
+  td 
+    - if room.public_access
+      i.material-icons check_box
+    - else
+      i.material-icons check_box_outline_blank
+  
+  td.action
+    = link_to room_path(room), class: "waves-effect waves-teal"
+      i.material-icons visibility
+    = link_to edit_room_path(room), remote: true, class: "waves-effect waves-teal"
+      i.material-icons edit
+    = remote_link_to_delete room, message: "Room deleted", class: "waves-effect waves-light red-text"
+      i.material-icons delete
+    

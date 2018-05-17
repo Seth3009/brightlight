@@ -1,0 +1,27 @@
+.card#filterrific_results
+  .card-content
+    div
+       = page_entries_info badges
+       = render_filterrific_spinner 
+
+    table.compact.striped
+      tr
+        th 
+        th Name
+        th Kind
+        th Badge Number
+
+      - badges.each do |badge|
+        tr
+          td            
+            = check_box_tag "add[#{badge.id}]"
+            = label_tag "add[#{badge.id}]", ""
+          td = badge.name
+          td = badge.kind
+          td = badge.code
+
+    = will_paginate badges 
+
+  .card-action
+    button.btn.waves-effect.waves-light type="submit" Add
+    = link_to "Close", room_path(params[:id]), class: "waves-effect waves-light btn-flat"

@@ -198,9 +198,11 @@ li
 		.collapsible-body
 			ul
 				li
-					a href="/door_access_logs" Door Access Logs
+					= link_to "Access Logs", door_access_logs_path
 				li
-					a href="/student_activities" Activity Schedules
+					= link_to "Activity Schedules", activity_schedules_path
+				li
+					= link_to "Rooms", rooms_path
 	li
 		.collapsible-header.waves-effect.waves-cyan
 			i.material-icons.red-text settings_applications

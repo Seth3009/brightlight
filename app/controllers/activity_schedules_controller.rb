@@ -18,7 +18,8 @@ class ActivitySchedulesController < ApplicationController
 
   # GET /activity_schedules/1
   # GET /activity_schedules/1.json
-  def show                          
+  def show   
+    authorize! :read, ActivitySchedule                        
     @students = StudentActivity.where(academic_year:@year_id,activity_schedule:@activity_schedule)    
     @grade_sections = GradeSectionsStudent.joins('left join grade_sections on grade_sections.id = grade_sections_students.grade_section_id')
                       .select('student_id','grade_sections.name as name')
@@ -27,16 +28,19 @@ class ActivitySchedulesController < ApplicationController
 
   # GET /activity_schedules/new
   def new
+    authorize! :create, ActivitySchedule 
     @activity_schedule = ActivitySchedule.new
   end
 
   # GET /activity_schedules/1/edit
   def edit
+    authorize! :update, ActivitySchedule 
   end
 
   # POST /activity_schedules
   # POST /activity_schedules.json
   def create
+    authorize! :create, ActivitySchedule 
     @activity_schedule = ActivitySchedule.new(activity_schedule_params)
 
     respond_to do |format|
@@ -53,6 +57,7 @@ class ActivitySchedulesController < ApplicationController
   # PATCH/PUT /activity_schedules/1
   # PATCH/PUT /activity_schedules/1.json
   def update
+    authorize! :update, ActivitySchedule 
     respond_to do |format|
       if @activity_schedule.update(activity_schedule_params)
         format.html { redirect_to @activity_schedule, notice: 'Activity schedule was successfully updated.' }
@@ -67,6 +72,7 @@ class ActivitySchedulesController < ApplicationController
   # DELETE /activity_schedules/1
   # DELETE /activity_schedules/1.json
   def destroy
+    authorize! :destroy, ActivitySchedule 
     @activity_schedule.destroy
     respond_to do |format|
       format.html { redirect_to activity_schedules_url, notice: 'Activity schedule was successfully destroyed.' }
@@ -105,6 +111,7 @@ class ActivitySchedulesController < ApplicationController
   end
 
   def add_students    
+    authorize! :update, ActivitySchedule 
     academic_year_id = params[:year]
     params[:add].map {|id,on| Student.find(id)}.each do |student|
       @sa = StudentActivity.new(student_id:student.id, activity_schedule_id:@activity_schedule.id, academic_year_id:@year_id)

@@ -1,7 +1,15 @@
 class BadgesController < ApplicationController
 
+  def index
+    authorize! :read, Student
+    respond_to do |format|
+    format.json {      
+        @badges = Badge.order(:kind,:name)
+    end
+  end
   # GET /badges/new
   def new
+    authorize! :create, Badge
     @badge = Badge.new
     if params[:employee_id]
       @employee_id = params[:employee_id]
@@ -16,6 +24,7 @@ class BadgesController < ApplicationController
   # POST /badges
   # POST /badges.json
   def create
+    authorize! :create, Badge
     @badge = Badge.new(badge_params)
 
     respond_to do |format|
@@ -30,6 +39,7 @@ class BadgesController < ApplicationController
   # DELETE /badges/1
   # DELETE /badges/1.json
   def destroy
+    authorize! :destroy, Badge
     @badge = Badge.find(params[:id])
     @badge.destroy
     respond_to do |format|
