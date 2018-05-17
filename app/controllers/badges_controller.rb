@@ -5,7 +5,7 @@ class BadgesController < ApplicationController
     respond_to do |format|
     format.json {      
         @badges = Badge.order(:kind,:name)
-    end
+    }
   end
   # GET /badges/new
   def new
