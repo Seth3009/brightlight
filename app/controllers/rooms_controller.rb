@@ -91,16 +91,18 @@ class RoomsController < ApplicationController
 
   end
 
-  def add_badges    
-    params[:add].map {|id,on| Badge.find(id)}.each do |badge|
-      @room_access = RoomAccess.new(badge_id:badge.id, room_id:@room.id)
-      if @room_access.save
-        next
-      else
-        #render :students
-        redirect_to badges_room_url, alert: 'Badge Card already added' and return
-      end
-    end
+  def add_badges  
+    # @room.room_accesses << params[:add].map {|id, on| RoomAccess.new badge_id:id}  
+    @room.room_accesses.create params[:add].map {|id, on| {badge_id: id}}
+    # params[:add].map {|id,on| Badge.find(id)}.each do |badge|
+    #   @room_access = RoomAccess.new(badge_id:badge.id, room_id:@room.id)
+    #   if @room_access.save
+    #     next
+    #   else
+    #     #render :students
+    #     redirect_to badges_room_url, alert: 'Badge Card already added' and return
+    #   end
+    # end
     redirect_to badges_room_url(@room), notice: 'Badge Card successfully added'
   end
 
