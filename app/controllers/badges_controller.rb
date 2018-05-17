@@ -1,12 +1,5 @@
 class BadgesController < ApplicationController
 
-  def index
-    authorize! :read, Student
-    respond_to do |format|
-    format.json {      
-        @badges = Badge.order(:kind,:name)
-    }
-  end
   # GET /badges/new
   def new
     authorize! :create, Badge
