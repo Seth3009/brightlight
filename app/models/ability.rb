@@ -85,6 +85,7 @@ class Ability
     can :manage, StudentBook #, grade_section: GradeSection.find_by_homeroom_id(@user.employee)
     can :manage, StandardBook
     can :scan, BookLoan
+    can :return, BookLoan
     can :read, BookLoan
     can [:read,:create], LoanCheck
     can [:create,:read,:update,:destroy], Carpool

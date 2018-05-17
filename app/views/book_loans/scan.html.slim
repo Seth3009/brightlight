@@ -13,7 +13,7 @@ nav
       li 
         = link_to 'Done', employee_book_loans_path(@teacher, year: params[:year])
 
-- if can? :manage, BookLoan
+- if can? :return, BookLoan
   ul.collapsible data-collapsible="expandable"
     li
       .collapsible-header
