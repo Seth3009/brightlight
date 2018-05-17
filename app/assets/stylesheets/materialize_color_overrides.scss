@@ -5,6 +5,10 @@
 $primary-color: #e7580b !default;
 $secondary-color: #e7580b !default;
 
+// Card link colors
+$card-link-color: #e7580b !default;
+$card-link-color-light: lighten($card-link-color, 20%) !default;
+
 // Brightlight's own colors
 $light-grey:            #9e9e9e;
 $lighter-grey:          #e0e0e0;

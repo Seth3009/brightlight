@@ -4,27 +4,32 @@ class RoomsController < ApplicationController
   # GET /rooms
   # GET /rooms.json
   def index
+    authorize! :read, Room
     @rooms = Room.all
   end
 
   # GET /rooms/1
   # GET /rooms/1.json
   def show
+    authorize! :read, Room
     @badges = RoomAccess.where(room_id:@room)
   end
 
   # GET /rooms/new
   def new
+    authorize! :create, Room
     @room = Room.new
   end
 
   # GET /rooms/1/edit
   def edit
+    authorize! :update, Room
   end
 
   # POST /rooms
   # POST /rooms.json
   def create
+    authorize! :create, Room
     @room = Room.new(room_params)
 
     respond_to do |format|
@@ -41,6 +46,7 @@ class RoomsController < ApplicationController
   # PATCH/PUT /rooms/1
   # PATCH/PUT /rooms/1.json
   def update
+    authorize! :update, Room
     respond_to do |format|
       if @room.update(room_params)
         format.html { redirect_to rooms_url, notice: 'Room was successfully updated.' }
@@ -56,6 +62,7 @@ class RoomsController < ApplicationController
   # DELETE /rooms/1
   # DELETE /rooms/1.json
   def destroy
+    authorize! :destroy, Room
     @room.destroy
     respond_to do |format|
       format.html { redirect_to rooms_url, notice: 'Room was successfully destroyed.' }
@@ -92,6 +99,7 @@ class RoomsController < ApplicationController
   end
 
   def add_badges  
+    authorize! :update, Room
     # @room.room_accesses << params[:add].map {|id, on| RoomAccess.new badge_id:id}  
     @room.room_accesses.create params[:add].map {|id, on| {badge_id: id}}
     # params[:add].map {|id,on| Badge.find(id)}.each do |badge|
@@ -107,6 +115,7 @@ class RoomsController < ApplicationController
   end
 
   def remove_badges
+    authorize! :update, Room
   end
 
   private
