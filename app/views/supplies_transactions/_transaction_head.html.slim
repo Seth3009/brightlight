@@ -4,7 +4,7 @@
       = f.label :transaction_date, class: 'active'
       = f.date_field :transaction_date, value: Time.now.strftime('%Y-%m-%d')
     .input-field.col.m8
-      = f.label :employee, class: 'active'  
+      = f.label :employee, class: 'active'      
       = f.hidden_field :employee_id, value: f.object.employee_id || params[:employee_id]
       = text_field_tag :employee, f.object.employee || params[:employee], disabled: params[:employee_id].present?, class: "employee_autocomplete", placeholder: "Search by Employee name or by Department name or by Job Title"            
     .input-field.col.m2 
@@ -39,6 +39,7 @@ javascript:
   function insert_input_values(employee) {
     $("#supplies_transaction_employee_id").val(employee.id);
     $(".employee_autocomplete").val(employee.name);
+    window.location.href= "/supplies_transactions/new?employee_id=" + employee.id + "&employee=" + employee.name;
   }
 
   $(document).on('change', ".employee_autocomplete", function() {

@@ -32,7 +32,7 @@ class SuppliesTransactionsController < ApplicationController
 
   # GET /supplies_transactions/new
   def new
-    authorize! :read, SuppliesTransaction
+    authorize! :manage, SuppliesTransaction
     @product = Product.all
     @supplies_transaction = SuppliesTransaction.new
   end
