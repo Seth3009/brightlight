@@ -48,14 +48,12 @@ class BookFine < ActiveRecord::Base
   end
 
   def self.collect_fines_for_grade_level grade_level, year: year
-    puts "Deleting unpaid Fines for grade #{grade_level}"
     BookFine.where(academic_year_id: year, grade_level: grade_level).where('paid is not true').destroy_all
     StudentBook.where(academic_year: year).where(grade_level: grade_level).fine_applies.each do |b|
       pct = FineScale.fine_percentage_for_condition_change(b.initial_copy_condition_id,b.end_copy_condition_id)
       price = b.book_copy.book_edition.price.to_f rescue 0.0
       book_copy = b.book_copy
       if book_copy
-        puts "Updating unpaid Fines for loan #{b.student.name} #{b.book_copy.barcode}"
         book_fine = BookFine.find_or_create_by(academic_year_id: year, book_copy_id: book_copy.id)
         book_fine.update_attributes(
           book_copy_id:     b.book_copy_id,

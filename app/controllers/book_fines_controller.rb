@@ -118,10 +118,10 @@ class BookFinesController < ApplicationController
   # POST /book_fines/calculate
   def calculate
     authorize! :manage, BookFine    
-    academic_year_id = params[:fines_academic_year].to_i
-
+    
     respond_to do |format|
       format.js do
+        academic_year_id = params[:fines_academic_year].to_i
         grades = params[:fines_grade]
         if grades[:all].present?
           BookFine.collect_fines academic_year_id
@@ -129,6 +129,13 @@ class BookFinesController < ApplicationController
           grades.each { |grade| BookFine.collect_fines_for_grade_level grade[0], year:academic_year_id }
         end 
       end
+      format.html do
+        if params[:grade].present?
+          grade_level = params[:grade]
+          BookFine.collect_fines_for_grade_level grade_level, year: AcademicYear.current.id 
+        end
+        redirect_to book_fines_path(s: params[:s], year: params[:year])
+      end 
     end
   end
 
