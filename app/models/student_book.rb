@@ -89,6 +89,11 @@ class StudentBook < ActiveRecord::Base
     .where('end_copy_condition_id - initial_copy_condition_id > 2 OR end_copy_condition_id = 5')
   }
 
+  # def fine_applies
+  #   initial_copy_condition_id.present? && end_copy_condition_id.present?
+  #   && (end_copy_condition_id - initial_copy_condition_id > 2 || end_copy_condition_id == 5)
+  # end
+
   def initial_condition
     initial_copy_condition #|| book_copy.current_start_condition
   end

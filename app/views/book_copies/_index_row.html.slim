@@ -11,10 +11,12 @@ tr id="row-#{book_copy.id}"
       = book_copy.cond_code.try(:capitalize) || 'N/A'  
   td = book_copy.status_name || 'N/A'
   td
-    - if book_copy.teacher_id.present? 
-      = link_to book_copy.teacher_name, employee_book_loans_path(book_copy.teacher_id)  
-    - elsif book_copy.student_id.present?
-      = link_to book_copy.student_name, student_student_books_path(book_copy.student_id)
+    - active_loan = book_copy.active_loan
+    - if active_loan.present?
+      - if active_loan.employee_id.present? 
+        = link_to active_loan.employee.name, employee_book_loans_path(active_loan.employee_id)  
+      - elsif active_loan.student_id.present?
+        = link_to active_loan.student.name, student_student_books_path(active_loan.student_id)
 
   td.actions
     = link_to book_copy, remote: true
