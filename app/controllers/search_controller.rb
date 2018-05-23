@@ -1,5 +1,7 @@
 class SearchController < ApplicationController
   def index
+    redirect_to "/" if current_user.blank?
+
     if params[:search_term]
       params[:search_term].split(" ").each do |each_term|
         term = each_term.downcase

@@ -38,7 +38,7 @@ nav.top-navbar
           .input-field
             input type="search" name="search_term" id="search_term" placeholder="Search for book titles, description, ISBN, author, barcode, people"
 ul#user-profile-options.dropdown-content
-  - if current_user.employee
+  - if current_user && current_user.employee
     li 
       = link_to current_user.employee
         i.material-icons.left face

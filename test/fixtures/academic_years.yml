@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 current:
-  id: 6
-  name: '2015-2016'
-  start_date: 2015-06-07
-  end_date: 2016-06-06
+  id: 17
+  name: '2017-2018'
+  start_date: 2017-06-07
+  end_date: 2018-06-06
 
 last_year:
-  id: 5
-  name: '2014-2015'
-  start_date: 2014-06-07
-  end_date: 2015-06-06
+  id: 16
+  name: '2016-2017'
+  start_date: 2016-06-07
+  end_date: 2017-06-06
