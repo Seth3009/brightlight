@@ -3,6 +3,6 @@
 	.col.s2.offset-s5
 		.card
 			.card-image
-					= image_tag (current_user.image.present? ? current_user.image : 'avatar-placeholder.png'), class: 'media-object show-image'
-				.card-content
-						p = current_user.name
+				= image_tag (current_user.image.present? ? current_user.image : 'avatar-placeholder.png'), class: 'media-object show-image'
+			.card-content
+				p = current_user.name
