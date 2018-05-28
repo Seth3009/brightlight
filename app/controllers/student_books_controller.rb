@@ -264,14 +264,14 @@ class StudentBooksController < ApplicationController
                         .not_disposed
                         .where("end_copy_condition_id = ? OR needs_rebinding = true", poor.id)
                         .where(grade_section:@grade_section)
-                        .order("#{sort_column} #{sort_direction}", 'book_editions.title', 'grade_section_id','CAST(roster_no AS int)','initial_copy_condition_id','end_copy_condition_id')
+                        .order("#{sort_column} #{sort_direction}", 'book_editions.title', 'grade_level_id','grade_section_id','CAST(roster_no AS int)','initial_copy_condition_id','end_copy_condition_id')
 
     else
       @student_books = StudentBook.pnnrb_columns
                         .where(academic_year_id: @year_id)
                         .not_disposed                        
                         .where("end_copy_condition_id = ? OR needs_rebinding = true", poor.id)
-                        .order("#{sort_column} #{sort_direction}", 'book_editions.title', 'grade_section_id','CAST(roster_no AS int)','initial_copy_condition_id','end_copy_condition_id')
+                        .order("#{sort_column} #{sort_direction}", 'book_editions.title', 'grade_level_id','grade_section_id','CAST(roster_no AS int)','initial_copy_condition_id','end_copy_condition_id')
     end
 
     respond_to do |format|
