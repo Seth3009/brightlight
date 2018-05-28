@@ -37,8 +37,13 @@ class Api::GatesController < Api::BaseController
           end
         end
       else
-        render json: "invalid"
-        response.header["result"] = '{invalid}'
+        if @badge.present? 
+          render json: "invalid"
+          response.header["result"] = '{invalid}'
+        else
+          render json: "disconnect"
+          response.header["result"] = '{disconnect}'
+        end
       end            
     end
   end
