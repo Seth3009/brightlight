@@ -16,7 +16,7 @@ class BookFinesController < ApplicationController
     # TODO: Optimize with eager loading
     #   @students = Student.eager_load([:book_fines,:grade_sections_students]).where("book_fines.academic_year_id = ? and grade_sections_students.academic_year_id = ?", @academic_year.id, @academic_year.id)
 
-    @book_fines = BookFine.where(academic_year:@academic_year).order(:student_id)
+    @book_fines = BookFine.where(academic_year:@academic_year)
     @students = Student.joins(:book_fines)
       .where(book_fines: {academic_year: @academic_year})
       .uniq
@@ -41,7 +41,8 @@ class BookFinesController < ApplicationController
       @grade_section = GradeSection.where(id:params[:s]).take
       @book_fines = @book_fines.for_grade_section_year @grade_section.id, @academic_year.id
     end
-    @book_fines = @book_fines.includes([:student,:old_condition,:new_condition]).includes(:book_copy => :book_edition).includes(:book_copy => :book_label)
+    @book_fines = @book_fines.including_associations
+                  .order("#{sort_column} #{sort_direction}")
   end
 
   # GET /book_fines/1
@@ -240,5 +241,9 @@ class BookFinesController < ApplicationController
 
     def helpers
       ActionController::Base.helpers
+    end
+
+    def sortable_columns
+      [:label, :title, :barcode]
     end
 end

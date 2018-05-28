@@ -58,9 +58,9 @@ nav
   table.compact.striped
     thead
       tr
-        th No 
-        th Barcode
-        th Title
+        th = sort_link 'label' 
+        th = sort_link 'barcode'
+        th = sort_link 'title'
         th Initial <br> condition
         th End <br> condition
         th Fine %
@@ -72,9 +72,13 @@ nav
     tbody
       - @book_fines.each do |book_fine|
         tr id="row-#{book_fine.id}"
-          td = link_to book_fine.book_copy.try(:book_label).try(:name) || '--', book_fine.book_copy
-          td = link_to book_fine.book_copy.try(:barcode), book_fine.book_copy
-          td = book_fine.book_copy.try(:book_edition).try(:title)
+          /td = link_to book_fine.book_copy.try(:book_label).try(:name) || '--', book_fine.book_copy
+          td = link_to book_fine.label || '--', book_fine.book_copy
+          td = link_to book_fine.barcode, book_fine.book_copy
+          /td = link_to book_fine.book_copy.try(:barcode), book_fine.book_copy
+          td = book_fine.title
+          /td = book_fine.book_copy.try(:book_edition).try(:title)
+          
           td = book_fine.old_condition.try(:code)
           td = book_fine.new_condition.try(:code)
           td = number_to_percentage(100 * book_fine.try(:percentage) || 0, precision:0)
