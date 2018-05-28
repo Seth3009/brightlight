@@ -41,8 +41,8 @@ class BookFinesController < ApplicationController
       @grade_section = GradeSection.where(id:params[:s]).take
       @book_fines = @book_fines.for_grade_section_year @grade_section.id, @academic_year.id
     end
-    @book_fines = @book_fines.including_associations
-                  .order("#{sort_column} #{sort_direction}")
+    @book_fines = @book_fines.including_associations.order('grade_section, gss.order_no')
+
   end
 
   # GET /book_fines/1
@@ -244,6 +244,6 @@ class BookFinesController < ApplicationController
     end
 
     def sortable_columns
-      [:label, :title, :barcode]
+      [:label, :title, :barcode, :grade, :name, :grade_section]
     end
 end

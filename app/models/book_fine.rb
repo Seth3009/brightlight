@@ -21,7 +21,7 @@ class BookFine < ActiveRecord::Base
   }
 
   scope :for_grade_section_year, lambda { |grade_section_id, academic_year_id|
-    where("student_id in
+    where("book_fines.student_id in
       (SELECT students.id FROM students INNER JOIN grade_sections_students
       ON grade_sections_students.student_id = students.id
       WHERE grade_sections_students.grade_section_id = ?
@@ -32,8 +32,12 @@ class BookFine < ActiveRecord::Base
     joins('left outer join book_copies bc on bc.id = book_fines.book_copy_id')
     .joins('left outer join book_editions be on be.id = bc.book_edition_id')
     .joins('left outer join book_labels bl on bc.book_label_id = bl.id')
-    .includes([:student,:book_copy,:old_condition,:new_condition])
-    .select("book_fines.*, be.title as title, bl.name as label, bc.barcode as barcode")
+    .joins('left outer join students on students.id = book_fines.student_id')
+    .joins('left outer join grade_sections_students gss
+            ON gss.student_id = students.id AND gss.academic_year_id = book_fines.academic_year_id')
+    .joins('left outer join grade_sections gs ON gs.id = gss.grade_section_id')
+    .includes([:old_condition,:new_condition])
+    .select("book_fines.*, be.title as title, bl.name as label, bc.barcode as barcode, students.name as name, gs.name as grade, gs.id as grade_section")
   }
 
   # collect_current will read student_books table and look for book that are applicable for book fine
