@@ -46,10 +46,10 @@ nav
       tr.compact-row
         th No
         th style='text-align:center;' = sort_link "title"
-        th style='text-align:center;' = sort_link "book_no", "Book No"
+        th style='text-align:center;' = sort_link "roster_no", "Book No"
         th style='text-align:center;' = sort_link "initial_copy_condition_id", "Initial <br> Condition"
         th style='text-align:center;' = sort_link "end_copy_condition_id", "End  <br> Condition"
-        th style='text-align:right;' Needs <br> Rebinding?
+        th style='text-align:right;' = sort_link "needs_rebinding", "Needs <br> Rebinding?"
     tbody                                    
       - @student_books.each_with_index do |book, i|
         tr style='border-bottom:1px solid gainsboro'
