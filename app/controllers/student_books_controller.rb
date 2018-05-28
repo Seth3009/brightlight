@@ -264,14 +264,14 @@ class StudentBooksController < ApplicationController
                         .not_disposed
                         .where("end_copy_condition_id = ? OR needs_rebinding = true", poor.id)
                         .where(grade_section:@grade_section)
-                        .order("#{sort_column} #{sort_direction}", 'CAST(roster_no AS int)')
+                        .order("#{sort_column} #{sort_direction}", 'book_editions.title', 'grade_section_id','CAST(roster_no AS int)','initial_copy_condition_id','end_copy_condition_id')
 
     else
       @student_books = StudentBook.pnnrb_columns
                         .where(academic_year_id: @year_id)
                         .not_disposed                        
                         .where("end_copy_condition_id = ? OR needs_rebinding = true", poor.id)
-                        .order("#{sort_column} #{sort_direction}", 'CAST(roster_no AS int)')
+                        .order("#{sort_column} #{sort_direction}", 'book_editions.title', 'grade_section_id','CAST(roster_no AS int)','initial_copy_condition_id','end_copy_condition_id')
     end
 
     respond_to do |format|
@@ -470,7 +470,7 @@ class StudentBooksController < ApplicationController
   private
     # enable sort column
     def sortable_columns 
-      [:title,:book_no,:initial_copy_condition_id,:end_copy_condition_id]
+      [:title,:roster_no,:initial_copy_condition_id,:end_copy_condition_id, :needs_rebinding]
     end
 
     # Use callbacks to share common setup or constraints between actions.
