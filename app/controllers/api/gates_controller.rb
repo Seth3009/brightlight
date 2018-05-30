@@ -31,13 +31,14 @@ class Api::GatesController < Api::BaseController
           if (@student.present? && @room_access.present?) || @room.public_access?
             DoorAccessLog.insert_door_log(@student.student_id, @student.kind, params[:id],@room.room_name,@student.name)
             render json: "code:"+@student.code + " name:" + @student.name + " kind:" + @student.kind
+            response.header["result"] = '{code:' + @student.code + ' name:' + @student.name + ' kind:' + @student.kind + '}'
           else
             render json: "denied"
             response.header["result"] = '{denied}'
           end
         end
       else
-        if @badge.present? 
+        if @badge.present? == false
           render json: "invalid"
           response.header["result"] = '{invalid}'
         else
