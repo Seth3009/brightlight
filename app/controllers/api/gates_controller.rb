@@ -13,8 +13,10 @@ class Api::GatesController < Api::BaseController
           if (@employee.present? && @room_access.present?) || @room.public_access?
             DoorAccessLog.insert_door_log(@employee.employee_id, @employee.kind, params[:id],@room.room_name,@employee.nama)            
             render json: "code:"+@employee.code + " name:" + @employee.nama + " kind:" + @employee.kind
+            response.header["result"] = '{code:' + @employee.code + ' name:' + @employee.nama + ' kind:' + @employee.kind + '}'
           else
             render json: "denied"
+            response.header["result"] = '{denied}'
           end        
         else
           now = Time.parse(Time.now.to_s)
@@ -29,12 +31,20 @@ class Api::GatesController < Api::BaseController
           if (@student.present? && @room_access.present?) || @room.public_access?
             DoorAccessLog.insert_door_log(@student.student_id, @student.kind, params[:id],@room.room_name,@student.name)
             render json: "code:"+@student.code + " name:" + @student.name + " kind:" + @student.kind
+            response.header["result"] = '{code:' + @student.code + ' name:' + @student.name + ' kind:' + @student.kind + '}'
           else
             render json: "denied"
+            response.header["result"] = '{denied}'
           end
         end
       else
-        render json: "invalid"
+        if @badge.present? == false
+          render json: "invalid"
+          response.header["result"] = '{invalid}'
+        else
+          render json: "disconnect"
+          response.header["result"] = '{disconnect}'
+        end
       end            
     end
   end
