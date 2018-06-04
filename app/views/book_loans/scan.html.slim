@@ -19,7 +19,12 @@ nav
       .collapsible-header
         | Manual input
         i.material-icons.left keyboard
-
+        .input-field.right-in-header
+          = check_box_tag :return_to_inventory 
+          = label_tag :return_to_inventory
+        .input-field.right-in-header
+          = check_box_tag :return 
+          = label_tag :return
       .collapsible-body
         .container style="margin-top:1px"
           .row
