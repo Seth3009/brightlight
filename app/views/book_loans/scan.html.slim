@@ -13,18 +13,12 @@ nav
       li 
         = link_to 'Done', employee_book_loans_path(@teacher, year: params[:year])
 
-- if can? :return, BookLoan
+- if can? :manage, BookLoan
   ul.collapsible data-collapsible="expandable"
     li
       .collapsible-header
         | Manual input
         i.material-icons.left keyboard
-        .input-field.right-in-header
-          = check_box_tag :return_to_inventory 
-          = label_tag :return_to_inventory
-        .input-field.right-in-header
-          = check_box_tag :return 
-          = label_tag :return
 
       .collapsible-body
         .container style="margin-top:1px"
@@ -40,6 +34,12 @@ nav
       .collapsible-header 
         | Scan bar code
         = hidden_field_tag :barcode
+        .input-field.right-in-header
+          = check_box_tag :return_to_inventory 
+          = label_tag :return_to_inventory
+        .input-field.right-in-header
+          = check_box_tag :return 
+          = label_tag :return
 
               
 .card-panel#returns style="display:none"
