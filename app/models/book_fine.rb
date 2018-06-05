@@ -7,7 +7,7 @@ class BookFine < ActiveRecord::Base
   belongs_to :student_book
   belongs_to :grade_section
   belongs_to :grade_level
-  has_one :line_item
+  has_one :line_item, dependent: :destroy
 
   validates :book_copy_id, presence: true, uniqueness: {scope: [:student_id, :academic_year_id]}
   validates :student_id, presence: true
