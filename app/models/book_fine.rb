@@ -7,7 +7,7 @@ class BookFine < ActiveRecord::Base
   belongs_to :student_book
   belongs_to :grade_section
   belongs_to :grade_level
-  has_many :line_items, dependent: :destroy
+  has_one :line_item
 
   validates :book_copy_id, presence: true, uniqueness: {scope: [:student_id, :academic_year_id]}
   validates :student_id, presence: true
@@ -90,7 +90,7 @@ class BookFine < ActiveRecord::Base
     # The tag is to identify the invoice with the book fines
     tag = Digest::MD5.hexdigest "#{academic_year.id}-#{student.id}-#{total_amount}"
     invoice = Invoice.find_by_tag tag
-    unless invoice.present?
+    if invoice.blank?
       invoice = Invoice.create(
           student: student,
           bill_to: student.name,
@@ -104,21 +104,21 @@ class BookFine < ActiveRecord::Base
           tag: tag,
           user: current_user
       )
-      if invoice.valid?
-        invoice.line_items.create(
-          book_fines.map do |book_fine|
-            idr_amount = book_fine.currency==foreign_currency ? book_fine.fine * exchange_rate : book_fine.fine rescue 0.0
-            {
-              description: book_fine.book_copy.try(:book_edition).try(:title),
-              price: idr_amount,
-              ext1: book_fine.old_condition.code,
-              ext2: book_fine.new_condition.code,
-              ext3: "#{book_fine.percentage * 100}%",
-              book_fine_id: book_fine.id
-            }
-          end
-        )
-      end
+    end
+    if invoice.valid? && invoice.line_items.blank?
+      invoice.line_items.create(
+        book_fines.map do |book_fine|
+          idr_amount = book_fine.currency==foreign_currency ? book_fine.fine * exchange_rate : book_fine.fine rescue 0.0
+          {
+            description: book_fine.book_copy.try(:book_edition).try(:title),
+            price: idr_amount,
+            ext1: book_fine.old_condition.code,
+            ext2: book_fine.new_condition.code,
+            ext3: "#{book_fine.percentage * 100}%",
+            book_fine_id: book_fine.id
+          }
+        end
+      )
     end
     return invoice
   end
