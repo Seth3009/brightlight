@@ -19,7 +19,7 @@ ul#catg-options.dropdown-content
       = link_to catg.name, employee_book_loans_path(params.merge(book_catg: catg.id).symbolize_keys)
 
 div
-  = form_tag list_action_book_loans_path(employee_id:params[:employee_id]), remote:true do 
+  = form_tag list_action_book_loans_path(employee_id:params[:employee_id], page:params[:page]), remote:true do 
     nav
       .nav-wrapper
         #context-buttons style="display:none;"
@@ -34,16 +34,18 @@ div
               li  
                 button.btn type='submit' name='move' Go!
           ul.right
-            - if can? :update, BookLoan
-              li 
+            - if can? :manage, BookLoan
+              li
                 .cat Edit:
+              li           
+                = select_tag :batch_return, options_for_select([['Return','R'], ['Return to inventory','RI']]), prompt: "Select return type"
               li 
                 = select_tag :book_catg, options_from_collection_for_select(BookCategory.all, :id, :name), prompt: "Select Category"
               li 
-                button.btn type='submit' name='category' Submit
+                button.btn type='submit' name='batch' Go!
             - if can? :delete, BookLoan
               li style="height: 54px"
-                button.icon type='submit' name='delete' data-confirm="Are you sure?"
+                button.icon type='submit' name='delete' data-confirm="Are you sure to delete selected book loan records?"
                   i.material-icons.red-text delete
         #default-buttons
           ul
@@ -210,11 +212,9 @@ javascript:
       draggable: true // Choose whether you can drag to open on touch screens
     });
   }
-  $(document).on('page:load', function(){
+  $(document).on('page:load ready', function(){
     prepare_menu();    
   });
-  $(document).on('ready', function(){
-    prepare_menu();
-  });
+
 
   

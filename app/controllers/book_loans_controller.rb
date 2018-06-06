@@ -311,27 +311,34 @@ class BookLoansController < ApplicationController
     # employee = Employee.find params[:employee_id]
     target = Employee.find params[:to_teacher]
     year = AcademicYear.find params[:to_year]
-    loan_ids = params[:add].map &:first
+    selected_ids = params[:add].map &:first
     completed = []
     ids_to_remove = []
     if params[:move]
-      BookLoan.not_disposed.where(id:loan_ids).each do |loan|
+      BookLoan.not_disposed.where(id:selected_ids).each do |loan|
         success = loan.move_book to:target, to_year:year
         completed << loan.id.to_s if success
         ids_to_remove << loan.id.to_s if success and year == loan.academic_year
       end
-      failed = loan_ids - completed
-    elsif params[:category]
-      BookLoan.not_disposed.where(id:loan_ids).update_all book_category_id: params[:book_catg] 
-      @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id])}" 
-    elsif params[:delete]
-      BookLoan.not_disposed.where(id:loan_ids).destroy_all
-      ids_to_remove = loan_ids
+      failed = selected_ids - completed
+    end
+    if params[:book_catg].present?
+      BookLoan.not_disposed.where(id:selected_ids).update_all book_category_id: params[:book_catg]
+      @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
+    end
+    if params[:batch_return].present?
+      BookLoan.not_disposed.where(id:selected_ids).update_all return_status: params[:batch_return], return_date: Date.today
+      @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
+    end
+    if params[:delete]
+      BookLoan.not_disposed.where(id:selected_ids).destroy_all
+      ids_to_remove = selected_ids
     end
     ids_to_uncheck = completed - ids_to_remove
     @rows_to_remove = ids_to_remove.present? ? ids_to_remove.map{|id| '#row-'+id.to_s}.join(', ') : ""
     @failed_barcodes = failed.present? ? failed.map {|x| BookLoan.not_disposed.where(id:x).take.try(:barcode)} : ""
     @rows_to_uncheck = ids_to_uncheck.present? ? ids_to_uncheck.map{|id| '#add_'+id.to_s}.join(', ') : ""
+    puts "RETURN PATH #{@return_path}"
     respond_to :js
   end
 
