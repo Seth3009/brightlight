@@ -82,7 +82,7 @@ div
                 = image_tag 'barcode-white.png', class:"left"
             - if can? :manage, BookLoan
               li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Add book"
-                = link_to new_employee_book_loans_path(@teacher, book_catg: params[:book_catg])
+                = link_to new_employee_book_loans_path(@teacher, book_catg: params[:book_catg], year: params[:year])
                   i.material-icons.left add
         
         a href="#" data-activates="sidenav-menu" class="right button-collapse" style="margin-right:10px"

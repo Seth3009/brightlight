@@ -78,6 +78,7 @@ class BookLoansController < ApplicationController
   # GET /book_loans/new
   def new
     authorize! :create, BookLoan
+    @academic_year_id = params[:year]
     @book_loan = BookLoan.new
   end
 
