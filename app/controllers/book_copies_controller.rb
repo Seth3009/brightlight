@@ -189,7 +189,7 @@ class BookCopiesController < ApplicationController
     end
   end
 
-  # GET /book_copies/1/undispose
+  # POST /book_copies/1/undispose
   def undispose
     authorize! :manage, BookCopy
     @book_copy = BookCopy.unscoped.find params[:id]
