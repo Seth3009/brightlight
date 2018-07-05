@@ -38,6 +38,6 @@ module Brightlight
 
     config.action_mailer.preview_path = "#{Rails.root}/test/mailers/previews"
     
-    config.purchasing_email_address = '"norie@cahayabangsa.org" <Nori M. Onggeleng>'
+    config.purchasing_email_address = '"Nori M. Onggeleng" <norie@cahayabangsa.org>'
   end
 end
