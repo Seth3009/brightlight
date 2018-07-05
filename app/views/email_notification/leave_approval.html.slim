@@ -24,6 +24,6 @@ html
       p Thank you for using <i>Brightlight</i>. 
       
     - if @sendto == "hr"
-      = render 'footer', to: @hrmanager
+      = render 'footer', to: @hrmanager.email
     - else
-      = render 'footer', to: @approver
+      = render 'footer', to: @approver.email
