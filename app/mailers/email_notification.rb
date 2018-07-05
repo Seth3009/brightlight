@@ -14,6 +14,12 @@ class EmailNotification < ActionMailer::Base
     mail(to: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Purchase Request #{requisition.id}.")
   end 
 
+  def requisition_to_purchasing(requisition, addressee)
+    @requisition = requisition
+    @addressee = addressee
+    mail(to: addressee, subject: "New Purchase Request #{requisition.id}.")
+  end 
+
   def leave_approval(leave_request, approver, sendto, type)
     @approver = approver
     @leave_request = leave_request

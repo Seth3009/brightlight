@@ -53,6 +53,14 @@ class Requisition < ActiveRecord::Base
     return true
   end 
 
+  def send_to_purchasing
+    purchasing_email = Rails.application.config.purchasing_email_address
+    email = EmailNotification.requisition_to_purchasing(self, purchasing_email)
+    email.deliver_now
+    notification = Message.new_from_email(email)
+    notification.save
+  end
+
   def pending_supv_approval?
     sent_to_supv != nil && is_supv_approved == nil
   end

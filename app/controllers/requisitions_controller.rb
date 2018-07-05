@@ -119,6 +119,12 @@ class RequisitionsController < ApplicationController
             format.json { render :show, status: :ok, location: @requisition }
             format.js
           end
+        elsif params[:approve] && @requisition.approved?
+          @requisition.send_to_purchasing 
+          @message = 'Purchase request has been sent for approval.'
+          format.html { redirect_to @requisition, notice: @message }
+          format.json { render :show, status: :ok, location: @requisition }
+          format.js
         else
           @message = 'Purchase request was successfully saved.'
           format.html { redirect_to @requisition, notice: @message }
