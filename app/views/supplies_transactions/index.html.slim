@@ -4,7 +4,7 @@
       h4 Supplies Transaction #{Date::MONTHNAMES[params[:m].to_i]} #{params[:y]}
       
     - else
-      h4 Supplies Transaction #{params[:trx_date].to_date.strftime('%d %b %Y')}
+      h4 Daily Supplies Transaction #{if params[:trx_date].present? then params[:trx_date].to_date.strftime('%d %b %Y') else Date.today.strftime('%d %b %Y') }
       
 nav
   .nav-wrapper    
@@ -14,26 +14,45 @@ nav
           = link_to new_supplies_transaction_path
             | New Transaction
             i.material-icons.left add  
-    - if params[:view] == 'daily' 
-      ul        
-        li style="padding: 0 20px"         
-          | Date :
-        li
-          = date_field_tag 'trx_date', params[:trx_date]
-    - else
+    / - if params[:view] == 'daily' 
+    ul        
+      li style="padding: 0 20px"         
+        | Date :
+      li
+        = date_field_tag 'trx_date', params[:trx_date] || Date.today
+    / - else
       ul
-        li  
-          = select_year(Date.strptime("1-"+params[:m]+"-"+params[:y],"%d-%m-%Y"),{},name: 'trx_year')        
-        li
-          = select_month(Date.strptime("1-"+params[:m]+"-"+params[:y],"%d-%m-%Y"),{},name: 'trx_month')
+        / li  
+        /   = select_year(Date.strptime("1-"+params[:m]+"-"+params[:y],"%d-%m-%Y"),{},name: 'trx_year')        
+        / li
+        /   = select_month(Date.strptime("1-"+params[:m]+"-"+params[:y],"%d-%m-%Y"),{},name: 'trx_month')
 
     
           
 
-- if params[:view] == 'monthly'
-  = render 'monthly_list'
-- else
-  = render 'daily_list'
+.card-panel
+  table.compact.striped  
+    thead
+      tr
+        th Employee
+        th Product
+        th Transaction date 
+        th Type 
+        th Notes      
+        th.right-align Qty
+        th Unit
+        
+
+    tbody#supplies_transaction
+      - @supplies_transactions.each do |supplies_transaction|
+        tr 
+          td = supplies_transaction.supplies_transaction.employee rescue nil
+          td = supplies_transaction.product.try(:name)
+          td = supplies_transaction.supplies_transaction.transaction_date.strftime("%a, %d %b %Y") rescue nil
+          td = supplies_transaction.try(:in_out)
+          td = supplies_transaction.supplies_transaction.notes
+          td.right-align = supplies_transaction.try(:qty)
+          td = supplies_transaction.product.item_unit.try(:abbreviation) rescue nil
       
 - if @supplies_transactions.count > 20
   .toolbar.z-index-1
@@ -57,24 +76,14 @@ javascript:
       }
     });
 
-  $(function(){
-      // bind change event to select
-      $('#date_month').on('change', function () {          
-          var month = $('#date_month').val();
-          var year = $('#date_year').val();
-          if (month) { // require a URL
-              window.location = "supplies_transactions?view=monthly&m="+month+"&y="+year; // redirect              
-          }
-          return false;
-      });
-    });
+  
 
   $(function(){
       // bind change event to select
       $('#trx_date').on('change', function () {          
           var date = $('#trx_date').val();          
           if (date) { // require a URL
-              window.location = "supplies_transactions?view=daily&trx_date="+date; // redirect              
+              window.location = "supplies_transactions?trx_date="+date; // redirect              
           }
           return false;
       });

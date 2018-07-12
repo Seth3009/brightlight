@@ -22,7 +22,7 @@ class SuppliesTransaction < ActiveRecord::Base
   end
 
   private
-    def has_at_least_one_supplies_transaction_item
+    def has_at_least_one_supplies_transaction_item     
       errors.add :supplies_transaction, 'must have at least one supplies item' if supplies_transaction_items.empty?
     end
 

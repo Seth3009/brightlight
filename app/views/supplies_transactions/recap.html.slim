@@ -9,13 +9,13 @@ nav
   .nav-wrapper  
     ul
       li  
-        = select_year(Date.strptime("1-"+params[:m]+"-"+params[:y],"%d-%m-%Y"),{},name: 'trx_year')        
+        = select_year(Date.strptime("1-"+ (params[:m] ? params[:m] : Date.today.month.to_s)  +"-"+ (params[:y] ? params[:y] : Date.today.year.to_s) ,"%d-%m-%Y"),{},name: 'trx_year')        
       li
-        = select_month(Date.strptime("1-"+params[:m]+"-"+params[:y],"%d-%m-%Y"),{},name: 'trx_month')
+        = select_month(Date.strptime("1-"+(params[:m] ? params[:m] : Date.today.month.to_s)  +"-"+ (params[:y] ? params[:y] : Date.today.year.to_s),"%d-%m-%Y"),{},name: 'trx_month')
     ul.right
       - if can? :read, SuppliesTransactionItem
         li
-          = link_to 'Export PDF', recap_supplies_transactions_path(m:params[:m],y:params[:y], format: :pdf), target: '_blank'
+          = link_to 'Export PDF', recap_supplies_transactions_path(m:(params[:m] || Date.today.month.to_i),y:(params[:y] || Date.today.year.to_i), format: :pdf), target: '_blank'
 
 = render 'recap_index_row'
             

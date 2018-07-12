@@ -4,9 +4,12 @@
       = f.label :transaction_date, class: 'active'
       = f.date_field :transaction_date, value: Time.now.strftime('%Y-%m-%d')
     .input-field.col.m8
-      = f.label :employee, class: 'active'      
+      = f.label :employee, class: 'active'    
+      / = f.hidden_field :employee_id, value: params[:employee_id]
+      / = text_field_tag :employee, params[:employee], disabled: true  
       = f.hidden_field :employee_id, value: f.object.employee_id || params[:employee_id]
       = text_field_tag :employee, f.object.employee || params[:employee], disabled: params[:employee_id].present?, class: "employee_autocomplete", placeholder: "Search by Employee name or by Department name or by Job Title"            
+      
     .input-field.col.m2 
       = f.label '', 'Transaction Type', class: 'active'     
       = select_tag 'in_out', options_for_select(["IN", "OUT"],"OUT"), id: "trx_type"

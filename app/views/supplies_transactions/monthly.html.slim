@@ -1,0 +1,57 @@
+.row 
+  .col.s6
+    - if params[:m].present? && params[:y].present?
+        h4 Supplies Transaction #{Date::MONTHNAMES[params[:m].to_i]} #{params[:y]}
+    - else
+        h4 Supplies Transaction #{Date::MONTHNAMES[Date.today.month.to_i]}
+
+nav
+  .nav-wrapper   
+    ul
+      li  
+        = select_year(Date.strptime("1-"+ (params[:m] ? params[:m] : Date.today.month.to_s)  +"-"+ (params[:y] ? params[:y] : Date.today.year.to_s) ,"%d-%m-%Y"),{},name: 'trx_year')        
+      li
+        = select_month(Date.strptime("1-"+(params[:m] ? params[:m] : Date.today.month.to_s)  +"-"+ (params[:y] ? params[:y] : Date.today.year.to_s),"%d-%m-%Y"),{},name: 'trx_month')
+      
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Employee
+        th Transaction date        
+        th Item count
+        th Notes
+        th Actions    
+
+    tbody#supplies_transaction
+      - @supplies_transactions.each do |supplies_transaction|
+        tr 
+          td = supplies_transaction.employee
+          td = supplies_transaction.transaction_date.strftime("%a, %d %b %Y")
+          td = supplies_transaction.itemcount
+          td = supplies_transaction.notes
+          td
+            = link_to supplies_transaction, remote: true
+              i.material-icons visibility       
+            - if supplies_transaction.itemcount == 0
+              = link_to supplies_transaction, data: {:confirm => 'Are you sure?'}, :method => :delete
+                i.material-icons.red-text delete          
+- if @supplies_transactions.count > 20
+  .toolbar.z-index-1
+    = will_paginate @supplies_transactions
+
+#show-modal.modal.modal-fixed-footer
+  #show-modal-content
+
+javascript:
+  $(function(){
+    // bind change event to select
+    $('#date_month').on('change', function () {          
+        var month = $('#date_month').val();
+        var year = $('#date_year').val();
+        if (month) { // require a URL
+            window.location = "/supplies_transactions/monthly?m="+month+"&y="+year; // redirect              
+        }
+        return false;
+    });
+  });
