@@ -63,6 +63,7 @@ Rails.application.routes.draw do
   resources :supplies_transactions, except: [:edit, :update] do
     collection do
       get 'recap'
+      get 'monthly'
     end
   end
   

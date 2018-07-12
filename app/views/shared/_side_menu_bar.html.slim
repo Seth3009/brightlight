@@ -92,11 +92,11 @@ li
   .collapsible-body
     ul
       li
-        = link_to 'Daily Transaction', supplies_transactions_url(view:'daily',trx_date: Date.today)
+        = link_to 'Daily Transaction', supplies_transactions_url
       li
-        = link_to 'Monthly Transaction', supplies_transactions_url(view:'monthly',m:Time.now.month,y:Time.now.year)
+        = link_to 'Monthly Transaction', monthly_supplies_transactions_url
       li
-        = link_to 'Transaction Recap', recap_supplies_transactions_url(m:Time.now.month,y:Time.now.year)
+        = link_to 'Transaction Recap', recap_supplies_transactions_url
       li
         = link_to 'Stock', supplies_stocks_products_url
       li
