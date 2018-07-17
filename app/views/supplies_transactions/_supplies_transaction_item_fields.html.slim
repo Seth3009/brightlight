@@ -3,8 +3,11 @@ tr.nested-fields
     .input-field     
       = f.text_field :barcode, class:'barcode', disabled: true
   td.wd40
-    .input-field     
-      = text_field_tag :name, '', class: 'product_autocomplete'       
+    .input-field    
+      span#keyboard style="display:none" 
+        = text_field_tag :name, '', class: 'product_autocomplete'     
+      span#scanner  
+        = text_field_tag :name, '' 
     = f.hidden_field :product_id, class: 'product_id' 
     = f.hidden_field :in_out, class: 'trx_type'
   td.wd15
