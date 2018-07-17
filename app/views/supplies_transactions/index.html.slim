@@ -9,11 +9,11 @@
 nav
   .nav-wrapper    
     ul.right
-      - if can? :manage, SuppliesTransaction
-        li
-          = link_to new_supplies_transaction_path
-            | New Transaction
-            i.material-icons.left add  
+      / - if can? :manage, SuppliesTransaction
+        / li
+        /   = link_to new_supplies_transaction_path
+        /     | New Transaction
+        /     i.material-icons.left add  
     / - if params[:view] == 'daily' 
     ul        
       li style="padding: 0 20px"         

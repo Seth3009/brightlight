@@ -6,7 +6,13 @@
         h4 Supplies Transaction #{Date::MONTHNAMES[Date.today.month.to_i]}
 
 nav
-  .nav-wrapper   
+  .nav-wrapper  
+    ul.right
+      - if can? :manage, SuppliesTransaction
+        li
+          = link_to new_supplies_transaction_path
+            | New Transaction
+            i.material-icons.left add
     ul
       li  
         = select_year(Date.strptime("1-"+ (params[:m] ? params[:m] : Date.today.month.to_s)  +"-"+ (params[:y] ? params[:y] : Date.today.year.to_s) ,"%d-%m-%Y"),{},name: 'trx_year')        

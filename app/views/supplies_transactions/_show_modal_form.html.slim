@@ -33,7 +33,7 @@
             td = item.product.name
             td = item.in_out
             td = item.qty.to_f
-            td = item.product.item_unit.abbreviation
+            td = item.product.item_unit.present? ? item.product.item_unit.abbreviation : "--"
             td
               - if can? :manage, SuppliesTransactionItem
                 = link_to item, data: {:confirm => 'Are you sure?'}, :method => :delete
