@@ -47,10 +47,14 @@ javascript:
   };
 
   $("#use-scanner").change(function() {
-    if (!$("#use-scanner").is(":checked")) {
-      $("#add-row").show();      
+    if ($("#use-scanner").is(":checked")) {
+      $("#keyboard").hide();
+      $("#scanner").show();
+      $("#add-row").hide();      
     } else {
-      $("#add-row").hide();     
+      $("#add-row").show();     
+      $("#scanner").hide();
+      $("#keyboard").show();
     }
   });
 
