@@ -39,7 +39,7 @@ javascript:
     var product = data;
 
     el.find("[name$='[barcode]']").val(product.barcode);
-    el.find(".product_autocomplete").val(product.name);
+    el.find("[name='name']").val(product.name);
     el.find(".units").html("<p>"+product.unit+"</p>");    
     el.find(".product_id").val(product.id);
     el.find("[name$='[item_unit_id]']").val(product.item_unit_id);
@@ -48,13 +48,13 @@ javascript:
 
   $("#use-scanner").change(function() {
     if ($("#use-scanner").is(":checked")) {
-      $("#keyboard").hide();
-      $("#scanner").show();
+      $(".keyboard").hide();
+      $(".scanner").show();
       $("#add-row").hide();      
     } else {
       $("#add-row").show();     
-      $("#scanner").hide();
-      $("#keyboard").show();
+      $(".scanner").hide();
+      $(".keyboard").show();
     }
   });
 
