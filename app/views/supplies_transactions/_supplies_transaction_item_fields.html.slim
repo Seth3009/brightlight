@@ -4,15 +4,12 @@ tr.nested-fields
       = f.text_field :barcode, class:'barcode', disabled: true
   td.wd40
     .input-field    
-      span.keyboard style="display:none" 
-        = text_field_tag :name, '', class: 'product_autocomplete'     
-      span.scanner  
-        = text_field_tag :name, '', class: 'product_name'
-    = f.hidden_field :product_id, class: 'product_id' 
-    = f.hidden_field :in_out, class: 'trx_type'
+      = text_field_tag :name, '', class: 'product_autocomplete'     
+      = f.hidden_field :product_id, class: 'product_id' 
+      = f.hidden_field :in_out, class: 'trx_type'
   td.wd15
     .input-field
-      = f.number_field :qty
+      = f.number_field :qty, value: @supplies_transaction_item
   td.wd15
     .input-field
       = label_tag :unit, '', class: 'active'
@@ -21,3 +18,14 @@ tr.nested-fields
     .input-field
       = link_to_remove_association f, class: "waves-effect waves-teal red-text"
         i.material-icons delete
+
+
+javascript:
+  $(document).on('change', '.product_qty', function() {
+      if($('.product_qty').val() < 1) {
+        $("#save").hide();
+      }
+      else {
+        $("#save").show();
+      }
+    });

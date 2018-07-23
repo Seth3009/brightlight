@@ -64,6 +64,7 @@ Rails.application.routes.draw do
     collection do
       get 'recap'
       get 'monthly'
+      get 'new_supplies'
     end
   end
   

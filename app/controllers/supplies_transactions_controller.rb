@@ -39,6 +39,12 @@ class SuppliesTransactionsController < ApplicationController
     @supplies_transaction = SuppliesTransaction.new
   end
 
+  def new_supplies
+    authorize! :manage, SuppliesTransaction
+    @supplies_transaction = SuppliesTransaction.new
+    @product = Product.all
+  end
+
   # POST /supplies_transactions
   # POST /supplies_transactions.json
   def create

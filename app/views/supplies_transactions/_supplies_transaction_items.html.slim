@@ -9,55 +9,12 @@
         th  Action
     
       tbody#supplies_transaction
-        = f.fields_for :supplies_transaction_items, @supplies_transaction.supplies_transaction_items.build  do |supplies_transaction_item|
+        = f.fields_for :supplies_transaction_items, @supplies_transaction.supplies_transaction_items.build do |supplies_transaction_item|
           = render partial: 'supplies_transactions/supplies_transaction_item_fields', locals: { f: supplies_transaction_item }
 
+
+
 javascript:
-  $(document).ready(function(){    
-    $("#use-scanner").click();
-  });
-  $("[name$='[barcode]']").codeScanner({
-      minEntryChars: 11,
-      onScan: function($element, input) {
-        $("#use-scanner").prop("checked",true);
-        var barcode = input.trim();
-        $.getJSON("/products/"+barcode+".json", null, function (data) {
-          if ($("tr:last").find("[name$='[barcode]']").val() != "") {
-            $(".add_fields").trigger('click');
-          } else if (!$("tr:last").is(":visible")) {
-            $("tr:last").show();
-          }
-          insert_values(data,$("tr:last"));        
-        }).fail(function(xhr){
-          Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
-        });            
-      }
-    });
-  
-
-  var insert_values = function (data, el) {
-    var product = data;
-
-    el.find("[name$='[barcode]']").val(product.barcode);
-    el.find("[name='name']").val(product.name);
-    el.find(".units").html("<p>"+product.unit+"</p>");    
-    el.find(".product_id").val(product.id);
-    el.find("[name$='[item_unit_id]']").val(product.item_unit_id);
-    el.find(".trx_type").val($( "select#trx_type").val());
-  };
-
-  $("#use-scanner").change(function() {
-    if ($("#use-scanner").is(":checked")) {
-      $(".keyboard").hide();
-      $(".scanner").show();
-      $("#add-row").hide();      
-    } else {
-      $("#add-row").show();     
-      $(".scanner").hide();
-      $(".keyboard").show();
-    }
-  });
-
   $(document).on('focus', '.product_autocomplete', function() {
     $(this).autocomplete({
         source: "/products?format=json",
@@ -89,3 +46,18 @@ javascript:
       $(this).closest('tr').find(".product_id").val(null);
     }
   });
+  
+
+  var insert_values = function (data, el) {
+    var product = data;
+
+    el.find("[name$='[barcode]']").val(product.barcode);
+    el.find("[name='name']").val(product.name);
+    el.find(".units").html("<p>"+product.unit+"</p>");    
+    el.find(".product_id").val(product.id);
+    el.find("[name$='[item_unit_id]']").val(product.item_unit_id);
+    el.find(".trx_type").val($( "select#trx_type").val());
+  };
+
+  
+  
