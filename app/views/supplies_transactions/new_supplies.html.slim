@@ -16,23 +16,15 @@
             i.material-icons.left chevron_left
         li
           .brand-logo style="margin-left: 20px; font-size:1.5em"
-            | Supplies Items
+            | Supplies Items (Use Scanner)
       ul.right#add-row
         li
           = link_to_add_association f, :supplies_transaction_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#supplies_transaction'
             ' Add row
-            i.material-icons.left playlist_add
-  
-  / ul.collapsible data-collapsible="expandable"
-  /   li
-  /     .collapsible-header                
-  /       div.right 
-  /         input.checkbox-toggle type="checkbox" id="use-scanner"
-  /         = label_tag "use-scanner", "Use scanner"
-  - if params[:employee_id].present?
-    = render 'supplies_transaction_items', f: f
+            i.material-icons.left playlist_add 
 
-    .toolbar.z-depth-1
-      button.btn.waves-effect.waves-light type="submit" name="save" Save    
-      = link_to 'Cancel', supplies_transactions_path, class: "waves-effect waves-light btn-flat"
+  = render 'new_supplies_transaction_items', f: f
 
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" name="save" Save    
+    = link_to 'Cancel', supplies_transactions_path, class: "waves-effect waves-light btn-flat"

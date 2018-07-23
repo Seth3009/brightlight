@@ -9,11 +9,11 @@
 nav
   .nav-wrapper    
     ul.right
-      / - if can? :manage, SuppliesTransaction
-        / li
-        /   = link_to new_supplies_transaction_path
-        /     | New Transaction
-        /     i.material-icons.left add  
+      - if can? :manage, SuppliesTransaction
+        li
+          = link_to new_supplies_transaction_path
+            | New Transaction
+            i.material-icons.left add  
     / - if params[:view] == 'daily' 
     ul        
       li style="padding: 0 20px"         
@@ -69,7 +69,7 @@ javascript:
         var card = input.trim();       
         $.getJSON("/employees/" + card + ".json", null, function (employee) {
           console.log("Scanned employee", employee);
-          window.location.href= "/supplies_transactions/new?employee_id=" + employee.id + "&employee=" + employee.name;    
+          window.location.href= "/supplies_transactions/new_supplies?employee_id=" + employee.id + "&employee=" + employee.name;    
         }).fail(function(xhr){
           Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
         });            
