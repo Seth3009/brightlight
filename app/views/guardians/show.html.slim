@@ -64,6 +64,6 @@ nav
 						- @guardian.family.children.each do |child|
 							tr
 								td = link_to child.name, child
-								td = child.current_grade_section.name
+								td = child.current_grade_section.name rescue "--"
 
 
