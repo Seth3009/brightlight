@@ -4,7 +4,7 @@ namespace :data do
 
     # create_families
 
-    xl = Roo::Spreadsheet.open('tmp/StudentDataExport.xlsx')
+    xl = Roo::Spreadsheet.open('StudentDataExport.xlsx')
     sheet = xl.sheet('COMBINED')
     puts sheet.row(1)
 
