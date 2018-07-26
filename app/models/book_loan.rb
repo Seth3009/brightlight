@@ -76,7 +76,7 @@ class BookLoan < ActiveRecord::Base
                 :out_date, :due_date, :academic_year_id, :user_id, :barcode, :refno,
                 :prev_academic_year_id, :loan_status, :bkudid, :employee_id, :deleted_flag]
     values = []
-    BookLoan.not_disposed.where(academic_year_id: previous_year_id).where.not(employee_id: nil).each do |bl|
+    BookLoan.not_disposed.where(academic_year_id: previous_year_id).where.not(employee_id: nil).where.not(return_status: 'RI').each do |bl|
       data = [bl.book_copy_id, bl.book_edition_id, bl.book_title_id, bl.person_id, bl.book_category_id, bl.loan_type_id,
                 Date.today, Date.today+360, new_year_id, user_id, bl.barcode, bl.refno,
                 previous_year_id, 'B', bl.bkudid, bl.employee_id, false]
@@ -93,11 +93,11 @@ class BookLoan < ActiveRecord::Base
     # This would be efficient, but it doesn't update the updated_at field
     # BookLoan.where(employee:source,academic_year:from_year).update_all(employee_id:to.id, academic_year_id:to_year.id)
 
-    tmp = source.book_loans.not_disposed.where(academic_year:from_year).map { |x|
+    tmp = source.book_loans.not_disposed.where(academic_year:from_year).where.not(return_status: 'RI').map { |x|
             x.attributes.except('created_at', 'updated_at', 'id', 'loan_status', 'return_status', 'return_date', 'out_date', 'due_date', 'user_id')
             .merge('academic_year_id'=>to_year, 'loan_status'=>'B', 'out_date'=>Date.today, 'due_date'=>Date.today+360, 'user_id'=>user_id)
           } 
-    source.book_loans.not_disposed.where(academic_year:from_year).delete_all if from_year == to_year
+    # source.book_loans.not_disposed.where(academic_year:from_year).delete_all if from_year == to_year
     destination.book_loans.create(tmp)
   end
 
