@@ -9,7 +9,18 @@
 
     .row
       .section-header.col.s12 Name : #{@employee} (#{@employee.job_title})
-        
+    .row
+      .col.s4
+        | Leave Category :
+      .col.s2  
+        = f.radio_button :category, 'Full Day',checked: true, class: 'with-gap'
+        = f.label "category_full_day", "Full Day"
+      .col.s2
+        = f.radio_button :category, 'Early Home', class: 'with-gap'
+        = f.label "category_early_home", "Early Home"
+      .col.s2
+        = f.radio_button :category, 'Come Late', class: 'with-gap'
+        = f.label "category_come_late", "Come Late"
     .row     
       .input-field.col.s4
         = f.label :Start_date, class: 'active'
@@ -29,7 +40,7 @@
         = f.label :leave_type, class:'active'
           |Choose type of leave
           .right.red-text *
-        = f.select :leave_type, ['Sick','Family Matter','School Related','Personal'], prompt: true 
+        = f.select :leave_type, [['Sick Without Medical Note','Sick'],'Special Leave','School Related Duty','Personal Permission'], prompt: true 
       .input-field.col.s8
         = f.label :leave_note, class: 'active'
           |Leave notes or description
@@ -42,7 +53,7 @@
       .input-field.col.s8
         = f.label :subtitute_notes
         = f.text_field :subtitute_notes        
-  
+        
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" name="save" Save Draft
     button.btn.waves-effect.waves-light type="submit" name="send" value="empl_submit" Send for Approval

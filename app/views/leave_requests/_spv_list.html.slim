@@ -4,6 +4,7 @@ table.compact.striped
       th Employee
       th Leave date 
       th Hours / Notes
+      th Category
       th Leave Type
       th Substitute
       th Approval (SPV,HR)
@@ -16,8 +17,19 @@ table.compact.striped
         td = leave_request.employee
         td = leave_request.start_date.strftime("%d/%m/%Y") + " - " + leave_request.end_date.strftime("%d/%m/%Y")
         td = leave_request.hour
-        td = leave_request.leave_type
-        td = leave_request.leave_subtitute.present? ? leave_request.leave_subtitute : "--"
+        td = leave_request.category? ? leave_request.category : "--"
+        td 
+          - if leave_request.leave_type == 'Sick' 
+            | Sick Without Medical Note
+          - else 
+            = leave_request.leave_type
+        td 
+          -if leave_request.leave_subtitute == true
+            |Required
+          -elsif leave_request.leave_subtitute == false
+            |Not Required
+          -else
+            |--
         td               
           -if leave_request.requires_supervisor_approval?           
             -if leave_request.spv_approval.nil?

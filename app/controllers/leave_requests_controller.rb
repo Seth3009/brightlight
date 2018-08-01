@@ -53,7 +53,7 @@ class LeaveRequestsController < ApplicationController
         format.html do
           if params[:send]
             approver = Employee.find_by_id(@department.manager_id)  
-            if @leave_request.leave_type == "Sick" || @leave_request.leave_type == "Family Matter"
+            if @leave_request.leave_type == "Sick" || @leave_request.leave_type == "Special Leave"
               @sendto = "hr"
             else 
               @sendto = "spv"
@@ -92,7 +92,7 @@ class LeaveRequestsController < ApplicationController
           if params[:send] 
             if params[:send] == 'empl_submit'
               approver = @supervisor
-              if @leave_request.leave_type == "Sick" || @leave_request == "Family Matter"
+              if @leave_request.leave_type == "Sick" || @leave_request == "Special Leave"
                 send_to = 'hr'
               else
                 send_to = 'spv'
@@ -184,6 +184,6 @@ class LeaveRequestsController < ApplicationController
     
     # Never trust parameters from the scary internet, only allow the white list through.
     def leave_request_params
-      params.require(:leave_request).permit(:start_date, :end_date, :hour, :leave_type, :leave_note, :leave_subtitute, :subtitute_notes, :spv_approval, :spv_date, :spv_notes, :hr_approval, :hr_date, :hr_notes, :form_submit_date, :leave_attachment, :employee_id )
+      params.require(:leave_request).permit(:start_date, :end_date, :hour, :leave_type, :leave_note, :leave_subtitute, :subtitute_notes, :spv_approval, :spv_date, :spv_notes, :hr_approval, :hr_date, :hr_notes, :form_submit_date, :hr_staf_notes, :employee_id, :category )
     end
 end

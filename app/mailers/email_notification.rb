@@ -22,7 +22,7 @@ class EmailNotification < ActionMailer::Base
     @type = type
     @dept = Department.find_by_code('HR')              
     @hrmanager = Employee.find_by_id(@dept.manager_id)
-    if @leave_request.leave_type != "Sick" && @leave_request.leave_type != "Family Matter"
+    if @leave_request.leave_type != "Sick" && @leave_request.leave_type != "Special Leave"
       mail(to: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
     else
       mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>), cc: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")

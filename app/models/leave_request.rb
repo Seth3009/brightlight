@@ -24,7 +24,7 @@ class LeaveRequest < ActiveRecord::Base
   scope :hrlist, ->  { 
     submitted
     .active
-    .where("spv_approval = true or leave_type = 'Sick' or leave_type = 'Family Matter'")
+    .where("spv_approval = true or leave_type = 'Sick' or leave_type = 'Special Leave'")
     .order(spv_date: :desc, form_submit_date: :desc, updated_at: :desc)
   }
 
@@ -81,7 +81,7 @@ class LeaveRequest < ActiveRecord::Base
   end
 
   def requires_supervisor_approval?
-    leave_type == 'Personal' || leave_type == 'School Related'
+    leave_type == 'Personal Permission' || leave_type == 'School Related Duty'
   end
 
   def pending_spv_approval?
