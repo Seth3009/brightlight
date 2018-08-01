@@ -17,6 +17,16 @@ class BookFinesController < ApplicationController
     #   @students = Student.eager_load([:book_fines,:grade_sections_students]).where("book_fines.academic_year_id = ? and grade_sections_students.academic_year_id = ?", @academic_year.id, @academic_year.id)
 
     @book_fines = BookFine.where(academic_year:@academic_year)
+
+    @status_filter = 'All'
+    if params[:pay] == '1'
+      @book_fines = @book_fines.paid
+      @status_filter = 'Paid'
+    elsif params[:pay] == '0'
+      @book_fines = @book_fines.unpaid
+      @status_filter = 'Unpaid'
+    end
+
     @students = Student.joins(:book_fines)
       .where(book_fines: {academic_year: @academic_year})
       .uniq

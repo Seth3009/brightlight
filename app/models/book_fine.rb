@@ -28,6 +28,14 @@ class BookFine < ActiveRecord::Base
       AND grade_sections_students.academic_year_id = ?)", grade_section_id, academic_year_id)
   }
 
+  scope :unpaid, lambda { 
+    where('paid is not true')
+  }
+
+  scope :paid, lambda { 
+    where('paid is true')
+  }
+
   scope :including_associations, lambda {
     joins('left outer join book_copies bc on bc.id = book_fines.book_copy_id')
     .joins('left outer join book_editions be on be.id = bc.book_edition_id')

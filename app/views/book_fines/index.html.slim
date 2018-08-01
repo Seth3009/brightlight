@@ -6,15 +6,22 @@ ul#year-options.dropdown-content
   - AcademicYear.all.each do |year|
     li 
       = link_to year.name, book_fines_path(params.merge(year:year.id).symbolize_keys)
+
 ul#section-options.dropdown-content
   - @grade_sections.each do |section| 
     li = link_to "#{section.name}", "#", onclick:"filterSectionOptions(#{section.id}, '#{section.name}');"
+
 ul#student-options.dropdown-content
   li = link_to "All", book_fines_path
   - @grade_sections.each do |section| 
     li = link_to "All #{section.name}", book_fines_path(s:section.id,year:@academic_year.id) , class:"section-#{section.id}"
   - @students.each do |student| 
     li = link_to "#{student.name}", book_fines_path(st:student.id,year:@academic_year.id) , class:"section-#{student.grade_sections_students.take.grade_section_id}"
+
+ul#status-options.dropdown-content
+  li = link_to "All", book_fines_path(params.merge(pay:'all'))
+  li = link_to "Paid", book_fines_path(params.merge(pay:1))
+  li = link_to "Unpaid", book_fines_path(params.merge(pay:0))
 
 javascript:
   function filterSectionOptions(id, name) {
@@ -45,6 +52,10 @@ nav
           span#grade = @student.present? ? "#{@student.name}" : "Student" 
           i.material-icons.right arrow_drop_down
     ul.right
+      li   
+        a.dropdown-button href="#!" data-activates="status-options"
+          span#filter = @status_filter
+          i.material-icons.right arrow_drop_down
       - if @grade_section.present?
         li
           = link_to calculate_book_fines_path(s: params[:s], year: params[:year], grade:@grade_section.grade_level_id), method:'post', class:'btn'
