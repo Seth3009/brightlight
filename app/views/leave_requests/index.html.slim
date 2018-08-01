@@ -2,6 +2,11 @@ h4 Leave Requests
 
 nav
   .nav-wrapper
+    ul        
+      li style="padding: 0 20px"         
+        | Date :
+      li
+        = date_field_tag 'leave_date', params[:leave_date]
     -if can? :read_hr, LeaveRequest
       ul
         li
@@ -60,3 +65,15 @@ ul#status-options.dropdown-content
     
 #edit-modal.modal.modal-fixed-footer
   #edit-modal-content   
+
+javascript:
+  $(function(){
+      // bind change event to select
+      $('#trx_date').on('change', function () {          
+          var date = $('#trx_date').val();          
+          if (date) { // require a URL
+              window.location = "leave_requests?leave_date="+date; // redirect              
+          }
+          return false;
+      });
+    });
