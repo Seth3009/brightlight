@@ -1,0 +1,32 @@
+h4 Leave Requests #{if params[:leave_date].present? then params[:leave_date].to_date.strftime('%d %b %Y') else Date.today.strftime('%d %b %Y') }
+
+nav
+  .nav-wrapper    
+    -if can? :read_hr, LeaveRequest
+      ul
+        li
+          a.dropdown-button href="#!" data-activates="dept-options"
+            span#dept = @dept_filter.present? ? "#{@dept_filter.name}" : "Department" 
+            i.material-icons.right arrow_drop_down
+        li style="padding: 0 10px"
+          a.dropdown-button href="#!" data-activates="status-options"
+            = @status
+            i.material-icons.right arrow_drop_down
+    ul        
+      li style="padding: 0 20px"         
+        | Date :
+      li
+        = date_field_tag 'submit_date', params[:submit_date]
+
+javascript:
+  $(function(){
+      // bind change event to select
+      $('#end_date').on('change', function () {          
+          var date = $('#leave_date').val(); 
+          var date2 = $('#end_date').val();          
+          if (date) { // require a URL
+              window.location = "leave_requests?leave_date="+date+"&end_date="+date2; // redirect              
+          }
+          return false;
+      });
+    });

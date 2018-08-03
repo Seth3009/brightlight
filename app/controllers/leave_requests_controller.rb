@@ -1,29 +1,43 @@
 class LeaveRequestsController < ApplicationController
   before_action :set_leave_request, only: [:show, :edit, :update, :destroy, :cancel, :approve]
-  before_action :set_employee, only: [:index, :new, :edit, :create, :update, :approve]
+  before_action :set_employee, only: [:index, :new, :edit, :create, :update, :approve, :by_dept]
   
   
   # GET /leave_requests
   # GET /leave_requests.json
   def index
+    @dept = Department.find_by_code('HR')              
+    @hrmanager = Employee.find_by_id(@dept.manager_id)
     @department = Department.find_by_id(@employee.department_id) 
     @leave_requests = LeaveRequest.with_employees_and_departments
-    @own_leave_requests = @leave_requests.where('start_date = ?',(params[:leave_date].present? ? params[:leave_date] : Date.today)).active.empl(@employee).order(form_submit_date: :desc, updated_at: :desc)
+    @own_leave_requests = @leave_requests.order(form_submit_date: :desc, updated_at: :desc)
+                          .where('form_submit_date = ? or hr_approval IS ? or form_submit_date = ?',Date.today, nil, nil)
+                          .empl(@employee).active
+    @own_count = @own_leave_requests.count
     @supv_approval_list = @leave_requests.active.spv(@employee).submitted
+                          .where('form_submit_date = ? or spv_approval IS ?',Date.today, nil)
+    @spv_count = @supv_approval_list.count
     @hr_approval_list = @leave_requests.hrlist
-    if params[:dept].present? && params[:dept] != 'all'
-      @dept_filter = Department.find_by(code: params[:dept])
-      @hr_approval_list = @hr_approval_list.where(departments: {code: params[:dept]})
-    end
-    if params[:canceled] == 'yes'
-      @hr_approval_list = @hr_approval_list.canceled
-      @status = 'Canceled'
-    else
-      @hr_approval_list = @hr_approval_list.active
-      @status = 'Active'
-    end
+                        .where('hr_approval IS ?', nil)
+    @hr_count = @hr_approval_list.count
+    # if params[:dept].present? && params[:dept] != 'all'
+    #   @dept_filter = Department.find_by(code: params[:dept])
+    #   @hr_approval_list = @hr_approval_list.where(departments: {code: params[:dept]})
+    # end
+    # if params[:canceled] == 'yes'
+    #   @hr_approval_list = @hr_approval_list.canceled
+    #   @status = 'Canceled'
+    # else
+    #   @hr_approval_list = @hr_approval_list.active
+    #   @status = 'Active'
+    # end
   end
 
+  def archives
+    @leave_requests = LeaveRequest.with_employees_and_departments
+    @supv_approval_list = @leave_requests.active.spv(@employee).submitted
+  end
+  
   # GET /leave_requests/1
   # GET /leave_requests/1.json
   def show
