@@ -1,31 +1,52 @@
-h4 Leave Requests #{if params[:leave_date].present? then params[:leave_date].to_date.strftime('%d %b %Y') else Date.today.strftime('%d %b %Y') }
+h4 Leave Requests (Archive)
 
 nav
   .nav-wrapper    
     -if can? :read_hr, LeaveRequest
-      ul
+      ul.right
         li
           a.dropdown-button href="#!" data-activates="dept-options"
             span#dept = @dept_filter.present? ? "#{@dept_filter.name}" : "Department" 
             i.material-icons.right arrow_drop_down
-        li style="padding: 0 10px"
-          a.dropdown-button href="#!" data-activates="status-options"
-            = @status
-            i.material-icons.right arrow_drop_down
+        
+
     ul        
       li style="padding: 0 20px"         
-        | Date :
+        | Leave Date :
       li
-        = date_field_tag 'submit_date', params[:submit_date]
+        = date_field_tag 'leave_date', params[:ld] || Date.today
+      li
+        | &nbsp to &nbsp &nbsp
+      li
+        = date_field_tag 'leave_date_end', params[:lde] || Date.today  
+ul#dept-options.dropdown-content
+  li  
+    = link_to 'All', leave_requests_path(params.merge(dept:'all').symbolize_keys)
+  - Department.all.each do |dept|
+    li 
+      = link_to dept.name, leave_requests_path(params.merge(dept: dept.code).symbolize_keys)  
+
+
+    
+.card-panel
+  - if params[:view] == "hr" && @department.id == @dept.id
+    == render 'hr_archive'
+  - elsif params[:view] == "spv" && @employee.id == @supervisor.id
+    == render 'spv_archive'
+  - else    
+    == render 'employee_archive'
+
 
 javascript:
   $(function(){
       // bind change event to select
-      $('#end_date').on('change', function () {          
+      $('#leave_date_end').on('change', function () {          
           var date = $('#leave_date').val(); 
-          var date2 = $('#end_date').val();          
+          var date2 = $('#leave_date_end').val();
+          var url = new URL(window.location.href);
+          var page = url.searchParams.get("view");        
           if (date) { // require a URL
-              window.location = "leave_requests?leave_date="+date+"&end_date="+date2; // redirect              
+              window.location = "archives?view="+page+"&ld="+date+"&lde="+date2; // redirect              
           }
           return false;
       });

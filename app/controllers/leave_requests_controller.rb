@@ -1,6 +1,6 @@
 class LeaveRequestsController < ApplicationController
   before_action :set_leave_request, only: [:show, :edit, :update, :destroy, :cancel, :approve]
-  before_action :set_employee, only: [:index, :new, :edit, :create, :update, :approve, :by_dept]
+  before_action :set_employee, only: [:index, :new, :edit, :create, :update, :approve, :archives]
   
   
   # GET /leave_requests
@@ -34,8 +34,36 @@ class LeaveRequestsController < ApplicationController
   end
 
   def archives
+    # authorize! :approve, @leave_request if params[:page] == 'spv'
+    # authorize! :validate, LeaveRequest if params[:page] == 'hr'
+
+   
+    @department = Department.find_by_id(@employee.department_id)    
+    @supervisor = Employee.find_by_id(@department.manager_id)
+    @dept = Department.find_by_code('HR')              
+    @hrmanager = Employee.find_by_id(@dept.manager_id)
     @leave_requests = LeaveRequest.with_employees_and_departments
-    @supv_approval_list = @leave_requests.active.spv(@employee).submitted
+
+    if params[:view] == "hr" && @department.id == @dept.id
+      @hr_approval_list = @leave_requests.hrlist_archive
+    elsif params[:view] == "spv" && @employee.id == @supervisor.id
+      @supv_approval_list = @leave_requests.spv(@employee).submitted
+                            .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
+    else
+      # redirect_to archive_path(view:'empl',ld:Date.today,lde:Date.today), alert: "You are not permitted to access this page" 
+      @own_leave_requests = @leave_requests.empl(@employee).order(form_submit_date: :desc, updated_at: :desc)
+                            .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
+    end
+    # if @employee != @supervisor && @employee != @hrmanager
+    #   redirect_to archive_path(view:'empl',ld:Date.today,lde:Date.today), alert: "You are not permitted to access this page" 
+    # # elsif params[:view] != "dept" && params[:page] != "hr" && params[:page] != "empl"
+    # #   redirect_to archive_url, alert: "unavailable page"
+    # end
+    if params[:dept].present? && params[:dept] != 'all'
+      @dept_filter = Department.find_by(code: params[:dept])
+      @hr_approval_list = @hr_approval_list.where(departments: {code: params[:dept]})
+    end
+    
   end
   
   # GET /leave_requests/1

@@ -28,6 +28,12 @@ class LeaveRequest < ActiveRecord::Base
     .order(spv_date: :desc, form_submit_date: :desc, updated_at: :desc)
   }
 
+  scope :hrlist_archive, ->  { 
+    submitted    
+    .where.not(hr_approval: nil)
+    .order(hr_date: :desc, form_submit_date: :desc, updated_at: :desc)
+  }
+
   scope :submitted, -> { where.not(form_submit_date: nil) }
 
   scope :draft, -> { where(form_submit_date: nil) }
