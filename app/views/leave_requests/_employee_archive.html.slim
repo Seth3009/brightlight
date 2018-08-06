@@ -7,7 +7,8 @@ table.compact.striped
       th Category
       th Leave Type
       th Substitute
-      th Approval (SPV,HR)                    
+      th Approval (SPV,HR)  
+      th Canceled?                  
       th Status
       
       
@@ -47,8 +48,12 @@ table.compact.striped
           -elsif leave_request.hr_approval == true
             i.material-icons check_box
           -else
-            i.material-icons cancel   
-                   
+            i.material-icons cancel 
+        td.center
+            - if leave_request.is_canceled?
+              i.material-icons check 
+            - else
+              | -- 
         td
           = link_to leave_request_path(leave_request)
             i.material-icons visibility          
