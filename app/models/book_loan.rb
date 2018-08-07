@@ -59,7 +59,7 @@ class BookLoan < ActiveRecord::Base
 
   def self.list_for_teachers_receipt(year_id, teacher_id)
     BookLoan.select(['COUNT (book_loans.id) AS loan_qty',
-        "COUNT (case when book_loans.return_status = 'R' then 1 else null end) AS return_qty",
+        "COUNT (case when book_loans.return_status = 'R' or book_loans.return_status = 'RI' then 1 else null end) AS return_qty",
         'subjects.name','book_editions.title','book_editions.authors','book_editions.publisher', 
         'book_editions.isbn13', 'book_editions.isbn10', 'book_editions.refno', 'book_loans.notes'])
       .where('book_loans.academic_year_id = ? AND book_loans.employee_id = ?', year_id, teacher_id)      
