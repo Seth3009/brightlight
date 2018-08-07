@@ -17,15 +17,15 @@ class LeaveRequest < ActiveRecord::Base
 
   scope :spv, -> (employee_id) { 
     with_employees_and_departments
-    .where('departments.manager_id = ?', employee_id)
-    .order(form_submit_date: :desc, updated_at: :desc)
+    .where('departments.manager_id = ? or departments.vice_manager_id = ?', employee_id, employee_id)
+    .order(form_submit_date: :asc, updated_at: :asc)
   }
 
   scope :hrlist, ->  { 
     submitted
     .active
     .where("spv_approval = true or leave_type = 'Sick' or leave_type = 'Special Leave'")
-    .order(spv_date: :desc, form_submit_date: :desc, updated_at: :desc)
+    .order(spv_date: :asc, form_submit_date: :asc, updated_at: :asc)
   }
 
   scope :hrlist_archive, ->  { 
@@ -44,11 +44,11 @@ class LeaveRequest < ActiveRecord::Base
     end
   end
 
-  def send_for_approval(approver, sendto, type)
+  def send_for_approval(approver,vice_approver, sendto, type)
     if approver      
       if type == 'empl_submit'
         self.update_attributes form_submit_date: Time.now.strftime('%Y-%m-%d')
-        email = EmailNotification.leave_approval(self, approver, sendto, type).deliver_now    
+        email = EmailNotification.leave_approval(self, approver,vice_approver, sendto, type).deliver_now    
         notification = Message.new_from_email(email)
         notification.save
       else

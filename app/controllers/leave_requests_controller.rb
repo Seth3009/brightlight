@@ -94,13 +94,18 @@ class LeaveRequestsController < ApplicationController
       if @leave_request.save
         format.html do
           if params[:send]
-            approver = Employee.find_by_id(@department.manager_id)  
+            approver = Employee.find_by_id(@department.manager_id)
+            if @department.vice_manager_id.present?  
+              vice_approver = Employee.find_by_id(@department.vice_manager_id)
+            else
+              vice_approver = "none"
+            end
             if @leave_request.leave_type == "Sick" || @leave_request.leave_type == "Special Leave"
               @sendto = "hr"
             else 
               @sendto = "spv"
             end          
-            if @leave_request.send_for_approval(approver, @sendto, 'empl_submit')  
+            if @leave_request.send_for_approval(approver,vice_approver, @sendto, 'empl_submit')  
               @leave_request.auto_approve             
               redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.'               
             else
@@ -183,9 +188,10 @@ class LeaveRequestsController < ApplicationController
     @requester = Employee.find_by_id(@leave_request.employee_id)
     @department = Department.find_by_id(@requester.department_id)    
     @supervisor = Employee.find_by_id(@department.manager_id)
+    @vice_supervisor = Employee.find_by_id(@department.vice_manager_id)
     @dept = Department.find_by_code('HR')              
     @hrmanager = Employee.find_by_id(@dept.manager_id)
-    if @employee != @supervisor && @employee != @hrmanager
+    if @employee != @supervisor && @employee != @hrmanager && @employee != @vice_supervisor
         redirect_to leave_requests_url, alert: "You are not permitted to access this page" 
     elsif params[:page] != "spv" && params[:page] != "hr" && params[:page] != "employee"
       redirect_to leave_requests_url, alert: "unavailable page"

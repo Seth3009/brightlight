@@ -14,18 +14,32 @@ class EmailNotification < ActionMailer::Base
     mail(to: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Purchase Request #{requisition.id}.")
   end 
 
-  def leave_approval(leave_request, approver, sendto, type)
+  def leave_approval(leave_request, approver,vice_approver, sendto, type)
     @approver = approver
+    @vice_approver = vice_approver
     @leave_request = leave_request
     @employee = @leave_request.employee
     @sendto = sendto
     @type = type
     @dept = Department.find_by_code('HR')              
     @hrmanager = Employee.find_by_id(@dept.manager_id)
+    @hrvicemanager = Employee.find_by_id(@dept.vice_manager_id)
     if @leave_request.leave_type != "Sick" && @leave_request.leave_type != "Special Leave"
-      mail(to: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
+      if @vice_approver == "none"
+        mail(to: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
+      else
+        mail(to: %("#{@approver.name}" <#{@approver.email}>, "#{@vice_approver.name}" <#{@vice_approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
+      end
     else
-      mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>), cc: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
+      if @hrvicemanager.present? && @vice_approver != "none"
+        mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>, "#{@hrvicemanager.name}" <#{@hrvicemanager.email}>), cc: %("#{@approver.name}" <#{@approver.email}>, "#{@vice_approver.name}" <#{@vice_approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
+      elsif @hrvicemanager.present? && @vice_approver == "none"
+        mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>, "#{@hrvicemanager.name}" <#{@hrvicemanager.email}>), cc: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
+      elsif @hrvicemanager.nil? && @vice_approver != "none"
+        mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>), cc: %("#{@approver.name}" <#{@approver.email}>, "#{@vice_approver.name}" <#{@vice_approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
+      else
+        mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>), cc: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Leave Request #{leave_request.employee.try(:name)}.")
+      end
     end
   end 
 

@@ -76,6 +76,9 @@ class Ability
     can [:approve, :read, :update], LeaveRequest do |lr|
       lr.employee.try(:department).try(:manager) == @user.employee   # Manager can only approve leave requests of employees in his/her department
     end
+    can [:approve, :read, :update], LeaveRequest do |lr|
+      lr.employee.try(:department).try(:vice_manager) == @user.employee   # Manager can only approve leave requests of employees in his/her department
+    end
 	end
 
   # Teacher
