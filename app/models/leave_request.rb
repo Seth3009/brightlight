@@ -44,30 +44,31 @@ class LeaveRequest < ActiveRecord::Base
     end
   end
 
-  def send_for_approval(approver,vice_approver, sendto, type)
-    if approver      
-      if type == 'empl_submit'
+  def send_for_approval(supervisor, vice_supervisor, hrmanager, hrvicemanager, sendto, type)
+    if supervisor 
+      if type == 'empl-submit'   
         self.update_attributes form_submit_date: Time.now.strftime('%Y-%m-%d')
-        email = EmailNotification.leave_approval(self, approver,vice_approver, sendto, type).deliver_now    
+        email = EmailNotification.leave_approval(self, supervisor, vice_supervisor,hrmanager,hrvicemanager, sendto).deliver_now    
         notification = Message.new_from_email(email)
         notification.save
       else
         return false
       end
+    else
       return true
     end
   end
 
-  def send_approval(employee,approver,status,notes,type)
+  def send_approval(employee,approver,vice_approver, status,notes,type)
     if employee && approver
       if type == 'spv-app' || type == 'spv-den'
         self.update_attributes spv_approval: status,spv_notes: notes, spv_date: Time.now.strftime('%Y-%m-%d')
-        email = EmailNotification.leave_spv_approve(self, employee, approver, status, notes,type).deliver_now
+        email = EmailNotification.leave_spv_approve(self, employee, approver,vice_approver, status, notes,type).deliver_now
         notification = Message.new_from_email(email)
         notification.save
       elsif type == 'hr-app' || type == 'hr-den'
         self.update_attributes hr_approval: status, hr_notes: notes, hr_date: Time.now.strftime('%Y-%m-%d')
-        email = EmailNotification.leave_hr_approve(self, employee, approver, status, notes,type).deliver_now
+        email = EmailNotification.leave_hr_approve(self, employee, approver,vice_approver, status, notes,type).deliver_now
         notification = Message.new_from_email(email)
         notification.save
       end
@@ -80,7 +81,15 @@ class LeaveRequest < ActiveRecord::Base
   def cancel 
     self.is_canceled = true
     self.save
-    cc = [self.employee.try(:department).try(:manager), Department.find_by(code: 'HR').manager]
+    if self.employee.try(:department).try(:vice_manager).present? && Department.find_by(code: 'HR').vice_manager.present?
+      cc = [self.employee.try(:department).try(:manager),self.employee.try(:department).try(:vice_manager), Department.find_by(code: 'HR').manager,Department.find_by(code: 'HR').vice_manager]
+    elsif self.employee.try(:department).try(:vice_manager).present? && Department.find_by(code: 'HR').vice_manager.nil?
+      cc = [self.employee.try(:department).try(:manager),self.employee.try(:department).try(:vice_manager), Department.find_by(code: 'HR').manager]
+    elsif self.employee.try(:department).try(:vice_manager).nil? && Department.find_by(code: 'HR').vice_manager.present?
+      cc = [self.employee.try(:department).try(:manager), Department.find_by(code: 'HR').manager,Department.find_by(code: 'HR').vice_manager]
+    else
+      cc = [self.employee.try(:department).try(:manager), Department.find_by(code: 'HR').manager]
+    end
     email = EmailNotification.leave_canceled(self, self.employee, cc).deliver_now
     notification = Message.new_from_email(email)
     notification.save
