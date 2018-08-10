@@ -6,7 +6,8 @@ table.compact.striped
       th Hours / Notes
       th Category
       th Leave Type
-      th Substitute
+      th Subs
+      th HR Notes
       th Approval (SPV,HR)                    
       th Actions
       
@@ -31,6 +32,7 @@ table.compact.striped
             |Not Required
           -else
             |--
+        td = leave_request.hr_staf_notes || "--"
         td
           -if leave_request.requires_supervisor_approval?           
             -if leave_request.spv_approval.nil?
@@ -58,6 +60,6 @@ table.compact.striped
           - if leave_request.draft?
             = link_to leave_request, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
-          - else
-            = link_to cancel_leave_request_path(leave_request), data: {:confirm => 'This action will cancel a leave request that has already been submitted. Are you sure?'}, :method => :delete, class:'red-text'
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete
+          / - else
+          /   = link_to cancel_leave_request_path(leave_request), data: {:confirm => 'This action will cancel a leave request that has already been submitted. Are you sure?'}, :method => :delete, class:'red-text'
+          /     i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete

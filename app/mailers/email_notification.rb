@@ -50,9 +50,13 @@ class EmailNotification < ActionMailer::Base
     @leave_request = leave_request
     @type = type        
     if type == 'spv-app'
-      mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>, "#{@hrvicemanager.name}" <#{@hrvicemanager.email}>), cc: %("#{@employee.name}" <#{@employee.email}>), subject: "[SPV] Leave Request Approved: #{leave_request.employee.try(:name)}.")
+      if @hrvicemanager.present?
+        mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>, "#{@hrvicemanager.name}" <#{@hrvicemanager.email}>), cc: %("#{@employee.name}" <#{@employee.email}>), subject: "[SPV] Leave Request Approved: #{leave_request.employee.try(:name)}.")
+      else
+        mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>), cc: %("#{@employee.name}" <#{@employee.email}>), subject: "[SPV] Leave Request Approved: #{leave_request.employee.try(:name)}.")
+      end
     elsif type == 'spv-den'
-      mail(to: %("#{@employee.name}" <#{@employee.email}>), subject: "[SPV] Leave canceled: #{leave_request.employee.try(:name)}.")
+      mail(to: %("#{@employee.name}" <#{@employee.email}>), subject: "[SPV] Leave Not Approved: #{leave_request.employee.try(:name)}.")
     end
   end
 
@@ -65,10 +69,13 @@ class EmailNotification < ActionMailer::Base
     if type == 'hr-app'
       @subject = "[HRD] Leave Request Approved: #{leave_request.employee.try(:name)}."
     elsif type == 'hr-den'
-      @subject = "[HRD] Leave Request Canceled: #{leave_request.employee.try(:name)}."
+      @subject = "[HRD] Leave Request Not Approved: #{leave_request.employee.try(:name)}."
     end
+    if @vice_supervisor.present?
       mail(to: %("#{@employee.name}" <#{@employee.email}>), cc: %("#{@supervisor.name}" <#{@supervisor.email}>, "#{@vice_supervisor.name}" <#{@vice_supervisor.email}>), subject: @subject)
-
+    else
+      mail(to: %("#{@employee.name}" <#{@employee.email}>), cc: %("#{@supervisor.name}" <#{@supervisor.email}>), subject: @subject)
+    end
   end
 
   def leave_canceled(leave_request, employee, cc_list)

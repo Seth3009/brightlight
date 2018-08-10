@@ -21,17 +21,7 @@ class LeaveRequestsController < ApplicationController
     @hr_approval_list = @leave_requests.hrlist
                         .where('hr_approval IS ?', nil)
     @hr_count = @hr_approval_list.count
-    # if params[:dept].present? && params[:dept] != 'all'
-    #   @dept_filter = Department.find_by(code: params[:dept])
-    #   @hr_approval_list = @hr_approval_list.where(departments: {code: params[:dept]})
-    # end
-    # if params[:canceled] == 'yes'
-    #   @hr_approval_list = @hr_approval_list.canceled
-    #   @status = 'Canceled'
-    # else
-    #   @hr_approval_list = @hr_approval_list.active
-    #   @status = 'Active'
-    # end
+    
   end
 
   def archives
@@ -50,16 +40,11 @@ class LeaveRequestsController < ApplicationController
     elsif params[:view] == "spv" && @employee.id == @supervisor.id
       @supv_approval_list = @leave_requests.spv(@employee).submitted
                             .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
-    else
-      # redirect_to archive_path(view:'empl',ld:Date.today,lde:Date.today), alert: "You are not permitted to access this page" 
+    else   
       @own_leave_requests = @leave_requests.empl(@employee).order(form_submit_date: :desc, updated_at: :desc)
                             .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
     end
-    # if @employee != @supervisor && @employee != @hrmanager
-    #   redirect_to archive_path(view:'empl',ld:Date.today,lde:Date.today), alert: "You are not permitted to access this page" 
-    # # elsif params[:view] != "dept" && params[:page] != "hr" && params[:page] != "empl"
-    # #   redirect_to archive_url, alert: "unavailable page"
-    # end
+   
     if params[:dept].present? && params[:dept] != 'all'
       @dept_filter = Department.find_by(code: params[:dept])
       @hr_approval_list = @hr_approval_list.where(departments: {code: params[:dept]})
@@ -130,18 +115,11 @@ class LeaveRequestsController < ApplicationController
     @requester = Employee.find_by_id(@leave_request.employee_id)
     @department = Department.find_by_id(@requester.department_id)    
     @supervisor = Employee.find_by_id(@department.manager_id)
-    if @department.vice_manager_id.present?  
-      @vice_supervisor = Employee.find_by_id(@department.vice_manager_id)
-    else
-      @vice_supervisor = "none"
-    end
+    @vice_supervisor = Employee.find_by_id(@department.vice_manager_id)
     @dept = Department.find_by_code('HR')              
     @hrmanager = Employee.find_by_id(@dept.manager_id)
-    if @dept.vice_manager_id.present?
-      @hrvicemanager = Employee.find_by_id(@dept.vice_manager_id)
-    else
-      @hrvicemanager = "none"
-    end
+    @hrvicemanager = Employee.find_by_id(@dept.vice_manager_id)
+    
     respond_to do |format|
       if @leave_request.update(leave_request_params)
         format.html do
@@ -149,12 +127,14 @@ class LeaveRequestsController < ApplicationController
             if params[:send] == 'empl_submit'
               approver = @supervisor
               vice_approver = @vice_supervisor
-              if @leave_request.leave_type == "Sick" || @leave_request == "Special Leave"
+              hrmanager = @hrmanager
+              hrvicemanager = @hrvicemanager
+              if @leave_request.leave_type == "Sick" || @leave_request.leave_type == "Special Leave"
                 send_to = 'hr'
               else
                 send_to = 'spv'
               end
-              if @leave_request.send_for_approval(approver,vice_approver, send_to) 
+              if @leave_request.send_for_approval(approver, vice_approver, hrmanager, hrvicemanager, send_to,'empl-submit') 
                 @leave_request.auto_approve          
                 redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.'
               else
@@ -164,9 +144,15 @@ class LeaveRequestsController < ApplicationController
               employee = @requester
               approver = @hrmanager   
               vice_approver = @hrvicemanager           
-              if params[:send] == 'spv-app' then status = true else status = false end  
+              if params[:send] == 'spv-app' 
+                  status = true 
+                  note = 'Leave request approval has been saved and sent to HR Department'
+              else 
+                  status = false
+                  note = 'Leave request approval has been saved and sent back to Employee'
+              end
               if @leave_request.send_approval(employee,approver, vice_approver,status,@leave_request.spv_notes,params[:send])
-                redirect_to leave_requests_url, notice: 'Leave request approval has been saved and sent to HR Department'
+                redirect_to leave_requests_url, notice: note
               end              
             elsif params[:send] == 'hr-app' || params[:send] == 'hr-den'
               employee = @requester
@@ -180,7 +166,7 @@ class LeaveRequestsController < ApplicationController
             
             
           else
-            redirect_to leave_requests_url, notice: 'Leave request has been successfully created.' 
+            redirect_to leave_requests_url, notice: 'Leave request has been saved successfully.' 
           end  
         end  
         format.json { render :show, status: :ok, location: @leave_request }

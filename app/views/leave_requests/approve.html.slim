@@ -5,7 +5,10 @@
     nav
       .nav-wrapper
         .brand-logo style="margin-left: 20px; font-size:1.5em"
-          | Approval Action  
+          - if can? :read, @leave_request
+            | HR Notes
+          - else
+            | Approval Action  
 
     -if params[:page] == "spv" && can?(:approve, @leave_request)
       -if @leave_request.pending_spv_approval?
@@ -30,6 +33,12 @@
           | Approved  
         = button_tag class:"btn waves-effect waves-light right", type: "submit", name:"send", value:"hr-den"
           | Not Approved
-
+    -elsif params[:page] == "hr" && can?(:read_hr, LeaveRequest)
+      .card-panel        
+        = label_tag "label_note", "HR Notes", class: 'label'
+        = f.text_field :hr_staf_notes,  class: 'cat'
+      .toolbar.z-depth-1
+        = button_tag class:"btn waves-effect waves-light right", type: "submit", name:"send", value:"hr-app"
+          | Approved  
 
  
