@@ -2,7 +2,7 @@ tr id="row-#{department.id}"
   td = link_to department.name, department, remote: true
   td = department.code
   td = department.manager || "--"
-
+  td = department.vice_manager || "--"
   td 
     = link_to edit_department_path(department), remote: true, class: "waves-effect waves-teal"
       i.material-icons edit

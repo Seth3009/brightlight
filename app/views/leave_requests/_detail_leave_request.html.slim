@@ -4,7 +4,7 @@ nav
   .nav-wrapper
     ul
       li
-        = link_to leave_requests_path
+        = link_to :back
           i.material-icons.left chevron_left  
       -if can?(:update, @leave_request) && @leave_request.draft?
         li.right
@@ -13,12 +13,14 @@ nav
 .card-panel
   .leave-request-container 
     .row
-      .col.s2
-        .label-text Employee
-      .col.s10 #{@leave_request.employee.try(:name)} ( #{@leave_request.employee.department} )
-      .col.s2
-        .label-text Job Title
-      .col.s10 #{@leave_request.employee.try(:job_title)}    
+        .col.s2
+          .label-text Employee
+        .col.s4 
+          | : #{@leave_request.employee.try(:name)} ( #{@leave_request.employee.department} )      
+        .col.s2
+          .label-text Job Title
+        .col.s4 
+          | : #{@leave_request.employee.try(:job_title)}    
     .row
       .col.s2
         .label-text Req'd date
@@ -73,6 +75,7 @@ nav
           i.material-icons cancel
       .col.s9
         | #{@leave_request.spv_notes}
+      
     .row   
       .col.s2
         .label-text HR Approval   
@@ -88,8 +91,14 @@ nav
           i.material-icons cancel
       .col.s9
         | #{@leave_request.hr_notes}
+    .row     
+      .col.s2
+        .label-text HR Notes
+      .col.s10
+        | :#{@leave_request.hr_staf_notes} 
     -if @leave_request.is_canceled?
       .row
         .col.s12
           h6.center-align.red-text This leave request has been canceled
         
+ 
