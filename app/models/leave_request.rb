@@ -29,8 +29,7 @@ class LeaveRequest < ActiveRecord::Base
   }
 
   scope :hrlist_archive, ->  { 
-    submitted    
-    .where.not(hr_approval: nil)
+    submitted 
     .order(hr_date: :desc, form_submit_date: :desc, updated_at: :desc)
   }
 

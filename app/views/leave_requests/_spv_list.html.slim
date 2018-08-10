@@ -6,7 +6,8 @@ table.compact.striped
       th Hours / Notes
       th Category
       th Leave Type
-      th Substitute
+      th Subs
+      th HR Notes
       th Approval (SPV,HR)
       th Form Submit
       th Actions
@@ -30,6 +31,7 @@ table.compact.striped
             |Not Required
           -else
             |--
+        td = leave_request.hr_staf_notes || "--"
         td               
           -if leave_request.requires_supervisor_approval?           
             -if leave_request.spv_approval.nil?
