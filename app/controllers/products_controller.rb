@@ -62,6 +62,9 @@ class ProductsController < ApplicationController
         format.json { render :show, status: :created, location: @product }
         format.js
       else
+        format.js   { 
+          render js: "Materialize.toast(#{@product.errors.full_messages}, 4000, 'red');"
+        }
         format.html { render :new }
         format.json { render json: @product.errors, status: :unprocessable_entity }        
       end
