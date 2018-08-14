@@ -3,6 +3,8 @@ class Product < ActiveRecord::Base
   belongs_to :item_category
   validates_uniqueness_of :code
   validates_presence_of :code
+  validates_presence_of :item_unit
+  validates_presence_of :item_category
   has_many :supplies_transaction_item
 
   after_create :assign_barcode
