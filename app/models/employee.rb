@@ -62,8 +62,14 @@ class Employee < ActiveRecord::Base
 
   def auto_fill_approver    
     manager = Department.find(self.department_id).manager_id
-    update_column(:approver1, manager)
+    if manager.present?
+      if !self.leaderships
+        self.update_column(:approver1, manager)
+      end
+    end
   end  
+
+  
 
 	def to_s
 		name
