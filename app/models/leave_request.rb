@@ -14,6 +14,7 @@ class LeaveRequest < ActiveRecord::Base
   }
 
   scope :empl, -> (employee_id) { where employee_id: employee_id }
+  
 
   scope :spv, -> (employee_id) { 
     with_employees_and_departments
@@ -24,6 +25,7 @@ class LeaveRequest < ActiveRecord::Base
   scope :spv_archive, -> (employee_id) { 
     with_employees_and_departments
     .where('approver1 = ? or approver2 = ?', employee_id, employee_id)
+    .archive
     .order(form_submit_date: :asc, updated_at: :asc)
   }
 
@@ -36,9 +38,11 @@ class LeaveRequest < ActiveRecord::Base
 
   scope :hrlist_archive, ->  { 
     submitted
-    .where.not(:hr_approval => nil) 
+    .archive
     .order(hr_date: :desc, form_submit_date: :desc, updated_at: :desc)
   }
+
+  scope :archive, -> { where.not(:hr_approval => nil)}
 
   scope :submitted, -> { where.not(form_submit_date: nil) }
 

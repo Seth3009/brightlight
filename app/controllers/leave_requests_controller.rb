@@ -39,7 +39,7 @@ class LeaveRequestsController < ApplicationController
       @supv_approval_list = @leave_requests.spv_archive(@employee)
                             .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
     else   
-      @own_leave_requests = @leave_requests.empl(@employee).order(form_submit_date: :desc, updated_at: :desc)
+      @own_leave_requests = @leave_requests.empl(@employee).archive.order(form_submit_date: :desc, updated_at: :desc)
                             .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
     end
    
