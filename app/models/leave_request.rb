@@ -17,7 +17,7 @@ class LeaveRequest < ActiveRecord::Base
 
   scope :spv, -> (employee_id) { 
     with_employees_and_departments
-    .where('departments.manager_id = ? or departments.vice_manager_id = ?', employee_id, employee_id)
+    .where('approver1 = ? or approver2 = ?', employee_id, employee_id)
     .order(form_submit_date: :asc, updated_at: :asc)
   }
 
@@ -29,7 +29,8 @@ class LeaveRequest < ActiveRecord::Base
   }
 
   scope :hrlist_archive, ->  { 
-    submitted 
+    submitted
+    .where.not(:hr_approval => nil) 
     .order(hr_date: :desc, form_submit_date: :desc, updated_at: :desc)
   }
 
@@ -80,14 +81,14 @@ class LeaveRequest < ActiveRecord::Base
   def cancel 
     self.is_canceled = true
     self.save
-    if self.employee.try(:department).try(:vice_manager).present? && Department.find_by(code: 'HR').vice_manager.present?
-      cc = [self.employee.try(:department).try(:manager),self.employee.try(:department).try(:vice_manager), Department.find_by(code: 'HR').manager,Department.find_by(code: 'HR').vice_manager]
-    elsif self.employee.try(:department).try(:vice_manager).present? && Department.find_by(code: 'HR').vice_manager.nil?
-      cc = [self.employee.try(:department).try(:manager),self.employee.try(:department).try(:vice_manager), Department.find_by(code: 'HR').manager]
-    elsif self.employee.try(:department).try(:vice_manager).nil? && Department.find_by(code: 'HR').vice_manager.present?
-      cc = [self.employee.try(:department).try(:manager), Department.find_by(code: 'HR').manager,Department.find_by(code: 'HR').vice_manager]
+    if self.employee.approver2.present? && Department.find_by(code: 'HR').vice_manager.present?
+      cc = [Employee.find(self.employee.approver1),Employee.find(self.employee.approver2), Department.find_by(code: 'HR').manager,Department.find_by(code: 'HR').vice_manager]
+    elsif self.employee.approver2.present? && Department.find_by(code: 'HR').vice_manager.nil?
+      cc = [Employee.find(self.employee.approver1),self.Employee.find(self.employee.approver2), Department.find_by(code: 'HR').manager]
+    elsif self.employee.approver2.nil? && Department.find_by(code: 'HR').vice_manager.present?
+      cc = [Employee.find(self.employee.approver1), Department.find_by(code: 'HR').manager,Department.find_by(code: 'HR').vice_manager]
     else
-      cc = [self.employee.try(:department).try(:manager), Department.find_by(code: 'HR').manager]
+      cc = [Employee.find(self.employee.approver1), Department.find_by(code: 'HR').manager]
     end
     email = EmailNotification.leave_canceled(self, self.employee, cc).deliver_now
     notification = Message.new_from_email(email)

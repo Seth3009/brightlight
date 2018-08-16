@@ -74,7 +74,7 @@ class Ability
     can_manage_own_leave_request
     can :review, LeaveRequest
     can [:approve, :read, :update], LeaveRequest do |lr|
-      lr.employee.try(:department).try(:manager) == @user.employee || lr.employee.try(:department).try(:vice_manager) == @user.employee  # Manager can only approve leave requests of employees in his/her department
+      Employee.find(lr.employee.approver1) == @user.employee || Employee.find(lr.employee.approver2) == @user.employee  # Manager can only approve leave requests of employees in his/her department
     end
     
 	end
