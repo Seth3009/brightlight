@@ -21,6 +21,12 @@ class LeaveRequest < ActiveRecord::Base
     .order(form_submit_date: :asc, updated_at: :asc)
   }
 
+  scope :spv_archive, -> (employee_id) { 
+    with_employees_and_departments
+    .where('approver1 = ? or approver2 = ?', employee_id, employee_id)
+    .order(form_submit_date: :asc, updated_at: :asc)
+  }
+
   scope :hrlist, ->  { 
     submitted
     .active

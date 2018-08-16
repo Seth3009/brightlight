@@ -31,7 +31,7 @@ ul#dept-options.dropdown-content
 .card-panel
   - if params[:view] == "hr" && @department.id == @dept.id
     == render 'hr_archive'
-  - elsif params[:view] == "spv" && @employee.id == @supervisor.id
+  - elsif params[:view] == "spv" 
     == render 'spv_archive'
   - else    
     == render 'employee_archive'

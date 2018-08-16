@@ -9,7 +9,6 @@ class LeaveRequestsController < ApplicationController
     @dept = Department.find_by_code('HR')              
     @hrmanager = Employee.find_by_id(@dept.manager_id)
     @hrvicemanager = Employee.find_by_id(@dept.vice_manager_id)
-    @department = Department.find_by_id(@employee.department_id) 
     @leave_requests = LeaveRequest.with_employees_and_departments
     @own_leave_requests = @leave_requests.order(form_submit_date: :desc, updated_at: :desc)
                           .where('form_submit_date = ? or hr_approval IS ? and spv_approval IS ?',Date.today, nil, nil)
@@ -29,16 +28,15 @@ class LeaveRequestsController < ApplicationController
     # authorize! :validate, LeaveRequest if params[:page] == 'hr'
 
    
-    @department = Department.find_by_id(@employee.department_id)    
-    @supervisor = Employee.find_by_id(@department.manager_id)
+    @department = Department.find_by_id(@employee.department_id)        
     @dept = Department.find_by_code('HR')              
     @hrmanager = Employee.find_by_id(@dept.manager_id)
     @leave_requests = LeaveRequest.with_employees_and_departments
 
     if params[:view] == "hr" && @department.id == @dept.id
       @hr_approval_list = @leave_requests.hrlist_archive
-    elsif params[:view] == "spv" && @employee.id == @supervisor.id
-      @supv_approval_list = @leave_requests.spv(@employee).submitted
+    elsif params[:view] == "spv"
+      @supv_approval_list = @leave_requests.spv_archive(@employee)
                             .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
     else   
       @own_leave_requests = @leave_requests.empl(@employee).order(form_submit_date: :desc, updated_at: :desc)
@@ -113,7 +111,6 @@ class LeaveRequestsController < ApplicationController
     #authorize! :update, @leave_request
     
     @requester = Employee.find_by_id(@leave_request.employee_id)
-    @department = Department.find_by_id(@requester.department_id)    
     @supervisor = Employee.find_by_id(@leave_request.employee.approver1)
     @vice_supervisor = Employee.find_by_id(@leave_request.employee.approver2)
     @dept = Department.find_by_code('HR')              
@@ -183,7 +180,6 @@ class LeaveRequestsController < ApplicationController
     authorize! :validate, LeaveRequest if params[:page] == 'hr'
 
     @requester = Employee.find_by_id(@leave_request.employee_id)
-    @department = Department.find_by_id(@requester.department_id)    
     @supervisor = Employee.find_by_id(@leave_request.employee.approver1)
     @vice_supervisor = Employee.find_by_id(@leave_request.employee.approver2)
     @dept = Department.find_by_code('HR')              
