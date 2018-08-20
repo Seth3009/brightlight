@@ -53,7 +53,7 @@ table.compact.striped
 
         td = leave_request.form_submit_date.nil? ? "--" : leave_request.form_submit_date.strftime("%d/%m/%Y")
         td 
-          - if @employee.id == @hrmanager.id || @employee.id == @hrvicemanager.id
+          - if @employee.id == @hrmanager.id || (if @hrvicemanager then @employee.id == @hrvicemanager.id end)
             = link_to approve_path(leave_request,"hr")
               i.material-icons visibility
           - else 

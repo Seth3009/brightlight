@@ -1,7 +1,7 @@
 class Employee < ActiveRecord::Base
- 	validates :name, presence: true
+ 	validates :name, :department, presence: true
     validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create, allow_blank: true
-    
+  after_save :auto_fill_approver  
  	belongs_to :user
 	belongs_to :department
 	belongs_to :supervisor, class_name: "Employee"
@@ -59,6 +59,17 @@ class Employee < ActiveRecord::Base
         *terms.map { |e| [e] * num_or_conds }.flatten
       )
   }
+
+  def auto_fill_approver    
+    manager = Department.find(self.department_id).manager_id
+    if manager.present?
+      if !self.leaderships
+        self.update_column(:approver1, manager)
+      end
+    end
+  end  
+
+  
 
 	def to_s
 		name

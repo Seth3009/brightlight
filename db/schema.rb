@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180806124137) do
+ActiveRecord::Schema.define(version: 20180816035215) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -671,8 +671,8 @@ ActiveRecord::Schema.define(version: 20180806124137) do
     t.string   "education_school2"
     t.string   "nationality"
     t.string   "blood_type"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.integer  "supervisor_id"
     t.integer  "department_id"
     t.string   "slug"
@@ -680,6 +680,9 @@ ActiveRecord::Schema.define(version: 20180806124137) do
     t.boolean  "is_active"
     t.integer  "family_no"
     t.integer  "user_id"
+    t.integer  "approver1"
+    t.integer  "approver2"
+    t.boolean  "leaderships",                default: false
   end
 
   add_index "employees", ["department_id"], name: "index_employees_on_department_id", using: :btree
