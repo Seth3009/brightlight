@@ -1,0 +1,21 @@
+/ TinyMCE textbox --
+= tinymce_assets
+/ Comments --------------------------------------
+#comments-box
+	.widget
+		.well.well-widget-content
+			#comments.collapse.in
+				= render partial: 'comments/comments', locals: { commentable: @commentable, comments: @commentable.comments }
+
+javascript:
+	$("a.cancel-form").on("click", function(event) {
+		$(".comment-form").remove();
+		$(".comment-footer").show();
+		event.preventDefault();
+	});
+	$("a.cancel-edit").on("click", function(event) {
+		$(".comment-form").next(".comment-text").show();
+		$(".comment-form").remove();
+		$(".comment-footer").show();
+		event.preventDefault();
+	});

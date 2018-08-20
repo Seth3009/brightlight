@@ -1,0 +1,21 @@
+li.comment-container id="comment-#{comment.id}"
+	.comment-user-avatar
+		- if comment.user.try(:image_url)
+			= image_tag comment.user.image_url, alt: comment.user.name, class: 'circle'
+		- else
+			i.material-icons.grey-text account_circle
+	.comment-text-container
+		span.comment-user-name
+			= comment.user.try(:name) || "--"
+		span.comment-date-ago.right
+			= timeago_tag comment.created_at, :nojs => true, :limit => 10.days.ago
+		span.right
+			= comment.created_at
+		.comment-title
+			= comment.title
+		.comment-text id="comment-text-#{comment.id}"
+			= comment.comment.html_safe
+
+
+		
+		

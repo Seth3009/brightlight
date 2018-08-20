@@ -17,6 +17,9 @@ class Requisition < ActiveRecord::Base
   validates :requester, presence: true
   validates :description, presence: true
 
+  acts_as_commentable
+  accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
+
   scope :pending_supv_approval, lambda { |supv|
     where.not(sent_to_supv: nil).where(is_supv_approved: nil).where(supervisor_id: supv.id)
   }

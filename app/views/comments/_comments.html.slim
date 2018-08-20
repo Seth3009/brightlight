@@ -1,0 +1,23 @@
+.comments-list-container
+	ul.comment-list
+		-comments.each do |comment|
+			= render partial: 'comments/comment', locals: { commentable: commentable, comment: comment }
+		#new-comment-box
+
+-if user_signed_in?
+	#comment-post.comment-form-container
+		.comment-user-avatar
+			- if current_user.image_url
+				= image_tag current_user.image_url, alt: current_user.name, class: 'circle'
+			- else
+				i.material-icons.grey-text account_circle
+		.comment-text-container
+			span.comment-user-name
+				= current_user.name || "--"
+			.comment-text Write your comment below:
+		.comment-controls
+			= render partial:'comments/comment_form', locals: { commentable: commentable, comment: commentable.comments.new }
+
+
+
+ 

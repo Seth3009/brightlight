@@ -1,0 +1,8 @@
+= form_for comment, class:'form-inline', remote: true do |form|
+	= form.text_area :comment, class:"tinymce", rows: 2, cols: 120
+	= form.hidden_field :user_id, value: current_user.id
+	= form.hidden_field :commentable_id, value: commentable.id
+	= form.hidden_field :commentable_type, value: commentable.class.to_s
+	= form.submit "Send", remote: true, class:'btn'
+
+	= tinymce

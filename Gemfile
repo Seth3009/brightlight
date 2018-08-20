@@ -103,6 +103,9 @@ gem 'tagsinput-rails'
 # For creating Budget pivot table
 gem 'pivot_table'
 
+# For comments in models
+gem 'acts_as_commentable'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

@@ -273,7 +273,8 @@ Rails.application.routes.draw do
   get  '/search' => "search#index"
   post '/search' => "search#index"
 
-
+  post '/comments' => "comments#create"
+  
   patch 'pax/:id' => 'late_passengers#update'
 
   devise_for :users, controllers: {

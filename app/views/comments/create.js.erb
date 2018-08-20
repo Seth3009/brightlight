@@ -1,0 +1,3 @@
+$("#new-comment-box").before("<%= escape_javascript(render(partial:'comments/comment', locals: {comment: @comment})) %>");
+tinyMCE.activeEditor.setContent('');
+Materialize.toast("Comment was successfully sent.", 4000, "green")
