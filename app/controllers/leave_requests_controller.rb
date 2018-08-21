@@ -1,6 +1,6 @@
 class LeaveRequestsController < ApplicationController
   before_action :set_leave_request, only: [:show, :edit, :update, :destroy, :cancel, :approve]
-  before_action :set_employee, only: [:index, :new, :edit, :create, :update, :approve, :archives]
+  before_action :set_employee, only: [:index, :new, :edit, :create, :update, :approve, :archives, :show]
   
   
   # GET /leave_requests
@@ -52,8 +52,14 @@ class LeaveRequestsController < ApplicationController
   
   # GET /leave_requests/1
   # GET /leave_requests/1.json
-  def show
-    authorize! :read, @leave_request
+  def show    
+    if @leave_request.employee == @employee || can?(:update,@leave_request)    
+      @commentable = @leave_request
+    else
+      redirect_to leave_requests_url, alert: "Unauthorized page"
+    end
+    
+    
   end
 
   # GET /leave_requests/new
@@ -108,7 +114,7 @@ class LeaveRequestsController < ApplicationController
   # PATCH/PUT /leave_requests/1
   # PATCH/PUT /leave_requests/1.json
   def update
-    #authorize! :update, @leave_request
+    authorize! :update, @leave_request
     
     @requester = Employee.find_by_id(@leave_request.employee_id)
     @supervisor = Employee.find_by_id(@leave_request.employee.approver1)
@@ -178,7 +184,7 @@ class LeaveRequestsController < ApplicationController
   def approve
     authorize! :approve, @leave_request if params[:page] == 'spv'
     authorize! :validate, LeaveRequest if params[:page] == 'hr'
-
+    @commentable = @leave_request
     @requester = Employee.find_by_id(@leave_request.employee_id)
     @supervisor = Employee.find_by_id(@leave_request.employee.approver1)
     @vice_supervisor = Employee.find_by_id(@leave_request.employee.approver2)
@@ -226,6 +232,7 @@ class LeaveRequestsController < ApplicationController
     
     # Never trust parameters from the scary internet, only allow the white list through.
     def leave_request_params
-      params.require(:leave_request).permit(:start_date, :end_date, :hour, :leave_type, :leave_note, :leave_subtitute, :subtitute_notes, :spv_approval, :spv_date, :spv_notes, :hr_approval, :hr_date, :hr_notes, :form_submit_date, :hr_staf_notes, :employee_id, :category )
+      params.require(:leave_request).permit(:start_date, :end_date, :hour, :leave_type, :leave_note, :leave_subtitute, :subtitute_notes, :spv_approval, :spv_date, :spv_notes, :hr_approval, :hr_date, :hr_notes, :form_submit_date, :hr_staf_notes, :employee_id, :category,
+                                            {comments_attributes: [:id, :title, :comment, :user_id, :commentable_id, :commentable_type, :role]} )
     end
 end

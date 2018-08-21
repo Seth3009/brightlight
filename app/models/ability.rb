@@ -73,7 +73,7 @@ class Ability
     can :read, :all
     can :review, LeaveRequest
     can [:approve, :read, :update], LeaveRequest do |lr|
-      Employee.find(lr.employee.approver1) == @user.employee || Employee.find(lr.employee.approver2) == @user.employee  # Manager can only approve leave requests of employees in his/her department
+      Employee.find(lr.employee).approver1 == @user.employee.id || Employee.find(lr.employee).approver2 == @user.employee.id  # Manager can only approve leave requests of employees in his/her department
     end
     can_manage_own_leave_request
     
@@ -142,8 +142,9 @@ class Ability
   
   private 
 
-    def can_manage_own_leave_request
-      can [:create, :read ], LeaveRequest, employee: @user.employee
+    def can_manage_own_leave_request      
+      # can [:create, :read ], Comment, user: @user
+      can [:create], LeaveRequest, employee: @user.employee 
       can [:update, :destroy], LeaveRequest do |lr| lr.employee == @user.employee && lr.draft? && lr.spv_approval.nil?end
     end
 

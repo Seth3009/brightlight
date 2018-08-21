@@ -53,13 +53,11 @@ table.compact.striped
 
         td = leave_request.form_submit_date.nil? ? "--" : leave_request.form_submit_date.strftime("%d/%m/%Y")
         td 
+          = link_to leave_request_path(leave_request)
+            i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="View" visibility
           - if @employee.id == @hrmanager.id || (if @hrvicemanager then @employee.id == @hrvicemanager.id end)
             = link_to approve_path(leave_request,"hr")
-              i.material-icons visibility
-          - else 
-            = link_to leave_request_url(leave_request)
-              i.material-icons visibility            
-            = link_to edit_leave_request_path(leave_request), remote: true
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Add HR Notes" edit
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Review approval" thumbs_up_down
+          - else             
             = link_to cancel_leave_request_path(leave_request), data: {:confirm => 'This action will cancel a leave request that has already been submitted. Are you sure?'}, :method => :delete, class:'red-text'
                 i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete

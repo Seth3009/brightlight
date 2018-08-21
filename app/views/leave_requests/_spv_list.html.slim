@@ -52,5 +52,8 @@ table.compact.striped
             
         td = leave_request.form_submit_date.nil? ? "--" : leave_request.form_submit_date.strftime("%d/%m/%Y")
         td 
-          = link_to approve_path(leave_request,"spv")
-            i.material-icons visibility
+           = link_to leave_request_path(leave_request)
+             i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="View" visibility
+           - if can?(:approve, leave_request ) and leave_request.spv_approval.nil?
+             = link_to approve_path(leave_request,"spv")
+               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Review approval" thumbs_up_down

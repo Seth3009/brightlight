@@ -5,6 +5,9 @@ class LeaveRequest < ActiveRecord::Base
   validates_presence_of :leave_type, :message => "Choose your leave type"
   validates_presence_of :leave_note, :message => "Describe your leave"
   
+  acts_as_commentable
+  accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
+  
   scope :active, -> { where(is_canceled: false) }
   scope :canceled, -> { where(is_canceled: true) }
 
