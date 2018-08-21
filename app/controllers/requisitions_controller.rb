@@ -32,6 +32,7 @@ class RequisitionsController < ApplicationController
     authorize! :read, @requisition
     @req_items = @requisition.req_items
     @budget_line = "#{@requisition.budget_item.try(:description)} #{@requisition.budget_item.try(:month)}/#{@requisition.budget_item.try(:academic_year).try(:name)} "
+    @commentable = @requisition
   end
 
   # GET /requisitions/new
@@ -185,7 +186,8 @@ class RequisitionsController < ApplicationController
                                           {req_items_attributes: [:id, :requisition_id, :description, :qty_reqd, :unit, :est_price, :actual_price, 
                                                                   :currency, :notes, :qty_ordered, :order_date, :qty_delivered, :delivery_date,
                                                                   :qty_accepted, :acceptance_date, :qty_rejected, :acceptance_notes, :reject_notes,
-                                                                  :needed_by_date, :id, :created_by, :last_updated_by, :_destroy]}
+                                                                  :needed_by_date, :id, :created_by, :last_updated_by, :_destroy]},
+                                          {comments_attributes: [:id, :title, :comment, :user_id, :commentable_id, :commentable_type, :role]}
                                           )
     end
 end
