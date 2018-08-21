@@ -43,4 +43,11 @@ module ApplicationHelper
     Message.unread(current_user).count
   end
 
+  def format_date_time(datetime)
+    if datetime > Time.now.beginning_of_day && datetime < Time.now.end_of_day
+      datetime.strftime("%H:%M")
+    else
+      datetime.strftime("%b %d") + (datetime.year != Time.now.year ? ", " + datetime.strftime : "")
+    end
+  end
 end

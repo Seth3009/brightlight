@@ -10,7 +10,7 @@ li.comment-container id="comment-#{comment.id}"
 		span.comment-date-ago.right
 			= timeago_tag comment.created_at, :nojs => true, :limit => 10.days.ago
 		span.right
-			= comment.created_at
+			strong = format_date_time(comment.created_at)
 		.comment-title
 			= comment.title
 		.comment-text id="comment-text-#{comment.id}"
