@@ -4,9 +4,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   helper_method :current_user
   helper_method :sort_column, :sort_direction
+  helper_method :unread_messages
+
   layout :layout_by_controller
   before_action :set_current_academic_year
-  helper_method :unread_messages
 
   # Authorization using CanCanCan gem
   include CanCan::ControllerAdditions

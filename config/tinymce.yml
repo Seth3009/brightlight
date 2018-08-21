@@ -1,10 +1,19 @@
-toolbar:
-  - styleselect | bold italic | bullist numlist outdent indent | undo redo | image link
-  - fontsizeselect | alignleft aligncenter alignright | forecolor backcolor | table
-fontsize_formats:
-  - 8pt 10pt 12pt 14pt 18pt 24pt 36pt
-plugins:
-  - image
-  - link
-  - textcolor
-  - table
+# toolbar:
+#   - styleselect | bold italic | bullist numlist outdent indent | undo redo | image link
+#   - fontsizeselect | alignleft aligncenter alignright | forecolor backcolor | table
+# fontsize_formats:
+#   - 8pt 10pt 12pt 14pt 18pt 24pt 36pt
+# plugins:
+#   - image
+#   - link
+#   - textcolor
+#   - table
+menubar: false
+statusbar: false
+plugins: 
+  - advlist autolink lists link image charmap print preview anchor textcolor searchreplace visualblocks fullscreen 
+  - insertdatetime media table contextmenu paste code wordcount
+toolbar: 
+  - insert | undo redo |  formatselect | bold italic forecolor backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat
+insert_toolbar: quickimage quicktable
+content_css: '/assets/tinymce.css'
