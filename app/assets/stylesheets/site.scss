@@ -1733,6 +1733,110 @@ td.barby-cell {
 }
 td.barby-cell.on { background: #000; }
 
+// ============================================ Comments +===========================================
+
+.comment-section {
+	.comment-widget-header {
+		background: $lighter-grey;
+		color: $gray;
+		h3 {
+			color: $gray;
+			i {
+				margin-right: 4px;
+				color: $gray;
+			}
+		}
+		span.widget-button {
+			margin: 0 9px 0 0;
+		}
+	}
+	.comment-form-container {
+		margin-top: 10px;     
+		padding-top: 10px;
+		padding-left: 10px;
+		background-color: $lighter-grey;
+		.comment-controls {
+			padding-right: 30px;
+			position: relative;
+			font-size: 12px;
+			display: block;
+		}
+	}
+	.comments-list-container {
+		margin-left: 0px;
+		margin-right: 0px;
+		ul.comment-list {
+			margin: 10px 0px 10px 0px;
+			li.comment-container {
+				list-style: none;
+				padding-top: 10px;
+				padding-left: 4px;
+				margin-top: 10px;
+				margin-bottom: 10px;
+				border-top: 1px solid #CACACA;
+				position: relative;
+				display: list-item;
+			}
+
+		}       
+	}
+	.comment-text-container {
+		padding-right: 0px;
+		position: relative;
+		font-size: 12px;
+		display: block;
+		margin-left: 48px;
+		min-height: 50px;
+		.comment-user-name {
+			margin-bottom: 6px;
+			color: $darker-grey;
+			font-weight: bold;
+		}
+		.comment-date-ago {
+			margin-left: 6px;
+			color: $dark-grey;
+		}
+		.comment-title {
+			font-size: 14px;
+			font-weight: bold;
+			color: $dark-grey;
+			word-wrap: break-word;
+		}
+		.comment-text {
+			font-size: 14px;
+			color: $dark-grey;
+			line-height: 14px;
+			word-wrap: break-word;
+		}
+	}
+	.comment-footer {
+		margin-top: 4px;
+		margin-left: 48px;
+		display: block;
+		color: $dark-grey;
+		font-size: 11px;
+		a {
+			color: #B5B5B5;
+			text-decoration: none;
+		}
+		a:hover {
+			color: $light-grey;
+		}
+	}
+	.comment-reply-box {
+		margin-left: 0px;
+	}
+	.comment-user-avatar {
+		margin-right: 2px;
+		display: block;
+		float: left;
+		padding-right: 10px;
+		i {
+			font-size: 3.5em;
+		}
+	}   
+}
+
 // ============================================ jQuery UI ===========================================
 .ui-widget {
 	font-family: Roboto, Arial, sans-serif;
@@ -1823,3 +1927,4 @@ td.barby-cell.on { background: #000; }
     font-size: 16px;
     margin-bottom: 0px !important;
 }
+
