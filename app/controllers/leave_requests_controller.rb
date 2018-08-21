@@ -87,11 +87,11 @@ class LeaveRequestsController < ApplicationController
             else 
               @sendto = "spv"             
             end          
-            if @leave_request.send_for_approval(supervisor, vice_supervisor, hrmanager, hrvicemanager, @sendto, 'empl-submit')  
+            if @leave_request.send_for_approval(supervisor, vice_supervisor, hrmanager, hrvicemanager, @sendto, 'empl-submit')  && supervisor
               @leave_request.auto_approve             
               redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.'               
             else
-              redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
+              redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe approver field is blank?"
             end
           else
             redirect_to leave_requests_url, notice: 'Leave request has been successfully created.' 
@@ -131,11 +131,11 @@ class LeaveRequestsController < ApplicationController
               else
                 send_to = 'spv'
               end
-              if @leave_request.send_for_approval(approver, vice_approver, hrmanager, hrvicemanager, send_to,'empl-submit') 
+              if @leave_request.send_for_approval(approver, vice_approver, hrmanager, hrvicemanager, send_to,'empl-submit') && approver
                 @leave_request.auto_approve          
                 redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.'
               else
-                redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
+                redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe approver field is blank?"
               end                         
             elsif params[:send] == 'spv-app' || params[:send] == 'spv-den'              
               employee = @requester

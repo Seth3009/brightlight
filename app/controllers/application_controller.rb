@@ -64,9 +64,9 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new('Not Found')
   end
 
-  def current_user
-    User.find  1 #35 #75 # 1 #
-  end
+  # def current_user
+  #   User.find  1 #35 #75 # 1 #
+  # end
 
   protected
 
