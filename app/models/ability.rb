@@ -143,7 +143,7 @@ class Ability
   private 
 
     def can_manage_own_leave_request      
-      # can [:create, :read ], Comment, user: @user
+      can [:create, :read ], Comment, user: @user
       can [:create], LeaveRequest, employee: @user.employee 
       can [:update, :destroy], LeaveRequest do |lr| lr.employee == @user.employee && lr.draft? && lr.spv_approval.nil?end
     end

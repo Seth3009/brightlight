@@ -90,12 +90,7 @@ nav
           | : 
           i.material-icons cancel
       .col.s9
-        | #{@leave_request.hr_notes}
-    .row     
-      .col.s2
-        .label-text HR Notes
-      .col.s10
-        | :#{@leave_request.hr_staf_notes} 
+        | #{@leave_request.hr_notes}    
     -if @leave_request.is_canceled?
       .row
         .col.s12
