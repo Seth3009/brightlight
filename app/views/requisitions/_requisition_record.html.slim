@@ -127,3 +127,14 @@ h5 Purchase Request
           .col.m3
             .label By
             .item = @requisition.budget_approver.try(:name) || "--"
+.row
+  ul.collection
+    li.collection-item.collection-header.comment-section
+      | Comments (#{@commentable.comments.count})
+      i.material-icons.arrow.left chevron_right
+      .right
+        = link_to "#"
+          |Add comment
+          i.material-icons.left add
+    li.collection-item.row.no-bottom-border.container-padding
+      = render 'comments/comment_widget'

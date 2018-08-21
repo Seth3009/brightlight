@@ -1,22 +1,23 @@
 table.compact.striped
   thead
     tr
-      th Employee
+      th Submit on
       th Leave date 
       th Hours / Notes
       th Category
       th Leave Type
       th Subs
       th HR Notes
-      th Approval (SPV,HR)
-      th Form Submit
-      th Actions
+      th Approval (SPV,HR)  
+      th Canceled?                  
+      th Status
       
-
+      
   tbody#leave_requests
-    - @hr_approval_list.each do |leave_request|
-      tr 
-        td = leave_request.employee
+    - @own_leave_requests.each do |leave_request|
+      tr
+        td 
+          = leave_request.form_submit_date.nil? ? 'Draft' : leave_request.form_submit_date.strftime("%d/%m/%Y")
         td = leave_request.start_date.strftime("%d/%m/%Y") + " - " + leave_request.end_date.strftime("%d/%m/%Y")
         td = leave_request.hour
         td = leave_request.category? ? leave_request.category : "--"
@@ -33,7 +34,7 @@ table.compact.striped
           -else
             |--
         td = leave_request.hr_staf_notes || "--"
-        td               
+        td
           -if leave_request.requires_supervisor_approval?           
             -if leave_request.spv_approval.nil?
               i.material-icons check_box_outline_blank
@@ -49,15 +50,13 @@ table.compact.striped
           -elsif leave_request.hr_approval == true
             i.material-icons check_box
           -else
-            i.material-icons cancel   
-
-        td = leave_request.form_submit_date.nil? ? "--" : leave_request.form_submit_date.strftime("%d/%m/%Y")
-        td 
+            i.material-icons cancel 
+        td.center
+            - if leave_request.is_canceled?
+              i.material-icons check 
+            - else
+              | -- 
+        td
           = link_to leave_request_path(leave_request)
-            i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="View" visibility
-          - if @employee.id == @hrmanager.id || (if @hrvicemanager then @employee.id == @hrvicemanager.id end)
-            = link_to approve_path(leave_request,"hr")
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Review approval" thumbs_up_down
-          - else             
-            = link_to cancel_leave_request_path(leave_request), data: {:confirm => 'This action will cancel a leave request that has already been submitted. Are you sure?'}, :method => :delete, class:'red-text'
-                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete
+            i.material-icons visibility          
+            

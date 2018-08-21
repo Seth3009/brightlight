@@ -1,7 +1,7 @@
 class EmployeesController < ApplicationController
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
   before_action :sortable_columns, only: [:index]
-
+  
   # GET /employees
   # GET /employees.json
   def index
@@ -52,7 +52,7 @@ class EmployeesController < ApplicationController
 
   # GET /employees/1/edit
   def edit
-    authorize! :manage, Employee
+    authorize! :manage, Employee    
   end
 
   # POST /employees
@@ -79,13 +79,13 @@ class EmployeesController < ApplicationController
       authorize! :update, Employee
     else
       authorize! :update, Employee
-    end
+    end    
     respond_to do |format|
-      if @employee.update(employee_params)
+      if @employee.update(employee_params)        
         format.html do
           if employee_params[:book_loans_attributes].present?
             redirect_to employee_book_loans_path(@employee, year:params[:acad_year], book_catg:params[:book_catg]), notice: 'Book loan was successfully added.'
-          else
+          else            
             redirect_to @employee, notice: 'Employee was successfully updated.'
           end
         end
@@ -134,7 +134,7 @@ class EmployeesController < ApplicationController
                   else
                     Employee.find(params[:id])
                   end
-    end
+    end   
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def employee_params
@@ -144,7 +144,7 @@ class EmployeesController < ApplicationController
         :home_country, :home_postal_code, :mobile_phone, :home_phone, :office_phone, :other_phone,
         :emergency_contact_number, :emergency_contact_name, :email, :photo_uri, :education_degree,
         :education_graduation_date, :education_school, :education_degree2, :education_graduation_date2,
-        :education_school2, :supervisor_id, :department_id, :nationality, :blood_type, :is_active,
+        :education_school2, :supervisor_id, :department_id, :nationality, :blood_type, :is_active, :approver1, :approver2, :leaderships,
         {book_loans_attributes: [:id, :book_copy_id, :academic_year_id, :book_edition_id, :book_category_id, :book_title_id,
             :out_date, :due_date, :return_date, :loan_type_id, :user_id, :created_at, :updated_at, :barcode,
             :employee_id, :employee_no, :loan_status, :return_status, :notes, :grade_section_code, :grade_subject_code,

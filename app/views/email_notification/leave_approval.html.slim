@@ -10,7 +10,7 @@ html
         - if @sendto == "hr"
           | Dear #{@hrmanager.name},
         - else
-          | Dear #{@approver.name},
+          | Dear #{@supervisor.name},
 
       p You have a pending leave request that requires your approval.
 
@@ -26,4 +26,4 @@ html
     - if @sendto == "hr"
       = render 'footer', to: @hrmanager.email
     - else
-      = render 'footer', to: @approver.email
+      = render 'footer', to: @supervisor
