@@ -71,11 +71,12 @@ class Ability
       budget_item.budget.budget_holder == @user.employee 
     end
     can :read, :all
-    can_manage_own_leave_request
     can :review, LeaveRequest
     can [:approve, :read, :update], LeaveRequest do |lr|
-      lr.employee.try(:department).try(:manager) == @user.employee   # Manager can only approve leave requests of employees in his/her department
+      Employee.find(lr.employee).approver1 == @user.employee.id || Employee.find(lr.employee).approver2 == @user.employee.id  # Manager can only approve leave requests of employees in his/her department
     end
+    can_manage_own_leave_request
+    
 	end
 
   # Teacher
@@ -108,10 +109,11 @@ class Ability
 
   def hrd
     can :manage, Employee
-    can [:create, :update, :read, :read_hr, :destroy], LeaveRequest
+    can [:create, :update, :read, :read_hr, :destroy, :cancel], LeaveRequest
     can :validate, LeaveRequest do 
-      @user.employee == Department.find_by(code: 'HR').manager
-    end
+      @user.employee == Department.find_by(code: 'HR').manager || @user.employee == Department.find_by(code: 'HR').vice_manager
+    end   
+    
   end
 
   def carpool
@@ -140,9 +142,10 @@ class Ability
   
   private 
 
-    def can_manage_own_leave_request
-      can [:create, :read, :cancel], LeaveRequest, employee: @user.employee
-      can [:update, :destroy], LeaveRequest do |lr| lr.employee == @user.employee && lr.draft? end
+    def can_manage_own_leave_request      
+      can [:create, :read ], Comment, user: @user
+      can [:create], LeaveRequest, employee: @user.employee 
+      can [:update, :destroy], LeaveRequest do |lr| lr.employee == @user.employee && lr.draft? && lr.spv_approval.nil?end
     end
 
     def can_manage_own_requisition

@@ -5,6 +5,9 @@ class LeaveRequest < ActiveRecord::Base
   validates_presence_of :leave_type, :message => "Choose your leave type"
   validates_presence_of :leave_note, :message => "Describe your leave"
   
+  acts_as_commentable
+  accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
+  
   scope :active, -> { where(is_canceled: false) }
   scope :canceled, -> { where(is_canceled: true) }
 
@@ -14,19 +17,35 @@ class LeaveRequest < ActiveRecord::Base
   }
 
   scope :empl, -> (employee_id) { where employee_id: employee_id }
+  
 
   scope :spv, -> (employee_id) { 
     with_employees_and_departments
-    .where('departments.manager_id = ?', employee_id)
-    .order(form_submit_date: :desc, updated_at: :desc)
+    .where('approver1 = ? or approver2 = ?', employee_id, employee_id)
+    .order(form_submit_date: :asc, updated_at: :asc)
+  }
+
+  scope :spv_archive, -> (employee_id) { 
+    with_employees_and_departments
+    .where('approver1 = ? or approver2 = ?', employee_id, employee_id)
+    .archive
+    .order(form_submit_date: :asc, updated_at: :asc)
   }
 
   scope :hrlist, ->  { 
     submitted
     .active
-    .where("spv_approval = true or leave_type = 'Sick' or leave_type = 'Family Matter'")
-    .order(spv_date: :desc, form_submit_date: :desc, updated_at: :desc)
+    .where("spv_approval = true or leave_type = 'Sick' or leave_type = 'Special Leave'")
+    .order(spv_date: :asc, form_submit_date: :asc, updated_at: :asc)
   }
+
+  scope :hrlist_archive, ->  { 
+    submitted
+    .archive
+    .order(hr_date: :desc, form_submit_date: :desc, updated_at: :desc)
+  }
+
+  scope :archive, -> { where.not(:hr_approval => nil)}
 
   scope :submitted, -> { where.not(form_submit_date: nil) }
 
@@ -38,30 +57,31 @@ class LeaveRequest < ActiveRecord::Base
     end
   end
 
-  def send_for_approval(approver, sendto, type)
-    if approver      
-      if type == 'empl_submit'
+  def send_for_approval(supervisor, vice_supervisor, hrmanager, hrvicemanager, sendto, type)
+    if supervisor 
+      if type == 'empl-submit'   
         self.update_attributes form_submit_date: Time.now.strftime('%Y-%m-%d')
-        email = EmailNotification.leave_approval(self, approver, sendto, type).deliver_now    
+        email = EmailNotification.leave_approval(self, supervisor, vice_supervisor,hrmanager,hrvicemanager, sendto).deliver_now    
         notification = Message.new_from_email(email)
         notification.save
       else
         return false
       end
+    else
       return true
     end
   end
 
-  def send_approval(employee,approver,status,notes,type)
+  def send_approval(employee,approver,vice_approver, status,notes,type)
     if employee && approver
       if type == 'spv-app' || type == 'spv-den'
         self.update_attributes spv_approval: status,spv_notes: notes, spv_date: Time.now.strftime('%Y-%m-%d')
-        email = EmailNotification.leave_spv_approve(self, employee, approver, status, notes,type).deliver_now
+        email = EmailNotification.leave_spv_approve(self, employee, approver,vice_approver, status, notes,type).deliver_now
         notification = Message.new_from_email(email)
         notification.save
       elsif type == 'hr-app' || type == 'hr-den'
         self.update_attributes hr_approval: status, hr_notes: notes, hr_date: Time.now.strftime('%Y-%m-%d')
-        email = EmailNotification.leave_hr_approve(self, employee, approver, status, notes,type).deliver_now
+        email = EmailNotification.leave_hr_approve(self, employee, approver,vice_approver, status, notes,type).deliver_now
         notification = Message.new_from_email(email)
         notification.save
       end
@@ -74,14 +94,22 @@ class LeaveRequest < ActiveRecord::Base
   def cancel 
     self.is_canceled = true
     self.save
-    cc = [self.employee.try(:department).try(:manager), Department.find_by(code: 'HR').manager]
+    if self.employee.approver2.present? && Department.find_by(code: 'HR').vice_manager.present?
+      cc = [Employee.find(self.employee.approver1),Employee.find(self.employee.approver2), Department.find_by(code: 'HR').manager,Department.find_by(code: 'HR').vice_manager]
+    elsif self.employee.approver2.present? && Department.find_by(code: 'HR').vice_manager.nil?
+      cc = [Employee.find(self.employee.approver1),self.Employee.find(self.employee.approver2), Department.find_by(code: 'HR').manager]
+    elsif self.employee.approver2.nil? && Department.find_by(code: 'HR').vice_manager.present?
+      cc = [Employee.find(self.employee.approver1), Department.find_by(code: 'HR').manager,Department.find_by(code: 'HR').vice_manager]
+    else
+      cc = [Employee.find(self.employee.approver1), Department.find_by(code: 'HR').manager]
+    end
     email = EmailNotification.leave_canceled(self, self.employee, cc).deliver_now
     notification = Message.new_from_email(email)
     notification.save
   end
 
   def requires_supervisor_approval?
-    leave_type == 'Personal' || leave_type == 'School Related'
+    leave_type == 'Personal Permission' || leave_type == 'School Related Duty'
   end
 
   def pending_spv_approval?

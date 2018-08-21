@@ -17,12 +17,17 @@
         = f.text_field :name
 
       .input-field.col.s5.offset-s1
-        = f.label :manager_id, class: 'active'
-        = f.collection_select :manager_id, Employee.all.order(:name), :id, :name, prompt: true
-    .row
-      .input-field.col.s4
         = f.label 'Department Code', class: 'active'
         = f.text_field :code
+    .row
+      input-field.col.s5
+        = f.label :manager_id, class: 'active'
+        = f.collection_select :manager_id, Employee.all.order(:name), :id, :name, prompt: true
+
+      .input-field.col.s5.offset-s1
+        = f.label :vice_manager_id, class: 'active'
+        = f.collection_select :vice_manager_id, Employee.all.order(:name), :id, :name, prompt: true, include_blank: true
+      
 
   .modal-footer
     button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" Save

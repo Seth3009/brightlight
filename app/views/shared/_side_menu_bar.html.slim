@@ -144,7 +144,12 @@ li
 		.collapsible-body
 			ul
 				li
-					= link_to "Leave Request", leave_requests_url
+					  = link_to 'Leave Request', leave_requests_url 
+            = link_to 'My Archives', archive_url(view: 'empl', ld:(Date.today-7.days), lde:Date.today)
+            - if can? :approve, LeaveRequest
+              = link_to 'My Dept Archives', archive_url(view: 'spv', ld:(Date.today-7.days), lde:Date.today)
+            - if can? :validate, LeaveRequest
+              = link_to 'All Employee Archives', archive_url(view: 'hr', ld:(Date.today-7.days), lde:Date.today)
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons school

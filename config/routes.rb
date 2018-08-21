@@ -51,7 +51,7 @@ Rails.application.routes.draw do
     end
   end
  
-
+  get 'leave_requests/archives' => 'leave_requests#archives', as: :archive
   resources :leave_requests do
     member do
       delete :cancel
@@ -60,6 +60,7 @@ Rails.application.routes.draw do
 
   get 'leave_requests/:id/approve/:page' => 'leave_requests#approve', as: :approve
   
+
   resources :supplies_transactions, except: [:edit, :update] do
     collection do
       get 'recap'
