@@ -34,7 +34,7 @@
 
           td = requisition.total_amt
           td 
-            = link_to requisition, remote: true
+            = link_to requisition
               i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="View" visibility
             - if requisition.draft?
               = link_to edit_requisition_path(requisition)
