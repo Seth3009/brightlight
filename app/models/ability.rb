@@ -71,11 +71,11 @@ class Ability
       budget_item.budget.budget_holder == @user.employee 
     end
     can :read, :all
-    can_manage_own_leave_request
     can :review, LeaveRequest
     can [:approve, :read, :update], LeaveRequest do |lr|
       Employee.find(lr.employee.approver1) == @user.employee || Employee.find(lr.employee.approver2) == @user.employee  # Manager can only approve leave requests of employees in his/her department
     end
+    can_manage_own_leave_request
     
 	end
 
