@@ -21,13 +21,22 @@ nav
 ul.tabs.z-depth-1
   li.tab.col.s2
     -if can? :read, @own_leave_requests.first
-      a href='#tab1' My Leave requests #{if @own_count > 0 then '(' + @own_count.to_s + ')'}
+      a href='#tab1' 
+        |My Leave requests 
+        -if @own_count && @own_count > 0
+            span.emblem = @own_count          
   - if can? :review, LeaveRequest    
     li.tab.col.s2
-      a href='#tab2' Dept. Approval #{if @spv_count > 0 then '(' + @spv_count.to_s + ')'}
+      a href='#tab2' 
+        |Dept. Approval
+        -if @spv_count && @spv_count > 0
+          span.emblem = @spv_count
   - if can? :read_hr, LeaveRequest
     li.tab.col.s2
-      a.active href='#tab3' HR Dept. #{if @hr_count > 0 then '(' + @hr_count.to_s + ')'}  
+      a.active href='#tab3'
+        |HR Dept.
+        -if @hr_count && @hr_count > 0
+          span.emblem = @hr_count
 
 / ul#dept-options.dropdown-content
 /   li  
