@@ -2,7 +2,7 @@ namespace :data do
 	desc "Replace shuttle passanger"
 	task import_passangers_replace: :environment do
 
-    xl = Roo::Spreadsheet.open('lib/tasks/Shuttle 2017-2018.xlsx')
+    xl = Roo::Spreadsheet.open('lib/tasks/passengers_2018-2019.xlsx')
     sheet = xl.sheet('passengers')
 
     header = {transport_id:'transport_id',student_id:'student_id',name:'name',family_no:'family_no',grade_section_id:'grade_section_id',class_name:'class_name',active:'active'}
