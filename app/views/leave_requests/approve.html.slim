@@ -33,12 +33,4 @@
           | Approved  
         = button_tag class:"btn waves-effect waves-light right", type: "submit", name:"send", value:"hr-den"
           | Not Approved
-    -elsif params[:page] == "hr" && can?(:read_hr, LeaveRequest)
-      .card-panel        
-        = label_tag "label_note", "HR Notes", class: 'label'
-        = f.text_field :hr_staf_notes,  class: 'cat'
-      .toolbar.z-depth-1
-        = button_tag class:"btn waves-effect waves-light right", type: "submit", name:"send", value:"hr-app"
-          | Approved  
-
- 
+    

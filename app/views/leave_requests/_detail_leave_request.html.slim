@@ -4,7 +4,7 @@ nav
   .nav-wrapper
     ul
       li
-        = link_to leave_requests_url()
+        = link_to (if params[:view] == 'archive' then :back else leave_requests_url() end)
           i.material-icons.left chevron_left  
       -if can?(:update, @leave_request) && @leave_request.draft?
         li.right
@@ -95,18 +95,18 @@ nav
       .row
         .col.s12
           h6.center-align.red-text This leave request has been canceled
-        
-ul.collapsible data-collapsible="expandable"
-  li.comment-section
-        .collapsible-header.active
-          | Comments (#{@commentable.comments.count})
-          i.material-icons.arrow.left chevron_right
-          .right
-            = link_to "#"
-              |Add comment
-              i.material-icons.left add
-        .collapsible-body.container-padding
-          = render 'comments/comment_widget'
+- if params[:action] =~ /show/ && params[:approve].nil?
+  ul.collapsible data-collapsible="expandable"
+    li.comment-section
+          .collapsible-header.active
+            | Comments (#{@commentable.comments.count})
+            i.material-icons.arrow.left chevron_right
+            .right
+              = link_to "#"
+                |Add comment
+                i.material-icons.left add
+          .collapsible-body.container-padding
+            = render 'comments/comment_widget'
 
 
 javascript:

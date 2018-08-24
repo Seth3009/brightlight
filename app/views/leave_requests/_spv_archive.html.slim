@@ -7,7 +7,6 @@ table.compact.striped
       th Category
       th Leave Type
       th Subs
-      th HR Notes
       th Approval (SPV,HR)
       th Form Submit
       th Canceled?
@@ -32,7 +31,6 @@ table.compact.striped
             |Not Required
           -else
             |--
-        td = leave_request.hr_staf_notes || "--"
         td               
           -if leave_request.requires_supervisor_approval?           
             -if leave_request.spv_approval.nil?
@@ -58,5 +56,5 @@ table.compact.striped
             - else
               | --
         td 
-          = link_to approve_path(leave_request,"spv")
+          = link_to leave_request_url(leave_request,view:'archive')
             i.material-icons visibility
