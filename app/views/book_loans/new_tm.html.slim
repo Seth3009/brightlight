@@ -57,7 +57,7 @@ javascript:
           $("tr:last").show();
         }
         var book = data.book_copy;
-        if (book.loans !== undefined && book.loans.return_status !== "R") {
+        if (book.loans !== undefined && !(book.loans.return_status == "R" || book.loans.return_status == "RI")) {
           Materialize.toast("Book is borrowed by " + book.loans.employee_name || book.loans.student_name, 5000, 'red');
         } else {
           insert_values(data, $("tr:last"));
@@ -77,7 +77,7 @@ javascript:
       console.log(element);
       $.getJSON("/book_copies/"+barcode+".json" + "?year=" + acad_year, null, function (data) {
         var book = data.book_copy;
-        if (book.loans !== undefined && book.loans.return_status !== "R") {
+        if (book.loans !== undefined && !(book.loans.return_status == "R" || book.loans.return_status == "RI")) {
           Materialize.toast("Book is borrowed by " + book.loans.employee_name || book.loans.student_name, 5000, 'red');
         } else {
           insert_values(data, element);
