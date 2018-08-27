@@ -4,7 +4,8 @@ class BookCopy < ActiveRecord::Base
   belongs_to :status
   belongs_to :book_label
   validates :book_edition, presence: true
-  validates :barcode, presence: true, uniqueness: true
+  validates :barcode, presence: true, uniqueness: true, format: { with: /\A[A-Z0-9-]+\Z/,
+    message: "Invalid barcode format: only capital letters, numbers & '-' character, no spaces allowed" }
   has_many :copy_conditions, dependent: :destroy
   has_many :book_fines, dependent: :restrict_with_error
   has_many :book_loans, dependent: :restrict_with_error
