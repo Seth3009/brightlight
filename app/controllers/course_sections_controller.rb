@@ -23,6 +23,7 @@ class CourseSectionsController < ApplicationController
   # GET /course_sections/1/edit
   def edit
     authorize! :update, @course_section
+    @academic_year_id = params[:year]
   end
 
   # POST /course_sections
@@ -66,6 +67,20 @@ class CourseSectionsController < ApplicationController
       format.html { redirect_to course_sections_url, notice: 'Course section was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def add_students
+    authorize! :update, @course_section
+    academic_year_id = params[:year]
+    params[:add].map {|id,on| Student.find(id)}.each do |student|
+      @roster = Roster.new(course_section: @course_section, student:student, academic_year_id: academic_year_id || current_academic_year_id)
+      if @roster.save
+        next
+      else
+        redirect_to edit_course_section_path, alert: 'Students already added' and return
+      end
+    end
+    redirect_to course_section_path(@course_section, year:params[:year]), notice: 'Students successfully added'
   end
 
   private

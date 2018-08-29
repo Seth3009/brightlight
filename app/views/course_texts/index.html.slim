@@ -1,4 +1,4 @@
-h4 Textbooks for #{@course.name}
+h4 Textbooks for #{@course.name} (#{@course.number})
 
 nav
   .nav-wrapper
@@ -59,7 +59,7 @@ nav
 - if @view_style == :list
   .card-panel
     .label Course texts
-    table.striped
+    table.compact.striped
       thead
         tr
           th Title
@@ -84,16 +84,13 @@ nav
 - else
   .row
     - @course_texts.each do |course_text|
-      .col.s12.m3.l3
+      .col.s12.m2.l2
         .card.book-info
           .card-image
             - thumbnail = course_text.book_title.image_url.present? ? course_text.book_title.image_url : 'book-icon.png' 
-            = image_tag(thumbnail, class: 'activator')           
-          /.card-content
-          /span.card-title.truncate.grey-text.text-darken-3.activator style="margin: 0 5px;font-size:large" 
+            = image_tag(thumbnail, class: 'list_image activator')           
           .book-title.activator
             = course_text.book_title.title
-            i.material-icons.right more_vert
           .card-action
             = link_to course_text.book_title
               i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show" visibility
@@ -102,8 +99,61 @@ nav
           .card-reveal
             .card-title.grey-text
               i.material-icons.right close
-            p  = course_text.book_title.title             
+            h5 = course_text.book_title.title             
             .label Author
             p = course_text.book_title.authors
             .label Publisher
             p = course_text.book_title.publisher
+
+
+#add-new-title.modal.modal-fixed-footer.ui-front
+  = form_tag ({controller: "course_texts", action: "create"}) do
+    .modal-content
+      h5 Adding new text book
+      .row      
+        .input-field.col.s12
+          = label_tag :title_field, 'Enter book title', class:'active'
+          = text_field_tag :title_field, '', class: 'title_autocomplete' 
+          = hidden_field :course_text, :course_id, {value: @course.id}
+          = hidden_field :course_text, :book_title_id
+      .row
+        .col.s3
+          img#book-cover.list_image
+        .col.s9
+          h5#selected
+          p#authors
+          p#publisher
+    .modal-footer
+      button#add-button.waves-effect.waves-light.modal-action.btn.btn-default disabled=true type="submit" Add
+      a.waves-effect.waves-light.modal-action.modal-close.btn-flat href="#!" Cancel
+
+  javascript:
+    $(document).on('focus', '.title_autocomplete', function() {
+      $('.title_autocomplete').autocomplete({
+        source: "/book_titles.json",
+        minLength: 3,
+        create: function() {
+          $(this).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+            console.log("CREATE", item);
+            return $( "<li>" )
+              .append( "<div>" + item.label +"</div>" )
+              .appendTo( ul );
+          }
+        },
+        select: function(event, ui) {
+          console.log("SELECT", ui.item);
+          event.preventDefault();
+          $('#add-button').prop('disabled', false);
+          insert_values(ui.item);
+        }
+      });
+      function insert_values(item ) {
+        $("#course_text_book_title_id").val(item.value);
+        $("#selected").html(item.title);
+        $("#authors").html(item.authors);
+        $("#publisher").html(item.publisher);
+        $("#book-cover").attr("src", item.image_url);
+        $("#title_field").val("");
+        $("#book-cover").scrollTop(0);
+      }
+    });

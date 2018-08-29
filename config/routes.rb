@@ -134,7 +134,11 @@ Rails.application.routes.draw do
   
   resources :courses do
     resources :course_texts, shallow: true
-    resources :course_sections, except: :new, shallow: true
+    resources :course_sections, except: :new, shallow: true do
+      member do
+        post 'add_students'
+      end
+    end
   end
 
   get  'book_copies/disposed_index' => 'book_copies#disposed_index', as: :book_copies_disposed_index

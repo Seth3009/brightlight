@@ -26,7 +26,7 @@ class BookTitle < ActiveRecord::Base
 
     else
       # condition query, parse into individual keywords
-      terms = query.downcase.split(/\s+/)
+      terms = query.downcase.split(/[\s\+]+/)  # split at spaces or '+' character
 
       # replace "*" with "%" for wildcard searches,
       # append '%', remove duplicate '%'s

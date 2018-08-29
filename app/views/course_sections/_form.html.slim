@@ -1,22 +1,50 @@
-= form_for [@course, @course_section] do |f|
-  .card-panel
-    - if @course_section.errors.any?
-      #error_explanation
-        h2 = "#{pluralize(@course_section.errors.count, "error")} prohibited this course_section from being saved:"
-        ul
-          - @course_section.errors.full_messages.each do |message|
-            li = message
+/ = form_for [@course, @course_section] do |f|
+/   .card-panel
+/     - if @course_section.errors.any?
+/       #error_explanation
+/         h2 = "#{pluralize(@course_section.errors.count, "error")} prohibited this course_section from being saved:"
+/         ul
+/           - @course_section.errors.full_messages.each do |message|
+/             li = message
 
-    .row
-      .input-field.col.s8
-        = f.label :name, class: 'active'
-        = f.text_field :name
-      .input-field.col.s8
-        = f.label :instructor, class: 'active'
-        = f.collection_select(:instructor_id, Employee.all_teachers, :id, :name, {prompt: true}, {:class => 'browser-default'})
+/     .row
+/       .input-field.col.s8
+/         = f.label :name, class: 'active'
+/         = f.text_field :name
+/       .input-field.col.s8
+/         = f.label :instructor, class: 'active'
+/         = f.collection_select(:instructor_id, Employee.all_teachers, :id, :name, {prompt: true}, {:class => 'browser-default'})
 
-  .toolbar.z-depth-1
-    = link_to 'Back', @course_section, class: "btn waves-effect waves-light btn-flat" 
-    button.btn.waves-effect.waves-light type="submit" data-disable=true Save
-    - if params[:action] =~ /edit/
-      = link_to 'Delete', @course_section, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-light red"
+/   .toolbar.z-depth-1
+/     = link_to 'Back', @course_section, class: "btn waves-effect waves-light btn-flat" 
+/     button.btn.waves-effect.waves-light type="submit" Save
+/     - if params[:action] =~ /edit/
+/       = link_to 'Delete', @course_section, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-light red"
+
+.card-panel
+  .list_description
+    dl.row
+      dd.col.s4
+        .label Course section
+        .item = link_to @course_section.name, @course_section
+      dd.col.s4
+        .label Teacher
+        .item = @course_section.instructor.present? ? link_to(@course_section.instructor, @course_section.instructor) : '--'
+      dd.col.s4
+        .label Academic Year
+        .item = @academic_year.name || "--"
+
+.card-panel
+  = form_for_filterrific @filterrific do |f|
+    .row.list_description
+      .col.s4
+        .label Filter term
+        = f.text_field :search_query, class: 'filterrific-periodically-observed'
+      .col.s3
+        .label Sorted by
+        = f.select :sorted_by, @filterrific.select_options[:sorted_by]
+      .col.s3
+        = link_to 'Reset filters', reset_filterrific_url, class:"btn waves-effect waves-teal btn-flat"
+
+= form_tag({controller: "course_sections", action: "add_students"}) do           
+  = render partial: 'students/list', locals: { students: @students, year_id: @year_id }

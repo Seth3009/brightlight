@@ -1,7 +1,6 @@
 class CourseSection < ActiveRecord::Base
   validates :name, presence: true
   validates :grade_section, presence: true
-  validates :course, presence: true
 
   belongs_to :course
   belongs_to :grade_section

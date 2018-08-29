@@ -65,27 +65,26 @@ nav
             - if @course.course_texts.present?
               .row
                 - @course.course_texts.each do |course_text|
-                  .col.s12.m3.l3
+                  .col.s12.m2.l2
                     .card.book-info
                       .card-image
                         - thumbnail = course_text.book_title.image_url.present? ? course_text.book_title.image_url : 'book-icon.png' 
                         = image_tag(thumbnail, class: 'activator')           
                       .book-title.activator
                         = course_text.book_title.title
-                        i.material-icons.right more_vert
-                      .card-action
-                        = link_to course_text.book_title
-                          i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show" visibility
-                        = link_to course_text, data: {:confirm => 'Are you sure?'}, :method => :delete
-                          i.material-icons.left.red-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove" delete
                       .card-reveal
                         .card-title.grey-text
                           i.material-icons.right close
-                        p  = course_text.book_title.title             
+                        .label Title
+                        strong = course_text.book_title.title             
                         .label Author
-                        p = course_text.book_title.authors
+                        p = course_text.book_title.authors || '--'
                         .label Publisher
-                        p = course_text.book_title.publisher
+                        p = course_text.book_title.publisher || '--'
+                        .label Link
+                        = link_to course_text.book_title
+                          | Visit link
+                          i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show" visibility
               / table.striped
               /   tbody
               /   - @course.course_texts.each do |course_text|
