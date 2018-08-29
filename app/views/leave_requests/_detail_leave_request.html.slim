@@ -52,7 +52,7 @@ nav
         -else
           | : --
       .col.s2
-        .label-text Notes
+        .label-text Substitute Notes
       .col.s4
         | : #{@leave_request.subtitute_notes}
     .row
@@ -60,37 +60,42 @@ nav
         .label-text Submit date
       .col.s4
         | : #{@leave_request.form_submit_date.try(:strftime, ("%d %b %Y")) || "Draft"}
-    .row
+    
       .col.s2
-        .label-text SPV Approval
-      .col.s1                           
-        - if @leave_request.spv_approval.nil?
+        .label-text Approval Status
+      .col.s4
+        -if @leave_request.is_canceled?
           | : 
-          i.material-icons check_box_outline_blank
-        - elsif @leave_request.spv_approval == true
-          | : 
-          i.material-icons check_box
+          span.box.black
+            | Canceled
         - else
-          | : 
-          i.material-icons cancel
-      .col.s9
-        | #{@leave_request.spv_notes}
+          -if @leave_request.hr_approval.nil? && @leave_request.spv_approval != false
+            | : 
+            span.box
+              | on progress
+            / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Submitted" check_box_outline_blank            
+          -elsif @leave_request.hr_approval == true
+            | : 
+            span.box.green
+              | Approved
+            / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Approved" check_box
+          -else
+            | : 
+            span.box.red
+              | Rejected
+            / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Rejected" cancel   
+    - if params[:page].present?
+      .row
+        .col.s2
+          .label-text SPV Notes
+        .col.s4
+          | : #{@leave_request.spv_notes}
+
+        .col.s2
+          .label-text HR Notes
+        .col.s4
+          | : #{@leave_request.hr_notes}
       
-    .row   
-      .col.s2
-        .label-text HR Approval   
-      .col.s1         
-        - if @leave_request.hr_approval.nil?
-          | : 
-          i.material-icons check_box_outline_blank
-        - elsif @leave_request.hr_approval == true
-          | : 
-          i.material-icons check_box
-        - else
-          | : 
-          i.material-icons cancel
-      .col.s9
-        | #{@leave_request.hr_notes}    
     -if @leave_request.is_canceled?
       .row
         .col.s12

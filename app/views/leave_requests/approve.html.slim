@@ -5,10 +5,7 @@
     nav
       .nav-wrapper
         .brand-logo style="margin-left: 20px; font-size:1.5em"
-          - if can? :read, @leave_request
-            | HR Notes
-          - else
-            | Approval Action  
+          | Approval Action  
 
     -if params[:page] == "spv" && can?(:approve, @leave_request)
       -if @leave_request.pending_spv_approval?
