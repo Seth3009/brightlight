@@ -17,45 +17,6 @@ nav
           | Add text book
           i.material-icons.left add
 
-#add-new-title.modal.modal-fixed-footer.ui-front
-  = form_tag ({controller: "course_texts", action: "create"}) do
-    .modal-content
-      h5 Adding new text book
-      .row      
-        .input-field.col.s12
-          = label_tag :title_field, 'Enter book title', class:'active'
-          = text_field_tag :title_field
-          = hidden_field :course_text, :course_id, {value: @course.id}
-          = hidden_field :course_text, :book_title_id
-      #book-cover
-      #selected
-    .modal-footer
-      button#add-button.waves-effect.waves-light.modal-action.btn.btn-default data-disable=true disabled=true type="submit" Add
-      a.waves-effect.waves-light.modal-action.modal-close.btn-flat href="#!" Cancel
-
-  javascript:
-    $(function() {
-      function log(image_url,title ) {
-        $("#book-cover").empty();
-        $("#selected").empty()
-        $("<div>").text(title).prependTo("#selected");
-        $("<img>").attr("src", image_url).prependTo("#book-cover");
-        $("#title_field").val("");
-        $("#book-cover").scrollTop(0);
-      }
-      $("#title_field").autocomplete({
-        source: "/book_titles.json",
-        minLength: 2,
-        select: function(event, ui) {
-          event.preventDefault();
-          $("#course_text_book_title_id").val(ui.item.value);
-          $('#add-button').prop('disabled', false);
-          log(ui.item.image_url, ui.item? ui.item.label : "Nothing selected");
-        }
-      });
-    });
-
-
 - if @view_style == :list
   .card-panel
     .label Course texts
