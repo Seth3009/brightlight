@@ -1,5 +1,5 @@
 class Employee < ActiveRecord::Base
- 	validates :name, :department, presence: true
+ 	validates :name, :department, :email, presence: true
     validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create, allow_blank: true
   after_save :auto_fill_approver  
  	belongs_to :user

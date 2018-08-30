@@ -15,7 +15,7 @@ html
         
         p Your leave request below has been <b>#{@leave_request.spv_approval ? 'approved' : 'rejected'}.</b>
       
-        p Reason : #{@leave_request.spv_notes}
+        / p Reason : #{@leave_request.spv_notes}
 
       p Leave request detail:
       = render 'leave_request'      
