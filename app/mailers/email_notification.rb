@@ -57,12 +57,12 @@ class EmailNotification < ActionMailer::Base
     @type = type        
     if type == 'spv-app'
       if @hrvicemanager.present?
-        mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>, "#{@hrvicemanager.name}" <#{@hrvicemanager.email}>), cc: %("#{@employee.name}" <#{@employee.email}>), subject: "[SPV] Leave Request Approved: #{leave_request.employee.try(:name)}.")
+        mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>, "#{@hrvicemanager.name}" <#{@hrvicemanager.email}>), subject: "[SPV] Leave Request Approved: #{leave_request.employee.try(:name)}.")
       else
-        mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>), cc: %("#{@employee.name}" <#{@employee.email}>), subject: "[SPV] Leave Request Approved: #{leave_request.employee.try(:name)}.")
+        mail(to: %("#{@hrmanager.name}" <#{@hrmanager.email}>), subject: "[SPV] Leave Request Approved: #{leave_request.employee.try(:name)}.")
       end
     elsif type == 'spv-den'
-      mail(to: %("#{@employee.name}" <#{@employee.email}>), subject: "[SPV] Leave Not Approved: #{leave_request.employee.try(:name)}.")
+      mail(to: %("#{@employee.name}" <#{@employee.email}>), subject: "Leave Request Not Approved: #{leave_request.employee.try(:name)}.")
     end
   end
 
@@ -73,9 +73,9 @@ class EmailNotification < ActionMailer::Base
     @type = type
     @employee = Employee.find_by_id(leave_request.employee_id)
     if type == 'hr-app'
-      @subject = "[HRD] Leave Request Approved: #{leave_request.employee.try(:name)}."
+      @subject = "Leave Request Approved: #{leave_request.employee.try(:name)}."
     elsif type == 'hr-den'
-      @subject = "[HRD] Leave Request Not Approved: #{leave_request.employee.try(:name)}."
+      @subject = "Leave Request Not Approved: #{leave_request.employee.try(:name)}."
     end
     if @vice_supervisor.present?
       mail(to: %("#{@employee.name}" <#{@employee.email}>), cc: %("#{@supervisor.name}" <#{@supervisor.email}>, "#{@vice_supervisor.name}" <#{@vice_supervisor.email}>), subject: @subject)

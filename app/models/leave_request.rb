@@ -45,7 +45,9 @@ class LeaveRequest < ActiveRecord::Base
     .order(hr_date: :desc, form_submit_date: :desc, updated_at: :desc)
   }
 
-  scope :archive, -> { where.not(:hr_approval => nil)}
+  scope :archive, -> { 
+    where("hr_approval is not ? or spv_approval = ?", nil,false)
+  }
 
   scope :submitted, -> { where.not(form_submit_date: nil) }
 

@@ -7,7 +7,7 @@ table.compact.striped
       th Category
       th Leave Type
       th Subs
-      th Approval (SPV,HR)
+      th.center Approval
       th Form Submit
       th Actions
 
@@ -30,24 +30,34 @@ table.compact.striped
             |Not Required
           -else
             |--
-        td               
-          -if leave_request.requires_supervisor_approval?           
-            -if leave_request.spv_approval.nil?
-              i.material-icons check_box_outline_blank
-            -elsif leave_request.spv_approval == true
-              i.material-icons check_box
+        td.center               
+          / -if leave_request.requires_supervisor_approval?           
+          /   -if leave_request.spv_approval.nil?
+          /     i.material-icons check_box_outline_blank
+          /   -elsif leave_request.spv_approval == true
+          /     i.material-icons check_box
+          /   -else
+          /     i.material-icons cancel
+          / -else
+          /   i.material-icons.grey-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Not required" check_box_outline_blank
+          / span &nbsp;&nbsp;&nbsp;
+          -if leave_request.is_canceled?
+              span.box.black
+                | Canceled
+          - else
+            -if leave_request.hr_approval.nil? && leave_request.spv_approval != false
+              span.box
+                | on progress
+              / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Submitted" check_box_outline_blank            
+            -elsif leave_request.hr_approval == true
+              span.box.green
+                | Approved
+              / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Approved" check_box
             -else
-              i.material-icons cancel
-          -else
-            i.material-icons.grey-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Not required" check_box_outline_blank
-          span &nbsp;&nbsp;&nbsp;
-          -if leave_request.hr_approval.nil?
-            i.material-icons check_box_outline_blank
-          -elsif leave_request.hr_approval == true
-            i.material-icons check_box
-          -else
-            i.material-icons cancel   
-            
+              span.box.red
+                | Rejected
+              / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Rejected" cancel   
+
         td = leave_request.form_submit_date.nil? ? "--" : leave_request.form_submit_date.strftime("%d/%m/%Y")
         td 
            = link_to leave_request_path(leave_request)
