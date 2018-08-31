@@ -1,0 +1,20 @@
+tr id="row-#{supplies_stock.id}"  
+  tr
+    td = supplies_stock.barcode
+    td = link_to supplies_stock.name, stock_card_product_url(supplies_stock.id)
+    td = supplies_stock.stock || 0.0
+    td = supplies_stock.min_stock
+    td = (supplies_stock.stock || 0.0) - supplies_stock.min_stock
+    td = supplies_stock.item_unit.name
+    td 
+      - if (supplies_stock.stock || 0.0) - supplies_stock.min_stock < 0
+        | Need to buy
+      - else
+        | --
+    td = supplies_stock.packs
+    td = supplies_stock.packs_unit
+    td 
+      - if supplies_stock.is_active
+        i.material-icons check_box
+      - else
+        i.material-icons check_box_outline_blank

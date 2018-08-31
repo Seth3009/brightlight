@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :stock_card]
-  
+  before_action :sortable_columns
 
   # GET /products
   # GET /products.json
@@ -107,12 +107,15 @@ class ProductsController < ApplicationController
   #get products/supplies_stocks
   def supplies_stocks
     authorize! :read, Product
-    @supplies_stocks = Product.select('products.*, (sum(CASE WHEN in_out =' + "'IN'" + ' THEN qty ELSE 0 END) - sum(CASE WHEN in_out =' + "'OUT'" + ' THEN qty ELSE 0 END)) as stock')
-                      .joins('left join supplies_transaction_items on supplies_transaction_items.product_id = products.id')
-                      .group('products.id').order('code')
-                      
     respond_to do |format|
       format.html
+        @supplies_stocks = Product.select('products.*, (sum(CASE WHEN in_out =' + "'IN'" + ' THEN qty ELSE 0 END) - sum(CASE WHEN in_out =' + "'OUT'" + ' THEN qty ELSE 0 END)) as stock')
+                          .joins('left join supplies_transaction_items on supplies_transaction_items.product_id = products.id')
+                          .group('products.id').order("#{sort_column} #{sort_direction}")
+        if params[:search]
+          @supplies_stocks = @supplies_stocks.where('UPPER(products.name) LIKE ?', "%#{params[:search].upcase}%").order("#{sort_column} #{sort_direction}")     
+        end                  
+    
       format.pdf do
         render pdf:         "Supplies_Stock_#{Date.current()}",
                disposition: 'inline',
@@ -143,7 +146,7 @@ class ProductsController < ApplicationController
    
     # Enable Sort column
     def sortable_columns 
-      [:barcode, :name, :is_active]
+      [:barcode, :name, :is_active, :stock]
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_product 

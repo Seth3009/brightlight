@@ -14,7 +14,7 @@
         - @stocks.each_with_index do |stock, i|
           tr
             td = i+1
-            td = stock.date.strftime("%d/%m/%Y")
+            td = stock.date.present? ? stock.date.strftime("%d/%m/%Y") : "-"
             td = stock.name                            
             td = stock.qty if stock.type == "IN"
             td = stock.qty if stock.type == "OUT"
