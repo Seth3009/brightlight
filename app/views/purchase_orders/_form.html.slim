@@ -1,54 +1,68 @@
 = form_for @purchase_order do |f|
   - if @purchase_order.errors.any?
     #error_explanation
-      h2 = "#{pluralize(@purchase_order.errors.count, "error")} prohibited this purchase_order from being saved:"
+      h5 = "#{pluralize(@purchase_order.errors.count, "error")} prohibited this purchase_order from being saved:"
       ul
         - @purchase_order.errors.full_messages.each do |message|
           li = message
 
-  .field
-    = f.label :order_num
-    = f.text_field :order_num
-  .field
-    = f.label :requestor
-    = f.text_field :requestor
-  .field
-    = f.label :order_date
-    = f.text_field :order_date
-  .field
-    = f.label :due_date
-    = f.text_field :due_date
-  .field
-    = f.label :total_amount
-    = f.text_field :total_amount
-  .field
-    = f.label :is_active
-    = f.text_field :is_active
-  .field
-    = f.label :currency
-    = f.text_field :currency
-  .field
-    = f.label :deleted
-    = f.text_field :deleted
-  .field
-    = f.label :notes
-    = f.text_field :notes
-  .field
-    = f.label :completed_date
-    = f.text_field :completed_date
-  .field
-    = f.label :supplier
-    = f.text_field :supplier
-  .field
-    = f.label :contact
-    = f.text_field :contact
-  .field
-    = f.label :phone_contact
-    = f.text_field :phone_contact
-  .field
-    = f.label :user
-    = f.text_field :user
-  .field
-    = f.label :status
-    = f.text_field :status
-  .actions = f.submit
+  .card-panel
+    .row
+      .input-field.col.s4
+        = f.label :supplier
+        = f.collection_select :supplier_id, Supplier.all, :id, :company_name, class:'material-select' 
+      .input-field.col.s4
+        = f.label :contact
+        = f.text_field :contact
+  nav.light
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Contact info
+  .card-panel
+    .rows
+      .col.s5
+        .rows
+          .input-field.col.s6
+            = f.label :requestor
+            = f.text_field :requestor
+          .input-field.col.s6
+            = f.label :order_date
+            = f.text_field :order_date
+          .input-field.col.s6
+            = f.label :due_date
+            = f.text_field :due_date
+          .input-field.col.s2
+            = f.label :currency
+            = f.text_field :currency
+          .input-field.col.s4
+            = f.label :total_amount
+            = f.text_field :total_amount
+      .col.s5
+        .rows
+          .input-field
+            = f.label :deleted
+            = f.text_field :deleted
+          .input-field
+            = f.label :notes
+            = f.text_field :notes
+          .input-field
+            = f.label :completed_date
+            = f.text_field :completed_date
+          .input-field
+            = f.label :supplier
+            = f.text_field :supplier
+          .input-field
+            = f.label :contact
+            = f.text_field :contact
+          .input-field
+            = f.label :phone_contact
+            = f.text_field :phone_contact
+          .input-field
+            = f.label :status
+            = f.text_field :status
+
+  .toolbar.z-depth-1 
+    = link_to 'Cancel', purchase_orders_path, class: "waves-effect waves-teal btn-flat"
+    button.btn.waves-effect.waves-light type="submit" Save
+    - if params[:action] =~ /edit/
+      = link_to 'Delete', @purchase_order, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"

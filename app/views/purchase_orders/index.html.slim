@@ -1,49 +1,48 @@
-h1 Listing purchase_orders
+-title = 'Purchase Orders'
+h4 Purchase Orders
 
-table
-  thead
-    tr
-      th Order num
-      th Requestor
-      th Order date
-      th Due date
-      th Total amount
-      th Is active
-      th Currency
-      th Deleted
-      th Notes
-      th Completed date
-      th Supplier
-      th Contact
-      th Phone contact
-      th User
-      th Status
-      th
-      th
-      th
+nav
+  .nav-wrapper
+    - if can? :manage, PurchaseOrder
+      ul.right
+        li        
+          = link_to new_purchase_order_path
+            | New Purchase Order
+            i.material-icons.left add
+        li
+          = link_to 'Export as CSV', purchase_orders_path + '.csv'
 
-  tbody
-    - @purchase_orders.each do |purchase_order|
+.card-panel
+  table.striped.compact
+    thead
       tr
-        td = purchase_order.order_num
-        td = purchase_order.requestor
-        td = purchase_order.order_date
-        td = purchase_order.due_date
-        td = purchase_order.total_amount
-        td = purchase_order.is_active
-        td = purchase_order.currency
-        td = purchase_order.deleted
-        td = purchase_order.notes
-        td = purchase_order.completed_date
-        td = purchase_order.supplier
-        td = purchase_order.contact
-        td = purchase_order.phone_contact
-        td = purchase_order.user
-        td = purchase_order.status
-        td = link_to 'Show', purchase_order
-        td = link_to 'Edit', edit_purchase_order_path(purchase_order)
-        td = link_to 'Destroy', purchase_order, data: {:confirm => 'Are you sure?'}, :method => :delete
+        th Order num
+        th Requestor
+        th Order date
+        th Due date
+        th Total amount
+        th Currency
+        th Supplier
+        th Status
+        th
 
-br
+    tbody
+      - @purchase_orders.each do |purchase_order|
+        tr
+          td = purchase_order.order_num
+          td = purchase_order.requestor
+          td = purchase_order.order_date
+          td = purchase_order.due_date
+          td = purchase_order.currency + purchase_order.total_amount
+          td = purchase_order.is_active
+          td = purchase_order.supplier.try(:name)
+          td = purchase_order.status
+          td 
+            = link_to purchase_order
+              i.material-icons visibility
+            = link_to edit_purchase_order_path(purchase_order)
+              i.material-icons edit
+            = link_to purchase_order, data: {:confirm => 'Are you sure?'}, :method => :delete
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
 
-= link_to 'New Purchase order', new_purchase_order_path
+
