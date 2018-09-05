@@ -116,18 +116,17 @@ class StudentBook < ActiveRecord::Base
                     'deleted_flag' => false, 'student_no' => student.student_no,
                     'initial_copy_condition_id' => receipt.initial_condition_id)
           } 
-        ) do |sb|
-          create_book_loan(sb)
-        end
+        )  
       end
     else
       logger.error "Preparing StudentBook. Student not found for #{gss.grade_section.name} no. #{gss.order_no} #{gss.student_id}"
     end
   end
 
-  def self.create_book_loan(sb = nil)
+  def self.create_book_loan(sb)
     logger.debug "Creating associated book_loan"
-    sb ||= self
+    #sb ||= self
+    logger.debug sb
     book_title_id = sb.book_edition.try(:book_title_id)
     book_title = BookTitle.where(id: book_title_id).take
     standard_book = StandardBook.where(book_title_id: book_title_id, academic_year_id:sb.academic_year_id).take
@@ -156,7 +155,7 @@ class StudentBook < ActiveRecord::Base
 
   private
     def create_associated_book_loan
-      logger.debug "Creating associated book_loan"
+      logger.debug "SB Callback on create: Creating associated book_loan"
       book_title_id = self.book_edition.try(:book_title_id)
       book_title = BookTitle.where(id: book_title_id).take
       standard_book = StandardBook.where(book_title_id: book_title_id, academic_year_id:self.academic_year_id).take

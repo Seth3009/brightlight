@@ -1,63 +1,83 @@
 = form_for @supplier do |f|
   - if @supplier.errors.any?
     #error_explanation
-      h2 = "#{pluralize(@supplier.errors.count, "error")} prohibited this supplier from being saved:"
+      h5 = "#{pluralize(@supplier.errors.count, "error")} prohibited this supplier from being saved:"
       ul
         - @supplier.errors.full_messages.each do |message|
           li = message
 
-  .field
-    = f.label :company_name,
-    = f.text_field :company_name,
-  .field
-    = f.label :contact_name,
-    = f.text_field :contact_name,
-  .field
-    = f.label :address1,
-    = f.text_field :address1,
-  .field
-    = f.label :address2,
-    = f.text_field :address2,
-  .field
-    = f.label :city,
-    = f.text_field :city,
-  .field
-    = f.label :province,
-    = f.text_field :province,
-  .field
-    = f.label :post_code,
-    = f.text_field :post_code,
-  .field
-    = f.label :country,
-    = f.text_field :country,
-  .field
-    = f.label :phone,
-    = f.text_field :phone,
-  .field
-    = f.label :mobile,
-    = f.text_field :mobile,
-  .field
-    = f.label :email,
-    = f.text_field :email,
-  .field
-    = f.label :website,
-    = f.text_field :website,
-  .field
-    = f.label :notes,
-    = f.text_field :notes,
-  .field
-    = f.label :logo,
-    = f.text_field :logo,
-  .field
-    = f.label :category,
-    = f.text_field :category,
-  .field
-    = f.label :status,
-    = f.text_field :status,
-  .field
-    = f.label :type,
-    = f.text_field :type,
-  .field
-    = f.label :group
-    = f.text_field :group
-  .actions = f.submit
+  .card-panel
+    .row
+      .input-field.col.s4
+        = f.label :company_name
+        = f.text_field :company_name
+      .input-field.col.s4
+        = f.label :contact_name
+        = f.text_field :contact_name
+  nav.light
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Contact info
+  .card-panel
+    table
+      tr
+        td
+          .input-field
+            = f.label :address1
+            = f.text_field :address1
+          .input-field
+            = f.label :address2
+            = f.text_field :address2
+          .input-field
+            = f.label :city
+            = f.text_field :city
+          .input-field
+            = f.label :province
+            = f.text_field :province
+          .input-field
+            = f.label :post_code
+            = f.text_field :post_code
+          .input-field
+            = f.label :country
+            = f.text_field :country
+        td
+          .input-field
+            = f.label :phone
+            = f.text_field :phone
+          .input-field
+            = f.label :mobile
+            = f.text_field :mobile
+          .input-field
+            = f.label :email
+            = f.text_field :email, type: 'email'
+          .input-field
+            = f.label :website
+            = f.text_field :website
+  nav.light
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Detail
+  .card-panel
+    .row
+
+      .input-field.col.s4
+        = f.label :category
+        = f.text_field :category
+      .input-field.col.s4
+        = f.label :status
+        = f.text_field :status
+      .input-field.col.s4
+        = f.label :type
+        = f.text_field :type
+      .input-field.col.s4
+        = f.label :group
+        = f.text_field :group
+      .input-field.col.s12
+        = f.label :notes
+        = f.text_field :notes
+
+  .toolbar.z-depth-1 
+    = link_to 'Cancel', suppliers_path, class: "waves-effect waves-teal btn-flat"
+    button.btn.waves-effect.waves-light type="submit" Save
+    - if params[:action] =~ /edit/
+      = link_to 'Delete', @supplier, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"
