@@ -15,7 +15,7 @@ h4 Book Copy
               | Edit
           - if @book_copy.disposed
             li.right
-              = link_to undispose_book_copies_path(@book_copy)
+              = link_to undispose_book_copy_path(@book_copy)
                 i.material-icons.left undo
                 | Undelete
         - unless @book_copy.disposed
