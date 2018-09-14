@@ -88,7 +88,7 @@ class LeaveRequestsController < ApplicationController
       if @leave_request.save
         format.html do
           if params[:send]
-            if @leave_request.leave_type == "Sick" || @leave_request.leave_type == "Special Leave"
+            if @leave_request.leave_type == "Special Leave"
               @sendto = "hr"              
             else 
               @sendto = "spv"             
@@ -132,7 +132,7 @@ class LeaveRequestsController < ApplicationController
               vice_approver = @vice_supervisor
               hrmanager = @hrmanager
               hrvicemanager = @hrvicemanager
-              if @leave_request.leave_type == "Sick" || @leave_request.leave_type == "Special Leave"
+              if @leave_request.leave_type == "Special Leave"
                 send_to = 'hr'
               else
                 send_to = 'spv'
