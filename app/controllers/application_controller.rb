@@ -65,6 +65,10 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new('Not Found')
   end
 
+  def current_user
+    User.find 53 # 78 Jenus, 86 Ina, 53 Nori, 50 Mul
+  end
+
   protected
 
     def configure_permitted_parameters

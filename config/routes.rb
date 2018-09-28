@@ -249,6 +249,9 @@ Rails.application.routes.draw do
   resources :smart_cards, only: [:show, :create, :destroy]
 
   resources :requisitions do
+    collection do
+      get 'list'
+    end
     member do
       get 'approve'
       post 'approve_requisition'

@@ -123,7 +123,7 @@ li
 						= link_to 'Templates Targets', template_targets_path
 				li
 					= link_to 'Maintenance', settings_inventory_mtce_path	
-- if can? :manage, Requisition
+- if can? :process, Requisition
 	li 
 		.collapsible-header.waves-effect.waves-cyan
 			i.material-icons shopping_basket

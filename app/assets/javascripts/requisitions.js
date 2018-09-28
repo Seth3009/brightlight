@@ -29,6 +29,7 @@ $(document).on("ready page:load page:change", function() {
 
             var can_send_for_budget_approval = function() {
                 return $("#requisition_is_supv_approved").val() == "true" && 
+                            $("#requisition_is_budget_approved").val() !== "true" && 
                             $("#requisition_supervisor_id").val() !== "" &&
                             $("#requisition_budget_approver_id").val() !== "";
             }
@@ -52,6 +53,14 @@ $(document).on("ready page:load page:change", function() {
             }.bind(this));
 
             $("#requisition_is_supv_approved").on("change", function() {
+                if( can_send_for_budget_approval() ) {
+                    $("button#send_budget").removeAttr('disabled');
+                } else {
+                    $("button#send_budget").prop('disabled', "disabled");
+                }
+            }.bind(this));
+
+            $("#requisition_is_budget_approved").on("change", function() {
                 if( can_send_for_budget_approval() ) {
                     $("button#send_budget").removeAttr('disabled');
                 } else {

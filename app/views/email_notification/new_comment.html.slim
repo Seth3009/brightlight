@@ -1,0 +1,33 @@
+doctype html
+html
+  head
+    = stylesheet_link_tag "email", media: "all", 'data-turbolinks-track' => true
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+  body
+    div style="margin-left:30px; width=85%; font-size:16px"
+      p You have a new comment on your #{@comment.commentable_type}
+
+      table.description-list
+        tbody
+          tr
+            td From
+            td 
+              strong = @from.try(:name)
+          tr 
+            td No
+            td 
+              strong = @comment.commentable.id
+          tr 
+            td Description
+            td = @comment.commentable.description
+          tr 
+            td Comment
+            td = @comment.comment
+
+      p You can access the #{@comment.commentable_type} from the following link.
+      p = link_to "No. #{@comment.commentable.id}", @comment.commentable, style:"text-decoration:underline"
+
+      p Thank you for using <i>Brightlight</i>. 
+    
+    = render 'footer', to: @to 
