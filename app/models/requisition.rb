@@ -16,12 +16,14 @@ class Requisition < ActiveRecord::Base
   validates :department, presence: true
   validates :requester, presence: true
   validates :description, presence: true
+  validate  :at_least_one_req_item
 
   acts_as_commentable
   accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
 
-  scope :pending_supv_approval, lambda { |supv|
-    where.not(sent_to_supv: nil).where(is_supv_approved: nil).where(supervisor_id: supv.id)
+  scope :pending_supv_approval, lambda { |employee|
+    where(department: employee.try(:department))
+    .where.not(sent_to_supv: nil).where(is_supv_approved: nil).where(supervisor_id: employee.id)
   }
 
   scope :pending_budget_approval, lambda { |employee|
@@ -83,5 +85,29 @@ class Requisition < ActiveRecord::Base
   def approved?
     (is_supv_approved && is_budget_approved) || (is_supv_approved && is_budgeted)
   end
+
+  # Call back from comment
+  def create_email_from_comment(comment)
+    # Purchasing email is set in Rails configuration file
+    purchasing_email = Rails.application.config.purchasing_email_address
+    purchasing = Employee.find_by_email /<(.+)>/.match(purchasing_email)[1]
+    # Send email to requester, supervisor and purchasing, except the comment originator
+    addressee = [self.requester, self.supervisor, purchasing].reject {|n| n.id == comment.user.employee.try(:id)}
+    to = addressee.map {|e| "#{e.name} <#{e.try(:email)}>"}.join(", ")
+    EmailNotification.new_comment comment, to
+  end
+
+  def user
+    requester 
+  end
+
+  private
+
+    def at_least_one_req_item
+      # when creating a new requisition: making sure at least one item exists
+      return errors.add :base, "Must have at least one item" unless req_items.length > 0
+      # when updating an existing contact: Making sure that at least one item would exist
+      return errors.add :base, "Must have at least one item" if req_items.reject{|item| item._destroy == true}.empty?
+    end
 
 end

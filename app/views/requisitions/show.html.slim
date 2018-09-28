@@ -6,7 +6,7 @@ nav
     ul
       li
         = link_to requisitions_path
-          | All requisitions
+          | Purchase Requests
           i.material-icons.left chevron_left
     ul.right
       - unless @requisition.sent_to_supv
@@ -26,59 +26,58 @@ nav
       .collapsible-body.container-padding
         ul.collection
           li.collection-item.row
-            .col.m3
+            .col.s6.m2
               .label Req. No.
               .item = @requisition.id
-            .col.m9
+            .col.s6.m2
+              .label Req. Date
+              .item = @requisition.date_required
+            .col.s12.m8
               .label Description
               .item = @requisition.description
           li.collection-item.row
-            .col.m3
+            .col.m2
               .label Requester
               .item = @requisition.requester
-            .col.m3
-              .label Notes
-              .item = @requisition.notes
-            .col.m3
+            .col.m2
               .label Department
-              .item = @requisition.department        
-            .col.m3
-              .label Req. Date
-              .item = @requisition.date_required
+              .item = @requisition.department  
+            .col.m8
+              .label Notes
+              .item = @requisition.notes      
           li.collection-item.row
-            .col.m3
+            .col.s6.m2
               = check_box_tag :is_budgeted, true, @requisition.is_budgeted
               = label_tag 'Budgeted'
-            .col.m3
+            .col.s6.m2
               .label Budget
               .item = @requisition.budget || "--"
-            .col.m6
+            .col.s6.m4
               .label Budget Item
               .item = @requisition.budget_item || "--"
-            .col.offset-m3.m9
+            .col.s6.m4
               .label Budget notes
               .item = @requisition.budget_notes
-    li
-      .collapsible-header.active
-        | Items
-        i.material-icons.arrow.left chevron_right
-      .collapsible-body.container-padding
-        table.compact.striped
-          thead
-            tr
-              th Description
-              th Qty
-              th Unit
-              th Est. Price
-              th Req'd Date
-          tbody
-            - @req_items.each do |req_item|
-              tr
-                td = req_item.description
-                td = req_item.qty_reqd
-                td = req_item.unit
-                td = "#{req_item.currency}#{req_item.est_price}"
-                td = req_item.needed_by_date
+          li.collection-item.row
+            .label Requested Items
+            table.compact.striped
+              thead
+                tr
+                  th No
+                  th Description
+                  th Qty
+                  th Unit
+                  th Est. Price
+                  th Req'd Date
+              tbody
+                - @req_items.each.with_index(1) do |req_item, i|
+                  tr
+                    td = "#{i}."
+                    td = req_item.description
+                    td = req_item.qty_reqd
+                    td = req_item.unit
+                    td = "#{req_item.currency}#{req_item.est_price}"
+                    td = req_item.needed_by_date
     li
       .collapsible-header.active
         | Approval
@@ -90,12 +89,13 @@ nav
               .label Supervisor
               .item = @requisition.supervisor || "--"
             .col.m3
+              .label Approval
               - if @requisition.is_supv_approved
                 |Approved
-                i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor approved" check_box
+                i.material-icons.left.tooltipped.green-text data-position="bottom" data-delay="50" data-tooltip="Supervisor approved" check_box
               - elsif @requisition.is_supv_approved == false
                 |Not approved
-                i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor did not approve" cancel
+                i.material-icons.left.tooltipped.red-text data-position="bottom" data-delay="50" data-tooltip="Supervisor did not approve" cancel
               - else
                 i.material-icons.left check_box_outline_blank
             .col.m6

@@ -6,7 +6,7 @@ class RequisitionsController < ApplicationController
   def index
     authorize! :read, Requisition
     
-    if can? :manage, Requisition
+    if can? :process, Requisition
       @approved_requisitions = Requisition.approved
       if params[:dept].present? && params[:dept] != 'all'
         dept = Department.where(code: params[:dept]).take
@@ -16,14 +16,21 @@ class RequisitionsController < ApplicationController
     end
     
     @employee = current_user.employee
+    @requisitions = Requisition.where(requester_id: @employee.id)
+
     if @employee.try(:is_manager?)
-      @supv = current_user.employee
-      @requisitions = Requisition.where(department: @employee.try(:department))
-      @pending_supv_approval   = @requisitions.pending_supv_approval(@supv)
-      @pending_budget_approval = Requisition.pending_budget_approval(@supv)
-    else
-      @requisitions = Requisition.where(requester_id: @employee.id)
+      @approver = current_user.employee
+      @dept_requisitions   = Requisition.where(department: @employee.try(:department))
+      @pending_my_approval   = @dept_requisitions.pending_supv_approval(@approver)
+      @pending_budget_approval = Requisition.pending_budget_approval(@approver)
     end
+  end
+
+  # GET /requisitions/list
+  def list
+    authorize! :process, Requisition
+    @pending_approval = Requisition.pending_approval
+    @approved_requisitions = Requisition.approved
   end
 
   # GET /requisitions/1
@@ -65,6 +72,7 @@ class RequisitionsController < ApplicationController
     @requisition = Requisition.new(requisition_params)
     @requisition.created_by = current_user
     @requisition.last_updated_by = current_user
+    @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue []
     respond_to do |format|
       if @requisition.save
         format.html do 
@@ -85,7 +93,7 @@ class RequisitionsController < ApplicationController
           @employee = @requisition.requester || current_user.employee
           @department = @employee.department
           @budget = @employee.department.budgets.current.take rescue nil
-          @budget_items = @budget.budget_items rescue nil
+          @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue nil
           render :new 
         }
         format.json { render json: @requisition.errors, status: :unprocessable_entity }

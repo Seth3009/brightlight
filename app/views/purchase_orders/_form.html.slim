@@ -9,15 +9,19 @@
   .card-panel
     .row
       .input-field.col.s4
-        = f.label :supplier
+        = f.label :supplier, class: 'active'
         = f.collection_select :supplier_id, Supplier.all, :id, :company_name, class:'material-select' 
       .input-field.col.s4
+        i.material-icons.prefix account_circle
         = f.label :contact
         = f.text_field :contact
   nav.light
     .nav-wrapper
       .brand-logo style="margin-left: 20px; font-size:1.5em"
-        | Contact info
+        | Purchase Order Info
+      ul.right
+        li
+          = link_to "Create from Purchase Request", new_purchase_order_path()
   .card-panel
     .rows
       .col.s5

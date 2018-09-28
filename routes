@@ -238,6 +238,37 @@
                                                PATCH    /book_conditions/:id(.:format)                                    book_conditions#update
                                                PUT      /book_conditions/:id(.:format)                                    book_conditions#update
                                                DELETE   /book_conditions/:id(.:format)                                    book_conditions#destroy
+                            student_activities GET      /student_activities(.:format)                                     student_activities#index
+                                               POST     /student_activities(.:format)                                     student_activities#create
+                          new_student_activity GET      /student_activities/new(.:format)                                 student_activities#new
+                         edit_student_activity GET      /student_activities/:id/edit(.:format)                            student_activities#edit
+                              student_activity GET      /student_activities/:id(.:format)                                 student_activities#show
+                                               PATCH    /student_activities/:id(.:format)                                 student_activities#update
+                                               PUT      /student_activities/:id(.:format)                                 student_activities#update
+                                               DELETE   /student_activities/:id(.:format)                                 student_activities#destroy
+                    students_activity_schedule GET      /activity_schedules/:id/students(.:format)                        activity_schedules#students
+                add_students_activity_schedule POST     /activity_schedules/:id/add_students(.:format)                    activity_schedules#add_students
+              remove_student_activity_schedule DELETE   /activity_schedules/:id/remove_student(.:format)                  activity_schedules#remove_student
+                            activity_schedules GET      /activity_schedules(.:format)                                     activity_schedules#index
+                                               POST     /activity_schedules(.:format)                                     activity_schedules#create
+                         new_activity_schedule GET      /activity_schedules/new(.:format)                                 activity_schedules#new
+                        edit_activity_schedule GET      /activity_schedules/:id/edit(.:format)                            activity_schedules#edit
+                             activity_schedule GET      /activity_schedules/:id(.:format)                                 activity_schedules#show
+                                               PATCH    /activity_schedules/:id(.:format)                                 activity_schedules#update
+                                               PUT      /activity_schedules/:id(.:format)                                 activity_schedules#update
+                                               DELETE   /activity_schedules/:id(.:format)                                 activity_schedules#destroy
+                                   badges_room GET      /rooms/:id/badges(.:format)                                       rooms#badges
+                               add_badges_room POST     /rooms/:id/add_badges(.:format)                                   rooms#add_badges
+                            remove_badges_room DELETE   /rooms/:id/remove_badges(.:format)                                rooms#remove_badges
+                                         rooms GET      /rooms(.:format)                                                  rooms#index
+                                               POST     /rooms(.:format)                                                  rooms#create
+                                      new_room GET      /rooms/new(.:format)                                              rooms#new
+                                     edit_room GET      /rooms/:id/edit(.:format)                                         rooms#edit
+                                          room GET      /rooms/:id(.:format)                                              rooms#show
+                                               PATCH    /rooms/:id(.:format)                                              rooms#update
+                                               PUT      /rooms/:id(.:format)                                              rooms#update
+                                               DELETE   /rooms/:id(.:format)                                              rooms#destroy
+                                       archive GET      /leave_requests/archives(.:format)                                leave_requests#archives
                           cancel_leave_request DELETE   /leave_requests/:id/cancel(.:format)                              leave_requests#cancel
                                 leave_requests GET      /leave_requests(.:format)                                         leave_requests#index
                                                POST     /leave_requests(.:format)                                         leave_requests#create
@@ -249,13 +280,12 @@
                                                DELETE   /leave_requests/:id(.:format)                                     leave_requests#destroy
                                        approve GET      /leave_requests/:id/approve/:page(.:format)                       leave_requests#approve
                    recap_supplies_transactions GET      /supplies_transactions/recap(.:format)                            supplies_transactions#recap
+                 monthly_supplies_transactions GET      /supplies_transactions/monthly(.:format)                          supplies_transactions#monthly
+            new_supplies_supplies_transactions GET      /supplies_transactions/new_supplies(.:format)                     supplies_transactions#new_supplies
                          supplies_transactions GET      /supplies_transactions(.:format)                                  supplies_transactions#index
                                                POST     /supplies_transactions(.:format)                                  supplies_transactions#create
                       new_supplies_transaction GET      /supplies_transactions/new(.:format)                              supplies_transactions#new
-                     edit_supplies_transaction GET      /supplies_transactions/:id/edit(.:format)                         supplies_transactions#edit
                           supplies_transaction GET      /supplies_transactions/:id(.:format)                              supplies_transactions#show
-                                               PATCH    /supplies_transactions/:id(.:format)                              supplies_transactions#update
-                                               PUT      /supplies_transactions/:id(.:format)                              supplies_transactions#update
                                                DELETE   /supplies_transactions/:id(.:format)                              supplies_transactions#destroy
                       supplies_stocks_products GET      /products/supplies_stocks(.:format)                               products#supplies_stocks
                             stock_card_product GET      /products/:id/stock_card(.:format)                                products#stock_card
@@ -319,7 +349,7 @@
                               book_copy_checks GET      /book_copies/:id/checks(.:format)                                 book_copies#checks
                        book_copy_check_barcode GET      /book_copies/:id/check_barcode(.:format)                          book_copies#check_barcode
                            dispose_book_copies POST     /book_copies/dispose(.:format)                                    book_copies#dispose
-                         undispose_book_copies GET      /book_copies/:id/undispose(.:format)                              book_copies#undispose
+                           undispose_book_copy GET      /book_copies/:id/undispose(.:format)                              book_copies#undispose
                    update_multiple_book_copies POST     /book_copies/update_multiple(.:format)                            book_copies#update_multiple
                         edit_merge_book_titles POST     /book_titles/edit_merge(.:format)                                 book_titles#edit_merge
                              merge_book_titles POST     /book_titles/merge(.:format)                                      book_titles#merge
@@ -526,8 +556,16 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PATCH    /messages/:id(.:format)                                           messages#update
                                                PUT      /messages/:id(.:format)                                           messages#update
                                                DELETE   /messages/:id(.:format)                                           messages#destroy
+                                        badges POST     /badges(.:format)                                                 badges#create
+                                     new_badge GET      /badges/new(.:format)                                             badges#new
+                                    edit_badge GET      /badges/:id/edit(.:format)                                        badges#edit
+                                         badge PATCH    /badges/:id(.:format)                                             badges#update
+                                               PUT      /badges/:id(.:format)                                             badges#update
+                                               DELETE   /badges/:id(.:format)                                             badges#destroy
+                              door_access_logs GET      /door_access_logs(.:format)                                       door_access_logs#index
                                         search GET      /search(.:format)                                                 search#index
                                                POST     /search(.:format)                                                 search#index
+                                      comments POST     /comments(.:format)                                               comments#create
                                                PATCH    /pax/:id(.:format)                                                late_passengers#update
                               new_user_session GET      /users/sign_in(.:format)                                          users/sessions#new
                                   user_session POST     /users/sign_in(.:format)                                          users/sessions#create
@@ -553,6 +591,17 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PUT      /users/:id(.:format)                                              users#update
                                    api_sign_in POST     /api/sign-in(.:format)                                            api/sessions#create {:format=>:json}
                                   api_sign_out DELETE   /api/sign-out(.:format)                                           api/sessions#destroy {:format=>:json}
+                             poll_api_carpools GET      /api/carpools/poll(.:format)                                      api/carpools#poll {:format=>:json}
+                          reorder_api_carpools PUT      /api/carpools/reorder(.:format)                                   api/carpools#reorder {:format=>:json}
+                                  api_carpools GET      /api/carpools(.:format)                                           api/carpools#index {:format=>:json}
+                                               POST     /api/carpools(.:format)                                           api/carpools#create {:format=>:json}
+                               new_api_carpool GET      /api/carpools/new(.:format)                                       api/carpools#new {:format=>:json}
+                              edit_api_carpool GET      /api/carpools/:id/edit(.:format)                                  api/carpools#edit {:format=>:json}
+                                   api_carpool GET      /api/carpools/:id(.:format)                                       api/carpools#show {:format=>:json}
+                                               PATCH    /api/carpools/:id(.:format)                                       api/carpools#update {:format=>:json}
+                                               PUT      /api/carpools/:id(.:format)                                       api/carpools#update {:format=>:json}
+                                               DELETE   /api/carpools/:id(.:format)                                       api/carpools#destroy {:format=>:json}
+                                     api_gates POST     /api/gates(.:format)                                              api/gates#create {:format=>:json}
                        settings_inventory_mtce GET      /settings/inventory_mtce(.:format)                                settings#inventory_mtce
                                           root GET      /                                                                 welcome#index
                                      dashboard GET      /dashboard(.:format)                                              welcome#dashboard

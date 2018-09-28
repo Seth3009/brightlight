@@ -14,6 +14,7 @@ $dark-grey:				#2d3039;
 $brightBlue:			#389bfe;
 $muted-red:				#f5494d;
 $kuning-podang:	  #e7580b;
+$muted-pink:			#f79394;
 
 $navbar-placeholder-text-color: #666;
 
@@ -166,6 +167,11 @@ td.actions {
 		padding-right: 0 15px;
 	}
 }
+
+td > a > i.material-icons {
+	margin-right: 10px;
+}
+
 table.medium {
 	font-size: 0.9rem;
 }
@@ -186,7 +192,11 @@ tr.header-shade {
 			margin: 0;
 		}
 	}
-	background-color:$lighter-grey;
+	background-color: $lighter-grey;
+}
+
+tr.highlight {
+	background-color: $muted-pink;
 }
 
 td.right-align, th.right-align {

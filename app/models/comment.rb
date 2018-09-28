@@ -12,4 +12,13 @@ class Comment < ActiveRecord::Base
 
   # NOTE: Comments belong to a user
   belongs_to :user
+
+  after_save :send_notification
+
+  def send_notification
+    email = self.commentable.create_email_from_comment(self)
+    email.deliver_now
+    notification = Message.new_from_email(email)
+    notification.save
+  end
 end
