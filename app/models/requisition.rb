@@ -11,6 +11,9 @@ class Requisition < ActiveRecord::Base
   belongs_to :last_updated_by, class_name: 'User'
   
   has_many :req_items, -> { order(:id) }, dependent: :destroy
+  has_many :po_reqs
+  has_many :purchase_orders, through: :po_reqs
+
   accepts_nested_attributes_for :req_items, reject_if: :all_blank, allow_destroy: true
 
   validates :department, presence: true

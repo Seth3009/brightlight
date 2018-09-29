@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180816035215) do
+ActiveRecord::Schema.define(version: 20180929034012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1043,6 +1043,11 @@ ActiveRecord::Schema.define(version: 20180816035215) do
     t.integer  "last_updated_by_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.decimal  "discount"
+    t.decimal  "est_tax"
+    t.decimal  "non_recurring"
+    t.decimal  "shipping"
+    t.decimal  "down_payment"
   end
 
   add_index "order_items", ["created_by_id"], name: "index_order_items_on_created_by_id", using: :btree
@@ -1111,6 +1116,18 @@ ActiveRecord::Schema.define(version: 20180816035215) do
 
   add_index "people", ["user_id"], name: "index_people_on_user_id", using: :btree
 
+  create_table "po_reqs", force: :cascade do |t|
+    t.integer  "purchase_order_id"
+    t.integer  "requisition_id"
+    t.integer  "user_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "po_reqs", ["purchase_order_id"], name: "index_po_reqs_on_purchase_order_id", using: :btree
+  add_index "po_reqs", ["requisition_id"], name: "index_po_reqs_on_requisition_id", using: :btree
+  add_index "po_reqs", ["user_id"], name: "index_po_reqs_on_user_id", using: :btree
+
   create_table "products", force: :cascade do |t|
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
@@ -1159,12 +1176,26 @@ ActiveRecord::Schema.define(version: 20180816035215) do
     t.integer  "last_updated_by_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.decimal  "subtotal"
+    t.decimal  "discounts"
+    t.decimal  "est_tax"
+    t.decimal  "non_recurring"
+    t.decimal  "shipping"
+    t.decimal  "down_payment"
+    t.integer  "buyer_id"
+    t.string   "instructions"
+    t.string   "fob"
+    t.string   "method"
+    t.string   "delivery"
+    t.integer  "term_of_payment_id"
   end
 
   add_index "purchase_orders", ["approver_id"], name: "index_purchase_orders_on_approver_id", using: :btree
+  add_index "purchase_orders", ["buyer_id"], name: "index_purchase_orders_on_buyer_id", using: :btree
   add_index "purchase_orders", ["created_by_id"], name: "index_purchase_orders_on_created_by_id", using: :btree
   add_index "purchase_orders", ["last_updated_by_id"], name: "index_purchase_orders_on_last_updated_by_id", using: :btree
   add_index "purchase_orders", ["requestor_id"], name: "index_purchase_orders_on_requestor_id", using: :btree
+  add_index "purchase_orders", ["term_of_payment_id"], name: "index_purchase_orders_on_term_of_payment_id", using: :btree
 
   create_table "recurring_types", force: :cascade do |t|
     t.string   "name"
@@ -1633,6 +1664,15 @@ ActiveRecord::Schema.define(version: 20180816035215) do
   add_index "templates", ["academic_year_id"], name: "index_templates_on_academic_year_id", using: :btree
   add_index "templates", ["user_id"], name: "index_templates_on_user_id", using: :btree
 
+  create_table "term_of_payments", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "notes"
+    t.boolean  "active"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "transports", force: :cascade do |t|
     t.string   "category"
     t.string   "name"
@@ -1762,6 +1802,9 @@ ActiveRecord::Schema.define(version: 20180816035215) do
   add_foreign_key "passengers", "grade_sections"
   add_foreign_key "passengers", "students"
   add_foreign_key "passengers", "transports"
+  add_foreign_key "po_reqs", "purchase_orders"
+  add_foreign_key "po_reqs", "requisitions"
+  add_foreign_key "po_reqs", "users"
   add_foreign_key "purchase_orders", "departments"
   add_foreign_key "purchase_orders", "employees", column: "approver_id"
   add_foreign_key "purchase_orders", "employees", column: "requestor_id"

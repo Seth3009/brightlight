@@ -14,7 +14,21 @@ class PurchaseOrdersController < ApplicationController
 
   # GET /purchase_orders/new
   def new
-    @purchase_order = PurchaseOrder.new
+    if params[:req]
+      req = Requisition.find params[:req]
+      @purchase_order = PurchaseOrder.new 
+      @purchase_order.requisitions << req
+      order_items =  req.req_items.each do |item|
+        @purchase_order.order_items.build(
+          description: item.description,
+          quantity: item.qty_reqd,
+          unit: item.unit
+        )
+      end
+    else
+      @purchase_order = PurchaseOrder.new
+    end
+    @buyers = User.all.reject {|u| ! u.has_role?(:purchasing)}
   end
 
   # GET /purchase_orders/1/edit

@@ -40,7 +40,7 @@
           td 
             = link_to requisition
               i.material-icons.tooltipped data-position="right" data-delay="30" data-tooltip="View" visibility
-            = link_to new_purchase_order_path(requisition)
+            = link_to new_purchase_order_path(req: requisition.id)
               i.material-icons.tooltipped data-position="right" data-delay="30" data-tooltip="Create P.O." shop
             - if requisition.draft?
               = link_to edit_requisition_path(requisition)
