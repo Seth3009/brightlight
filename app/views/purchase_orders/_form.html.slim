@@ -5,30 +5,46 @@
       ul
         - @purchase_order.errors.full_messages.each do |message|
           li = message
-
-  .card-panel
-    .row
-      .input-field.col.s4
-        = f.label :supplier, class: 'active'
-        = f.collection_select :supplier_id, Supplier.all, :id, :company_name, class:'material-select' 
-      .input-field.col.s4
-        i.material-icons.prefix account_circle
-        = f.label :contact
-        = f.text_field :contact
-  nav.light
+  nav
     .nav-wrapper
-      .brand-logo style="margin-left: 20px; font-size:1.5em"
-        | Purchase Order Info
+      ul
+        li
+          = link_to purchase_orders_path
+            i.material-icons chevron_left
       ul.right
         li
-          = link_to "Create from Purchase Request", new_purchase_order_path()
-  .card-panel
-    .rows
-      .col.s5
-        .rows
+          = link_to "#"
+            i.material-icons local_printshop
+  .row
+    .col.s12.m6
+      .card-panel.blue-grey.lighten-4
+        .row
+          .input-field.col.s12
+            = f.label :supplier, class: 'active'
+            = f.collection_select :supplier_id, Supplier.all, :id, :company_name, class:'material-select' 
+          .input-field.col.s12
+            i.material-icons.prefix account_circle
+            = f.label :contact
+            = f.text_field :contact
+          .input-field.col.s12
+            i.material-icons.prefix phone
+            = f.label :phone_contact
+            = f.text_field :phone_contact
+    .col.s12.m6
+      .card-panel
+        .row
+          .input-field.col.s6
+            = f.label :order_num
+            = f.text_field :order_num
+          .input-field.col.s6
+            = f.label :buyer, class: "active"
+            = f.collection_select :buyer_id, @buyers, :id, :name, class:'material-select'
           .input-field.col.s6
             = f.label :requestor
             = f.text_field :requestor
+          .input-field.col.s6
+            = f.label :department
+            = f.text_field :department
           .input-field.col.s6
             = f.label :order_date
             = f.text_field :order_date
@@ -36,35 +52,61 @@
             = f.label :due_date
             = f.text_field :due_date
           .input-field.col.s2
-            = f.label :currency
-            = f.text_field :currency
-          .input-field.col.s4
-            = f.label :total_amount
-            = f.text_field :total_amount
-      .col.s5
-        .rows
-          .input-field
-            = f.label :deleted
-            = f.text_field :deleted
-          .input-field
-            = f.label :notes
-            = f.text_field :notes
-          .input-field
-            = f.label :completed_date
-            = f.text_field :completed_date
-          .input-field
-            = f.label :supplier
-            = f.text_field :supplier
-          .input-field
-            = f.label :contact
-            = f.text_field :contact
-          .input-field
-            = f.label :phone_contact
-            = f.text_field :phone_contact
-          .input-field
+            = f.label :currency, class: 'active'
+            = f.select :currency, [['IDR', 'IDR'], ['USD', 'USD'], ['SGD', 'SGD'], ['AUD', 'AUD'], ['GBP', 'GBP']]
+          .input-field.col.s2
             = f.label :status
-            = f.text_field :status
+            = f.text_field :status  
+  nav.light
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Items
+      ul.right
+        li
+          = link_to_add_association f, :order_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#purchase_order'
+            ' Add Item
+            i.material-icons.left playlist_add
+  
+  = render 'order_items', f: f
 
+  .row
+    .col.s12.m8
+      .card-panel
+        .input-field
+          = f.label :notes
+          = f.text_field :notes
+        .input-field
+          = f.label 'Instructions to supplier'
+          = f.text_field :instructions
+        .input-field
+          = f.label :completed_date
+          = f.text_field :completed_date
+    .col.s12.m4
+      .card-panel
+        .input-field.inline
+          = f.label :subtotal
+          = f.text_field :subtotal
+        .input-field.inline
+          = f.label :discounts
+          = f.text_field :discounts
+        .input-field.inline
+          = f.label :est_tax
+          = f.text_field :est_tax
+        .input-field.inline
+          = f.label :non_recurring_cost
+          = f.text_field :non_recurring
+        .input-field.inline
+          = f.label :shipping
+          = f.text_field :shipping
+        .input-field
+          = f.label :total_amount
+          = f.text_field :total_amount
+        .input-field
+          = f.label :down_payment
+          = f.text_field :down_payment
+        .input-field
+          = f.label :remaining_amount
+          = text_field_tag :remaining_amount
   .toolbar.z-depth-1 
     = link_to 'Cancel', purchase_orders_path, class: "waves-effect waves-teal btn-flat"
     button.btn.waves-effect.waves-light type="submit" Save
