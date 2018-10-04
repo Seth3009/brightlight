@@ -104,14 +104,14 @@
 
 
 javascript:
-  $(document).delegate("blur", ".nested_fields", function() {
+  $(document).on("blur", ".nested-fields", function() {
     var row = $(this);
     var total = row.find("input[name$='[line_amount]']")
-    var qty = row.find("input[name$='[quantity]']").val()
-    var unit_price = row.find("input[name$='[unit_price]']").val()
-    var discount = row.find("input[name$='[unit_price]']").val()
-    var est_tax = row.find("input[name$='[est_tax]']").val()
-    var non_recurring = row.find("input[name$='[non_recurring]']").val()
-    var shipping = row.find("input[name$='[shipping]']").val()
+    var qty = Number(row.find("input[name$='[quantity]']").val())
+    var unit_price = Number(row.find("input[name$='[unit_price]']").val())
+    var discount = Number(row.find("input[name$='[unit_price]']").val())
+    var est_tax = Number(row.find("input[name$='[est_tax]']").val())
+    var non_recurring = Number(row.find("input[name$='[non_recurring]']").val())
+    var shipping = Number(row.find("input[name$='[shipping]']").val())
     total.val(qty*unit_price - discount + est_tax + non_recurring + shipping)
   })
