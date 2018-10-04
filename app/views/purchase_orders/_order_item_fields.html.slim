@@ -10,22 +10,22 @@ tr.compact.nested-fields
       = f.text_field :unit
   td
     .input-field
-      = f.number_field :unit_price
+      = f.number_field :unit_price, step: 'any'
   td
     .input-field
-      = f.number_field :discount
+      = f.number_field :discount, step: 'any'
   td
     .input-field
-      = f.number_field :est_tax
+      = f.number_field :est_tax, step: 'any'
   td
     .input-field
-      = f.number_field :non_recurring
+      = f.number_field :non_recurring, step: 'any'
   td
     .input-field
-      = f.number_field :shipping
+      = f.number_field :shipping, step: 'any'
   td
     .input-field
-      = f.number_field :line_amount
+      = f.number_field :line_amount, disabled: true
   td
     = link_to_remove_association f, class: "waves-effect waves-teal red-text"
       i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete

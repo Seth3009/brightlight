@@ -424,6 +424,11 @@ input.invalid-input {
 	}
 }
 
+.input-field .prefix ~ .select-wrapper {
+	margin-left: 3rem;
+	width: calc(100% - 3rem);
+}
+
 // ========================================= Typography =============================================
 html {
   font-family: Roboto, sans-serif;
@@ -1117,6 +1122,32 @@ ul {
 
 .list_line_odd {
 	background:   #3BAFDA;
+}
+
+.display-field {
+	.label, .item {
+		display: inline-block;
+		min-width: 40%;
+		text-align: right;
+	}
+}
+
+.record-field {
+	.label, .item {
+		display: inline-block;
+		vertical-align: middle;
+	}
+	.label {
+		min-width: 30%;
+	}
+	.item {
+		border: solid 1px lightgrey;
+		border-radius: 4px;
+		min-width: 60%;
+		min-height: 34px;
+		padding: 5px 10px;
+		margin: 2px;
+	}
 }
 
 
