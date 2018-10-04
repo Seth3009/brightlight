@@ -15,6 +15,24 @@ class PurchaseOrder < ActiveRecord::Base
   accepts_nested_attributes_for :order_items, reject_if: :all_blank, allow_destroy: true
   validate  :at_least_one_order_item
 
+  def self.new_from_requisition(req)
+    purchase_order = PurchaseOrder.new 
+    purchase_order.requisitions << req
+    purchase_order.requestor_id = req.requester_id,
+    purchase_order.department_id = req.department_id,
+    purchase_order.due_date = req.date_required,
+    req.req_items.each do |item|
+      purchase_order.order_items.build(
+        description: item.description,
+        quantity: item.qty_reqd,
+        unit: item.unit,
+        unit_price: item.est_price,
+        currency: item.currency
+      )
+    end
+    purchase_order
+  end
+
   private
 
     def at_least_one_order_item

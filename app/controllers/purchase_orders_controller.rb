@@ -4,7 +4,7 @@ class PurchaseOrdersController < ApplicationController
   # GET /purchase_orders
   # GET /purchase_orders.json
   def index
-    @purchase_orders = PurchaseOrder.all
+    @purchase_orders = PurchaseOrder.all.includes([:requestor, :supplier])
   end
 
   # GET /purchase_orders/1
@@ -16,15 +16,7 @@ class PurchaseOrdersController < ApplicationController
   def new
     if params[:req]
       req = Requisition.find params[:req]
-      @purchase_order = PurchaseOrder.new 
-      @purchase_order.requisitions << req
-      order_items =  req.req_items.each do |item|
-        @purchase_order.order_items.build(
-          description: item.description,
-          quantity: item.qty_reqd,
-          unit: item.unit
-        )
-      end
+      @purchase_order = PurchaseOrder.new_from_requisition req
     else
       @purchase_order = PurchaseOrder.new
     end
@@ -33,6 +25,7 @@ class PurchaseOrdersController < ApplicationController
 
   # GET /purchase_orders/1/edit
   def edit
+    @buyers = User.all.reject {|u| ! u.has_role?(:purchasing)}
   end
 
   # POST /purchase_orders
@@ -45,7 +38,10 @@ class PurchaseOrdersController < ApplicationController
         format.html { redirect_to @purchase_order, notice: 'Purchase order was successfully created.' }
         format.json { render :show, status: :created, location: @purchase_order }
       else
-        format.html { render :new }
+        format.html { 
+          @buyers = User.all.reject {|u| ! u.has_role?(:purchasing)}
+          render :new 
+        }
         format.json { render json: @purchase_order.errors, status: :unprocessable_entity }
       end
     end
@@ -83,6 +79,11 @@ class PurchaseOrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def purchase_order_params
-      params.require(:purchase_order).permit(:order_num, :requestor_id, :order_date, :due_date, :total_amount, :is_active, :currency, :deleted, :notes, :completed_date, :supplier_id, :contact, :phone_contact, :user_id, :status)
+      params.require(:purchase_order).permit(:order_num, :requestor_id, :order_date, :due_date, :total_amount, :requestor, :department, 
+        :is_active, :currency, :deleted, :notes, :completed_date, :supplier_id, :contact, :phone_contact, :user_id, :status, :buyer_id, 
+        :instructions, :subtotal, :discounts, :est_tax, :non_recurring, :shipping, :down_payment,
+        {:order_items_attributes => [:stock_item__id, :quantity, :unit, :min_delivery_qty, :pending_qty, :type, :line_amount, 
+          :unit_price, :currency, :deleted, :description, :status, :line_num, :extra1, :extra2,
+          :discount, :est_tax, :non_recurring, :shipping, :_destroy, :id ]})
     end
 end

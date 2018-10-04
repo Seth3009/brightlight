@@ -17,12 +17,12 @@ nav
     thead
       tr
         th Order num
-        th Requestor
+        th Supplier
         th Order date
         th Due date
         th Total amount
         th Currency
-        th Supplier
+        th Requestor
         th Status
         th
 
@@ -30,12 +30,12 @@ nav
       - @purchase_orders.each do |purchase_order|
         tr
           td = purchase_order.order_num
-          td = purchase_order.requestor
+          td = purchase_order.supplier.try(:company_name)
           td = purchase_order.order_date
           td = purchase_order.due_date
-          td = purchase_order.currency + purchase_order.total_amount
+          td = "#{purchase_order.currency} #{purchase_order.total_amount}"
           td = purchase_order.is_active
-          td = purchase_order.supplier.try(:name)
+          td = purchase_order.requestor
           td = purchase_order.status
           td 
             = link_to purchase_order
