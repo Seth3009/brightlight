@@ -3,28 +3,28 @@ tr.compact.nested-fields
     .input-field
       = f.text_field :description
   td
-    .input-field
+    .input-field.right-align
       = f.number_field :quantity
   td
     .input-field
       = f.text_field :unit
   td
-    .input-field
+    .input-field.right-align
       = f.number_field :unit_price, step: 'any'
   td
-    .input-field
+    .input-field.right-align
       = f.number_field :discount, step: 'any'
   td
-    .input-field
+    .input-field.right-align
       = f.number_field :est_tax, step: 'any'
   td
-    .input-field
+    .input-field.right-align
       = f.number_field :non_recurring, step: 'any'
   td
-    .input-field
+    .input-field.right-align
       = f.number_field :shipping, step: 'any'
   td
-    .input-field
+    .input-field.right-align
       = f.number_field :line_amount, disabled: true
   td
     = link_to_remove_association f, class: "waves-effect waves-teal red-text"

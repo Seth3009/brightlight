@@ -3,15 +3,15 @@
     thead
       tr
         td Description
-        td Qty
+        td.right-align Qty
         td Unit
-        td Unit price
-        td Disc.
-        td Est.Tax
-        td Non-recurring
-        td Shipping
-        td Total
+        td.right-align Unit price
+        td.right-align Disc.
+        td.right-align Est.Tax
+        td.right-align Non-recurring
+        td.right-align Shipping
+        td.right-align Total
         td 
-    tbody#purchase_order
+    tbody#purchase_orders
       = f.fields_for :order_items do |order_item|
         = render 'order_item_fields', f: order_item
