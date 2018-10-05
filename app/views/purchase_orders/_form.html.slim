@@ -54,7 +54,7 @@
         | Items
       ul.right
         li
-          = link_to_add_association f, :order_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#purchase_order'
+          = link_to_add_association f, :order_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#purchase_orders'
             ' Add Item
             i.material-icons.left playlist_add
   
@@ -74,28 +74,28 @@
       .card-panel.blue-grey.lighten-4
         .display-field
           .label Subtotal
-          .item = f.object.subtotal
+          .item = f.text_field :subtotal, disabled: true
         .display-field
           .label Discounts
-          .item = f.object.discounts
+          .item = f.text_field :discounts, disabled: true
         .display-field
           .label Est. tax
-          .item = f.object.est_tax
+          .item = f.text_field :est_tax, disabled: true
         .display-field
           .label Non recurring
-          .item = f.object.non_recurring
+          .item = f.text_field :non_recurring, disabled: true
         .display-field
           .label Shipping
-          .item = f.object.shipping
+          .item = f.text_field :shipping, disabled: true
         .display-field
           .label Total Amount
-          .item = f.object.total_amount
+          .item = f.text_field :total_amount, disabled: true
         .display-field
           .label Down Payment
-          .item = f.object.down_payment
+          .item = f.text_field :down_payment
         .display-field
           .label Remaining Amount
-          .item = f.object.total_amount - f.object.down_payment rescue 0
+          .item = text_field_tag :remaining_amount, value: f.object.total_amount - f.object.down_payment rescue 0
   .toolbar.z-depth-1 
     = link_to 'Cancel', purchase_orders_path, class: "waves-effect waves-teal btn-flat"
     button.btn.waves-effect.waves-light type="submit" Save
@@ -104,14 +104,45 @@
 
 
 javascript:
-  $(document).on("blur", ".nested-fields", function() {
-    var row = $(this);
-    var total = row.find("input[name$='[line_amount]']")
-    var qty = Number(row.find("input[name$='[quantity]']").val())
-    var unit_price = Number(row.find("input[name$='[unit_price]']").val())
-    var discount = Number(row.find("input[name$='[unit_price]']").val())
-    var est_tax = Number(row.find("input[name$='[est_tax]']").val())
-    var non_recurring = Number(row.find("input[name$='[non_recurring]']").val())
-    var shipping = Number(row.find("input[name$='[shipping]']").val())
-    total.val(qty*unit_price - discount + est_tax + non_recurring + shipping)
-  })
+  $(document).on('page:load ready', function() {
+    $(document).on("blur", ".nested-fields", function() {
+      var row = $(this);
+      var total_field = row.find("input[name$='[line_amount]']");
+      var qty = Number(row.find("input[name$='[quantity]']").val());
+      var unit_price = Number(row.find("input[name$='[unit_price]']").val());
+      var discount = Number(row.find("input[name$='[unit_price]']").val());
+      var est_tax = Number(row.find("input[name$='[est_tax]']").val());
+      var non_recurring = Number(row.find("input[name$='[non_recurring]']").val());
+      var shipping = Number(row.find("input[name$='[shipping]']").val());
+      var line_total = qty*unit_price - discount + est_tax + non_recurring + shipping;
+      total_field.val(line_total);
+      calc_totals();
+    });
+    $(document).on("change", "#purchase_order_down_payment", function() {
+      calc_totals();
+    });
+  });
+  var calc_total = function(field) {
+    return $.map($("#purchase_orders").find("input[name$='[" + field + "]']"), function(item) { 
+        return Number($(item).val()) })
+      .reduce(function(tot, val){return tot+val}, 0);
+  };
+  var calc_totals = function() {
+    var total_qty, total_discount, total_est_tax, total_non_recurring, total_shipping, subtotal;
+    total_discount = calc_total('discount');
+    total_est_tax = calc_total('est_tax');
+    total_non_recurring = calc_total('non_recurring');
+    total_shipping = calc_total('shipping');
+    subtotal = calc_total('line_amount');
+    var down_payment = Number($("#purchase_order_down_payment").val());
+    var total_amount = subtotal - total_discount + total_est_tax + total_non_recurring + total_shipping;
+    var remaining_amount = total_amount - down_payment;
+    
+    $("#purchase_order_subtotal").val(subtotal);
+    $("#purchase_order_discounts").val(total_discount);
+    $("#purchase_order_est_tax").val(total_est_tax);
+    $("#purchase_order_non_recurring").val(total_non_recurring);
+    $("#purchase_order_shipping").val(total_shipping);
+    $("#purchase_order_total_amount").val(total_amount);  
+    $("#purchase_order_remaining_amount").val(remaining_amount);  
+  };
