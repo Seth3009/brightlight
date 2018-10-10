@@ -12,6 +12,18 @@ class PurchaseOrdersController < ApplicationController
   def show
   end
 
+  def daily
+    date = Date.parse params[:date] rescue Date.today
+    @purchase_orders = PurchaseOrder.where(due_date: date).includes([:requestor, :supplier, order_items: [:req_item]])
+  end
+
+  def monthly 
+    today = Date.today
+    start_date = Date.new params[:year], params[:month], 1 rescue Date.new today.year, today.month, 1
+    end_date = Date.new params[:year], params[:month], -1 rescue Date.new today.year, today.month, -1
+    @purchase_orders = PurchaseOrder.where(due_date: start_date..end_date).includes([:requestor, :supplier, :order_items])
+  end
+
   # GET /purchase_orders/new
   def new
     if params[:req]
@@ -79,7 +91,7 @@ class PurchaseOrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def purchase_order_params
-      params.require(:purchase_order).permit(:order_num, :requestor_id, :order_date, :due_date, :total_amount, :requestor, :department, 
+      params.require(:purchase_order).permit(:order_num, :requestor_id, :order_date, :due_date, :total_amount, :requestor, :department_id, 
         :is_active, :currency, :deleted, :notes, :completed_date, :supplier_id, :contact, :phone_contact, :user_id, :status, :buyer_id, 
         :instructions, :subtotal, :discounts, :est_tax, :non_recurring, :shipping, :down_payment,
         {:order_items_attributes => [:stock_item__id, :quantity, :unit, :min_delivery_qty, :pending_qty, :type, :line_amount, 

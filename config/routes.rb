@@ -9,7 +9,6 @@ Rails.application.routes.draw do
   resources :delivery_items
   resources :deliveries
   resources :order_items
-  resources :purchase_orders
   resources :req_items
   resources :supplies_transaction_items
   resources :warehouses
@@ -269,6 +268,13 @@ Rails.application.routes.draw do
   resources :messages do 
     member do
       post 'mark_read'
+    end
+  end
+
+  resources :purchase_orders do
+    collection do
+      get 'daily'
+      get 'monthly'
     end
   end
 
