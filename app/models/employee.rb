@@ -10,7 +10,7 @@ class Employee < ActiveRecord::Base
   has_many :grade_sections, foreign_key: "homeroom_id"
 	has_many :course_sections, foreign_key: "instructor_id"
 	has_one :manager, through: :department
-	has_many :leave_requests
+	has_many :leave_requests, foreign_key: "employee_id"
   has_many :supplies_transaction
   has_one :employee_smartcard
   has_one :badge

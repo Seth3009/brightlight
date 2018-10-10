@@ -1,5 +1,5 @@
 class LeaveRequest < ActiveRecord::Base
-  belongs_to :employee
+  belongs_to :employee  
   validates_presence_of :employee_id
   validates_presence_of :hour, :message => "Leave period can't be blank"
   validates_presence_of :leave_type, :message => "Choose your leave type"
@@ -41,8 +41,8 @@ class LeaveRequest < ActiveRecord::Base
 
   scope :hrlist_archive, ->  { 
     submitted
-    .archive
-    .order(hr_date: :desc, form_submit_date: :desc, updated_at: :desc)
+    .select('leave_requests.*,employees.name as employee_name')
+    .archive    
   }
 
   scope :archive, -> { 
