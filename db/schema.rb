@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181004045745) do
+ActiveRecord::Schema.define(version: 20181009071456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1048,11 +1048,13 @@ ActiveRecord::Schema.define(version: 20181004045745) do
     t.decimal  "non_recurring"
     t.decimal  "shipping"
     t.decimal  "down_payment"
+    t.integer  "req_item_id"
   end
 
   add_index "order_items", ["created_by_id"], name: "index_order_items_on_created_by_id", using: :btree
   add_index "order_items", ["last_updated_by_id"], name: "index_order_items_on_last_updated_by_id", using: :btree
   add_index "order_items", ["purchase_order_id"], name: "index_order_items_on_purchase_order_id", using: :btree
+  add_index "order_items", ["req_item_id"], name: "index_order_items_on_req_item_id", using: :btree
   add_index "order_items", ["stock_item_id"], name: "index_order_items_on_stock_item_id", using: :btree
 
   create_table "passengers", force: :cascade do |t|
@@ -1803,6 +1805,7 @@ ActiveRecord::Schema.define(version: 20181004045745) do
   add_foreign_key "msg_folders", "msg_folders", column: "parent_id"
   add_foreign_key "msg_groups", "users", column: "creator_id"
   add_foreign_key "order_items", "purchase_orders"
+  add_foreign_key "order_items", "req_items"
   add_foreign_key "order_items", "stock_items"
   add_foreign_key "order_items", "users", column: "created_by_id"
   add_foreign_key "order_items", "users", column: "last_updated_by_id"

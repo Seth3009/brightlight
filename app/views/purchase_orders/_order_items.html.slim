@@ -2,16 +2,16 @@
   table.compact.striped
     thead
       tr
-        td Description
-        td.right-align Qty
-        td Unit
-        td.right-align Unit price
-        td.right-align Disc.
-        td.right-align Est.Tax
-        td.right-align Non-recurring
-        td.right-align Shipping
-        td.right-align Total
-        td 
+        th Description
+        th.right-align Qty
+        th Unit
+        th.right-align Unit price
+        th.right-align Disc.
+        th.right-align Est.Tax
+        th.right-align Non-recurring
+        th.right-align Shipping
+        th.right-align Total
+        th 
     tbody#purchase_orders
       = f.fields_for :order_items do |order_item|
         = render 'order_item_fields', f: order_item

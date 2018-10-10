@@ -67,28 +67,28 @@ h5 Items
   table.compact.striped
     thead
       tr
-        td Description
-        td Qty
-        td Unit
-        td Unit price
-        td Disc.
-        td Est.Tax
-        td Non-reccuring
-        td Shipping
-        td Total
-        td 
+        th.wd25 Description
+        th.right-align Qty
+        th Unit
+        th.right-align Unit price
+        th.right-align Disc.
+        th.right-align Est.Tax
+        th.right-align Non-reccuring
+        th.right-align Shipping
+        th.right-align Total
+
     tbody
       - @purchase_order.order_items.each do |item|
         tr.compact.nested-fields
-          td = item.description
-          td = item.quantity
+          td.wd25 = item.description
+          td.right-align = item.quantity
           td = item.unit
-          td = item.unit_price
-          td = item.discount
-          td = item.est_tax
-          td = item.non_recurring
-          td = item.shipping
-          td = item.line_amount
+          td.right-align = item.unit_price
+          td.right-align = item.discount
+          td.right-align = item.est_tax
+          td.right-align = item.non_recurring
+          td.right-align = item.shipping
+          td.right-align = item.line_amount
 
 .row
   .col.s12.m8

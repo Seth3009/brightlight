@@ -3,14 +3,16 @@ h4 Purchase Orders
 
 nav
   .nav-wrapper
-    - if can? :manage, PurchaseOrder
+    - if can? :create, PurchaseOrder
       ul.right
+        li
+          = link_to daily_purchase_orders_path
+        li
+          = link_to monthly_purchase_orders_path
         li        
           = link_to new_purchase_order_path
-            | New Purchase Order
+            | New PO
             i.material-icons.left add
-        li
-          = link_to 'Export as CSV', purchase_orders_path + '.csv'
 
 .card-panel
   table.striped.compact
