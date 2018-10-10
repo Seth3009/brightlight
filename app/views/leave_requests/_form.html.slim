@@ -23,12 +23,12 @@
         = f.label "category_come_late", "Come Late"
     .row     
       .input-field.col.s4
-        = f.label :Start_date, class: 'active'
-        = f.date_field :start_date, :value => Time.now.strftime('%Y-%m-%d')
+        = f.label 'Start date (mm/dd/yyyy)', class: 'active'
+        = f.date_field :start_date, :value => Date.today.strftime('%Y-%m-%d')
         = f.hidden_field :employee_id, :value => @employee.id
       .input-field.col.s4
-        = f.label :End_Date, class: 'active'
-        = f.date_field :end_date, :value => Time.now.strftime('%Y-%m-%d')
+        = f.label 'End date (mm/dd/yyyy)', class: 'active'
+        = f.date_field :end_date, :value => Date.today.strftime('%Y-%m-%d')
       .input-field.col.s4
         = f.label :hour, class: 'active'
           |Number of days/hours 
@@ -58,5 +58,3 @@
     button.btn.waves-effect.waves-light type="submit" name="save" Save Draft
     button.btn.waves-effect.waves-light type="submit" name="send" value="empl_submit" Send for Approval
     = link_to 'Cancel', leave_requests_path, class: "waves-effect waves-light btn-flat"       
-
-     
