@@ -112,7 +112,7 @@
       - if params[:action] =~ /edit/ && @employee.approver1
         .input-field.col.s4
           = f.label :approver2, "Approver Assistant", class: 'active'
-          = f.collection_select :approver2, Employee.active.order(:name), :id, :name, prompt: true
+          = f.collection_select :approver2, Employee.active.order(:name), :id, :name, include_blank: 'No One', prompt: true
       .input-field.col.s4
         = f.label :job_title, class: 'active'
         = f.text_field :job_title

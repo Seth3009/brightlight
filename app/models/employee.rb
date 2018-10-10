@@ -71,15 +71,12 @@ class Employee < ActiveRecord::Base
   }
 
   def auto_fill_approver    
-    manager = Department.find(self.department_id).manager_id
-    vice_manager = Department.find(self.department_id).vice_manager_id
+    manager = Department.find(self.department_id).manager_id    
       if !self.leaderships
-        if manager.present? && vice_manager.present?
+        if manager.present? 
           self.update_column(:approver1, manager)
-          self.update_column(:approver2, vice_manager)
         else
-          self.update_column(:approver1, manager)
-          self.update_column(:approver2, nil)
+          self.update_column(:approver1, manager)          
         end
       end
   end  
