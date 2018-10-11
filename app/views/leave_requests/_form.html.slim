@@ -23,12 +23,12 @@
         = f.label "category_come_late", "Come Late"
     .row     
       .input-field.col.s4
-        = f.label :Start_date, class: 'active'
-        = f.date_field :start_date, :value => Time.now.strftime('%Y-%m-%d')
+        = f.label 'Start date (mm/dd/yyyy)', class: 'active'
+        = f.date_field :start_date, :value => Date.today.strftime('%Y-%m-%d')
         = f.hidden_field :employee_id, :value => @employee.id
       .input-field.col.s4
-        = f.label :End_Date, class: 'active'
-        = f.date_field :end_date, :value => Time.now.strftime('%Y-%m-%d')
+        = f.label 'End date (mm/dd/yyyy)', class: 'active'
+        = f.date_field :end_date, :value => Date.today.strftime('%Y-%m-%d')
       .input-field.col.s4
         = f.label :hour, class: 'active'
           |Number of days/hours 
@@ -40,7 +40,7 @@
         = f.label :leave_type, class:'active'
           |Choose type of leave
           .right.red-text *
-        = f.select :leave_type, [['Sick Without Medical Note','Sick'],'Special Leave','School Related Duty','Personal Permission'], prompt: true 
+        = f.select :leave_type, [['Sick Without Medical Note','Sick'],'Special Leave','School Related Duty','Personal Permission'], prompt: true         
       .input-field.col.s8
         = f.label :leave_note, class: 'active'
           |Leave notes or description
@@ -52,11 +52,11 @@
         = f.select :leave_subtitute, [['Substitute not required',false],['Substitute required',true]], prompt: true 
       .input-field.col.s8
         = f.label :subtitute_notes
-        = f.text_field :subtitute_notes        
+        = f.text_field :subtitute_notes  
+    .red-text style="font-style: italic;"
+      |* Special leave only includes Employee’s marriage, birth of an employee’s baby, the death of an immediate family member  
         
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" name="save" Save Draft
     button.btn.waves-effect.waves-light type="submit" name="send" value="empl_submit" Send for Approval
     = link_to 'Cancel', leave_requests_path, class: "waves-effect waves-light btn-flat"       
-
-     

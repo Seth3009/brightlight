@@ -137,6 +137,12 @@ nav
           dd.col.s4
             .label Department:
             .item = @employee.department || "--"
+          dd.col.s4
+            .label Approver:
+            - if @employee.approver_assistant
+              .item  #{@employee.approver} \ #{@employee.approver_assistant}
+            - else
+              .item = @employee.approver || "--"
 
     #tab5.tab-content
       .list_description.col.s12

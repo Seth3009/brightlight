@@ -34,18 +34,21 @@ class LeaveRequestsController < ApplicationController
     @leave_requests = LeaveRequest.with_employees_and_departments
 
     if params[:view] == "hr" && @department.id == @dept.id
-      @hr_approval_list = @leave_requests.hrlist_archive
+      @hr_approval_list = @leave_requests.hrlist_archive.where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
+                          .order("#{sort_column} #{sort_direction}").order(:form_submit_date)
     elsif params[:view] == "spv"
       @supv_approval_list = @leave_requests.spv_archive(@employee)
-                            .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
+                            .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today)).order("#{sort_column} #{sort_direction}")
     else   
-      @own_leave_requests = @leave_requests.empl(@employee).archive.order(form_submit_date: :desc, updated_at: :desc)
+      @own_leave_requests = @leave_requests.empl(@employee).archive.order("#{sort_column} #{sort_direction}")
                             .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
     end
    
     if params[:dept].present? && params[:dept] != 'all'
       @dept_filter = Department.find_by(code: params[:dept])
       @hr_approval_list = @hr_approval_list.where(departments: {code: params[:dept]})
+      .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
+      .order("#{sort_column} #{sort_direction}").order(:form_submit_date)
     end
     
   end
@@ -218,6 +221,9 @@ class LeaveRequestsController < ApplicationController
   
 
   private
+    def sortable_columns 
+      [:form_submit_date, :start_date, :employee_name, :category,:leave_type]
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_leave_request
       @leave_request = LeaveRequest.find(params[:id])

@@ -1,14 +1,14 @@
 table.compact.striped
   thead
     tr
-      th Employee
-      th Leave date 
+      th = sort_link :employee_name, 'Employee'
+      th = sort_link :start_date, 'Leave date'
       th Hours / Notes
-      th Category
-      th Leave Type
+      th = sort_link :category, 'Category'
+      th = sort_link :leave_type, 'Leave Type'
       th Subs
       th.center Approval
-      th Form Submit
+      th =sort_link :form_submit_date, 'Form Submit'
       th Actions
       
 
