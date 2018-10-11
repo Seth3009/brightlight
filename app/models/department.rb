@@ -12,7 +12,13 @@ class Department < ActiveRecord::Base
     if employees.present?
       employees.each do |employee|
         if !employee.leaderships
-          employee.update_column(:approver1, self.manager_id)
+          if self.manager_id && self.vice_manager_id
+            employee.update_column(:approver1, self.manager_id)
+            employee.update_column(:approver2, self.vice_manager_id)
+          else 
+            employee.update_column(:approver1, self.manager_id)
+            employee.update_column(:approver2, nil)
+          end
         end
       end
     end

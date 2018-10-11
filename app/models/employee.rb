@@ -4,13 +4,13 @@ class Employee < ActiveRecord::Base
   after_save :auto_fill_approver  
  	belongs_to :user
 	belongs_to :department
-	belongs_to :supervisor, class_name: "Employee"
+  belongs_to :supervisor, class_name: "Employee"  
 	has_many :subordinates, class_name: "Employee", foreign_key: "supervisor_id", dependent: :restrict_with_error
   has_many :book_loans, dependent: :restrict_with_error
   has_many :grade_sections, foreign_key: "homeroom_id"
 	has_many :course_sections, foreign_key: "instructor_id"
 	has_one :manager, through: :department
-	has_many :leave_requests
+	has_many :leave_requests, foreign_key: "employee_id"
   has_many :supplies_transaction
   has_one :employee_smartcard
   has_one :badge
@@ -30,7 +30,17 @@ class Employee < ActiveRecord::Base
 	scope :supervisors, lambda { 
 		where('id in (select supervisor_id from employees where supervisor_id is not null)')
 		.select(:id, :name)
-	}
+  }
+  
+  def approver
+    Employee.find(self.approver1)
+  end
+
+  def approver_assistant
+    if self.approver2?
+      Employee.find(self.approver2)
+    end
+  end
 
 	def is_manager?
 		Department.all.map(&:manager_id).include? self.id
@@ -61,12 +71,14 @@ class Employee < ActiveRecord::Base
   }
 
   def auto_fill_approver    
-    manager = Department.find(self.department_id).manager_id
-    if manager.present?
+    manager = Department.find(self.department_id).manager_id    
       if !self.leaderships
-        self.update_column(:approver1, manager)
+        if manager.present? 
+          self.update_column(:approver1, manager)
+        else
+          self.update_column(:approver1, manager)          
+        end
       end
-    end
   end  
 
   
