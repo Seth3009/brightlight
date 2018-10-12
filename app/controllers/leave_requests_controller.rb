@@ -11,7 +11,7 @@ class LeaveRequestsController < ApplicationController
     @hrvicemanager = Employee.find_by_id(@dept.vice_manager_id)
     @leave_requests = LeaveRequest.with_employees_and_departments
     @own_leave_requests = @leave_requests.order(form_submit_date: :desc, updated_at: :desc)
-                          .where('form_submit_date = ? or hr_approval IS ? and spv_approval IS ?',Date.today, nil, nil)
+                          .where('form_submit_date = ? or hr_approval IS ? or spv_approval IS ?',Date.today, nil, nil)
                           .empl(@employee).active
     @own_count = @own_leave_requests.count
     @supv_approval_list = @leave_requests.active.spv(@employee).submitted
