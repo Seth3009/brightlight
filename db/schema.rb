@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181009071456) do
+ActiveRecord::Schema.define(version: 20181019071836) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1251,11 +1251,20 @@ ActiveRecord::Schema.define(version: 20181009071456) do
     t.integer  "last_updated_by_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.integer  "order_item_id"
   end
 
   add_index "req_items", ["created_by_id"], name: "index_req_items_on_created_by_id", using: :btree
   add_index "req_items", ["last_updated_by_id"], name: "index_req_items_on_last_updated_by_id", using: :btree
+  add_index "req_items", ["order_item_id"], name: "index_req_items_on_order_item_id", using: :btree
   add_index "req_items", ["requisition_id"], name: "index_req_items_on_requisition_id", using: :btree
+
+  create_table "req_statuses", force: :cascade do |t|
+    t.string   "code"
+    t.string   "desription"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "requisitions", force: :cascade do |t|
     t.string   "req_no"
@@ -1292,6 +1301,7 @@ ActiveRecord::Schema.define(version: 20181009071456) do
     t.date     "sent_to_supv"
     t.date     "sent_to_purchasing"
     t.date     "sent_for_bgt_approval"
+    t.string   "status"
   end
 
   add_index "requisitions", ["budget_approver_id"], name: "index_requisitions_on_budget_approver_id", using: :btree
@@ -1823,6 +1833,7 @@ ActiveRecord::Schema.define(version: 20181009071456) do
   add_foreign_key "purchase_orders", "users", column: "last_updated_by_id"
   add_foreign_key "reminders", "messages"
   add_foreign_key "reminders", "recurring_types"
+  add_foreign_key "req_items", "order_items"
   add_foreign_key "req_items", "requisitions"
   add_foreign_key "req_items", "users", column: "created_by_id"
   add_foreign_key "req_items", "users", column: "last_updated_by_id"
