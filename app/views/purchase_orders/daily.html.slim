@@ -4,9 +4,17 @@ h4 Laporan Belanja
 
 nav
   .nav-wrapper
+    ul
+      li
+        = link_to purchase_orders_path
+          | Purchase Orders
+          i.material-icons.left chevron_left
     ul.right
       li
-        = link_to daily_purchase_orders_path
+        = link_to 'Monthly', monthly_purchase_orders_path
+      li
+        = link_to "#", onclick: 'window.print();return false;'
+          i.material-icons print
 
 table.compact.striped
   thead
@@ -32,3 +40,12 @@ table.compact.striped
           td = item.purchase_order.supplier.try(:company_name)
           td = item.line_amount
 
+css:
+  @media print {
+    nav {
+      display: none;
+    }
+    table, tr, td {
+      border: 0.5px solid grey;
+    }
+  }

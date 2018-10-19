@@ -32,7 +32,7 @@
             = f.collection_select :buyer_id, @buyers, :id, :name, class:'material-select'
           .input-field.col.s6
             = f.label :requestor, class: "active"
-            = f.collection_select :requestor_id, Employee.active, :id, :name, selected: f.object.requestor_id, prompt: "Select requester"
+            = f.collection_select :requestor_id, Employee.active, :id, :name, prompt: "Select requester"
           .input-field.col.s6
             = f.label :department, class: "active"
             = f.collection_select :department_id, Department.all, :id, :name, prompt: "Select department"
@@ -53,6 +53,10 @@
       .brand-logo style="margin-left: 20px; font-size:1.5em"
         | Items
       ul.right
+        li
+          = link_to "#purchase_orders", id: "recalculate"
+            | Calculate
+            i.material-icons.left loop
         li
           = link_to_add_association f, :order_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#purchase_orders'
             ' Add Item
@@ -130,12 +134,18 @@ javascript:
     $(document).on("change", "#purchase_order_down_payment", function() {
       calc_totals();
     });
+  
+    $(document).on("click", "#recalculate", function() {
+      calc_totals();
+    })
   });
+  
   var calc_total = function(field) {
     return $.map($("#purchase_orders").find("input[name$='[" + field + "]']"), function(item) { 
         return Number($(item).val()) })
       .reduce(function(tot, val){return tot+val}, 0);
   };
+  
   var calc_totals = function() {
     var total_qty, total_discount, total_est_tax, total_non_recurring, total_shipping, subtotal;
     total_discount = calc_total('discount');
@@ -157,7 +167,7 @@ javascript:
     $("#po_non_recurring").val(total_non_recurring);
     $("#purchase_order_shipping").val(total_shipping);
     $("#po_shipping").val(total_shipping);
-    $("#purchase_order_total_amount").val(total_amount);  
-    $("#po_total_amount").val(total_amount);  
-    $("#purchase_order_remaining_amount").val(remaining_amount);  
+    $("#purchase_order_total_amount").val(total_amount);
+    $("#po_total_amount").val(total_amount);
+    $("#purchase_order_remaining_amount").val(remaining_amount);
   };

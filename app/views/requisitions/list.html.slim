@@ -18,10 +18,10 @@ nav
 
 ul#dept-options.dropdown-content
   li  
-    = link_to 'All', requisitions_path(params.merge(dept:'all').symbolize_keys)
+    = link_to 'All', list_requisitions_path(params.merge(dept:'all').symbolize_keys)
   - Department.all.each do |dept|
     li 
-      = link_to dept.name, requisitions_path(params.merge(dept: dept.code).symbolize_keys)    
+      = link_to dept.name, list_requisitions_path(params.merge(dept: dept.code).symbolize_keys)    
 
 ul.tabs.z-depth-1
   li.tab.col.s6

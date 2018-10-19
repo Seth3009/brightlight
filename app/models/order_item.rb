@@ -7,4 +7,13 @@ class OrderItem < ActiveRecord::Base
 
   has_many :delivery_items
 
+  validates :req_item_id, presence: true
+
+  after_save :sync_req_item
+
+  private
+
+    def sync_req_item
+      self.req_item.order_item_id = self.id
+    end
 end

@@ -4,7 +4,7 @@ class PurchaseOrdersController < ApplicationController
   # GET /purchase_orders
   # GET /purchase_orders.json
   def index
-    @purchase_orders = PurchaseOrder.all.includes([:requestor, :supplier])
+    @purchase_orders = PurchaseOrder.all.includes([:requestor, :supplier, :order_items])
   end
 
   # GET /purchase_orders/1
@@ -95,7 +95,7 @@ class PurchaseOrdersController < ApplicationController
         :is_active, :currency, :deleted, :notes, :completed_date, :supplier_id, :contact, :phone_contact, :user_id, :status, :buyer_id, 
         :instructions, :subtotal, :discounts, :est_tax, :non_recurring, :shipping, :down_payment,
         {:order_items_attributes => [:stock_item__id, :quantity, :unit, :min_delivery_qty, :pending_qty, :type, :line_amount, 
-          :unit_price, :currency, :deleted, :description, :status, :line_num, :extra1, :extra2,
+          :unit_price, :currency, :deleted, :description, :status, :line_num, :extra1, :extra2, :req_item_id,
           :discount, :est_tax, :non_recurring, :shipping, :_destroy, :id ]})
     end
 end
