@@ -5,64 +5,178 @@
       ul
         - @purchase_order.errors.full_messages.each do |message|
           li = message
-
-  .card-panel
-    .row
-      .input-field.col.s4
-        = f.label :supplier
-        = f.collection_select :supplier_id, Supplier.all, :id, :company_name, class:'material-select' 
-      .input-field.col.s4
-        = f.label :contact
-        = f.text_field :contact
+  .row
+    .col.s12.m6
+      .card-panel
+        .row
+          .input-field.col.s12
+            i.material-icons.prefix store
+            = f.label :supplier, class: 'active'
+            = f.collection_select :supplier_id, Supplier.all, :id, :company_name, class:'material-select', prompt: "Select supplier"
+          .input-field.col.s12
+            i.material-icons.prefix account_circle
+            = f.label :contact
+            = f.text_field :contact
+          .input-field.col.s12
+            i.material-icons.prefix phone
+            = f.label :phone_contact
+            = f.text_field :phone_contact
+    .col.s12.m6
+      .card-panel
+        .row
+          .input-field.col.s6
+            = f.label :order_num
+            = f.text_field :order_num
+          .input-field.col.s6
+            = f.label :buyer, class: "active"
+            = f.collection_select :buyer_id, @buyers, :id, :name, class:'material-select'
+          .input-field.col.s6
+            = f.label :requestor, class: "active"
+            = f.collection_select :requestor_id, Employee.active, :id, :name, prompt: "Select requester"
+          .input-field.col.s6
+            = f.label :department, class: "active"
+            = f.collection_select :department_id, Department.all, :id, :name, prompt: "Select department"
+          .input-field.col.s6
+            = f.label :order_date, class: "active"
+            = f.date_field :order_date
+          .input-field.col.s6
+            = f.label :due_date, class: "active"
+            = f.date_field :due_date
+          .input-field.col.s2
+            = f.label :currency, class: 'active'
+            = f.select :currency, [['IDR', 'IDR'], ['USD', 'USD'], ['SGD', 'SGD'], ['AUD', 'AUD'], ['GBP', 'GBP']]
+          .input-field.col.offset-s4
+            = f.label :status, class: "active"
+            = f.text_field :status  
   nav.light
     .nav-wrapper
       .brand-logo style="margin-left: 20px; font-size:1.5em"
-        | Contact info
-  .card-panel
-    .rows
-      .col.s5
-        .rows
-          .input-field.col.s6
-            = f.label :requestor
-            = f.text_field :requestor
-          .input-field.col.s6
-            = f.label :order_date
-            = f.text_field :order_date
-          .input-field.col.s6
-            = f.label :due_date
-            = f.text_field :due_date
-          .input-field.col.s2
-            = f.label :currency
-            = f.text_field :currency
-          .input-field.col.s4
-            = f.label :total_amount
-            = f.text_field :total_amount
-      .col.s5
-        .rows
-          .input-field
-            = f.label :deleted
-            = f.text_field :deleted
-          .input-field
-            = f.label :notes
-            = f.text_field :notes
-          .input-field
-            = f.label :completed_date
-            = f.text_field :completed_date
-          .input-field
-            = f.label :supplier
-            = f.text_field :supplier
-          .input-field
-            = f.label :contact
-            = f.text_field :contact
-          .input-field
-            = f.label :phone_contact
-            = f.text_field :phone_contact
-          .input-field
-            = f.label :status
-            = f.text_field :status
+        | Items
+      ul.right
+        li
+          = link_to "#purchase_orders", id: "recalculate"
+            | Calculate
+            i.material-icons.left loop
+        li
+          = link_to_add_association f, :order_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#purchase_orders'
+            ' Add Item
+            i.material-icons.left playlist_add
+  
+  = render 'order_items', f: f
 
+  .row
+    .col.s12.m8
+      .card-panel
+        .input-field
+          = f.label 'Instructions to supplier'
+          = f.text_area :instructions, class: "materialize-textarea"
+      .card-panel
+        .input-field
+          = f.label :notes
+          = f.text_area :notes, class: "materialize-textarea"
+    .col.s12.m4
+      .card-panel.compact.blue-grey.lighten-4
+        .display-field
+          .label Subtotal
+          .item = text_field_tag :po_subtotal, f.object.subtotal, disabled: true
+          = f.hidden_field :subtotal
+        .display-field
+          .label Discounts
+          .item = text_field_tag :po_discounts, f.object.discounts, disabled: true
+          = f.hidden_field :discounts
+        .display-field
+          .label Est. tax
+          .item = text_field_tag :po_est_tax, f.object.est_tax, disabled: true
+          = f.hidden_field :est_tax
+        .display-field
+          .label Non recurring
+          .item = text_field_tag :po_non_recurring, f.object.non_recurring, disabled: true
+          = f.hidden_field :non_recurring
+        .display-field
+          .label Shipping
+          .item = text_field_tag :po_shipping, f.object.shipping, disabled: true
+          = f.hidden_field :shipping
+        .display-field
+          .label Total Amount
+          .item = text_field_tag :po_total_amount, f.object.total_amount, disabled: true
+          = f.hidden_field :total_amount
+        .display-field
+          .label Down Payment
+          .item = f.text_field :down_payment
+        .display-field
+          .label Remaining Amount
+          .item = text_field_tag :purchase_order_remaining_amount, (f.object.total_amount - f.object.down_payment rescue 0), disabled: true
+          
   .toolbar.z-depth-1 
     = link_to 'Cancel', purchase_orders_path, class: "waves-effect waves-teal btn-flat"
     button.btn.waves-effect.waves-light type="submit" Save
     - if params[:action] =~ /edit/
       = link_to 'Delete', @purchase_order, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"
+
+
+javascript:
+  $(document).on('page:load ready', function() {
+    $(document).on("blur", ".nested-fields", function() {
+      calc_row_total($(this));
+      calc_totals();
+    });
+    $(document).on("change", ".nested-fields input", function() {
+      calc_row_total($(this).parents("tr"));
+      calc_totals();
+    });
+    $(document).on("change", "#purchase_order_down_payment", function() {
+      calc_totals();
+    });
+  
+    $(document).on("click", "#recalculate", function() {
+      $("#purchase_orders > tr").each(function(_idx, row) { calc_row_total($(row)) });
+      calc_totals();
+    })
+  });
+
+  var calc_row_total = function(row) {
+      var hidden_total_field = row.find("input[name$='[line_amount]']");
+      var total_field = row.find("input[name$='line_total']");
+      var qty = Number(row.find("input[name$='[quantity]']").val());
+      var unit_price = Number(row.find("input[name$='[unit_price]']").val());
+      var discount = Number(row.find("input[name$='[discount]']").val());
+      var est_tax = Number(row.find("input[name$='[est_tax]']").val());
+      var non_recurring = Number(row.find("input[name$='[non_recurring]']").val());
+      var shipping = Number(row.find("input[name$='[shipping]']").val());
+      var line_total = qty*unit_price - discount + est_tax + non_recurring + shipping;
+      total_field.val(line_total);
+      hidden_total_field.val(line_total);
+      return line_total;
+  }
+  
+  var calc_total = function(field) {
+    return $.map($("#purchase_orders").find("input[name$='[" + field + "]']"), function(item) { 
+        return Number($(item).val()) })
+      .reduce(function(tot, val){return tot+val}, 0);
+  };
+  
+  var calc_totals = function() {
+    var total_qty, total_discount, total_est_tax, total_non_recurring, total_shipping, subtotal;
+    total_discount = calc_total('discount');
+    total_est_tax = calc_total('est_tax');
+    total_non_recurring = calc_total('non_recurring');
+    total_shipping = calc_total('shipping');
+    subtotal = calc_total('line_amount');
+    var down_payment = Number($("#purchase_order_down_payment").val());
+    var total_amount = subtotal - total_discount + total_est_tax + total_non_recurring + total_shipping;
+    var remaining_amount = total_amount - down_payment;
+    
+    $("#purchase_order_subtotal").val(subtotal);
+    $("#po_subtotal").val(subtotal);
+    $("#purchase_order_discounts").val(total_discount);
+    $("#po_discounts").val(total_discount);
+    $("#purchase_order_est_tax").val(total_est_tax);
+    $("#po_est_tax").val(total_est_tax);
+    $("#purchase_order_non_recurring").val(total_non_recurring);
+    $("#po_non_recurring").val(total_non_recurring);
+    $("#purchase_order_shipping").val(total_shipping);
+    $("#po_shipping").val(total_shipping);
+    $("#purchase_order_total_amount").val(total_amount);
+    $("#po_total_amount").val(total_amount);
+    $("#purchase_order_remaining_amount").val(remaining_amount);
+  };

@@ -3,39 +3,39 @@ h4 Purchase Orders
 
 nav
   .nav-wrapper
-    - if can? :manage, PurchaseOrder
+    - if can? :create, PurchaseOrder
       ul.right
+        li
+          = link_to "Daily", daily_purchase_orders_path
+        li
+          = link_to "Monthy", monthly_purchase_orders_path
         li        
           = link_to new_purchase_order_path
-            | New Purchase Order
+            | New PO
             i.material-icons.left add
-        li
-          = link_to 'Export as CSV', purchase_orders_path + '.csv'
 
 .card-panel
   table.striped.compact
     thead
       tr
         th Order num
-        th Requestor
-        th Order date
-        th Due date
-        th Total amount
-        th Currency
         th Supplier
+        th Items
+        th Order date
+        th Total amount
+        th Requestor
         th Status
-        th
+        th Actions
 
     tbody
       - @purchase_orders.each do |purchase_order|
         tr
           td = purchase_order.order_num
-          td = purchase_order.requestor
+          td = purchase_order.supplier.try(:company_name)
+          td = purchase_order.order_items.map {|item| item.description}.join(", ") if purchase_order.order_items
           td = purchase_order.order_date
-          td = purchase_order.due_date
-          td = purchase_order.currency + purchase_order.total_amount
-          td = purchase_order.is_active
-          td = purchase_order.supplier.try(:name)
+          td = "#{purchase_order.currency} #{purchase_order.total_amount}"
+          td = purchase_order.requestor
           td = purchase_order.status
           td 
             = link_to purchase_order

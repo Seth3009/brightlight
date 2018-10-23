@@ -13,7 +13,7 @@ h4 Purchase Request Approval
   .card-panel
     .row class="#{params[:appvl]=='supv' ? 'red lighten-4' : ''}"
       .input-field.col.m3
-        = f.label :supervisor, class: 'active'
+        = f.label 'supervisor/approver', class: 'active'
         = f.text_field :supervisor, disabled: true
       .input-field.col.m2
         = f.select :is_supv_approved, options_for_select([['Yes', true], ['No', false]]), disabled: params[:appvl] != 'supv', prompt: true
@@ -28,7 +28,7 @@ h4 Purchase Request Approval
       .input-field.col.m3
         = f.label :budget_approver, class: 'active'
         = f.collection_select :budget_approver_id, @supervisors, :id, :name, prompt: "Select budget approver"
-      - if params[:appvl] == 'budget' && (can? :approve_budget, @requisition)
+      - if can? :approve_budget, @requisition
         .input-field.col.m2
           = f.select :is_budget_approved, options_for_select([['Yes', true], ['No', false]]), prompt: true
           = f.label :is_budget_approved, 'Approve Budget'
