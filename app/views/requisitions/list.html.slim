@@ -1,0 +1,46 @@
+- title 'Purchase Requests'
+h4 Purchase Requests
+
+nav
+  .nav-wrapper
+    ul
+      - if can? :process, Requisition
+        li
+          a.dropdown-button href="#!" data-activates="dept-options"
+            span#dept = @department.present? ? "#{@department.name}" : "Department" 
+            i.material-icons.right arrow_drop_down
+
+    ul.right
+      li
+        = link_to new_requisition_path
+          | New
+          i.material-icons.left add
+
+ul#dept-options.dropdown-content
+  li  
+    = link_to 'All', list_requisitions_path(params.merge(dept:'all').symbolize_keys)
+  - Department.all.each do |dept|
+    li 
+      = link_to dept.name, list_requisitions_path(params.merge(dept: dept.code).symbolize_keys)    
+
+ul.tabs.z-depth-1
+  li.tab.col.s6
+    a.active href='#tab1' Approved
+  li.tab.col.s6
+    a href='#tab2' 
+      |Pending Approval
+      - if @pending_approval.count > 0
+        span.emblem = @pending_approval.count
+          
+.card-panel
+  #tab1.tab-content
+    == render partial: 'req_table', locals: { requisitions: @approved_requisitions }
+      
+  #tab2.tab-content
+    == render partial: 'req_table', locals: { requisitions: @pending_approval }
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

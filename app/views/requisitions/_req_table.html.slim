@@ -2,6 +2,7 @@
   table.compact.striped
     thead
       tr
+        th
         th Req no
         th Description
         th Required date
@@ -13,6 +14,11 @@
     tbody
       - requisitions.each do |requisition|
         tr
+          td 
+            -if requisition.pending_supv_approval? || requisition.pending_budget_approval?
+              i.material-icons.blue-text lens
+            -elsif requisition.status == 'ALLORDERED'
+              i.material-icons.green-text done_all
           td = requisition.id
           td = requisition.description
           td = requisition.date_required
@@ -35,16 +41,19 @@
           td = requisition.total_amt
           td 
             = link_to requisition
-              i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="View" visibility
+              i.material-icons.tooltipped data-position="right" data-delay="30" data-tooltip="View" visibility
+            - if requisition.status != 'ALLORDERED' && can?(:process, requisition)
+              = link_to new_purchase_order_path(req: requisition.id)
+                i.material-icons.tooltipped data-position="right" data-delay="30" data-tooltip="Create P.O." shop
             - if requisition.draft?
               = link_to edit_requisition_path(requisition)
-                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+                i.material-icons.tooltipped data-position="right" data-delay="50" data-tooltip="Edit" edit
               = link_to requisition, data: {id: requisition.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
-                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+                i.material-icons.tooltipped data-position="right" data-delay="50" data-tooltip="Delete" delete
             |&nbsp;&nbsp;
             - if requisition.pending_supv_approval? and can?(:approve, requisition)
               = link_to approve_requisition_path(requisition, appvl: 'supv')
-                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Review approval"  thumbs_up_down
+                i.material-icons.tooltipped data-position="right" data-delay="50" data-tooltip="Review approval"  thumbs_up_down
             - if requisition.pending_budget_approval? and can?(:approve_budget, requisition)
               = link_to approve_requisition_path(requisition, appvl: 'budget')
-                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Review approval" thumbs_up_down
+                i.material-icons.tooltipped data-position="right" data-delay="50" data-tooltip="Review approval" thumbs_up_down

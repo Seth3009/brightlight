@@ -90,4 +90,11 @@ class EmailNotification < ActionMailer::Base
     cc = cc_list.map {|e| "#{e.name} <#{e.try(:email)}>"}.join(", ")
     mail(to: %("#{@employee.name}" <#{@employee.email}>), cc: cc, subject: "Leave canceled (#{employee.name})")
   end
+
+  def new_comment(comment, addressee)
+    @comment = comment 
+    @from = @comment.user 
+    @to = addressee
+    mail(to: @to, subject: "New comment on #{comment.commentable.description}")
+  end
 end

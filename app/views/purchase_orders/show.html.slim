@@ -1,5 +1,5 @@
--title = 'Supplier Data'
-.label Supplier
+-title = 'Purchase Order'
+.label Purchase Order
 h4 = "Purchase Order no #{@purchase_order.order_num}"
 
 nav
@@ -8,44 +8,121 @@ nav
       li 
         = link_to purchase_orders_path
           | All Purchase Orders
-          i.material-icons.left chevron_left
+          i.material-icons.left chevron_left     
     ul.right
       li
-        = link_to purchase_order_path(@purchase_order)
+        = link_to "#"
+          i.material-icons print
+      li
+        = link_to edit_purchase_order_path(@purchase_order)
           | Edit
           i.material-icons.left edit
+
 .card-panel
   .row
-    .col.s4
-      strong PO Number:
-      = @purchase_order.order_num
-    .col.s4
-      strong Requestor:
-      = @purchase_order.requestor
-    .col.s4
-      strong Order date:
-      = @purchase_order.order_date
-    .col.s4
-      strong Total amount:
-      = @purchase_order.currency + @purchase_order.total_amount
-    .col.s4
-      strong Due date:
-      = @purchase_order.due_date
-    .col.s4
-      strong Completed date:
-      = @purchase_order.completed_date
-    .col.s4
-      strong Supplier:
-      = @purchase_order.supplier
-    .col.s4
-      strong Contact:
-      = @purchase_order.contact
-    .col.s4
-      strong Phone contact:
-      = @purchase_order.phone_contact
-    .col.s4
-      strong Status:
-      = @purchase_order.status
-    .col.s12
-      strong Notes:
-      = @purchase_order.notes
+    .col.s12.m6
+      .card-panel
+        .record-field
+          i.material-icons.prefix store
+          .label Supplier
+          .item = @purchase_order.supplier.try(:company_name) 
+        .record-field
+          i.material-icons.prefix account_circle
+          .label Contact
+          .item = @purchase_order.contact
+        .record-field
+          i.material-icons.prefix phone
+          .label Phone
+          .item = @purchase_order.phone_contact
+    .col.s12.m6
+      .card-panel
+        .row
+          .record-field.s6
+            .label Order #
+            .item = @purchase_order.order_num
+          .record-field.s6
+            .label Buyer
+            .item = @purchase_order.buyer.try(:name)
+          .record-field.s6
+            .label Requestor
+            .item = @purchase_order.requestor.try(:name)
+          .record-field.s6
+            .label Department
+            .item = @purchase_order.department.try(:name)
+          .record-field.s6
+            .label Order date
+            .item = @purchase_order.order_date
+          .record-field.s6
+            .label Due date
+            .item = @purchase_order.due_date
+          .record-field.s2
+            .label Currency
+            .item = @purchase_order.currency
+          .record-field.s2
+            .label Status
+            .item = @purchase_order.status  
+
+h5 Items
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th.wd25 Description
+        th.right-align Qty
+        th Unit
+        th.right-align Unit price
+        th.right-align Disc.
+        th.right-align Est.Tax
+        th.right-align Non-reccuring
+        th.right-align Shipping
+        th.right-align Total
+
+    tbody
+      - @purchase_order.order_items.each do |item|
+        tr.compact.nested-fields
+          td.wd25 = item.description
+          td.right-align = item.quantity
+          td = item.unit
+          td.right-align = item.unit_price
+          td.right-align = item.discount
+          td.right-align = item.est_tax
+          td.right-align = item.non_recurring
+          td.right-align = item.shipping
+          td.right-align = item.line_amount
+
+.row
+  .col.s12.m8
+    .card-panel
+      .record-field
+        .label Instructions to supplier
+        .item = @purchase_order.instructions
+      .record-field
+        .label Notes
+        .item = @purchase_order.notes
+
+  .col.s12.m4
+    .card-panel.blue-grey.lighten-4
+      .display-field
+        .label Subtotal
+        .item = @purchase_order.subtotal
+      .display-field
+        .label Discounts
+        .item = @purchase_order.discounts
+      .display-field
+        .label Est. tax
+        .item = @purchase_order.est_tax
+      .display-field
+        .label Non recurring
+        .item = @purchase_order.non_recurring
+      .display-field
+        .label Shipping
+        .item = @purchase_order.shipping
+      .display-field
+        .label Total Amount
+        .item = @purchase_order.total_amount
+      .display-field
+        .label Down Payment
+        .item = @purchase_order.down_payment
+      .display-field
+        .label Remaining Amount
+        .item = @purchase_order.total_amount - @purchase_order.down_payment rescue nil

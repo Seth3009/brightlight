@@ -14,6 +14,6 @@ plugins:
   - advlist autolink lists link image charmap print preview anchor textcolor searchreplace visualblocks fullscreen 
   - insertdatetime media table contextmenu paste code wordcount
 toolbar: 
-  - insert | undo redo |  formatselect | bold italic forecolor backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat
+  - insert | undo redo |  formatselect | bold italic forecolor backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table | removeformat
 insert_toolbar: quickimage quicktable
 content_css: '/assets/tinymce.css'

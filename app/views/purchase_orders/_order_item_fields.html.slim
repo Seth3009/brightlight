@@ -1,0 +1,33 @@
+tr.compact.nested-fields
+  = f.hidden_field :req_item_id
+  td.wd25
+    .input-field
+      = f.text_field :description
+  td
+    .input-field
+      = f.number_field :quantity, class: "right-align"
+  td
+    .input-field
+      = f.text_field :unit
+  td
+    .input-field
+      = f.number_field :unit_price, step: 'any', class: "right-align"
+  td
+    .input-field
+      = f.number_field :discount, step: 'any', class: "right-align"
+  td
+    .input-field
+      = f.number_field :est_tax, step: 'any', class: "right-align"
+  td
+    .input-field
+      = f.number_field :non_recurring, step: 'any', class: "right-align"
+  td
+    .input-field
+      = f.number_field :shipping, step: 'any', class: "right-align"
+  td
+    .input-field
+      = number_field_tag :line_total, f.object.line_amount, disabled: true, class: "right-align"
+      = f.hidden_field :line_amount
+  td
+    = link_to_remove_association f, class: "waves-effect waves-teal red-text"
+      i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete
