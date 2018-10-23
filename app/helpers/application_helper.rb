@@ -54,4 +54,8 @@ module ApplicationHelper
   def currency(amount, currency: currency)
     number_to_currency(amount, unit: currency + " ", precision: currency == 'IDR' ? 0 : 2)
   end
+
+  def impersonating?
+    session[:impersonated_user_id].present?
+  end 
 end
