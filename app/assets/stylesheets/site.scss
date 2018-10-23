@@ -118,6 +118,10 @@ table.compact {
 	}	
 }
 
+table.striped > tbody > tr:nth-child(odd) {
+	background-color: #dfdfdf;
+}
+
 table.description-list {
 	tr {
 		td {

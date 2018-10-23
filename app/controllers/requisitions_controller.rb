@@ -30,7 +30,7 @@ class RequisitionsController < ApplicationController
   def list
     authorize! :process, Requisition
     @pending_approval = Requisition.pending_approval
-    @approved_requisitions = Requisition.approved.joins(:req_items).where(req_items: {order_item: nil})
+    @approved_requisitions = Requisition.approved #.joins(:req_items).where(req_items: {order_item: nil})
   end
 
   # GET /requisitions/1

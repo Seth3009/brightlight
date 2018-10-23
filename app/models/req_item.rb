@@ -6,16 +6,4 @@ class ReqItem < ActiveRecord::Base
 
   validates :description, presence: true
 
-  after_create :update_requisition_status
-
-  private
-    def update_requisition_status
-      self.requisition.update :status, 'ALLORDERED' if all_items_ordered?
-    end
-
-    def all_items_ordered? 
-      self.requisition.req_items.reduce(true) do |req_item, acc| 
-        acc && req_item.order_item.present?
-      end
-    end
 end

@@ -17,6 +17,8 @@
           td 
             -if requisition.pending_supv_approval? || requisition.pending_budget_approval?
               i.material-icons.blue-text lens
+            -elsif requisition.status == 'ALLORDERED'
+              i.material-icons.green-text done_all
           td = requisition.id
           td = requisition.description
           td = requisition.date_required
@@ -40,7 +42,7 @@
           td 
             = link_to requisition
               i.material-icons.tooltipped data-position="right" data-delay="30" data-tooltip="View" visibility
-            - if can? :process, requisition
+            - if requisition.status != 'ALLORDERED' && can?(:process, requisition)
               = link_to new_purchase_order_path(req: requisition.id)
                 i.material-icons.tooltipped data-position="right" data-delay="30" data-tooltip="Create P.O." shop
             - if requisition.draft?
