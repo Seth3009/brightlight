@@ -117,7 +117,24 @@
 javascript:
   $(document).on('page:load ready', function() {
     $(document).on("blur", ".nested-fields", function() {
-      var row = $(this);
+      calc_row_total($(this));
+      calc_totals();
+    });
+    $(document).on("change", ".nested-fields input", function() {
+      calc_row_total($(this).parents("tr"));
+      calc_totals();
+    });
+    $(document).on("change", "#purchase_order_down_payment", function() {
+      calc_totals();
+    });
+  
+    $(document).on("click", "#recalculate", function() {
+      $("#purchase_orders > tr").each(function(_idx, row) { calc_row_total($(row)) });
+      calc_totals();
+    })
+  });
+
+  var calc_row_total = function(row) {
       var hidden_total_field = row.find("input[name$='[line_amount]']");
       var total_field = row.find("input[name$='line_total']");
       var qty = Number(row.find("input[name$='[quantity]']").val());
@@ -129,16 +146,8 @@ javascript:
       var line_total = qty*unit_price - discount + est_tax + non_recurring + shipping;
       total_field.val(line_total);
       hidden_total_field.val(line_total);
-      calc_totals();
-    });
-    $(document).on("change", "#purchase_order_down_payment", function() {
-      calc_totals();
-    });
-  
-    $(document).on("click", "#recalculate", function() {
-      calc_totals();
-    })
-  });
+      return line_total;
+  }
   
   var calc_total = function(field) {
     return $.map($("#purchase_orders").find("input[name$='[" + field + "]']"), function(item) { 

@@ -104,6 +104,12 @@ class Requisition < ActiveRecord::Base
     requester 
   end
 
+  def all_items_ordered? 
+    self.req_items.reduce(true) do |acc, req_item| 
+      acc && req_item.order_item.present?
+    end
+  end
+  
   private
 
     def at_least_one_req_item

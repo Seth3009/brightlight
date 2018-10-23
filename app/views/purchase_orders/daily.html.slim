@@ -23,22 +23,22 @@ table.compact.striped
       th FPB
       th Requester
       th Item description
-      th Qty
+      th.right-align Qty
       th Budget Item
       th Supplier
-      th Est. Price
+      th.right-align Est. Price
   tbody
-    - @purchase_orders.each do |po|
-      - po.order_items.each.with_index(1) do |item, i|
+    - @purchase_orders.each.with_index(1) do |po, i|
+      - po.order_items.each.with_index(1) do |item, j|
         tr
-          td = i
-          td = item.req_item.requisition.req_no rescue ""
-          td = item.try(:req_item).try(:requisition).try(:requestor).try(:name) || "N/A"
-          td = "#{item.description} #{item.unit}"
-          td = item.quantity
+          td = "#{i}.#{j}"
+          td = item.req_item.requisition.id 
+          td = item.try(:req_item).try(:requisition).try(:requester).try(:name) || "N/A"
+          td = item.description
+          td.right-align = "#{item.quantity} #{item.unit}"
           td = item.req_item.requisition.budget rescue "--"
           td = item.purchase_order.supplier.try(:company_name)
-          td = item.line_amount
+          td.right-align = currency(item.line_amount, currency: po.currency)
 
 css:
   @media print {

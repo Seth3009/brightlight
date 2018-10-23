@@ -50,4 +50,8 @@ module ApplicationHelper
       datetime.strftime("%b %d") + (datetime.year != Time.now.year ? ", " + datetime.strftime : "")
     end
   end
+
+  def currency(amount, currency: currency)
+    number_to_currency(amount, unit: currency + " ", precision: currency == 'IDR' ? 0 : 2)
+  end
 end

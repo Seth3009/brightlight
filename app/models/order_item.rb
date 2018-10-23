@@ -7,13 +7,15 @@ class OrderItem < ActiveRecord::Base
 
   has_many :delivery_items
 
-  validates :req_item_id, presence: true
+  validates :req_item_id, presence: true, uniqueness: true
 
   after_save :sync_req_item
 
   private
 
     def sync_req_item
-      self.req_item.order_item_id = self.id
+      req_item.update_columns order_item_id: self.id
+      req_item.requisition.update_columns(status: 'ALLORDERED') if req_item.requisition.all_items_ordered?
     end
+
 end
