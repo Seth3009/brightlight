@@ -26,9 +26,12 @@ nav.top-navbar
           = link_to new_user_session_path
             | Login
             i.material-icons.left perm_identity
-      / li.right
-      /   a.dropdown-button href="#" data-activates="app-options" data-beloworigin="true" data-alignment="right"
-      /     i.material-icons apps
+      -if Rails.env.development?
+        li.right
+          a.dropdown-button href="#" data-activates="users-list" data-beloworigin="true" data-alignment="right"  style="position: relative"
+            -if impersonating?
+              span.orange-text Acting as
+            i.material-icons.left style="margin-left: 0px" face
       li.right
         a.dropdown-button href="#" data-activates="notification-list" data-beloworigin="true" data-alignment="right"  style="position: relative"
           i.material-icons.right style="margin-left: 0px" inbox 
@@ -51,6 +54,15 @@ ul#user-profile-options.dropdown-content
     = link_to destroy_user_session_path, method: :delete
       |Sign out
       = image_tag "logout.png", size:"30x40", class:"left"
+
+ul#users-list.dropdown-content
+  li 
+    = link_to "/?impersonate=#{devise_current_user.id}"
+      | Myself
+  - User.all.order(:name).each do |user|
+    li
+      = link_to "/?impersonate=#{user.id}"
+        = user.name
 
 ul#app-options.dropdown-content
   li 
