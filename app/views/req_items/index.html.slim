@@ -10,16 +10,10 @@ table
       th Est price
       th Actual price
       th Notes
-      th Date needed
-      th Budgetted
-      th Budget item
-      th Budget name
-      th Bdgt approved
-      th Bdgt notes
-      th Bdgt appvl by
+      th Qty Ordered
+      th Needed By
       th
-      th
-      th
+
 
   tbody
     - @req_items.each do |req_item|
@@ -31,13 +25,8 @@ table
         td = req_item.est_price
         td = req_item.actual_price
         td = req_item.notes
-        td = req_item.date_needed
-        td = req_item.budgetted
-        td = req_item.budget_item
-        td = req_item.budget_name
-        td = req_item.bdgt_approved
-        td = req_item.bdgt_notes
-        td = req_item.bdgt_appvl_by
+        td = req_item.qty_ordered
+        td = req_item.needed_by_date
         td = link_to 'Show', req_item
         td = link_to 'Edit', edit_req_item_path(req_item)
         td = link_to 'Destroy', req_item, data: {:confirm => 'Are you sure?'}, :method => :delete
