@@ -6,4 +6,15 @@ class ReqItem < ActiveRecord::Base
 
   validates :description, presence: true
 
+  scope :incomplete, lambda { where(order_item:nil).order(:created_at).includes([requisition: :requester]) }
+
+  def description_for_select
+    "#{description} | FPB##{requisition_id} (#{requisition.requester.name})"
+  end
+
+  def self.incomplete_options_for_select
+    ReqItem.incomplete.map do |item|
+      [item.description, item.description_for_select, {data: {quantity: item.qty_reqd, unit: item.unit, unit_price: item.est_price, currency: item.currency }}]
+    end
+  end
 end

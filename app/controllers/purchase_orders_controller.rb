@@ -28,6 +28,8 @@ class PurchaseOrdersController < ApplicationController
   def new
     if params[:req]
       req = Requisition.find params[:req]
+      req_item = ReqItem.find params[:item]
+      @order_item = OrderItem.new_from_req_item req_item
       @purchase_order = PurchaseOrder.new_from_requisition req
     else
       @purchase_order = PurchaseOrder.new
