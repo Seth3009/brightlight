@@ -74,7 +74,8 @@ nav
                   th Unit
                   th Est. Price
                   th Req'd Date
-                  th PO No.
+                  -if can? :process, Requisition
+                    th PO No.
               tbody
                 - @req_items.each.with_index(1) do |req_item, i|
                   tr
@@ -84,13 +85,14 @@ nav
                     td = req_item.unit
                     td = "#{req_item.currency}#{req_item.est_price}"
                     td = req_item.needed_by_date
-                    td 
-                      -if req_item.order_item.present?
-                        = link_to req_item.order_item.purchase_order.order_num, purchase_order_path(req_item.order_item.purchase_order)
-                        i.material-icons.green-text.left check
-                      -else
-                        = link_to new_purchase_order_path(req: @requisition.id, item: req_item.id)
-                          i.material-icons.tooltipped data-position="right" data-delay="30" data-tooltip="Create P.O." shop
+                    -if can? :process, Requisition
+                      td 
+                        -if req_item.order_item.present?
+                          = link_to req_item.order_item.purchase_order.order_num, purchase_order_path(req_item.order_item.purchase_order)
+                          i.material-icons.green-text.left check
+                        -else
+                          = link_to new_purchase_order_path(req: @requisition.id, item: req_item.id)
+                            i.material-icons.tooltipped data-position="right" data-delay="30" data-tooltip="Create P.O." shop
     li
       .collapsible-header.active
         | Approval

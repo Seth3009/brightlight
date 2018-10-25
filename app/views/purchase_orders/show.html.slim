@@ -83,12 +83,12 @@ h5 Items
           td.wd25 = item.description
           td.right-align = item.quantity
           td = item.unit
-          td.right-align = item.unit_price
-          td.right-align = item.discount
-          td.right-align = item.est_tax
-          td.right-align = item.non_recurring
-          td.right-align = item.shipping
-          td.right-align = item.line_amount
+          td.right-align = currency(item.unit_price, currency: item.currency)
+          td.right-align = currency(item.discount, currency: item.currency)
+          td.right-align = currency(item.est_tax, currency: item.currency)
+          td.right-align = currency(item.non_recurring, currency: item.currency)
+          td.right-align = currency(item.shipping, currency: item.currency)
+          td.right-align = currency(item.line_amount, currency: item.currency)
 
 .row
   .col.s12.m8
@@ -104,25 +104,25 @@ h5 Items
     .card-panel.blue-grey.lighten-4
       .display-field
         .label Subtotal
-        .item = @purchase_order.subtotal
+        .item = currency(@purchase_order.subtotal, currency: @purchase_order.currency)
       .display-field
         .label Discounts
-        .item = @purchase_order.discounts
+        .item = currency(@purchase_order.discounts, currency: @purchase_order.currency)
       .display-field
         .label Est. tax
-        .item = @purchase_order.est_tax
+        .item = currency(@purchase_order.est_tax, currency: @purchase_order.currency)
       .display-field
         .label Non recurring
-        .item = @purchase_order.non_recurring
+        .item = currency(@purchase_order.non_recurring, currency: @purchase_order.currency)
       .display-field
         .label Shipping
-        .item = @purchase_order.shipping
+        .item = currency(@purchase_order.shipping, currency: @purchase_order.currency)
       .display-field
         .label Total Amount
-        .item = @purchase_order.total_amount
+        .item = currency(@purchase_order.total_amount, currency: @purchase_order.currency)
       .display-field
         .label Down Payment
-        .item = @purchase_order.down_payment
+        .item = currency(@purchase_order.down_payment, currency: @purchase_order.currency)
       .display-field
         .label Remaining Amount
-        .item = @purchase_order.total_amount - @purchase_order.down_payment rescue nil
+        .item = currency(@purchase_order.total_amount - @purchase_order.down_payment, currency: @purchase_order.currency) rescue nil

@@ -14,7 +14,7 @@ class ReqItem < ActiveRecord::Base
 
   def self.incomplete_options_for_select
     ReqItem.incomplete.map do |item|
-      [item.description, item.description_for_select, {data: {id: item.id, quantity: item.qty_reqd, unit: item.unit, unit_price: item.est_price, currency: item.currency }}]
+      [item.description_for_select, item.description, {data: {id: item.id, quantity: item.qty_reqd, unit: item.unit, unit_price: item.est_price, currency: item.currency }}]
     end
   end
 end
