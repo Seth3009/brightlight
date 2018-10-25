@@ -28,18 +28,21 @@ class PurchaseOrdersController < ApplicationController
   def new
     if params[:req]
       req = Requisition.find params[:req]
-      req_item = ReqItem.find params[:item]
-      @order_item = OrderItem.new_from_req_item req_item
+      if params[:item]
+        req_item = ReqItem.find params[:item]
+        @order_items = [OrderItem.new_from_req_item(req_item)] 
+      end
       @purchase_order = PurchaseOrder.new_from_requisition req
+      @order_items = @purchase_order.order_items
     else
       @purchase_order = PurchaseOrder.new
     end
-    @buyers = User.all.reject {|u| ! u.has_role?(:purchasing)}
+    @buyers = User.purchasing
   end
 
   # GET /purchase_orders/1/edit
   def edit
-    @buyers = User.all.reject {|u| ! u.has_role?(:purchasing)}
+    @buyers = User.purchasing
   end
 
   # POST /purchase_orders
@@ -53,7 +56,7 @@ class PurchaseOrdersController < ApplicationController
         format.json { render :show, status: :created, location: @purchase_order }
       else
         format.html { 
-          @buyers = User.all.reject {|u| ! u.has_role?(:purchasing)}
+          @buyers = User.purchasing
           render :new 
         }
         format.json { render json: @purchase_order.errors, status: :unprocessable_entity }

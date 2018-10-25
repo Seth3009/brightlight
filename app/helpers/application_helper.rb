@@ -52,7 +52,7 @@ module ApplicationHelper
   end
 
   def currency(amount, currency: currency)
-    number_to_currency(amount, unit: currency + " ", precision: currency == 'IDR' ? 0 : 2)
+    number_to_currency(amount, unit: "#{currency} ", precision: currency == 'IDR' ? 0 : 2, delimiter: ',')
   end
 
   def impersonating?

@@ -2,7 +2,7 @@ tr.compact.nested-fields
   = f.hidden_field :req_item_id
   td.wd25
     .input-field
-      -if f.object.id 
+      -if f.object.persisted? 
         = f.text_field :description, disabled: true
       -else
         = f.select :description, options_for_select(ReqItem.incomplete_options_for_select), prompt: "Select item"

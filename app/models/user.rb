@@ -6,6 +6,9 @@ class User < ActiveRecord::Base
     where('LOWER(users.name) LIKE ? OR LOWER(users.email) LIKE ? OR LOWER(users.first_name) LIKE ? OR LOWER(users.last_name) LIKE ?', term, term, term, term)
   }
 
+  scope :purchasing, lambda { all.reject {|u| ! u.has_role?(:purchasing)} }
+  scope :admin, lambda { all.reject {|u| ! u.has_role?(:admin)} }
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,

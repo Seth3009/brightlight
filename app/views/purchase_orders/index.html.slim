@@ -22,7 +22,7 @@ nav
         th Supplier
         th Items
         th Order date
-        th Total amount
+        th.right-align Total amount
         th Requestor
         th Status
         th Actions
@@ -34,7 +34,7 @@ nav
           td = purchase_order.supplier.try(:company_name)
           td = purchase_order.order_items.map {|item| item.description}.join(", ") if purchase_order.order_items
           td = purchase_order.order_date
-          td = "#{purchase_order.currency} #{purchase_order.total_amount}"
+          td.right-align = currency(purchase_order.total_amount, currency: purchase_order.currency)
           td = purchase_order.requestor
           td = purchase_order.status
           td 
