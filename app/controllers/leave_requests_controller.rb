@@ -46,9 +46,7 @@ class LeaveRequestsController < ApplicationController
    
     if params[:dept].present? && params[:dept] != 'all'
       @dept_filter = Department.find_by(code: params[:dept])
-      @hr_approval_list = @hr_approval_list.where(departments: {code: params[:dept]})
-      .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
-      .order("#{sort_column} #{sort_direction}").order(:form_submit_date)
+      @hr_approval_list = @hr_approval_list.where(departments: {code: params[:dept]})      
     end
     
   end

@@ -46,7 +46,7 @@ class LeaveRequest < ActiveRecord::Base
   }
 
   scope :archive, -> { 
-    where("hr_approval is not ?",nil)
+    where("hr_approval is not ? or spv_approval = ?", nil,false)
   }
 
   scope :submitted, -> { where.not(form_submit_date: nil) }

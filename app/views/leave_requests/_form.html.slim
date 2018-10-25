@@ -13,7 +13,7 @@
       .col.s4
         | Leave Category :
       .col.s2  
-        = f.radio_button :category, 'Full Day',checked: true, class: 'with-gap'
+        = f.radio_button :category, 'Full Day',checked: true, class: 'with-gap', value:1
         = f.label "category_full_day", "Full Day"
       .col.s2
         = f.radio_button :category, 'Early Home', class: 'with-gap'
@@ -29,12 +29,14 @@
       .input-field.col.s4
         = f.label 'End date (mm/dd/yyyy)', class: 'active'
         = f.date_field :end_date, :value => Date.today.strftime('%Y-%m-%d')
-      .input-field.col.s4
-        = f.label :hour, class: 'active'
-          |Number of days/hours 
-          .right.red-text *
-          
-        = f.text_field :hour
+      .input-field.col.s2
+        = f.label :leave_day, "Number of days", class: 'active'
+        = f.number_field :leave_day, min:0, class: "days_number"
+        / input type="number" class="days_number" min="0" value="0" style='text-align: center;'
+      .input-field.col.s2        
+        = f.label :hour,"Number of hours", class: 'active'
+        = f.number_field :hour , min:0, step: 0.5 ,class: :text_field , value:0     
+        
     .row
       .input-field.col.s4
         = f.label :leave_type, class:'active'
@@ -60,3 +62,17 @@
     button.btn.waves-effect.waves-light type="submit" name="save" Save Draft
     button.btn.waves-effect.waves-light type="submit" name="send" value="empl_submit" Send for Approval
     = link_to 'Cancel', leave_requests_path, class: "waves-effect waves-light btn-flat"       
+
+javascript:
+  $(document).ready(function(){
+    $('#leave_request_category_full_day,#leave_request_category_early_home,#leave_request_category_come_late').change(function(){      
+      if($('#leave_request_category_full_day').is(":checked")) { 
+          $('.days_number').removeAttr('disabled');
+      }
+      else {
+        $('.days_number').attr('disabled','disabled');
+        }
+    });  
+  });   
+  
+  
