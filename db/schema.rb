@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181025072749) do
+ActiveRecord::Schema.define(version: 20181026030621) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -921,8 +921,8 @@ ActiveRecord::Schema.define(version: 20181025072749) do
     t.boolean  "is_canceled",      default: false
     t.string   "category"
     t.integer  "leave_day",        default: 0
-    t.time     "start_time"
-    t.time     "end_time"
+    t.string   "start_time"
+    t.string   "end_time"
   end
 
   add_index "leave_requests", ["employee_id"], name: "index_leave_requests_on_employee_id", using: :btree

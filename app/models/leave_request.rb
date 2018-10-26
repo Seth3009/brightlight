@@ -137,7 +137,12 @@ class LeaveRequest < ActiveRecord::Base
   end
 
   def fill_hour_column
-    @hour = self.leave_day.to_s + " day " + self.start_time.to_s + self.end_time.to_s
+    if self.leave_day == 1
+      @day = " day "
+    else
+      @day = " days "
+    end
+    @hour = self.leave_day.to_s + @day + self.start_time.to_s + " - "+ self.end_time.to_s
     self.update_column(:hour,@hour)
   end
 
