@@ -11,14 +11,16 @@ class OrderItem < ActiveRecord::Base
 
   after_save :sync_req_item
 
-  def self.new_from_req_item(req_item)
-    new(description: req_item.description,
-      quantity: req_item.qty_reqd,
-      unit: req_item.unit,
-      unit_price: req_item.est_price,
-      currency: req_item.currency,
-      req_item_id: req_item.id
-    )
+  def self.new_from_req_items(req_items)
+    req_items.map {|req_item|
+      new(description: req_item.description,
+        quantity: req_item.qty_reqd,
+        unit: req_item.unit,
+        unit_price: req_item.est_price,
+        currency: req_item.currency,
+        req_item_id: req_item.id
+      )
+    }
   end
 
   private

@@ -132,12 +132,11 @@ javascript:
       $("#purchase_orders > tr").each(function(_idx, row) { calc_row_total($(row)) });
       calc_totals();
     })
-    $(document).on("change", $("[name$='[description]']"), function(event) {
+    $(document).on("change", "select[name$='[description]']", function(event) {
       insert_item(event.target);
     })
     $(document).on('cocoon:after-remove', function(event) {
       calc_totals();
-      console.log("COCOON removed", event);
     });
   });
 

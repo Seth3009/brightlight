@@ -28,12 +28,13 @@ class PurchaseOrdersController < ApplicationController
   def new
     if params[:req]
       req = Requisition.find params[:req]
-      if params[:item]
-        req_item = ReqItem.find params[:item]
-        @order_items = [OrderItem.new_from_req_item(req_item)] 
-      end
       @purchase_order = PurchaseOrder.new_from_requisition req
-      @order_items = @purchase_order.order_items
+      if params[:items]
+        req_items = ReqItem.where(id: params[:items].map(&:first))
+        @order_items = OrderItem.new_from_req_items(req_items) 
+      else
+        @order_items = @purchase_order.order_items
+      end
     else
       @purchase_order = PurchaseOrder.new
     end
