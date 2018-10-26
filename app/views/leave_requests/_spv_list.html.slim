@@ -64,4 +64,4 @@ table.compact.striped
              i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="View" visibility
            - if can?(:approve, leave_request ) and leave_request.spv_approval.nil?
              = link_to approve_path(leave_request,"spv")
-               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Review approval" thumbs_up_down
+               i.material-icons.tooltipped.green-text data-position="bottom" data-delay="50" data-tooltip="Review approval" assignment_ind 
