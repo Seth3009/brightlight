@@ -1,8 +1,8 @@
 class LeaveRequest < ActiveRecord::Base
   belongs_to :employee  
   validates_presence_of :employee_id
-  validates_presence_of :start_time, :message => "Start time can't be blank"
-  validates_presence_of :end_time, :message => "End time can't be blank"
+  validates_format_of :start_time,  with: /\A\d{2}:\d{2}\z/, :message => "Start time is blank or incorrect time format"
+  validates_format_of :end_time,  with: /\A\d{2}:\d{2}\z/, :message => "End time is blank or incorrect time format"
   validates_presence_of :leave_type, :message => "Choose your leave type"
   validates_presence_of :leave_note, :message => "Describe your leave"
   after_save :fill_hour_column
@@ -142,7 +142,7 @@ class LeaveRequest < ActiveRecord::Base
     else
       @day = " days "
     end
-    @hour = self.leave_day.to_s + @day + self.start_time.to_s + " - "+ self.end_time.to_s
+    @hour = self.leave_day.to_s + @day +", " + self.start_time.to_s + " - "+ self.end_time.to_s
     self.update_column(:hour,@hour)
   end
 
