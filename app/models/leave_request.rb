@@ -1,10 +1,12 @@
 class LeaveRequest < ActiveRecord::Base
   belongs_to :employee  
   validates_presence_of :employee_id
-  validates_presence_of :hour, :message => "Leave period can't be blank"
+  validates_presence_of :start_time, :message => "Start time can't be blank"
+  validates_presence_of :end_time, :message => "End time can't be blank"
   validates_presence_of :leave_type, :message => "Choose your leave type"
   validates_presence_of :leave_note, :message => "Describe your leave"
-  
+  after_save :fill_hour_column
+
   acts_as_commentable
   accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
   
@@ -132,6 +134,11 @@ class LeaveRequest < ActiveRecord::Base
 
   def is_canceled?
     is_canceled
+  end
+
+  def fill_hour_column
+    @hour = self.leave_day.to_s + " day " + self.start_time.to_s + self.end_time.to_s
+    self.update_column(:hour,@hour)
   end
 
 end
