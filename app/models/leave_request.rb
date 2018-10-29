@@ -12,6 +12,7 @@ class LeaveRequest < ActiveRecord::Base
   
   scope :active, -> { where(is_canceled: false) }
   scope :canceled, -> { where(is_canceled: true) }
+  scope :not_canceled_by_employee, -> { where(employee_canceled: false) }
 
   scope :with_employees_and_departments, -> {
     joins('left join employees on employees.id = leave_requests.employee_id') 
@@ -44,16 +45,18 @@ class LeaveRequest < ActiveRecord::Base
   scope :hrlist_archive, ->  { 
     submitted
     .select('leave_requests.*,employees.name as employee_name')
-    .archive    
+    .archive.not_canceled_by_employee    
   }
 
   scope :archive, -> { 
-    where("hr_approval is not ? or spv_approval = ?", nil,false)
+    where("hr_approval is not ? or spv_approval = ? or is_canceled = ? or employee_canceled = ?", nil,false, true, true)
   }
 
   scope :submitted, -> { where.not(form_submit_date: nil) }
 
   scope :draft, -> { where(form_submit_date: nil) }
+  
+  
 
   def auto_approve
     if !self.requires_supervisor_approval?

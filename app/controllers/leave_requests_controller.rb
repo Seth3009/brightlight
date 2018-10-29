@@ -16,9 +16,10 @@ class LeaveRequestsController < ApplicationController
     @own_count = @own_leave_requests.count
     @supv_approval_list = @leave_requests.active.spv(@employee).submitted
                           .where('form_submit_date = ? or spv_approval IS ?',Date.today, nil)
+                          .not_canceled_by_employee
     @spv_count = @supv_approval_list.count
     @hr_approval_list = @leave_requests.hrlist
-                        .where('hr_approval IS ?', nil)
+                        .where('hr_approval IS ?', nil).active
     @hr_count = @hr_approval_list.count
     
   end

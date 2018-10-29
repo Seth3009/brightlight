@@ -47,6 +47,9 @@ table.compact.striped
           -elsif leave_request.is_canceled?
               span.box.black
                 | Canceled
+          -elsif leave_request.employee_canceled?
+              span.box.black
+                | Canceled by me
           - else
             -if leave_request.hr_approval.nil? && leave_request.spv_approval != false
               span.box
