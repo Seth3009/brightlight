@@ -1,8 +1,8 @@
 class LeaveRequest < ActiveRecord::Base
   belongs_to :employee  
   validates_presence_of :employee_id
-  validates_presence_of :start_time, :message => "Start time can't be blank"
-  validates_presence_of :end_time, :message => "End time can't be blank"
+  # validates_presence_of :start_time, :message => "Start time can't be blank"
+  # validates_presence_of :end_time, :message => "End time can't be blank"
   validates_presence_of :leave_type, :message => "Choose your leave type"
   validates_presence_of :leave_note, :message => "Describe your leave"
   after_save :fill_hour_column
@@ -38,7 +38,7 @@ class LeaveRequest < ActiveRecord::Base
   scope :hrlist, ->  { 
     submitted
     .active
-    .where("spv_approval = true or leave_type = 'Special Leave'")
+    .where("spv_approval = true")
     .order(spv_date: :asc, form_submit_date: :asc, updated_at: :asc)
   }
 
@@ -58,11 +58,11 @@ class LeaveRequest < ActiveRecord::Base
   
   
 
-  def auto_approve
-    if !self.requires_supervisor_approval?
-      self.update_attributes(:spv_approval => true, :spv_date => Date.today, :spv_notes => "Approval not required")
-    end
-  end
+  # def auto_approve
+  #   if !self.requires_supervisor_approval?
+  #     self.update_attributes(:spv_approval => true, :spv_date => Date.today, :spv_notes => "Approval not required")
+  #   end
+  # end
 
   def send_for_approval(supervisor, vice_supervisor, hrmanager, hrvicemanager, sendto, type)
     if supervisor 
@@ -131,11 +131,12 @@ class LeaveRequest < ActiveRecord::Base
   end
 
   def requires_supervisor_approval?
-    leave_type == 'Personal Permission' || leave_type == 'School Related Duty' || leave_type == 'Sick'
+    leave_type == 'Personal Permission' || leave_type == 'School Related Duty' || leave_type == 'Sick' 
   end
 
   def pending_spv_approval?
-    requires_supervisor_approval? && spv_approval.blank?
+    # requires_supervisor_approval? && spv_approval.blank?
+    spv_approval.blank?
   end
 
   def pending_hr_approval?

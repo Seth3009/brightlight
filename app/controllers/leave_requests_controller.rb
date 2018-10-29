@@ -15,7 +15,7 @@ class LeaveRequestsController < ApplicationController
                           .empl(@employee).active
     @own_count = @own_leave_requests.count
     @supv_approval_list = @leave_requests.active.spv(@employee).submitted
-                          .where('form_submit_date = ? or spv_approval IS ?',Date.today, nil)
+                          .where('form_submit_date = ? and spv_approval IS ?',Date.today, nil)
                           .not_canceled_by_employee
     @spv_count = @supv_approval_list.count
     @hr_approval_list = @leave_requests.hrlist
@@ -90,13 +90,13 @@ class LeaveRequestsController < ApplicationController
       if @leave_request.save
         format.html do
           if params[:send]
-            if @leave_request.leave_type == "Special Leave"
-              @sendto = "hr"              
-            else 
+            # if @leave_request.leave_type == "Special Leave"
+            #   @sendto = "hr"              
+            # else 
               @sendto = "spv"             
-            end          
+            # end          
             if @leave_request.send_for_approval(supervisor, vice_supervisor, hrmanager, hrvicemanager, @sendto, 'empl-submit')  && supervisor
-              @leave_request.auto_approve             
+              # @leave_request.auto_approve             
               redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.'               
             else
               redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe approver field is blank?"
@@ -134,13 +134,13 @@ class LeaveRequestsController < ApplicationController
               vice_approver = @vice_supervisor
               hrmanager = @hrmanager
               hrvicemanager = @hrvicemanager
-              if @leave_request.leave_type == "Special Leave"
-                send_to = 'hr'
-              else
+              # if @leave_request.leave_type == "Special Leave"
+              #   send_to = 'hr'
+              # else
                 send_to = 'spv'
-              end
+              # end
               if @leave_request.send_for_approval(approver, vice_approver, hrmanager, hrvicemanager, send_to,'empl-submit') && approver
-                @leave_request.auto_approve          
+                # @leave_request.auto_approve          
                 redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.'
               else
                 redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe approver field is blank?"
