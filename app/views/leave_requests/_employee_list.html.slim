@@ -70,6 +70,9 @@ table.compact.striped
           - if leave_request.draft?
             = link_to leave_request, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+          - if  leave_request.spv_approval.nil? && leave_request.employee_canceled == false && leave_request.submitted?
+            = link_to cancel_leave_request_path(leave_request,byemp:'yes'), data: {:confirm => 'You are going to cancel submitted leave request and your supervisor will be notified. Are you sure?'}, :method => :delete, class:'red-text'
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete
           / - else
           /   = link_to cancel_leave_request_path(leave_request), data: {:confirm => 'This action will cancel a leave request that has already been submitted. Are you sure?'}, :method => :delete, class:'red-text'
           /     i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete

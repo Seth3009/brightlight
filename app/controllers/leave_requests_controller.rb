@@ -201,9 +201,13 @@ class LeaveRequestsController < ApplicationController
 
   # DELETE /leave_requests/1/cancel
   def cancel
-    authorize! :cancel, @leave_request
-    @leave_request.cancel
-    redirect_to :back, notice: 'Leave request has been successfully canceled.'
+     authorize! :cancel, @leave_request
+    if params[:byemp] == "yes"
+      @leave_request.cancel_by_employee
+    else
+      @leave_request.cancel     
+    end
+    redirect_to :back, notice: 'Leave request has been successfully canceled.'    
   end
 
   # DELETE /leave_requests/1
@@ -236,7 +240,7 @@ class LeaveRequestsController < ApplicationController
     
     # Never trust parameters from the scary internet, only allow the white list through.
     def leave_request_params
-      params.require(:leave_request).permit(:start_date, :end_date, :hour, :leave_type, :leave_note, :leave_subtitute, :subtitute_notes, :spv_approval, :spv_date, :spv_notes, :hr_approval, :hr_date, :hr_notes, :form_submit_date, :hr_staf_notes, :employee_id, :category, :leave_day, :start_time, :end_time,
+      params.require(:leave_request).permit(:start_date, :end_date, :hour, :leave_type, :leave_note, :leave_subtitute, :subtitute_notes, :spv_approval, :spv_date, :spv_notes, :hr_approval, :hr_date, :hr_notes, :form_submit_date, :hr_staf_notes, :employee_id, :category, :leave_day, :start_time, :end_time, :employee_canceled,
                                             {comments_attributes: [:id, :title, :comment, :user_id, :commentable_id, :commentable_type, :role]} )
     end
 end

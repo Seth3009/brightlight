@@ -37,12 +37,12 @@
       /   = f.number_field :hour , min:0, step: 0.5 ,class: :text_field , value:0, style:"text-align:center;"
       .input-field.col.s1
         = f.label :start_time, "Start time", class: 'active'
-        = f.text_field :start_time, class:'show_timepicker', id:"timepicker1", style:"text-align:center;"
+        = f.text_field :start_time, class:'show_timepicker', id:"timepicker1", style:"text-align:center;", onkeydown:"return false"
       / .input-field.col.s1
       /   input type='text' disabled=true value="to" style="text-align:center;"
       .input-field.col.s1
         = f.label :end_time, "End time", class: 'active'
-        = f.text_field :end_time, class:'show_timepicker', id:"timepicker2" , style:"text-align:center;"
+        = f.text_field :end_time, class:'show_timepicker', id:"timepicker2" , style:"text-align:center;", onkeydown:"return false"
     .row
       .input-field.col.s4
         = f.label :leave_type, class:'active'
@@ -65,8 +65,8 @@
       |* Special leave only includes Employee’s marriage, birth of an employee’s baby, the death of an immediate family member  
         
   .toolbar.z-depth-1
-    button.btn.waves-effect.waves-light type="submit" name="save" Save Draft
-    button.btn.waves-effect.waves-light type="submit" name="send" value="empl_submit" Send for Approval
+    button.btn.waves-effect.waves-light type="submit" name="save"  Save Draft 
+    button.btn.waves-effect.waves-light type="submit" name="send" value="empl_submit" Send for Approval 
     = link_to 'Cancel', leave_requests_path, class: "waves-effect waves-light btn-flat"       
 
 javascript:
@@ -82,11 +82,10 @@ javascript:
     });  
 
     $('.show_timepicker').timepicker({
-      'minTime': '6:45am',
-      'maxTime': '9:30pm',
+      'minTime': '5:00am',
+      'maxTime': '10:00pm',
       'timeFormat': 'H:i',
       'step': 15
       });
     
   
- 

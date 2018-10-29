@@ -1,8 +1,8 @@
 class LeaveRequest < ActiveRecord::Base
   belongs_to :employee  
   validates_presence_of :employee_id
-  validates_format_of :start_time,  with: /\A\d{2}:\d{2}\z/, :message => "Start time is blank or incorrect time format"
-  validates_format_of :end_time,  with: /\A\d{2}:\d{2}\z/, :message => "End time is blank or incorrect time format"
+  validates_presence_of :start_time, :message => "Start time can't be blank"
+  validates_presence_of :end_time, :message => "End time can't be blank"
   validates_presence_of :leave_type, :message => "Choose your leave type"
   validates_presence_of :leave_note, :message => "Describe your leave"
   after_save :fill_hour_column
@@ -95,9 +95,10 @@ class LeaveRequest < ActiveRecord::Base
     return true    
   end
 
-  def cancel 
-    self.is_canceled = true
-    self.save
+  def cancel    
+    self.update_attributes is_canceled: true    
+    self.save   
+    emp = "no"
     if self.employee.approver2.present? && Department.find_by(code: 'HR').vice_manager.present?
       cc = [Employee.find(self.employee.approver1),Employee.find(self.employee.approver2), Department.find_by(code: 'HR').manager,Department.find_by(code: 'HR').vice_manager]
     elsif self.employee.approver2.present? && Department.find_by(code: 'HR').vice_manager.nil?
@@ -107,7 +108,21 @@ class LeaveRequest < ActiveRecord::Base
     else
       cc = [Employee.find(self.employee.approver1), Department.find_by(code: 'HR').manager]
     end
-    email = EmailNotification.leave_canceled(self, self.employee, cc).deliver_now
+    email = EmailNotification.leave_canceled(self, self.employee, cc, emp).deliver_now    
+    notification = Message.new_from_email(email)
+    notification.save
+  end
+
+  def cancel_by_employee
+    self.update_attributes employee_canceled: true
+    self.save
+    emp = "yes"
+    if self.employee.approver2.present?
+      cc = [Employee.find(self.employee.approver1),Employee.find(self.employee.approver2)]
+    else
+      cc = [Employee.find(self.employee.approver1)]
+    end
+    email = EmailNotification.leave_canceled(self, self.employee, cc, emp).deliver_now
     notification = Message.new_from_email(email)
     notification.save
   end

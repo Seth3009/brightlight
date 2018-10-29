@@ -84,10 +84,15 @@ class EmailNotification < ActionMailer::Base
     end
   end
 
-  def leave_canceled(leave_request, employee, cc_list)
+  def leave_canceled(leave_request, employee, cc_list, emp)
+    @emp = emp
     @employee = employee
     @leave_request = leave_request
     cc = cc_list.map {|e| "#{e.name} <#{e.try(:email)}>"}.join(", ")
-    mail(to: %("#{@employee.name}" <#{@employee.email}>), cc: cc, subject: "Leave canceled (#{employee.name})")
+    if @emp == "yes"
+      mail(to: %("#{@employee.name}" <#{@employee.email}>), cc: cc, subject: "Leave canceled by employee")
+    else
+      mail(to: %("#{@employee.name}" <#{@employee.email}>), cc: cc, subject: "Leave canceled by HR (#{employee.name})")
+    end
   end
 end
