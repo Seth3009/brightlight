@@ -1,7 +1,7 @@
 = form_for @leave_request do |f|
   = render 'detail_leave_request' 
 
-  -unless @leave_request.is_canceled?
+  -unless @leave_request.is_canceled? || @leave_request.employee_canceled?
     nav
       .nav-wrapper
         .brand-logo style="margin-left: 20px; font-size:1.5em"

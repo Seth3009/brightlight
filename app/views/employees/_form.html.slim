@@ -118,7 +118,7 @@
         = f.text_field :job_title
       .input-field.col.s4
         = f.label :employment_status, class: 'active'
-        = f.select :employment_status, [['Probation','probation'],['Contract','contract'],['Permanent','permanent']], prompt: true
+        = f.select :employment_status, [['On the job training','on the job training'],['PKWT','pkwt'], ['Part time','part time'],['Permanent','permanent']], prompt: true
       .input-field.col.s4
         = f.label :experience_year, class: 'active'
         = f.number_field :experience_year
