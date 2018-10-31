@@ -67,6 +67,6 @@ table.compact.striped
           td 
             = link_to leave_request_url(leave_request,view:'archive')
               i.material-icons visibility
-            - if leave_request.is_canceled == false
+            - if leave_request.is_canceled == false && (@employee != @hrmanager && (@employee != @vice_hrmanager if @vice_hrmanager != nil))
               = link_to cancel_leave_request_path(leave_request), data: {:confirm => 'This action will cancel a leave request that has already been submitted. Are you sure?'}, :method => :delete, class:'red-text'
                   i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete
