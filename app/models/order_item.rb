@@ -10,6 +10,7 @@ class OrderItem < ActiveRecord::Base
   validates :req_item_id, presence: true, uniqueness: true
 
   after_save :sync_req_item
+  before_destroy :remove_link_with_req_item
 
   def self.new_from_req_items(req_items)
     req_items.map {|req_item|
@@ -28,6 +29,10 @@ class OrderItem < ActiveRecord::Base
     def sync_req_item
       req_item.update_columns order_item_id: self.id
       req_item.requisition.update_columns(status: 'ALLORDERED') if req_item.requisition.all_items_ordered?
+    end
+
+    def remove_link_with_req_item
+      req_item.update_columns order_item_id: nil
     end
 
 end
