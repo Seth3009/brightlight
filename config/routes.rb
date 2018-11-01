@@ -273,8 +273,8 @@ Rails.application.routes.draw do
 
   resources :purchase_orders do
     collection do
-      get 'daily'
-      get 'monthly'
+      get 'list'
+      get 'status'
     end
   end
 

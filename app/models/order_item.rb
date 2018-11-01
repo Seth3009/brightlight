@@ -24,6 +24,14 @@ class OrderItem < ActiveRecord::Base
     }
   end
 
+  def requisition
+    req_item.try(:requisition)
+  end
+
+  def requestor
+    requisition.try(:requester)
+  end
+
   private
 
     def sync_req_item

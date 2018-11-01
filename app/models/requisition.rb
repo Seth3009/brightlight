@@ -67,6 +67,8 @@ class Requisition < ActiveRecord::Base
     email.deliver_now
     notification = Message.new_from_email(email)
     notification.save
+    sent_to_purchasing = Date.today
+    save
   end
 
   def pending_supv_approval?

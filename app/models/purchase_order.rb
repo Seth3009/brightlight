@@ -13,7 +13,7 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :requisitions, through: :po_reqs
 
   accepts_nested_attributes_for :order_items, reject_if: :all_blank, allow_destroy: true
-  validate  :at_least_one_order_item
+  #validate  :at_least_one_order_item
 
   after_create :assign_po_number
 

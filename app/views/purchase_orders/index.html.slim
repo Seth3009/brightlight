@@ -6,9 +6,9 @@ nav
     - if can? :create, PurchaseOrder
       ul.right
         li
-          = link_to "Daily", daily_purchase_orders_path
+          = link_to "PO List", list_purchase_orders_path
         li
-          = link_to "Monthy", monthly_purchase_orders_path
+          = link_to "Status Report", status_purchase_orders_path
         li        
           = link_to new_purchase_order_path
             | New PO

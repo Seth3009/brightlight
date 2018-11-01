@@ -78,7 +78,7 @@ nav
                     th Req'd Date
                     -if can? :process, Requisition
                       th PO No.
-                      th
+
                 tbody
                   - @req_items.each.with_index(1) do |req_item, i|
                     tr
@@ -91,16 +91,14 @@ nav
                       -if can? :process, Requisition
                         td 
                           -if req_item.order_item.present?
-                            = link_to req_item.order_item.purchase_order.order_num, purchase_order_path(req_item.order_item.purchase_order)
-                            i.material-icons.green-text.left check
+                            = link_to purchase_order_path(req_item.order_item.purchase_order), target: 'blank'
+                              = req_item.order_item.purchase_order.order_num
+                              i.material-icons.left open_in_new
                           -else
-                            = link_to new_purchase_order_path(req: @requisition.id, item: req_item.id)
-                              i.material-icons.tooltipped data-position="right" data-delay="30" data-tooltip="Create P.O." shop
-                        td 
-                          = hidden_field_tag :req, @requisition.id
-                          input.checkbox type="checkbox" id="reqitem-#{req_item.id}" name="items[#{req_item.id}]"
-                          / This label is required by Materialize CSS for the checkbox to work
-                          = label_tag "reqitem-#{req_item.id}", ""
+                            = hidden_field_tag :req, @requisition.id
+                            input.checkbox type="checkbox" id="reqitem-#{req_item.id}" name="items[#{req_item.id}]"
+                            / This label is required by Materialize CSS for the checkbox to work
+                            = label_tag "reqitem-#{req_item.id}", ""
     li
       .collapsible-header.active
         | Approval

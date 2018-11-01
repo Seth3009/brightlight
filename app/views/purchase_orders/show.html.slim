@@ -76,6 +76,7 @@ h5 Items
         th.right-align Non-reccuring
         th.right-align Shipping
         th.right-align Total
+        th.right-align Req.Link
 
     tbody
       - @purchase_order.order_items.each do |item|
@@ -89,6 +90,12 @@ h5 Items
           td.right-align = currency(item.non_recurring, currency: item.currency)
           td.right-align = currency(item.shipping, currency: item.currency)
           td.right-align = currency(item.line_amount, currency: item.currency)
+          td 
+            -if item.req_item.requisition
+              = link_to item.req_item.requisition, target: 'blank'
+                i.material-icons.right open_in_new
+            -else
+              |--
 
 .row
   .col.s12.m8

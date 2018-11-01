@@ -3,7 +3,7 @@ tr.compact.nested-fields
   td.wd25
     .input-field
       -if f.object.description.present? 
-        = f.text_field :description, disabled: true
+        = f.text_field :description, readonly: true
       -else
         = f.select :description, options_for_select(ReqItem.incomplete_options_for_select), prompt: "Select item"
   td
@@ -29,7 +29,7 @@ tr.compact.nested-fields
       = f.number_field :shipping, step: 'any', class: "right-align"
   td
     .input-field
-      = number_field_tag :line_total, f.object.line_amount, disabled: true, class: "right-align"
+      = number_field_tag :line_total, f.object.line_amount, readonly: true, class: "right-align"
       = f.hidden_field :line_amount
   td
     = link_to_remove_association f, class: "waves-effect waves-teal red-text"

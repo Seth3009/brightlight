@@ -12,12 +12,12 @@ class PurchaseOrdersController < ApplicationController
   def show
   end
 
-  def daily
+  def list
     date = Date.parse(params[:date]) rescue Date.today
     @purchase_orders = PurchaseOrder.where(due_date: date).includes([:requestor, :supplier, order_items: [:req_item]])
   end
 
-  def monthly 
+  def status 
     today = Date.today
     start_date = Date.new(params[:year], params[:month], 1) rescue Date.new(today.year, today.month, 1)
     end_date = Date.new(params[:year], params[:month], -1) rescue Date.new(today.year, today.month, -1)
