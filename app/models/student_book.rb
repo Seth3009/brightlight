@@ -156,6 +156,7 @@ class StudentBook < ActiveRecord::Base
   private
     def create_associated_book_loan
       logger.debug "SB Callback on create: Creating associated book_loan"
+      logger.debug self.book_copy_id
       book_title_id = self.book_edition.try(:book_title_id)
       book_title = BookTitle.where(id: book_title_id).take
       standard_book = StandardBook.where(book_title_id: book_title_id, academic_year_id:self.academic_year_id).take
@@ -178,8 +179,12 @@ class StudentBook < ActiveRecord::Base
         student_no:       self.student_no,
         deleted_flag:     false
       })
-      self.book_loan_id = book_loan.id
-      self.book_copy.update_column :status_id, 2    # (Status on loan)
+      self.book_loan_id = book_loan.id 
+      if self.book_copy.present?  
+        self.book_copy.update_column(:status_id, 2)     # (Status on loan)
+      else
+        logger.error "ERROR: Book Copy not found: ID##{self.book_copy_id}"
+      end
     end
 
     def sync_book_loan
