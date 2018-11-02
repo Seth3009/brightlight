@@ -1,5 +1,8 @@
 -title 'Leave Request'
-h4 Leave Request
+-if params[:view].present?
+  h4 Leave Request (archive)
+-else
+  h4 Leave Request
 nav
   .nav-wrapper
     ul
@@ -68,6 +71,10 @@ nav
           | : 
           span.box.black
             | Canceled
+        -elsif @leave_request.employee_canceled?
+          | :
+          span.box.black
+            | Empl. Canceled 
         - else
           -if @leave_request.hr_approval.nil? && @leave_request.spv_approval != false
             | : 

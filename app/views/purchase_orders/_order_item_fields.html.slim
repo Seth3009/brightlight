@@ -2,7 +2,10 @@ tr.compact.nested-fields
   = f.hidden_field :req_item_id
   td.wd25
     .input-field
-      = f.text_field :description
+      -if f.object.id 
+        = f.text_field :description, disabled: true
+      -else
+        = f.select :description, options_for_select(ReqItem.incomplete_options_for_select), prompt: "Select item"
   td
     .input-field
       = f.number_field :quantity, class: "right-align"

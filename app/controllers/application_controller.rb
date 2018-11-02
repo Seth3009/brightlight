@@ -8,9 +8,13 @@ class ApplicationController < ActionController::Base
 
   layout :layout_by_controller
   before_action :set_current_academic_year
+  before_action :impersonate_user
 
   # Authorization using CanCanCan gem
   include CanCan::ControllerAdditions
+
+  # Support for Impersonation (should be done in development only)
+  include Concerns::ControllerWithImpersonation
 
   # Uncomment the next line to ensure authorization check for every single controller acion
   # check_authorization
@@ -34,6 +38,13 @@ class ApplicationController < ActionController::Base
       "application"
     end
   end
+
+  # feature to login as other user, ONLY IN DEVELOPMENT!
+  def impersonate_user 
+    if params[:impersonate] && Rails.env.development?
+      set_impersonation(params[:impersonate])
+    end
+  end    
 
   def set_current_academic_year
     AcademicYear.current_id = session[:year_id] || AcademicYear.current.id
@@ -65,8 +76,12 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new('Not Found')
   end
 
-
   protected
+
+    # for impersonation in development only
+    def set_impersonation(id)
+      session[:impersonated_user_id] = devise_current_user.id == id.to_i ? "" : id
+    end
 
     def configure_permitted_parameters
       devise_parameter_sanitizer.for(:sign_up)  { |u| u.permit(  :email, :password, :password_confirmation, roles: [] ) }

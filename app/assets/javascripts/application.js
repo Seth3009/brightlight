@@ -33,4 +33,4 @@
 //= require messages
 //= require requisitions
 //= require settings
-
+//= require jquery.timepicker.min.js

@@ -53,10 +53,10 @@ Rails.application.routes.draw do
   get 'leave_requests/archives' => 'leave_requests#archives', as: :archive
   resources :leave_requests do
     member do
-      delete :cancel
+      delete 'cancel'
     end
   end 
-
+  #  get 'leave_requests/:id/cancel' => 'leave_requests#cancel', as: :cancel_leave_request
   get 'leave_requests/:id/approve/:page' => 'leave_requests#approve', as: :approve
   
 
