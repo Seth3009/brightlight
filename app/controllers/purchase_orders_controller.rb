@@ -13,15 +13,15 @@ class PurchaseOrdersController < ApplicationController
   end
 
   def list
-    date = Date.parse(params[:date]) rescue Date.today
-    @purchase_orders = PurchaseOrder.where(due_date: date).includes([:requestor, :supplier, order_items: [:req_item]])
+    date = Date.new(params[:year].to_i, params[:month].to_i, params[:day].to_i) rescue Date.today
+    @purchase_orders = PurchaseOrder.where(order_date: date).includes([:requestor, :supplier, order_items: [:req_item]])
   end
 
   def status 
     today = Date.today
-    start_date = Date.new(params[:year], params[:month], 1) rescue Date.new(today.year, today.month, 1)
-    end_date = Date.new(params[:year], params[:month], -1) rescue Date.new(today.year, today.month, -1)
-    @purchase_orders = PurchaseOrder.where(due_date: start_date..end_date).includes([:requestor, :supplier, :order_items])
+    start_date = Date.new(params[:year].to_i, params[:month].to_i, 1) rescue Date.new(today.year, today.month, 1)
+    end_date = Date.new(params[:year].to_i, params[:month].to_i, -1) rescue Date.new(today.year, today.month, -1)
+    @purchase_orders = PurchaseOrder.where(order_date: start_date..end_date).includes([:requestor, :supplier, :order_items])
   end
 
   # GET /purchase_orders/new

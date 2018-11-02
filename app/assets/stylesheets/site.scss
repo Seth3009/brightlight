@@ -81,6 +81,10 @@ table.compact {
 	// white-space: nowrap;
 	// table-layout: fixed;
 
+	th { 
+		padding: 5px 5px;
+	}
+
 	td.ellipsize {
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -187,6 +191,19 @@ td.center-align, th.center-align {
 		margin-bottom: 0px !important;
 	}
 } 
+
+table.bordered {
+	tr, td { 
+		border: 1px solid grey;
+	}
+}
+table.bordered {
+	th { 
+		text-align: center; 
+		border-bottom: 1px solid grey; 
+		border-right: 1px solid grey;
+	}
+}
 
 // ========================================= Template  ==============================================
 
