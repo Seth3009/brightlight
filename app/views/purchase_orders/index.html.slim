@@ -4,6 +4,9 @@ h4 Purchase Orders
 nav
   .nav-wrapper
     - if can? :create, PurchaseOrder
+      ul
+        li 
+          = link_to "Process FPB", list_requisitions_path
       ul.right
         li
           = link_to "Purchase Report", list_purchase_orders_path

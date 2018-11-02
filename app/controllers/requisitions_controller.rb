@@ -5,16 +5,7 @@ class RequisitionsController < ApplicationController
   # GET /requisitions.json
   def index
     authorize! :read, Requisition
-    
-    if can? :process, Requisition
-      @approved_requisitions = Requisition.approved
-      if params[:dept].present? && params[:dept] != 'all'
-        dept = Department.where(code: params[:dept]).take
-        @approved_requisitions = @approved_requisitions.where(department: dept)
-      end
-      @pending_approval = Requisition.pending_approval
-    end
-    
+
     @employee = current_user.employee
     @requisitions = Requisition.where(requester_id: @employee.id)
 
@@ -31,6 +22,12 @@ class RequisitionsController < ApplicationController
     authorize! :process, Requisition
     @pending_approval = Requisition.pending_approval
     @approved_requisitions = Requisition.approved
+    if params[:dept]
+      @approved_requisitions = @approved_requisitions.where(department_id:params[:dept])
+    end
+    if params[:active] == 0
+      @approved_requisitions = @approved_requisitions.where(active: false)
+    end
     # Filter to exclude ordered items
     # .joins(:req_items).where(req_items: {order_item: nil})
   end

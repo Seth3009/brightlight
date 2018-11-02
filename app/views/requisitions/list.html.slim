@@ -1,27 +1,23 @@
-- title 'Purchase Requests'
-h4 Purchase Requests
+- title 'Process Purchase Requests'
+h4 Process Purchase Requests
 
 nav
   .nav-wrapper
-    ul
-      - if can? :process, Requisition
-        li
-          a.dropdown-button href="#!" data-activates="dept-options"
-            span#dept = @department.present? ? "#{@department.name}" : "Department" 
-            i.material-icons.right arrow_drop_down
-
+    = form_tag list_requisitions_path, method: :get do
+      ul
+        - if can? :process, Requisition
+          li
+            = select_tag :dept, options_from_collection_for_select(Department.all.order(:name),:id,:name)
+        li style="padding: 0 10px"
+          = check_box_tag :active, 1, checked: true
+          = label_tag :active
+        li 
+          = submit_tag "Go", class: "btn btn-flat btn-small grey"
     ul.right
       li
         = link_to new_requisition_path
           | New
-          i.material-icons.left add
-
-ul#dept-options.dropdown-content
-  li  
-    = link_to 'All', list_requisitions_path(params.merge(dept:'all').symbolize_keys)
-  - Department.all.each do |dept|
-    li 
-      = link_to dept.name, list_requisitions_path(params.merge(dept: dept.code).symbolize_keys)    
+          i.material-icons.left add  
 
 ul.tabs.z-depth-1
   li.tab.col.s6

@@ -3,15 +3,7 @@ h4 Purchase Requests
 
 nav
   .nav-wrapper
-    ul
-      - if can? :process, Requisition
-        li
-          a.dropdown-button href="#!" data-activates="dept-options"
-            span#dept = @department.present? ? "#{@department.name}" : "Department" 
-            i.material-icons.right arrow_drop_down
-      / li style="padding: 0 10px"
-      /   = check_box_tag :active, 1, checked: true
-      /   = label_tag :active
+
     ul.right
       li
         = link_to new_requisition_path
