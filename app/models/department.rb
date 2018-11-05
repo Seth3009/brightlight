@@ -3,8 +3,8 @@ class Department < ActiveRecord::Base
 	has_many :employees, dependent: :restrict_with_error
 	has_many :budgets, dependent: :restrict_with_error
 	has_many :budget_items, through: :budgets
-  belongs_to :manager, class_name: "Employee", foreign_key: 'manager_id'
-  belongs_to :vice_manager, class_name: "Employee", foreign_key: 'vice_manager_id'
+  belongs_to :manager, class_name: "Employee"
+  belongs_to :vice_manager, class_name: "Employee"
   after_save :update_approver_employee
 
   def update_approver_employee    

@@ -4,13 +4,15 @@ class Employee < ActiveRecord::Base
   after_save :auto_fill_approver  
  	belongs_to :user
 	belongs_to :department
-  belongs_to :supervisor, class_name: "Employee"  
+  belongs_to :supervisor, class_name: "Employee" 
+  belongs_to :approver, class_name: "Employee"
+  belongs_to :approver_assistant, class_name: "Employee"
 	has_many :subordinates, class_name: "Employee", foreign_key: "supervisor_id", dependent: :restrict_with_error
   has_many :book_loans, dependent: :restrict_with_error
   has_many :grade_sections, foreign_key: "homeroom_id"
 	has_many :course_sections, foreign_key: "instructor_id"
 	has_one :manager, through: :department
-	has_many :leave_requests, foreign_key: "employee_id"
+	has_many :leave_requests
   has_many :supplies_transaction
   has_one :employee_smartcard
   has_one :badge
