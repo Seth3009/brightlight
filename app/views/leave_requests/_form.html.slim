@@ -34,11 +34,11 @@
         = f.number_field :leave_day, min:0, id:"daynumber", class: "days_number"  , style:"text-align:center;"
       .input-field.col.s1
         = f.label :start_time, class: 'active'
-        = f.text_field :start_time, class:'show_timepicker center', disabled:true, placeholder: "Start Time"
+        = f.text_field :start_time, class:'show_timepicker center', placeholder: "Start Time"
       .input-field.col.s1
         = f.label :end_time, class: 'active'
         label.active End time
-        = f.text_field :end_time, class:'show_timepicker center', disabled:true, placeholder: "End Time"
+        = f.text_field :end_time, class:'show_timepicker center', placeholder: "End Time"
     .row
       .input-field.col.s4
         = f.label :leave_type, class:'active'
