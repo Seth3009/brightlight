@@ -41,9 +41,12 @@ table.compact.striped
           / -else
           /   i.material-icons.grey-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Not required" check_box_outline_blank
           / span &nbsp;&nbsp;&nbsp;
-          -if leave_request.is_canceled?
+          -if leave_request.is_canceled? || leave_request.employee_canceled?
               span.box.black
-                | Canceled
+                | Canceled  
+          -elsif leave_request.employee_canceled?
+              span.box.black
+                | Empl. Canceled       
           - else
             -if leave_request.hr_approval.nil? && leave_request.spv_approval != false
               span.box
@@ -64,4 +67,4 @@ table.compact.striped
              i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="View" visibility
            - if can?(:approve, leave_request ) and leave_request.spv_approval.nil?
              = link_to approve_path(leave_request,"spv")
-               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Review approval" thumbs_up_down
+               i.material-icons.tooltipped.green-text data-position="bottom" data-delay="50" data-tooltip="Review approval" assignment_ind 

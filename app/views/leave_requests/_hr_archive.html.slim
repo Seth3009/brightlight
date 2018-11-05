@@ -42,9 +42,12 @@ table.compact.striped
             / -else
             /   i.material-icons.grey-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Not required" check_box_outline_blank
             / span &nbsp;&nbsp;&nbsp;
-            -if leave_request.is_canceled?
+            -if leave_request.is_canceled? 
               span.box.black
                 | Canceled
+            -elsif leave_request.employee_canceled?
+              span.box.black
+                | Empl. Canceled
             - else
               -if leave_request.hr_approval.nil? && leave_request.spv_approval != false
                 span.box
@@ -64,6 +67,6 @@ table.compact.striped
           td 
             = link_to leave_request_url(leave_request,view:'archive')
               i.material-icons visibility
-            - if leave_request.is_canceled == false
+            - if leave_request.is_canceled == false && (@employee != @hrmanager && (@employee != @vice_hrmanager if @vice_hrmanager != nil))
               = link_to cancel_leave_request_path(leave_request), data: {:confirm => 'This action will cancel a leave request that has already been submitted. Are you sure?'}, :method => :delete, class:'red-text'
                   i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete

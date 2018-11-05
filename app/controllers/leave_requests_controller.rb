@@ -7,18 +7,20 @@ class LeaveRequestsController < ApplicationController
   # GET /leave_requests.json
   def index
     @dept = Department.find_by_code('HR')              
-    @hrmanager = Employee.find_by_id(@dept.manager_id)
-    @hrvicemanager = Employee.find_by_id(@dept.vice_manager_id)
-    @leave_requests = LeaveRequest.with_employees_and_departments
+    @hrmanager = @dept.manager
+    @hrvicemanager = @dept.vice_manager
+    @leave_requests = LeaveRequest.with_employees_and_departments.active
     @own_leave_requests = @leave_requests.order(form_submit_date: :desc, updated_at: :desc)
                           .where('form_submit_date = ? or hr_approval IS ? or spv_approval IS ?',Date.today, nil, nil)
-                          .empl(@employee).active
+                          .empl(@employee)
     @own_count = @own_leave_requests.count
-    @supv_approval_list = @leave_requests.active.spv(@employee).submitted
-                          .where('form_submit_date = ? or spv_approval IS ?',Date.today, nil)
+    @supv_approval_list = @leave_requests.spv(@employee)
+                          .where('form_submit_date = ? or spv_approval IS ?',Date.today, nil) 
+                          .order(form_submit_date: :asc, updated_at: :asc)                         
     @spv_count = @supv_approval_list.count
     @hr_approval_list = @leave_requests.hrlist
                         .where('hr_approval IS ?', nil)
+                        .order(spv_date: :asc, form_submit_date: :asc, updated_at: :asc)
     @hr_count = @hr_approval_list.count
     
   end
@@ -28,9 +30,10 @@ class LeaveRequestsController < ApplicationController
     # authorize! :validate, LeaveRequest if params[:page] == 'hr'
 
    
-    @department = Department.find_by_id(@employee.department_id)        
+    @department = @employee.department       
     @dept = Department.find_by_code('HR')              
-    @hrmanager = Employee.find_by_id(@dept.manager_id)
+    @hrmanager = @dept.manager
+    @vice_hrmanager = @dept.vice_manager
     @leave_requests = LeaveRequest.with_employees_and_departments
 
     if params[:view] == "hr" && @department.id == @dept.id
@@ -41,14 +44,12 @@ class LeaveRequestsController < ApplicationController
                             .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today)).order("#{sort_column} #{sort_direction}")
     else   
       @own_leave_requests = @leave_requests.empl(@employee).archive.order("#{sort_column} #{sort_direction}")
-                            .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
+                            .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today)).empl_canceled
     end
    
     if params[:dept].present? && params[:dept] != 'all'
       @dept_filter = Department.find_by(code: params[:dept])
-      @hr_approval_list = @hr_approval_list.where(departments: {code: params[:dept]})
-      .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
-      .order("#{sort_column} #{sort_direction}").order(:form_submit_date)
+      @hr_approval_list = @hr_approval_list.where(departments: {code: params[:dept]})      
     end
     
   end
@@ -91,13 +92,13 @@ class LeaveRequestsController < ApplicationController
       if @leave_request.save
         format.html do
           if params[:send]
-            if @leave_request.leave_type == "Special Leave"
-              @sendto = "hr"              
-            else 
+            # if @leave_request.leave_type == "Special Leave"
+            #   @sendto = "hr"              
+            # else 
               @sendto = "spv"             
-            end          
+            # end          
             if @leave_request.send_for_approval(supervisor, vice_supervisor, hrmanager, hrvicemanager, @sendto, 'empl-submit')  && supervisor
-              @leave_request.auto_approve             
+              # @leave_request.auto_approve             
               redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.'               
             else
               redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe approver field is blank?"
@@ -118,13 +119,13 @@ class LeaveRequestsController < ApplicationController
   # PATCH/PUT /leave_requests/1.json
   def update
     authorize! :update, @leave_request
-    
-    @requester = Employee.find_by_id(@leave_request.employee_id)
-    @supervisor = Employee.find_by_id(@leave_request.employee.approver1)
-    @vice_supervisor = Employee.find_by_id(@leave_request.employee.approver2)
+    @employees = Employee.all
+    @requester = @leave_request.employee
+    @supervisor = @requester.approver
+    @vice_supervisor = @requester.approver_assistant
     @dept = Department.find_by_code('HR')              
-    @hrmanager = Employee.find_by_id(@dept.manager_id)
-    @hrvicemanager = Employee.find_by_id(@dept.vice_manager_id)
+    @hrmanager = @dept.manager
+    @hrvicemanager = @dept.vice_manager
     
     respond_to do |format|
       if @leave_request.update(leave_request_params)
@@ -135,13 +136,13 @@ class LeaveRequestsController < ApplicationController
               vice_approver = @vice_supervisor
               hrmanager = @hrmanager
               hrvicemanager = @hrvicemanager
-              if @leave_request.leave_type == "Special Leave"
-                send_to = 'hr'
-              else
+              # if @leave_request.leave_type == "Special Leave"
+              #   send_to = 'hr'
+              # else
                 send_to = 'spv'
-              end
+              # end
               if @leave_request.send_for_approval(approver, vice_approver, hrmanager, hrvicemanager, send_to,'empl-submit') && approver
-                @leave_request.auto_approve          
+                # @leave_request.auto_approve          
                 redirect_to leave_requests_url, notice: 'Leave request has been saved and sent for approval.'
               else
                 redirect_to edit_leave_request_path(@leave_request), alert: "Cannot send for approval. Maybe approver field is blank?"
@@ -187,13 +188,13 @@ class LeaveRequestsController < ApplicationController
   def approve
     authorize! :approve, @leave_request if params[:page] == 'spv'
     authorize! :validate, LeaveRequest if params[:page] == 'hr'
-    @commentable = @leave_request
-    @requester = Employee.find_by_id(@leave_request.employee_id)
-    @supervisor = Employee.find_by_id(@leave_request.employee.approver1)
-    @vice_supervisor = Employee.find_by_id(@leave_request.employee.approver2)
+    @commentable = @leave_request    
+    @requester = @leave_request.employee
+    @supervisor = @requester.approver
+    @vice_supervisor = @requester.approver_assistant
     @dept = Department.find_by_code('HR')              
-    @hrmanager = Employee.find_by_id(@dept.manager_id)
-    @hrvicemanager = Employee.find_by_id(@dept.vice_manager_id)
+    @hrmanager = @dept.manager
+    @hrvicemanager = @dept.vice_manager
     if @employee != @supervisor && @employee != @hrmanager && @employee != @vice_supervisor && @employee != @hrvicemanager
         redirect_to leave_requests_url, alert: "You are not permitted to access this page" 
     elsif params[:page] != "spv" && params[:page] != "hr" && params[:page] != "employee"
@@ -203,9 +204,13 @@ class LeaveRequestsController < ApplicationController
 
   # DELETE /leave_requests/1/cancel
   def cancel
-    authorize! :cancel, @leave_request
-    @leave_request.cancel
-    redirect_to :back, notice: 'Leave request has been successfully canceled.'
+     authorize! :cancel, @leave_request
+    if params[:byemp] == "yes"
+      @leave_request.cancel_by_employee
+    else
+      @leave_request.cancel     
+    end
+    redirect_to :back, notice: 'Leave request has been successfully canceled.'    
   end
 
   # DELETE /leave_requests/1
@@ -238,7 +243,7 @@ class LeaveRequestsController < ApplicationController
     
     # Never trust parameters from the scary internet, only allow the white list through.
     def leave_request_params
-      params.require(:leave_request).permit(:start_date, :end_date, :hour, :leave_type, :leave_note, :leave_subtitute, :subtitute_notes, :spv_approval, :spv_date, :spv_notes, :hr_approval, :hr_date, :hr_notes, :form_submit_date, :hr_staf_notes, :employee_id, :category,
+      params.require(:leave_request).permit(:start_date, :end_date, :hour, :leave_type, :leave_note, :leave_subtitute, :subtitute_notes, :spv_approval, :spv_date, :spv_notes, :hr_approval, :hr_date, :hr_notes, :form_submit_date, :hr_staf_notes, :employee_id, :category, :leave_day, :start_time, :end_time, :employee_canceled,
                                             {comments_attributes: [:id, :title, :comment, :user_id, :commentable_id, :commentable_type, :role]} )
     end
 end
