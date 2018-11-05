@@ -165,4 +165,12 @@ class LeaveRequest < ActiveRecord::Base
     self.update_column(:hour,@hour)
   end
 
+   # Call back from comment
+  def create_email_from_comment(comment)    
+    sender = comment.user.employee     
+    # Send email to requester and sender, except the comment originator
+    addressee = [self.employee, sender].reject {|n| n.id == comment.user.employee.try(:id)}
+    to = addressee.map {|e| "#{e.name} <#{e.try(:email)}>"}.join(", ")
+    EmailNotification.new_comment_lr comment, to
+  end
 end
