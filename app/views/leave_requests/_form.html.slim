@@ -70,12 +70,10 @@ javascript:
       if($('#leave_request_category_full_day').is(":checked")) { 
           $('.days_number').removeAttr('disabled');
           $('#daynumber').val(1);
-          $('input.show_timepicker').attr('disabled','disabled');
       }
       else {
         $('.days_number').attr('disabled','disabled');
         $('#daynumber').val(0);
-        $('input.show_timepicker').removeAttr('disabled');
       }
     });  
   $("form").on("keypress", function (e) {
