@@ -920,10 +920,14 @@ ActiveRecord::Schema.define(version: 20181026081019) do
     t.datetime "updated_at",                        null: false
     t.boolean  "is_canceled",       default: false
     t.string   "category"
+<<<<<<< HEAD
     t.integer  "leave_day",         default: 0
     t.string   "start_time"
     t.string   "end_time"
     t.boolean  "employee_canceled", default: false
+=======
+    t.integer  "leave_day",        default: 0
+>>>>>>> change leaving notes input
   end
 
   add_index "leave_requests", ["employee_id"], name: "index_leave_requests_on_employee_id", using: :btree
