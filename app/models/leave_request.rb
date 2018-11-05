@@ -1,8 +1,13 @@
 class LeaveRequest < ActiveRecord::Base
   belongs_to :employee   
   validates_presence_of :employee_id
+<<<<<<< HEAD
   # validates_presence_of :start_time, :message => "Start time can't be blank"
   # validates_presence_of :end_time, :message => "End time can't be blank"
+=======
+  validates_presence_of :start_time, :message => "Start time can't be blank"
+  validates_presence_of :end_time, :message => "End time can't be blank"
+>>>>>>> add employee cancel
   validates_presence_of :leave_type, :message => "Choose your leave type"
   validates_presence_of :leave_note, :message => "Describe your leave"
   after_save :fill_hour_column
