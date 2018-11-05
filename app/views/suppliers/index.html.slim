@@ -3,11 +3,11 @@ h4 Listing suppliers
 
 nav
   .nav-wrapper
-    - if can? :manage, Supplier
+    - if can? :create, Supplier
       ul.right
         li        
           = link_to new_supplier_path
-            | Add New Supplier
+            | New
             i.material-icons.left add
         li
           = link_to 'Export as CSV', suppliers_path + '.csv'

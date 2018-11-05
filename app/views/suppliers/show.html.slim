@@ -1,6 +1,5 @@
 -title = 'Supplier Data'
 .label Supplier
-h4 = @supplier.company_name
 
 nav
   .nav-wrapper
@@ -10,11 +9,17 @@ nav
           | All suppliers
           i.material-icons.left chevron_left
     ul.right
+      - if can? :create, Supplier
+        li        
+          = link_to new_supplier_path
+            | New
+            i.material-icons.left add
       li
         = link_to edit_supplier_path(@supplier)
           | Edit
           i.material-icons.left edit
 .card-panel
+  h4 = @supplier.company_name
   .row
     .col.s4
       .label Address1:
