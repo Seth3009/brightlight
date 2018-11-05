@@ -7,19 +7,20 @@ class LeaveRequestsController < ApplicationController
   # GET /leave_requests.json
   def index
     @dept = Department.find_by_code('HR')              
-    @hrmanager = Employee.find_by_id(@dept.manager_id)
-    @hrvicemanager = Employee.find_by_id(@dept.vice_manager_id)
-    @leave_requests = LeaveRequest.with_employees_and_departments
+    @hrmanager = @dept.manager
+    @hrvicemanager = @dept.vice_manager
+    @leave_requests = LeaveRequest.with_employees_and_departments.active
     @own_leave_requests = @leave_requests.order(form_submit_date: :desc, updated_at: :desc)
                           .where('form_submit_date = ? or hr_approval IS ? or spv_approval IS ?',Date.today, nil, nil)
-                          .empl(@employee).active
+                          .empl(@employee)
     @own_count = @own_leave_requests.count
-    @supv_approval_list = @leave_requests.active.spv(@employee).submitted
-                          .where('form_submit_date = ? or spv_approval IS ?',Date.today, nil)
-                          .not_canceled_by_employee
+    @supv_approval_list = @leave_requests.spv(@employee)
+                          .where('form_submit_date = ? or spv_approval IS ?',Date.today, nil) 
+                          .order(form_submit_date: :asc, updated_at: :asc)                         
     @spv_count = @supv_approval_list.count
     @hr_approval_list = @leave_requests.hrlist
-                        .where('hr_approval IS ?', nil).active
+                        .where('hr_approval IS ?', nil)
+                        .order(spv_date: :asc, form_submit_date: :asc, updated_at: :asc)
     @hr_count = @hr_approval_list.count
     
   end
@@ -29,9 +30,10 @@ class LeaveRequestsController < ApplicationController
     # authorize! :validate, LeaveRequest if params[:page] == 'hr'
 
    
-    @department = Department.find_by_id(@employee.department_id)        
+    @department = @employee.department       
     @dept = Department.find_by_code('HR')              
-    @hrmanager = Employee.find_by_id(@dept.manager_id)
+    @hrmanager = @dept.manager
+    @vice_hrmanager = @dept.vice_manager
     @leave_requests = LeaveRequest.with_employees_and_departments
 
     if params[:view] == "hr" && @department.id == @dept.id
@@ -42,7 +44,7 @@ class LeaveRequestsController < ApplicationController
                             .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today)).order("#{sort_column} #{sort_direction}")
     else   
       @own_leave_requests = @leave_requests.empl(@employee).archive.order("#{sort_column} #{sort_direction}")
-                            .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
+                            .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today)).empl_canceled
     end
    
     if params[:dept].present? && params[:dept] != 'all'
@@ -117,13 +119,13 @@ class LeaveRequestsController < ApplicationController
   # PATCH/PUT /leave_requests/1.json
   def update
     authorize! :update, @leave_request
-    
-    @requester = Employee.find_by_id(@leave_request.employee_id)
-    @supervisor = Employee.find_by_id(@leave_request.employee.approver1)
-    @vice_supervisor = Employee.find_by_id(@leave_request.employee.approver2)
+    @employees = Employee.all
+    @requester = @leave_request.employee
+    @supervisor = @requester.approver
+    @vice_supervisor = @requester.approver_assistant
     @dept = Department.find_by_code('HR')              
-    @hrmanager = Employee.find_by_id(@dept.manager_id)
-    @hrvicemanager = Employee.find_by_id(@dept.vice_manager_id)
+    @hrmanager = @dept.manager
+    @hrvicemanager = @dept.vice_manager
     
     respond_to do |format|
       if @leave_request.update(leave_request_params)
@@ -186,13 +188,13 @@ class LeaveRequestsController < ApplicationController
   def approve
     authorize! :approve, @leave_request if params[:page] == 'spv'
     authorize! :validate, LeaveRequest if params[:page] == 'hr'
-    @commentable = @leave_request
-    @requester = Employee.find_by_id(@leave_request.employee_id)
-    @supervisor = Employee.find_by_id(@leave_request.employee.approver1)
-    @vice_supervisor = Employee.find_by_id(@leave_request.employee.approver2)
+    @commentable = @leave_request    
+    @requester = @leave_request.employee
+    @supervisor = @requester.approver
+    @vice_supervisor = @requester.approver_assistant
     @dept = Department.find_by_code('HR')              
-    @hrmanager = Employee.find_by_id(@dept.manager_id)
-    @hrvicemanager = Employee.find_by_id(@dept.vice_manager_id)
+    @hrmanager = @dept.manager
+    @hrvicemanager = @dept.vice_manager
     if @employee != @supervisor && @employee != @hrmanager && @employee != @vice_supervisor && @employee != @hrvicemanager
         redirect_to leave_requests_url, alert: "You are not permitted to access this page" 
     elsif params[:page] != "spv" && params[:page] != "hr" && params[:page] != "employee"

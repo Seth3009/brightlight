@@ -1,5 +1,5 @@
 class LeaveRequest < ActiveRecord::Base
-  belongs_to :employee  
+  belongs_to :employee   
   validates_presence_of :employee_id
   # validates_presence_of :start_time, :message => "Start time can't be blank"
   # validates_presence_of :end_time, :message => "End time can't be blank"
@@ -10,9 +10,9 @@ class LeaveRequest < ActiveRecord::Base
   acts_as_commentable
   accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
   
-  scope :active, -> { where(is_canceled: false) }
-  scope :canceled, -> { where(is_canceled: true) }
-  scope :not_canceled_by_employee, -> { where(employee_canceled: false) }
+  scope :active, -> { where(is_canceled: false,employee_canceled: false ) }
+  scope :canceled, -> { where(is_canceled: true) }  
+  scope :empl_canceled, -> {where(employee_canceled: true)}
 
   scope :with_employees_and_departments, -> {
     joins('left join employees on employees.id = leave_requests.employee_id') 
@@ -23,33 +23,28 @@ class LeaveRequest < ActiveRecord::Base
   
 
   scope :spv, -> (employee_id) { 
-    with_employees_and_departments
+    submitted
     .where('approver1 = ? or approver2 = ?', employee_id, employee_id)
-    .order(form_submit_date: :asc, updated_at: :asc)
   }
 
   scope :spv_archive, -> (employee_id) { 
-    with_employees_and_departments
-    .where('approver1 = ? or approver2 = ?', employee_id, employee_id)
-    .archive
-    .order(form_submit_date: :asc, updated_at: :asc)
+    submitted
+    .where('approver1 = ? or approver2 = ?' , employee_id, employee_id)
+    .where("hr_approval is not ? or spv_approval = ? or is_canceled = ? or employee_canceled = ?", nil,false, true, true)  
   }
 
   scope :hrlist, ->  { 
-    submitted
-    .active
-    .where("spv_approval = true")
-    .order(spv_date: :asc, form_submit_date: :asc, updated_at: :asc)
+    where("spv_approval = true")    
   }
 
   scope :hrlist_archive, ->  { 
     submitted
     .select('leave_requests.*,employees.name as employee_name')
-    .archive.not_canceled_by_employee    
+    .archive 
   }
 
   scope :archive, -> { 
-    where("hr_approval is not ? or spv_approval = ? or is_canceled = ? or employee_canceled = ?", nil,false, true, true)
+    where("hr_approval is not ? or spv_approval = ? or is_canceled = ? ", nil,false, true)
   }
 
   scope :submitted, -> { where.not(form_submit_date: nil) }
