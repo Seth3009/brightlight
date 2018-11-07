@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   
   
+  resources :diknas_gradebooks
   resources :employee_smartcards
   resources :stock_categories
   resources :stock_items
@@ -267,6 +268,12 @@ Rails.application.routes.draw do
     member do
       post 'mark_read'
     end
+  end
+
+  resources :diknasreports do
+    collection do
+      post 'import'
+    end 
   end
 
   resources :badges, only: [:new, :create, :edit, :update, :destroy]

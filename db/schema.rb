@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180816035215) do
+ActiveRecord::Schema.define(version: 20181107082322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -626,6 +626,16 @@ ActiveRecord::Schema.define(version: 20180816035215) do
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
 
+  create_table "diknas_gradebooks", force: :cascade do |t|
+    t.string   "studentname"
+    t.string   "grade"
+    t.string   "class"
+    t.string   "avg"
+    t.string   "semester"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "door_access_logs", force: :cascade do |t|
     t.string   "location"
     t.string   "card"
@@ -811,6 +821,16 @@ ActiveRecord::Schema.define(version: 20180816035215) do
   add_index "grade_sections_students", ["grade_section_history_id"], name: "index_grade_sections_students_on_grade_section_history_id", using: :btree
   add_index "grade_sections_students", ["grade_section_id"], name: "index_grade_sections_students_on_grade_section_id", using: :btree
   add_index "grade_sections_students", ["student_id"], name: "index_grade_sections_students_on_student_id", using: :btree
+
+  create_table "gradebook", force: :cascade do |t|
+    t.string   "studentname"
+    t.string   "grade"
+    t.string   "class"
+    t.decimal  "avg"
+    t.string   "semester"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "guardians", force: :cascade do |t|
     t.string   "name"
