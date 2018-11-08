@@ -2,8 +2,8 @@ class LeaveRequest < ActiveRecord::Base
   include ActionView::Helpers::TextHelper
   belongs_to :employee   
   validates_presence_of :employee_id
-  # validates_presence_of :start_time, :message => "Start time can't be blank"
-  # validates_presence_of :end_time, :message => "End time can't be blank"
+  validates_presence_of :start_time, :message => "Start time can't be blank"
+  validates_presence_of :end_time, :message => "End time can't be blank"
   validates_presence_of :category, :message => "Choose your leave category"
   validates_presence_of :leave_type, :message => "Choose your leave type"
   validates_presence_of :leave_note, :message => "Describe your leave"

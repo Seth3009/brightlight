@@ -30,7 +30,7 @@
       .input-field.col.s2.time_box.time1
         = f.label :start_time, "Time", class: 'active'
         = f.text_field :start_time, class:'show_timepicker center',id:"time_from", placeholder: "From"
-      .input-field.col.s1.dateend
+      .input-field.col.s1
         label to
       .input-field.col.s3.dateend
         = f.label 'Until date (mm/dd/yyyy)', class: 'active'
@@ -104,13 +104,11 @@ javascript:
         $('.dateend').hide(); 
         $('#full_day').attr('disabled','disabled');     
         if($('#early_home').is(':checked') && $('#come_late').is(':checked')==false){
-          $('#come_late').attr('disabled','disabled'); 
-          $('.time2').hide(); 
+          $('#come_late').attr('disabled','disabled');            
           $('#time_from').val("11:00");
         }
         if($('#early_home').is(':checked')==false && $('#come_late').is(':checked')){
-          $('#early_home').attr('disabled','disabled');  
-          $('.time1').hide();   
+          $('#early_home').attr('disabled','disabled');
           $('#time_to').val("11:00");       
         }
       }      
