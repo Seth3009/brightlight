@@ -1,33 +1,40 @@
 #login-page.row
-	.card.z-depth-4.zero-padding
+	.card.login-box
+		.card-content
+			.center
+				= image_tag 'lightbulb-icon.png', class: "small-logo-icon", style:"height: 50px"
+				span.card-title.grey-text Log in to Brightlight
+			.row.center.zero-margin				
+				.input-field.col.s12
+					= link_to "Sign in with Google", user_omniauth_authorize_path(:google_oauth2), class:'btn blue waves-effect waves-light col s12'
+		
 		= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: 'login-form'}) do |f|
-			.card-content.white
-				.center
-					span.card-title.grey-text Log in
-				.row
-					.input-field.col.s12
-						i.mdi-social-person-outline.prefix
-						= f.email_field :email, autofocus: true
-					.input-field.col.s12
-						i.mdi-action-lock-outline.prefix
-						= f.password_field :password, autocomplete: "off"
-			
-					- if devise_mapping.rememberable?
-						.input-field.col.s12.m12.l12
-							= f.check_box :remember_me
-							= f.label :remember_me
-				.row.zero-margin
-					.input-field.col.s12
-						button.btn.waves-effect.waves-light.col.s12 type="submit" Login
-			.card-action
-				.row.center.zero-margin				
-					.col.s12.grey-text
-						| OR
-					.input-field.col.s12
-						= link_to "Sign in with Google", user_omniauth_authorize_path(:google_oauth2), class:'btn blue waves-effect waves-light col s12'
+	
+			ul.collapsible data-collapsible="expandable"
+				li
+					.collapsible-header
+						.grey-text.center
+							| Login with email
+							i.material-icons.right chevron_right
+					.collapsible-body.white
+						.row.with-side-padding
+							.input-field.col.s12
+								i.mdi-social-person-outline.prefix
+								= f.email_field :email, autofocus: true
+							.input-field.col.s12
+								i.mdi-action-lock-outline.prefix
+								= f.password_field :password, autocomplete: "off"
+					
+							- if devise_mapping.rememberable?
+								.input-field.col.s12.m12.l12
+									= f.check_box :remember_me
+									= f.label :remember_me
+							.input-field.col.s12
+								button.btn.waves-effect.waves-light.col.s12 type="submit" Login
 
 			.row.with-side-padding
 				.input-field.col.s4.m4.l4
 					= link_to 'Sign up', new_user_registration_path
-				.input-field.col.s8.m8.l8
+				.input-field.col.s8.m8.l8.right-align
 					= link_to 'Forgot your password?', new_user_password_path
+

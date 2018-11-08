@@ -24,8 +24,14 @@ nav
         .label Roles
         .item = @user.roles.map(&:to_s).map(&:capitalize).join(', ')
       dd.col.s4
-        .label Employee profile
-        .item 
-          = link_to @user.employee
-            i.material-icons account_circle
-  
+        -if @user.employee.present?
+          .label Employee profile
+          .item 
+            = link_to @user.employee
+              i.material-icons account_circle
+        -else
+          .label Action
+          .item
+            = link_to edit_user_registration_path
+              |Change your password
+              i.material-icons.left vpn_key

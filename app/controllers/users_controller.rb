@@ -23,7 +23,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    authorize! :show, @user
+    authorize! :read, @user
   end
 
   def edit

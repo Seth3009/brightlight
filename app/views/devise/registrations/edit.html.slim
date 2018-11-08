@@ -1,25 +1,24 @@
-.row
+#login-page.row
 	.col.s5.offset-s3
 		= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
-			- puts "name:#{resource.name} email:#{resource.email} password:#{resource.password}"	
 			= devise_error_messages!
-			.card
-				.card-content.white
-					span.card-title.grey-text = "Edit #{resource_name.to_s.humanize}"
+			.card.login-box
+				.card-content
+					.card-title.grey-text = "Edit #{resource_name.to_s.humanize}"
 					.row
-						input-field.col.s10.offset-s1
+						.input-field.col.s10.offset-s1
 							= f.label :name, class: 'active'
-							= f.text_field :name, autofocus: true
+							= f.text_field :name
 						.input-field.col.s10.offset-s1
 							= f.label :email, class: 'active'
-							= f.email_field :email, autofocus: true
+							= f.email_field :email, disabled: true
 							- if devise_mapping.confirmable? && resource.pending_reconfirmation?
 								div 
 									| Currently waiting confirmation for: 
 									= resource.unconfirmed_email
 						.input-field.col.s10.offset-s1
 							= f.label :password
-							= f.password_field :password, autocomplete: "off"
+							= f.password_field :password, autocomplete: "off", autofocus: true
 							i = "(leave blank if you don't want to change it)"
 						.input-field.col.s10.offset-s1
 							= f.label :password_confirmation, class: 'active'
@@ -32,12 +31,5 @@
 					button.btn.btn-flat
 					= f.submit 'Update', class: 'btn right'
 
-	.col.s3
-		.card
-			.card-content.white
-				span.card-title.grey-text Cancel my account
-				p Unhappy?
-			.card-action
-				= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, class:'btn btn-flat'
 
 			
