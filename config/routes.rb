@@ -1,11 +1,8 @@
 Rails.application.routes.draw do
 
-  
-  
   resources :employee_smartcards
   resources :stock_categories
   resources :stock_items
-  resources :suppliers
   resources :delivery_items
   resources :deliveries
   resources :order_items
@@ -275,6 +272,18 @@ Rails.application.routes.draw do
     collection do
       get 'list'
       get 'status'
+    end
+  end
+
+  resources :accounts, only: [:index, :new, :create, :edit, :update, :destroy]  do
+    collection do
+      post 'import'
+    end
+  end
+
+  resources :suppliers do
+    collection do
+      post 'import'
     end
   end
 
