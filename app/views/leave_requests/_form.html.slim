@@ -86,19 +86,16 @@ javascript:
       if($('#full_day').is(':checked')) {        
         if($('#early_home').is(':checked')==false && $('#come_late').is(':checked')==false){
           $('.time_box').hide();
+          $('#full_day').removeAttr('disabled');
         }else{
           setdaterange();
           $('.time_box').show();
           $('.show_timepicker').removeAttr('readonly');
-          $('#full_day').removeAttr('disabled');
-          if($('#early_home').is(':checked') && $('#come_late').is(':checked')==false){
-            $('#time_to').attr('readonly',true);
-          }else if($('#early_home').is(':checked')==false && $('#come_late').is(':checked')){
-            $('#time_from').attr('readonly',true);
-          }else{
-            $('.show_timepicker').removeAttr('readonly');
-            $('#full_day').attr('disabled','disabled');
+          $('#full_day').attr('disabled','disabled');
+          if($('#early_home').is(':checked')==false && $('#come_late').is(':checked')){
+            $('#time_from').attr('readonly',true);            
           }
+          
         }        
       }else{  
         $('.dateend').hide(); 
