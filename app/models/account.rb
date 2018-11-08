@@ -1,6 +1,12 @@
 class Account < ActiveRecord::Base
-  has_many :account_departments
+  has_many :account_departments, dependent: :destroy
   has_many :departments, through: :account_departments
+  has_many :requisitions
+
+  scope :for_department_id, lambda {|id| 
+    joins(:departments).where(departments: {id: id}) 
+    .where.not(acc_l4: nil)
+  }
 
   def self.import_xlsx(file_path)
     # Read from file

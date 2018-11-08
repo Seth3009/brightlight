@@ -6,6 +6,7 @@ class Requisition < ActiveRecord::Base
   belongs_to :budget_approver, class_name: 'Employee'
   belongs_to :purch_receiver, class_name: 'Employee'
   belongs_to :budget
+  belongs_to :account
   belongs_to :budget_item
   belongs_to :created_by, class_name: 'User'
   belongs_to :last_updated_by, class_name: 'User'

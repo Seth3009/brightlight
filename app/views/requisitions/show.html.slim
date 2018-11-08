@@ -41,25 +41,28 @@ nav
               .item = @requisition.description
           li.collection-item.row
             .col.m2
-              .label Requester
-              .item = @requisition.requester
-            .col.m2
               .label Department
               .item = @requisition.department  
-            .col.m8
+            .col.m4
+              .label Requester
+              .item = @requisition.requester            
+            .col.m6
               .label Notes
               .item = @requisition.notes      
           li.collection-item.row
             .col.s6.m2
-              = check_box_tag :is_budgeted, true, @requisition.is_budgeted
-              = label_tag 'Budgeted'
-            .col.s6.m2
+              /= check_box_tag :is_budgeted, true, @requisition.is_budgeted
+              .label Budgeted?
+              -if @requisition.is_budgeted
+                |Yes
+                i.material-icons.left.green-text check_box
+              -else
+                |No
+                i.material-icons.left check_box_outline_blank
+            .col.s6.m4
               .label Budget
-              .item = @requisition.budget || "--"
-            .col.s6.m4
-              .label Budget Item
-              .item = @requisition.budget_item || "--"
-            .col.s6.m4
+              .item = @requisition.account.try(:description) || "--"
+            .col.s6.m6
               .label Budget notes
               .item = @requisition.budget_notes
           li.collection-item.row

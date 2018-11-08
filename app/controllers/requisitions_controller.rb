@@ -47,8 +47,7 @@ class RequisitionsController < ApplicationController
     @employee = current_user.employee
     if @employee.present?
       @department = @employee.department
-      @budget = @employee.department.budgets.current.take rescue nil
-      @budget_items = @budget.budget_items.order(:description, :year, :month) rescue []
+      @accounts = Account.for_department_id(@employee.department_id) rescue []
       @manager = @employee.manager || @employee.supervisor
     end
     @requisition = Requisition.new
@@ -60,8 +59,7 @@ class RequisitionsController < ApplicationController
     @employee = @requisition.requester || current_user.employee
     @manager = @employee.manager || @employee.supervisor
     @supervisors = Employee.active.supervisors.all
-    @budget = @employee.department.budgets.current.take rescue nil
-    @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue []
+    @accounts = Account.for_department_id(@employee.department_id) rescue []
   end
 
   # POST /requisitions
@@ -71,7 +69,6 @@ class RequisitionsController < ApplicationController
     @requisition = Requisition.new(requisition_params)
     @requisition.created_by = current_user
     @requisition.last_updated_by = current_user
-    @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue []
     respond_to do |format|
       if @requisition.save
         format.html do 
@@ -91,8 +88,7 @@ class RequisitionsController < ApplicationController
         format.html { 
           @employee = @requisition.requester || current_user.employee
           @department = @employee.department
-          @budget = @employee.department.budgets.current.take rescue nil
-          @budget_items = @budget.budget_items.where(academic_year: AcademicYear.current) rescue nil
+          @accounts = Account.for_department_id(@employee.department_id) rescue []
           render :new 
         }
         format.json { render json: @requisition.errors, status: :unprocessable_entity }
@@ -159,8 +155,7 @@ class RequisitionsController < ApplicationController
     @employee = @requisition.requester
     @manager = @employee.manager || @employee.supervisor
     @supervisors = Employee.active.supervisors.all
-    @budget = @employee.department.budgets.current.take rescue nil
-    @budget_items = @budget.budget_items rescue []
+    @accounts = Account.for_department_id(@employee.department_id) rescue []
     @button_state = !@requisition.is_budgeted && @requisition.is_supv_approved && !@requisition.is_budget_approved && @requisition.budget_approver_id
   end
 
@@ -189,7 +184,7 @@ class RequisitionsController < ApplicationController
                                           :sent_for_bgt_approval, :is_rejected, :reject_reason, :active,
                                           :budget_approved_date, :supv_approved_date,
                                           :budget_approver_id, :bgt_appvl_notes, :purch_receiver_id, :receive_notes,
-                                          :created_by, :last_updated_by,
+                                          :created_by, :last_updated_by, :account_id,
                                           {req_items_attributes: [:id, :requisition_id, :description, :qty_reqd, :unit, :est_price, :actual_price, 
                                                                   :currency, :notes, :qty_ordered, :order_date, :qty_delivered, :delivery_date,
                                                                   :qty_accepted, :acceptance_date, :qty_rejected, :acceptance_notes, :reject_notes,

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181106035207) do
+ActiveRecord::Schema.define(version: 20181108053440) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1328,8 +1328,10 @@ ActiveRecord::Schema.define(version: 20181106035207) do
     t.date     "sent_to_purchasing"
     t.date     "sent_for_bgt_approval"
     t.string   "status"
+    t.integer  "account_id"
   end
 
+  add_index "requisitions", ["account_id"], name: "index_requisitions_on_account_id", using: :btree
   add_index "requisitions", ["budget_approver_id"], name: "index_requisitions_on_budget_approver_id", using: :btree
   add_index "requisitions", ["budget_id"], name: "index_requisitions_on_budget_id", using: :btree
   add_index "requisitions", ["budget_item_id"], name: "index_requisitions_on_budget_item_id", using: :btree
@@ -1880,6 +1882,7 @@ ActiveRecord::Schema.define(version: 20181106035207) do
   add_foreign_key "req_items", "requisitions"
   add_foreign_key "req_items", "users", column: "created_by_id"
   add_foreign_key "req_items", "users", column: "last_updated_by_id"
+  add_foreign_key "requisitions", "accounts"
   add_foreign_key "requisitions", "budget_items"
   add_foreign_key "requisitions", "budgets"
   add_foreign_key "requisitions", "departments"
