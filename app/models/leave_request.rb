@@ -1,13 +1,10 @@
 class LeaveRequest < ActiveRecord::Base
+  include ActionView::Helpers::TextHelper
   belongs_to :employee   
   validates_presence_of :employee_id
-<<<<<<< HEAD
   # validates_presence_of :start_time, :message => "Start time can't be blank"
   # validates_presence_of :end_time, :message => "End time can't be blank"
-=======
-  validates_presence_of :start_time, :message => "Start time can't be blank"
-  validates_presence_of :end_time, :message => "End time can't be blank"
->>>>>>> add employee cancel
+  validates_presence_of :category, :message => "Choose your leave category"
   validates_presence_of :leave_type, :message => "Choose your leave type"
   validates_presence_of :leave_note, :message => "Describe your leave"
   after_save :fill_hour_column
@@ -161,10 +158,36 @@ class LeaveRequest < ActiveRecord::Base
     else
       @day = " days "
     end
-    @hour = self.leave_day.to_s + @day +", " + self.start_time.to_s + " - "+ self.end_time.to_s
+    if self.category == 'Early Home' || self.category == 'Come Late'
+      @hour = 'Leave time ' +self.start_time.to_s + " to "+ self.end_time.to_s + " (" + time_diff(Time.parse(self.start_time),Time.parse(self.end_time)) + ")" 
+    else
+      if self.category == "Full Day, Early Home"
+        @hour = "Leave date " + self.start_date.strftime('%b %e') + " at " + self.start_time.to_s + ' and full day leave until ' + self.end_date.strftime('%b %e')
+      elsif self.category == "Full Day, Come Late"
+        @hour = "Full day leave on " + self.start_date.strftime('%b %e') + " and going back late at " + self.end_date.strftime('%b %e') + " (" + self.end_time.to_s + ")"
+      elsif self.category == "Full Day"
+        @hour = "Leave from " + self.start_date.strftime('%b %e') + " until " + self.end_date.strftime('%b %e')
+      else
+        @hour = "Leave on " + self.start_date.strftime('%b %e') + " (" + self.start_time.to_s + ") and going back at " + self.end_date.strftime('%b %e') + " (" + self.end_time.to_s + ")"
+      end
+    end
     self.update_column(:hour,@hour)
   end
 
+  def time_diff(start_time, end_time)
+    seconds_diff = (start_time - end_time).to_i.abs
+  
+    hours = seconds_diff / 3600
+    seconds_diff -= hours * 3600
+  
+    minutes = seconds_diff / 60
+    seconds_diff -= minutes * 60
+  
+    seconds = seconds_diff
+  
+    "#{pluralize(hours.to_s,'hour')} and #{pluralize(minutes.to_s,'minute')}"
+    
+  end
    # Call back from comment
   def create_email_from_comment(comment)    
     sender = comment.user.employee     
