@@ -8,7 +8,8 @@ class Ability
 		@user.roles << 'guest' if @user.new_record?
 
 		# This one calls each method according to the roles
-		@user.roles.each { |role| send(role.downcase) }
+    @user.roles.each { |role| send(role.downcase) }
+    can_view_own_account
   end
 
   # Admin user can do anything
@@ -153,6 +154,8 @@ class Ability
       can [:update, :destroy], Requisition do |req| req.requester == @user.employee && req.draft? end
     end
 
-    
+    def can_view_own_account
+      can [:read], User, id: @user.id 
+    end   
 
 end

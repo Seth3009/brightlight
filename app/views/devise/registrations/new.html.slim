@@ -1,8 +1,9 @@
 #login-page.row
-	.card.z-depth-4.col.s12.zero-padding
+	.card.login-box
 		= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {class: 'login-form'}) do |f|
-			.card-content.white
+			.card-content
 				.center
+					= image_tag 'lightbulb-icon.png', class: "small-logo-icon", style:"height: 50px"
 					span.card-title.grey-text Sign Up
 				.row.zero-margin
 					.input-field.col.s12

@@ -1721,14 +1721,23 @@ a.sidebar-collapse {
 
 // ============================================ Login Page ===========================================
 
-.login-form {
-  // width: 310px;
+.login-box {
+	background: #eceff1;
+	padding: 0;
+	.collapsible {
+		box-shadow: none;
+		border-left: none;
+		border-right: none;
+	}
+	box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.16), 0 3px 10px 0 rgba(0, 0, 0, 0.12);
 }
+
 .login-form-text{
   text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 0.8rem;
 }
+
 .profile-image-login{
   width: 100px;
   height: 100px !important;

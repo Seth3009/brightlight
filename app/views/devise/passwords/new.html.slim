@@ -1,9 +1,9 @@
-.row
-	.col.s12
-		= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|	
-			= devise_error_messages!
-			.card
-				.card-content.white
+#login-page.row
+	.card.login-box
+		.col.s12
+			= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|	
+				= devise_error_messages!
+				.card-content
 					span.card-title.grey-text Forgot your password?
 					.row
 						input-field.col.s10.offset-s1
@@ -13,7 +13,6 @@
 				.card-action
 					button.btn type="submit" Send me reset password instructions
 
-	.col.s12
-		.card
-			.card-content.white
+		.col.s12
+			.card-content
 				= render "devise/shared/links"
