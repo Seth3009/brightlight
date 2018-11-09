@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
     where('LOWER(users.name) LIKE ? OR LOWER(users.email) LIKE ? OR LOWER(users.first_name) LIKE ? OR LOWER(users.last_name) LIKE ?', term, term, term, term)
   }
 
-  scope :purchasing, lambda { all.reject {|u| ! u.has_role?(:purchasing)} }
+  scope :purchasing, lambda { all.reject {|u| ! u.has_role?(:buyer)} }
   scope :admin, lambda { all.reject {|u| ! u.has_role?(:admin)} }
 
   # Include default devise modules. Others available are:
@@ -67,7 +67,11 @@ class User < ActiveRecord::Base
 
   # For authorization
   # Do not change the order! If you add an item, add at the end of the list.
-  ROLES = %i[admin manager student teacher staff employee inventory carpool librarian hrd purchasing] 
+  ROLES = %i[admin manager student teacher staff employee inventory carpool librarian hrd purchasing buyer] 
+
+  def self.all_roles
+    ROLES
+  end
 
   def roles=(roles)
     roles = [*roles].map { |r| r.to_sym }
