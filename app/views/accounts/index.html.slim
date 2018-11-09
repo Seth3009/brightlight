@@ -15,7 +15,7 @@ nav
 #form-upload-modal.modal
   = form_tag({action: :import}, multipart: true) do
     .modal-content
-      h4 Import Account File
+      h4 Import Account Data
 
       p Select Excel file to upload
       = file_field_tag 'filename'

@@ -130,6 +130,9 @@ class Ability
     can [:create,:read,:update,:destroy], Supplier
   end
 
+  def buyer
+  end
+
   def student
     can :read, CourseSection
     can :read, GradeLevel
