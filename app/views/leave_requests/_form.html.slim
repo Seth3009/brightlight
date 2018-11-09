@@ -31,14 +31,6 @@
         = f.label :start_time, "Time", class: 'active'
         = f.text_field :start_time, class:'show_timepicker center',id:"time_from", placeholder: "From"
       .input-field.col.s1
-<<<<<<< HEAD
-        = f.label :start_time, class: 'active'
-        = f.text_field :start_time, class:'show_timepicker center', placeholder: "Start Time"
-      .input-field.col.s1
-        = f.label :end_time, class: 'active'
-        label.active End time
-        = f.text_field :end_time, class:'show_timepicker center', placeholder: "End Time"
-=======
         label to
       .input-field.col.s3.dateend
         = f.label 'Until date (mm/dd/yyyy)', class: 'active'
@@ -48,7 +40,6 @@
         = f.text_field :end_time, class:'show_timepicker center',id:"time_to",  placeholder: "To"      
         = f.hidden_field :leave_day, id:'leave_day'
       
->>>>>>> hrd
     .row
       .input-field.col.s4
         = f.label :leave_type, class:'active'
