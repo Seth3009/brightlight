@@ -1,5 +1,5 @@
--title = 'Purchase Orders'
-h4 Laporan Belanja
+-title = 'Purchase Report'
+h4 Purchase Report
 .report-subtitle = @date
 
 nav
@@ -9,9 +9,18 @@ nav
         = link_to purchase_orders_path
           | Purchase Orders
           i.material-icons.left chevron_left
+      = form_tag(list_purchase_orders_path, method: :get) do
+        li style="width:110px" class="text-align:center"
+          = select_tag :year, year_options_for_select(selected: params[:year] || Date.today.year)
+        li style="width:110px" class="text-align:center"
+          = select_tag :month, month_options_for_select(selected: params[:month] || Date.today.month)
+        li style="width:110px" class="text-align:center"
+          = select_tag :day, options_for_select((1..31).map {|d| [d,d]}, params[:month] || Date.today.day)
+        li 
+          = submit_tag "Go", class: "btn btn-flat btn-small grey"
     ul.right
       li
-        = link_to 'Monthly', monthly_purchase_orders_path
+        = link_to 'Status Report', status_purchase_orders_path
       li
         = link_to "#", onclick: 'window.print();return false;'
           i.material-icons print

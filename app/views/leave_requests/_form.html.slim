@@ -10,41 +10,42 @@
     .row
       .section-header.col.s12 Name : #{@employee} (#{@employee.job_title})
     .row
-      .col.s4
+      .col.s2
         | Leave Category :
+      .col.s2       
+        = check_box_tag 'full_day',"Full Day" ,(@leave_request.category.present? ? (@leave_request.category.include? "Full Day") : false), class: 'leave_type_check'
+        = label_tag "full_day"
       .col.s2
-        = f.radio_button :category, 'Full Day',checked: true, class: 'with-gap leave_type_radio'
-        = f.label "category_full_day", "Full Day"
+        = check_box_tag 'early_home',"Early Home",(@leave_request.category.present? ? (@leave_request.category.include? "Early Home") : false),  class: 'leave_type_check'
+        = label_tag "early_home"
       .col.s2
-        = f.radio_button :category, 'Early Home', class: 'with-gap leave_type_radio'
-        = f.label "category_early_home", "Early Home"
-      .col.s2
-        = f.radio_button :category, 'Come Late', class: 'with-gap leave_type_radio'
-        = f.label "category_come_late", "Come Late"
+        = check_box_tag 'come_late',"Come Late",(@leave_request.category.present? ? (@leave_request.category.include? "Come Late") : false),  class: 'leave_type_check'
+        = label_tag "come_late"
+        = f.hidden_field :category, id:"category"
     .row     
-      .input-field.col.s4
-        = f.label 'Start date (mm/dd/yyyy)', class: 'active'
-        = f.date_field :start_date, :value => Date.today.strftime('%Y-%m-%d')
+      .input-field.col.s3
+        = f.label 'From date (mm/dd/yyyy)', class: 'active'
+        = f.date_field :start_date, :value => @leave_request.start_date ? @leave_request.start_date : Date.today.strftime('%Y-%m-%d'), class:'show_date',id:'date1'
         = f.hidden_field :employee_id, :value => @employee.id
-      .input-field.col.s4
-        = f.label 'End date (mm/dd/yyyy)', class: 'active'
-        = f.date_field :end_date, :value => Date.today.strftime('%Y-%m-%d')
-      .input-field.col.s2
-        = f.label :leave_day, "Number of day(s)", class: 'active'
-        = f.number_field :leave_day, min:0, id:"daynumber", class: "days_number"  , style:"text-align:center;"
+      .input-field.col.s2.time_box.time1
+        = f.label :start_time, "Time", class: 'active'
+        = f.text_field :start_time, class:'show_timepicker center',id:"time_from", placeholder: "From"
       .input-field.col.s1
-        = f.label :start_time, class: 'active'
-        = f.text_field :start_time, class:'show_timepicker center', placeholder: "Start Time"
-      .input-field.col.s1
-        = f.label :end_time, class: 'active'
-        label.active End time
-        = f.text_field :end_time, class:'show_timepicker center', placeholder: "End Time"
+        label to
+      .input-field.col.s3.dateend
+        = f.label 'Until date (mm/dd/yyyy)', class: 'active'
+        = f.date_field :end_date, :value => @leave_request.end_date ? @leave_request.end_date : Date.today.strftime('%Y-%m-%d'), class:'show_date',id:'date2'
+      .input-field.col.s2.time_box.time2
+        = f.label :end_time, "Time", class: 'active'
+        = f.text_field :end_time, class:'show_timepicker center',id:"time_to",  placeholder: "To"      
+        = f.hidden_field :leave_day, id:'leave_day'
+      
     .row
       .input-field.col.s4
         = f.label :leave_type, class:'active'
           |Choose type of leave
           .right.red-text *
-        = f.select :leave_type, [['Sick Without Medical Note','Sick'],'Special Leave','School Related Duty','Personal Permission'], prompt: true         
+        = f.select :leave_type, [['Sick Without Medical Note','Sick'],'Special Leave','School Related Duty','Personal Permission'], prompt: true  
       .input-field.col.s8
         = f.label :leave_note, class: 'active'
           |Leave notes or description
@@ -56,26 +57,69 @@
         = f.select :leave_subtitute, [['Substitute not required',false],['Substitute required',true]], prompt: true 
       .input-field.col.s8
         = f.label :subtitute_notes
-        = f.text_field :subtitute_notes  
+        = f.text_field :subtitute_notes ,class:'modern' 
     .red-text
       em * Special leave only includes Employee’s marriage, birth of an employee’s baby, the death of an immediate family member  
         
   .toolbar.z-depth-1
-    button.btn.waves-effect.waves-light type="submit" name="save"  Save Draft 
-    button.btn.waves-effect.waves-light type="submit" name="send" value="empl_submit" Send for Approval 
+    button.btn.waves-effect.waves-light.btnsubmit type="submit" name="save"  Save Draft 
+    button.btn.waves-effect.waves-light.btnsubmit type="submit" name="send" value="empl_submit" Send for Approval 
     = link_to 'Cancel', leave_requests_path, class: "waves-effect waves-light btn-flat"       
 
-javascript:
-  $(document).on('change','.leave_type_radio',function(){    
-      if($('#leave_request_category_full_day').is(":checked")) { 
-          $('.days_number').removeAttr('disabled');
-          $('#daynumber').val(1);
-      }
-      else {
-        $('.days_number').attr('disabled','disabled');
-        $('#daynumber').val(0);
-      }
-    });  
+javascript:  
+  $( document ).ready(function() {    
+    if(window.location.pathname == '/leave_requests/new'){
+      defaulttime();  
+      $('.btnsubmit').attr('disabled','disabled');     
+    }    
+  });
+  $(document).on('change','.leave_type_check',function(){ 
+    defaulttime();
+    if($('#full_day').is(':checked')==false && $('#early_home').is(':checked')==false && $('#come_late').is(':checked')==false){
+      $('.btnsubmit').attr('disabled','disabled');
+      $('.time_box').show();
+      $('.dateend').show();
+      $('.leave_type_check').removeAttr('disabled');      
+      $('.show_timepicker').removeAttr('readonly'); 
+    }else{
+      $('.btnsubmit').removeAttr('disabled');
+      if($('#full_day').is(':checked')) {        
+        if($('#early_home').is(':checked')==false && $('#come_late').is(':checked')==false){
+          $('.time_box').hide();
+          $('#full_day').removeAttr('disabled');
+        }else{
+          setdaterange();
+          $('.time_box').show();
+          $('.show_timepicker').removeAttr('readonly');
+          $('#full_day').attr('disabled','disabled');
+          if($('#early_home').is(':checked')==false && $('#come_late').is(':checked')){
+            $('#time_from').attr('readonly',true);            
+          }
+          
+        }        
+      }else{  
+        $('.dateend').hide(); 
+        $('#full_day').attr('disabled','disabled');     
+        if($('#early_home').is(':checked') && $('#come_late').is(':checked')==false){
+          $('#come_late').attr('disabled','disabled');            
+          $('#time_from').val("11:00");
+        }
+        if($('#early_home').is(':checked')==false && $('#come_late').is(':checked')){
+          $('#early_home').attr('disabled','disabled');
+          $('#time_to').val("11:00");       
+        }
+      }      
+    }
+  });  
+
+  $(document).on('click','.btnsubmit',function(){
+    var fd = $('#full_day').is(':checked') ? "Full Day" : ""
+    var ec = $('#early_home').is(':checked') ? "Early Home" : ""
+    var cl = $('#come_late').is(':checked') ? "Come Late" : ""
+    var cat = $.grep([fd,ec,cl],Boolean).join(", ");
+    $('#category').val(cat);
+    countdays();
+  });
   $("form").on("keypress", function (e) {
       if (e.keyCode == 13) {
           return false;
@@ -85,8 +129,41 @@ javascript:
     'minTime': '5:00am',
     'maxTime': '10:00pm',
     'timeFormat': 'H:i',
-    'step': 15,
+    'step': 5,
     'className': 'active'
-    });
-    
+    }); 
+
+  $(document).on('change','#date1',function(){
+    $('#date2').val($('#date1').val());
+    $('#date2').prop('min',$('#date1').val());    
+  }); 
+  
+  function defaulttime(){    
+      $('#date2').val($('#date1').val());
+      $('#date2').prop('min',$('#date1').val());
+      $('#time_from').val("07:15");
+      $('#time_to').val("15:45");     
+  }
+
+  function setdaterange() {
+    var date = new Date($("#date1").val());              
+      if(!isNaN(date.getTime())){
+        date.setDate(date.getDate() + parseInt(1));
+        yr      = date.getFullYear(),
+        month   = date.getMonth()+1 < 10 ? '0' + date.getMonth()+1 : date.getMonth()+1,
+        day     = date.getDate()  < 10 ? '0' + date.getDate()  : date.getDate(),
+        newDate = yr + '-' + month + '-' + day ;
+        $('#date2').prop('min',newDate);
+        $("#date2").val(newDate);                
+      } else {
+        alert("Invalid Date");  
+      }
+  }
+
+  function countdays() {
+    var dt1 = Date.parse($('#date1').val());
+      var dt2 = Date.parse($('#date2').val());
+      var dc = Math.floor((dt2-dt1)/(24 * 60 * 60 * 1000));
+      $('#leave_day').val(dc);
+  }
   

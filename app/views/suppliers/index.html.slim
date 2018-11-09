@@ -3,26 +3,40 @@ h4 Listing suppliers
 
 nav
   .nav-wrapper
-    - if can? :manage, Supplier
+    - if can? :create, Supplier
       ul.right
+        li
+          = link_to "#form-upload-modal", class:"modal-trigger" 
+            | Import
+            i.material-icons.left input
         li        
           = link_to new_supplier_path
-            | Add New Supplier
+            | New
             i.material-icons.left add
         li
           = link_to 'Export as CSV', suppliers_path + '.csv'
 
+#form-upload-modal.modal
+  = form_tag({action: :import}, multipart: true) do
+    .modal-content
+      h4 Import Account File
+
+      p Select Excel file to upload
+      = file_field_tag 'filename'
+
+    .modal-footer
+      a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+      button.btn.btn-primary.waves-effect.waves-light Submit 
+
 .card-panel
   table.striped.compact
     thead
-    tr
-      th Company name
-      th Contact name
-      th Phone
-      th Mobile
-      th Email
-      th Actions
-
+      tr
+        th Company name
+        th Contact name
+        th Phone
+        th Mobile
+        th Actions
 
     tbody
       - @suppliers.each do |supplier|
@@ -31,7 +45,6 @@ nav
           td = supplier.contact_name
           td = supplier.phone
           td = supplier.mobile
-          td = supplier.email
 
           td.actions
             = link_to supplier

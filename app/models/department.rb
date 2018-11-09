@@ -2,9 +2,11 @@ class Department < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
 	has_many :employees, dependent: :restrict_with_error
 	has_many :budgets, dependent: :restrict_with_error
-	has_many :budget_items, through: :budgets
-  belongs_to :manager, class_name: "Employee"
-  belongs_to :vice_manager, class_name: "Employee"
+  has_many :budget_items, through: :budgets
+  has_many :account_departments
+  has_many :accounts, through: :account_departments
+  belongs_to :manager, class_name: "Employee", foreign_key: 'manager_id'
+  belongs_to :vice_manager, class_name: "Employee", foreign_key: 'vice_manager_id'
   after_save :update_approver_employee
 
   def update_approver_employee    

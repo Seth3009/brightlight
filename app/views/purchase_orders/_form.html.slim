@@ -12,15 +12,16 @@
           .input-field.col.s12
             i.material-icons.prefix store
             = f.label :supplier, class: 'active'
-            = f.collection_select :supplier_id, Supplier.all, :id, :company_name, class:'material-select', prompt: "Select supplier"
+            /= f.collection_select :supplier_id, Supplier.all, :id, :company_name, class:'material-select', prompt: "Select supplier"
+            = f.select :supplier_id, options_for_select(Supplier.all.map { |s| [s.company_name, s.id, {'data-contact' => s.try(:contact_name), 'data-mobile' => s.try(:mobile)}] }), prompt: 'Select supplier'
           .input-field.col.s12
             i.material-icons.prefix account_circle
-            = f.label :contact
-            = f.text_field :contact
+            = f.label :contact, class: 'active'
+            = f.text_field :contact, placeholder: "Contact's name"
           .input-field.col.s12
             i.material-icons.prefix phone
-            = f.label :phone_contact
-            = f.text_field :phone_contact
+            = f.label :phone_contact, class: 'active'
+            = f.text_field :phone_contact, placeholder: "Contact's phone number"
     .col.s12.m6
       .card-panel
         .row
@@ -132,25 +133,46 @@ javascript:
       $("#purchase_orders > tr").each(function(_idx, row) { calc_row_total($(row)) });
       calc_totals();
     })
+    $(document).on("change", "select[name$='[description]']", function(event) {
+      insert_item(event.target);
+    })
+    $(document).on('cocoon:after-remove', function(event) {
+      calc_totals();
+    });
+    $(document).on("change", "select#purchase_order_supplier_id", function(event) {
+      insert_contact_info(event.target);
+    })
   });
 
+  var insert_item = function(element) {
+    var row = $(element).parents("tr");
+    var selected = row.find("[id$='description'] option:selected");
+    row.find("[id $= 'quantity']").val(selected.data("quantity"));
+    row.find("[id $= 'unit_price']").val(selected.data("unitPrice"));
+    row.find("[id $= 'unit']").val(selected.data("unit"));
+    row.find("[id $= 'currency']").val(selected.data("currency"));
+    row.find("[id $= 'req_item_id']").val(selected.data("id"));
+    calc_row_total(row);
+    calc_totals();
+  }
+
   var calc_row_total = function(row) {
-      var hidden_total_field = row.find("input[name$='[line_amount]']");
-      var total_field = row.find("input[name$='line_total']");
-      var qty = Number(row.find("input[name$='[quantity]']").val());
-      var unit_price = Number(row.find("input[name$='[unit_price]']").val());
-      var discount = Number(row.find("input[name$='[discount]']").val());
-      var est_tax = Number(row.find("input[name$='[est_tax]']").val());
-      var non_recurring = Number(row.find("input[name$='[non_recurring]']").val());
-      var shipping = Number(row.find("input[name$='[shipping]']").val());
-      var line_total = qty*unit_price - discount + est_tax + non_recurring + shipping;
-      total_field.val(line_total);
-      hidden_total_field.val(line_total);
-      return line_total;
+    var hidden_total_field = row.find("input[name$='[line_amount]']");
+    var total_field = row.find("input[name$='line_total']");
+    var qty = Number(row.find("input[name$='[quantity]']").val());
+    var unit_price = Number(row.find("input[name$='[unit_price]']").val());
+    var discount = Number(row.find("input[name$='[discount]']").val());
+    var est_tax = Number(row.find("input[name$='[est_tax]']").val());
+    var non_recurring = Number(row.find("input[name$='[non_recurring]']").val());
+    var shipping = Number(row.find("input[name$='[shipping]']").val());
+    var line_total = qty*unit_price - discount + est_tax + non_recurring + shipping;
+    total_field.val(line_total);
+    hidden_total_field.val(line_total);
+    return line_total;
   }
   
   var calc_total = function(field) {
-    return $.map($("#purchase_orders").find("input[name$='[" + field + "]']"), function(item) { 
+    return $.map($("#purchase_orders > tr:visible").find("input[name$='[" + field + "]']"), function(item) { 
         return Number($(item).val()) })
       .reduce(function(tot, val){return tot+val}, 0);
   };
@@ -180,3 +202,10 @@ javascript:
     $("#po_total_amount").val(total_amount);
     $("#purchase_order_remaining_amount").val(remaining_amount);
   };
+
+  var insert_contact_info = function (elem) {
+    console.log(elem);
+    var selected = $("select#purchase_order_supplier_id option:selected");
+    $("input#purchase_order_contact").val(selected.data("contact"));
+    $("input#purchase_order_phone_contact").val(selected.data("mobile"));
+  }

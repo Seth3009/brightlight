@@ -102,4 +102,11 @@ class EmailNotification < ActionMailer::Base
     @to = addressee
     mail(to: @to, subject: "New comment on #{comment.commentable.description}")
   end
+
+  def new_comment_lr(comment, addressee)
+    @comment = comment 
+    @from = @comment.user 
+    @to = addressee
+    mail(to: @to, subject: "New comment on #{comment.commentable.leave_type}")
+  end
 end

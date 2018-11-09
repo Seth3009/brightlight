@@ -81,6 +81,10 @@ table.compact {
 	// white-space: nowrap;
 	// table-layout: fixed;
 
+	th { 
+		padding: 5px 5px;
+	}
+
 	td.ellipsize {
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -187,6 +191,19 @@ td.center-align, th.center-align {
 		margin-bottom: 0px !important;
 	}
 } 
+
+table.bordered {
+	tr, td { 
+		border: 1px solid grey;
+	}
+}
+table.bordered {
+	th { 
+		text-align: center; 
+		border-bottom: 1px solid grey; 
+		border-right: 1px solid grey;
+	}
+}
 
 // ========================================= Template  ==============================================
 
@@ -785,6 +802,14 @@ span.emblem {
       line-height: 36px;
     }
 	}
+	.beta {
+		font-variant: small-caps;
+		font-size: 16px;
+		font-weight: bold;
+		color: maroon;
+		padding-left: 10px;
+		display: inline-block;
+	}
 }
 
 // ============================================ Toolbar =============================================
@@ -1213,7 +1238,6 @@ ul {
 // =========================================== Modal =========================================
 .modal {
 	max-height: 80%;
-	width: 75%;
 }
 
 .modal.modal-fixed-footer {
@@ -1721,14 +1745,23 @@ a.sidebar-collapse {
 
 // ============================================ Login Page ===========================================
 
-.login-form {
-  // width: 310px;
+.login-box {
+	background: #eceff1;
+	padding: 0;
+	.collapsible {
+		box-shadow: none;
+		border-left: none;
+		border-right: none;
+	}
+	box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.16), 0 3px 10px 0 rgba(0, 0, 0, 0.12);
 }
+
 .login-form-text{
   text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 0.8rem;
 }
+
 .profile-image-login{
   width: 100px;
   height: 100px !important;

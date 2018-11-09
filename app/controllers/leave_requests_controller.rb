@@ -58,7 +58,7 @@ class LeaveRequestsController < ApplicationController
   # GET /leave_requests/1.json
   def show    
     if @leave_request.employee == @employee || can?(:update,@leave_request)    
-      @commentable = @leave_request
+      @commentable = @leave_request      
     else
       redirect_to leave_requests_url, alert: "Unauthorized page"
     end
@@ -188,7 +188,7 @@ class LeaveRequestsController < ApplicationController
   def approve
     authorize! :approve, @leave_request if params[:page] == 'spv'
     authorize! :validate, LeaveRequest if params[:page] == 'hr'
-    @commentable = @leave_request    
+    # @commentable = @leave_request    
     @requester = @leave_request.employee
     @supervisor = @requester.approver
     @vice_supervisor = @requester.approver_assistant
@@ -231,7 +231,7 @@ class LeaveRequestsController < ApplicationController
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_leave_request
-      @leave_request = LeaveRequest.find(params[:id])
+      @leave_request = LeaveRequest.includes(:employee, :comments => [:user]).find(params[:id])
     end
     def set_employee
       if current_user.present?

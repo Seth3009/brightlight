@@ -14,11 +14,13 @@ html
 
 		meta name="viewport" content="width=device-width, initial-scale=1.0"
 
-	body class="#{ controller.controller_name} blue-grey lighten-1"
+	body class="#{ controller.controller_name}"
 		header
 			- if signed_in?
 				= render 'shared/layout/header'
-
+			- else
+				.center
+					= image_tag 'cbcs-logo.jpg', class:'center-align', style:"height: 70px"
 		- if signed_in?
 			main#main
 				.container

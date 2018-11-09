@@ -6,6 +6,9 @@ class User < ActiveRecord::Base
     where('LOWER(users.name) LIKE ? OR LOWER(users.email) LIKE ? OR LOWER(users.first_name) LIKE ? OR LOWER(users.last_name) LIKE ?', term, term, term, term)
   }
 
+  scope :purchasing, lambda { all.reject {|u| ! u.has_role?(:purchasing)} }
+  scope :admin, lambda { all.reject {|u| ! u.has_role?(:admin)} }
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -26,27 +29,24 @@ class User < ActiveRecord::Base
 
   def self.find_for_google_oauth2(access_token, signed_in_resource=nil)
     data = access_token.info
-    # puts "Finding user: #{data}"
     user = User.where(:provider => access_token.provider, :uid => access_token.uid ).first
     if user
-      # puts "User found: #{user.id}"
       return user
     else
       registered_user = User.where('LOWER(email) = ?', access_token.info.email.try(:downcase)).take
-      # puts "User by email: #{registered_user}"
       if registered_user
-        # puts "Found #{registered_user.id}"
+        registered_user.save_access_token access_token
         return registered_user
       else
-        # puts "Not found in User DB, trying Employee"
         employee = Employee.where('LOWER(email) = ?', data["email"].try(:downcase)).take
         if employee.present?
-          user = User.create(name: data["name"],
-            provider:access_token.provider,
+          user = User.create(
+            name: data["name"],
+            provider: access_token.provider,
+            uid: access_token.uid,
             email: data["email"],
             first_name: employee.first_name,
             last_name: employee.last_name,
-            uid: access_token.uid,
             image_url: access_token.extra.raw_info["picture"],
             password: Devise.friendly_token[0,20],
             roles: User.roles_from_job_title(employee.job_title)
@@ -109,5 +109,11 @@ class User < ActiveRecord::Base
     if job_title
       job_title.split(',').map(&:strip).map(&:downcase).map(&:to_sym) & ROLES
     end
+  end
+
+  def save_access_token(token)
+    self.provider = token.provider
+    self.uid = token.uid
+    self.save 
   end
 end

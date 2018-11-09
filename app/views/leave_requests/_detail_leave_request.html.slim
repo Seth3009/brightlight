@@ -91,7 +91,7 @@ nav
             span.box.red
               | Rejected
             / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Rejected" cancel   
-    - if params[:page].present?
+    - if params[:page].present? || (can? :read_hr, LeaveRequest) == true
       .row
         .col.s2
           .label-text SPV Notes

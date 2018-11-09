@@ -233,6 +233,9 @@
               |HR
               i.material-icons.right more_vert
             p Submit and manage your Leave Requests
+            = link_to leave_requests_path
+              .left Leave Request
+              i.material-icons chevron_right
         .card-reveal
           span.card-title.grey-text.text-darken-4
             |HR
@@ -301,23 +304,45 @@
         .card-image.waves-effect.waves-block.waves-light
           = image_tag 'purchase-order.jpg', class:'activator'
         .card-stacked
-          = image_tag 'beta.jpg', size:'60x56', style:"position: absolute; right: 0"
+          / = image_tag 'beta.jpg', size:'60x56', style:"position: absolute; right: 0"
           .card-content
             span.card-title.activator.grey-text.text-darken-4 
               |Purchasing
+              .beta BETA
               i.activator.material-icons.right more_vert
             p Submit and manage your Purchase Requests
-            p.red-text This feature is in beta testing. You are welcome to try it. Please report any problems to IT.
+            = link_to requisitions_path
+              .left Purchase Request
+              i.material-icons chevron_right
+            p.red-text.small-text This feature is in beta testing. You are welcome to try it. Please report any problems to IT.
         .card-reveal
           span.card-title.grey-text.text-darken-4
             |Purchase Request
             i.material-icons.right close
+          .card-tabs
+            ul.tabs.tabs-fixed-width.tabs-transparent
+              -if can? :process, Requisition
+                li.tab
+                  a.active href="#tab-purchasing" Purchasing
+              li.tab
+                a href="#tab-requisition" Purchase Requests
           .card-content
-            ul
-              li
-                = link_to 'Purchase Request', requisitions_path
-              li
-                = link_to 'Budget', budgets_path
+            #tab-requisition
+              ul
+                li
+                  = link_to 'Purchase Request', requisitions_path
+            #tab-purchasing
+              ul
+                li
+                  = link_to 'Process FPB', list_requisitions_path
+                li
+                  = link_to 'Purchase Orders', purchase_orders_path
+                li
+                  = link_to 'Manage Suppliers', suppliers_path	
+                - if can? :manage, Budget
+                  li = link_to 'Budgets', budgets_path
+                - if can? :manage, Account
+                  li = link_to 'Accounts', accounts_path
 
     - if signed_in? and current_user.admin?
       .col.m4.s6

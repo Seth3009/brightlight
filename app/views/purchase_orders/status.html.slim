@@ -1,0 +1,74 @@
+-title = 'PO Status'
+h4 PO Status
+.report-subtitle = @date
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to purchase_orders_path
+          | Purchase Orders
+          i.material-icons.left chevron_left
+      = form_tag(status_purchase_orders_path, method: :get) do
+        li style="width:110px" class="text-align:center"
+          = select_tag :year, year_options_for_select(selected: params[:year] || Date.today.year)
+        li style="width:110px" class="text-align:center"
+          = select_tag :month, month_options_for_select(selected: params[:month] || Date.today.month)
+        li 
+          = submit_tag "Go", class: "btn btn-flat btn-small grey"
+    ul.right
+      li
+        = link_to list_purchase_orders_path
+          | Purchase Report
+          i.material-icons.left shopping_basket
+      li
+        = link_to "#", onclick: 'window.print();return false;'
+          i.material-icons print
+
+br
+table.compact.striped.bordered
+  thead
+    tr
+      th style="border-bottom: 3px double grey" rowspan=2 No.
+      th colspan=5 Purchase Request
+      th colspan=4 PO Data
+      th colspan=2 Received
+      th colspan=2 Payment
+      th style="border-bottom: 3px double grey" rowspan=2 Notes
+    tr style="border-bottom: 3px double grey"
+      th No.
+      th Requester
+      th Date
+      th Received
+      th Item description
+      th No.
+      th Date
+      th Supplier
+      th.right-align Amount
+      th BPB
+      th.right-align Date
+      th.right-align DP
+      th.right-align Date
+  tbody
+    - @purchase_orders.each do |po|
+      - item_count = po.order_items.count
+      - po.order_items.each.with_index(1) do |item, i|
+        tr
+          td = i
+          td = item.requisition.id || "N/A"
+          td = item.requestor.try(:name).try(:truncate, 20) || "N/A"
+          td = item.requisition.try(:created_at).try(:strftime,"%d-%b")
+          td = item.requisition.try(:sent_to_purchasing)
+          td = item.description.try(:truncate, 50)
+          -if (item_count > 1 && i == 1) || item_count == 1 
+            td rowspan="#{item_count}" = item.purchase_order.order_num
+            td rowspan="#{item_count}" = item.purchase_order.order_date
+            td rowspan="#{item_count}" = item.purchase_order.supplier.try(:company_name).try(:truncate, 30)
+            td.right-align rowspan="#{item_count}"
+              = currency(item.purchase_order.total_amount, currency: po.currency)
+          td
+          td.right-align
+          -if (item_count > 1 && i == 1) || item_count == 1
+            td.right-align rowspan="#{item_count}" = currency(item.purchase_order.down_payment, currency: po.currency)
+          td 
+          td.right-align = item.purchase_order.notes
