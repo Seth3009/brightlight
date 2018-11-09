@@ -1,0 +1,51 @@
+h4 Accounts
+
+nav
+  .nav-wrapper
+    ul.right
+      li
+        = link_to "#form-upload-modal", class:"modal-trigger" 
+          | Import
+          i.material-icons.left input
+      li
+        = link_to new_account_path
+          | New
+          i.material-icons.left add
+
+#form-upload-modal.modal
+  = form_tag({action: :import}, multipart: true) do
+    .modal-content
+      h4 Import Account File
+
+      p Select Excel file to upload
+      = file_field_tag 'filename'
+
+    .modal-footer
+      a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+      button.btn.btn-primary.waves-effect.waves-light Submit 
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th colspan=4 Account
+        th Description
+        th Notes
+        th Action
+
+    tbody
+      - @accounts.each do |account|
+        tr id="row-#{account.id}"
+          td = account.acc_l1
+          td = account.acc_l2
+          td = account.acc_l3
+          td = account.acc_l4
+          td = account.description
+          td = account.notes
+          td
+            = link_to edit_account_path(account) 
+              i.material-icons edit
+            = remote_link_to_delete account, message: "Account deleted", class: "left waves-effect waves-light red-text"
+              i.material-icons delete
+
+

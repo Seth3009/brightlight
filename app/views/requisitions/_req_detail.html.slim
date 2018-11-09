@@ -23,8 +23,8 @@
       = f.check_box :is_budgeted
       = f.label :is_budgeted, 'Budgeted?'
     .input-field.col.m6
-      = f.label 'Budget', class: 'active'
-      = f.collection_select :budget_item_id, @budget_items || [], :id, :to_s, prompt: "Select budget", selected: @requisition.budget_item_id
+      = f.label 'Budget Account', class: 'active'
+      = f.select :account_id, options_for_select(@accounts.map { |a| ["#{a.acc_l4}: #{a.description}", a.id] }), prompt: 'Select budget account'
     .input-field.col.offset-m3.m9
       = f.label :budget_notes
       = f.text_field :budget_notes

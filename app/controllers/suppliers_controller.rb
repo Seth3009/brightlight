@@ -4,26 +4,31 @@ class SuppliersController < ApplicationController
   # GET /suppliers
   # GET /suppliers.json
   def index
+    authorize! :read, Supplier
     @suppliers = Supplier.all
   end
 
   # GET /suppliers/1
   # GET /suppliers/1.json
   def show
+    authorize! :read, Supplier
   end
 
   # GET /suppliers/new
   def new
+    authorize! :create, Supplier
     @supplier = Supplier.new
   end
 
   # GET /suppliers/1/edit
   def edit
+    authorize! :update, Supplier
   end
 
   # POST /suppliers
   # POST /suppliers.json
   def create
+    authorize! :create, Supplier
     @supplier = Supplier.new(supplier_params)
 
     respond_to do |format|
@@ -40,6 +45,7 @@ class SuppliersController < ApplicationController
   # PATCH/PUT /suppliers/1
   # PATCH/PUT /suppliers/1.json
   def update
+    authorize! :update, Supplier
     respond_to do |format|
       if @supplier.update(supplier_params)
         format.html { redirect_to @supplier, notice: 'Supplier was successfully updated.' }
@@ -54,10 +60,27 @@ class SuppliersController < ApplicationController
   # DELETE /suppliers/1
   # DELETE /suppliers/1.json
   def destroy
+    authorize! :destroy, Supplier
     @supplier.destroy
     respond_to do |format|
       format.html { redirect_to suppliers_url, notice: 'Supplier was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  # POST /import
+  def import
+    authorize! :create, Supplier
+    uploaded_io = params[:filename] 
+    path = Rails.root.join('public', 'uploads', uploaded_io.original_filename)
+    File.open(path, 'wb') do |file|
+      file.write(uploaded_io.read)
+      if uploaded_io.content_type =~ /office.xlsx/
+        Supplier.import_xlsx(file)
+        redirect_to suppliers_path, notice: "Import succeeded"
+      else
+        redirect_to suppliers_path, alert: 'Import failed: selected file is not an Excel file'
+      end
     end
   end
 

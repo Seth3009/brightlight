@@ -1,6 +1,5 @@
 -title = 'Supplier Data'
 .label Supplier
-h4 = @supplier.company_name
 
 nav
   .nav-wrapper
@@ -10,46 +9,90 @@ nav
           | All suppliers
           i.material-icons.left chevron_left
     ul.right
+      - if can? :create, Supplier
+        li        
+          = link_to new_supplier_path
+            | New
+            i.material-icons.left add
       li
         = link_to edit_supplier_path(@supplier)
           | Edit
           i.material-icons.left edit
 .card-panel
+  h4 = @supplier.company_name
   .row
     .col.s4
-      .label Address1:
+      .section-head ADDRESSES
+      .label Address:
       .item = @supplier.address1
-      .label Address2:
       .item = @supplier.address2 || '--'
-      .label City:
       .item = @supplier.city || '--'
-      .label Province:
-      .item = @supplier.province || '--'
-      .label Post code:
-      .item = @supplier.post_code || '--'
-      .label Country:
+      .item = "#{@supplier.province || '--'} #{@supplier.post_code || '--'}"
       .item = @supplier.country || '--'
-    .col.s4
-      .label Contact name:
-      .item = @supplier.contact_name || '--'
+
       .label Phone:
       .item = @supplier.phone || '--'
-      .label Mobile:
+      .item = @supplier.phone2 || '--'
       .item = @supplier.mobile || '--'
+
+      .label Fax:
+      .item = @supplier.fax || '--'
+
       .label Email:
       .item = @supplier.email || '--'
+
       .label Website:
       .item = @supplier.website || '--'
-  .row
+
+    .col.s4
+      .section-head CONTACTS
+      .label Contacts:
+      .item = @supplier.contact_name || '--'
+      .label Phone:
+      .item = @supplier.mobile || '--'
+      br
+      .label Contact (finance):
+      .item = @supplier.acctg_contact_name || '--'
+      .label Phone:
+      .item = @supplier.acctg_phone || '--'
+
+    .col.s4
+      .section-head BANK
+      -if @supplier.bank.present?
+        .label Bank:
+        .item = @supplier.bank || '--'
+        .label Branch:
+        .item = @supplier.bank_branch || '--'
+        .label Account name:
+        .item = @supplier.bank_acct_name || '--'
+        .label Account number:
+        .item = @supplier.bank_acct_no || '--'
+
+      -if @supplier.bank2.present?
+        .label Bank:
+        .item = @supplier.bank2 || '--'
+        .label Branch:
+        .item = @supplier.bank2_branch || '--'
+        .label Account name:
+        .item = @supplier.bank2_acct_name || '--'
+        .label Account number:
+        .item = @supplier.bank2_acct_no || '--'
+  .row style="border-top: 1px solid grey; padding-top: 10px"
     .col.s4
       .label Category:
       .item = @supplier.category || '--'
-      .label Status:
-      .item = @supplier.status || '--'
-      .label Type:
-      .item = @supplier.type || '--'
-      .label Group:
-      .item = @supplier.group || '--'
+      -if @supplier.payment_method.present?
+        .label Payment method:
+        .item = @supplier.payment_method
+      / .label Status:
+      / .item = @supplier.status || '--'
+      / .label Type:
+      / .item = @supplier.type || '--'
+      / .label Group:
+      / .item = @supplier.group || '--'
     .col.s8
       .label Notes:
       .item = @supplier.notes || '--'
+
+css:
+  .section-head { font-weight: 300; font-size: 1.3em; border-bottom: 2px solid grey; }

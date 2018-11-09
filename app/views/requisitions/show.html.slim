@@ -14,12 +14,11 @@ nav
             | List
             i.material-icons.left list_alt
     ul.right
-      - unless @requisition.sent_to_supv
-        li
+      li
+        - unless @requisition.sent_to_supv
           = link_to edit_requisition_path @requisition
             i.material-icons edit
-      - else
-        li
+        - else
           i.material-icons.left lock
 
 .panel
@@ -42,55 +41,66 @@ nav
               .item = @requisition.description
           li.collection-item.row
             .col.m2
-              .label Requester
-              .item = @requisition.requester
-            .col.m2
               .label Department
               .item = @requisition.department  
-            .col.m8
+            .col.m4
+              .label Requester
+              .item = @requisition.requester            
+            .col.m6
               .label Notes
               .item = @requisition.notes      
           li.collection-item.row
             .col.s6.m2
-              = check_box_tag :is_budgeted, true, @requisition.is_budgeted
-              = label_tag 'Budgeted'
-            .col.s6.m2
+              /= check_box_tag :is_budgeted, true, @requisition.is_budgeted
+              .label Budgeted?
+              -if @requisition.is_budgeted
+                |Yes
+                i.material-icons.left.green-text check_box
+              -else
+                |No
+                i.material-icons.left check_box_outline_blank
+            .col.s6.m4
               .label Budget
-              .item = @requisition.budget || "--"
-            .col.s6.m4
-              .label Budget Item
-              .item = @requisition.budget_item || "--"
-            .col.s6.m4
+              .item = @requisition.account.try(:description) || "--"
+            .col.s6.m6
               .label Budget notes
               .item = @requisition.budget_notes
           li.collection-item.row
-            .label Requested Items
-            table.compact.striped
-              thead
-                tr
-                  th No
-                  th Description
-                  th Qty
-                  th Unit
-                  th Est. Price
-                  th Req'd Date
-                  th PO No.
-              tbody
-                - @req_items.each.with_index(1) do |req_item, i|
+            = form_tag new_purchase_order_path, method: :get do
+              .label.left Requested Items
+              button.right.btn#create-po-button type="submit" disabled=true Create PO
+              table.compact.striped
+                thead
                   tr
-                    td = "#{i}."
-                    td = req_item.description
-                    td = req_item.qty_reqd
-                    td = req_item.unit
-                    td = "#{req_item.currency}#{req_item.est_price}"
-                    td = req_item.needed_by_date
-                    td 
-                      -if req_item.order_item.present?
-                        = link_to req_item.order_item.purchase_order.order_num, purchase_order_path(req_item.order_item.purchase_order)
-                        i.material-icons.green-text.left check
-                      -else
-                        = link_to new_purchase_order_path(req: @requisition.id, item: req_item.id)
-                          i.material-icons.tooltipped data-position="right" data-delay="30" data-tooltip="Create P.O." shop
+                    th No
+                    th Description
+                    th Qty
+                    th Unit
+                    th Est. Price
+                    th Req'd Date
+                    -if can? :process, Requisition
+                      th PO No.
+
+                tbody
+                  - @req_items.each.with_index(1) do |req_item, i|
+                    tr
+                      td = "#{i}."
+                      td = req_item.description
+                      td = req_item.qty_reqd
+                      td = req_item.unit
+                      td = "#{req_item.currency}#{req_item.est_price}"
+                      td = req_item.needed_by_date
+                      -if can? :process, Requisition
+                        td 
+                          -if req_item.order_item.present?
+                            = link_to purchase_order_path(req_item.order_item.purchase_order), target: 'blank'
+                              = req_item.order_item.purchase_order.order_num
+                              i.material-icons.left open_in_new
+                          -else
+                            = hidden_field_tag :req, @requisition.id
+                            input.checkbox type="checkbox" id="reqitem-#{req_item.id}" name="items[#{req_item.id}]"
+                            / This label is required by Materialize CSS for the checkbox to work
+                            = label_tag "reqitem-#{req_item.id}", ""
     li
       .collapsible-header.active
         | Approval
@@ -185,3 +195,13 @@ javascript:
       accordion: false
     });
   });
+  $(document).on("click", "input.checkbox", function(event) {
+    var checked = $("input.checkbox:checked").length;
+    if (checked > 0) {
+      console.log("ON", checked);
+      $("#create-po-button").prop("disabled", false);
+    } else {
+      console.log("OFF", checked);
+      $("#create-po-button").prop("disabled", true)
+    }
+  })

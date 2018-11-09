@@ -52,7 +52,18 @@ module ApplicationHelper
   end
 
   def currency(amount, currency: currency)
-    number_to_currency(amount, unit: currency + " ", precision: currency == 'IDR' ? 0 : 2)
+    unit_display = {"IDR" => "", "USD" => "$"}
+    unit_precision = {"IDR" => 0, "USD" => 2}
+    number_to_currency(amount, unit: "#{unit_display[currency]}", precision: unit_precision[currency] || 0, delimiter: ',')
+  end
+
+  def year_options_for_select(number_of_years = 5, offset_from_now = 0, selected: selected)
+    start_year = Date.today.year + offset_from_now - number_of_years
+    options_for_select (start_year..start_year+number_of_years).map{|y| [y,y.to_s]}, selected
+  end
+
+  def month_options_for_select(selected: selected)
+    options_for_select (1..12).map {|m| Date.new(Date.today.year,m,1)}.map{|d| [d.strftime("%b"),d.month] }, selected
   end
 
   def impersonating?
