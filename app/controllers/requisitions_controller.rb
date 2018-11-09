@@ -25,9 +25,9 @@ class RequisitionsController < ApplicationController
     if params[:dept]
       @approved_requisitions = @approved_requisitions.where(department_id:params[:dept])
     end
-    if params[:active] == 0
-      @approved_requisitions = @approved_requisitions.where(active: false)
-    end
+    # if params[:active].present? && params[:active] == 0
+    #   @approved_requisitions = @approved_requisitions.where(active: false)
+    # end
     # Filter to exclude ordered items
     # .joins(:req_items).where(req_items: {order_item: nil})
   end

@@ -4,20 +4,24 @@ class PurchaseOrdersController < ApplicationController
   # GET /purchase_orders
   # GET /purchase_orders.json
   def index
+    authorize! :read, PurchaseOrder
     @purchase_orders = PurchaseOrder.all.includes([:requestor, :supplier, :order_items])
   end
 
   # GET /purchase_orders/1
   # GET /purchase_orders/1.json
   def show
+    authorize! :read, PurchaseOrder
   end
 
   def list
+    authorize! :read, PurchaseOrder
     date = Date.new(params[:year].to_i, params[:month].to_i, params[:day].to_i) rescue Date.today
     @purchase_orders = PurchaseOrder.where(order_date: date).includes([:requestor, :supplier, order_items: [:req_item]])
   end
 
   def status 
+    authorize! :read, PurchaseOrder
     today = Date.today
     start_date = Date.new(params[:year].to_i, params[:month].to_i, 1) rescue Date.new(today.year, today.month, 1)
     end_date = Date.new(params[:year].to_i, params[:month].to_i, -1) rescue Date.new(today.year, today.month, -1)
@@ -26,6 +30,7 @@ class PurchaseOrdersController < ApplicationController
 
   # GET /purchase_orders/new
   def new
+    authorize! :create, PurchaseOrder
     if params[:req]
       req = Requisition.find params[:req]
       @purchase_order = PurchaseOrder.new_from_requisition req
@@ -43,12 +48,14 @@ class PurchaseOrdersController < ApplicationController
 
   # GET /purchase_orders/1/edit
   def edit
+    authorize! :update, PurchaseOrder
     @buyers = User.purchasing
   end
 
   # POST /purchase_orders
   # POST /purchase_orders.json
   def create
+    authorize! :create, PurchaseOrder
     @purchase_order = PurchaseOrder.new(purchase_order_params)
 
     respond_to do |format|
@@ -68,6 +75,7 @@ class PurchaseOrdersController < ApplicationController
   # PATCH/PUT /purchase_orders/1
   # PATCH/PUT /purchase_orders/1.json
   def update
+    authorize! :update, PurchaseOrder
     respond_to do |format|
       if @purchase_order.update(purchase_order_params)
         format.html { redirect_to @purchase_order, notice: 'Purchase order was successfully updated.' }
@@ -82,6 +90,7 @@ class PurchaseOrdersController < ApplicationController
   # DELETE /purchase_orders/1
   # DELETE /purchase_orders/1.json
   def destroy
+    authorize! :destroy, PurchaseOrder
     @purchase_order.destroy
     respond_to do |format|
       format.html { redirect_to purchase_orders_url, notice: 'Purchase order was successfully destroyed.' }

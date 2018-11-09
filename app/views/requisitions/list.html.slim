@@ -7,10 +7,10 @@ nav
       ul
         - if can? :process, Requisition
           li
-            = select_tag :dept, options_from_collection_for_select(Department.all.order(:name),:id,:name)
-        li style="padding: 0 10px"
-          = check_box_tag :active, 1, checked: true
-          = label_tag :active
+            = select_tag :dept, options_from_collection_for_select(Department.all.order(:name),:id,:name, params[:dept]), prompt: 'Select Dept'
+        / li style="padding: 0 10px"
+        /   = check_box_tag :active, 1, checked: true
+        /   = label_tag :active
         li 
           = submit_tag "Go", class: "btn btn-flat btn-small grey"
     ul.right
