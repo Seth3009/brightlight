@@ -82,7 +82,7 @@ class BudgetsController < ApplicationController
     File.open(path, 'wb') do |file|
       file.write(uploaded_io.read)
       if uploaded_io.content_type =~ /office.xlsx/
-        budget = Budget.import_xlsx(file)
+        budget = Diknas_gradebook.import_xlsx(file)
         redirect_to budget, notice: "Import succeeded"
       else
         redirect_to budgets_path, alert: 'Import failed: selected file is not an Excel file'

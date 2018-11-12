@@ -61,6 +61,22 @@ class DiknasGradebooksController < ApplicationController
     end
   end
 
+  # POST /import
+  def import
+    authorize! :create, DiknasGradebook
+    uploaded_io = params[:filename] 
+    path = Rails.root.join('public', 'uploads', uploaded_io.original_filename)
+    File.open(path, 'wb') do |file|
+      file.write(uploaded_io.read)
+      if uploaded_io.content_type =~ /office.xlsx/
+        budget = DiknasGradebook.import_xlsx(file)
+        redirect_to diknas_gradebooks_url, notice: "Import succeeded"
+      else
+        redirect_to diknas_gradebooks_url, alert: 'Import failed: selected file is not an Excel file'
+      end
+    end
+  end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_diknas_gradebook
