@@ -18,6 +18,31 @@ ul#catg-options.dropdown-content
     li
       = link_to catg.name, employee_book_loans_path(params.merge(book_catg: catg.id).symbolize_keys)
 
+ul#inventory-menu.dropdown-content.menu
+  li
+    = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg])
+      | Book Receipt
+      i.material-icons.left receipt 
+  li
+    -if @academic_year.present?
+      = link_to employee_book_loans_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg], format: :pdf), target: '_blank'
+        |Export to PDF
+        i.material-icons.left picture_as_pdf
+    - else
+      = link_to employee_book_loans_path(@teacher, format: :pdf), target: '_blank'
+        Export to PDF
+        i.material-icons.left picture_as_pdf
+  li
+    = link_to employee_book_loans_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg], format: :xls), target: '_blank'
+      |Export to Excel
+      = image_tag 'xls80-orange.png', class: 'left'
+  -if can? :manage, BookLoan 
+    -confirm_msg = "This will change ALL loans status for this teacher in academic year #{@academic_year.name} to Check. Are you sure?"
+    li  
+      = link_to fix_check_employee_book_loans_path(@teacher, year: @academic_year.id), data: {:confirm => confirm_msg}
+        | Change all Return status to Check
+        i.material-icons.left checkbox
+
 div
   = form_tag list_action_book_loans_path(employee_id:params[:employee_id], page:params[:page]), remote:true do 
     nav
@@ -63,19 +88,10 @@ div
                 i.material-icons.right arrow_drop_down
 
           ul.right.hide-on-med-and-down
-            li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Book Receipt"
-              = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg])
-                i.material-icons.left receipt 
-            li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Export to PDF"
-              -if @academic_year.present?
-                = link_to employee_book_loans_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg], format: :pdf), target: '_blank'
-                  i.material-icons.left picture_as_pdf
-              - else
-                = link_to employee_book_loans_path(@teacher, format: :pdf), target: '_blank'
-                  i.material-icons.left picture_as_pdf
-            li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Export to Excel"
-              = link_to employee_book_loans_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg], format: :xls), target: '_blank'
-                = image_tag 'xls80-white.png'
+            li
+              a.dropdown-button href="#!" data-activates="inventory-menu" data-year="#{@academic_year.id}" data-beloworigin="true" 
+                |Actions
+                i.material-icons.right arrow_drop_down
             li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Scan book to check/return"
               = link_to scan_employee_book_loans_path(@teacher, year: @academic_year.id)              
                 | Check
@@ -88,7 +104,7 @@ div
         a href="#" data-activates="sidenav-menu" class="right button-collapse" style="margin-right:10px"
           i.material-icons menu
 
-        ul.side-nav#sidenav-menu
+        ul.side-nav#sidenav-menu  
           li 
             = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg])
               | Book Receipt
@@ -106,6 +122,11 @@ div
             = link_to employee_book_loans_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg], format: :xls), target: '_blank'            
               | Export to Excel
               = image_tag 'xls80-black.png', class:'left'
+          -if can? :manage, BookLoan
+            li  
+              = link_to fix_check_employee_book_loans_path(@teacher, year: @academic_year.id), data: {:confirm => confirm_msg}
+                | Change all Return status to Check
+                i.material-icons.left checkbox
           li
             = link_to scan_employee_book_loans_path(@teacher, year: @academic_year.id)
               | Scan book to check or return

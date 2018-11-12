@@ -565,8 +565,13 @@ nav {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-    //width: 100% !important;
+		}
+	}
+	ul.dropdown-content.menu {
+    a {
+			height: 48px !important;
+			line-height: 54px;
+		}
 	}
 	img.left { margin-right: 15px; }
 
