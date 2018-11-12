@@ -374,6 +374,32 @@ class BookLoansController < ApplicationController
     end
   end
 
+  def change_status_return_to_check
+    empl = params[:employee_id]
+    year = params[:year]
+    
+    loans = BookLoan.where(academic_year_id: year, employee_id: empl, return_status: 'R')
+    if loans.present?
+      loans.each do |bl|
+        bl.loan_checks << LoanCheck.new(
+          academic_year_id: year,
+          loaned_to: empl,
+          scanned_for: empl,
+          book_copy_id: bl.book_copy_id, 
+          emp_flag: true, 
+          matched: true,
+          user_id: bl.user_id
+        )
+        bl.return_status = nil
+        bl.return_date = nil
+        bl.save
+      end
+      redirect_to employee_book_loans_path(employee_id: empl), notice: 'Book loan status was successfully changed to CHECK.'
+    else
+      redirect_to employee_book_loans_path(employee_id: empl), alert: 'No loans with Return status found. Did you select the corrent year?'
+    end
+  end
+
   ####
 
   private
