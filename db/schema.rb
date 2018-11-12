@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181107082322) do
+ActiveRecord::Schema.define(version: 20181112075917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -626,15 +626,24 @@ ActiveRecord::Schema.define(version: 20181107082322) do
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
 
-  create_table "diknas_gradebooks", force: :cascade do |t|
-    t.string   "studentname"
-    t.string   "grade"
-    t.string   "class"
-    t.string   "avg"
-    t.string   "semester"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+  create_table "diknas_report_cards", force: :cascade do |t|
+    t.integer  "student_id"
+    t.integer  "grade_level_id"
+    t.integer  "grade_section_id"
+    t.integer  "academic_year_id"
+    t.integer  "academic_term_id"
+    t.string   "course_belongs_to"
+    t.float    "average"
+    t.text     "notes"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
+
+  add_index "diknas_report_cards", ["academic_term_id"], name: "index_diknas_report_cards_on_academic_term_id", using: :btree
+  add_index "diknas_report_cards", ["academic_year_id"], name: "index_diknas_report_cards_on_academic_year_id", using: :btree
+  add_index "diknas_report_cards", ["grade_level_id"], name: "index_diknas_report_cards_on_grade_level_id", using: :btree
+  add_index "diknas_report_cards", ["grade_section_id"], name: "index_diknas_report_cards_on_grade_section_id", using: :btree
+  add_index "diknas_report_cards", ["student_id"], name: "index_diknas_report_cards_on_student_id", using: :btree
 
   create_table "door_access_logs", force: :cascade do |t|
     t.string   "location"
@@ -1749,6 +1758,11 @@ ActiveRecord::Schema.define(version: 20181107082322) do
   add_foreign_key "delivery_items", "order_items"
   add_foreign_key "delivery_items", "users", column: "created_by_id"
   add_foreign_key "delivery_items", "users", column: "last_updated_by_id"
+  add_foreign_key "diknas_report_cards", "academic_terms"
+  add_foreign_key "diknas_report_cards", "academic_years"
+  add_foreign_key "diknas_report_cards", "grade_levels"
+  add_foreign_key "diknas_report_cards", "grade_sections"
+  add_foreign_key "diknas_report_cards", "students"
   add_foreign_key "door_access_logs", "employees"
   add_foreign_key "door_access_logs", "students"
   add_foreign_key "employee_smartcards", "employees"

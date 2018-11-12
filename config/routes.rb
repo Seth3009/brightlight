@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   
   
+  resources :diknas_report_cards
   resources :diknas_gradebooks do
     collection do
       post 'import'
