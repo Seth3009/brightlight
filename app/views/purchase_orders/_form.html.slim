@@ -12,8 +12,7 @@
           .input-field.col.s12
             i.material-icons.prefix store
             = f.label :supplier, class: 'active'
-            /= f.collection_select :supplier_id, Supplier.all, :id, :company_name, class:'material-select', prompt: "Select supplier"
-            = f.select :supplier_id, options_for_select(Supplier.all.map { |s| [s.company_name, s.id, {'data-contact' => s.try(:contact_name), 'data-mobile' => s.try(:mobile)}] }), prompt: 'Select supplier'
+            = f.select :supplier_id, options_for_select(Supplier.all.map { |s| [s.company_name, s.id, {'data-contact' => s.try(:contact_name), 'data-mobile' => s.try(:mobile)}] }, f.object.supplier_id), prompt: 'Select supplier'
           .input-field.col.s12
             i.material-icons.prefix account_circle
             = f.label :contact, class: 'active'

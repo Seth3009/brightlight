@@ -5,7 +5,7 @@ class SuppliersController < ApplicationController
   # GET /suppliers.json
   def index
     authorize! :read, Supplier
-    @suppliers = Supplier.all
+    @suppliers = Supplier.all.order(:id)
   end
 
   # GET /suppliers/1
