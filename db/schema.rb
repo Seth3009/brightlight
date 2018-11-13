@@ -648,6 +648,16 @@ ActiveRecord::Schema.define(version: 20181112075917) do
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
 
+  create_table "diknas_gradebooks", force: :cascade do |t|
+    t.string   "studentname"
+    t.string   "grade"
+    t.string   "class"
+    t.string   "avg"
+    t.string   "semester"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "diknas_report_cards", force: :cascade do |t|
     t.integer  "student_id"
     t.integer  "grade_level_id"
@@ -971,20 +981,10 @@ ActiveRecord::Schema.define(version: 20181112075917) do
     t.datetime "updated_at",                        null: false
     t.boolean  "is_canceled",       default: false
     t.string   "category"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> add employee cancel
     t.integer  "leave_day",         default: 0
     t.string   "start_time"
     t.string   "end_time"
     t.boolean  "employee_canceled", default: false
-<<<<<<< HEAD
-=======
-    t.integer  "leave_day",        default: 0
->>>>>>> change leaving notes input
-=======
->>>>>>> add employee cancel
   end
 
   add_index "leave_requests", ["employee_id"], name: "index_leave_requests_on_employee_id", using: :btree

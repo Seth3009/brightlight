@@ -13,8 +13,9 @@ namespace :data do
 			next if i < 1
     #   course = Student.find_by_student_no row[:student_no]
     #   grade_section = GradeSection.find_by_name row[:section_name]
+      puts "Importing row #{i}. #{row[:number]}"
       course = Course.new(
-                  name: row[:name],
+                  name: row[:number],
                   number: row[:number],
                   description: row[:description],
                   grade_level_id: row[:grade_level_id],
