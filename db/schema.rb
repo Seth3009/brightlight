@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181108053440) do
+ActiveRecord::Schema.define(version: 20181113082829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -457,27 +457,6 @@ ActiveRecord::Schema.define(version: 20181108053440) do
   add_index "carpools", ["barcode"], name: "index_carpools_on_barcode", using: :btree
   add_index "carpools", ["sort_order"], name: "index_carpools_on_sort_order", using: :btree
   add_index "carpools", ["transport_id"], name: "index_carpools_on_transport_id", using: :btree
-
-  create_table "cars", force: :cascade do |t|
-    t.string   "transport_name", limit: 255
-    t.string   "uid",            limit: 255
-    t.string   "family_no",      limit: 255
-    t.integer  "period"
-    t.string   "status",         limit: 255
-    t.string   "category",       limit: 255
-    t.datetime "arrival"
-    t.datetime "departure"
-    t.boolean  "loading",                    default: false, null: false
-    t.float    "sort_order"
-    t.string   "notes",          limit: 255
-    t.integer  "transport_id"
-    t.datetime "inserted_at",                                null: false
-    t.datetime "updated_at",                                 null: false
-    t.string   "period_hash",    limit: 32
-  end
-
-  add_index "cars", ["transport_id", "period_hash"], name: "transport_period_index", unique: true, using: :btree
-  add_index "cars", ["transport_id"], name: "cars_transport_id_index", using: :btree
 
   create_table "comments", force: :cascade do |t|
     t.string   "title",            limit: 50, default: ""
@@ -942,20 +921,10 @@ ActiveRecord::Schema.define(version: 20181108053440) do
     t.datetime "updated_at",                        null: false
     t.boolean  "is_canceled",       default: false
     t.string   "category"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> add employee cancel
     t.integer  "leave_day",         default: 0
     t.string   "start_time"
     t.string   "end_time"
     t.boolean  "employee_canceled", default: false
-<<<<<<< HEAD
-=======
-    t.integer  "leave_day",        default: 0
->>>>>>> change leaving notes input
-=======
->>>>>>> add employee cancel
   end
 
   add_index "leave_requests", ["employee_id"], name: "index_leave_requests_on_employee_id", using: :btree
@@ -1242,6 +1211,13 @@ ActiveRecord::Schema.define(version: 20181108053440) do
   add_index "purchase_orders", ["requestor_id"], name: "index_purchase_orders_on_requestor_id", using: :btree
   add_index "purchase_orders", ["term_of_payment_id"], name: "index_purchase_orders_on_term_of_payment_id", using: :btree
 
+  create_table "raw_foods", force: :cascade do |t|
+    t.string   "name"
+    t.boolean  "is_stock"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "recurring_types", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -1385,10 +1361,6 @@ ActiveRecord::Schema.define(version: 20181108053440) do
   add_index "rosters", ["academic_year_id"], name: "index_rosters_on_academic_year_id", using: :btree
   add_index "rosters", ["course_section_id"], name: "index_rosters_on_course_section_id", using: :btree
   add_index "rosters", ["student_id"], name: "index_rosters_on_student_id", using: :btree
-
-  create_table "schema_versions", primary_key: "version", force: :cascade do |t|
-    t.datetime "inserted_at"
-  end
 
   create_table "school_levels", force: :cascade do |t|
     t.string   "name"
@@ -1829,7 +1801,6 @@ ActiveRecord::Schema.define(version: 20181108053440) do
   add_foreign_key "budgets", "users", column: "created_by_id"
   add_foreign_key "budgets", "users", column: "last_updated_by_id"
   add_foreign_key "carpools", "transports"
-  add_foreign_key "cars", "transports", name: "cars_transport_id_fkey"
   add_foreign_key "course_section_histories", "employees", column: "instructor_id"
   add_foreign_key "currencies", "users"
   add_foreign_key "deliveries", "employees", column: "accepted_by_id"

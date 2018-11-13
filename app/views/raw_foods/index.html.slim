@@ -1,0 +1,23 @@
+h1 Listing raw_foods
+
+table
+  thead
+    tr
+      th Name
+      th Is stock
+      th
+      th
+      th
+
+  tbody
+    - @raw_foods.each do |raw_food|
+      tr
+        td = raw_food.name
+        td = raw_food.is_stock
+        td = link_to 'Show', raw_food
+        td = link_to 'Edit', edit_raw_food_path(raw_food)
+        td = link_to 'Destroy', raw_food, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Raw food', new_raw_food_path
