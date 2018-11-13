@@ -2,10 +2,10 @@ namespace :data do
 	desc "Import new course"
 	task import_new_course: :environment do
 
-    xl = Roo::Spreadsheet.open('lib/tasks/course.xlsx')
+    xl = Roo::Spreadsheet.open('lib/tasks/courses.xlsx')
     sheet = xl.sheet('Sheet1')
 
-    header = {name:'Name',number:'number', description:'description', grade_level_id:'grade_level_id',
+    header = {name:'name',number:'number', description:'description', grade_level_id:'grade_level_id',
               academic_year_id:'academic_year_id', academic_term_id:'academic_term_id', employee_id:'employee_id'}
     # course = Course.find_by_name '2017-2018'
 
@@ -16,10 +16,10 @@ namespace :data do
       course = Course.new(
                   name: row[:name],
                   number: row[:number],
-                  description: row[:description},
+                  description: row[:description],
                   grade_level_id: row[:grade_level_id],
                   academic_year_id: row[:academic_year_id],
-                  academic_year_id: row[:academic_year_id],
+                  academic_term_id: row[:academic_term_id],
                   employee_id: row[:employee_id]
                 )
       course.save
