@@ -77,7 +77,7 @@ class Requisition < ActiveRecord::Base
   end
 
   def pending_budget_approval?
-    sent_for_bgt_approval != nil && is_budget_approved == nil
+    !is_budgeted && sent_for_bgt_approval != nil && is_budget_approved == nil
   end
 
   def draft?

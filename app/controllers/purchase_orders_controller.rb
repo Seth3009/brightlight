@@ -60,6 +60,7 @@ class PurchaseOrdersController < ApplicationController
 
     respond_to do |format|
       if @purchase_order.save
+        @purchase_order.notify_requesters
         format.html { redirect_to @purchase_order, notice: 'Purchase order was successfully created.' }
         format.json { render :show, status: :created, location: @purchase_order }
       else

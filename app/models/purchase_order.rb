@@ -11,12 +11,12 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :deliveries
   has_many :po_reqs, dependent: :destroy
   has_many :requisitions, through: :po_reqs
+  has_many :req_items, through: :order_items
 
   accepts_nested_attributes_for :order_items, reject_if: :all_blank, allow_destroy: true
   #validate  :at_least_one_order_item
 
   after_create :assign_po_number
-
 
   def self.new_from_requisition(req)
     purchase_order = PurchaseOrder.new 
@@ -35,6 +35,16 @@ class PurchaseOrder < ActiveRecord::Base
       )
     end
     purchase_order
+  end
+
+  def unique_requests
+    Requisition.joins(req_items: :order_item).where(order_items: {purchase_order_id: self.id}).uniq
+  end
+
+  def notify_requesters
+    self.unique_requests.each do |req|
+      EmailNotification.po_processed(req, self).deliver_now
+    end
   end
 
   private
