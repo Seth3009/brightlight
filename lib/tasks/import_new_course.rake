@@ -5,7 +5,7 @@ namespace :data do
     xl = Roo::Spreadsheet.open('lib/tasks/courses.xlsx')
     sheet = xl.sheet('Sheet1')
 
-    header = {name:'name',number:'number', description:'description', grade_level_id:'grade_level_id',
+    header = {no:'no',name:'name',number:'number', description:'description', grade_level_id:'grade_level_id',
               academic_year_id:'academic_year_id', academic_term_id:'academic_term_id', employee_id:'employee_id'}
     # course = Course.find_by_name '2017-2018'
 
