@@ -18,6 +18,8 @@ class PurchaseOrder < ActiveRecord::Base
 
   after_create :assign_po_number
 
+  Statuses = {0 => "Requested", 1 =>"Ordered", 2 =>"Pending Delivery", 3 =>"Received", 4 => "Canceled"}
+
   def self.new_from_requisition(req)
     purchase_order = PurchaseOrder.new 
     purchase_order.requisitions << req

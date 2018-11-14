@@ -60,7 +60,7 @@ nav
             .item = @purchase_order.currency
           .record-field.s2
             .label Status
-            .item = @purchase_order.status  
+            .item = PurchaseOrder::Statuses[@purchase_order.status.to_i]
 
 h5 Items
 .card-panel

@@ -38,7 +38,7 @@
             = f.collection_select :department_id, Department.all, :id, :name, prompt: "Select department"
           .input-field.col.s6
             = f.label :order_date, class: "active"
-            = f.date_field :order_date
+            = f.date_field :order_date, value: Date.today
           .input-field.col.s6
             = f.label :due_date, class: "active"
             = f.date_field :due_date
@@ -47,7 +47,7 @@
             = f.select :currency, [['IDR', 'IDR'], ['USD', 'USD'], ['SGD', 'SGD'], ['AUD', 'AUD'], ['GBP', 'GBP']]
           .input-field.col.offset-s4
             = f.label :status, class: "active"
-            = f.text_field :status  
+            = f.select :status, options_for_select(PurchaseOrder::Statuses.map{|k,v| [v,k]})
   nav.light
     .nav-wrapper
       .brand-logo style="margin-left: 20px; font-size:1.5em"
