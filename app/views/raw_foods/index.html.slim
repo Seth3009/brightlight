@@ -35,15 +35,15 @@ nav
     thead
       tr
         th Name
-        th Stock items
-        th Is Active
-        th Actions
+        th.center Stock items
+        th.center Is Active
+        th.center Actions
         
 
-  tbody#raw_foods
-    - @raw_foods.each do |raw_food|
-      tr id="row-#{raw_food.id}"
-        = render partial: 'index_row', locals: {raw_food: raw_food}
+    tbody#raw_foods
+      - @raw_foods.each do |raw_food|
+        tr id="row-#{raw_food.id}"
+          = render partial: 'index_row', locals: {raw_food: raw_food}
 
 
 
