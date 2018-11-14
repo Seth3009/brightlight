@@ -2,22 +2,22 @@ p#notice = notice
 
 p
   strong Student:
-  = @diknas_report_card.student
+  = @diknas_report_card.student.name
 p
   strong Grade level:
-  = @diknas_report_card.grade_level
+  = @diknas_report_card.grade_level.name
 p
   strong Grade section:
   = @diknas_report_card.grade_section
 p
   strong Academic year:
-  = @diknas_report_card.academic_year
+  = @diknas_report_card.academic_year.name
 p
   strong Academic term:
   = @diknas_report_card.academic_term
 p
-  strong Course belongs to:
-  = @diknas_report_card.course_belongs_to
+  strong Course :
+  = @diknas_report_card.course.name
 p
   strong Average:
   = @diknas_report_card.average

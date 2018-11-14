@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181112075917) do
+ActiveRecord::Schema.define(version: 20181114075056) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -632,11 +632,11 @@ ActiveRecord::Schema.define(version: 20181112075917) do
     t.integer  "grade_section_id"
     t.integer  "academic_year_id"
     t.integer  "academic_term_id"
-    t.string   "course_belongs_to"
     t.float    "average"
     t.text     "notes"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "course_id"
   end
 
   add_index "diknas_report_cards", ["academic_term_id"], name: "index_diknas_report_cards_on_academic_term_id", using: :btree
@@ -1760,6 +1760,7 @@ ActiveRecord::Schema.define(version: 20181112075917) do
   add_foreign_key "delivery_items", "users", column: "last_updated_by_id"
   add_foreign_key "diknas_report_cards", "academic_terms"
   add_foreign_key "diknas_report_cards", "academic_years"
+  add_foreign_key "diknas_report_cards", "courses"
   add_foreign_key "diknas_report_cards", "grade_levels"
   add_foreign_key "diknas_report_cards", "grade_sections"
   add_foreign_key "diknas_report_cards", "students"

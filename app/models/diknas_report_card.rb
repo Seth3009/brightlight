@@ -4,6 +4,7 @@ class DiknasReportCard < ActiveRecord::Base
   belongs_to :grade_section
   belongs_to :academic_year
   belongs_to :academic_term
+  belongs_to :course
 
   def self.import_xlsx(file_path)
     # Read from file
@@ -11,23 +12,22 @@ class DiknasReportCard < ActiveRecord::Base
     sheet = xl.sheet('Sheet1')
 
     header = {student_id: "School UD ID", grade: "Grade", course: "Course",
-      gradesection: "Class", average: "S1Avg", school_year: "School Year", academic_term: "Academic term"}
+      gradesection: "Class", average: "S1Avg", year: "School Year", academic_term: "Academic term"}
     
     sheet.each_with_index(header) do |row,i|
       puts "#{i}, #{row}"
       next if i < 1
       
-        # puts "Department: #{row[:department]}"
         student = Student.find_by_student_no(row[:student_id])
-        # grade = Grade.find_by_student_no
-        # budget_holder = dept.manager
-        # academic_year = AcademicYear.find_by_name(row[:year])
+        academicyear = AcademicYear.find_by_name(row[:year])
+        course = Course.find_by_number(row[:course])
 
         diknasreportcard = DiknasReportCard.new(
           student_id:       student.id,
-          grade_level_id:   row[:grade]
-          # budget_holder_id: dept.manager_id,
-          # total_amt:        0
+          grade_level_id:   row[:grade],
+          course_id:        course.id,
+          average:          row[:average],
+          academic_year_id: academicyear.id
         )
 
         diknasreportcard.save

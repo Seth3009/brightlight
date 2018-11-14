@@ -68,15 +68,15 @@ class DiknasReportCardsController < ApplicationController
     path = Rails.root.join('public', 'uploads', uploaded_io.original_filename)
     File.open(path, 'wb') do |file|
       file.write(uploaded_io.read)
-      diknas = DiknasReportCard.import_xlsx(file)
-      redirect_to diknas_report_cards_url, notice: "Import succeeded"
 
-      # if uploaded_io.content_type =~ /office.xlsx/
-      #   diknas = DiknasReportCard.import_xlsx(file)
-      #   redirect_to diknas_report_cards_url, notice: "Import succeeded"
-      # else
-      #   redirect_to diknas_report_cards_url, alert: 'Import failed: selected file is not an Excel file'
-      # end
+      # diknas = DiknasReportCard.import_xlsx(file)
+      # redirect_to diknas_report_cards_url, notice: "Import succeeded"
+      if uploaded_io.content_type =~ /office.xlsx/ || uploaded_io.content_type =~ /officedocument/
+        diknas = DiknasReportCard.import_xlsx(file)
+        redirect_to diknas_report_cards_url, notice: "Import succeeded"
+      else
+        redirect_to diknas_report_cards_url, alert: 'Import failed: selected file is not an Excel file'
+      end
     end
   end
 
