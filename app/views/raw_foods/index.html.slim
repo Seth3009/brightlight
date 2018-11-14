@@ -21,13 +21,13 @@ nav
   .nav-wrapper
     ul
       li
-        = link_to 'Catalog (PDF)', raw_foods_path(format: 'pdf'), target: '_blank'
+        / = link_to 'Catalog (PDF)', raw_foods_path(format: 'pdf'), target: '_blank'
 
     ul.right
       - if can? :manage, RawFood
         li
           = link_to new_raw_food_path, remote: true
-            | New Food Product
+            | New Product
             i.material-icons.left add
 
 .card-panel
@@ -44,3 +44,18 @@ nav
     - @raw_foods.each do |raw_food|
       tr id="row-#{raw_food.id}"
         = render partial: 'index_row', locals: {raw_food: raw_food}
+
+
+
+/ - if @raw_foods.length >= 20   
+/   .toolbar.z-index-1
+/     = will_paginate @raw_foods
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content
