@@ -15,8 +15,8 @@ table.compact.striped
     - @own_leave_requests.each do |leave_request|
       tr
         td 
-          = leave_request.form_submit_date.nil? ? 'Draft' : leave_request.form_submit_date.strftime("%d/%m/%Y")
-        td = leave_request.start_date.strftime("%d/%m/%Y") + " - " + leave_request.end_date.strftime("%d/%m/%Y")
+          = leave_request.form_submit_date.nil? ? 'Draft' : leave_request.form_submit_date.strftime("%d %b %y")
+        td = leave_request.start_date.strftime("%d %b %Y") + " - " + leave_request.end_date.strftime("%d %b %Y")
         td = leave_request.hour
         td = leave_request.category? ? leave_request.category : "--"
         td 
