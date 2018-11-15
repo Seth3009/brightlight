@@ -245,6 +245,7 @@ GEM
       rspec-mocks (~> 3.5.0)
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
+    ruby-measurement (1.2.3)
     rubyzip (1.2.0)
     sass (3.4.21)
     sass-rails (5.0.4)
@@ -354,6 +355,7 @@ DEPENDENCIES
   rails-timeago (~> 2.0)
   roo (~> 2.3.2)
   rspec-rails (~> 3.5)
+  ruby-measurement
   sass-rails (~> 5.0)
   scenic
   sdoc (~> 0.4.0)

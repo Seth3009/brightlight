@@ -120,6 +120,9 @@ gem 'roo', '~> 2.3.2'
 
 # For connecting to SQL server
 gem 'tiny_tds'
+
+# To define measurements unit
+gem 'ruby-measurement'
   
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
