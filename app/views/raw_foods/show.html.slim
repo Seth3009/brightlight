@@ -20,15 +20,18 @@ nav.light
           | Add Badge Card
           i.material-icons.left add
 
-h5 Badges
+h5 Product's packages
 = form_for @raw_food do |f|
   .card-panel
     .row.header.compact
-      .col.s4 Name 
-      .col.s2 Kind
-      .col.s2 Badge
+      .col.s4 Packaging 
+      .col.s2 Qty
+      .col.s2 Unit
       .col.s2.center Action
     .row.compact
-      = f.fields_for :room_accesses, @badges do |room_access|
+      = f.fields_for :food_packages, @raw_food do |food_package|
           .nested-fields
-            = render 'room_accesses_fields', f: room_access
+            = render 'food_packages_fields', f: food_package
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', raw_foods_path, class: "waves-effect waves-light btn-flat"

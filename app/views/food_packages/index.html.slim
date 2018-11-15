@@ -1,0 +1,25 @@
+h1 Listing food_packages
+
+table
+  thead
+    tr
+      th Packaging
+      th Qty
+      th Unit
+      th
+      th
+      th
+
+  tbody
+    - @food_packages.each do |food_package|
+      tr
+        td = food_package.packaging
+        td = food_package.qty
+        td = food_package.unit
+        td = link_to 'Show', food_package
+        td = link_to 'Edit', edit_food_package_path(food_package)
+        td = link_to 'Destroy', food_package, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Food package', new_food_package_path

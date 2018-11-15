@@ -10,6 +10,7 @@ class RawFoodsController < ApplicationController
   # GET /raw_foods/1
   # GET /raw_foods/1.json
   def show
+    @food_packages = FoodPackage.where(raw_food_id:@raw_food)
   end
 
   # GET /raw_foods/new
@@ -69,6 +70,7 @@ class RawFoodsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def raw_food_params
-      params.require(:raw_food).permit(:name, :is_stock)
+      params.require(:raw_food).permit(:name, :is_stock, :is_active,
+                                {:food_packages_attributes => [:id, :packaging, :qty, :unit, :raw_food_id, :_destroy]})
     end
 end
