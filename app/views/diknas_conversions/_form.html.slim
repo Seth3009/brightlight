@@ -1,0 +1,27 @@
+= form_for @diknas_conversion do |f|
+  - if @diknas_conversion.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@diknas_conversion.errors.count, "error")} prohibited this diknas_conversion from being saved:"
+      ul
+        - @diknas_conversion.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :course
+    = f.text_field :course
+  .field
+    = f.label :diknas_course
+    = f.text_field :diknas_course
+  .field
+    = f.label :academic_year
+    = f.text_field :academic_year
+  .field
+    = f.label :academic_term
+    = f.text_field :academic_term
+  .field
+    = f.label :weight
+    = f.text_field :weight
+  .field
+    = f.label :notes
+    = f.text_area :notes
+  .actions = f.submit
