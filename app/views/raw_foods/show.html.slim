@@ -1,12 +1,34 @@
-p#notice = notice
+- title "#{@raw_food.name}"
 
-p
-  strong Name:
-  = @raw_food.name
-p
-  strong Is stock:
-  = @raw_food.is_stock
+h4 #{@raw_food.name}
 
-= link_to 'Edit', edit_raw_food_path(@raw_food)
-'|
-= link_to 'Back', raw_foods_path
+nav.light
+  .nav-wrapper
+    ul
+      li
+        = link_to raw_foods_path
+          i.material-icons.left chevron_left
+      li
+        .brand-logo style="margin-left: 20px; font-size:1.5em"
+          - if @raw_food.is_stock?
+            | Stock Product
+          - else
+            | Non Stock Product
+    ul.right
+      li
+        = link_to badges_room_url
+          | Add Badge Card
+          i.material-icons.left add
+
+h5 Badges
+= form_for @raw_food do |f|
+  .card-panel
+    .row.header.compact
+      .col.s4 Name 
+      .col.s2 Kind
+      .col.s2 Badge
+      .col.s2.center Action
+    .row.compact
+      = f.fields_for :room_accesses, @badges do |room_access|
+          .nested-fields
+            = render 'room_accesses_fields', f: room_access
