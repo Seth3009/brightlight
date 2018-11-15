@@ -44,7 +44,7 @@ class LeaveRequestsController < ApplicationController
                             .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today)).order("#{sort_column} #{sort_direction}")
     else   
       @own_leave_requests = @leave_requests.empl(@employee).archive.order("#{sort_column} #{sort_direction}")
-                            .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today)).empl_canceled
+                            .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
     end
    
     if params[:dept].present? && params[:dept] != 'all'
