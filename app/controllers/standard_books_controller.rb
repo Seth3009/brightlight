@@ -58,6 +58,7 @@ class StandardBooksController < ApplicationController
     @standard_book = StandardBook.new
     @grade_level = GradeLevel.find params[:grade_level_id]
     @academic_year = AcademicYear.where(id:params[:year]).take || AcademicYear.current
+    @subjects = Subject.all
   end
 
   # GET /standard_books/1/edit
@@ -65,6 +66,7 @@ class StandardBooksController < ApplicationController
     authorize! :update, StandardBook
     @grade_level = @standard_book.grade_level
     @academic_year = @standard_book.academic_year
+    @subjects = Subject.all
   end
 
   # POST /standard_books
