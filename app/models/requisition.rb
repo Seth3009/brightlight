@@ -25,6 +25,12 @@ class Requisition < ActiveRecord::Base
   acts_as_commentable
   accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
 
+  Statuses = {:wappr  => {code: "WAPPR",  description: "Waiting for Approval"},
+              :appvd  => {code: "APPVD",  description: "Approved"},
+              :open   => {code: "OPEN",   description: "Purchase Order created"},
+              :close  => {code: "CLOSE",  description: "All items ordered"},
+              :cancel => {code: "CANCEL", description: "Canceled"}}
+
   scope :pending_supv_approval, lambda { |employee|
     where(department: employee.try(:department))
     .where.not(sent_to_supv: nil).where(is_supv_approved: nil).where(supervisor_id: employee.id)
@@ -107,9 +113,24 @@ class Requisition < ActiveRecord::Base
     requester 
   end
 
+  def number_of_unordered_items
+    req_items.where(order_item_id: nil).count
+  end
+
   def all_items_ordered? 
     self.req_items.reduce(true) do |acc, req_item| 
       acc && req_item.order_item.present?
+    end
+  end
+
+  def update_status
+    unordered_items_count = number_of_unordered_items
+    if unordered_items_count == 0
+      update_columns(status: Requisition::Statuses[:closed][:code])
+    elsif unordered_items_count != req_items.count
+      update_columns(status: Requisition::Statuses[:open][:code])
+    else
+      update_columns(status: Requisition::Statuses[:appvd][:code])
     end
   end
   

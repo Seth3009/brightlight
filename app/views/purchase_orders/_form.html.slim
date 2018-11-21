@@ -24,9 +24,13 @@
     .col.s12.m6
       .card-panel
         .row
+          = hidden_field_tag :req, params[:req]
           .input-field.col.s6
             = f.label :order_num
             = f.text_field :order_num
+          .input-field.col.s6
+            = f.label :description
+            = f.text_field :description
           .input-field.col.s6
             = f.label :buyer, class: "active"
             = f.collection_select :buyer_id, @buyers, :id, :name, class:'material-select'

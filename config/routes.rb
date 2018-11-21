@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   resources :warehouses
   resources :item_categories
   resources :item_units
-  resources :template_targets
+  resources :template_targets, except: :show
   resources :templates
   resources :currencies
   resources :people
@@ -273,6 +273,9 @@ Rails.application.routes.draw do
     collection do
       get 'list'
       get 'status'
+    end
+    member do
+      get 'letter'
     end
   end
 

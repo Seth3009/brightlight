@@ -1,4 +1,14 @@
+
 = form_for @template_target do |f|
+  nav
+    .nav-wrapper
+      ul
+        li
+          = link_to template_targets_path 
+            i.material-icons.left chevron_left
+        li.right
+          button.btn.waves-effect.waves-light type="submit" Save
+          
   - if @template_target.errors.any?
     #error_explanation
       h2 = "#{pluralize(@template_target.errors.count, "error")} prohibited this template_target from being saved:"
@@ -6,13 +16,16 @@
         - @template_target.errors.full_messages.each do |message|
           li = message
 
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :code
-    = f.text_field :code
-  .field
-    = f.label :description
-    = f.text_field :description
-  .actions = f.submit
+  .card-panel
+    .row
+      .col.s6
+        .input_field
+          = f.label :name
+          = f.text_field :name
+        .input_field
+          = f.label :code
+          = f.text_field :code
+        .input_field
+          = f.label :description
+          = f.text_field :description
+

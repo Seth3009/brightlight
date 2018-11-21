@@ -1,0 +1,113 @@
+-date = @purchase_order.order_date || Date.today
+div
+  | Bandung, #{date.strftime("%d %B %Y")}
+br
+/ table.compact
+/   tr 
+/     td style="padding: 0; width: 65px" No. PO
+/     td = @purchase_order.order_num
+/   tr
+/     td style="padding: 0; width: 65px"  Hal
+/     td = @purchase_order.contact
+
+div
+  span style="display: inline-block; width: 65px" No. PO
+  span = @purchase_order.order_num
+div 
+  span style="display: inline-block; width: 65px" Hal
+  span = @purchase_order.description
+br
+-if @supplier
+  |Kepada
+  div
+    strong = @supplier.company_name
+  div
+    = @supplier.address1
+  div
+    = @supplier.address2
+  div
+    = "#{@supplier.city} #{@supplier.post_code}"
+  div
+    span style="display: inline-block; padding-right:10px" No. Telp/Fax
+    = "#{@supplier.phone} / #{@supplier.fax || '-'}"
+  div
+    strong = "u.p #{@supplier.contact_name}"
+
+p Dengan hormat,
+p Melalui surat pemesanan ini, kami <strong>Cahaya Bangsa Classical School</strong> bermaksud memesan barang sebagai berikut:
+
+table.compact.bordered
+  thead
+    tr
+      td No
+      td Item
+      td Order
+      td Code
+      td Unit Price
+      td Total (incl. disc)
+      td Notes
+  tbody
+    - discount = total = 0
+    - @purchase_order.order_items.each.with_index(1) do |item, i|
+      - discount += item.discount if item.discount
+      - total += item.line_amount if item.line_amount
+      tr 
+        td = "#{i}."
+        td = item.description
+        td = "#{item.quantity} #{item.unit}"
+        td 
+        td = item.unit_price
+        td = item.line_amount
+        td ---
+  tfoot style="background-color: lightgrey"
+    tr
+      td
+      td colspan=4 Jumlah
+      td = total
+      td
+    tr
+      td
+      td colspan=4 Discount 
+      td = discount
+      td
+    tr
+      td
+      td colspan=4 Total Tagihan 
+      td = @purchase_order.total_amount
+      td
+
+p Adapun ketentuan waktu pengiriman dan pembayaran adalah sbb.:
+
+table.compact.bordered
+  thead
+    tr
+      td.wd50 Waktu dan Tempan Pengiriman Barang
+      td.wd50 Pembayaran Tagihan
+  tbody
+    tr
+      td 
+        |Tanggal: ASAP
+        br Pukul 09:00 - 14:00 WIB
+        br Alamat:
+      td
+        ul
+          li Pembayaran akan ditransfer segera setelah barang pesanan kami terima.
+          li Kwitansi asli mohon dikirimkan bersamaan dengan barang pesanan (kwitansi bermeterai Rp6.000)
+          li Data Rekening: #{@supplier.bank} Cab. #{@supplier.bank_branch}
+          li
+            strong a.c : #{@supplier.bank_acct_no}
+          li
+            strong a.n : #{@supplier.bank_acct_name}
+
+p Demikianlah pesanan barang yang dapat kami sampaikan, untuk contact person dapat menghubungi Bag. Pembelian di no. telp 022-86813919 (Nori).
+p Atas perhatian dan kerjasamanya kami ucapkan terima kasih.
+
+table
+  tr
+    td Hormat kami
+    td Mengetahui
+  td
+    td
+  tr
+    td Nori M. Onggeleng <br> Purchasing Staff
+    td Muliani Tjiptoatmadja <br> Head of Business Operation

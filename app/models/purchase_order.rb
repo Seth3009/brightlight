@@ -26,7 +26,7 @@ class PurchaseOrder < ActiveRecord::Base
     purchase_order.requestor_id = req.requester_id
     purchase_order.department_id = req.department_id
     purchase_order.due_date = req.date_required
-    req.req_items.each do |item|
+    req.req_items.incomplete.each do |item|
       purchase_order.order_items.build(
         description: item.description,
         quantity: item.qty_reqd,
@@ -45,7 +45,8 @@ class PurchaseOrder < ActiveRecord::Base
 
   def notify_requesters
     self.unique_requests.each do |req|
-      EmailNotification.po_processed(req, self).deliver_now
+      email = EmailNotification.po_processed(req, self).deliver_now
+      Message.create_from_email(email)
     end
   end
 

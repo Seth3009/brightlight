@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181108053440) do
+ActiveRecord::Schema.define(version: 20181116091441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -648,6 +648,35 @@ ActiveRecord::Schema.define(version: 20181108053440) do
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
 
+  create_table "diknas_gradebooks", force: :cascade do |t|
+    t.string   "studentname"
+    t.string   "grade"
+    t.string   "class"
+    t.string   "avg"
+    t.string   "semester"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "diknas_report_cards", force: :cascade do |t|
+    t.integer  "student_id"
+    t.integer  "grade_level_id"
+    t.integer  "grade_section_id"
+    t.integer  "academic_year_id"
+    t.integer  "academic_term_id"
+    t.string   "course_belongs_to"
+    t.float    "average"
+    t.text     "notes"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "diknas_report_cards", ["academic_term_id"], name: "index_diknas_report_cards_on_academic_term_id", using: :btree
+  add_index "diknas_report_cards", ["academic_year_id"], name: "index_diknas_report_cards_on_academic_year_id", using: :btree
+  add_index "diknas_report_cards", ["grade_level_id"], name: "index_diknas_report_cards_on_grade_level_id", using: :btree
+  add_index "diknas_report_cards", ["grade_section_id"], name: "index_diknas_report_cards_on_grade_section_id", using: :btree
+  add_index "diknas_report_cards", ["student_id"], name: "index_diknas_report_cards_on_student_id", using: :btree
+
   create_table "door_access_logs", force: :cascade do |t|
     t.string   "location"
     t.string   "card"
@@ -834,6 +863,16 @@ ActiveRecord::Schema.define(version: 20181108053440) do
   add_index "grade_sections_students", ["grade_section_id"], name: "index_grade_sections_students_on_grade_section_id", using: :btree
   add_index "grade_sections_students", ["student_id"], name: "index_grade_sections_students_on_student_id", using: :btree
 
+  create_table "gradebook", force: :cascade do |t|
+    t.string   "studentname"
+    t.string   "grade"
+    t.string   "class"
+    t.decimal  "avg"
+    t.string   "semester"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "guardians", force: :cascade do |t|
     t.string   "name"
     t.string   "first_name"
@@ -942,20 +981,10 @@ ActiveRecord::Schema.define(version: 20181108053440) do
     t.datetime "updated_at",                        null: false
     t.boolean  "is_canceled",       default: false
     t.string   "category"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> add employee cancel
     t.integer  "leave_day",         default: 0
     t.string   "start_time"
     t.string   "end_time"
     t.boolean  "employee_canceled", default: false
-<<<<<<< HEAD
-=======
-    t.integer  "leave_day",        default: 0
->>>>>>> change leaving notes input
-=======
->>>>>>> add employee cancel
   end
 
   add_index "leave_requests", ["employee_id"], name: "index_leave_requests_on_employee_id", using: :btree
@@ -1085,6 +1114,7 @@ ActiveRecord::Schema.define(version: 20181108053440) do
     t.decimal  "shipping"
     t.decimal  "down_payment"
     t.integer  "req_item_id"
+    t.string   "code"
   end
 
   add_index "order_items", ["created_by_id"], name: "index_order_items_on_created_by_id", using: :btree
@@ -1233,6 +1263,11 @@ ActiveRecord::Schema.define(version: 20181108053440) do
     t.string   "method"
     t.string   "delivery"
     t.integer  "term_of_payment_id"
+    t.string   "description"
+    t.string   "dlvry_address"
+    t.string   "dlvry_address2"
+    t.string   "dlvry_city"
+    t.string   "dlvry_post_code"
   end
 
   add_index "purchase_orders", ["approver_id"], name: "index_purchase_orders_on_approver_id", using: :btree
@@ -1843,6 +1878,11 @@ ActiveRecord::Schema.define(version: 20181108053440) do
   add_foreign_key "delivery_items", "order_items"
   add_foreign_key "delivery_items", "users", column: "created_by_id"
   add_foreign_key "delivery_items", "users", column: "last_updated_by_id"
+  add_foreign_key "diknas_report_cards", "academic_terms"
+  add_foreign_key "diknas_report_cards", "academic_years"
+  add_foreign_key "diknas_report_cards", "grade_levels"
+  add_foreign_key "diknas_report_cards", "grade_sections"
+  add_foreign_key "diknas_report_cards", "students"
   add_foreign_key "door_access_logs", "employees"
   add_foreign_key "door_access_logs", "students"
   add_foreign_key "employee_smartcards", "employees"
