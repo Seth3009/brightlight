@@ -8,6 +8,8 @@ ul#grade-options.dropdown-content
       = link_to grade.name, grade_level_standard_books_path(grade_level_id:grade.id)
 -if params[:grade_level_id].present?
   ul#category-options.dropdown-content
+    li 
+      = link_to 'All', standard_books_path(params.merge(category:'all').symbolize_keys)
     li  
     - BookCategory.all.each do |category|
       li 
@@ -22,7 +24,14 @@ ul#grade-options.dropdown-content
     li = link_to 'All', grade_level_standard_books_path(grade_level_id:params[:grade_level_id],track:'all',category:params[:category],year:params[:year])
     li = link_to 'NS', grade_level_standard_books_path(grade_level_id:params[:grade_level_id],track:'NS',year:params[:year],category:params[:category])
     li = link_to 'SS', grade_level_standard_books_path(grade_level_id:params[:grade_level_id],track:'SS',year:params[:year],category:params[:category])
-      
+  
+  ul#subject-options.dropdown-content
+    li 
+      = link_to 'All', standard_books_path(params.merge(subject:'all').symbolize_keys)
+    - @subjects.all.each do |subject|
+      li
+        = link_to subject.name, standard_books_path(params.merge(subject: subject.id).symbolize_keys)
+
 nav
   .nav-wrapper
     ul
@@ -40,10 +49,16 @@ nav
           i.material-icons.right arrow_drop_down
       li
         a.dropdown-button href="#!" data-activates="year-options"
-          span#grade = @academic_year.present? ? "#{@academic_year.name}" : "Current Academic Year" 
+          span#grade = @academic_year.present? ? "#{@academic_year.name}" : "Current Year" 
           i.material-icons.right arrow_drop_down
-      - if params[:grade_level_id].present?
-        li.right
+      li 
+        a.dropdown-button href="#!" data-activates="subject-options" data-beloworigin="true" 
+          span#subject = @subject.present? ? "#{@subject.name}" : "Select subject" 
+          i.material-icons.right arrow_drop_down
+    
+    - if params[:grade_level_id].present?
+      ul.right
+        li
           = link_to new_grade_level_standard_book_path(grade_level_id:params[:grade_level_id])
             | New Standard book
             i.material-icons.left add
@@ -55,9 +70,10 @@ nav
         tr
           th No
           th Book title
+          th Subject
           th Category
-          th Quantity
           th Track
+          th Quantity
           th Academic year
           th
 
@@ -65,12 +81,17 @@ nav
         - @standard_books.each_with_index do |standard_book, i|
           tr id="row-#{standard_book.id}"
             td = i+1
-            td = link_to standard_book.book_edition.title.truncate(50), standard_book.book_edition
+            td 
+              = link_to standard_book.book_edition
+                .tooltipped data-position="bottom" data-delay="50" data-tooltip="Book Edition" = standard_book.title.truncate(60) 
+            td = standard_book.book_title.subject.name rescue "--"
             td = standard_book.book_category.try(:code)
-            td = standard_book.quantity
             td = standard_book.track || "--"
+            td = standard_book.quantity
             td = standard_book.academic_year.try(:name)
             td 
+              = link_to standard_book, remote: true
+                i.material-icons visibility
               = link_to edit_standard_book_path(standard_book) 
                 i.material-icons edit
               = remote_link_to_delete standard_book, message: "Standard book removed", class: "right waves-effect waves-light red-text"
@@ -79,3 +100,6 @@ nav
   - if @standard_books.total_pages > 1
     .toolbar.z-depth-1
       = will_paginate @standard_books
+
+#show-modal.modal.modal-fixed-footer
+  #show-modal-content

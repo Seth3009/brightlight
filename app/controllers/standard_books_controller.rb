@@ -1,5 +1,6 @@
 class StandardBooksController < ApplicationController
   before_action :set_standard_book, only: [:show, :edit, :update, :destroy]
+#  before_action :sortable_columns, only: [:index]
   autocomplete :book_edition, :title,
     full: true,
     extra_data: [:book_title_id, :isbn10, :isbn13, :authors],
@@ -23,6 +24,12 @@ class StandardBooksController < ApplicationController
         end
       end
 
+      @subjects = Subject.all
+      @subject = Subject.find_by_id params[:subject] if params[:subject]
+      if @subject && params[:subject] != 'all'
+        @standard_books = @standard_books.includes(book_title: :subject).joins(:book_title).where(book_titles: {subject_id: @subject.id})
+      end
+
       if params[:year].present?
         @academic_year = AcademicYear.find_by_id params[:year]
         @standard_books = @standard_books.where(academic_year:@academic_year) if params[:year].upcase != 'ALL'
@@ -35,6 +42,7 @@ class StandardBooksController < ApplicationController
         @standard_books = @standard_books.where(book_category:@category)
       end
 
+      # @standard_books = @standard_books.order("#{sort_column} #{sort_direction}") if params[:column].present?
       @standard_books = @standard_books.paginate(page: params[:page], per_page: @items_per_page)
     end
 
@@ -58,6 +66,7 @@ class StandardBooksController < ApplicationController
     @standard_book = StandardBook.new
     @grade_level = GradeLevel.find params[:grade_level_id]
     @academic_year = AcademicYear.where(id:params[:year]).take || AcademicYear.current
+    @subjects = Subject.all
   end
 
   # GET /standard_books/1/edit
@@ -65,6 +74,7 @@ class StandardBooksController < ApplicationController
     authorize! :update, StandardBook
     @grade_level = @standard_book.grade_level
     @academic_year = @standard_book.academic_year
+    @subjects = Subject.all
   end
 
   # POST /standard_books
@@ -146,4 +156,22 @@ class StandardBooksController < ApplicationController
     def standard_book_params
       params.require(:standard_book).permit(:book_title_id, :book_edition_id, :book_category_id, :isbn, :refno, :quantity, :grade_subject_code, :grade_name, :grade_level_id, :grade_section_id, :group, :category, :bkudid, :notes, :academic_year_id, :track)
     end
+
+    # def sortable_columns 
+    #   [:title, :subject_id, :category_id]
+    # end
+
+    # def sort_column    
+    #   columns_to_sort = sortable_columns.map &:to_s
+    #   case params[:column] 
+    #   when 'title'
+    #     'book_editions.title'
+    #   when 'subject'
+    #     'book_titles.subject_id'
+    #   when 'book_category_id'
+    #     'book_categories.name'
+    #   else
+    #     params[:column]
+    #   end
+    # end
 end

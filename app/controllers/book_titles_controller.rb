@@ -2,6 +2,7 @@ require 'isbndb_client/api.rb'
 
 class BookTitlesController < ApplicationController
   before_action :set_book_title, only: [:show, :edit, :edit_subject, :update, :destroy, :editions, :add_existing_editions, :add_isbn, :update_metadata]
+  before_action :sortable_columns, only: [:index]
   respond_to :html, :json, :js 
 
   # GET /book_titles
@@ -20,17 +21,21 @@ class BookTitlesController < ApplicationController
 
     respond_to do |format|
       format.html {
+        @subjects = Subject.joins(:book_titles).uniq
+        @subject = Subject.find_by_id params[:subject] if params[:subject]
+        @book_titles = BookTitle
+          .includes([:book_editions, :subject])
+          .order("#{sort_column} #{sort_direction}")
+          .paginate(page: params[:page], per_page: items_per_page)
+
+        if @subject && params[:subject] != 'all'
+          @book_titles = @book_titles.where(subject: @subject)
+        end
+
         if params[:term]
-          @book_titles = BookTitle
-            .search_query(params[:term])
-            .includes(:book_editions)
-            .paginate(page: params[:page], per_page: items_per_page)
+          @book_titles = @book_titles.search_query(params[:term])
         elsif params[:copy]
           redirect_to book_copy_path(params[:copy].upcase)
-        else
-          @book_titles = BookTitle
-            .includes(:book_editions)
-            .paginate(page: params[:page], per_page: items_per_page)
         end
       }
       format.json {
@@ -313,4 +318,8 @@ class BookTitlesController < ApplicationController
                                           }
                                         )
     end
+
+    def sortable_columns 
+      [:title, :authors, :subject_id]
+    end 
 end
