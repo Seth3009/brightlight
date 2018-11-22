@@ -11,7 +11,7 @@ tr id="row-#{raw_food.id}"
     - else
       i.material-icons check_box_outline_blank
   td.actions.center
-    = link_to raw_food, class: 'green-text'
+    = link_to raw_food_food_packages_path(raw_food), class: 'green-text'
       i.material-icons visibility
     - if can? :update, raw_food
       = link_to edit_raw_food_path(raw_food), remote: true

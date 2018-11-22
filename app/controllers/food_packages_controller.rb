@@ -4,7 +4,11 @@ class FoodPackagesController < ApplicationController
   # GET /food_packages
   # GET /food_packages.json
   def index
-    @food_packages = FoodPackage.all
+    if params[:raw_food_id].present?
+      @raw_food = RawFood.find(params[:raw_food_id])
+      @food_packages = FoodPackage.where(raw_food_id:@raw_food.id)
+    end
+
   end
 
   # GET /food_packages/1
@@ -14,7 +18,8 @@ class FoodPackagesController < ApplicationController
 
   # GET /food_packages/new
   def new
-    @food_package = FoodPackage.new
+    @raw_food = RawFood.find(params[:raw_food_id])    
+    @food_package = @raw_food.food_packages.new
   end
 
   # GET /food_packages/1/edit
@@ -69,6 +74,6 @@ class FoodPackagesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def food_package_params
-      params.require(:food_package).permit(:packaging, :qty, :unit)
+      params.require(:food_package).permit(:packaging, :qty, :unit, :raw_food_id)
     end
 end

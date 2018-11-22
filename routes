@@ -23,14 +23,6 @@
                                                PATCH    /stock_items/:id(.:format)                                        stock_items#update
                                                PUT      /stock_items/:id(.:format)                                        stock_items#update
                                                DELETE   /stock_items/:id(.:format)                                        stock_items#destroy
-                                     suppliers GET      /suppliers(.:format)                                              suppliers#index
-                                               POST     /suppliers(.:format)                                              suppliers#create
-                                  new_supplier GET      /suppliers/new(.:format)                                          suppliers#new
-                                 edit_supplier GET      /suppliers/:id/edit(.:format)                                     suppliers#edit
-                                      supplier GET      /suppliers/:id(.:format)                                          suppliers#show
-                                               PATCH    /suppliers/:id(.:format)                                          suppliers#update
-                                               PUT      /suppliers/:id(.:format)                                          suppliers#update
-                                               DELETE   /suppliers/:id(.:format)                                          suppliers#destroy
                                 delivery_items GET      /delivery_items(.:format)                                         delivery_items#index
                                                POST     /delivery_items(.:format)                                         delivery_items#create
                              new_delivery_item GET      /delivery_items/new(.:format)                                     delivery_items#new
@@ -55,14 +47,6 @@
                                                PATCH    /order_items/:id(.:format)                                        order_items#update
                                                PUT      /order_items/:id(.:format)                                        order_items#update
                                                DELETE   /order_items/:id(.:format)                                        order_items#destroy
-                               purchase_orders GET      /purchase_orders(.:format)                                        purchase_orders#index
-                                               POST     /purchase_orders(.:format)                                        purchase_orders#create
-                            new_purchase_order GET      /purchase_orders/new(.:format)                                    purchase_orders#new
-                           edit_purchase_order GET      /purchase_orders/:id/edit(.:format)                               purchase_orders#edit
-                                purchase_order GET      /purchase_orders/:id(.:format)                                    purchase_orders#show
-                                               PATCH    /purchase_orders/:id(.:format)                                    purchase_orders#update
-                                               PUT      /purchase_orders/:id(.:format)                                    purchase_orders#update
-                                               DELETE   /purchase_orders/:id(.:format)                                    purchase_orders#destroy
                                      req_items GET      /req_items(.:format)                                              req_items#index
                                                POST     /req_items(.:format)                                              req_items#create
                                   new_req_item GET      /req_items/new(.:format)                                          req_items#new
@@ -246,6 +230,22 @@
                                                PATCH    /student_activities/:id(.:format)                                 student_activities#update
                                                PUT      /student_activities/:id(.:format)                                 student_activities#update
                                                DELETE   /student_activities/:id(.:format)                                 student_activities#destroy
+                        raw_food_food_packages GET      /raw_foods/:raw_food_id/food_packages(.:format)                   food_packages#index
+                                               POST     /raw_foods/:raw_food_id/food_packages(.:format)                   food_packages#create
+                     new_raw_food_food_package GET      /raw_foods/:raw_food_id/food_packages/new(.:format)               food_packages#new
+                             edit_food_package GET      /food_packages/:id/edit(.:format)                                 food_packages#edit
+                                  food_package GET      /food_packages/:id(.:format)                                      food_packages#show
+                                               PATCH    /food_packages/:id(.:format)                                      food_packages#update
+                                               PUT      /food_packages/:id(.:format)                                      food_packages#update
+                                               DELETE   /food_packages/:id(.:format)                                      food_packages#destroy
+                                     raw_foods GET      /raw_foods(.:format)                                              raw_foods#index
+                                               POST     /raw_foods(.:format)                                              raw_foods#create
+                                  new_raw_food GET      /raw_foods/new(.:format)                                          raw_foods#new
+                                 edit_raw_food GET      /raw_foods/:id/edit(.:format)                                     raw_foods#edit
+                                      raw_food GET      /raw_foods/:id(.:format)                                          raw_foods#show
+                                               PATCH    /raw_foods/:id(.:format)                                          raw_foods#update
+                                               PUT      /raw_foods/:id(.:format)                                          raw_foods#update
+                                               DELETE   /raw_foods/:id(.:format)                                          raw_foods#destroy
                     students_activity_schedule GET      /activity_schedules/:id/students(.:format)                        activity_schedules#students
                 add_students_activity_schedule POST     /activity_schedules/:id/add_students(.:format)                    activity_schedules#add_students
               remove_student_activity_schedule DELETE   /activity_schedules/:id/remove_student(.:format)                  activity_schedules#remove_student
@@ -479,6 +479,7 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                        new_employee_book_loans GET      /employees/:employee_id/book_loans/new(.:format)                  book_loans#new_tm
                       edit_employee_book_loans GET      /employees/:employee_id/book_loans/:id/edit(.:format)             book_loans#edit_tm
                       scan_employee_book_loans GET      /employees/:employee_id/book_loans/scan(.:format)                 book_loans#scan
+                 fix_check_employee_book_loans GET      /employees/:employee_id/book_loans/fix_check(.:format)            book_loans#change_status_return_to_check
                             employee_book_loan GET      /employees/:employee_id/book_loans/:id(.:format)                  book_loans#show_tm
                         list_action_book_loans POST     /employees/:employee_id/book_loans/list_action(.:format)          book_loans#list_action
                                                PATCH    /employees/:employee_id/book_loans/:id(.:format)                  book_loans#update_tm
@@ -525,6 +526,7 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                    smart_cards POST     /smart_cards(.:format)                                            smart_cards#create
                                     smart_card GET      /smart_cards/:id(.:format)                                        smart_cards#show
                                                DELETE   /smart_cards/:id(.:format)                                        smart_cards#destroy
+                             list_requisitions GET      /requisitions/list(.:format)                                      requisitions#list
                            approve_requisition GET      /requisitions/:id/approve(.:format)                               requisitions#approve
                approve_requisition_requisition POST     /requisitions/:id/approve_requisition(.:format)                   requisitions#approve_requisition
                     approve_budget_requisition POST     /requisitions/:id/approve_budget(.:format)                        requisitions#approve_budget
@@ -556,6 +558,33 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PATCH    /messages/:id(.:format)                                           messages#update
                                                PUT      /messages/:id(.:format)                                           messages#update
                                                DELETE   /messages/:id(.:format)                                           messages#destroy
+                          list_purchase_orders GET      /purchase_orders/list(.:format)                                   purchase_orders#list
+                        status_purchase_orders GET      /purchase_orders/status(.:format)                                 purchase_orders#status
+                               purchase_orders GET      /purchase_orders(.:format)                                        purchase_orders#index
+                                               POST     /purchase_orders(.:format)                                        purchase_orders#create
+                            new_purchase_order GET      /purchase_orders/new(.:format)                                    purchase_orders#new
+                           edit_purchase_order GET      /purchase_orders/:id/edit(.:format)                               purchase_orders#edit
+                                purchase_order GET      /purchase_orders/:id(.:format)                                    purchase_orders#show
+                                               PATCH    /purchase_orders/:id(.:format)                                    purchase_orders#update
+                                               PUT      /purchase_orders/:id(.:format)                                    purchase_orders#update
+                                               DELETE   /purchase_orders/:id(.:format)                                    purchase_orders#destroy
+                               import_accounts POST     /accounts/import(.:format)                                        accounts#import
+                                      accounts GET      /accounts(.:format)                                               accounts#index
+                                               POST     /accounts(.:format)                                               accounts#create
+                                   new_account GET      /accounts/new(.:format)                                           accounts#new
+                                  edit_account GET      /accounts/:id/edit(.:format)                                      accounts#edit
+                                       account PATCH    /accounts/:id(.:format)                                           accounts#update
+                                               PUT      /accounts/:id(.:format)                                           accounts#update
+                                               DELETE   /accounts/:id(.:format)                                           accounts#destroy
+                              import_suppliers POST     /suppliers/import(.:format)                                       suppliers#import
+                                     suppliers GET      /suppliers(.:format)                                              suppliers#index
+                                               POST     /suppliers(.:format)                                              suppliers#create
+                                  new_supplier GET      /suppliers/new(.:format)                                          suppliers#new
+                                 edit_supplier GET      /suppliers/:id/edit(.:format)                                     suppliers#edit
+                                      supplier GET      /suppliers/:id(.:format)                                          suppliers#show
+                                               PATCH    /suppliers/:id(.:format)                                          suppliers#update
+                                               PUT      /suppliers/:id(.:format)                                          suppliers#update
+                                               DELETE   /suppliers/:id(.:format)                                          suppliers#destroy
                                         badges POST     /badges(.:format)                                                 badges#create
                                      new_badge GET      /badges/new(.:format)                                             badges#new
                                     edit_badge GET      /badges/:id/edit(.:format)                                        badges#edit

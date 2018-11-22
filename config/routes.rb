@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :food_packages
-  resources :raw_foods
   resources :employee_smartcards
   resources :stock_categories
   resources :stock_items
@@ -32,6 +30,11 @@ Rails.application.routes.draw do
   resources :copy_conditions
   resources :book_conditions
   resources :student_activities
+  
+  resources :raw_foods do
+    resources :food_packages, shallow: true
+  end
+  
   
   resources :activity_schedules, shallow: true do
     member do

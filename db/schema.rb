@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181115041647) do
+ActiveRecord::Schema.define(version: 20181115071428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -764,11 +764,11 @@ ActiveRecord::Schema.define(version: 20181115041647) do
 
   create_table "food_packages", force: :cascade do |t|
     t.string   "packaging"
-    t.float    "qty"
+    t.float    "package_contents"
     t.string   "unit"
     t.integer  "raw_food_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   add_index "food_packages", ["raw_food_id"], name: "index_food_packages_on_raw_food_id", using: :btree

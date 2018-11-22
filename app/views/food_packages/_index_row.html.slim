@@ -1,0 +1,8 @@
+tr id="row-#{food_package.id}"  
+  td = idx
+  td = food_package.packaging
+  td = food_package.package_contents  
+  td = food_package.unit
+  td = 1
+  td = (food_package.package_contents * 2).to_s + " " + food_package.unit
+  td

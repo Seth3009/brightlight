@@ -1,4 +1,4 @@
-= form_for @food_package do |f|
+= form_for [@raw_food, @food_package] do |f|
   - if @food_package.errors.any?
     #error_explanation
       h2 = "#{pluralize(@food_package.errors.count, "error")} prohibited this food_package from being saved:"
@@ -11,7 +11,7 @@
     = f.text_field :packaging
   .field
     = f.label :qty
-    = f.text_field :qty
+    = f.text_field :package_contents
   .field
     = f.label :unit
     = f.text_field :unit

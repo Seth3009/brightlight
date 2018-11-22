@@ -24,11 +24,11 @@ nav
         / = link_to 'Catalog (PDF)', raw_foods_path(format: 'pdf'), target: '_blank'
 
     ul.right
-      - if can? :manage, RawFood
-        li
-          = link_to new_raw_food_path, remote: true
-            | New Product
-            i.material-icons.left add
+      / - if can? :manage, RawFood
+      li
+        = link_to new_raw_food_path, remote: true
+          | New Product
+          i.material-icons.left add
 
 .card-panel
   table.compact.striped
