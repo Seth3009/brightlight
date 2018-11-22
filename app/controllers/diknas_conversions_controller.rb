@@ -5,6 +5,8 @@ class DiknasConversionsController < ApplicationController
   # GET /diknas_conversions.json
   def index
     @diknas_conversions = DiknasConversion.all
+    # @course = params[:course].present? ? Course.find(params[:course]) : Course.current
+
   end
 
   # GET /diknas_conversions/1

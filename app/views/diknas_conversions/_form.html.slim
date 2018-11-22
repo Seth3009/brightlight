@@ -8,16 +8,16 @@
 
   .field
     = f.label :course
-    = f.text_field :course
+    = f.collection_select :course_id, Course.all, :id, :name, prompt: true
   .field
     = f.label :diknas_course
-    = f.text_field :diknas_course
+    = f.collection_select :diknas_course_id, DiknasCourse.all, :id, :name, prompt: true
   .field
     = f.label :academic_year
-    = f.text_field :academic_year
+    = f.collection_select :academic_year_id, AcademicYear.all, :id, :name, prompt: true
   .field
     = f.label :academic_term
-    = f.text_field :academic_term
+    = f.collection_select :academic_term_id, AcademicTerm.all, :id, :name, prompt: true
   .field
     = f.label :weight
     = f.text_field :weight
