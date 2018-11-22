@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181116091441) do
+ActiveRecord::Schema.define(version: 20181122003147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1102,8 +1102,8 @@ ActiveRecord::Schema.define(version: 20181116091441) do
     t.string   "description"
     t.string   "status"
     t.integer  "line_num"
-    t.string   "extra1"
-    t.string   "extra2"
+    t.string   "remark"
+    t.string   "notes"
     t.integer  "created_by_id"
     t.integer  "last_updated_by_id"
     t.datetime "created_at",         null: false
@@ -1481,6 +1481,7 @@ ActiveRecord::Schema.define(version: 20181116091441) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.string   "track"
+    t.integer  "subject_id"
   end
 
   add_index "standard_books", ["academic_year_id"], name: "index_standard_books_on_academic_year_id", using: :btree
@@ -1489,6 +1490,7 @@ ActiveRecord::Schema.define(version: 20181116091441) do
   add_index "standard_books", ["book_title_id"], name: "index_standard_books_on_book_title_id", using: :btree
   add_index "standard_books", ["grade_level_id"], name: "index_standard_books_on_grade_level_id", using: :btree
   add_index "standard_books", ["grade_section_id"], name: "index_standard_books_on_grade_section_id", using: :btree
+  add_index "standard_books", ["subject_id"], name: "index_standard_books_on_subject_id", using: :btree
 
   create_table "statuses", force: :cascade do |t|
     t.string  "name"
@@ -1946,6 +1948,7 @@ ActiveRecord::Schema.define(version: 20181116091441) do
   add_foreign_key "room_accesses", "badges"
   add_foreign_key "room_accesses", "rooms"
   add_foreign_key "smart_cards", "transports"
+  add_foreign_key "standard_books", "subjects"
   add_foreign_key "student_activities", "academic_years"
   add_foreign_key "student_activities", "activity_schedules"
   add_foreign_key "student_activities", "students"
