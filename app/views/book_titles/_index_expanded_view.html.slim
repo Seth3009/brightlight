@@ -1,0 +1,34 @@
+table.striped
+  tbody
+    - @book_titles.each do |book_title|
+      tr id="title-#{book_title.id}"
+        td
+          input.checkbox type="checkbox" id="cb-#{book_title.id}" name="merge[#{book_title.id}]" onchange="toggle_toolbar_menu()"
+          / This label is required for Materialize CSS to work
+          = label_tag "cb-#{book_title.id}", ""
+        td style="vertical-align:top"
+          - thumbnail = book_title.image_url.present? ? book_title.image_url : 'book-icon.png' 
+          span id="cover-#{book_title.id}"
+            = image_tag(thumbnail, class: 'list_image')
+        td
+          .list_description
+            dl.row
+              dt = link_to book_title.title, book_title
+              dd.col.s8
+                .label Author:
+                .item = book_title.authors || "--"
+              dd.col.s4
+                .label Subject:
+                .item = book_title.subject.try(:name) || "--"
+              dd.col.s8
+                .label Publisher:
+                .item = book_title.publisher || "--"
+              dd.col.s4
+                .label Total copies:
+                .item = book_title.number_of_copies
+        td 
+          = link_to book_title
+            i.material-icons visibility
+          = link_to edit_book_title_path(book_title)
+            i.material-icons edit
+          /= link_to 'Update', update_metadata_book_title_path(book_title), remote: true, method: :post, class: "btn waves-effect waves-yellow btn-flat btn-small"

@@ -1,0 +1,48 @@
+.modal-content
+  table
+    tr
+      td style="vertical-align:top"
+        - thumbnail = @standard_book.book_edition.present? ? @standard_book.book_edition.small_thumbnail : 'book-icon.png' 
+        = image_tag(thumbnail, class: 'list_image')
+      td
+        .label Standard Book
+        .list_description
+          dl
+            h4 = @standard_book.book_edition.title
+            dd = @standard_book.book_edition.subtitle
+          dl.row
+            dd.col.s4
+              .label Grade Level
+              .item = @standard_book.grade_level.try(:name)
+            dd.col.s4
+              .label Track
+              .item = @standard_book.track
+          dl.row
+            dd.col.s4
+              .label Category
+              .item = @standard_book.book_category.try(:name)
+            dd.col.s4
+              .label Subject             
+              .item = @standard_book.subject.try(:name)
+            dd.col.s4
+              .label Quantity
+              .item = @standard_book.quantity
+          dl.row
+            dd.col.s12
+              .label Notes
+              .item = @standard_book.notes || "--"
+          dl
+            .label Links
+            dd
+              = link_to @standard_book.book_title
+                |Book Title
+                i.material-icons open_in_new
+            dd
+              = link_to @standard_book.book_edition
+                |Book Edition
+                i.material-icons open_in_new
+
+
+
+.modal-footer
+  a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

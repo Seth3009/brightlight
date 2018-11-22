@@ -35,6 +35,9 @@
       .input-field.col.s3
         = f.label :quantity
         = f.number_field :quantity
-      .input-field.col.s9
+      .input-field.col.s4
+        = f.label :subject, class: 'active'
+        = f.collection_select :subject_id, @subjects, :id, :name, prompt: 'Select subject'
+      .input-field.col.s12
         = f.label :notes
         = f.text_field :notes
