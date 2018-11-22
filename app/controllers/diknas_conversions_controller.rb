@@ -71,6 +71,6 @@ class DiknasConversionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diknas_conversion_params
-      params.require(:diknas_conversion).permit(:course_id, :diknas_course_id, :academic_year_id, :academic_term_id, :weight, :notes)
+      params.require(:diknas_conversion).permit(:course_id, :diknas_course_id, :diknas_academic_year_id, :diknas_academic_term_id, :academic_year_id, :academic_term_id, :weight, :notes)
     end
 end
