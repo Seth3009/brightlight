@@ -154,9 +154,9 @@ class PurchaseOrdersController < ApplicationController
     def purchase_order_params
       params.require(:purchase_order).permit(:order_num, :requestor_id, :order_date, :due_date, :total_amount, :requestor, :department_id, 
         :is_active, :currency, :deleted, :notes, :completed_date, :supplier_id, :contact, :phone_contact, :user_id, :status, :buyer_id, 
-        :instructions, :subtotal, :discounts, :est_tax, :non_recurring, :shipping, :down_payment,
+        :instructions, :subtotal, :discounts, :est_tax, :non_recurring, :shipping, :down_payment, :description,
         {:order_items_attributes => [:stock_item__id, :quantity, :unit, :min_delivery_qty, :pending_qty, :type, :line_amount, 
-          :unit_price, :currency, :deleted, :description, :status, :line_num, :extra1, :extra2, :req_item_id,
+          :unit_price, :currency, :deleted, :description, :status, :line_num, :extra1, :extra2, :req_item_id, :remark,
           :discount, :est_tax, :non_recurring, :shipping, :_destroy, :id ]})
     end
 end

@@ -126,7 +126,7 @@ class Requisition < ActiveRecord::Base
   def update_status
     unordered_items_count = number_of_unordered_items
     if unordered_items_count == 0
-      update_columns(status: Requisition::Statuses[:closed][:code])
+      update_columns(status: Requisition::Statuses[:close][:code])
     elsif unordered_items_count != req_items.count
       update_columns(status: Requisition::Statuses[:open][:code])
     else

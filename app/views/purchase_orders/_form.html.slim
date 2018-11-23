@@ -32,9 +32,6 @@
             = f.label :description
             = f.text_field :description
           .input-field.col.s6
-            = f.label :buyer, class: "active"
-            = f.collection_select :buyer_id, @buyers, :id, :name, class:'material-select'
-          .input-field.col.s6
             = f.label :requestor, class: "active"
             = f.collection_select :requestor_id, Employee.active, :id, :name, prompt: "Select requester"
           .input-field.col.s6
@@ -52,6 +49,9 @@
           .input-field.col.offset-s4
             = f.label :status, class: "active"
             = f.select :status, options_for_select(PurchaseOrder::Statuses.map{|k,v| [v,k]})
+          .input-field.col.s6
+            = f.label :buyer, class: "active"
+            = f.collection_select :buyer_id, @buyers, :id, :name, class:'material-select'
   nav.light
     .nav-wrapper
       .brand-logo style="margin-left: 20px; font-size:1.5em"
@@ -144,6 +144,9 @@ javascript:
     });
     $(document).on("change", "select#purchase_order_supplier_id", function(event) {
       insert_contact_info(event.target);
+    });
+    $(document).on("click", ".toggle-remark", function(event) {
+      toggle_remark(event.target);
     })
   });
 
@@ -207,8 +210,12 @@ javascript:
   };
 
   var insert_contact_info = function (elem) {
-    console.log(elem);
     var selected = $("select#purchase_order_supplier_id option:selected");
     $("input#purchase_order_contact").val(selected.data("contact"));
     $("input#purchase_order_phone_contact").val(selected.data("mobile"));
+  }
+
+  var toggle_remark = function(elem) {
+    $(elem).closest('tr').next().toggle();
+    $(elem).toggle();
   }

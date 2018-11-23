@@ -80,12 +80,14 @@ h5 Items
         th.right-align Non-reccuring
         th.right-align Shipping
         th.right-align Total
-        th.right-align Req.Link
+        th.right-align Link
 
     tbody
       - @purchase_order.order_items.each do |item|
-        tr.compact.nested-fields
-          td.wd25 = item.description
+        tr.compact
+          td.wd25 
+            = item.description
+            i.material
           td.right-align = item.quantity
           td = item.unit
           td.right-align = currency(item.unit_price, currency: item.currency)
@@ -97,9 +99,9 @@ h5 Items
           td 
             -if item.req_item.requisition
               = link_to item.req_item.requisition, target: 'blank'
-                i.material-icons.right open_in_new
-            -else
-              |--
+                i.material-icons.right.tooltipped data-position="bottom" data-delay="50" data-tooltip="Purchase Request" open_in_new
+            -if item.remark.present?
+              i.material-icons.right.orange-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="#{item.remark}" speaker_notes
 
 .row
   .col.s12.m8
