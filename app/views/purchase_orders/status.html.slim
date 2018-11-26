@@ -57,12 +57,12 @@ table.compact.striped.bordered
           td = i
           td = item.requisition.id || "N/A"
           td = item.requestor.try(:name).try(:truncate, 20) || "N/A"
-          td = item.requisition.try(:created_at).try(:strftime,"%d-%b")
+          td = item.requisition.try(:created_at).try(:strftime,"%d %b %y")
           td = item.requisition.try(:sent_to_purchasing)
           td = item.description.try(:truncate, 50)
           -if (item_count > 1 && i == 1) || item_count == 1 
             td rowspan="#{item_count}" = item.purchase_order.order_num
-            td rowspan="#{item_count}" = item.purchase_order.order_date
+            td rowspan="#{item_count}" = item.purchase_order.order_date.try(:strftime, "%d %b %y")
             td rowspan="#{item_count}" = item.purchase_order.supplier.try(:company_name).try(:truncate, 30)
             td.right-align rowspan="#{item_count}"
               = currency(item.purchase_order.total_amount, currency: po.currency)

@@ -18,7 +18,11 @@ class PurchaseOrder < ActiveRecord::Base
 
   after_create :assign_po_number
 
-  Statuses = {0 => "Requested", 1 =>"Ordered", 2 =>"Pending Delivery", 3 =>"Received", 4 => "Canceled"}
+  Statuses = {:reqstd => {code: "REQSTD", description: "Requested"}, 
+              :order  => {code: "ORDER", description: "Ordered"}, 
+              :pendv  => {code: "PENDV", description: "Pending Delivery"}, 
+              :recvd  => {code: "RECVD", description: "Received"}, 
+              :cancel => {code: "CANCEL", description:  "Canceled"}}
 
   def self.new_from_requisition(req)
     purchase_order = PurchaseOrder.new 
@@ -37,6 +41,10 @@ class PurchaseOrder < ActiveRecord::Base
       )
     end
     purchase_order
+  end
+
+  def status_description
+    PurchaseOrder::Statuses[self.status.downcase.to_sym][:description] rescue nil
   end
 
   def unique_requests

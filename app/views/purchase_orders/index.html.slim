@@ -39,13 +39,13 @@ nav
           td = purchase_order.order_date
           td.right-align = currency(purchase_order.total_amount, currency: purchase_order.currency)
           td = purchase_order.requestor
-          td = purchase_order.status
+          td = purchase_order.status_description
           td 
             = link_to purchase_order
               i.material-icons visibility
             = link_to edit_purchase_order_path(purchase_order)
               i.material-icons edit
             = link_to purchase_order, data: {:confirm => 'Are you sure?'}, :method => :delete
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+              i.material-icons.tooltipped.red-text data-position="bottom" data-delay="50" data-tooltip="Delete" delete
 
 

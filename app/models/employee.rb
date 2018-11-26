@@ -27,12 +27,21 @@ class Employee < ActiveRecord::Base
 		joins(:book_loans)
     .where(book_loans: {academic_year_id: year || AcademicYear.current_id})
 		.order(:name).uniq
-	}
-	scope :department_heads, lambda { joins('join departments on employees.id = departments.manager_id').order(:name) }
+  }
+  
+	scope :department_heads, lambda { 
+    joins('join departments on employees.id = departments.manager_id or employees.id = departments.vice_manager_id')
+    .joins('join (select * from employees where supervisor_id is not null) supv on supv.id = employees.id')
+    .order(:name) 
+  }
+
 	scope :supervisors, lambda { 
 		where('id in (select supervisor_id from employees where supervisor_id is not null)')
-		.select(:id, :name)
   }
+  
+  def superiors
+    [supervisor, supervisor.supervisor]
+  end
   
   def approver
     Employee.find(self.approver1)
