@@ -7,46 +7,34 @@
           - @diknas_conversion.errors.full_messages.each do |message|
             li = message
 
+    .row
+      .col.s4
+        .field
+          = f.label :diknas_course
+          = f.collection_select :diknas_course_id, DiknasCourse.all, :id, :name, prompt: true
+      .col.s4
+        .field
+          = f.label :diknas_academic_year
+          = f.collection_select :diknas_academic_year_id, DiknasAcademicYear.all, :id, :name, prompt: true  
+      .col.s4
+        .field
+          = f.label :diknas_academic_term
+          = f.collection_select :diknas_academic_term_id, DiknasAcademicTerm.all, :id, :name, prompt: true
+      
+    .row
+      nav.light
+          .nav-wrapper
+            ul
+              li
+                = link_to diknas_conversions_path
+                  i.material-icons.left chevron_left
+              li
+                .brand-logo style="margin-left: 20px; font-size:1.5em"
+                  | Course Items (From Report Card)
+            ul.right#add-row
+              li
+                = link_to_add_association f, :diknas_conversion_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#diknas_conversions'
+                  ' Add row
+                  i.material-icons.left playlist_add 
 
-    .field
-      = f.label :diknas_course
-      = f.collection_select :diknas_course_id, DiknasCourse.all, :id, :name, prompt: true
-    .field
-      = f.label :diknas_academic_year
-      = f.collection_select :diknas_academic_year_id, DiknasAcademicYear.all, :id, :name, prompt: true  
-    .field
-      = f.label :diknas_academic_term
-      = f.collection_select :diknas_academic_term_id, DiknasAcademicTerm.all, :id, :name, prompt: true
-    
-
-    nav.light
-        .nav-wrapper
-          ul
-            li
-              = link_to diknas_conversions_path
-                i.material-icons.left chevron_left
-            li
-              .brand-logo style="margin-left: 20px; font-size:1.5em"
-                | Course Items (From Report Card)
-          ul.right#add-row
-            li
-              / = link_to_add_association f, :supplies_transaction_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#supplies_transaction'
-                ' Add row
-                i.material-icons.left playlist_add 
-
-    .field
-      = f.label :course
-      = f.collection_select :course_id, Course.all, :id, :name, prompt: true
-    .field
-      = f.label :academic_year
-      = f.collection_select :academic_year_id, AcademicYear.all, :id, :name, prompt: true
-    .field
-      = f.label :academic_term
-      = f.collection_select :academic_term_id, AcademicTerm.all, :id, :name, prompt: true
-    .field
-      = f.label :weight
-      = f.text_field :weight
-    .field
-      = f.label :notes
-      = f.text_area :notes
-    .actions = f.submit
+      = render 'diknas_conversion_item_fields', f: f

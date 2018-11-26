@@ -4,8 +4,16 @@ class DiknasConversionsController < ApplicationController
   # GET /diknas_conversions
   # GET /diknas_conversions.json
   def index
-    @diknas_conversions = DiknasConversion.all
+    # @diknas_conversions = DiknasConversion.all
     # @course = params[:course].present? ? Course.find(params[:course]) : Course.current
+    authorize! :read, DiknasConversion    
+    respond_to do |format|
+      format.html {
+        items_per_page = 20        
+        @diknas_conversions = DiknasConversionItem.joins('left join diknas_conversions on diknas_conversions.id = diknas_conversion_items.diknas_conversion_id')                                          
+                                .paginate(page: params[:page], per_page: items_per_page)
+      }
+    end
 
   end
 

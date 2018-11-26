@@ -1,0 +1,23 @@
+        .row
+            .col.s3
+                .field
+                = f.label :course
+                / = f.collection_select :course_id, Course.all, :id, :name, prompt: true
+            .col.s2
+                .field
+                = f.label :academic_year
+                / = f.collection_select :academic_year_id, AcademicYear.all, :id, :name, prompt: true
+            .col.s2
+                .field
+                = f.label :academic_term
+                / = f.collection_select :academic_term_id, AcademicTerm.all, :id, :name, prompt: true
+            .col.s2
+                .field
+                = f.label :weight
+                = f.text_field :weight
+            .col.s3
+                .field
+                = f.label :notes
+                = f.text_area :notes
+        .row
+                .actions = f.submit
