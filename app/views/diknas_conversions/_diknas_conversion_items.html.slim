@@ -1,0 +1,11 @@
+.card-panel
+  .row
+    strong.col.s2 Course
+    strong.col.s2 Academic Year
+    strong.col.s2 Academic Term
+    strong.col.s2 Weight
+    strong.col.s3 Notes
+    strong.col.s1 Action
+  .row#diknas_conversion
+    = f.fields_for :diknas_conversion_items do |diknas_conversion_item|
+      = render 'diknas_conversion_item_fields', f: diknas_conversion_item

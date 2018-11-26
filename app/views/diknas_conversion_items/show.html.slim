@@ -1,0 +1,24 @@
+p#notice = notice
+
+p
+  strong Diknas conversion:
+  = @diknas_conversion_item.diknas_conversion
+p
+  strong Course:
+  = @diknas_conversion_item.course
+p
+  strong Academic year:
+  = @diknas_conversion_item.academic_year
+p
+  strong Academic term:
+  = @diknas_conversion_item.academic_term
+p
+  strong Weight:
+  = @diknas_conversion_item.weight
+p
+  strong Notes:
+  = @diknas_conversion_item.notes
+
+= link_to 'Edit', edit_diknas_conversion_item_path(@diknas_conversion_item)
+'|
+= link_to 'Back', diknas_conversion_items_path

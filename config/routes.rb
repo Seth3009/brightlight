@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :diknas_conversion_items
   resources :diknas_conversions
   resources :diknas_report_cards do
     collection do

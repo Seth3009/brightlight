@@ -1,14 +1,10 @@
 class DiknasConversion < ActiveRecord::Base
   belongs_to :diknas_course
-  belongs_to :diknas_academic_year
-  belongs_to :diknas_academic_term
+  belongs_to :academic_year
+  belongs_to :academic_term
 
-  has_many :diknas_conversion_items, -> { order(:id) }, dependent: :destroy  
-  validate :has_at_least_one_diknas_conversion_item
-  
-  accepts_nested_attributes_for :diknas_conversion_items,
-    allow_destroy: true,
-    reject_if: proc { |attributes| attributes['course_id'].blank? }
+  has_many :diknas_conversion_items, inverse_of: :diknas_conversion
+  accepts_nested_attributes_for :diknas_conversion_items, reject_if: :all_blank, allow_destroy: true
   
   private
     def has_at_least_one_diknas_conversion_item     

@@ -24,7 +24,7 @@ nav
       - @diknas_conversions.each do |diknas_conversion|
         tr
           td = diknas_conversion.diknas_conversion.diknas_course.name
-          td = diknas_conversion.diknas_conversion.diknas_academic_year.name
+          td = diknas_conversion.diknas_conversion.academic_year.name
           / td = diknas_conversion.diknas_conversion.diknas_academic_term.name
           / td = diknas_conversion.course
           / td = diknas_conversion.academic_year.name
