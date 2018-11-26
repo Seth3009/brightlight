@@ -40,11 +40,20 @@ class Employee < ActiveRecord::Base
   }
   
   def superiors
-    [supervisor, supervisor.supervisor]
+    [supervisor, manager, supervisor.supervisor, manager.supervisor].uniq.reject{|e| e == self}.reject &:nil?
   end
   
   def approver
     Employee.find(self.approver1)
+  end
+
+  def self.with_role(role)
+    role_mask = User::ROLES.index(role)
+    Employee.joins(:user).where('users.roles_mask & (1 << ?) != 0', role_mask)
+  end
+
+  def self.budget_approvers 
+    Employee.with_role :approve_budget
   end
 
   def approver_assistant
@@ -56,7 +65,6 @@ class Employee < ActiveRecord::Base
 	def is_manager?
 		Department.all.map(&:manager_id).include? self.id
 	end
-	
   
   scope :search_query, lambda { |query|
     return nil  if query.blank?   
