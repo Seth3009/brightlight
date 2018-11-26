@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181112075917) do
+ActiveRecord::Schema.define(version: 20181123054216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -648,6 +648,7 @@ ActiveRecord::Schema.define(version: 20181112075917) do
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
 
+<<<<<<< HEAD
   create_table "diknas_gradebooks", force: :cascade do |t|
     t.string   "studentname"
     t.string   "grade"
@@ -656,6 +657,58 @@ ActiveRecord::Schema.define(version: 20181112075917) do
     t.string   "semester"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+=======
+  create_table "diknas_academic_terms", force: :cascade do |t|
+    t.string   "name"
+    t.text     "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "diknas_academic_years", force: :cascade do |t|
+    t.string   "name"
+    t.text     "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "diknas_conversion_items", force: :cascade do |t|
+    t.integer  "diknas_conversion_id"
+    t.integer  "course_id"
+    t.integer  "academic_year_id"
+    t.integer  "academic_term_id"
+    t.float    "weight"
+    t.text     "notes"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "diknas_conversion_items", ["academic_term_id"], name: "index_diknas_conversion_items_on_academic_term_id", using: :btree
+  add_index "diknas_conversion_items", ["academic_year_id"], name: "index_diknas_conversion_items_on_academic_year_id", using: :btree
+  add_index "diknas_conversion_items", ["course_id"], name: "index_diknas_conversion_items_on_course_id", using: :btree
+  add_index "diknas_conversion_items", ["diknas_conversion_id"], name: "index_diknas_conversion_items_on_diknas_conversion_id", using: :btree
+
+  create_table "diknas_conversions", force: :cascade do |t|
+    t.float    "weight"
+    t.text     "notes"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "diknas_course_id"
+    t.integer  "diknas_academic_year_id"
+    t.integer  "diknas_academic_term_id"
+  end
+
+  add_index "diknas_conversions", ["diknas_academic_term_id"], name: "index_diknas_conversions_on_diknas_academic_term_id", using: :btree
+  add_index "diknas_conversions", ["diknas_academic_year_id"], name: "index_diknas_conversions_on_diknas_academic_year_id", using: :btree
+  add_index "diknas_conversions", ["diknas_course_id"], name: "index_diknas_conversions_on_diknas_course_id", using: :btree
+
+  create_table "diknas_courses", force: :cascade do |t|
+    t.string   "number"
+    t.string   "name"
+    t.text     "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+>>>>>>> eff75ca4ba8349fd80042f35cc17057c7b64892a
   end
 
   create_table "diknas_report_cards", force: :cascade do |t|
@@ -664,11 +717,11 @@ ActiveRecord::Schema.define(version: 20181112075917) do
     t.integer  "grade_section_id"
     t.integer  "academic_year_id"
     t.integer  "academic_term_id"
-    t.string   "course_belongs_to"
     t.float    "average"
     t.text     "notes"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "course_id"
   end
 
   add_index "diknas_report_cards", ["academic_term_id"], name: "index_diknas_report_cards_on_academic_term_id", using: :btree
@@ -1872,8 +1925,16 @@ ActiveRecord::Schema.define(version: 20181112075917) do
   add_foreign_key "delivery_items", "order_items"
   add_foreign_key "delivery_items", "users", column: "created_by_id"
   add_foreign_key "delivery_items", "users", column: "last_updated_by_id"
+  add_foreign_key "diknas_conversion_items", "academic_terms"
+  add_foreign_key "diknas_conversion_items", "academic_years"
+  add_foreign_key "diknas_conversion_items", "courses"
+  add_foreign_key "diknas_conversion_items", "diknas_conversions"
+  add_foreign_key "diknas_conversions", "diknas_academic_terms"
+  add_foreign_key "diknas_conversions", "diknas_academic_years"
+  add_foreign_key "diknas_conversions", "diknas_courses"
   add_foreign_key "diknas_report_cards", "academic_terms"
   add_foreign_key "diknas_report_cards", "academic_years"
+  add_foreign_key "diknas_report_cards", "courses"
   add_foreign_key "diknas_report_cards", "grade_levels"
   add_foreign_key "diknas_report_cards", "grade_sections"
   add_foreign_key "diknas_report_cards", "students"

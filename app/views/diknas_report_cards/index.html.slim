@@ -42,7 +42,7 @@ ul#year-options.dropdown-content
         th Grade section
         th Academic year
         th Academic term
-        th Course belongs to
+        th Course
         th Average
         th Notes
         th
@@ -52,12 +52,12 @@ ul#year-options.dropdown-content
     tbody
       - @diknas_report_cards.each do |diknas_report_card|
         tr
-          td = diknas_report_card.student
-          td = diknas_report_card.grade_level
+          td = diknas_report_card.student.name
+          td = diknas_report_card.grade_level.name
           td = diknas_report_card.grade_section
-          td = diknas_report_card.academic_year
+          td = diknas_report_card.academic_year.name
           td = diknas_report_card.academic_term
-          td = diknas_report_card.course_belongs_to
+          td = diknas_report_card.course.name
           td = diknas_report_card.average
           td = diknas_report_card.notes
           td = link_to 'Show', diknas_report_card

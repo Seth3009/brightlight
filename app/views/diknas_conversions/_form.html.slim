@@ -1,0 +1,40 @@
+.card-panel
+  = form_for @diknas_conversion do |f|
+    - if @diknas_conversion.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@diknas_conversion.errors.count, "error")} prohibited this diknas_conversion from being saved:"
+        ul
+          - @diknas_conversion.errors.full_messages.each do |message|
+            li = message
+
+    .row
+      .col.s4
+        .field
+          = f.label :diknas_course
+          = f.collection_select :diknas_course_id, DiknasCourse.all, :id, :name, prompt: true
+      .col.s4
+        .field
+          = f.label :diknas_academic_year
+          = f.collection_select :diknas_academic_year_id, DiknasAcademicYear.all, :id, :name, prompt: true  
+      .col.s4
+        .field
+          = f.label :diknas_academic_term
+          = f.collection_select :diknas_academic_term_id, DiknasAcademicTerm.all, :id, :name, prompt: true
+      
+    .row
+      nav.light
+          .nav-wrapper
+            ul
+              li
+                = link_to diknas_conversions_path
+                  i.material-icons.left chevron_left
+              li
+                .brand-logo style="margin-left: 20px; font-size:1.5em"
+                  | Course Items (From Report Card)
+            ul.right#add-row
+              li
+                = link_to_add_association f, :diknas_conversion_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#diknas_conversions'
+                  ' Add row
+                  i.material-icons.left playlist_add 
+
+      = render 'diknas_conversion_item_fields', f: f
