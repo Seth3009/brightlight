@@ -1,16 +1,11 @@
 class TemplateTargetsController < ApplicationController
-  before_action :set_template_target, only: [:show, :edit, :update, :destroy]
+  before_action :set_template_target, only: [:edit, :update, :destroy]
   before_action :authorize_resource
 
   # GET /template_targets
   # GET /template_targets.json
   def index
     @template_targets = TemplateTarget.all
-  end
-
-  # GET /template_targets/1
-  # GET /template_targets/1.json
-  def show
   end
 
   # GET /template_targets/new
@@ -29,7 +24,7 @@ class TemplateTargetsController < ApplicationController
 
     respond_to do |format|
       if @template_target.save
-        format.html { redirect_to @template_target, notice: 'Template target was successfully created.' }
+        format.html { redirect_to template_targets_url, notice: 'Template target was successfully created.' }
         format.json { render :show, status: :created, location: @template_target }
       else
         format.html { render :new }
@@ -43,7 +38,7 @@ class TemplateTargetsController < ApplicationController
   def update
     respond_to do |format|
       if @template_target.update(template_target_params)
-        format.html { redirect_to @template_target, notice: 'Template target was successfully updated.' }
+        format.html { redirect_to template_targets_url, notice: 'Template target was successfully updated.' }
         format.json { render :show, status: :ok, location: @template_target }
       else
         format.html { render :edit }

@@ -1,7 +1,6 @@
 .row
   .col.s6
-    h4 Template Target
-
+    h4 Template Targets
 
 nav
   .nav-wrapper
@@ -12,30 +11,28 @@ nav
             | New Template Target
             i.material-icons.left add
 .card-panel
-  table
+  table.compact.striped
     thead
       tr
         th Name
         th Code
         th Description
         th
-        th
-        th
 
     tbody
       - @template_targets.each do |template_target|
-        tr
+        tr id="row-#{template_target.id}"
           td = template_target.name
           td = template_target.code
           td = template_target.description
           td 
              = link_to template_target
-               i.material-icons visibility
+              i.material-icons visibility
              - if can? :update, template_target
-               = link_to edit_template_target_path(template_target)
+              = link_to edit_template_target_path(template_target)
                 i.material-icons edit
              - if can? :destroy,template_target
-               = link_to template_target, data: {:confirm => 'Are you sure?'}, :method => :delete
+              = remote_link_to_delete template_target, message: "Template target deleted", class: "left waves-effect waves-light red-text"
                 i.material-icons delete
 
 

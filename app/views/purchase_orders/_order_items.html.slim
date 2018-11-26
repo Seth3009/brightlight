@@ -1,5 +1,5 @@
 .card-panel
-  table.compact.striped
+  table.compact
     thead
       tr
         th Description
@@ -11,7 +11,7 @@
         th.right-align Non-recurring
         th.right-align Shipping
         th.right-align Line Total
-        th Action
+        th colspan=2 Action
     tbody#purchase_orders
       -if @order_items.present?
         = f.fields_for :order_items, @order_items do |order_item|

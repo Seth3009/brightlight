@@ -1,5 +1,5 @@
 class PurchaseOrdersController < ApplicationController
-  before_action :set_purchase_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_purchase_order, only: [:show, :edit, :update, :destroy, :letter]
 
   # GET /purchase_orders
   # GET /purchase_orders.json
@@ -57,10 +57,21 @@ class PurchaseOrdersController < ApplicationController
   def create
     authorize! :create, PurchaseOrder
     @purchase_order = PurchaseOrder.new(purchase_order_params)
-
     respond_to do |format|
       if @purchase_order.save
-        format.html { redirect_to @purchase_order, notice: 'Purchase order was successfully created.' }
+        @purchase_order.notify_requesters
+        format.html { 
+          if params[:req]
+            requisition = Requisition.find params[:req] 
+            if requisition.all_items_ordered?
+              redirect_to @purchase_order, notice: 'Purchase order was successfully created.' 
+            else
+              redirect_to requisition, notice: 'Purchase order was successfully created.' 
+            end
+          else
+            redirect_to @purchase_order, notice: 'Purchase order was successfully created.' 
+          end
+        }
         format.json { render :show, status: :created, location: @purchase_order }
       else
         format.html { 
@@ -98,7 +109,42 @@ class PurchaseOrdersController < ApplicationController
     end
   end
 
+  def letter
+    authorize! :create, PurchaseOrder
+    @supplier = @purchase_order.supplier
+    if params[:template].present?
+      letter_using_template(params[:template])
+    else
+      letter_html
+    end
+  end
+
   private
+    def letter_html
+    end
+
+    def letter_using_template(template_name)
+      @template = Template.find template_name
+      @template = Template.where(target:'purchase_order_letter').where(active:'true').take unless @template
+
+      if @template
+        @template.placeholders = {
+          order_date: @purchase_order.order_date,
+          order_num: @purchase_order.order_num,
+          supplier_name: @purchase_order.supplier.company_name,
+          supplier_address: @purchase_order.full_address,
+          supplier_phone: @purchase_order.supplier.phone,
+          supplier_fax: @purchase_order.supplier.fax,
+          supplier_contact: @purchase_order.supplier.contact_name,
+          supplier_contact: @purchase_order.supplier.contact_name,
+          supplier_bank: @purchase_order.supplier.bank,
+          supplier_bank_branch: @purchase_order.supplier.bank_branch,
+          supplier_bank_acct_no: @purchase_order.supplier.bank_acct_no,
+          supplier_bank_acct_name: @purchase_order.supplier.bank_acct_name
+        }
+      end
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_purchase_order
       @purchase_order = PurchaseOrder.find(params[:id])
@@ -108,9 +154,9 @@ class PurchaseOrdersController < ApplicationController
     def purchase_order_params
       params.require(:purchase_order).permit(:order_num, :requestor_id, :order_date, :due_date, :total_amount, :requestor, :department_id, 
         :is_active, :currency, :deleted, :notes, :completed_date, :supplier_id, :contact, :phone_contact, :user_id, :status, :buyer_id, 
-        :instructions, :subtotal, :discounts, :est_tax, :non_recurring, :shipping, :down_payment,
+        :instructions, :subtotal, :discounts, :est_tax, :non_recurring, :shipping, :down_payment, :description,
         {:order_items_attributes => [:stock_item__id, :quantity, :unit, :min_delivery_qty, :pending_qty, :type, :line_amount, 
-          :unit_price, :currency, :deleted, :description, :status, :line_num, :extra1, :extra2, :req_item_id,
+          :unit_price, :currency, :deleted, :description, :status, :line_num, :extra1, :extra2, :req_item_id, :remark,
           :discount, :est_tax, :non_recurring, :shipping, :_destroy, :id ]})
     end
 end

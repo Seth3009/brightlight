@@ -1,4 +1,4 @@
-tr.compact.nested-fields
+tr.compact.nested-fields style="border-top: 1px solid #f46518"
   = f.hidden_field :req_item_id
   td.wd25
     .input-field
@@ -32,5 +32,15 @@ tr.compact.nested-fields
       = number_field_tag :line_total, f.object.line_amount, readonly: true, class: "right-align"
       = f.hidden_field :line_amount
   td
+    span.toggle-remark
+      i.material-icons.blue-text note_add
+  td
     = link_to_remove_association f, class: "waves-effect waves-teal red-text"
       i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete
+
+tr.compact style="display: none"
+  td.right-align.grey-text
+    | Remark: 
+  td colspan=8
+    .input-field
+      = f.text_field :remark, placeholder: "Write your remark for this item"
