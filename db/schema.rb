@@ -648,16 +648,6 @@ ActiveRecord::Schema.define(version: 20181123054216) do
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
 
-<<<<<<< HEAD
-  create_table "diknas_gradebooks", force: :cascade do |t|
-    t.string   "studentname"
-    t.string   "grade"
-    t.string   "class"
-    t.string   "avg"
-    t.string   "semester"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-=======
   create_table "diknas_academic_terms", force: :cascade do |t|
     t.string   "name"
     t.text     "notes"
@@ -708,7 +698,6 @@ ActiveRecord::Schema.define(version: 20181123054216) do
     t.text     "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
->>>>>>> eff75ca4ba8349fd80042f35cc17057c7b64892a
   end
 
   create_table "diknas_report_cards", force: :cascade do |t|
