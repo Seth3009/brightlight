@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   }
 
   scope :purchasing, lambda { all.reject {|u| ! u.has_role?(:buyer)} }
+  #scope :budget_approvers, lambda { all.includes(:employee).reject {|u| ! u.has_role?(:budget_approver)}}
   scope :admin, lambda { all.reject {|u| ! u.has_role?(:admin)} }
 
   # Include default devise modules. Others available are:
@@ -67,7 +68,7 @@ class User < ActiveRecord::Base
 
   # For authorization
   # Do not change the order! If you add an item, add at the end of the list.
-  ROLES = %i[admin manager student teacher staff employee inventory carpool librarian hrd purchasing buyer] 
+  ROLES = %i[admin manager student teacher staff employee inventory carpool librarian hrd purchasing buyer approve_budget] 
 
   def self.all_roles
     ROLES

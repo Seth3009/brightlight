@@ -7,7 +7,8 @@ class OrderItem < ActiveRecord::Base
 
   has_many :delivery_items
 
-  validates :req_item_id, presence: true, uniqueness: true
+  validates :req_item_id, presence: true
+  validates_uniqueness_of :req_item_id, message: "Requested item has been ordered before."
 
   after_save :sync_req_item
   before_destroy :remove_link_with_req_item
@@ -36,11 +37,12 @@ class OrderItem < ActiveRecord::Base
 
     def sync_req_item
       req_item.update_columns order_item_id: self.id
-      req_item.requisition.update_columns(status: 'ALLORDERED') if req_item.requisition.all_items_ordered?
+      req_item.requisition.update_status
     end
 
     def remove_link_with_req_item
       req_item.update_columns order_item_id: nil
+      req_item.requisition.update_status
     end
 
 end

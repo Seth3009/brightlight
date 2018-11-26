@@ -1102,8 +1102,8 @@ ActiveRecord::Schema.define(version: 20181121054623) do
     t.string   "description"
     t.string   "status"
     t.integer  "line_num"
-    t.string   "extra1"
-    t.string   "extra2"
+    t.string   "remark"
+    t.string   "notes"
     t.integer  "created_by_id"
     t.integer  "last_updated_by_id"
     t.datetime "created_at",         null: false

@@ -12,8 +12,7 @@
           .input-field.col.s12
             i.material-icons.prefix store
             = f.label :supplier, class: 'active'
-            /= f.collection_select :supplier_id, Supplier.all, :id, :company_name, class:'material-select', prompt: "Select supplier"
-            = f.select :supplier_id, options_for_select(Supplier.all.map { |s| [s.company_name, s.id, {'data-contact' => s.try(:contact_name), 'data-mobile' => s.try(:mobile)}] }), prompt: 'Select supplier'
+            = f.select :supplier_id, options_for_select(Supplier.all.map { |s| [s.company_name, s.id, {'data-contact' => s.try(:contact_name), 'data-mobile' => s.try(:mobile)}] }, f.object.supplier_id), prompt: 'Select supplier'
           .input-field.col.s12
             i.material-icons.prefix account_circle
             = f.label :contact, class: 'active'
@@ -25,12 +24,13 @@
     .col.s12.m6
       .card-panel
         .row
+          = hidden_field_tag :req, params[:req]
           .input-field.col.s6
             = f.label :order_num
             = f.text_field :order_num
           .input-field.col.s6
-            = f.label :buyer, class: "active"
-            = f.collection_select :buyer_id, @buyers, :id, :name, class:'material-select'
+            = f.label :description
+            = f.text_field :description
           .input-field.col.s6
             = f.label :requestor, class: "active"
             = f.collection_select :requestor_id, Employee.active, :id, :name, prompt: "Select requester"
@@ -39,7 +39,7 @@
             = f.collection_select :department_id, Department.all, :id, :name, prompt: "Select department"
           .input-field.col.s6
             = f.label :order_date, class: "active"
-            = f.date_field :order_date
+            = f.date_field :order_date, value: Date.today
           .input-field.col.s6
             = f.label :due_date, class: "active"
             = f.date_field :due_date
@@ -48,7 +48,10 @@
             = f.select :currency, [['IDR', 'IDR'], ['USD', 'USD'], ['SGD', 'SGD'], ['AUD', 'AUD'], ['GBP', 'GBP']]
           .input-field.col.offset-s4
             = f.label :status, class: "active"
-            = f.text_field :status  
+            = f.select :status, options_for_select(PurchaseOrder::Statuses.map{|k,v| [v[:description],v[:code]]})
+          .input-field.col.s6
+            = f.label :buyer, class: "active"
+            = f.collection_select :buyer_id, @buyers, :id, :name, class:'material-select'
   nav.light
     .nav-wrapper
       .brand-logo style="margin-left: 20px; font-size:1.5em"
@@ -141,6 +144,9 @@ javascript:
     });
     $(document).on("change", "select#purchase_order_supplier_id", function(event) {
       insert_contact_info(event.target);
+    });
+    $(document).on("click", ".toggle-remark", function(event) {
+      toggle_remark(event.target);
     })
   });
 
@@ -204,8 +210,12 @@ javascript:
   };
 
   var insert_contact_info = function (elem) {
-    console.log(elem);
     var selected = $("select#purchase_order_supplier_id option:selected");
     $("input#purchase_order_contact").val(selected.data("contact"));
     $("input#purchase_order_phone_contact").val(selected.data("mobile"));
+  }
+
+  var toggle_remark = function(elem) {
+    $(elem).closest('tr').next().toggle();
+    $(elem).toggle();
   }

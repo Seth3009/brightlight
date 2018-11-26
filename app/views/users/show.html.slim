@@ -22,7 +22,7 @@ nav
         .item = @user.name
       dd.col.s4
         .label Roles
-        .item = @user.roles.map(&:to_s).map(&:capitalize).join(', ')
+        .item = @user.roles.map(&:to_s).map(&:humanize).map(&:capitalize).join(', ')
       dd.col.s4
         -if @user.employee.present?
           .label Employee profile

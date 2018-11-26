@@ -1,6 +1,5 @@
 class EmailNotification < ActionMailer::Base
-  default from: "Brightlight <brightlight@cahayabangsa.org>",
-          bcc: "medhiwidjaja@cahayabangsa.org"
+  default from: "Brightlight <brightlight@cahayabangsa.org>"
 
   def scan_completed(user)
     @user = user
@@ -19,6 +18,13 @@ class EmailNotification < ActionMailer::Base
     @addressee = addressee
     mail(to: addressee, subject: "New Purchase Request #{requisition.id}.")
   end 
+
+  def po_processed(requisition, po)
+    @requester = requisition.requester
+    @requisition = requisition
+    @po = po
+    mail(to: %("#{@requester.name}" <#{@requester.email}>), subject: "Your purchase request (#{requisition.id}) has been processed.")
+  end
 
   def leave_approval(leave_request, supervisor,vice_supervisor,hrmanager,hrvicemanager, sendto)
     @supervisor = Employee.find_by_id(supervisor)
@@ -109,4 +115,5 @@ class EmailNotification < ActionMailer::Base
     @to = addressee
     mail(to: @to, subject: "New comment on #{comment.commentable.leave_type}")
   end
+
 end

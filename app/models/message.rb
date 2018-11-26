@@ -49,6 +49,10 @@ class Message < ActiveRecord::Base
     message 
   end
 
+  def self.create_from_email(email)
+    self.new_from_email(email).save
+  end
+
   def reply(reply_message)
     reply_message.parent = self
     reply_message.subject = "RE: #{self.subject}"

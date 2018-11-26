@@ -27,15 +27,33 @@ class Employee < ActiveRecord::Base
 		joins(:book_loans)
     .where(book_loans: {academic_year_id: year || AcademicYear.current_id})
 		.order(:name).uniq
-	}
-	scope :department_heads, lambda { joins('join departments on employees.id = departments.manager_id').order(:name) }
+  }
+  
+	scope :department_heads, lambda { 
+    joins('join departments on employees.id = departments.manager_id or employees.id = departments.vice_manager_id')
+    .joins('join (select * from employees where supervisor_id is not null) supv on supv.id = employees.id')
+    .order(:name) 
+  }
+
 	scope :supervisors, lambda { 
 		where('id in (select supervisor_id from employees where supervisor_id is not null)')
-		.select(:id, :name)
   }
+  
+  def superiors
+    [supervisor, manager, supervisor.supervisor, manager.supervisor].uniq.reject{|e| e == self}.reject &:nil?
+  end
   
   def approver
     Employee.find(self.approver1)
+  end
+
+  def self.with_role(role)
+    role_mask = User::ROLES.index(role)
+    Employee.joins(:user).where('users.roles_mask & (1 << ?) != 0', role_mask)
+  end
+
+  def self.budget_approvers 
+    Employee.with_role :approve_budget
   end
 
   def approver_assistant
@@ -47,7 +65,6 @@ class Employee < ActiveRecord::Base
 	def is_manager?
 		Department.all.map(&:manager_id).include? self.id
 	end
-	
   
   scope :search_query, lambda { |query|
     return nil  if query.blank?   

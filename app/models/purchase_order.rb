@@ -11,12 +11,18 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :deliveries
   has_many :po_reqs, dependent: :destroy
   has_many :requisitions, through: :po_reqs
+  has_many :req_items, through: :order_items
 
   accepts_nested_attributes_for :order_items, reject_if: :all_blank, allow_destroy: true
   #validate  :at_least_one_order_item
 
   after_create :assign_po_number
 
+  Statuses = {:reqstd => {code: "REQSTD", description: "Requested"}, 
+              :order  => {code: "ORDER", description: "Ordered"}, 
+              :pendv  => {code: "PENDV", description: "Pending Delivery"}, 
+              :recvd  => {code: "RECVD", description: "Received"}, 
+              :cancel => {code: "CANCEL", description:  "Canceled"}}
 
   def self.new_from_requisition(req)
     purchase_order = PurchaseOrder.new 
@@ -24,7 +30,7 @@ class PurchaseOrder < ActiveRecord::Base
     purchase_order.requestor_id = req.requester_id
     purchase_order.department_id = req.department_id
     purchase_order.due_date = req.date_required
-    req.req_items.each do |item|
+    req.req_items.incomplete.each do |item|
       purchase_order.order_items.build(
         description: item.description,
         quantity: item.qty_reqd,
@@ -35,6 +41,21 @@ class PurchaseOrder < ActiveRecord::Base
       )
     end
     purchase_order
+  end
+
+  def status_description
+    PurchaseOrder::Statuses[self.status.downcase.to_sym][:description] rescue nil
+  end
+
+  def unique_requests
+    Requisition.joins(req_items: :order_item).where(order_items: {purchase_order_id: self.id}).uniq
+  end
+
+  def notify_requesters
+    self.unique_requests.each do |req|
+      email = EmailNotification.po_processed(req, self).deliver_now
+      Message.create_from_email(email)
+    end
   end
 
   private
