@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181026081019) do
+ActiveRecord::Schema.define(version: 20181126034626) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,28 @@ ActiveRecord::Schema.define(version: 20181026081019) do
   end
 
   add_index "academic_years", ["slug"], name: "index_academic_years_on_slug", unique: true, using: :btree
+
+  create_table "account_departments", force: :cascade do |t|
+    t.integer  "account_id"
+    t.integer  "department_id"
+    t.string   "notes"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "account_departments", ["account_id"], name: "index_account_departments_on_account_id", using: :btree
+  add_index "account_departments", ["department_id"], name: "index_account_departments_on_department_id", using: :btree
+
+  create_table "accounts", force: :cascade do |t|
+    t.string   "acc_l1"
+    t.string   "acc_l2"
+    t.string   "acc_l3"
+    t.string   "acc_l4"
+    t.string   "description"
+    t.string   "notes"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "activity_schedules", force: :cascade do |t|
     t.string   "activity"
@@ -632,9 +654,10 @@ ActiveRecord::Schema.define(version: 20181026081019) do
     t.integer  "employee_id"
     t.integer  "student_id"
     t.string   "name"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.string   "kind"
+    t.string   "status",      default: "Granted"
   end
 
   add_index "door_access_logs", ["employee_id"], name: "index_door_access_logs_on_employee_id", using: :btree
@@ -695,8 +718,8 @@ ActiveRecord::Schema.define(version: 20181026081019) do
     t.boolean  "is_active"
     t.integer  "family_no"
     t.integer  "user_id"
-    t.integer  "approver1"
-    t.integer  "approver2"
+    t.integer  "approver_id"
+    t.integer  "approver_assistant_id"
     t.boolean  "leaderships",                default: false
   end
 
@@ -739,6 +762,17 @@ ActiveRecord::Schema.define(version: 20181026081019) do
 
   add_index "fine_scales", ["new_condition_id"], name: "index_fine_scales_on_new_condition_id", using: :btree
   add_index "fine_scales", ["old_condition_id"], name: "index_fine_scales_on_old_condition_id", using: :btree
+
+  create_table "food_packages", force: :cascade do |t|
+    t.string   "packaging"
+    t.float    "package_contents"
+    t.string   "unit"
+    t.integer  "raw_food_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "food_packages", ["raw_food_id"], name: "index_food_packages_on_raw_food_id", using: :btree
 
   create_table "grade_levels", force: :cascade do |t|
     t.string   "name"
@@ -920,20 +954,10 @@ ActiveRecord::Schema.define(version: 20181026081019) do
     t.datetime "updated_at",                        null: false
     t.boolean  "is_canceled",       default: false
     t.string   "category"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> add employee cancel
     t.integer  "leave_day",         default: 0
     t.string   "start_time"
     t.string   "end_time"
     t.boolean  "employee_canceled", default: false
-<<<<<<< HEAD
-=======
-    t.integer  "leave_day",        default: 0
->>>>>>> change leaving notes input
-=======
->>>>>>> add employee cancel
   end
 
   add_index "leave_requests", ["employee_id"], name: "index_leave_requests_on_employee_id", using: :btree
@@ -1220,6 +1244,14 @@ ActiveRecord::Schema.define(version: 20181026081019) do
   add_index "purchase_orders", ["requestor_id"], name: "index_purchase_orders_on_requestor_id", using: :btree
   add_index "purchase_orders", ["term_of_payment_id"], name: "index_purchase_orders_on_term_of_payment_id", using: :btree
 
+  create_table "raw_foods", force: :cascade do |t|
+    t.string   "name"
+    t.boolean  "is_stock"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.boolean  "is_active",  default: true
+  end
+
   create_table "recurring_types", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -1316,8 +1348,10 @@ ActiveRecord::Schema.define(version: 20181026081019) do
     t.date     "sent_to_purchasing"
     t.date     "sent_for_bgt_approval"
     t.string   "status"
+    t.integer  "account_id"
   end
 
+  add_index "requisitions", ["account_id"], name: "index_requisitions_on_account_id", using: :btree
   add_index "requisitions", ["budget_approver_id"], name: "index_requisitions_on_budget_approver_id", using: :btree
   add_index "requisitions", ["budget_id"], name: "index_requisitions_on_budget_id", using: :btree
   add_index "requisitions", ["budget_item_id"], name: "index_requisitions_on_budget_item_id", using: :btree
@@ -1635,6 +1669,21 @@ ActiveRecord::Schema.define(version: 20181026081019) do
     t.integer  "last_updated_by_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.string   "fax"
+    t.string   "acctg_contact_name"
+    t.string   "acctg_phone"
+    t.string   "acctg_mobile"
+    t.string   "phone2"
+    t.string   "mobile2"
+    t.string   "bank"
+    t.string   "bank_branch"
+    t.string   "bank_acct_name"
+    t.string   "bank_acct_no"
+    t.string   "bank2"
+    t.string   "bank2_branch"
+    t.string   "bank2_acct_name"
+    t.string   "bank2_acct_no"
+    t.string   "payment_method"
   end
 
   add_index "suppliers", ["created_by_id"], name: "index_suppliers_on_created_by_id", using: :btree
@@ -1772,6 +1821,8 @@ ActiveRecord::Schema.define(version: 20181026081019) do
     t.datetime "updated_at",  null: false
   end
 
+  add_foreign_key "account_departments", "accounts"
+  add_foreign_key "account_departments", "departments"
   add_foreign_key "activity_schedules", "academic_years"
   add_foreign_key "book_fines", "grade_levels"
   add_foreign_key "book_fines", "grade_sections"
@@ -1808,6 +1859,7 @@ ActiveRecord::Schema.define(version: 20181026081019) do
   add_foreign_key "family_members", "families"
   add_foreign_key "family_members", "guardians"
   add_foreign_key "family_members", "students"
+  add_foreign_key "food_packages", "raw_foods"
   add_foreign_key "invoices", "academic_years"
   add_foreign_key "invoices", "students"
   add_foreign_key "invoices", "users"
@@ -1851,6 +1903,7 @@ ActiveRecord::Schema.define(version: 20181026081019) do
   add_foreign_key "req_items", "requisitions"
   add_foreign_key "req_items", "users", column: "created_by_id"
   add_foreign_key "req_items", "users", column: "last_updated_by_id"
+  add_foreign_key "requisitions", "accounts"
   add_foreign_key "requisitions", "budget_items"
   add_foreign_key "requisitions", "budgets"
   add_foreign_key "requisitions", "departments"

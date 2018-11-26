@@ -6,7 +6,7 @@ html
 
   body
     div style="margin-left:30px; width=85%; font-size:16px"
-      p You have a new comment on your #{@comment.commentable_type}
+      p You have a new comment on your Leave Request - #{@comment.commentable.leave_type}
 
       table.description-list
         tbody
@@ -15,18 +15,17 @@ html
             td 
               strong = @from.try(:name)
           tr 
-            td No
-            td 
-              strong = @comment.commentable.id
+            td Leave type
+            td = @comment.commentable.leave_type
           tr 
             td Description
-            td = @comment.commentable.leave_type
+            td = @comment.commentable.hour
           tr 
             td Comment
             td = @comment.comment
 
       p You can access the #{@comment.commentable_type} from the following link.
-      p = link_to "No. #{@comment.commentable.id}", @comment.commentable, style:"text-decoration:underline"
+      p = link_to "Leave Request No. #{@comment.commentable.id}", @comment.commentable, style:"text-decoration:underline"
 
       p Thank you for using <i>Brightlight</i>. 
     

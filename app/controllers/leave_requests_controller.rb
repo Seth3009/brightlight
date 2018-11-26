@@ -83,8 +83,8 @@ class LeaveRequestsController < ApplicationController
     authorize! :create, @leave_request
 
     
-    supervisor = @leave_request.employee.approver1
-    vice_supervisor = @leave_request.employee.approver2
+    supervisor = @leave_request.employee.approver_id
+    vice_supervisor = @leave_request.employee.approver_assistant_id
     @hrdept = Department.find_by_code('HR')
     hrmanager = @hrdept.manager_id
     hrvicemanager = @hrdept.vice_manager_id

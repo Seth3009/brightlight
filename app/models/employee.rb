@@ -34,15 +34,15 @@ class Employee < ActiveRecord::Base
 		.select(:id, :name)
   }
   
-  def approver
-    Employee.find(self.approver1)
-  end
+  # def approver
+  #   Employee.find(self.approver_id)
+  # end
 
-  def approver_assistant
-    if self.approver2?
-      Employee.find(self.approver2)
-    end
-  end
+  # def approver_assistant
+  #   if self.approver_assistant_id?
+  #     Employee.find(self.approver_assistant_id)
+  #   end
+  # end
 
 	def is_manager?
 		Department.all.map(&:manager_id).include? self.id
@@ -76,9 +76,9 @@ class Employee < ActiveRecord::Base
     manager = Department.find(self.department_id).manager_id    
       if !self.leaderships
         if manager.present? 
-          self.update_column(:approver1, manager)
+          self.update_column(:approver_id, manager)
         else
-          self.update_column(:approver1, manager)          
+          self.update_column(:approver_id, manager)          
         end
       end
   end  

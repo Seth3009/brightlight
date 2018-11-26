@@ -3,7 +3,7 @@ table.compact.striped
     tr
       th Employee
       th Leave date 
-      th Hours / Notes
+      th Leave notes
       th Category
       th Leave Type
       th Subs
@@ -11,7 +11,7 @@ table.compact.striped
       th Form Submit
       th Actions
 
-  tbody#leave_requests
+  tbody#leave_requests style="font-size:14px;" 
     - @supv_approval_list.each do |leave_request|
       tr 
         td = leave_request.employee
@@ -50,7 +50,7 @@ table.compact.striped
           - else
             -if leave_request.hr_approval.nil? && leave_request.spv_approval != false
               span.box
-                | on progress
+                | Progress
               / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Submitted" check_box_outline_blank            
             -elsif leave_request.hr_approval == true
               span.box.green
