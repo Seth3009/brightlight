@@ -1,0 +1,21 @@
+p#notice = notice
+
+p
+  strong Student:
+  = @diknas_report_converted.student
+p
+  strong Academic year:
+  = @diknas_report_converted.academic_year
+p
+  strong Academic term:
+  = @diknas_report_converted.academic_term
+p
+  strong Grade level:
+  = @diknas_report_converted.grade_level
+p
+  strong Notes:
+  = @diknas_report_converted.notes
+
+= link_to 'Edit', edit_diknas_report_converted_path(@diknas_report_converted)
+'|
+= link_to 'Back', diknas_report_converteds_path

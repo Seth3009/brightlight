@@ -1,0 +1,29 @@
+h1 Listing diknas_report_converted_items
+
+table
+  thead
+    tr
+      th Diknas report converted
+      th Diknas conversion
+      th P score
+      th T score
+      th Comment
+      th
+      th
+      th
+
+  tbody
+    - @diknas_report_converted_items.each do |diknas_report_converted_item|
+      tr
+        td = diknas_report_converted_item.diknas_report_converted
+        td = diknas_report_converted_item.diknas_conversion
+        td = diknas_report_converted_item.P_score
+        td = diknas_report_converted_item.T_score
+        td = diknas_report_converted_item.comment
+        td = link_to 'Show', diknas_report_converted_item
+        td = link_to 'Edit', edit_diknas_report_converted_item_path(diknas_report_converted_item)
+        td = link_to 'Destroy', diknas_report_converted_item, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Diknas report converted item', new_diknas_report_converted_item_path

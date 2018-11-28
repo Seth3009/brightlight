@@ -2,6 +2,7 @@ class DiknasConversion < ActiveRecord::Base
   belongs_to :diknas_course
   belongs_to :academic_year
   belongs_to :academic_term
+  belongs_to :grade_level
 
   has_many :diknas_conversion_items, inverse_of: :diknas_conversion
   accepts_nested_attributes_for :diknas_conversion_items, reject_if: :all_blank, allow_destroy: true

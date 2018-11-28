@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181126074047) do
+ActiveRecord::Schema.define(version: 20181127071529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -650,6 +650,7 @@ ActiveRecord::Schema.define(version: 20181126074047) do
     t.text     "notes"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
+    t.integer  "grade_level_id"
   end
 
   add_index "diknas_conversions", ["academic_term_id"], name: "index_diknas_conversions_on_academic_term_id", using: :btree
@@ -1803,6 +1804,7 @@ ActiveRecord::Schema.define(version: 20181126074047) do
   add_foreign_key "diknas_conversions", "academic_terms"
   add_foreign_key "diknas_conversions", "academic_years"
   add_foreign_key "diknas_conversions", "diknas_courses"
+  add_foreign_key "diknas_conversions", "grade_levels"
   add_foreign_key "diknas_report_cards", "academic_terms"
   add_foreign_key "diknas_report_cards", "academic_years"
   add_foreign_key "diknas_report_cards", "courses"

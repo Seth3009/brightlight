@@ -1,0 +1,29 @@
+h1 Listing diknas_report_converteds
+
+table
+  thead
+    tr
+      th Student
+      th Academic year
+      th Academic term
+      th Grade level
+      th Notes
+      th
+      th
+      th
+
+  tbody
+    - @diknas_report_converteds.each do |diknas_report_converted|
+      tr
+        td = diknas_report_converted.student
+        td = diknas_report_converted.academic_year
+        td = diknas_report_converted.academic_term
+        td = diknas_report_converted.grade_level
+        td = diknas_report_converted.notes
+        td = link_to 'Show', diknas_report_converted
+        td = link_to 'Edit', edit_diknas_report_converted_path(diknas_report_converted)
+        td = link_to 'Destroy', diknas_report_converted, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Diknas report converted', new_diknas_report_converted_path
