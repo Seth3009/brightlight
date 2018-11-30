@@ -64,9 +64,6 @@ class Ability
     can :approve, Requisition do |req|
       req.supervisor == @user.employee          # User can only approve requisition that is sent to the respective user
     end
-    can :approve_budget, Requisition do |req|
-      req.budget_approver == @user.employee     # User can only approve requisition that is sent to the respective user
-    end
     can :manage, Budget, budget_holder: @user.employee
     can :manage, BudgetItem do |budget_item| 
       budget_item.budget.budget_holder == @user.employee 
@@ -131,6 +128,10 @@ class Ability
   end
 
   def buyer
+  end
+
+  def approve_budget
+    can :approve_budget, Requisition
   end
 
   def student
