@@ -5,6 +5,15 @@ class DiknasConvertedsController < ApplicationController
   # GET /diknas_converteds.json
   def index
     @diknas_converteds = DiknasConverted.all
+    # authorize! :read, DiknasConverted    
+    # respond_to do |format|
+    #   format.html {
+    #     items_per_page = 10  
+    #     @diknas_converteds = DiknasReportCard.select(:student_id).group(:student_id)
+    #     # @diknas_converted = DiknasConvertedItem.joins('left join diknas_converteds on diknas_converteds.id = diknas_converted_items.diknas_converted_id')                                          
+    #                             # .paginate(page: params[:page], per_page: items_per_page)
+    #   }
+    # end
   end
 
   # GET /diknas_converteds/1
@@ -69,6 +78,6 @@ class DiknasConvertedsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diknas_converted_params
-      params.require(:diknas_converted).permit(:student_id, :academic_year_id, :academic_term_id, :grade_level_id, :notes)
+      params.require(:diknas_converted).permit(:student_id, :academic_year_id, :academic_term_id, :grade_level_id, :notes, diknas_converted_items_attributes[:id, :diknas_conversion_id, :p_score, :t_score])
     end
 end
