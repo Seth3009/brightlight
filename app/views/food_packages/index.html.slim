@@ -3,6 +3,10 @@
 h4 = @raw_food.name
 nav
   .nav-wrapper
+    ul
+      li
+        .brand-logo style="margin-left: 20px; font-size:1.5em"
+          | Stock remains : #{number_with_precision(@raw_food.stock, :precision => 1, :delimiter => ',').to_s} #{@raw_food.unit}
     ul.right
       li
         / - if can? :manage, FoodPackage
@@ -15,10 +19,9 @@ nav
       tr
         th No
         th Packaging
-        th Package Contents
-        th Measurement Unit
+        th Package Contents        
         th Qty
-        th Total
+        th.right Total
         th Actions
 
     tbody

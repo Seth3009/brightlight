@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181115071428) do
+ActiveRecord::Schema.define(version: 20181127043654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -654,9 +654,10 @@ ActiveRecord::Schema.define(version: 20181115071428) do
     t.integer  "employee_id"
     t.integer  "student_id"
     t.string   "name"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.string   "kind"
+    t.string   "status",      default: "Granted"
   end
 
   add_index "door_access_logs", ["employee_id"], name: "index_door_access_logs_on_employee_id", using: :btree
@@ -717,8 +718,8 @@ ActiveRecord::Schema.define(version: 20181115071428) do
     t.boolean  "is_active"
     t.integer  "family_no"
     t.integer  "user_id"
-    t.integer  "approver1"
-    t.integer  "approver2"
+    t.integer  "approver_id"
+    t.integer  "approver_assistant_id"
     t.boolean  "leaderships",                default: false
   end
 
@@ -767,8 +768,9 @@ ActiveRecord::Schema.define(version: 20181115071428) do
     t.float    "package_contents"
     t.string   "unit"
     t.integer  "raw_food_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.float    "qty",              default: 0.0
   end
 
   add_index "food_packages", ["raw_food_id"], name: "index_food_packages_on_raw_food_id", using: :btree
@@ -1249,6 +1251,8 @@ ActiveRecord::Schema.define(version: 20181115071428) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.boolean  "is_active",  default: true
+    t.float    "stock",      default: 0.0
+    t.string   "unit"
   end
 
   create_table "recurring_types", force: :cascade do |t|
