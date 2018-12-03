@@ -19,4 +19,12 @@ class FoodPackage < ActiveRecord::Base
       unit_list = ["-"]
     end
   end  
+
+  def self.disable_item(food_package)
+    if self.find(food_package).is_active?
+      self.find(food_package).update(:is_active => false)
+    else
+      self.find(food_package).update(:is_active => true)
+    end
+  end
 end

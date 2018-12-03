@@ -6,7 +6,7 @@ class FoodPackagesController < ApplicationController
   def index
     if params[:raw_food_id].present?
       @raw_food = RawFood.find(params[:raw_food_id])
-      @food_packages = FoodPackage.where(raw_food_id:@raw_food.id)     
+      @food_packages = FoodPackage.where(raw_food_id:@raw_food.id).order(:packaging)     
     end
 
   end
@@ -37,6 +37,7 @@ class FoodPackagesController < ApplicationController
       if @food_package.save
         format.html { redirect_to raw_food_food_packages_path(@food_package.raw_food_id), notice: 'Food package was successfully created.' }
         format.json { render :show, status: :created, location: @food_package }
+        format.js
       else
         format.html { redirect_to :back, alert: "Choose package unit"  }
         format.json { render json: @food_package.errors, status: :unprocessable_entity }
@@ -51,6 +52,7 @@ class FoodPackagesController < ApplicationController
       if @food_package.update(food_package_params)       
         format.html { redirect_to raw_food_food_packages_path(@food_package.raw_food_id), notice: 'Food package was successfully updated.' }
         format.json { render :show, status: :ok, location: @food_package }
+        format.js
       else
         format.html { render :edit }
         format.json { render json: @food_package.errors, status: :unprocessable_entity }
@@ -61,9 +63,15 @@ class FoodPackagesController < ApplicationController
   # DELETE /food_packages/1
   # DELETE /food_packages/1.json
   def destroy
-    @food_package.destroy
+    FoodPackage.disable_item(@food_package.id)
+    if @food_package.is_active? 
+      @notice = 'food package is inactive' 
+    else 
+      @notice = 'food package is now active.'
+    end 
+    # @food_package.destroy
     respond_to do |format|
-      format.html { redirect_to food_packages_url, notice: 'Food package was successfully destroyed.' }
+      format.html { redirect_to :back, notice: @notice }
       format.json { head :no_content }
     end
   end

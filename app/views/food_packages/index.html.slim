@@ -10,28 +10,30 @@ nav
     ul.right
       li
         / - if can? :manage, FoodPackage
-        = link_to new_raw_food_food_package_url
+        = link_to new_raw_food_food_package_url, remote:true
           | New Package
           i.material-icons.left add
 .card-panel  
-  table.compact.striped
+  table#fp_table.compact.striped
     thead
-      tr
-        th No
+      tr        
         th Packaging
         th Package Contents        
         th Qty
-        th.right Total
-        th Actions
+        th Total
+        th Is Active
+        th.center Actions
 
-    tbody
-      - @food_packages.each.with_index(1) do |food_package, idx|
-        = render partial: 'index_row', locals: {food_package: food_package, idx: idx}        
+    tbody#food_packages
+      - @food_packages.each do |food_package|
+        tr id="row-#{food_package.id}"
+          = render partial: 'index_row', locals: {food_package: food_package} 
 
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
 #edit-modal.modal.modal-fixed-footer
   #edit-modal-content
-#show-modal.modal.modal-fixed-footer
-  #show-modal-content
-
-css:
-  .ui-autocomplete { position: absolute; cursor: default;z-index:10000 !important;}

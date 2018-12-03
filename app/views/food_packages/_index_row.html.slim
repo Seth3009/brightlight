@@ -1,9 +1,19 @@
-tr id="row-#{food_package.id}"  
-   td = idx
+tr id="row-#{food_package.id}"     
    td = food_package.packaging
    td = (food_package.package_contents.to_s + food_package.unit).to_measurement
    td = food_package.qty
-   td.right   
-      = number_with_precision(food_package.package_contents * food_package.qty, :precision => 1, :delimiter => ',').to_s + " " + food_package.unit.to_unit     
-   td  
-      = link_to 'Edit', edit_food_package_url(food_package), class: "btn waves-effect waves-teal btn-small"
+   td = number_with_precision(food_package.package_contents * food_package.qty, :precision => 1, :delimiter => ',').to_s + " " + food_package.unit.to_unit     
+   td
+      - if food_package.is_active
+         i.material-icons check_box
+      - else
+         i.material-icons check_box_outline_blank
+   td.center  
+      = link_to edit_food_package_url(food_package), remote: true, class: "waves-effect waves-teal"
+         i.material-icons edit
+      - if food_package.is_active
+         = link_to food_package, data: {:confirm => 'Inactive package?'}, :method => :delete, class:'red-text'
+            i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Inactive" thumb_down
+      - else
+         = link_to food_package, data: {:confirm => 'Activate package?'}, :method => :delete, class:'green-text'
+            i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Active" thumb_up

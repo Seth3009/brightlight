@@ -12,7 +12,7 @@
         = f.text_field :packaging, placeholder:'describe the package name', id:'packaging_input', class:'food'
       .input-field.col.s4
         = f.label :package_contents, class:'active'
-        = f.text_field :package_contents, placeholder:'fill amount of contents', id:'content_input', class:'food', :onkeypress=> "return isNumberKey(event)"        
+        = f.text_field :package_contents, placeholder:'fill amount of contents', id:'content_input', class:'food'
       .input-field.col.s4
         = f.label :unit, class:'active'
         / = f.select :unit,@measurement.map{|measure| [measure,measure]}, id:"mes"
