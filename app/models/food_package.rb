@@ -8,17 +8,7 @@ class FoodPackage < ActiveRecord::Base
 
   def update_stock
     raw_food.total_stock
-  end  
-
-  def self.unit_list(type)
-    if type == 'solid'
-      unit_list = ["Kilograms","Grams"]
-    elsif type == 'liquid'
-      unit_list = ["Liters","Milliliters"]
-    else
-      unit_list = ["-"]
-    end
-  end  
+  end    
 
   def self.disable_item(food_package)
     if self.find(food_package).is_active?

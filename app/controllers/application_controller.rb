@@ -76,6 +76,16 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new('Not Found')
   end
 
+  def unit_list(type)
+    if type.downcase == 'solid'
+      unit_list = ["Kilograms","Grams"]
+    elsif type.downcase == 'liquid'
+      unit_list = ["Liters","Milliliters"]
+    else
+      unit_list = ["unknown unit"]
+    end
+  end  
+
   protected
 
     # for impersonation in development only
