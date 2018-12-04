@@ -5,8 +5,11 @@ nav
   .nav-wrapper
     ul
       li
+        = link_to raw_foods_path
+          i.material-icons.left chevron_left
+      li
         .brand-logo style="margin-left: 20px; font-size:1.5em"
-          | Stock remains : #{number_with_precision(@raw_food.stock, :precision => 1, :delimiter => ',').to_s} #{@raw_food.unit}
+          | Stock remains : #{number_with_precision(@raw_food.stock, :precision => 2, :delimiter => ',').to_s} #{@raw_food.unit}
     ul.right
       li
         / - if can? :manage, FoodPackage

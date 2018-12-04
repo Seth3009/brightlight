@@ -65,9 +65,9 @@ class FoodPackagesController < ApplicationController
   def destroy
     FoodPackage.disable_item(@food_package.id)
     if @food_package.is_active? 
-      @notice = 'food package is inactive' 
+      @notice = 'food package disabled' 
     else 
-      @notice = 'food package is now active.'
+      @notice = 'food package enabled.'
     end 
     # @food_package.destroy
     respond_to do |format|

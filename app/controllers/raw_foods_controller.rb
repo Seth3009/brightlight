@@ -4,7 +4,10 @@ class RawFoodsController < ApplicationController
   # GET /raw_foods
   # GET /raw_foods.json
   def index
-    @raw_foods = RawFood.all
+    @raw_foods = RawFood.all.order(:name)
+    if params[:search]
+      @raw_foods = @raw_foods.where('UPPER(raw_foods.name) LIKE ?', "%#{params[:search].upcase}%")       
+    end
   end
 
   # GET /raw_foods/1
@@ -20,6 +23,7 @@ class RawFoodsController < ApplicationController
 
   # GET /raw_foods/1/edit
   def edit
+
   end
 
   # POST /raw_foods
@@ -31,6 +35,7 @@ class RawFoodsController < ApplicationController
       if @raw_food.save
         format.html { redirect_to @raw_food, notice: 'Raw food was successfully created.' }
         format.json { render :show, status: :created, location: @raw_food }
+        format.js
       else
         format.html { render :new }
         format.json { render json: @raw_food.errors, status: :unprocessable_entity }
@@ -45,6 +50,7 @@ class RawFoodsController < ApplicationController
       if @raw_food.update(raw_food_params)
         format.html { redirect_to @raw_food, notice: 'Raw food was successfully updated.' }
         format.json { render :show, status: :ok, location: @raw_food }
+        format.js
       else
         format.html { render :edit }
         format.json { render json: @raw_food.errors, status: :unprocessable_entity }
@@ -55,9 +61,16 @@ class RawFoodsController < ApplicationController
   # DELETE /raw_foods/1
   # DELETE /raw_foods/1.json
   def destroy
-    @raw_food.destroy
+    authorize! :manage, RawFood
+    RawFood.disable_item(@raw_food.id)
+    if @raw_food.is_active? 
+      @notice = 'Raw food disabled.' 
+    else 
+      @notice = 'Raw food enabled.'
+    end 
+    # @raw_food.destroy
     respond_to do |format|
-      format.html { redirect_to raw_foods_url, notice: 'Raw food was successfully destroyed.' }
+      format.html { redirect_to raw_foods_url, notice: @notice }
       format.json { head :no_content }
     end
   end
@@ -70,7 +83,7 @@ class RawFoodsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def raw_food_params
-      params.require(:raw_food).permit(:name, :is_stock, :is_active,
+      params.require(:raw_food).permit(:name, :is_stock, :is_active, :stock, :unit, :food_type,
                                 {:food_packages_attributes => [:id, :packaging, :qty, :unit, :raw_food_id, :_destroy]})
     end
 end

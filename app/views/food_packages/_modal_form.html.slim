@@ -27,11 +27,11 @@
 javascript: 
   
   if($('.food').val() ==  "") 
-   $('.btnsubmit').attr('disabled', true);
+    $('.btnsubmit').attr('disabled', true);
   
   $('.food').keyup(function(){
-        if($('#packaging_input').val() !=  "" && $('#content_input').val() !=  "" && $('#unit_input').val() != "Please select"  ) 
-            $('.btnsubmit').attr('disabled', false);    
+    if($('#packaging_input').val() !=  "" && $('#content_input').val() !=  "" && $('#unit_input').val() != "Please select"  ) 
+        $('.btnsubmit').attr('disabled', false);    
     else
       $('.btnsubmit').attr('disabled', true);   
   });

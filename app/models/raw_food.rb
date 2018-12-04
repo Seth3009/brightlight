@@ -14,4 +14,12 @@ class RawFood < ActiveRecord::Base
     end
     self.update_column :stock, total    
   end
+
+  def self.disable_item(raw_food)
+    if self.find(raw_food).is_active?
+      self.find(raw_food).update(:is_active => false)
+    else
+      self.find(raw_food).update(:is_active => true)
+    end
+  end
 end

@@ -1,7 +1,7 @@
 = form_for @raw_food, remote:true do |f|
     .modal-content
         - if @raw_food.persisted?
-            h4 Editing #{@raw_food.name} #{'('+@raw_food.code+')' if @raw_food.code.present?}
+            h4 Editing #{@raw_food.name}
         - else 
             h4 New Supply
         - if @raw_food.errors.any?
@@ -13,11 +13,21 @@
 
         .row
             .input-field.col.s4  
-                = f.label :name
+                = f.label :name, class:'active'
                 = f.text_field :name
             .input-field.col.s4                  
                 = f.check_box :is_stock
                 = f.label :is_stock
     .modal-footer
-        button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" Save
+        button.btn.btn-flat.btnsubmit.waves-effect.waves-light.modal-action.modal-close type="submit" Save
         a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+
+javascript:
+    if($('#raw_food_name').val() ==  "") 
+        $('.btnsubmit').attr('disabled', true);
+    $('#raw_food_name').keyup(function(){
+        if($('#raw_food_name').val() !=  "" )
+            $('.btnsubmit').attr('disabled', false);    
+        else
+            $('.btnsubmit').attr('disabled', true);   
+    });
