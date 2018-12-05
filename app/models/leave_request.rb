@@ -26,12 +26,12 @@ class LeaveRequest < ActiveRecord::Base
 
   scope :spv, -> (employee_id) { 
     submitted
-    .where('approver1 = ? or approver2 = ?', employee_id, employee_id)
+    .where('approver_id = ? or approver_assistant_id = ?', employee_id, employee_id)
   }
 
   scope :spv_archive, -> (employee_id) { 
     submitted
-    .where('approver1 = ? or approver2 = ?' , employee_id, employee_id)
+    .where('approver_id = ? or approver_assistant_id = ?' , employee_id, employee_id)
     .where("hr_approval is not ? or spv_approval = ? or is_canceled = ? or employee_canceled = ?", nil,false, true, true)  
   }
 
@@ -99,14 +99,14 @@ class LeaveRequest < ActiveRecord::Base
     self.update_attributes is_canceled: true    
     self.save   
     emp = "no"
-    if self.employee.approver2.present? && Department.find_by(code: 'HR').vice_manager.present?
-      cc = [Employee.find(self.employee.approver1),Employee.find(self.employee.approver2), Department.find_by(code: 'HR').manager,Department.find_by(code: 'HR').vice_manager]
-    elsif self.employee.approver2.present? && Department.find_by(code: 'HR').vice_manager.nil?
-      cc = [Employee.find(self.employee.approver1),self.Employee.find(self.employee.approver2), Department.find_by(code: 'HR').manager]
-    elsif self.employee.approver2.nil? && Department.find_by(code: 'HR').vice_manager.present?
-      cc = [Employee.find(self.employee.approver1), Department.find_by(code: 'HR').manager,Department.find_by(code: 'HR').vice_manager]
+    if self.employee.approver_assistant_id.present? && Department.find_by(code: 'HR').vice_manager.present?
+      cc = [Employee.find(self.employee.approver_id),Employee.find(self.employee.approver_assistant_id), Department.find_by(code: 'HR').manager,Department.find_by(code: 'HR').vice_manager]
+    elsif self.employee.approver_assistant_id.present? && Department.find_by(code: 'HR').vice_manager.nil?
+      cc = [Employee.find(self.employee.approver_id),self.Employee.find(self.employee.approver_assistant_id), Department.find_by(code: 'HR').manager]
+    elsif self.employee.approver_assistant_id.nil? && Department.find_by(code: 'HR').vice_manager.present?
+      cc = [Employee.find(self.employee.approver_id), Department.find_by(code: 'HR').manager,Department.find_by(code: 'HR').vice_manager]
     else
-      cc = [Employee.find(self.employee.approver1), Department.find_by(code: 'HR').manager]
+      cc = [Employee.find(self.employee.approver_id), Department.find_by(code: 'HR').manager]
     end
     email = EmailNotification.leave_canceled(self, self.employee, cc, emp).deliver_now    
     notification = Message.new_from_email(email)
@@ -117,10 +117,10 @@ class LeaveRequest < ActiveRecord::Base
     self.update_attributes employee_canceled: true
     self.save
     emp = "yes"
-    if self.employee.approver2.present?
-      cc = [Employee.find(self.employee.approver1),Employee.find(self.employee.approver2)]
+    if self.employee.approver_assistant_id.present?
+      cc = [Employee.find(self.employee.approver_id),Employee.find(self.employee.approver_assistant_id)]
     else
-      cc = [Employee.find(self.employee.approver1)]
+      cc = [Employee.find(self.employee.approver_id)]
     end
     email = EmailNotification.leave_canceled(self, self.employee, cc, emp).deliver_now
     notification = Message.new_from_email(email)

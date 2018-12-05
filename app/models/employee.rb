@@ -42,10 +42,6 @@ class Employee < ActiveRecord::Base
   def superiors
     [supervisor, manager, supervisor.supervisor, manager.supervisor].uniq.reject{|e| e == self}.reject &:nil?
   end
-  
-  def approver
-    Employee.find(self.approver1)
-  end
 
   def self.with_role(role)
     role_mask = User::ROLES.index(role)
@@ -54,12 +50,6 @@ class Employee < ActiveRecord::Base
 
   def self.budget_approvers 
     Employee.with_role :approve_budget
-  end
-
-  def approver_assistant
-    if self.approver2?
-      Employee.find(self.approver2)
-    end
   end
 
 	def is_manager?
@@ -93,9 +83,9 @@ class Employee < ActiveRecord::Base
     manager = Department.find(self.department_id).manager_id    
       if !self.leaderships
         if manager.present? 
-          self.update_column(:approver1, manager)
+          self.update_column(:approver_id, manager)
         else
-          self.update_column(:approver1, manager)          
+          self.update_column(:approver_id, manager)          
         end
       end
   end  

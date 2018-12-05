@@ -107,12 +107,12 @@
         = f.select :leaderships, [['Yes', true], ['No', false]], prompt: true
       - if params[:action] =~ /edit/ && @employee.leaderships
         .input-field.col.s4
-          = f.label :approver1, "Approver", class: 'active'
-          = f.collection_select :approver1, Employee.active.order(:name), :id, :name, prompt: true
-      - if params[:action] =~ /edit/ && @employee.approver1
+          = f.label :approver_id, "Approver", class: 'active'
+          = f.collection_select :approver_id, Employee.active.order(:name), :id, :name, prompt: true
+      - if params[:action] =~ /edit/ && @employee.approver_id
         .input-field.col.s4
-          = f.label :approver2, "Approver Assistant", class: 'active'
-          = f.collection_select :approver2, Employee.active.order(:name), :id, :name, include_blank: 'No One', prompt: true
+          = f.label :approver_assistant_id, "Approver Assistant", class: 'active'
+          = f.collection_select :approver_assistant_id, Employee.active.order(:name), :id, :name, include_blank: 'No One', prompt: true
       .input-field.col.s4
         = f.label :job_title, class: 'active'
         = f.text_field :job_title

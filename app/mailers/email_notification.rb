@@ -113,7 +113,7 @@ class EmailNotification < ActionMailer::Base
     @comment = comment 
     @from = @comment.user 
     @to = addressee
-    mail(to: @to, subject: "New comment on #{comment.commentable.leave_type}")
+    mail(to: @to, subject: "New comment on your leave request")
   end
 
 end

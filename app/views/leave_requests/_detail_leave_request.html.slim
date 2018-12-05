@@ -79,7 +79,7 @@ nav
           -if @leave_request.hr_approval.nil? && @leave_request.spv_approval != false
             | : 
             span.box
-              | on progress
+              | Progress
             / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Submitted" check_box_outline_blank            
           -elsif @leave_request.hr_approval == true
             | : 
