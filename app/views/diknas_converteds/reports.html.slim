@@ -47,51 +47,10 @@ nav
           span#student = 'Choose student'
           i.material-icons.right arrow_drop_down
       
-br
-.card-panel
-  table.compact.striped.bordered
-    thead
-      tr
-        th style="border-bottom: 3px double grey" rowspan=3 No.
-        th style="border-bottom: 3px double grey" rowspan=3 Komponen
-        th style="border-bottom: 3px double grey" rowspan=3 Kriteria Ketuntasan minimal KKM
-        th colspan=5 Nilai Hasil Belajar      
-      tr 
-        th colspan=2 Pengetahuan
-        th colspan=2 Praktik
-        th Sikap
-      tr style="border-bottom: 3px double grey"
-        th Angka
-        th Huruf
-        th Angka
-        th Huruf
-        th Predikat
-    tbody
-      tr style="font-weight:bold;"
-        td A.
-        td Mata Pelajaran
-        td
-        td
-        td
-        td
-        td
-        td
-      - @students.each.with_index(1) do |student,idx|
-        tr
-          td = idx
-          td = student.name
-          td.center -
-          td.center -
-          td.center -
-          td.center -
-          td.center -
-          td.center -
-      tr style="font-weight:bold;"
-        td B.
-        td Muatan Lokal **)
-        td
-        td
-        td
-        td
-        td
-        td  
+
+= render 'table_a'
+
+= render 'table_b'
+
+= render 'table_c'
+        

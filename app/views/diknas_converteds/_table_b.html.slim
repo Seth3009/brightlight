@@ -1,0 +1,23 @@
+.card-panel
+  table.compact.striped.bordered
+    thead
+      tr
+        th style="border-bottom: 3px double grey" rowspan=2 No.
+        th style="border-bottom: 3px double grey" rowspan=2 Komponen
+        th style="border-bottom: 3px double grey" rowspan=2 Ketercapaian Kompetensi                 
+    tbody
+      tr style="font-weight:bold;"
+        td A.
+        td Mata Pelajaran
+        td
+        
+      - @students.each.with_index(1) do |student,idx|
+        tr
+          td = idx
+          td = student.name
+          td.center -
+          
+      tr style="font-weight:bold;"
+        td B.
+        td Muatan Lokal **)
+        td
