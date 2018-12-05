@@ -1,0 +1,97 @@
+- title 'Diknas Converted'
+h5 Listing Diknas Converted
+
+ul#grade-options.dropdown-content
+  - GradeLevel.all.order(:id).each do |grade|
+    li 
+      = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
+
+ul#section-options.dropdown-content
+  - @grade_sections.each do |section|
+    li
+      = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterStudentOptions(#{section.grade_level_id},#{section.id}, '#{section.name}');"
+
+ul#student-options.dropdown-content
+  - if @grade_section.present?
+    li = link_to 'All', by_student_student_books_path(params.except(:st).merge(year:@year_id,s:@grade_section.id, g:@grade_level.id).symbolize_keys)
+    - @all_students.each do |gss| 
+      li = link_to "#{gss.order_no}. #{gss.student.name}", by_student_student_books_path(params.merge(year:@year_id,st:gss.student.id,s:@grade_section.id).symbolize_keys)
+
+ul#year-options.dropdown-content
+  li  
+  - AcademicYear.list_for_menu.each do |year|
+    li 
+      = link_to year.name, converted_reports_path(year:year.id)
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to "#", onclick: 'window.print();return false;'
+          i.material-icons print
+    ul.right
+      li 
+        a.dropdown-button href="#!" data-activates="year-options" data-beloworigin="true" 
+          span#year = @academic_year.name
+          i.material-icons.right arrow_drop_down
+      li
+        a.dropdown-button href="#!" data-activates="grade-options" data-beloworigin="true" 
+          span#grade = params[:l].present? ? "Grade #{@grade_level_name}" : 'Choose grade'
+          i.material-icons.right arrow_drop_down
+      li
+        a.dropdown-button href="#!" data-activates="section-options" data-beloworigin="true" 
+          span#section = params[:l].present? ? "Section #{@grade_section_name}" : 'Choose class'
+          i.material-icons.right arrow_drop_down
+      li
+        a#student-menu.dropdown-button href="#!" data-activates="student-options" data-beloworigin="true" 
+          span#student = 'Choose student'
+          i.material-icons.right arrow_drop_down
+      
+br
+.card-panel
+  table.compact.striped.bordered
+    thead
+      tr
+        th style="border-bottom: 3px double grey" rowspan=3 No.
+        th style="border-bottom: 3px double grey" rowspan=3 Komponen
+        th style="border-bottom: 3px double grey" rowspan=3 Kriteria Ketuntasan minimal KKM
+        th colspan=5 Nilai Hasil Belajar      
+      tr 
+        th colspan=2 Pengetahuan
+        th colspan=2 Praktik
+        th Sikap
+      tr style="border-bottom: 3px double grey"
+        th Angka
+        th Huruf
+        th Angka
+        th Huruf
+        th Predikat
+    tbody
+      tr style="font-weight:bold;"
+        td A.
+        td Mata Pelajaran
+        td
+        td
+        td
+        td
+        td
+        td
+      - @students.each.with_index(1) do |student,idx|
+        tr
+          td = idx
+          td = student.name
+          td.center -
+          td.center -
+          td.center -
+          td.center -
+          td.center -
+          td.center -
+      tr style="font-weight:bold;"
+        td B.
+        td Muatan Lokal **)
+        td
+        td
+        td
+        td
+        td
+        td  

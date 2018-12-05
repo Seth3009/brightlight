@@ -70,6 +70,23 @@ class DiknasConvertedsController < ApplicationController
     end
   end
 
+
+  #get /diknas_converteds/reports
+  def reports
+    @year_id = params[:year] || AcademicYear.current_id
+    @disable_edit = @year_id.to_i != AcademicYear.current_id
+    @academic_year = AcademicYear.find @year_id
+    @students = Student.all.limit(13)
+
+    respond_to do |format|
+      format.html do
+        @grade_level_ids = GradeLevel.all.order(:id).collect(&:id)
+        @grade_sections = GradeSection.all.order(:grade_level_id, :id)
+        @grade_sections_ids = @grade_sections.collect(&:id)
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_diknas_converted
