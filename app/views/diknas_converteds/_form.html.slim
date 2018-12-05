@@ -1,0 +1,64 @@
+= form_for @diknas_converted do |f|
+  - if @diknas_converted.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@diknas_converted.errors.count, "error")} prohibited this diknas_converted from being saved:"
+      ul
+        - @diknas_converted.errors.full_messages.each do |message|
+          li = message
+
+  .card-panel
+    .row
+      .field.col.s3
+        = f.label :student
+        = f.collection_select :student_id, Student.all, :id, :name, prompt: true
+      .field.col.s2
+        = f.label :academic_year
+        = f.collection_select :academic_year_id, AcademicYear.all, :id, :name, prompt: true
+      .field.col.s2
+        = f.label :academic_term
+        = f.collection_select :academic_term_id, AcademicTerm.all, :id, :name, prompt: true
+      .field.col.s2
+        = f.label :grade_level
+        = f.collection_select :grade_level_id, GradeLevel.all, :id, :name, prompt: true
+      / .field.col.s3
+      /   = f.label :notes
+      /   = f.text_area :notes
+
+  nav.light
+          .nav-wrapper
+            ul
+              li
+                = link_to diknas_converteds_path
+                  i.material-icons.left chevron_left
+              li
+                .brand-logo style="margin-left: 20px; font-size:1.5em"
+                  | Course List
+
+  .card-panel
+    table
+      thead
+        tr
+          th Diknas conversion
+          th Course
+          th Academic year
+          th Academic term
+          th Weight
+          th Notes
+          th
+          th
+          th
+
+      tbody
+        / - @diknas_conversion_items.each do |diknas_conversion_item|
+          tr
+            td = diknas_conversion_item.diknas_conversion
+            td = diknas_conversion_item.course
+            td = diknas_conversion_item.academic_year
+            td = diknas_conversion_item.academic_term
+            td = diknas_conversion_item.weight
+            td = diknas_conversion_item.notes
+            td = link_to 'Show', diknas_conversion_item
+            td = link_to 'Edit', edit_diknas_conversion_item_path(diknas_conversion_item)
+            td = link_to 'Destroy', diknas_conversion_item, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br  

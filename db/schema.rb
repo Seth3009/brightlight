@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181123054216) do
+ActiveRecord::Schema.define(version: 20181128065639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -648,26 +648,12 @@ ActiveRecord::Schema.define(version: 20181123054216) do
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
 
-  create_table "diknas_academic_terms", force: :cascade do |t|
-    t.string   "name"
-    t.text     "notes"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "diknas_academic_years", force: :cascade do |t|
-    t.string   "name"
-    t.text     "notes"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "diknas_conversion_items", force: :cascade do |t|
     t.integer  "diknas_conversion_id"
     t.integer  "course_id"
     t.integer  "academic_year_id"
     t.integer  "academic_term_id"
-    t.float    "weight"
+    t.integer  "weight"
     t.text     "notes"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
@@ -679,18 +665,47 @@ ActiveRecord::Schema.define(version: 20181123054216) do
   add_index "diknas_conversion_items", ["diknas_conversion_id"], name: "index_diknas_conversion_items_on_diknas_conversion_id", using: :btree
 
   create_table "diknas_conversions", force: :cascade do |t|
+    t.integer  "diknas_course_id"
+    t.integer  "academic_year_id"
+    t.integer  "academic_term_id"
     t.float    "weight"
     t.text     "notes"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.integer  "diknas_course_id"
-    t.integer  "diknas_academic_year_id"
-    t.integer  "diknas_academic_term_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "grade_level_id"
   end
 
-  add_index "diknas_conversions", ["diknas_academic_term_id"], name: "index_diknas_conversions_on_diknas_academic_term_id", using: :btree
-  add_index "diknas_conversions", ["diknas_academic_year_id"], name: "index_diknas_conversions_on_diknas_academic_year_id", using: :btree
+  add_index "diknas_conversions", ["academic_term_id"], name: "index_diknas_conversions_on_academic_term_id", using: :btree
+  add_index "diknas_conversions", ["academic_year_id"], name: "index_diknas_conversions_on_academic_year_id", using: :btree
   add_index "diknas_conversions", ["diknas_course_id"], name: "index_diknas_conversions_on_diknas_course_id", using: :btree
+
+  create_table "diknas_converted_items", force: :cascade do |t|
+    t.integer  "diknas_converted_id"
+    t.integer  "diknas_conversion_id"
+    t.float    "P_score"
+    t.float    "T_score"
+    t.text     "comment"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "diknas_converted_items", ["diknas_conversion_id"], name: "index_diknas_converted_items_on_diknas_conversion_id", using: :btree
+  add_index "diknas_converted_items", ["diknas_converted_id"], name: "index_diknas_converted_items_on_diknas_converted_id", using: :btree
+
+  create_table "diknas_converteds", force: :cascade do |t|
+    t.integer  "student_id"
+    t.integer  "academic_year_id"
+    t.integer  "academic_term_id"
+    t.integer  "grade_level_id"
+    t.text     "notes"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "diknas_converteds", ["academic_term_id"], name: "index_diknas_converteds_on_academic_term_id", using: :btree
+  add_index "diknas_converteds", ["academic_year_id"], name: "index_diknas_converteds_on_academic_year_id", using: :btree
+  add_index "diknas_converteds", ["grade_level_id"], name: "index_diknas_converteds_on_grade_level_id", using: :btree
+  add_index "diknas_converteds", ["student_id"], name: "index_diknas_converteds_on_student_id", using: :btree
 
   create_table "diknas_courses", force: :cascade do |t|
     t.string   "number"
@@ -1918,9 +1933,16 @@ ActiveRecord::Schema.define(version: 20181123054216) do
   add_foreign_key "diknas_conversion_items", "academic_years"
   add_foreign_key "diknas_conversion_items", "courses"
   add_foreign_key "diknas_conversion_items", "diknas_conversions"
-  add_foreign_key "diknas_conversions", "diknas_academic_terms"
-  add_foreign_key "diknas_conversions", "diknas_academic_years"
+  add_foreign_key "diknas_conversions", "academic_terms"
+  add_foreign_key "diknas_conversions", "academic_years"
   add_foreign_key "diknas_conversions", "diknas_courses"
+  add_foreign_key "diknas_conversions", "grade_levels"
+  add_foreign_key "diknas_converted_items", "diknas_conversions"
+  add_foreign_key "diknas_converted_items", "diknas_converteds"
+  add_foreign_key "diknas_converteds", "academic_terms"
+  add_foreign_key "diknas_converteds", "academic_years"
+  add_foreign_key "diknas_converteds", "grade_levels"
+  add_foreign_key "diknas_converteds", "students"
   add_foreign_key "diknas_report_cards", "academic_terms"
   add_foreign_key "diknas_report_cards", "academic_years"
   add_foreign_key "diknas_report_cards", "courses"

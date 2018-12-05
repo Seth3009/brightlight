@@ -1,0 +1,31 @@
+h1 Listing diknas_conversion_items
+
+table
+  thead
+    tr
+      th Diknas conversion
+      th Course
+      th Academic year
+      th Academic term
+      th Weight
+      th Notes
+      th
+      th
+      th
+
+  tbody
+    - @diknas_conversion_items.each do |diknas_conversion_item|
+      tr
+        td = diknas_conversion_item.diknas_conversion
+        td = diknas_conversion_item.course
+        td = diknas_conversion_item.academic_year
+        td = diknas_conversion_item.academic_term
+        td = diknas_conversion_item.weight
+        td = diknas_conversion_item.notes
+        td = link_to 'Show', diknas_conversion_item
+        td = link_to 'Edit', edit_diknas_conversion_item_path(diknas_conversion_item)
+        td = link_to 'Destroy', diknas_conversion_item, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Diknas conversion item', new_diknas_conversion_item_path

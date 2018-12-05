@@ -1,5 +1,5 @@
-.card-panel
-  = form_for @diknas_conversion do |f|
+
+= form_for @diknas_conversion do |f|
     - if @diknas_conversion.errors.any?
       #error_explanation
         h2 = "#{pluralize(@diknas_conversion.errors.count, "error")} prohibited this diknas_conversion from being saved:"
@@ -7,22 +7,26 @@
           - @diknas_conversion.errors.full_messages.each do |message|
             li = message
 
-    .row
-      .col.s4
-        .field
-          = f.label :diknas_course
-          = f.collection_select :diknas_course_id, DiknasCourse.all, :id, :name, prompt: true
-      .col.s4
-        .field
-          = f.label :diknas_academic_year
-          = f.collection_select :diknas_academic_year_id, DiknasAcademicYear.all, :id, :name, prompt: true  
-      .col.s4
-        .field
-          = f.label :diknas_academic_term
-          = f.collection_select :diknas_academic_term_id, DiknasAcademicTerm.all, :id, :name, prompt: true
-      
-    .row
-      nav.light
+    .card-panel
+      .row
+        .col.s3
+          .field
+            = f.label :diknas_course
+            = f.collection_select :diknas_course_id, DiknasCourse.all, :id, :name, prompt: true
+        .col.s3
+          .field
+            = f.label :grade_level
+            = f.collection_select :grade_level_id, GradeLevel.all, :id, :name, prompt: true  
+        .col.s3
+          .field
+            = f.label :academic_year
+            = f.collection_select :academic_year_id, AcademicYear.all, :id, :name, prompt: true      
+        .col.s3
+          .field
+            = f.label :academic_term
+            = f.collection_select :academic_term_id, AcademicTerm.all, :id, :name, prompt: true
+        
+    nav.light
           .nav-wrapper
             ul
               li
@@ -31,10 +35,14 @@
               li
                 .brand-logo style="margin-left: 20px; font-size:1.5em"
                   | Course Items (From Report Card)
-            ul.right#add-row
+            ul.right
               li
-                = link_to_add_association f, :diknas_conversion_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#diknas_conversions'
-                  ' Add row
+                = link_to_add_association f, :diknas_conversion_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#diknas_conversion'
+                  ' Add item
                   i.material-icons.left playlist_add 
 
-      = render 'diknas_conversion_item_fields', f: f
+    = render 'diknas_conversion_items', f: f
+
+    .toolbar.z-depth-1
+      button.btn.waves-effect.waves-light type="submit" name="save" Save
+      = link_to 'Cancel', diknas_conversions_path, class: "waves-effect waves-light btn-flat"
