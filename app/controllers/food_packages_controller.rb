@@ -25,8 +25,8 @@ class FoodPackagesController < ApplicationController
 
   # GET /food_packages/1/edit
   def edit
-    # @raw_food = RawFood.find(@food_package.raw_food_id)
-    @measurement = unit_list('solid')
+    @raw_food = RawFood.find(@food_package.raw_food_id)
+    @measurement = unit_list(@raw_food.food_type)
   end
 
   # POST /food_packages

@@ -32,9 +32,9 @@ Rails.application.routes.draw do
   resources :student_activities
   
   resources :raw_foods do
-    resources :food_packages, shallow: true
+    resources :food_packages, shallow: true, except: [:edit]
   end
-  
+  get 'food_packages/:id/edit' => 'food_packages#edit', as: :raw_food_food_package
   
   resources :activity_schedules, shallow: true do
     member do
