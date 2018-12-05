@@ -24,41 +24,18 @@
       /   = f.label :notes
       /   = f.text_area :notes
 
-  nav.light
-          .nav-wrapper
-            ul
-              li
-                = link_to diknas_converteds_path
-                  i.material-icons.left chevron_left
-              li
-                .brand-logo style="margin-left: 20px; font-size:1.5em"
-                  | Course List
-
   .card-panel
-    table
-      thead
-        tr
-          th Diknas conversion
-          th Course
-          th Academic year
-          th Academic term
-          th Weight
-          th Notes
-          th
-          th
-          th
+    .row
+      strong.col.s2 Course
+      strong.col.s2 Nilai Praktek
+      strong.col.s2 Nilai Teory
+      strong.col.s3 Comment
+      
 
-      tbody
-        / - @diknas_conversion_items.each do |diknas_conversion_item|
-          tr
-            td = diknas_conversion_item.diknas_conversion
-            td = diknas_conversion_item.course
-            td = diknas_conversion_item.academic_year
-            td = diknas_conversion_item.academic_term
-            td = diknas_conversion_item.weight
-            td = diknas_conversion_item.notes
-            td = link_to 'Show', diknas_conversion_item
-            td = link_to 'Edit', edit_diknas_conversion_item_path(diknas_conversion_item)
-            td = link_to 'Destroy', diknas_conversion_item, data: {:confirm => 'Are you sure?'}, :method => :delete
+    .row#diknas_converted
+          = f.fields_for :diknas_converted_items do |diknas_converted_item|
+            = render 'diknas_converted_item_fields', f: diknas_converted_item 
 
-br  
+  .toolbar.z-depth-1
+        button.btn.waves-effect.waves-light type="submit" name="save" Save
+        = link_to 'Cancel', diknas_converteds_path, class: "waves-effect waves-light btn-flat"
