@@ -11,16 +11,18 @@ class DiknasReportCard < ActiveRecord::Base
     xl = Roo::Spreadsheet.open(file_path)
     sheet = xl.sheet('Sheet1')
 
-    header = {student_id: "School UD ID", grade: "Grade", course: "Course",
-      gradesection: "Class", average: "S1Avg", year: "School Year", academic_term: "Academic term"}
+    header = {student_id: "School UD ID ", grade: "Grade Level ", course: "Base Course ",
+      average: "Avg ", year: "Year ", academic_term: "Semester "}
     
     sheet.each_with_index(header) do |row,i|
       puts "#{i}, #{row}"
       next if i < 1
       
         student = Student.find_by_student_no(row[:student_id])
-        academicyear = AcademicYear.find_by_name(row[:year])
-        course = Course.find_by_number(row[:course])
+        year = row[:year].slice(0..8)
+        academicyear = AcademicYear.find_by_name(year)
+        academicterm = AcademicTerm.find_by_academic_year_id(academicyear.id)
+        course = Course.find_by_name(row[:course])
 
         diknasreportcard = DiknasReportCard.new(
           student_id:       student.id,
@@ -28,6 +30,7 @@ class DiknasReportCard < ActiveRecord::Base
           course_id:        course.id,
           average:          row[:average],
           academic_year_id: academicyear.id
+          academic_term_id: academicterm.id
         )
 
         diknasreportcard.save
