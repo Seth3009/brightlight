@@ -7,12 +7,22 @@ class DiknasConversionsController < ApplicationController
     @diknas_conversions = DiknasConversion.all
 
     authorize! :read, DiknasConversion    
+<<<<<<< HEAD
     # respond_to do |format|
     #   format.html {      
     #     @diknas_conversions = DiknasConversionItem.joins('left join diknas_conversions on diknas_conversions.id = diknas_conversion_items.diknas_conversion_id')                                          
     #                             .paginate(page: params[:page], per_page: items_per_page)
     #   }
     # end
+=======
+    respond_to do |format|
+      format.html {
+        items_per_page = 20        
+        @diknas_conversions = DiknasConversionItem.joins('left join diknas_conversions on diknas_conversions.id = diknas_conversion_items.diknas_conversion_id')                                          
+                                # .paginate(page: params[:page], per_page: items_per_page)
+      }
+    end
+>>>>>>> 8edbc951309bbfbcce08ef528d9feb039a3f6ea4
 
   end
 

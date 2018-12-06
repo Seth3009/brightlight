@@ -1,17 +1,17 @@
 namespace :data do
-	desc "Import new diknas conversion"
-	task import_new_diknas_conversion: :environment do
+	desc "Import new diknas converted"
+	task import_new_diknas_converted: :environment do
 
-    xl = Roo::Spreadsheet.open('lib/tasks/DiknasConversion.xlsx')
+    xl = Roo::Spreadsheet.open('lib/tasks/DiknasConverted.xlsx')
     sheet = xl.sheet('Sheet1')
 
-    header = {id:'no', course:'pelajaran', year:'year',semester:'semester', grade_level_id:'grade'}
+    header = {id:'no', student_id:'student', year:'year',semester:'semester', grade_level_id:'grade'}
     # course = Course.find_by_name '2017-2018'
 
     sheet.each_with_index(header) do |row,i|
         puts "#{i}, #{row}"
 		next if i < 1
-            course = DiknasCourse.find_by_name row[:course]
+            student = Student.find_by_student_no(row[:student_id])
             academicyear = AcademicYear.find_by_name row[:year]
 
     #   grade_section = GradeSection.find_by_name row[:section_name]
@@ -22,9 +22,9 @@ namespace :data do
                 academicterm = AcademicTerm.where(academic_year_id: academicyear.id).last
             end
 
-      dc = DiknasConversion.new(
+      dc = DiknasConverted.new(
                   id: row[:id],
-                  diknas_course_id: course.id,
+                  student_id: student.id,
                   academic_year_id: academicyear.id,
                   academic_term_id: academicterm.id,                  
                   grade_level_id: row[:grade_level_id]
