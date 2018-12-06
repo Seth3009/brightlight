@@ -67,7 +67,7 @@ class User < ActiveRecord::Base
 
   # For authorization
   # Do not change the order! If you add an item, add at the end of the list.
-  ROLES = %i[admin manager student teacher staff employee inventory carpool librarian hrd purchasing buyer] 
+  ROLES = %i[admin manager student teacher staff employee inventory carpool librarian hrd purchasing buyer administrative] 
 
   def self.all_roles
     ROLES

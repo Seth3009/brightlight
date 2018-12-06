@@ -133,6 +133,12 @@ class Ability
   def buyer
   end
 
+  def administrative
+    can :manage, DiknasReportCard
+    can :manage, DiknasConversion
+    can :manage, DiknasConverted
+  end
+
   def student
     can :read, CourseSection
     can :read, GradeLevel

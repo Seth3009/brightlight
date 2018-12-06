@@ -18,11 +18,11 @@ development:
   # <<: *default
   # database: db/development.sqlite3
   <<: *default
-  database: brightlight-dev
+  database: tes_diknas
   pool: 5
   username: brightlight
   password: Sadrakh201
-  host: localhost
+  host: 222.168.2.159
   port: 5432
 
 # Warning: The database defined as "test" will be erased and

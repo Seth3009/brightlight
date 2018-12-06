@@ -6,6 +6,13 @@ class DiknasReportCard < ActiveRecord::Base
   belongs_to :academic_term
   belongs_to :course
 
+  validates_presence_of :student_id, :grade_level_id, :grade_section_id, :academic_year_id, :academic_term_id, :course_id
+
+  def self.value_for(student_id: student_id, academic_year_id: academic_year_id, academic_term_id: academic_term_id, course_id: course_id) 
+    record = DiknasReportCard.find_by student_id: student_id, academic_year_id: academic_year_id, course_id: course_id
+    record.try(:average)
+  end
+  
   def self.import_xlsx(file_path)
     # Read from file
     xl = Roo::Spreadsheet.open(file_path)
@@ -18,48 +25,22 @@ class DiknasReportCard < ActiveRecord::Base
       puts "#{i}, #{row}"
       next if i < 1
       
-        student = Student.find_by_student_no(row[:student_id])
-        year = row[:year].slice(0..8)
-        academicyear = AcademicYear.find_by_name(year)
+      student = Student.find_by_student_no(row[:student_id])
+      year = row[:year].slice(0..8)
+      academic_year = AcademicYear.find_by_name(year)
+      terms = academic_year.academic_terms.order(:start_date).map &:id
+      course = Course.find_by_name(row[:course])
 
-        if row[:academic_term] == 1
-          academicterm = AcademicTerm.where(academic_year_id: academicyear.id).first
-        else
-          academicterm = AcademicTerm.where(academic_year_id: academicyear.id).last
-        end
-
-        course = Course.find_by_name(row[:course])
-
-        diknasreportcard = DiknasReportCard.new(
-          student_id:       student.id,
-          grade_level_id:   row[:grade],
-          course_id:        course.id,
-          average:          row[:average],
-          academic_year_id: academicyear.id,
-          academic_term_id: academicterm.id
-        )
-
-        diknasreportcard.save
+      diknas_report_card = DiknasReportCard.new(
+        student_id:       student.id,
+        grade_level_id:   row[:grade],
+        course_id:        course.id,
+        average:          row[:average],
+        academic_year_id: academic_year.id,
+        academic_term_id: terms[row[:academic_term]-1]
+      )
+      diknas_report_card.save
       
-
-    #   MONTHS.each do |month, month_no|
-    #     if row[month].present?
-    #       budget_item = BudgetItem.new(
-    #         account:            row[:account],
-    #         year:               month_no < 7 ? academic_year.end_date.year : academic_year.start_date.year,
-    #         line:               i,
-    #         description:        row[:description],
-    #         month:              month_no,
-    #         amount:             row[month],
-    #         budget_id:          budget.id
-    #       )
-    #       budget_item.save
-    #       total += budget_item.amount
-    #     end 
-    #   end       
-    # end
-    # budget.update_attributes total_amt: total
-    # return diknas_report_cards_url
-  end 
-end
+    end 
+  end
 end
