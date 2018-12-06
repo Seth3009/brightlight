@@ -923,7 +923,7 @@ ActiveRecord::Schema.define(version: 20181206035325) do
   create_table "gradebook", force: :cascade do |t|
     t.string   "studentname"
     t.string   "grade"
-    t.string   "class"
+    t.string   "gradeclass"
     t.decimal  "avg"
     t.string   "semester"
     t.datetime "created_at",  null: false
@@ -1159,8 +1159,8 @@ ActiveRecord::Schema.define(version: 20181206035325) do
     t.string   "description"
     t.string   "status"
     t.integer  "line_num"
-    t.string   "extra1"
-    t.string   "extra2"
+    t.string   "remark"
+    t.string   "notes"
     t.integer  "created_by_id"
     t.integer  "last_updated_by_id"
     t.datetime "created_at",         null: false
@@ -1171,6 +1171,7 @@ ActiveRecord::Schema.define(version: 20181206035325) do
     t.decimal  "shipping"
     t.decimal  "down_payment"
     t.integer  "req_item_id"
+    t.string   "code"
   end
 
   add_index "order_items", ["created_by_id"], name: "index_order_items_on_created_by_id", using: :btree
@@ -1319,6 +1320,11 @@ ActiveRecord::Schema.define(version: 20181206035325) do
     t.string   "method"
     t.string   "delivery"
     t.integer  "term_of_payment_id"
+    t.string   "description"
+    t.string   "dlvry_address"
+    t.string   "dlvry_address2"
+    t.string   "dlvry_city"
+    t.string   "dlvry_post_code"
   end
 
   add_index "purchase_orders", ["approver_id"], name: "index_purchase_orders_on_approver_id", using: :btree
@@ -1532,6 +1538,7 @@ ActiveRecord::Schema.define(version: 20181206035325) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.string   "track"
+    t.integer  "subject_id"
   end
 
   add_index "standard_books", ["academic_year_id"], name: "index_standard_books_on_academic_year_id", using: :btree
@@ -1540,6 +1547,7 @@ ActiveRecord::Schema.define(version: 20181206035325) do
   add_index "standard_books", ["book_title_id"], name: "index_standard_books_on_book_title_id", using: :btree
   add_index "standard_books", ["grade_level_id"], name: "index_standard_books_on_grade_level_id", using: :btree
   add_index "standard_books", ["grade_section_id"], name: "index_standard_books_on_grade_section_id", using: :btree
+  add_index "standard_books", ["subject_id"], name: "index_standard_books_on_subject_id", using: :btree
 
   create_table "statuses", force: :cascade do |t|
     t.string  "name"
@@ -2013,6 +2021,7 @@ ActiveRecord::Schema.define(version: 20181206035325) do
   add_foreign_key "room_accesses", "badges"
   add_foreign_key "room_accesses", "rooms"
   add_foreign_key "smart_cards", "transports"
+  add_foreign_key "standard_books", "subjects"
   add_foreign_key "student_activities", "academic_years"
   add_foreign_key "student_activities", "activity_schedules"
   add_foreign_key "student_activities", "students"
