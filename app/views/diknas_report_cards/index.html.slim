@@ -52,21 +52,12 @@ ul#year-options.dropdown-content
     tbody
       - @diknas_report_cards.each do |diknas_report_card|
         tr
-<<<<<<< 97bec75518faaa95999b1c5327ef877c72efc72c
-          td = diknas_report_card.student.name
-          td = diknas_report_card.grade_level.name
-          td = diknas_report_card.grade_section
-          td = diknas_report_card.academic_year.name
-          td = diknas_report_card.academic_term.name
-          td = diknas_report_card.course.name
-=======
           td = diknas_report_card.student.try(:name)
           td = diknas_report_card.grade_level.try(:name)
           td = diknas_report_card.grade_section.try(:name)
           td = diknas_report_card.academic_year.try(:name)
           td = diknas_report_card.academic_term.try(:name)
           td = diknas_report_card.course.try(:name)
->>>>>>> Interim: diknas conversion
           td = diknas_report_card.average
           td = diknas_report_card.notes
           td = link_to 'Show', diknas_report_card
