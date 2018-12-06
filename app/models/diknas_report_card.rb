@@ -21,7 +21,13 @@ class DiknasReportCard < ActiveRecord::Base
         student = Student.find_by_student_no(row[:student_id])
         year = row[:year].slice(0..8)
         academicyear = AcademicYear.find_by_name(year)
-        academicterm = AcademicTerm.find_by_academic_year_id(academicyear.id)
+
+        if row[:academic_term] == 1
+          academicterm = AcademicTerm.where(academic_year_id: academicyear.id).first
+        else
+          academicterm = AcademicTerm.where(academic_year_id: academicyear.id).last
+        end
+
         course = Course.find_by_name(row[:course])
 
         diknasreportcard = DiknasReportCard.new(
@@ -29,7 +35,7 @@ class DiknasReportCard < ActiveRecord::Base
           grade_level_id:   row[:grade],
           course_id:        course.id,
           average:          row[:average],
-          academic_year_id: academicyear.id
+          academic_year_id: academicyear.id,
           academic_term_id: academicterm.id
         )
 
