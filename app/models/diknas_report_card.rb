@@ -6,7 +6,7 @@ class DiknasReportCard < ActiveRecord::Base
   belongs_to :academic_term
   belongs_to :course
 
-  validates_presence_of :student_id, :grade_level_id, :grade_section_id, :academic_year_id, :academic_term_id, :course_id
+  validates_presence_of :student_id, :grade_level_id, :academic_year_id, :academic_term_id, :course_id
 
   def self.value_for(student_id: student_id, academic_year_id: academic_year_id, academic_term_id: academic_term_id, course_id: course_id) 
     record = DiknasReportCard.find_by student_id: student_id, academic_year_id: academic_year_id, course_id: course_id
@@ -40,7 +40,7 @@ class DiknasReportCard < ActiveRecord::Base
         academic_term_id: terms[row[:academic_term]-1]
       )
       diknas_report_card.save
-      
+
     end 
   end
 end

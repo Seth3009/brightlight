@@ -6,7 +6,7 @@ class AcademicYear < ActiveRecord::Base
 	# slug  :name
   scope :current_year, lambda { where("? between start_date and end_date", Date.today) }
   scope :for_date, lambda { |date| where("? between start_date and end_date", date) }
-	scope :list_for_menu, lambda { where("id>? and id<?", AcademicYear.current_id-7, AcademicYear.current_id+3) }
+	scope :list_for_menu, -> (from=7, to=3) { where("id >= ? and id <= ?", AcademicYear.current_id-from, AcademicYear.current_id+to) }
 	default_scope { order(:id) }
 
 	class << self

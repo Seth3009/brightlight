@@ -1,5 +1,5 @@
 - title 'Diknas Conversion'
-h1 Diknas Conversions
+h4 Diknas Conversions
 
 nav
   .nav-wrapper
@@ -11,7 +11,7 @@ nav
           
 
 .card-panel
-  table.compact.striped
+  table.compact
     thead
       tr
         th Diknas Course
@@ -25,19 +25,19 @@ nav
        
     tbody
       - @diknas_conversions.each do |diknas_conversion|
-        tr
-          td = diknas_conversion.diknas_conversion.diknas_course.name
-          / td = diknas_conversion.diknas_conversion.academic_year.name
-          td = diknas_conversion.diknas_conversion.academic_term.name
-          td = diknas_conversion.diknas_conversion.grade_level_id
-          td = diknas_conversion.course.name
-          td = diknas_conversion.academic_term.name
-          td = diknas_conversion.weight
-          td = diknas_conversion.notes
-          / td = link_to 'Show', diknas_conversion
-          td = link_to 'Edit', edit_diknas_conversion_path(diknas_conversion)
-          / td = link_to 'Destroy', diknas_conversion, data: {:confirm => 'Are you sure?'}, :method => :delete
-
-  br
-
-/ = link_to 'New Diknas conversion', new_diknas_conversion_path
+        -diknas_conversion.diknas_conversion_items.each.with_index do |diknas_conversion_item, idx|
+          tr
+            td = diknas_conversion.diknas_course.name if idx==0
+            td = diknas_conversion.academic_year.name if idx==0
+            td = diknas_conversion.academic_term.name if idx==0
+            td = diknas_conversion.grade_level_id     if idx==0
+            td = diknas_conversion_item.course.name
+            td = diknas_conversion_item.academic_term.name
+            td = diknas_conversion_item.weight
+            td = diknas_conversion_item.notes
+            td 
+              -if idx==0
+                = link_to edit_diknas_conversion_path(diknas_conversion)
+                  i.material-icons edit
+                = link_to diknas_conversion, data: {:confirm => 'Are you sure?'}, :method => :delete
+                  i.material-icons.red-text delete

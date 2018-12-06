@@ -4,16 +4,15 @@ class DiknasConversionsController < ApplicationController
   # GET /diknas_conversions
   # GET /diknas_conversions.json
   def index
-    # @diknas_conversions = DiknasConversion.all
-    # @course = params[:course].present? ? Course.find(params[:course]) : Course.current
+    @diknas_conversions = DiknasConversion.all
+
     authorize! :read, DiknasConversion    
-    respond_to do |format|
-      format.html {
-        items_per_page = 20        
-        @diknas_conversions = DiknasConversionItem.joins('left join diknas_conversions on diknas_conversions.id = diknas_conversion_items.diknas_conversion_id')                                          
-                                .paginate(page: params[:page], per_page: items_per_page)
-      }
-    end
+    # respond_to do |format|
+    #   format.html {      
+    #     @diknas_conversions = DiknasConversionItem.joins('left join diknas_conversions on diknas_conversions.id = diknas_conversion_items.diknas_conversion_id')                                          
+    #                             .paginate(page: params[:page], per_page: items_per_page)
+    #   }
+    # end
 
   end
 
@@ -79,6 +78,7 @@ class DiknasConversionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diknas_conversion_params
-      params.require(:diknas_conversion).permit(:diknas_course_id, :grade_level_id, :academic_year_id, :academic_term_id, :weight, :notes, diknas_conversion_items_attributes: [:course_id, :academic_year_id, :academic_term_id, :weight, :notes, :_destroy])
+      params.require(:diknas_conversion).permit(:diknas_course_id, :grade_level_id, :academic_year_id, :academic_term_id, :weight, :notes, 
+        diknas_conversion_items_attributes: [:id, :course_id, :academic_year_id, :academic_term_id, :weight, :notes, :_destroy])
     end
 end
