@@ -11,7 +11,7 @@ class DiknasConversionsController < ApplicationController
       format.html {
         items_per_page = 20        
         @diknas_conversions = DiknasConversionItem.joins('left join diknas_conversions on diknas_conversions.id = diknas_conversion_items.diknas_conversion_id')                                          
-                                .paginate(page: params[:page], per_page: items_per_page)
+                                # .paginate(page: params[:page], per_page: items_per_page)
       }
     end
 
