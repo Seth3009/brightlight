@@ -4,7 +4,21 @@ class DiknasReportCardsController < ApplicationController
   # GET /diknas_report_cards
   # GET /diknas_report_cards.json
   def index
-    @diknas_report_cards = DiknasReportCard.all
+    @diknas_report_cards = DiknasReportCard
+                            .includes([:student, :academic_year, :academic_term, :grade_level, :course])
+                            .paginate(page: params[:page], per_page: 50)
+    # if params[:year].present?
+    #   @diknas_report_cards = @diknas_report_cards.where(academic_year_id: params[:year])
+    #   @academic_year = AcademicYear.find params[:year]
+    # end
+    if params[:term].present?
+      @diknas_report_cards = @diknas_report_cards.where(academic_term_id: params[:term])
+      @academic_term = AcademicTerm.find params[:term]
+    end
+    if params[:grade].present?
+      @diknas_report_cards = @diknas_report_cards.where(grade_level_id: params[:grade])
+      @grade_level = GradeLevel.find params[:grade]
+    end
   end
 
   # GET /diknas_report_cards/1

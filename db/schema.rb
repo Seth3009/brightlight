@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181128065639) do
+ActiveRecord::Schema.define(version: 20181207010227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1707,6 +1707,8 @@ ActiveRecord::Schema.define(version: 20181128065639) do
     t.string   "slug"
     t.string   "place_of_birth"
     t.string   "language"
+    t.string   "nisn"
+    t.string   "nis"
   end
 
   add_index "students", ["family_no"], name: "index_students_on_family_no", using: :btree
