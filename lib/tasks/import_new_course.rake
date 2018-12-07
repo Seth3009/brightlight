@@ -10,6 +10,7 @@ namespace :data do
     # course = Course.find_by_name '2017-2018'
 
     sheet.each_with_index(header) do |row,i|
+      puts "#{i}, #{row}"
 			next if i < 1
     #   course = Student.find_by_student_no row[:student_no]
     #   grade_section = GradeSection.find_by_name row[:section_name]
