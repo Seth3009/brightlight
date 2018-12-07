@@ -15,8 +15,8 @@ namespace :data do
       dc = DiknasConvertedItem.new(
                   diknas_converted_id: row[:converted_id],
                   diknas_conversion_id: row[:conversion_id],
-                  P_score: row[:np],
-                  T_score: row[:nt],
+                  p_score: row[:np],
+                  t_score: row[:nt],
                 )
       dc.save
     #   puts "#{i}. #{student.name} (No:#{student.student_no}/Fam:#{student.family_no})"

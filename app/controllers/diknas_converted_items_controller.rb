@@ -69,6 +69,6 @@ class DiknasConvertedItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diknas_converted_item_params
-      params.require(:diknas_converted_item).permit(:diknas_converted_id, :diknas_conversion_id, :P_score, :T_score, :comment)
+      params.require(:diknas_converted_item).permit(:diknas_converted_id, :diknas_conversion_id, :p_score, :t_score, :comment)
     end
 end

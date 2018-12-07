@@ -26,8 +26,8 @@ namespace :data do
 
       dc.diknas_converted_items << DiknasConvertedItem.new(
         diknas_conversion_id: row[:conversion_id],
-        P_score: row[:np],
-        T_score: row[:nt]
+        p_score: row[:np],
+        t_score: row[:nt]
       )
     end
   end

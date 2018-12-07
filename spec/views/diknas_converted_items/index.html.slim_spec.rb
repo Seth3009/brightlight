@@ -6,15 +6,15 @@ RSpec.describe "diknas_converted_items/index", type: :view do
       DiknasConvertedItem.create!(
         :diknas_converted => nil,
         :diknas_conversion => nil,
-        :P_score => 2.5,
-        :T_score => 3.5,
+        :p_score => 2.5,
+        :t_score => 3.5,
         :comment => "MyText"
       ),
       DiknasConvertedItem.create!(
         :diknas_converted => nil,
         :diknas_conversion => nil,
-        :P_score => 2.5,
-        :T_score => 3.5,
+        :p_score => 2.5,
+        :t_score => 3.5,
         :comment => "MyText"
       )
     ])

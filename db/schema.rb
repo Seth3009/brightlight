@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181207010227) do
+ActiveRecord::Schema.define(version: 20181207042819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -682,8 +682,8 @@ ActiveRecord::Schema.define(version: 20181207010227) do
   create_table "diknas_converted_items", force: :cascade do |t|
     t.integer  "diknas_converted_id"
     t.integer  "diknas_conversion_id"
-    t.float    "P_score"
-    t.float    "T_score"
+    t.float    "p_score"
+    t.float    "t_score"
     t.text     "comment"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
