@@ -7,10 +7,6 @@ class DiknasReportCardsController < ApplicationController
     @diknas_report_cards = DiknasReportCard
                             .includes([:student, :academic_year, :academic_term, :grade_level, :course])
                             .paginate(page: params[:page], per_page: 50)
-    # if params[:year].present?
-    #   @diknas_report_cards = @diknas_report_cards.where(academic_year_id: params[:year])
-    #   @academic_year = AcademicYear.find params[:year]
-    # end
     if params[:term].present?
       @diknas_report_cards = @diknas_report_cards.where(academic_term_id: params[:term])
       @academic_term = AcademicTerm.find params[:term]

@@ -4,10 +4,6 @@ nav
   .nav-wrapper
     ul
       li 
-        / a.dropdown-button href="#!" data-activates="year-options"
-        /   span#year = @academic_year.present? ? "#{@academic_year.name}" : "Academic Year" 
-        /   i.material-icons.right arrow_drop_down
-      li 
         a.dropdown-button href="#!" data-activates="term-options"
           span#term = @academic_term.present? ? "#{@academic_term.name}" : "Academic Term" 
           i.material-icons.right arrow_drop_down
@@ -21,12 +17,6 @@ nav
           | Import
           i.material-icons.left input
 
-
-/ ul#year-options.dropdown-content
-/   li  
-/   - AcademicYear.list_for_menu(5,0).each do |year|
-/     li 
-/       = link_to year.name, diknas_report_cards_path(params.merge(year:year.id).symbolize_keys) 
 ul#term-options.dropdown-content
   li  
   - AcademicTerm.list_for_menu(5,0).each do |term|

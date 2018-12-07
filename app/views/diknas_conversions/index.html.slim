@@ -1,14 +1,33 @@
 - title 'Diknas Conversion'
-h4 Diknas Conversions
+h4 Setting Rapor Diknas Conversions
 
 nav
   .nav-wrapper
+    ul
+      li 
+        a.dropdown-button href="#!" data-activates="term-options"
+          span#term = @academic_term.present? ? "#{@academic_term.name}" : "Academic Term" 
+          i.material-icons.right arrow_drop_down
+      li 
+        a.dropdown-button href="#!" data-activates="grade-options"
+          span#grade = @grade_level.present? ? "#{@grade_level.name}" : "Grade" 
+          i.material-icons.right arrow_drop_down
     ul.right
       li
       = link_to new_diknas_conversion_path
         | New
         i.material-icons.left add
           
+ul#term-options.dropdown-content
+  li  
+  - AcademicTerm.list_for_menu(5,0).each do |term|
+    li 
+      = link_to term.name, diknas_conversions_path(params.merge(term:term.id).symbolize_keys) 
+ul#grade-options.dropdown-content
+  li  
+  - GradeLevel.order(:id).each do |grade|
+    li 
+      = link_to grade.name, diknas_conversions_path(params.merge(grade:grade.id).symbolize_keys) 
 
 .card-panel
   table.compact
@@ -24,11 +43,11 @@ nav
         th Action
        
     tbody
-      - @diknas_conversions.each do |diknas_conversion|
-        -diknas_conversion.diknas_conversion_items.each.with_index do |diknas_conversion_item, idx|
-          tr
+      - @diknas_conversions.each.with_index do |diknas_conversion, i|
+        - bg = i.even? ? "#dfdfdf" : "white"
+        - diknas_conversion.diknas_conversion_items.each.with_index do |diknas_conversion_item, idx|
+          tr style="background:#{bg}"
             td = diknas_conversion.diknas_course.name if idx==0
-            td = diknas_conversion.academic_year.name if idx==0
             td = diknas_conversion.academic_term.name if idx==0
             td = diknas_conversion.grade_level_id     if idx==0
             td = diknas_conversion_item.course.name
@@ -41,3 +60,6 @@ nav
                   i.material-icons edit
                 = link_to diknas_conversion, data: {:confirm => 'Are you sure?'}, :method => :delete
                   i.material-icons.red-text delete
+
+.toolbar.z-depth-1
+  = will_paginate @diknas_conversions

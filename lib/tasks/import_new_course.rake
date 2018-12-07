@@ -7,25 +7,21 @@ namespace :data do
 
     header = {no:'no',name:'name',number:'number', description:'description', grade_level_id:'grade_level_id',
               academic_year_id:'academic_year_id', academic_term_id:'academic_term_id', employee_id:'employee_id'}
-    # course = Course.find_by_name '2017-2018'
 
     sheet.each_with_index(header) do |row,i|
       puts "#{i}, #{row}"
 			next if i < 1
-    #   course = Student.find_by_student_no row[:student_no]
-    #   grade_section = GradeSection.find_by_name row[:section_name]
+
       puts "Importing row #{i}. #{row[:number]}"
-      course = Course.new(
-                  name: row[:number],
-                  number: row[:number],
-                  description: row[:description],
-                  grade_level_id: row[:grade_level_id],
-                  academic_year_id: row[:academic_year_id],
-                  academic_term_id: row[:academic_term_id],
-                  employee_id: row[:employee_id]
-                )
-      course.save
-    #   puts "#{i}. #{student.name} (No:#{student.student_no}/Fam:#{student.family_no})"
+      Course.find_or_create_by(
+        name: row[:number],
+        number: row[:number],
+        description: row[:description],
+        grade_level_id: row[:grade_level_id],
+        academic_year_id: row[:academic_year_id],
+        academic_term_id: row[:academic_term_id],
+        employee_id: row[:employee_id]
+      )
     end
   end
 end
