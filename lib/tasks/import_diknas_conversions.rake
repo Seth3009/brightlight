@@ -5,7 +5,7 @@ namespace :data do
     xl = Roo::Spreadsheet.open('lib/tasks/DiknasConversions.xlsx')
     sheet = xl.sheet('Sheet1')
 
-    header = {course: 'course', year: 'year', term: 'term', pelajaran:'pelajaran', tahun:'tahun', semester:'semester', grade:'grade'}
+    header = {course: 'course', year: 'year', term: 'term', weight: 'weight', notes:'notes', pelajaran:'pelajaran', tahun:'tahun', semester:'semester', grade:'grade'}
  
     sheet.each_with_index(header) do |row,i|
       puts "#{i}, #{row}"
@@ -29,7 +29,9 @@ namespace :data do
       dc.diknas_conversion_items << DiknasConversionItem.new(
         course_id: course.id,
         academic_year_id: year.id,
-        academic_term_id: terms[row[:term]-1]
+        academic_term_id: terms[row[:term]-1],
+        weight: row[:weight],
+        notes: row[:notes]
       )
     end
   end
