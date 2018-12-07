@@ -1,7 +1,7 @@
 .card-panel
   = render 'report_header'
   p.strong Pengembangan Diri
-  table.compact.bordered.striped
+  table.compact.bordered
     thead
       tr
         th style="border-bottom: 3px double grey" No.
@@ -9,25 +9,25 @@
         th style="border-bottom: 3px double grey" Ketercapaian Kompetensi                 
     tbody
       tr 
-        td A.
+        td.center A.
         td colspan=2 Kegiatan Ekstrakurikuler
         td
         
         
       - (1..3).each do |r|
         tr
-          td = r
+          td 
           td
           td
           td
         
       tr 
-        td B.
+        td.center B.
         td colspan=2 Keikutsertaan dalam organisasi / Kegiatan di sekolah
         td 
       - (1..4).each do |r|
         tr
-          td = r
+          td 
           td
           td
           td
@@ -44,7 +44,7 @@
     tbody         
       - @aspek.each.with_index do |aspek,idx|
         tr
-          td = idx+1
+          td.center = idx+1
           td = @aspek[idx]          
           - if idx==0
             td rowspan=@aspek.length
@@ -53,11 +53,10 @@
   br
   table.compact.bordered
     thead
-      tr
-        th rowspan=3 Catatan Wali Kelas:
+      
     tbody
       tr
-        td 
+        td Catatan Wali Kelas:
           br
           br
           br
