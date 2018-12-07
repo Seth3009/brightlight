@@ -8,7 +8,7 @@
         th.center style="border-bottom: 3px double grey" rowspan=2 Ketercapaian Kompetensi                 
     tbody
       tr style="font-weight:bold;"
-        td.center A.
+        td.center style="width:70px !important;" A.
         td Mata Pelajaran
         td
         
@@ -28,4 +28,9 @@
         td.center B.
         td Muatan Lokal **)
         td
+      - (1..2).each do |r|
+        tr
+          td.center = r
+          td .......................................
+          td
   = render 'report_footer'

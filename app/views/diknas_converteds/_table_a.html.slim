@@ -31,7 +31,7 @@
         tr
           td = idx
           td = course.diknas_conversion.diknas_course.name
-          td.center -
+          td.center 70
           td.center = course.p_score.to_i
           td = DiknasConvertedItem.in_words(course.p_score) || "-"
           td.center = course.t_score.to_i
@@ -46,4 +46,14 @@
         td
         td
         td  
+      - (1..2).each do |r|
+        tr
+          td.center = r
+          td .......................................
+          td 
+          td
+          td
+          td
+          td
+          td 
   = render 'report_footer'
