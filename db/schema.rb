@@ -653,7 +653,7 @@ ActiveRecord::Schema.define(version: 20181207042819) do
     t.integer  "course_id"
     t.integer  "academic_year_id"
     t.integer  "academic_term_id"
-    t.float    "weight"
+    t.integer  "weight"
     t.text     "notes"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
@@ -715,19 +715,6 @@ ActiveRecord::Schema.define(version: 20181207042819) do
     t.datetime "updated_at", null: false
   end
 
-<<<<<<< HEAD
-  create_table "diknas_gradebooks", force: :cascade do |t|
-    t.string   "studentname"
-    t.string   "grade"
-    t.string   "class"
-    t.string   "avg"
-    t.string   "semester"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
-=======
->>>>>>> raportdiknas
   create_table "diknas_report_cards", force: :cascade do |t|
     t.integer  "student_id"
     t.integer  "grade_level_id"
@@ -1956,11 +1943,6 @@ ActiveRecord::Schema.define(version: 20181207042819) do
   add_foreign_key "diknas_conversion_items", "academic_years"
   add_foreign_key "diknas_conversion_items", "courses"
   add_foreign_key "diknas_conversion_items", "diknas_conversions"
-<<<<<<< HEAD
-  add_foreign_key "diknas_conversions", "diknas_academic_terms"
-  add_foreign_key "diknas_conversions", "diknas_academic_years"
-  add_foreign_key "diknas_conversions", "diknas_courses"
-=======
   add_foreign_key "diknas_conversions", "academic_terms"
   add_foreign_key "diknas_conversions", "academic_years"
   add_foreign_key "diknas_conversions", "diknas_courses"
@@ -1971,7 +1953,6 @@ ActiveRecord::Schema.define(version: 20181207042819) do
   add_foreign_key "diknas_converteds", "academic_years"
   add_foreign_key "diknas_converteds", "grade_levels"
   add_foreign_key "diknas_converteds", "students"
->>>>>>> raportdiknas
   add_foreign_key "diknas_report_cards", "academic_terms"
   add_foreign_key "diknas_report_cards", "academic_years"
   add_foreign_key "diknas_report_cards", "courses"
