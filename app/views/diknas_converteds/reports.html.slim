@@ -2,7 +2,7 @@
 h5 Listing Diknas Converted
 
 ul#grade-options.dropdown-content
-  - GradeLevel.limit(12).all.order(:id).each do |grade|
+  - GradeLevel.where(:id=>10..12).all.order(:id).each do |grade|
     li 
       = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
 
