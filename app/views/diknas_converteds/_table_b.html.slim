@@ -2,22 +2,28 @@
   table.compact.striped.bordered
     thead
       tr
-        th style="border-bottom: 3px double grey" rowspan=2 No.
-        th style="border-bottom: 3px double grey" rowspan=2 Komponen
-        th style="border-bottom: 3px double grey" rowspan=2 Ketercapaian Kompetensi                 
+        th.center style="border-bottom: 3px double grey" rowspan=2 No.
+        th.center style="border-bottom: 3px double grey" rowspan=2 Komponen
+        th.center style="border-bottom: 3px double grey" rowspan=2 Ketercapaian Kompetensi                 
     tbody
       tr style="font-weight:bold;"
-        td A.
+        td.center A.
         td Mata Pelajaran
         td
         
-      - @students.each.with_index(1) do |student,idx|
+      - @diknas.each.with_index(1) do |course,idx|
         tr
-          td = idx
-          td = student.name
-          td.center -
+          td.center = idx
+          td = course.diknas_conversion.diknas_course.name
+          td.center
+            - if course.P_score > 70
+              | TERLAMPAUI
+            - elsif course.P_score < 70
+              | BELUM TERCAPAI
+            - else
+              | TERCAPAI
           
       tr style="font-weight:bold;"
-        td B.
+        td.center B.
         td Muatan Lokal **)
         td

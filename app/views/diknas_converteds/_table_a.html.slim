@@ -1,4 +1,5 @@
 .card-panel
+  = render 'report_header'
   table.compact.striped.bordered
     thead
       tr
@@ -26,20 +27,20 @@
         td
         td
         td
-      - @students.each.with_index(1) do |student,idx|
+      - @diknas.each.with_index(1) do |course,idx|
         tr
           td = idx
-          td = student.name
+          td = course.diknas_conversion.diknas_course.name
           td.center -
-          td.center -
-          td.center -
-          td.center -
-          td.center -
-          td.center -
+          td.center = course.P_score.to_i
+          td = course.in_word_pscore || "-"
+          td.center = course.T_score.to_i
+          td = course.in_word_tscore || "-"
+          td.center A/B
       tr style="font-weight:bold;"
         td B.
         td Muatan Lokal **)
-        td
+        td 
         td
         td
         td

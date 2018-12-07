@@ -73,11 +73,22 @@ class DiknasConvertedsController < ApplicationController
 
   #get /diknas_converteds/reports
   def reports
-    @year_id = params[:year] || AcademicYear.current_id
-    @disable_edit = @year_id.to_i != AcademicYear.current_id
+    @year_id = params[:year] || AcademicYear.current_id    
     @academic_year = AcademicYear.find @year_id
-    @students = Student.all.limit(13)
-
+    @term_id = params[:term] || AcademicYear.current_id
+    @aspek = ["Kedisiplinan","Kebersihan","Kesehatan","Tanggung Jawab", "Sopan Santun", "Percaya Diri","Kompetitif","Hubungan Sosial","Kejujuran","Pelaksanaan Ibadah Ritual"]
+    @diknas = DiknasConvertedItem.where(diknas_converted_id:2).all
+              .joins('left join diknas_conversions on diknas_conversions.id = diknas_converted_items.diknas_conversion_id')
+              .joins('left join diknas_courses on diknas_courses.id = diknas_conversions.diknas_course_id').order('diknas_courses.name')                
+              .joins('left join diknas_converteds on diknas_converteds.id = diknas_converted_items.diknas_converted_id')
+              .joins('left join students on students.id = diknas_converteds.student_id')                  
+              .joins('left join grade_levels on grade_levels.id = diknas_conversions.grade_level_id')
+    @student = @diknas.first.diknas_converted.student
+    # @grade = GradeSectionsStudent.where('grade_sections_students.student_id = ? and grade_sections_students.academic_year_id=?',@student.id,17)
+            # .joins('left join grade_sections on grade_sections.id = grade_sections_students.grade_section_id').first
+    @grade = @diknas.first.diknas_conversion.grade_level.name
+    @grade_name = @grade.delete "Grade "
+    # @grade_name = 12.roman
     respond_to do |format|
       format.html do
         @grade_level_ids = GradeLevel.all.order(:id).collect(&:id)
@@ -86,6 +97,7 @@ class DiknasConvertedsController < ApplicationController
       end
     end
   end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
