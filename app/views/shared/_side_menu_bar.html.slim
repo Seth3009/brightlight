@@ -123,7 +123,8 @@ li
 						= link_to 'Templates Targets', template_targets_path
 				li
 					= link_to 'Maintenance', settings_inventory_mtce_path	
-- if can? :create, Requisition
+
+- if can? :process, Requisition
 	li 
 		.collapsible-header.waves-effect.waves-cyan
 			i.material-icons shopping_basket
@@ -142,6 +143,7 @@ li
 						= link_to 'Budgets', budgets_path
 					- if can? :manage, Account
 						= link_to 'Accounts', accounts_path
+
 - if can? :create, LeaveRequest
 	li 
 		.collapsible-header.waves-effect.waves-cyan
@@ -157,6 +159,7 @@ li
               = link_to 'My Dept Archives', archive_url(view: 'spv', ld:(Date.today-7.days), lde:Date.today)
             - if can? :validate, LeaveRequest
               = link_to 'All Employee Archives', archive_url(view: 'hr', ld:(Date.today-7.days), lde:Date.today)
+
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons school
@@ -168,8 +171,23 @@ li
 				= link_to 'Grade Levels', grade_levels_path
 			li
 				= link_to 'Departments', departments_path
-			/ li
-			/ 	= link_to 'Courses', courses_path
+			-if can? :manage, Course
+				li
+					= link_to 'Courses', courses_path
+
+- if can? :create, DiknasReportCard
+	li
+		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons import_contacts
+			i.mdi-navigation-chevron-right.right
+			| Diknas Report Cards
+		.collapsible-body
+			ul
+				li
+					= link_to 'Import Grade Book', diknas_report_cards_path
+					= link_to 'Conversion Setting', diknas_conversions_path 
+					= link_to 'Convert Grade Book', diknas_converteds_path
+					
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons people

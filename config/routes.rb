@@ -1,5 +1,15 @@
 Rails.application.routes.draw do
 
+  resources :diknas_converted_items
+  resources :diknas_converteds
+  resources :diknas_conversion_items
+  resources :diknas_conversions
+  resources :diknas_report_cards do
+    collection do
+      post 'import'
+    end 
+  end
+
   resources :employee_smartcards
   resources :stock_categories
   resources :stock_items

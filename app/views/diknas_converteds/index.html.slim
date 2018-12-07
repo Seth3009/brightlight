@@ -1,0 +1,39 @@
+- title 'Diknas Converted'
+h1 Listing Diknas Converted
+
+nav
+  .nav-wrapper
+    ul.right
+      li
+      = link_to new_diknas_converted_path
+        | New
+        i.material-icons.left add
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Student
+        th Academic year
+        th Academic term
+        th Grade level
+        th Notes
+        th
+        th
+        th
+
+    tbody
+      - @diknas_converteds.each do |diknas_converted|
+        tr
+          td = diknas_converted.student.name
+          td = diknas_converted.academic_year_id
+          td = diknas_converted.academic_term_id
+          td = diknas_converted.grade_level.name
+          / td = diknas_converted.notes
+          / td = link_to 'Show', diknas_converted
+          td = link_to 'Edit', edit_diknas_converted_path(diknas_converted)
+          / td = link_to 'Destroy', diknas_converted, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+  br
+
+/ = link_to 'New Diknas converted', new_diknas_converted_path

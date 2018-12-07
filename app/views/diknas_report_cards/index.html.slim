@@ -1,0 +1,65 @@
+h4 RenWeb Imported Data
+
+nav
+  .nav-wrapper
+    ul
+      li 
+        a.dropdown-button href="#!" data-activates="term-options"
+          span#term = @academic_term.present? ? "#{@academic_term.name}" : "Academic Term" 
+          i.material-icons.right arrow_drop_down
+      li 
+        a.dropdown-button href="#!" data-activates="grade-options"
+          span#grade = @grade_level.present? ? "#{@grade_level.name}" : "Grade" 
+          i.material-icons.right arrow_drop_down
+    ul.right
+      li
+        = link_to "#form-upload-modal", class:"modal-trigger" 
+          | Import
+          i.material-icons.left input
+
+ul#term-options.dropdown-content
+  li  
+  - AcademicTerm.list_for_menu(5,0).each do |term|
+    li 
+      = link_to term.name, diknas_report_cards_path(params.merge(term:term.id).symbolize_keys) 
+ul#grade-options.dropdown-content
+  li  
+  - GradeLevel.order(:id).each do |grade|
+    li 
+      = link_to grade.name, diknas_report_cards_path(params.merge(grade:grade.id).symbolize_keys) 
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Academic year
+        th Term
+        th Grade level
+        th Student
+        th Course
+        th Average
+
+    tbody
+      - @diknas_report_cards.each do |diknas_report_card|
+        tr
+          td = diknas_report_card.academic_year.try(:name)
+          td = diknas_report_card.academic_term.try(:short_name)
+          td = diknas_report_card.grade_level.try(:name)
+          td = diknas_report_card.student.try(:name)
+          td = diknas_report_card.course.try(:name)
+          td = diknas_report_card.average
+
+.toolbar.z-depth-1
+  = will_paginate @diknas_report_cards
+
+#form-upload-modal.modal
+  = form_tag({action: :import}, multipart: true) do
+    .modal-content
+      h4 Import Diknas Report Card File
+
+      p Select Excel file to upload
+      = file_field_tag 'filename'
+
+    .modal-footer
+      a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+      button.btn.btn-primary.waves-effect.waves-light Submit

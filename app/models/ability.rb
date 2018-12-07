@@ -133,6 +133,12 @@ class Ability
   def approve_budget
     can :approve_budget, Requisition
   end
+  
+  def administrative
+    can :manage, DiknasReportCard
+    can :manage, DiknasConversion
+    can :manage, DiknasConverted
+  end
 
   def student
     can :read, CourseSection

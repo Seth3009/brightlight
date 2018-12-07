@@ -1,0 +1,30 @@
+p#notice = notice
+
+p
+  strong Student:
+  = @diknas_report_card.student.name
+p
+  strong Grade level:
+  = @diknas_report_card.grade_level.name
+p
+  strong Grade section:
+  = @diknas_report_card.grade_section
+p
+  strong Academic year:
+  = @diknas_report_card.academic_year.name
+p
+  strong Academic term:
+  = @diknas_report_card.academic_term
+p
+  strong Course :
+  = @diknas_report_card.course.name
+p
+  strong Average:
+  = @diknas_report_card.average
+p
+  strong Notes:
+  = @diknas_report_card.notes
+
+= link_to 'Edit', edit_diknas_report_card_path(@diknas_report_card)
+'|
+= link_to 'Back', diknas_report_cards_path

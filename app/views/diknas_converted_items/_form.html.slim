@@ -1,0 +1,24 @@
+= form_for @diknas_converted_item do |f|
+  - if @diknas_converted_item.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@diknas_converted_item.errors.count, "error")} prohibited this diknas_converted_item from being saved:"
+      ul
+        - @diknas_converted_item.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :diknas_converted
+    = f.text_field :diknas_converted
+  .field
+    = f.label :diknas_conversion
+    = f.text_field :diknas_conversion
+  .field
+    = f.label :p_score
+    = f.text_field :p_score
+  .field
+    = f.label :t_score
+    = f.text_field :t_score
+  .field
+    = f.label :comment
+    = f.text_area :comment
+  .actions = f.submit
