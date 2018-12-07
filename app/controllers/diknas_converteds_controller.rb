@@ -88,7 +88,7 @@ class DiknasConvertedsController < ApplicationController
             # .joins('left join grade_sections on grade_sections.id = grade_sections_students.grade_section_id').first
     @grade = @diknas.first.diknas_conversion.grade_level.name
     @grade_name = @grade.delete "Grade "
-    # @grade_name = 12.roman
+    @grade_roman = GradeLevel.roman(@grade_name.to_i)    
     respond_to do |format|
       format.html do
         @grade_level_ids = GradeLevel.all.order(:id).collect(&:id)

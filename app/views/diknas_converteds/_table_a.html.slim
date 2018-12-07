@@ -33,9 +33,9 @@
           td = course.diknas_conversion.diknas_course.name
           td.center -
           td.center = course.P_score.to_i
-          td = course.in_word_pscore || "-"
+          td = DiknasConvertedItem.in_words(course.P_score) || "-"
           td.center = course.T_score.to_i
-          td = course.in_word_tscore || "-"
+          td = DiknasConvertedItem.in_words(course.T_score) || "-"
           td.center A/B
       tr style="font-weight:bold;"
         td B.
