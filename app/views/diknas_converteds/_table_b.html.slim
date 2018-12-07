@@ -17,9 +17,9 @@
           td.center = idx
           td = course.diknas_conversion.diknas_course.name
           td.center
-            - if course.P_score > 70
+            - if course.p_score > 70
               | TERLAMPAUI
-            - elsif course.P_score < 70
+            - elsif course.p_score < 70
               | BELUM TERCAPAI
             - else
               | TERCAPAI

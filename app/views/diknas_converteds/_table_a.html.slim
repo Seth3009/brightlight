@@ -32,10 +32,10 @@
           td = idx
           td = course.diknas_conversion.diknas_course.name
           td.center -
-          td.center = course.P_score.to_i
-          td = DiknasConvertedItem.in_words(course.P_score) || "-"
-          td.center = course.T_score.to_i
-          td = DiknasConvertedItem.in_words(course.T_score) || "-"
+          td.center = course.p_score.to_i
+          td = DiknasConvertedItem.in_words(course.p_score) || "-"
+          td.center = course.t_score.to_i
+          td = DiknasConvertedItem.in_words(course.t_score) || "-"
           td.center A/B
       tr style="font-weight:bold;"
         td B.
@@ -46,3 +46,4 @@
         td
         td
         td  
+  = render 'report_footer'

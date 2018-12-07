@@ -75,20 +75,37 @@ class DiknasConvertedsController < ApplicationController
   def reports
     @year_id = params[:year] || AcademicYear.current_id    
     @academic_year = AcademicYear.find @year_id
-    @term_id = params[:term] || AcademicYear.current_id
+    @term_ids = AcademicTerm.where(academic_year_id:@year_id) if @year_id.present?
     @aspek = ["Kedisiplinan","Kebersihan","Kesehatan","Tanggung Jawab", "Sopan Santun", "Percaya Diri","Kompetitif","Hubungan Sosial","Kejujuran","Pelaksanaan Ibadah Ritual"]
-    @diknas = DiknasConvertedItem.where(diknas_converted_id:2).all
+    if params[:s].present?
+      @grade_section = GradeSection.find(params[:s])
+      @grade_level = @grade_section.grade_level
+      @all_students = @grade_section.students_for_academic_year(@year_id)            
+    end
+
+    if params[:st].present?
+      # A student is selected, here we load only the specified student
+      @student = Student.find params[:st]      
+      @student_list = @all_students.where(student:@student)
+      @next_in_list = @all_students.where(order_no: @student_list.take.try(:order_no) + 1).take
+      gss = @student_list.take
+      @grade_section = gss.try(:grade_section)
+      @roster_no = gss.order_no
+      @diknas = DiknasConvertedItem.where(diknas_converteds:{academic_year_id:@year_id,student_id:params[:st],academic_term_id:params[:term]}).all
               .joins('left join diknas_conversions on diknas_conversions.id = diknas_converted_items.diknas_conversion_id')
               .joins('left join diknas_courses on diknas_courses.id = diknas_conversions.diknas_course_id').order('diknas_courses.name')                
               .joins('left join diknas_converteds on diknas_converteds.id = diknas_converted_items.diknas_converted_id')
               .joins('left join students on students.id = diknas_converteds.student_id')                  
               .joins('left join grade_levels on grade_levels.id = diknas_conversions.grade_level_id')
-    @student = @diknas.first.diknas_converted.student
-    # @grade = GradeSectionsStudent.where('grade_sections_students.student_id = ? and grade_sections_students.academic_year_id=?',@student.id,17)
-            # .joins('left join grade_sections on grade_sections.id = grade_sections_students.grade_section_id').first
-    @grade = @diknas.first.diknas_conversion.grade_level.name
-    @grade_name = @grade.delete "Grade "
-    @grade_roman = GradeLevel.roman(@grade_name.to_i)    
+    end
+
+    
+    if @diknas.present?
+      @student = @diknas.first.diknas_converted.student
+      @grade = @diknas.first.diknas_conversion.grade_level.name
+      @grade_name = @grade.delete "Grade "
+      @grade_roman = GradeLevel.roman(@grade_name.to_i) 
+    end
     respond_to do |format|
       format.html do
         @grade_level_ids = GradeLevel.all.order(:id).collect(&:id)
