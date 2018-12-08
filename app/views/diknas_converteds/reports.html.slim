@@ -42,15 +42,15 @@ nav
           i.material-icons.right arrow_drop_down
       li 
         a.dropdown-button href="#!" data-activates="term-options" data-beloworigin="true" 
-          span#term = params[:term].present? ? @term_ids.name : @term_ids.first.name
+          span#term = @term.present? ? @term.short_name : "Choose semester"
           i.material-icons.right arrow_drop_down
       li
         a.dropdown-button href="#!" data-activates="grade-options" data-beloworigin="true" 
-          span#grade = params[:l].present? ? "Grade #{@grade_level_name}" : 'Choose grade'
+          span#grade = @grade_level.present? ? @grade_level.name : 'Choose grade'
           i.material-icons.right arrow_drop_down
       li
         a.dropdown-button href="#!" data-activates="section-options" data-beloworigin="true" 
-          span#section = params[:l].present? ? "Section #{@grade_section_name}" : 'Choose class'
+          span#section = @grade_section.present? ? @grade_section.name : 'Choose class'
           i.material-icons.right arrow_drop_down
       li
         a#student-menu.dropdown-button href="#!" data-activates="student-options" data-beloworigin="true" 

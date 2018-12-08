@@ -1,4 +1,4 @@
-.row  
+.row style="margin-bottom: 5px"
   .col.s2 
     | Nama Peserta Didik
   .col.s1 
@@ -11,13 +11,13 @@
     | :
   .col.s3
     = @grade.present? ? @grade_roman : "-"
-.row
+.row style="margin-bottom: 5px"
   .col.s2 
     | Nomor Induk
   .col.s1 
     | :
   .col.s3
-    = @student.student_no
+    = "#{@student.nis} / #{@student.nisn}"
   .col.s2 
     | Tahun Pelajar
   .col.s1 

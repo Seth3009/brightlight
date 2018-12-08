@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :diknas_converteds
   resources :diknas_conversions do
     member do
       get 'dry_run'

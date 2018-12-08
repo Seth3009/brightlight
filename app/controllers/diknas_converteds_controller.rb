@@ -82,6 +82,8 @@ class DiknasConvertedsController < ApplicationController
       @grade_level = @grade_section.grade_level
       @all_students = @grade_section.students_for_academic_year(@year_id)            
     end
+    
+    @term = AcademicTerm.find params[:term] if params[:term].present?
 
     if params[:st].present?
       # A student is selected, here we load only the specified student
