@@ -43,6 +43,8 @@ Rails.application.routes.draw do
   resources :book_conditions
   resources :student_activities
   
+  get 'diknas_converteds/reports' => 'diknas_converteds#reports', as: :converted_reports
+  resources :diknas_converteds
   resources :activity_schedules, shallow: true do
     member do
       get 'students'

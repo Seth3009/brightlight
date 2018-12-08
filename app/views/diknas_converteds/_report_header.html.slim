@@ -1,0 +1,37 @@
+.row  
+  .col.s2 
+    | Nama Peserta Didik
+  .col.s1 
+    | :
+  .col.s3
+    = @student.name
+  .col.s2 
+    | Kelas/Semes
+  .col.s1 
+    | :
+  .col.s3
+    = @grade.present? ? @grade_roman : "-"
+.row
+  .col.s2 
+    | Nomor Induk
+  .col.s1 
+    | :
+  .col.s3
+    = @student.student_no
+  .col.s2 
+    | Tahun Pelajar
+  .col.s1 
+    | :
+  .col.s3
+    = @academic_year.name
+.row
+  .col.s2 
+    | Nama Sekolah
+  .col.s1 
+    | :
+  .col.s3
+    | SMA Cahaya Bangsa Classical School
+  .col.s2 
+    | Program
+  .col.s1 
+    | :

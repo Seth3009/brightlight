@@ -1,0 +1,72 @@
+.card-panel
+  = render 'report_header'
+  p.strong Pengembangan Diri
+  table.compact.bordered
+    thead
+      tr
+        th style="border-bottom: 3px double grey" No.
+        th style="border-bottom: 3px double grey" colspan=2 Jenis Kegiatan
+        th style="border-bottom: 3px double grey" Ketercapaian Kompetensi                 
+    tbody
+      tr 
+        td.center A.
+        td colspan=2 Kegiatan Ekstrakurikuler
+        td
+        
+        
+      - (1..3).each do |r|
+        tr
+          td style="height:30px"
+          td
+          td
+          td
+        
+      tr 
+        td.center B.
+        td colspan=2 Keikutsertaan dalam organisasi / Kegiatan di sekolah
+        td 
+      - (1..4).each do |r|
+        tr
+          td style="height:30px"
+          td
+          td
+          td
+
+      
+  br
+  p.strong Akhlak Mulia dan Kepribadian
+  table.compact.bordered
+    thead
+      tr
+        th style="border-bottom: 3px double grey" rowspan=2 No.
+        th style="border-bottom: 3px double grey" Aspek Yang Dinilai
+        th style="border-bottom: 3px double grey" Keterangan                
+    tbody         
+      - @aspek.each.with_index do |aspek,idx|
+        tr
+          td.center style="width:70px !important;" = idx+1
+          td style="width:60% !important;" = @aspek[idx]          
+          - if idx==0
+            td.center rowspan=@aspek.length style="width:30% !important; font-size:8pt;"
+              | Fileld with 3 options, according to the student's condition :
+              br
+              | 1. Sangat Baik ( very good ) 
+              br
+              | 2. Baik ( good )
+              br
+              | 3. Kurang baik ( Not good )
+              br
+              | preferably we fill this space with 
+              a style="text-decoration:underline;" baik
+               
+          
+  br
+  table.compact.bordered
+    thead
+      
+    tbody
+      tr
+        td style="height: 100px; vertical-align:top !important" Catatan Wali Kelas:
+        
+
+  = render 'report_footer'
