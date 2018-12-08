@@ -11,7 +11,7 @@ namespace :data do
       puts "#{i}, #{row}"
       next if i < 1
       
-      diknas_course = DiknasCourse.find_by_name row[:pelajaran]
+      diknas_course = DiknasCourse.find_by_name row[:pelajaran].strip
       tahun = AcademicYear.find_by_name row[:tahun]
       semesters = tahun.academic_terms.order(:id).map &:id
 

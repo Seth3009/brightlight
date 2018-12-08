@@ -29,7 +29,7 @@ namespace :data do
       semesters = tahun.academic_terms.order(:id).map &:id
 
       conversion = DiknasConversion.find_by(
-        diknas_course_id: DiknasCourse.find_by_name(row[:pelajaran]).try(:id), 
+        diknas_course_id: DiknasCourse.find_by_name(row[:pelajaran].strip).try(:id), 
         academic_year_id: tahun.try(:id), 
         academic_term_id: semesters[row[:semester]-1],
         grade_level_id: row[:grade]

@@ -1,5 +1,5 @@
 class DiknasConversionsController < ApplicationController
-  before_action :set_diknas_conversion, only: [:show, :edit, :update, :destroy]
+  before_action :set_diknas_conversion, only: [:show, :edit, :update, :destroy, :dry_run]
 
   # GET /diknas_conversions
   # GET /diknas_conversions.json
@@ -23,6 +23,7 @@ class DiknasConversionsController < ApplicationController
   # GET /diknas_conversions/1
   # GET /diknas_conversions/1.json
   def show
+    @students = Student.joins(:diknas_report_cards).where(diknas_report_cards: {grade_level: @diknas_conversion.grade_level}).uniq.order(:name)
   end
 
   # GET /diknas_conversions/new
@@ -71,6 +72,12 @@ class DiknasConversionsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to diknas_conversions_url, notice: 'Diknas conversion was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def dry_run
+    respond_to do |format|
+      format.js { @student = Student.find params[:student_id] }
     end
   end
 

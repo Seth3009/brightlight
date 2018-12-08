@@ -56,6 +56,8 @@ ul#grade-options.dropdown-content
             td = diknas_conversion_item.notes
             td 
               -if idx==0
+                = link_to diknas_conversion_path(diknas_conversion)
+                  i.material-icons visibility
                 = link_to edit_diknas_conversion_path(diknas_conversion)
                   i.material-icons edit
                 = link_to diknas_conversion, data: {:confirm => 'Are you sure?'}, :method => :delete

@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
 
-  resources :diknas_converted_items
   resources :diknas_converteds
-  resources :diknas_conversion_items
-  resources :diknas_conversions
+  resources :diknas_conversions do
+    member do
+      get 'dry_run'
+    end
+  end
   resources :diknas_report_cards do
     collection do
       post 'import'

@@ -1,5 +1,5 @@
 .nested-fields
-  .col.s3
+  .col.s2
     .input-field
       = f.collection_select :course_id, Course.all.order(:name), :id, :name, prompt: true
   .col.s2
@@ -8,6 +8,9 @@
   .col.s2
     .input-field
       = f.collection_select :academic_term_id, AcademicTerm.list_for_menu(5,0), :id, :name, prompt: true
+  .col.s1
+    .input-field
+      = f.text_field :weight
   .col.s4
     .input-field
       = f.text_field :notes

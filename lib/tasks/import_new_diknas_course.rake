@@ -11,7 +11,7 @@ namespace :data do
 			next if i < 1
     
       diknascourse = DiknasCourse.new(
-                  name: row[:name],
+                  name: row[:name].strip,
                   notes: row[:notes]                  
                 )
       diknascourse.save
