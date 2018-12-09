@@ -36,8 +36,6 @@ ul#grade-options.dropdown-content
         th Term
         th Grade level
         th Student
-        th Course
-        th Average
 
     tbody
       - @diknas_report_cards.each do |diknas_report_card|
@@ -45,9 +43,8 @@ ul#grade-options.dropdown-content
           td = diknas_report_card.academic_year.try(:name)
           td = diknas_report_card.academic_term.try(:short_name)
           td = diknas_report_card.grade_level.try(:name)
-          td = diknas_report_card.student.try(:name)
-          td = diknas_report_card.course.try(:name)
-          td = diknas_report_card.average
+          td 
+            = link_to diknas_report_card.student.try(:name), diknas_report_card_path(id: diknas_report_card.student_id, grade: diknas_report_card.grade_level_id, year: diknas_report_card.academic_year_id)
 
 .toolbar.z-depth-1
   = will_paginate @diknas_report_cards

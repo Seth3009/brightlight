@@ -43,4 +43,19 @@ class DiknasReportCard < ActiveRecord::Base
 
     end 
   end
+
+  def self.records_for(student_id: student_id, academic_year_id: academic_year_id)
+    DiknasReportCard.where(student_id: student_id, academic_year_id: academic_year_id)
+      .order(:course_id, :academic_term_id)
+      .group_by(&:course_id)
+      .map do |course_id, recs|
+        record = Hash.new
+        record[:course_id] = course_id
+        recs.each do |rec|
+          record[rec.academic_term_id] = rec.average
+        end  
+        record
+      end  
+  end
+
 end
