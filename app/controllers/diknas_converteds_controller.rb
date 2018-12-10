@@ -95,7 +95,7 @@ class DiknasConvertedsController < ApplicationController
       @roster_no = gss.order_no
       @diknas = DiknasConvertedItem.where(diknas_converteds:{academic_year_id:@year_id,student_id:params[:st],academic_term_id:params[:term]}).all
               .joins('left join diknas_conversions on diknas_conversions.id = diknas_converted_items.diknas_conversion_id')
-              .joins('left join diknas_courses on diknas_courses.id = diknas_conversions.diknas_course_id').order('diknas_courses.name')                
+              .joins('left join diknas_courses on diknas_courses.id = diknas_conversions.diknas_course_id').order('diknas_courses.number')                
               .joins('left join diknas_converteds on diknas_converteds.id = diknas_converted_items.diknas_converted_id')
               .joins('left join students on students.id = diknas_converteds.student_id')                  
               .joins('left join grade_levels on grade_levels.id = diknas_conversions.grade_level_id')

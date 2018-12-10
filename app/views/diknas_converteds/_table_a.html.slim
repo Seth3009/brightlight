@@ -31,7 +31,7 @@
         tr
           td.center = idx
           td style="width:500px!important;"
-            = course.diknas_conversion.diknas_course.name
+            = course.diknas_conversion.diknas_course.name.titlecase
           td.center 70
           td.center = course.p_score.to_i
           td style="width:250px !important;"
@@ -39,7 +39,7 @@
           td.center = course.t_score.to_i
           td style="width:250px !important;" 
             = DiknasConvertedItem.in_words(course.t_score) || "-"
-          td.center A/B
+          td.center A
       tr style="font-weight:bold;"
         td.center style="width:70px !important;" B.
         td Muatan Lokal **)
