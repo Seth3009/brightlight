@@ -648,6 +648,20 @@ ActiveRecord::Schema.define(version: 20181207042819) do
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
 
+  create_table "diknas_academic_terms", force: :cascade do |t|
+    t.string   "name"
+    t.text     "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "diknas_academic_years", force: :cascade do |t|
+    t.string   "name"
+    t.text     "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "diknas_conversion_items", force: :cascade do |t|
     t.integer  "diknas_conversion_id"
     t.integer  "course_id"
@@ -707,12 +721,30 @@ ActiveRecord::Schema.define(version: 20181207042819) do
   add_index "diknas_converteds", ["grade_level_id"], name: "index_diknas_converteds_on_grade_level_id", using: :btree
   add_index "diknas_converteds", ["student_id"], name: "index_diknas_converteds_on_student_id", using: :btree
 
+  create_table "diknas_course", force: :cascade do |t|
+    t.string   "number"
+    t.string   "name"
+    t.text     "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "diknas_courses", force: :cascade do |t|
     t.string   "number"
     t.string   "name"
     t.text     "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "diknas_gradebooks", force: :cascade do |t|
+    t.string   "studentname"
+    t.string   "grade"
+    t.string   "class"
+    t.string   "avg"
+    t.string   "semester"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "diknas_report_cards", force: :cascade do |t|
@@ -740,10 +772,9 @@ ActiveRecord::Schema.define(version: 20181207042819) do
     t.integer  "employee_id"
     t.integer  "student_id"
     t.string   "name"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.string   "kind"
-    t.string   "status",      default: "Granted"
   end
 
   add_index "door_access_logs", ["employee_id"], name: "index_door_access_logs_on_employee_id", using: :btree
@@ -849,19 +880,6 @@ ActiveRecord::Schema.define(version: 20181207042819) do
   add_index "fine_scales", ["new_condition_id"], name: "index_fine_scales_on_new_condition_id", using: :btree
   add_index "fine_scales", ["old_condition_id"], name: "index_fine_scales_on_old_condition_id", using: :btree
 
-  create_table "food_packages", force: :cascade do |t|
-    t.string   "packaging"
-    t.float    "package_contents"
-    t.string   "unit"
-    t.integer  "raw_food_id"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.float    "qty",              default: 0.0
-    t.boolean  "is_active",        default: true
-  end
-
-  add_index "food_packages", ["raw_food_id"], name: "index_food_packages_on_raw_food_id", using: :btree
-
   create_table "grade_levels", force: :cascade do |t|
     t.string   "name"
     t.integer  "order_no"
@@ -937,7 +955,7 @@ ActiveRecord::Schema.define(version: 20181207042819) do
   create_table "gradebook", force: :cascade do |t|
     t.string   "studentname"
     t.string   "grade"
-    t.string   "gradeclass"
+    t.string   "class"
     t.decimal  "avg"
     t.string   "semester"
     t.datetime "created_at",  null: false
@@ -1979,7 +1997,6 @@ ActiveRecord::Schema.define(version: 20181207042819) do
   add_foreign_key "family_members", "families"
   add_foreign_key "family_members", "guardians"
   add_foreign_key "family_members", "students"
-  add_foreign_key "food_packages", "raw_foods"
   add_foreign_key "invoices", "academic_years"
   add_foreign_key "invoices", "students"
   add_foreign_key "invoices", "users"

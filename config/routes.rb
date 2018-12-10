@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :diknas_report_cards do
     collection do
       post 'import'
+      get 'convert'
     end 
   end
 

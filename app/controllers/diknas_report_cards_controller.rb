@@ -100,6 +100,12 @@ class DiknasReportCardsController < ApplicationController
     end
   end
 
+  def convert 
+    authorize! :create, DiknasReportCard
+    DiknasReportCard.convert(academic_term_id: params[:term], grade_level_id: params[:grade])
+    redirect_to diknas_converteds_path
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_diknas_report_card

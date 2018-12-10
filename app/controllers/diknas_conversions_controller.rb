@@ -23,7 +23,9 @@ class DiknasConversionsController < ApplicationController
   # GET /diknas_conversions/1
   # GET /diknas_conversions/1.json
   def show
-    @students = Student.joins(:diknas_report_cards).where(diknas_report_cards: {grade_level: @diknas_conversion.grade_level}).uniq.order(:name)
+    @students = Student.joins(:diknas_report_cards)
+                .where(diknas_report_cards: {grade_level: @diknas_conversion.grade_level, academic_term_id: @diknas_conversion.academic_term_id})
+                .uniq.order(:name)
   end
 
   # GET /diknas_conversions/new

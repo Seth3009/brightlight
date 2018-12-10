@@ -58,4 +58,23 @@ class DiknasReportCard < ActiveRecord::Base
       end  
   end
 
+  def self.convert(academic_term_id: academic_term_id, grade_level_id: grade_level_id)
+    academic_year_id = AcademicTerm.find(academic_term_id).academic_year_id
+    Student.joins(:grade_sections_students)
+      .joins('join grade_sections on grade_sections.id = grade_sections_students.grade_section_id')
+      .joins("join grade_levels on grade_levels.id = grade_sections.grade_level_id AND grade_levels.id=#{grade_level_id}")
+      .where(grade_sections_students: {academic_year_id: academic_year_id})
+      .each do |student|
+        dc = DiknasConverted.create(student_id: student.id, academic_year_id: academic_year_id, academic_term_id: academic_term_id, grade_level_id: grade_level_id)
+        DiknasConversion.where(academic_term_id: academic_term_id, grade_level_id: grade_level_id)
+          .each do |conversion|
+            dc.diknas_converted_items << DiknasConvertedItem.new(
+              diknas_conversion_id: conversion.id,
+              p_score: conversion.value_for(student.id),
+              t_score: conversion.value_for(student.id)
+            )
+          end
+      end
+  end 
+
 end

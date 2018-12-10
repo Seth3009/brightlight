@@ -17,6 +17,7 @@ class DiknasConversion < ActiveRecord::Base
     avgs
     .reject { |x| x.nil? }
     .reduce(0.0) { |sum,x| sum+x } / avgs.count { |x| !x.nil? }
+    .ceil # always round up
   end
 
   def course_averages(student_id) 
