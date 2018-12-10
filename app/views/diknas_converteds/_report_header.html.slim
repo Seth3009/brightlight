@@ -24,4 +24,5 @@
   .col.s2
     | Program
   .col.s3
-    | :
+    = @ipa.present? ? ": IPA" : ": IPS"
+      

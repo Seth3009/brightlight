@@ -1,5 +1,5 @@
 - title 'Diknas Converted'
-h5 Listing Diknas Converted #{@ipa.present?}
+h5 Listing Diknas Converted
 
 ul#grade-options.dropdown-content
   - GradeLevel.where(:id=>10..12).all.order(:id).each do |grade|
