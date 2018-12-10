@@ -1,37 +1,27 @@
 .row style="margin-bottom: 5px"
   .col.s2 
     | Nama Peserta Didik
-  .col.s1 
-    | :
-  .col.s3
-    = @student.name
-  .col.s2 
+  .col.s5
+    = ": " + @student.name
+  .col.s2
     | Kelas/Semes
-  .col.s1 
-    | :
   .col.s3
-    = @grade.present? ? @grade_roman : "-"
+    = @grade.present? ? ": " + @grade_roman + " / " + @term.short_name[@term.short_name.length-1] : "-/-"
 .row style="margin-bottom: 5px"
   .col.s2 
     | Nomor Induk
-  .col.s1 
-    | :
-  .col.s3
-    = "#{@student.nis} / #{@student.nisn}"
-  .col.s2 
+  .col.s5
+    = ": #{@student.nis.to_s} / #{@student.nisn.to_s}"
+  .col.s2
     | Tahun Pelajar
-  .col.s1 
-    | :
   .col.s3
-    = @academic_year.name
+    = ": " + @academic_year.name
 .row
   .col.s2 
     | Nama Sekolah
-  .col.s1 
-    | :
-  .col.s3
-    | SMA Cahaya Bangsa Classical School
-  .col.s2 
+  .col.s5
+    | : SMA Cahaya Bangsa Classical School
+  .col.s2
     | Program
-  .col.s1 
+  .col.s3
     | :
