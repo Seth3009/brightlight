@@ -3,11 +3,35 @@ h4 Rapor Diknas Converted
 
 nav
   .nav-wrapper
+    ul
+      li 
+        a.dropdown-button href="#!" data-activates="term-options"
+          span#term = @academic_term.present? ? "#{@academic_term.name}" : "Academic Term" 
+          i.material-icons.right arrow_drop_down
+      li 
+        a.dropdown-button href="#!" data-activates="grade-options"
+          span#grade = @grade_level.present? ? "#{@grade_level.name}" : "Grade" 
+          i.material-icons.right arrow_drop_down
     ul.right
       / li
-      / = link_to new_diknas_converted_path
-      /   | New
-      /   i.material-icons.left add
+      /   = link_to convert_diknas_report_cards_path(params.merge(term: params[:term], grade: params[:grade]))
+      /     | Convert
+      /     i.material-icons.left donut_small
+      / li
+      /   = link_to "#form-upload-modal", class:"modal-trigger" 
+      /     | Import
+      /     i.material-icons.left input
+
+ul#term-options.dropdown-content
+  li  
+  - AcademicTerm.list_for_menu(5,0).each do |term|
+    li 
+      = link_to term.name, diknas_converteds_path(params.merge(term:term.id).symbolize_keys) 
+ul#grade-options.dropdown-content
+  li  
+  - GradeLevel.order(:id).each do |grade|
+    li 
+      = link_to grade.name, diknas_converteds_path(params.merge(grade:grade.id).symbolize_keys) 
 
 .card-panel
   table.compact.striped
@@ -25,7 +49,9 @@ nav
           td = diknas_converted.academic_term.name
           td = diknas_converted.grade_level.name
           td 
+            - grade_section_id = GradeSectionsStudent.where(academic_year: diknas_converted.academic_year_id, student_id: diknas_converted.student_id).take.grade_section_id
             = link_to diknas_converted
               i.material-icons visibility
-            /= link_to reports_diknas_converted
+            = link_to converted_reports_path(s: grade_section_id, st: diknas_converted.student_id, year: diknas_converted.academic_year_id, term: diknas_converted.academic_term_id)
+              i.material-icons import_contacts
 

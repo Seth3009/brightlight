@@ -6,12 +6,19 @@ class DiknasConvertedsController < ApplicationController
   def index
     authorize! :read, DiknasConverted    
     respond_to do |format|
-      format.html {
-        items_per_page = 10  
-          @diknas_converteds = DiknasConverted.all
-        # @diknas_converteds = DiknasReportCard.select(:student_id).group(:student_id)
-        # @diknas_converted = DiknasConvertedItem.joins('left join diknas_converteds on diknas_converteds.id = diknas_converted_items.diknas_converted_id')                                          
-                                # .paginate(page: params[:page], per_page: items_per_page)
+      format.html { 
+        @diknas_converteds = DiknasConverted.all
+          .paginate(page: params[:page], per_page: 30)
+
+        if params[:term].present?
+          @diknas_converteds = @diknas_converteds.where(academic_term_id: params[:term])
+          @academic_term = AcademicTerm.find params[:term]
+        end
+        if params[:grade].present?
+          @diknas_converteds = @diknas_converteds.where(grade_level_id: params[:grade])
+          @grade_level = GradeLevel.find params[:grade]
+        end
+
       }
     end
   end
@@ -19,6 +26,8 @@ class DiknasConvertedsController < ApplicationController
   # GET /diknas_converteds/1
   # GET /diknas_converteds/1.json
   def show
+    @student = @diknas_converted.student
+    @grade_section_id = GradeSectionsStudent.where(academic_year: @diknas_converted.academic_year_id, student_id: @diknas_converted.student_id).take.grade_section_id
   end
 
   # GET /diknas_converteds/new
