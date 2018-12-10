@@ -1,0 +1,9 @@
+= form_for @diknas_course do |f|
+  - if @diknas_course.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@diknas_course.errors.count, "error")} prohibited this diknas_course from being saved:"
+      ul
+        - @diknas_course.errors.full_messages.each do |message|
+          li = message
+
+  .actions = f.submit

@@ -31,7 +31,12 @@
         tr
           td.center = idx
           td style="width:500px!important;"
-            = course.diknas_conversion.diknas_course.name.titlecase
+            - if course.diknas_conversion.diknas_course.name.titlecase.include? "*)"
+              = course.diknas_conversion.diknas_course.name.titlecase
+              br 
+              | ................................................................
+            - else
+              = course.diknas_conversion.diknas_course.name.titlecase
           td.center 70
           td.center = course.p_score.to_i
           td style="width:250px !important;"

@@ -16,7 +16,13 @@
         - @diknas.each.with_index(1) do |course,idx|
           tr
             td.center = idx
-            td = course.diknas_conversion.diknas_course.name.titlecase
+            td 
+              - if course.diknas_conversion.diknas_course.name.titlecase.include? "*)"
+                = course.diknas_conversion.diknas_course.name.titlecase
+                br 
+                | ................................................................
+              - else
+                = course.diknas_conversion.diknas_course.name.titlecase
             td.center
               - if course.p_score > 70
                 | TERLAMPAUI
