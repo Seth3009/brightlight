@@ -1,36 +1,37 @@
-.card-panel
-  = render 'report_header'
-  table.compact.bordered
-    thead
-      tr
-        th.center style="border-bottom: 3px double grey" rowspan=2 No.
-        th.center style="border-bottom: 3px double grey" rowspan=2 Komponen
-        th.center style="border-bottom: 3px double grey" rowspan=2 Ketercapaian Kompetensi                 
-    tbody
-      tr style="font-weight:bold;"
-        td.center style="width:70px !important;" A.
-        td style="width:470px !important;" Mata Pelajaran
-        td
-        
-      - @diknas.each.with_index(1) do |course,idx|
+.section
+  .card-panel
+    = render 'report_header'
+    table.compact.bordered
+      thead
         tr
-          td.center = idx
-          td = course.diknas_conversion.diknas_course.name
-          td.center
-            - if course.p_score > 70
-              | TERLAMPAUI
-            - elsif course.p_score < 70
-              | BELUM TERCAPAI
-            - else
-              | TERCAPAI
-          
-      tr style="font-weight:bold;"
-        td.center B.
-        td Muatan Lokal **)
-        td
-      - (1..2).each do |r|
-        tr
-          td.center = r
-          td .......................................
+          th.center style="border-bottom: 3px double grey" rowspan=2 No.
+          th.center style="border-bottom: 3px double grey" rowspan=2 Komponen
+          th.center style="border-bottom: 3px double grey" rowspan=2 Ketercapaian Kompetensi                 
+      tbody
+        tr style="font-weight:bold;"
+          td.center style="width:70px !important;" A.
+          td style="width:470px !important;" Mata Pelajaran
           td
-  = render 'report_footer'
+          
+        - @diknas.each.with_index(1) do |course,idx|
+          tr
+            td.center = idx
+            td = course.diknas_conversion.diknas_course.name
+            td.center
+              - if course.p_score > 70
+                | TERLAMPAUI
+              - elsif course.p_score < 70
+                | BELUM TERCAPAI
+              - else
+                | TERCAPAI
+            
+        tr style="font-weight:bold;"
+          td.center B.
+          td Muatan Lokal **)
+          td
+        - (1..2).each do |r|
+          tr
+            td.center = r
+            td .......................................
+            td
+    = render 'report_footer'
