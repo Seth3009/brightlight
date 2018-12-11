@@ -99,7 +99,7 @@ class DiknasConvertedsController < ApplicationController
               .joins('left join diknas_converteds on diknas_converteds.id = diknas_converted_items.diknas_converted_id')
               .joins('left join students on students.id = diknas_converteds.student_id')                  
               .joins('left join grade_levels on grade_levels.id = diknas_conversions.grade_level_id')
-      @ipa = @diknas.where('lower(diknas_courses.name) = ?','kimia')
+      @ipa = @diknas.where('lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ?','kimia','biologi','fisika')
       if @ipa.present?
         @diknas = @diknas.order('diknas_courses.number')
       else
