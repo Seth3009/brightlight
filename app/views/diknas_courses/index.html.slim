@@ -1,4 +1,4 @@
-h1 Diknas Course List
+h4 Diknas Course List
 
 nav
   .nav-wrapper
@@ -20,8 +20,7 @@ nav
     
     tbody#diknas_courses
       - @diknas_courses.each do |diknas_course|
-        tr id="row-#{diknas_course.id}"
-          = render partial: 'index_row', locals: {diknas_course: diknas_course}
+        = render partial: 'index_row', locals: {diknas_course: diknas_course}
     
 #show-modal.modal.modal-fixed-footer
   .modal-content
