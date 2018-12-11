@@ -34,7 +34,7 @@ nav
     ul
       li
         = link_to "#", onclick: 'window.print();return false;'
-          i.material-icons print
+          i.material-icons print          
     ul.right
       li 
         a.dropdown-button href="#!" data-activates="year-options" data-beloworigin="true" 
@@ -91,3 +91,46 @@ javascript:
       $("#student-menu").dropdown();
     });    
   }
+
+css:  
+  @media print {    
+    h5 , .top-navbar {
+      margin: none;
+      display: none !important;
+    }
+    html, body {
+      display: block; 
+      background: white;         
+    }    
+  	
+    .row {
+      font-size:9pt !important;
+    }
+    table {
+      table-layout: auto;
+      border-collapse: collapse;
+      font-size:9pt !important;
+    }
+   
+    @page {
+      size: A4;
+      margin: none;     
+    }  
+    
+    .page-footer {
+      position: fixed;
+      width: 90%;
+      bottom: 1.5cm;          
+    }
+    .section {
+      size: A4;
+      margin-top: 1.5cm !important;      
+    }	
+    div.section1 {
+      page: section1;
+    }
+    
+    .page-break	{ 
+      display: block; 
+      page-break-after: always; }
+  }  

@@ -1,0 +1,2 @@
+$("tr#row-<%= @diknas_course.id%>").replaceWith("<%=j render partial:'index_row', locals: {diknas_course: @diknas_course}%>");
+Materialize.toast("Course <%= @diknas_course.try(:name)%> updated.", 4000, "green")

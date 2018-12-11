@@ -1,0 +1,8 @@
+tr id="row-#{diknas_course.id}"
+  td = diknas_course.number
+  td = diknas_course.number2
+  td = diknas_course.name.titlecase
+  td = diknas_course.notes
+  td
+    = link_to edit_diknas_course_path(diknas_course), remote: true, class: "waves-effect waves-teal"
+      i.material-icons edit

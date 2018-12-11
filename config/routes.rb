@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       get 'convert'
     end 
   end
-
+  resources :diknas_courses
   resources :employee_smartcards
   resources :stock_categories
   resources :stock_items
