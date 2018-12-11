@@ -5,8 +5,16 @@ class DiknasConversion < ActiveRecord::Base
   belongs_to :grade_level
 
   has_many :diknas_conversion_items, dependent: :destroy
+  has_many :diknas_conversion_lists, dependent: :destroy
+
   accepts_nested_attributes_for :diknas_conversion_items, reject_if: :all_blank, allow_destroy: true
   
+  def self.list_for_select
+    DiknasConversion.joins([:diknas_course, :grade_level, :academic_term])
+      .select(:id, "(diknas_courses.name || ' - ' || grade_levels.name || ' - ' || academic_terms.name) as name")
+      .order([:academic_term_id, :grade_level_id, 'diknas_courses.name'])
+  end
+
   def self.value_for(student_id, diknas_course_id, academic_year_id, academic_term_id)
     find_by(diknas_course_id: diknas_course_id, academic_year_id: academic_year_id, academic_term_id: academic_term_id)
     .value_for student_id
@@ -22,6 +30,9 @@ class DiknasConversion < ActiveRecord::Base
   def course_averages(student_id) 
     diknas_conversion_items.map {|ci| 
       DiknasReportCard.value_for student_id: student_id, academic_year_id: ci.academic_year_id, academic_term_id: ci.academic_term_id, course_id: ci.course_id
+    } <<
+    diknas_conversion_lists.map {|item|
+      item.value_for student_id
     }
   end
 

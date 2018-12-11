@@ -141,7 +141,7 @@ class DiknasConvertedsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diknas_converted_params
-      # params.require(:diknas_converted).permit(:student_id, :academic_year_id, :academic_term_id, :grade_level_id, :notes)
-      params.require(:diknas_converted).permit(:student_id, :academic_year_id, :academic_term_id, :grade_level_id, :notes, diknas_converted_items_attributes[:id, :diknas_conversion_id, :p_score, :t_score])
+      params.require(:diknas_converted).permit(:student_id, :academic_year_id, :academic_term_id, :grade_level_id, :notes, 
+        diknas_converted_items_attributes[:id, :diknas_conversion_id, :p_score, :t_score])
     end
 end
