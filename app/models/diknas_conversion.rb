@@ -13,11 +13,10 @@ class DiknasConversion < ActiveRecord::Base
   end
 
   def value_for(student_id) 
-    avgs = course_averages(student_id) 
-    avgs
-    .reject { |x| x.nil? }
-    .reduce(0.0) { |sum,x| sum+x } / avgs.count { |x| !x.nil? }
-    .ceil # always round up
+    values = course_averages(student_id).reject { |x| x.nil? } 
+    average = values.reduce(0.0) { |sum,x| sum+x } / values.count
+    
+    average.nan? || average == Float::INFINITY ? average : average.ceil # always round up
   end
 
   def course_averages(student_id) 
