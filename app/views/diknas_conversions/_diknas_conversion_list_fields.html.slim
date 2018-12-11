@@ -1,7 +1,7 @@
 .nested-fields
   .col.s5
     .input-field
-      = f.select :conversion_id, options_from_collection_for_select(DiknasConversion.list_for_select, :id, :name), prompt: true
+      = f.select :conversion_id, options_from_collection_for_select(DiknasConversion.list_for_select, :id, :name, f.object.conversion_id), prompt: true
   .col.s1
     .input-field
       = f.text_field :weight
@@ -9,5 +9,5 @@
     .input-field
       = f.text_field :notes
   .col.s1
-    / = link_to_remove_association f, class: "waves-effect waves-teal red-text"
-    /   i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete
+    = link_to_remove_association f, class: "waves-effect waves-teal red-text"
+      i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete
