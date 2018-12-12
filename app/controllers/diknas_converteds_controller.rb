@@ -26,6 +26,7 @@ class DiknasConvertedsController < ApplicationController
   # GET /diknas_converteds/1
   # GET /diknas_converteds/1.json
   def show
+    authorize! :read, DiknasConverted 
     @student = @diknas_converted.student
     @grade_section_id = GradeSectionsStudent.where(academic_year: @diknas_converted.academic_year_id, student_id: @diknas_converted.student_id).take.grade_section_id
     @diknas_converted_items = @diknas_converted.diknas_converted_items
@@ -41,16 +42,19 @@ class DiknasConvertedsController < ApplicationController
 
   # GET /diknas_converteds/new
   def new
+    authorize! :create, DiknasConverted 
     @diknas_converted = DiknasConverted.new
   end
 
   # GET /diknas_converteds/1/edit
   def edit
+    authorize! :update, DiknasConverted 
   end
 
   # POST /diknas_converteds
   # POST /diknas_converteds.json
   def create
+    authorize! :create, DiknasConverted 
     @diknas_converted = DiknasConverted.new(diknas_converted_params)
 
     respond_to do |format|
@@ -67,6 +71,7 @@ class DiknasConvertedsController < ApplicationController
   # PATCH/PUT /diknas_converteds/1
   # PATCH/PUT /diknas_converteds/1.json
   def update
+    authorize! :update, DiknasConverted 
     respond_to do |format|
       if @diknas_converted.update(diknas_converted_params)
         format.html { redirect_to @diknas_converted, notice: 'Diknas converted was successfully updated.' }
@@ -81,6 +86,7 @@ class DiknasConvertedsController < ApplicationController
   # DELETE /diknas_converteds/1
   # DELETE /diknas_converteds/1.json
   def destroy
+    authorize! :destroy, DiknasConverted 
     @diknas_converted.destroy
     respond_to do |format|
       format.html { redirect_to diknas_converteds_url, notice: 'Diknas converted was successfully destroyed.' }
@@ -91,6 +97,7 @@ class DiknasConvertedsController < ApplicationController
 
   #get /diknas_converteds/reports
   def reports
+    authorize! :read, DiknasConverted 
     @year_id = params[:year] || AcademicYear.current_id    
     @academic_year = AcademicYear.find @year_id
     @term_ids = AcademicTerm.where(academic_year_id:@year_id) if @year_id.present?

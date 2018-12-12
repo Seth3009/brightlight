@@ -138,6 +138,8 @@ class Ability
     can :manage, DiknasReportCard
     can :manage, DiknasConversion
     can :manage, DiknasConverted
+    can :manage, DiknasCourse
+    can :manage, Course
   end
 
   def student

@@ -5,6 +5,7 @@ class CoursesController < ApplicationController
   # GET /courses
   # GET /courses.json
   def index
+    authorize! :read, Course 
     items_per_page = 20
     if params[:grade]
       @courses = Course.with_grade_level(params[:grade]).paginate(page: params[:page], per_page: items_per_page)
@@ -17,6 +18,7 @@ class CoursesController < ApplicationController
   # GET /courses/1
   # GET /courses/1.json
   def show
+    authorize! :read, Course
   end
 
   # GET /courses/new
