@@ -1,0 +1,31 @@
+h4 Student Record
+
+nav
+  .nav-wrapper
+    ul
+      li 
+        = link_to :back
+          i.material-icons.left chevron_left
+    ul.right
+      li
+        = link_to converted_reports_path(s: @grade_section.id, st: @student.id, year: @academic_year.id, term: @academic_year.academic_terms.first)
+          |Raport Sem 1
+      li
+        = link_to converted_reports_path(s: @grade_section.id, st: @student.id, year: @academic_year.id, term: @academic_year.academic_terms.last)
+          |Raport Sem 2
+
+.card-panel
+  h5 = "#{@student.try(:name)} (#{@grade_level.try(:name)}) - Year: #{@academic_year.try(:name)}"
+  table.compact.striped
+    thead
+      tr
+        th Course
+        th Sem. 1
+        th Sem. 2
+    tbody
+      - @records.each do |rec|
+        tr
+          td = Course.find(rec[:course_id]).try(:name)
+          td = rec[@terms.first]
+          td = rec[@terms.last]
+

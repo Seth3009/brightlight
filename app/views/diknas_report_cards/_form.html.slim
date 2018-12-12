@@ -1,0 +1,33 @@
+= form_for @diknas_report_card do |f|
+  - if @diknas_report_card.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@diknas_report_card.errors.count, "error")} prohibited this diknas_report_card from being saved:"
+      ul
+        - @diknas_report_card.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :student
+    = f.text_field :student
+  .field
+    = f.label :grade_level
+    = f.text_field :grade_level
+  .field
+    = f.label :grade_section
+    = f.text_field :grade_section
+  .field
+    = f.label :academic_year
+    = f.text_field :academic_year
+  .field
+    = f.label :academic_term
+    = f.text_field :academic_term
+  .field
+    = f.label :course
+    = f.text_field :course
+  .field
+    = f.label :average
+    = f.text_field :average
+  .field
+    = f.label :notes
+    = f.text_area :notes
+  .actions = f.submit

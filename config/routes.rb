@@ -1,5 +1,17 @@
 Rails.application.routes.draw do
 
+  resources :diknas_conversions do
+    member do
+      get 'dry_run'
+    end
+  end
+  resources :diknas_report_cards do
+    collection do
+      post 'import'
+      get 'convert'
+    end 
+  end
+  resources :diknas_courses
   resources :employee_smartcards
   resources :stock_categories
   resources :stock_items
@@ -31,6 +43,8 @@ Rails.application.routes.draw do
   resources :book_conditions
   resources :student_activities
   
+  get 'diknas_converteds/reports' => 'diknas_converteds#reports', as: :converted_reports
+  resources :diknas_converteds
   resources :activity_schedules, shallow: true do
     member do
       get 'students'

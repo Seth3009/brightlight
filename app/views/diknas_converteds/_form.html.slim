@@ -1,0 +1,43 @@
+= form_for @diknas_converted do |f|
+  - if @diknas_converted.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@diknas_converted.errors.count, "error")} prohibited this diknas_converted from being saved:"
+      ul
+        - @diknas_converted.errors.full_messages.each do |message|
+          li = message
+
+  .card-panel
+    .row
+      .field.col.s3
+        = f.label :student
+        = f.collection_select :student_id, Student.all, :id, :name, prompt: true
+      .field.col.s2
+        = f.label :academic_year
+        = f.collection_select :academic_year_id, AcademicYear.all, :id, :name, prompt: true
+      .field.col.s2
+        = f.label :academic_term
+        = f.collection_select :academic_term_id, AcademicTerm.all, :id, :name, prompt: true
+      .field.col.s2
+        = f.label :grade_level
+        = f.collection_select :grade_level_id, GradeLevel.all, :id, :name, prompt: true
+      / .field.col.s3
+      /   = f.label :notes
+      /   = f.text_area :notes
+
+  .card-panel
+    .row
+      strong.col.s2 Course
+      strong.col.s2 Nilai Praktek
+      strong.col.s2 Nilai Teory
+      strong.col.s3 Comment
+
+    .row#diknas_converted
+          = f.fields_for :diknas_converted_items do |diknas_converted_item|
+            = render 'diknas_converted_item_fields', f: diknas_converted_item 
+
+  .toolbar.z-depth-1
+        button.btn.waves-effect.waves-light type="submit" name="save" Save
+        = link_to 'Cancel', diknas_converteds_path, class: "waves-effect waves-light btn-flat"
+
+javascript:
+  

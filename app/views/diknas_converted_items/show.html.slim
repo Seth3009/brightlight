@@ -1,0 +1,21 @@
+p#notice = notice
+
+p
+  strong Diknas converted:
+  = @diknas_converted_item.diknas_converted
+p
+  strong Diknas conversion:
+  = @diknas_converted_item.diknas_conversion
+p
+  strong P score:
+  = @diknas_converted_item.p_score
+p
+  strong T score:
+  = @diknas_converted_item.t_score
+p
+  strong Comment:
+  = @diknas_converted_item.comment
+
+= link_to 'Edit', edit_diknas_converted_item_path(@diknas_converted_item)
+'|
+= link_to 'Back', diknas_converted_items_path
