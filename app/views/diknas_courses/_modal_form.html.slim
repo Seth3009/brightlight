@@ -12,12 +12,15 @@
             li = message
     .row
       .input-field.col.s1
-        = f.label 'No Urut IPA', class: 'active'
+        = f.label '#', class: 'active'
+        = f.text_field :sort_num
+      .input-field.col.s1
+        = f.label '#IPA', class: 'active'
         = f.text_field :number
       .input-field.col.s1
-        = f.label 'No Urut IPS', class: 'active'
+        = f.label '#IPS', class: 'active'
         = f.text_field :number2
-      .input-field.col.s5
+      .input-field.col.s4
         = f.label 'Mata Pelajaran', class: 'active'
         = f.text_field :name
       .input-field.col.s5

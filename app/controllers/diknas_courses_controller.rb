@@ -70,6 +70,6 @@ class DiknasCoursesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diknas_course_params
-      params.require(:diknas_course).permit(:number,:number2, :name, :notes)
+      params.require(:diknas_course).permit(:number,:number2, :sort_num, :name, :notes)
     end
 end
