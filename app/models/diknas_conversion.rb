@@ -24,8 +24,8 @@ class DiknasConversion < ActiveRecord::Base
   end
 
   def value_for(student_id) 
-    values = course_values(student_id).reject { |x| x.nil? } 
-    average = values.reduce(0.0) { |sum,x| sum+x } / values.count
+    values = course_values(student_id).reject(&:nil?) 
+    average = values.sum.to_f / values.count
     
     average.nan? || average == Float::INFINITY ? average : average.ceil # always round up
   end
@@ -33,7 +33,7 @@ class DiknasConversion < ActiveRecord::Base
   def course_values(student_id) 
     values = diknas_conversion_items.where(substitute: false).map {|ci| 
       DiknasReportCard.value_for student_id: student_id, academic_year_id: ci.academic_year_id, academic_term_id: ci.academic_term_id, course_id: ci.course_id
-    }
+    }.reject &:nil?
     if values.blank?
       values = diknas_conversion_items.where(substitute: true).map {|ci| 
         DiknasReportCard.value_for student_id: student_id, academic_year_id: ci.academic_year_id, academic_term_id: ci.academic_term_id, course_id: ci.course_id
