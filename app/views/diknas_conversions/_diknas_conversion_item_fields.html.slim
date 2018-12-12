@@ -11,7 +11,11 @@
   .col.s1
     .input-field
       = f.text_field :weight
-  .col.s4
+  .col.s1
+    .input-field
+      = f.check_box :substitute
+      = f.label :substitute, "Subs"
+  .col.s3
     .input-field
       = f.text_field :notes
   .col.s1
