@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20181211035232) do
+=======
+ActiveRecord::Schema.define(version: 20181212030141) do
+>>>>>>> 6dfe5cdbdec57d07ed2fadb3bf5f78c792f45d10
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -747,6 +751,7 @@ ActiveRecord::Schema.define(version: 20181211035232) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "number2"
+    t.integer  "sort_num"
   end
 
   create_table "diknas_gradebooks", force: :cascade do |t|
