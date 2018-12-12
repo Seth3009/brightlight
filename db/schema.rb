@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20181211035232) do
-=======
-ActiveRecord::Schema.define(version: 20181212030141) do
->>>>>>> 6dfe5cdbdec57d07ed2fadb3bf5f78c792f45d10
+ActiveRecord::Schema.define(version: 20181212065126) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -673,8 +669,9 @@ ActiveRecord::Schema.define(version: 20181212030141) do
     t.integer  "academic_term_id"
     t.integer  "weight"
     t.text     "notes"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.boolean  "substitute",           default: false
   end
 
   add_index "diknas_conversion_items", ["academic_term_id"], name: "index_diknas_conversion_items_on_academic_term_id", using: :btree

@@ -31,9 +31,15 @@ class DiknasConversion < ActiveRecord::Base
   end
 
   def course_values(student_id) 
-    diknas_conversion_items.map {|ci| 
+    values = diknas_conversion_items.where(substitute: false).map {|ci| 
       DiknasReportCard.value_for student_id: student_id, academic_year_id: ci.academic_year_id, academic_term_id: ci.academic_term_id, course_id: ci.course_id
-    } + diknas_conversion_lists.map {|item|
+    }
+    if values.blank?
+      values = diknas_conversion_items.where(substitute: true).map {|ci| 
+        DiknasReportCard.value_for student_id: student_id, academic_year_id: ci.academic_year_id, academic_term_id: ci.academic_term_id, course_id: ci.course_id
+      }
+    end
+    values + diknas_conversion_lists.map {|item|
       item.conversion.value_for student_id
     }
   end
