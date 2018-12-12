@@ -31,23 +31,39 @@ nav
       .label Grade
       .item = @diknas_conversion.grade_level.name
 
-.card-panel
-  table.compact.striped
-    thead
-      tr
-        th Course
-        th Academic Year
-        th Academic Term
-        th Weight
-        th Notes
-    tbody
-      -@diknas_conversion.diknas_conversion_items.each do |conversion_item|
-        tr  
-          td = conversion_item.course.try(:name)
-          td = conversion_item.academic_year.try(:name)
-          td = conversion_item.academic_term.try(:short_name)
-          td = conversion_item.weight
-          td = conversion_item.notes
+-if @diknas_conversion.conversions.present?
+  .card-panel
+    table.compact.striped
+      thead
+        tr
+          th Diknas Course
+          th Weight
+          th Notes
+      tbody
+        -@diknas_conversion.diknas_conversion_lists.each do |conversion_list_item|
+          tr  
+            td = conversion_list_item.conversion.try(:diknas_course).try(:name)
+            td = conversion_list_item.weight
+            td = conversion_list_item.notes
+
+-if @diknas_conversion.diknas_conversion_items.present?
+  .card-panel
+    table.compact.striped
+      thead
+        tr
+          th Course
+          th Academic Year
+          th Academic Term
+          th Weight
+          th Notes
+      tbody
+        -@diknas_conversion.diknas_conversion_items.each do |conversion_item|
+          tr  
+            td = conversion_item.course.try(:name)
+            td = conversion_item.academic_year.try(:name)
+            td = conversion_item.academic_term.try(:short_name)
+            td = conversion_item.weight
+            td = conversion_item.notes
 
 nav
   .nav-wrapper

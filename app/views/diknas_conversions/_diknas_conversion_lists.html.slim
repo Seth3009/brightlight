@@ -1,0 +1,9 @@
+.card-panel
+  .row
+    strong.col.s5 Conversion
+    strong.col.s1 Weight
+    strong.col.s5 Notes
+    strong.col.s1 Action
+  .row#conversion_list
+    = f.fields_for :diknas_conversion_lists do |diknas_conversion_list|
+      = render 'diknas_conversion_list_fields', f: diknas_conversion_list

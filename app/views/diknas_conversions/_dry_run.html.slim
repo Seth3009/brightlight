@@ -7,6 +7,12 @@ table.compact.striped style="width: 80%"
       th Value
 
   tbody
+    - @diknas_conversion.diknas_conversion_lists.each do |list_item| 
+      tr
+        td = list_item.conversion.try(:diknas_course).try(:name)
+        td = AcademicTerm.find(list_item.conversion.academic_term_id).try(:name)
+        td = list_item.conversion.value_for @student.id
+
     - @diknas_conversion.diknas_conversion_items.each do |ci| 
       tr
         td = Course.find(ci.course_id).try(:name)
