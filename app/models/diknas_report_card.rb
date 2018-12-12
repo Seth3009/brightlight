@@ -65,15 +65,23 @@ class DiknasReportCard < ActiveRecord::Base
       .joins("join grade_levels on grade_levels.id = grade_sections.grade_level_id AND grade_levels.id=#{grade_level_id}")
       .where(grade_sections_students: {academic_year_id: academic_year_id})
       .each do |student|
-        dc = DiknasConverted.create(student_id: student.id, academic_year_id: academic_year_id, academic_term_id: academic_term_id, grade_level_id: grade_level_id)
+        dc = DiknasConverted.find_or_create_by(student_id: student.id, academic_year_id: academic_year_id, academic_term_id: academic_term_id, grade_level_id: grade_level_id)
         DiknasConversion.where(academic_term_id: academic_term_id, grade_level_id: grade_level_id)
-          .each do |conversion|
-            converted_item = DiknasConvertedItem.new(
-              diknas_conversion_id: conversion.id,
-              p_score: conversion.value_for(student.id),
-              t_score: conversion.value_for(student.id)
-            )
-            dc.diknas_converted_items << converted_item unless converted_item.p_score.nan? || converted_item.p_score == Float::INFINITY
+          .each do |diknas_conversion|
+            converted_item = dc.diknas_converted_items.find_by(diknas_conversion_id: diknas_conversion.id)
+            if converted_item.present?
+              converted_item.update(
+                p_score: diknas_conversion.value_for(student.id),
+                t_score: diknas_conversion.value_for(student.id)
+              ) unless converted_item.p_score.nan? || converted_item.p_score == Float::INFINITY
+            else
+              converted_item = DiknasConvertedItem.new(
+                diknas_conversion_id: diknas_conversion.id,
+                p_score: diknas_conversion.value_for(student.id),
+                t_score: diknas_conversion.value_for(student.id)
+              )
+              dc.diknas_converted_items << converted_item unless converted_item.p_score.nan? || converted_item.p_score == Float::INFINITY
+            end
           end
       end
   end 
