@@ -99,21 +99,30 @@ class DiknasConvertedsController < ApplicationController
               .joins('left join diknas_converteds on diknas_converteds.id = diknas_converted_items.diknas_converted_id')
               .joins('left join students on students.id = diknas_converteds.student_id')                  
               .joins('left join grade_levels on grade_levels.id = diknas_conversions.grade_level_id')
-      @ipa = @diknas.where('lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ?','kimia','biologi','fisika')
-      if @ipa.present?
-        @diknas = @diknas.order('diknas_courses.number')
-      else
-        @diknas = @diknas.order('diknas_courses.number2')
+      if @diknas.present?
+        @student = @diknas.first.diknas_converted.student
+        @grade = @diknas.first.diknas_conversion.grade_level.name
+        @grade_name = @grade.delete "Grade "
+        @grade_roman = GradeLevel.roman(@grade_name.to_i) 
+      
+      
+        if @grade_name.to_i < 11
+          @diknas = @diknas.order('diknas_courses.sort_num')
+          @row = 4
+        else
+          @row = 2
+          @ipa = @diknas.where('lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ?','kimia','biologi','fisika')
+          if @ipa.present?
+            @diknas = @diknas.order('diknas_courses.number')
+          else
+            @diknas = @diknas.order('diknas_courses.number2')
+          end
+        end
       end
     end
 
     
-    if @diknas.present?
-      @student = @diknas.first.diknas_converted.student
-      @grade = @diknas.first.diknas_conversion.grade_level.name
-      @grade_name = @grade.delete "Grade "
-      @grade_roman = GradeLevel.roman(@grade_name.to_i) 
-    end
+    
     respond_to do |format|
       format.html do
         @grade_level_ids = GradeLevel.all.order(:id).collect(&:id)

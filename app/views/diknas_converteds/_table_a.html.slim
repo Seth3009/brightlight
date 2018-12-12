@@ -54,14 +54,22 @@
         td
         td
         td  
-      - (1..2).each do |r|
+      - (1..@row).each do |r|
         tr
-          td.center = r
-          td ................................................................
+          - if r < 3
+            td.center = r
+            td ................................................................
+          - elsif r == 3
+            td
+            td style="text-align:right;" JUMLAH
+          - else
+            td
+            td style="text-align:right;" RATA-RATA
           td 
           td
           td
           td
           td
           td 
+      
   = render 'report_footer'
