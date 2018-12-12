@@ -648,6 +648,20 @@ ActiveRecord::Schema.define(version: 20181211035232) do
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
 
+  create_table "diknas_academic_terms", force: :cascade do |t|
+    t.string   "name"
+    t.text     "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "diknas_academic_years", force: :cascade do |t|
+    t.string   "name"
+    t.text     "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "diknas_conversion_items", force: :cascade do |t|
     t.integer  "diknas_conversion_id"
     t.integer  "course_id"
@@ -718,6 +732,14 @@ ActiveRecord::Schema.define(version: 20181211035232) do
   add_index "diknas_converteds", ["grade_level_id"], name: "index_diknas_converteds_on_grade_level_id", using: :btree
   add_index "diknas_converteds", ["student_id"], name: "index_diknas_converteds_on_student_id", using: :btree
 
+  create_table "diknas_course", force: :cascade do |t|
+    t.string   "number"
+    t.string   "name"
+    t.text     "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "diknas_courses", force: :cascade do |t|
     t.integer  "number"
     t.string   "name"
@@ -725,6 +747,16 @@ ActiveRecord::Schema.define(version: 20181211035232) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "number2"
+  end
+
+  create_table "diknas_gradebooks", force: :cascade do |t|
+    t.string   "studentname"
+    t.string   "grade"
+    t.string   "class"
+    t.string   "avg"
+    t.string   "semester"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "diknas_report_cards", force: :cascade do |t|
@@ -815,8 +847,8 @@ ActiveRecord::Schema.define(version: 20181211035232) do
     t.boolean  "is_active"
     t.integer  "family_no"
     t.integer  "user_id"
-    t.integer  "approver1"
-    t.integer  "approver2"
+    t.integer  "approver_id"
+    t.integer  "approver_assistant_id"
     t.boolean  "leaderships",                default: false
   end
 
@@ -935,7 +967,7 @@ ActiveRecord::Schema.define(version: 20181211035232) do
   create_table "gradebook", force: :cascade do |t|
     t.string   "studentname"
     t.string   "grade"
-    t.string   "gradeclass"
+    t.string   "class"
     t.decimal  "avg"
     t.string   "semester"
     t.datetime "created_at",  null: false

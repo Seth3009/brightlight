@@ -4,7 +4,7 @@
   .col.s5
     = ": " + @student.name
   .col.s2
-    | Kelas/Semes
+    | Kelas/Semester
   .col.s3
     = @grade.present? ? ": " + @grade_roman + " / " + @term.short_name[@term.short_name.length-1] : "-/-"
 .row style="margin-bottom: 5px"
@@ -13,7 +13,7 @@
   .col.s5
     = ": #{@student.nis.to_s} / #{@student.nisn.to_s}"
   .col.s2
-    | Tahun Pelajar
+    | Tahun Pelajaran
   .col.s3
     = ": " + @academic_year.name
 .row

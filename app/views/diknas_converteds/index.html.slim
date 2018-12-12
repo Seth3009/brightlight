@@ -1,5 +1,5 @@
-- title 'Rapor Diknas Converted'
-h4 Rapor Diknas Converted
+- title 'Converted Data for Rapor Diknas'
+h4 Converted Data for Rapor Diknas
 
 nav
   .nav-wrapper
@@ -12,26 +12,17 @@ nav
         a.dropdown-button href="#!" data-activates="grade-options"
           span#grade = @grade_level.present? ? "#{@grade_level.name}" : "Grade" 
           i.material-icons.right arrow_drop_down
-    ul.right
-      / li
-      /   = link_to convert_diknas_report_cards_path(params.merge(term: params[:term], grade: params[:grade]))
-      /     | Convert
-      /     i.material-icons.left donut_small
-      / li
-      /   = link_to "#form-upload-modal", class:"modal-trigger" 
-      /     | Import
-      /     i.material-icons.left input
 
 ul#term-options.dropdown-content
   li  
   - AcademicTerm.list_for_menu(5,0).each do |term|
     li 
-      = link_to term.name, diknas_converteds_path(params.merge(term:term.id).symbolize_keys) 
+      = link_to term.name, diknas_converteds_path(term: term.id, grade: params["grade"])
 ul#grade-options.dropdown-content
   li  
   - GradeLevel.order(:id).each do |grade|
     li 
-      = link_to grade.name, diknas_converteds_path(params.merge(grade:grade.id).symbolize_keys) 
+      = link_to grade.name, diknas_converteds_path(grade:grade.id, term: params["term"]) 
 
 .card-panel
   table.compact.striped
@@ -40,7 +31,8 @@ ul#grade-options.dropdown-content
         th Student
         th Academic term
         th Grade level
-        th
+        th Report
+        th Data
 
     tbody
       - @diknas_converteds.each do |diknas_converted|
@@ -50,8 +42,10 @@ ul#grade-options.dropdown-content
           td = diknas_converted.grade_level.name
           td 
             - grade_section_id = GradeSectionsStudent.where(academic_year: diknas_converted.academic_year_id, student_id: diknas_converted.student_id).take.grade_section_id
+            = link_to converted_reports_path(s: grade_section_id, st: diknas_converted.student_id, year: diknas_converted.academic_year_id, term: diknas_converted.academic_term_id)
+              i.material-icons.left import_contacts
+          td
             = link_to diknas_converted
               i.material-icons visibility
-            = link_to converted_reports_path(s: grade_section_id, st: diknas_converted.student_id, year: diknas_converted.academic_year_id, term: diknas_converted.academic_term_id)
-              i.material-icons import_contacts
-
+.toolbar.z-depth-1
+  = will_paginate @diknas_converteds

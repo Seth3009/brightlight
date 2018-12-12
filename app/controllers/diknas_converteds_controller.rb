@@ -28,6 +28,15 @@ class DiknasConvertedsController < ApplicationController
   def show
     @student = @diknas_converted.student
     @grade_section_id = GradeSectionsStudent.where(academic_year: @diknas_converted.academic_year_id, student_id: @diknas_converted.student_id).take.grade_section_id
+    @diknas_converted_items = @diknas_converted.diknas_converted_items
+    .joins('left join diknas_conversions on diknas_conversions.id = diknas_converted_items.diknas_conversion_id')                          
+    .joins('left join diknas_courses on diknas_courses.id = diknas_conversions.diknas_course_id')
+    @ipa = @diknas_converted_items.where('lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ?','kimia','biologi','fisika')
+    if @ipa.present?
+      @diknas_converted_items = @diknas_converted_items.order('diknas_courses.number')
+    else
+      @diknas_converted_items = @diknas_converted_items.order('diknas_courses.number2')
+    end
   end
 
   # GET /diknas_converteds/new

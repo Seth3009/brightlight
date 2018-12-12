@@ -23,9 +23,9 @@ nav
         th Teori
 
     tbody
-      - @diknas_converted.diknas_converted_items.each do |ci| 
+      - @diknas_converted_items.each do |ci| 
         tr
-          td = ci.diknas_conversion.try(:diknas_course).try(:name)
+          td = ci.diknas_conversion.try(:diknas_course).try(:name).try(:titlecase)
           td = ci.p_score
           td = ci.t_score
 
