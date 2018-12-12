@@ -11,4 +11,9 @@ class GradeLevel < ActiveRecord::Base
   accepts_nested_attributes_for :grade_sections, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :book_labels, allow_destroy: true, reject_if: :all_blank
 
+  def self.roman(id)
+    arr = ["VII","VIII","IX","X","XI","XII"]
+    roman = arr[self.find(id).id.to_i-7]
+    return roman
+  end
 end

@@ -1,5 +1,5 @@
 class DiknasConversionsController < ApplicationController
-  before_action :set_diknas_conversion, only: [:show, :edit, :update, :destroy]
+  before_action :set_diknas_conversion, only: [:show, :edit, :update, :destroy, :dry_run]
 
   # GET /diknas_conversions
   # GET /diknas_conversions.json
@@ -23,6 +23,9 @@ class DiknasConversionsController < ApplicationController
   # GET /diknas_conversions/1
   # GET /diknas_conversions/1.json
   def show
+    @students = Student.joins(:diknas_report_cards)
+                .where(diknas_report_cards: {grade_level: @diknas_conversion.grade_level, academic_term_id: @diknas_conversion.academic_term_id})
+                .uniq.order(:name)
   end
 
   # GET /diknas_conversions/new
@@ -74,6 +77,12 @@ class DiknasConversionsController < ApplicationController
     end
   end
 
+  def dry_run
+    respond_to do |format|
+      format.js { @student = Student.find params[:student_id] }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_diknas_conversion
@@ -83,6 +92,7 @@ class DiknasConversionsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def diknas_conversion_params
       params.require(:diknas_conversion).permit(:diknas_course_id, :grade_level_id, :academic_year_id, :academic_term_id, :weight, :notes, 
-        diknas_conversion_items_attributes: [:id, :course_id, :academic_year_id, :academic_term_id, :weight, :notes, :_destroy])
+        diknas_conversion_items_attributes: [:id, :course_id, :academic_year_id, :academic_term_id, :weight, :notes, :_destroy],
+        diknas_conversion_lists_attributes: [:id, :conversion_id, :weight, :notes, :_destroy])
     end
 end

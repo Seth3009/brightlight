@@ -1,24 +1,83 @@
-p#notice = notice
+- title 'Diknas Conversion'
+h4 Setting Rapor Diknas Conversions
 
-p
-  strong Course:
-  / = @diknas_conversion.course
-p
-  strong Diknas course:
-  = @diknas_conversion.diknas_course
-p
-  strong Academic year:
-  = @diknas_conversion.academic_year
-p
-  strong Academic term:
-  = @diknas_conversion.academic_term
-p
-  strong Weight:
-  = @diknas_conversion.weight
-p
-  strong Notes:
-  = @diknas_conversion.notes
+nav
+  .nav-wrapper
+    ul
+      li 
+        = link_to diknas_conversions_path
+          |Back
+          i.material-icons.left chevron_left
+    ul.right
+      li
+        = link_to edit_diknas_conversion_path(@diknas_conversion)
+          i.material-icons edit
+      li
+        = link_to @diknas_conversion, data: {:confirm => 'Are you sure?'}, :method => :delete
+          i.material-icons.red-text delete
 
-= link_to 'Edit', edit_diknas_conversion_path(@diknas_conversion)
-'|
-= link_to 'Back', diknas_conversions_path
+.card-panel
+  .row
+    .col.s3 
+      .label Diknas Course
+      .item = @diknas_conversion.diknas_course.try(:name)
+    .col.s2 
+      .label Academic Year
+      .item = @diknas_conversion.academic_year.try(:name)
+    .col.s2 
+      .label Academic Term
+      .item = @diknas_conversion.academic_term.try(:short_name)
+    .col.s1 
+      .label Grade
+      .item = @diknas_conversion.grade_level.name
+
+-if @diknas_conversion.conversions.present?
+  .card-panel
+    table.compact.striped
+      thead
+        tr
+          th Diknas Course
+          th Weight
+          th Notes
+      tbody
+        -@diknas_conversion.diknas_conversion_lists.each do |conversion_list_item|
+          tr  
+            td = conversion_list_item.conversion.try(:diknas_course).try(:name)
+            td = conversion_list_item.weight
+            td = conversion_list_item.notes
+
+-if @diknas_conversion.diknas_conversion_items.present?
+  .card-panel
+    table.compact.striped
+      thead
+        tr
+          th Course
+          th Academic Year
+          th Academic Term
+          th Weight
+          th Notes
+      tbody
+        -@diknas_conversion.diknas_conversion_items.each do |conversion_item|
+          tr  
+            td = conversion_item.course.try(:name)
+            td = conversion_item.academic_year.try(:name)
+            td = conversion_item.academic_term.try(:short_name)
+            td = conversion_item.weight
+            td = conversion_item.notes
+
+nav
+  .nav-wrapper
+    .brand-logo style="margin-left: 20px; font-size:1.1em"
+      | Dry run
+    ul.right
+      li
+        a.dropdown-button href="#!" data-activates="students-options"
+          span Select student
+          i.material-icons.right arrow_drop_down
+ul#students-options.dropdown-content
+  - @students.each do |student|
+    li 
+      = link_to student.name, dry_run_diknas_conversion_path(@diknas_conversion, student_id: student.id), remote: true
+
+.card-panel
+  #dry-run-result

@@ -1,0 +1,136 @@
+- title 'Diknas Converted'
+h5 Listing Diknas Converted
+
+ul#grade-options.dropdown-content
+  - GradeLevel.where(:id=>10..12).all.order(:id).each do |grade|
+    li 
+      = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
+
+ul#section-options.dropdown-content
+  - @grade_sections.each do |section|
+    li
+      = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterStudentOptions(#{section.grade_level_id},#{section.id}, '#{section.name}');"
+
+ul#student-options.dropdown-content
+  - if @grade_section.present?
+    li = link_to 'All', converted_reports_path(params.except(:st).merge(year:@year_id,s:@grade_section.id, g:@grade_level.id).symbolize_keys)
+    - @all_students.each do |gss| 
+      li = link_to "#{gss.order_no}. #{gss.student.name}", converted_reports_path(params.merge(year:@year_id,st:gss.student.id,s:@grade_section.id).symbolize_keys)
+
+ul#year-options.dropdown-content
+  li  
+  - AcademicYear.list_for_menu.each do |year|
+    li 
+      = link_to year.name, converted_reports_path(year:year.id)
+ul#term-options.dropdown-content
+  li  
+  - @term_ids.each do |term|
+    li 
+      = link_to term.name, converted_reports_path(year:@year_id,term:term.id)
+  
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to "#", onclick: 'window.print();return false;'
+          i.material-icons print          
+    ul.right
+      li 
+        a.dropdown-button href="#!" data-activates="year-options" data-beloworigin="true" 
+          span#year = @academic_year.name
+          i.material-icons.right arrow_drop_down
+      li 
+        a.dropdown-button href="#!" data-activates="term-options" data-beloworigin="true" 
+          span#term = @term.present? ? @term.short_name : "Choose semester"
+          i.material-icons.right arrow_drop_down
+      li
+        a.dropdown-button href="#!" data-activates="grade-options" data-beloworigin="true" 
+          span#grade = @grade_level.present? ? @grade_level.name : 'Choose grade'
+          i.material-icons.right arrow_drop_down
+      li
+        a.dropdown-button href="#!" data-activates="section-options" data-beloworigin="true" 
+          span#section = @grade_section.present? ? @grade_section.name : 'Choose class'
+          i.material-icons.right arrow_drop_down
+      li
+        a#student-menu.dropdown-button href="#!" data-activates="student-options" data-beloworigin="true" 
+          span#student = 'Choose student'
+          i.material-icons.right arrow_drop_down
+      
+- if @diknas.present?
+  = render 'table_a'
+
+  = render 'table_b'
+
+  = render 'table_c'
+- else
+  #message.card-panel.grey.lighten-1
+      .center.white-text Please choose another Grade Level, Class and Student
+        
+
+javascript:
+  function filterSectionOptions(id, name) {
+    var grade_ids = #{raw @grade_level_ids};
+    $("#grade").html(name);
+    grade_ids.forEach(function(g){
+      if(id!=g) {
+        $(".grade-"+g).hide();
+      } else {
+        $(".grade-"+id).show();
+      }
+    })
+  }
+  function filterStudentOptions(grade_level_id, grade_section_id, section_name) {
+    $("#section").html(section_name);
+    $.getJSON("/students.json?section="+grade_section_id+"&year=#{@year_id}", null, function (data) {
+      var list = "<li><a href='/diknas_converteds/reports?s="+grade_section_id+"&year=#{@year_id}"+"'>All</a></li>";
+      $.each(data, function(i,student){
+        list += "<li><a href='/diknas_converteds/reports?s="+grade_section_id+"&st="+student.student.id+"&year=#{@year_id}"+"&term=#{params[:term]}"+"'>"+student.student.roster_no+". "+student.student.name+"</a></li>";
+      });
+      $("#student-options").html(list);
+      $("#student-menu").dropdown();
+    });    
+  }
+
+css:  
+  @media print {    
+    h5 , .top-navbar {
+      margin: none;
+      display: none !important;
+    }
+    html, body {
+      display: block; 
+      background: white;         
+    }    
+  	
+    .row {
+      font-size:9pt !important;
+    }
+    table {
+      table-layout: auto;
+      border-collapse: collapse;
+      font-size:9pt !important;
+    }
+   
+    @page {
+      size: A4;
+      margin: none;     
+    }  
+    
+    .page-footer {
+      position: fixed;
+      width: 90%;
+      bottom: 1.5cm;          
+    }
+    .section {
+      size: A4;
+      margin-top: 1.5cm !important;      
+    }	
+    div.section1 {
+      page: section1;
+    }
+    
+    .page-break	{ 
+      display: block; 
+      page-break-after: always; }
+  }  

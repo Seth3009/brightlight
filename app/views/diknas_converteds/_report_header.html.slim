@@ -1,0 +1,28 @@
+.row style="margin-bottom: 5px"
+  .col.s2 
+    | Nama Peserta Didik
+  .col.s5
+    = ": " + @student.name
+  .col.s2
+    | Kelas/Semester
+  .col.s3
+    = @grade.present? ? ": " + @grade_roman + " / " + @term.short_name[@term.short_name.length-1] : "-/-"
+.row style="margin-bottom: 5px"
+  .col.s2 
+    | Nomor Induk
+  .col.s5
+    = ": #{@student.nis.to_s} / #{@student.nisn.to_s}"
+  .col.s2
+    | Tahun Pelajaran
+  .col.s3
+    = ": " + @academic_year.name
+.row
+  .col.s2 
+    | Nama Sekolah
+  .col.s5
+    | : SMA Cahaya Bangsa Classical School
+  .col.s2
+    | Program
+  .col.s3
+    = @ipa.present? ? ": IPA" : ": IPS"
+      

@@ -1,13 +1,28 @@
-- title 'Rapor Diknas Converted'
-h4 Rapor Diknas Converted
+- title 'Converted Data for Rapor Diknas'
+h4 Converted Data for Rapor Diknas
 
 nav
   .nav-wrapper
-    ul.right
-      / li
-      / = link_to new_diknas_converted_path
-      /   | New
-      /   i.material-icons.left add
+    ul
+      li 
+        a.dropdown-button href="#!" data-activates="term-options"
+          span#term = @academic_term.present? ? "#{@academic_term.name}" : "Academic Term" 
+          i.material-icons.right arrow_drop_down
+      li 
+        a.dropdown-button href="#!" data-activates="grade-options"
+          span#grade = @grade_level.present? ? "#{@grade_level.name}" : "Grade" 
+          i.material-icons.right arrow_drop_down
+
+ul#term-options.dropdown-content
+  li  
+  - AcademicTerm.list_for_menu(5,0).each do |term|
+    li 
+      = link_to term.name, diknas_converteds_path(term: term.id, grade: params["grade"])
+ul#grade-options.dropdown-content
+  li  
+  - GradeLevel.order(:id).each do |grade|
+    li 
+      = link_to grade.name, diknas_converteds_path(grade:grade.id, term: params["term"]) 
 
 .card-panel
   table.compact.striped
@@ -16,7 +31,8 @@ nav
         th Student
         th Academic term
         th Grade level
-        th
+        th Report
+        th Data
 
     tbody
       - @diknas_converteds.each do |diknas_converted|
@@ -24,6 +40,12 @@ nav
           td = diknas_converted.student.name
           td = diknas_converted.academic_term.name
           td = diknas_converted.grade_level.name
-          / td = link_to 'Show', diknas_converted
-          td = link_to 'Edit', edit_diknas_converted_path(diknas_converted)
-
+          td 
+            - grade_section_id = GradeSectionsStudent.where(academic_year: diknas_converted.academic_year_id, student_id: diknas_converted.student_id).take.grade_section_id
+            = link_to converted_reports_path(s: grade_section_id, st: diknas_converted.student_id, year: diknas_converted.academic_year_id, term: diknas_converted.academic_term_id)
+              i.material-icons.left import_contacts
+          td
+            = link_to diknas_converted
+              i.material-icons visibility
+.toolbar.z-depth-1
+  = will_paginate @diknas_converteds

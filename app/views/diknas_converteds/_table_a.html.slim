@@ -1,0 +1,67 @@
+.card-panel
+  = render 'report_header'
+  table.compact.bordered
+    thead
+      tr
+        th style="border-bottom: 3px double grey" rowspan=3 No.
+        th style="border-bottom: 3px double grey" rowspan=3 Komponen
+        th style="border-bottom: 3px double grey" rowspan=3 Kriteria Ketuntasan minimal KKM
+        th colspan=5 Nilai Hasil Belajar      
+      tr 
+        th colspan=2 Pengetahuan
+        th colspan=2 Praktik
+        th Sikap
+      tr style="border-bottom: 3px double grey"
+        th Angka
+        th Huruf
+        th Angka
+        th Huruf
+        th Predikat
+    tbody
+      tr style="font-weight:bold;"
+        td.center style="width:70px !important;" A.
+        td style="width:400px !important;" Mata Pelajaran
+        td style="width:70px !important;"
+        td
+        td
+        td
+        td
+        td
+      - @diknas.each.with_index(1) do |course,idx|
+        tr
+          td.center = idx
+          td style="width:500px!important;"
+            - if course.diknas_conversion.diknas_course.name.titlecase.include? "*)"
+              = course.diknas_conversion.diknas_course.name.titlecase
+              br 
+              | ................................................................
+            - else
+              = course.diknas_conversion.diknas_course.name.titlecase
+          td.center 70
+          td.center = course.p_score.to_i
+          td style="width:250px !important;"
+            = DiknasConvertedItem.in_words(course.p_score) || "-"
+          td.center = course.t_score.to_i
+          td style="width:250px !important;" 
+            = DiknasConvertedItem.in_words(course.t_score) || "-"
+          td.center A
+      tr style="font-weight:bold;"
+        td.center style="width:70px !important;" B.
+        td Muatan Lokal **)
+        td 
+        td
+        td
+        td
+        td
+        td  
+      - (1..2).each do |r|
+        tr
+          td.center = r
+          td ................................................................
+          td 
+          td
+          td
+          td
+          td
+          td 
+  = render 'report_footer'

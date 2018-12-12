@@ -1,0 +1,32 @@
+h4 Diknas Course List
+
+nav
+  .nav-wrapper
+    ul.right
+      li
+        - if can? :manage, DiknasCourse
+          = link_to new_diknas_course_path
+            | New Diknas Course
+            i.material-icons.left add
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th #IPA
+        th #IPS
+        th Mata Pelajaran
+        th Notes
+        th Actions
+    
+    tbody#diknas_courses
+      - @diknas_courses.each do |diknas_course|
+        = render partial: 'index_row', locals: {diknas_course: diknas_course}
+    
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content        

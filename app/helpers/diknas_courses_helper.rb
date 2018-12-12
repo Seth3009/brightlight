@@ -1,0 +1,2 @@
+module DiknasCoursesHelper
+end

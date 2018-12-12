@@ -43,4 +43,39 @@ class DiknasReportCard < ActiveRecord::Base
 
     end 
   end
+
+  def self.records_for(student_id: student_id, academic_year_id: academic_year_id)
+    DiknasReportCard.where(student_id: student_id, academic_year_id: academic_year_id)
+      .order(:course_id, :academic_term_id)
+      .group_by(&:course_id)
+      .map do |course_id, recs|
+        record = Hash.new
+        record[:course_id] = course_id
+        recs.each do |rec|
+          record[rec.academic_term_id] = rec.average
+        end  
+        record
+      end  
+  end
+
+  def self.convert(academic_term_id: academic_term_id, grade_level_id: grade_level_id)
+    academic_year_id = AcademicTerm.find(academic_term_id).academic_year_id
+    Student.joins(:grade_sections_students)
+      .joins('join grade_sections on grade_sections.id = grade_sections_students.grade_section_id')
+      .joins("join grade_levels on grade_levels.id = grade_sections.grade_level_id AND grade_levels.id=#{grade_level_id}")
+      .where(grade_sections_students: {academic_year_id: academic_year_id})
+      .each do |student|
+        dc = DiknasConverted.create(student_id: student.id, academic_year_id: academic_year_id, academic_term_id: academic_term_id, grade_level_id: grade_level_id)
+        DiknasConversion.where(academic_term_id: academic_term_id, grade_level_id: grade_level_id)
+          .each do |conversion|
+            converted_item = DiknasConvertedItem.new(
+              diknas_conversion_id: conversion.id,
+              p_score: conversion.value_for(student.id),
+              t_score: conversion.value_for(student.id)
+            )
+            dc.diknas_converted_items << converted_item unless converted_item.p_score.nan? || converted_item.p_score == Float::INFINITY
+          end
+      end
+  end 
+
 end

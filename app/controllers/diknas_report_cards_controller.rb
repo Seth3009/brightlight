@@ -1,12 +1,16 @@
 class DiknasReportCardsController < ApplicationController
-  before_action :set_diknas_report_card, only: [:show, :edit, :update, :destroy]
+  before_action :set_diknas_report_card, only: [:edit, :update, :destroy]
 
   # GET /diknas_report_cards
   # GET /diknas_report_cards.json
   def index
     @diknas_report_cards = DiknasReportCard
-                            .includes([:student, :academic_year, :academic_term, :grade_level, :course])
+                            .includes([:student, :academic_year, :academic_term, :grade_level])
+                            .select([:student_id, :grade_level_id, :grade_section_id, :academic_year_id, :academic_term_id])
+                            .group([:student_id, :grade_level_id, :grade_section_id, :academic_year_id, :academic_term_id])
+                            .order([:academic_year_id, :academic_term_id, :grade_level_id])
                             .paginate(page: params[:page], per_page: 50)
+
     if params[:term].present?
       @diknas_report_cards = @diknas_report_cards.where(academic_term_id: params[:term])
       @academic_term = AcademicTerm.find params[:term]
@@ -20,6 +24,12 @@ class DiknasReportCardsController < ApplicationController
   # GET /diknas_report_cards/1
   # GET /diknas_report_cards/1.json
   def show
+    @academic_year = AcademicYear.find params[:year]
+    @student = Student.find params[:id]
+    @grade_level = GradeLevel.find params[:grade]
+    @grade_section = GradeSectionsStudent.where(academic_year: @academic_year.id, student_id: @student.id).take.grade_section
+    @terms = @academic_year.academic_terms.order(:id).map &:id
+    @records = DiknasReportCard.records_for student_id: @student.id, academic_year_id: @academic_year.id
   end
 
   # GET /diknas_report_cards/new
@@ -88,6 +98,12 @@ class DiknasReportCardsController < ApplicationController
         redirect_to diknas_report_cards_url, alert: 'Import failed: selected file is not an Excel file'
       end
     end
+  end
+
+  def convert 
+    authorize! :create, DiknasReportCard
+    DiknasReportCard.convert(academic_term_id: params[:term], grade_level_id: params[:grade])
+    redirect_to diknas_converteds_path
   end
 
   private

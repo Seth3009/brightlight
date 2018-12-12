@@ -1,21 +1,31 @@
-p#notice = notice
+- title 'Converted Data'
+h4 Converted Data
 
-p
-  strong Student:
-  = @diknas_converted.student
-p
-  strong Academic year:
-  = @diknas_converted.academic_year
-p
-  strong Academic term:
-  = @diknas_converted.academic_term
-p
-  strong Grade level:
-  = @diknas_converted.grade_level
-p
-  strong Notes:
-  = @diknas_converted.notes
+nav
+  .nav-wrapper
+    ul
+      li 
+        = link_to :back
+          |Back
+          i.material-icons.left chevron_left
+    ul.right
+      li
+        = link_to converted_reports_path(s: @grade_section_id, st: @diknas_converted.student_id, year: @diknas_converted.academic_year_id, term: @diknas_converted.academic_term_id)
+          i.material-icons import_contacts
 
-= link_to 'Edit', edit_diknas_converted_path(@diknas_converted)
-'|
-= link_to 'Back', diknas_converteds_path
+.card-panel
+  h5 #{@student.name} (#{@diknas_converted.grade_level.name}) - (#{@diknas_converted.academic_term.name})
+  table.compact.striped style="width: 80%"
+    thead
+      tr
+        th Course
+        th Praktek
+        th Teori
+
+    tbody
+      - @diknas_converted_items.each do |ci| 
+        tr
+          td = ci.diknas_conversion.try(:diknas_course).try(:name).try(:titlecase)
+          td = ci.p_score
+          td = ci.t_score
+

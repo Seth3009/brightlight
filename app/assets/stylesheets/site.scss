@@ -1655,6 +1655,10 @@ section {
 	.template-closing{
 		table { page-break-inside: avoid; }
 	}
+
+	footer {
+		display:none;
+	}
 	
 }
 

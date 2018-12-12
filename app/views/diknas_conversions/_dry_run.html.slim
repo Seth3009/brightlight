@@ -1,0 +1,27 @@
+strong = "#{@student.name} (#{@diknas_conversion.grade_level.name})"
+table.compact.striped style="width: 80%"
+  thead
+    tr
+      th Course
+      th Semester
+      th Value
+
+  tbody
+    - @diknas_conversion.diknas_conversion_lists.each do |list_item| 
+      tr
+        td = list_item.conversion.try(:diknas_course).try(:name)
+        td = AcademicTerm.find(list_item.conversion.academic_term_id).try(:name)
+        td = list_item.conversion.value_for @student.id
+
+    - @diknas_conversion.diknas_conversion_items.each do |ci| 
+      tr
+        td = Course.find(ci.course_id).try(:name)
+        td = AcademicTerm.find(ci.academic_term_id).try(:short_name)
+        td = DiknasReportCard.value_for student_id: @student.id, academic_year_id: ci.academic_year_id, academic_term_id: ci.academic_term_id, course_id: ci.course_id
+
+  tfoot
+    tr style="font-weight: bold; border-top: 1px solid grey"
+      td Converted value
+      td 
+        em = "(#{DiknasConverted.value_for @student, @diknas_conversion})"
+      td = @diknas_conversion.value_for @student.id

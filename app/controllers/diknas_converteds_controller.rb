@@ -6,12 +6,19 @@ class DiknasConvertedsController < ApplicationController
   def index
     authorize! :read, DiknasConverted    
     respond_to do |format|
-      format.html {
-        items_per_page = 10  
-          @diknas_converteds = DiknasConverted.all
-        # @diknas_converteds = DiknasReportCard.select(:student_id).group(:student_id)
-        # @diknas_converted = DiknasConvertedItem.joins('left join diknas_converteds on diknas_converteds.id = diknas_converted_items.diknas_converted_id')                                          
-                                # .paginate(page: params[:page], per_page: items_per_page)
+      format.html { 
+        @diknas_converteds = DiknasConverted.all
+          .paginate(page: params[:page], per_page: 30)
+
+        if params[:term].present?
+          @diknas_converteds = @diknas_converteds.where(academic_term_id: params[:term])
+          @academic_term = AcademicTerm.find params[:term]
+        end
+        if params[:grade].present?
+          @diknas_converteds = @diknas_converteds.where(grade_level_id: params[:grade])
+          @grade_level = GradeLevel.find params[:grade]
+        end
+
       }
     end
   end
@@ -19,6 +26,17 @@ class DiknasConvertedsController < ApplicationController
   # GET /diknas_converteds/1
   # GET /diknas_converteds/1.json
   def show
+    @student = @diknas_converted.student
+    @grade_section_id = GradeSectionsStudent.where(academic_year: @diknas_converted.academic_year_id, student_id: @diknas_converted.student_id).take.grade_section_id
+    @diknas_converted_items = @diknas_converted.diknas_converted_items
+    .joins('left join diknas_conversions on diknas_conversions.id = diknas_converted_items.diknas_conversion_id')                          
+    .joins('left join diknas_courses on diknas_courses.id = diknas_conversions.diknas_course_id')
+    @ipa = @diknas_converted_items.where('lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ?','kimia','biologi','fisika')
+    if @ipa.present?
+      @diknas_converted_items = @diknas_converted_items.order('diknas_courses.number')
+    else
+      @diknas_converted_items = @diknas_converted_items.order('diknas_courses.number2')
+    end
   end
 
   # GET /diknas_converteds/new
@@ -70,6 +88,60 @@ class DiknasConvertedsController < ApplicationController
     end
   end
 
+
+  #get /diknas_converteds/reports
+  def reports
+    @year_id = params[:year] || AcademicYear.current_id    
+    @academic_year = AcademicYear.find @year_id
+    @term_ids = AcademicTerm.where(academic_year_id:@year_id) if @year_id.present?
+    @aspek = ["Kedisiplinan","Kebersihan","Kesehatan","Tanggung Jawab", "Sopan Santun", "Percaya Diri","Kompetitif","Hubungan Sosial","Kejujuran","Pelaksanaan Ibadah Ritual"]
+    if params[:s].present?
+      @grade_section = GradeSection.find(params[:s])
+      @grade_level = @grade_section.grade_level
+      @all_students = @grade_section.students_for_academic_year(@year_id)            
+    end
+    
+    @term = AcademicTerm.find params[:term] if params[:term].present?
+
+    if params[:st].present?
+      # A student is selected, here we load only the specified student
+      @student = Student.find params[:st]      
+      @student_list = @all_students.where(student:@student)
+      @next_in_list = @all_students.where(order_no: @student_list.take.try(:order_no) + 1).take
+      gss = @student_list.take
+      @grade_section = gss.try(:grade_section)
+      @roster_no = gss.order_no      
+      @diknas = DiknasConvertedItem.where(diknas_converteds:{academic_year_id:@year_id,student_id:params[:st],academic_term_id:params[:term]}).all
+              .joins('left join diknas_conversions on diknas_conversions.id = diknas_converted_items.diknas_conversion_id')
+              .joins('left join diknas_courses on diknas_courses.id = diknas_conversions.diknas_course_id')                
+              .joins('left join diknas_converteds on diknas_converteds.id = diknas_converted_items.diknas_converted_id')
+              .joins('left join students on students.id = diknas_converteds.student_id')                  
+              .joins('left join grade_levels on grade_levels.id = diknas_conversions.grade_level_id')
+      @ipa = @diknas.where('lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ?','kimia','biologi','fisika')
+      if @ipa.present?
+        @diknas = @diknas.order('diknas_courses.number')
+      else
+        @diknas = @diknas.order('diknas_courses.number2')
+      end
+    end
+
+    
+    if @diknas.present?
+      @student = @diknas.first.diknas_converted.student
+      @grade = @diknas.first.diknas_conversion.grade_level.name
+      @grade_name = @grade.delete "Grade "
+      @grade_roman = GradeLevel.roman(@grade_name.to_i) 
+    end
+    respond_to do |format|
+      format.html do
+        @grade_level_ids = GradeLevel.all.order(:id).collect(&:id)
+        @grade_sections = GradeSection.all.order(:grade_level_id, :id)
+        @grade_sections_ids = @grade_sections.collect(&:id)
+      end
+    end
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_diknas_converted
@@ -78,7 +150,7 @@ class DiknasConvertedsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diknas_converted_params
-      # params.require(:diknas_converted).permit(:student_id, :academic_year_id, :academic_term_id, :grade_level_id, :notes)
-      params.require(:diknas_converted).permit(:student_id, :academic_year_id, :academic_term_id, :grade_level_id, :notes, diknas_converted_items_attributes[:id, :diknas_conversion_id, :p_score, :t_score])
+      params.require(:diknas_converted).permit(:student_id, :academic_year_id, :academic_term_id, :grade_level_id, :notes, 
+        diknas_converted_items_attributes[:id, :diknas_conversion_id, :p_score, :t_score])
     end
 end
