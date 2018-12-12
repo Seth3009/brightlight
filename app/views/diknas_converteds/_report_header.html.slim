@@ -21,8 +21,9 @@
     | Nama Sekolah
   .col.s5
     | : SMA Cahaya Bangsa Classical School
-  .col.s2
-    | Program #{@grade_level.name}
-  .col.s3
-    = @ipa.present? ? ": IPA" : ": IPS"
+  - if @grade_name.to_i > 10  
+    .col.s2
+      | Program
+    .col.s3
+      = @ipa.present? ? ": IPA" : ": IPS"
       
