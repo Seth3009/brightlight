@@ -23,6 +23,7 @@ class DiknasConversionsController < ApplicationController
   # GET /diknas_conversions/1
   # GET /diknas_conversions/1.json
   def show
+    authorize! :read, DiknasConversion 
     @students = Student.joins(:diknas_report_cards)
                 .where(diknas_report_cards: {grade_level: @diknas_conversion.grade_level, academic_term_id: @diknas_conversion.academic_term_id})
                 .uniq.order(:name)
@@ -30,16 +31,19 @@ class DiknasConversionsController < ApplicationController
 
   # GET /diknas_conversions/new
   def new
+    authorize! :create, DiknasConversion 
     @diknas_conversion = DiknasConversion.new
   end
 
   # GET /diknas_conversions/1/edit
   def edit
+    authorize! :update, DiknasConversion 
   end
 
   # POST /diknas_conversions
   # POST /diknas_conversions.json
   def create
+    authorize! :create, DiknasConversion 
     @diknas_conversion = DiknasConversion.new(diknas_conversion_params)
 
     respond_to do |format|
@@ -56,6 +60,7 @@ class DiknasConversionsController < ApplicationController
   # PATCH/PUT /diknas_conversions/1
   # PATCH/PUT /diknas_conversions/1.json
   def update
+    authorize! :update, DiknasConversion 
     respond_to do |format|
       if @diknas_conversion.update(diknas_conversion_params)
         format.html { redirect_to @diknas_conversion, notice: 'Diknas conversion was successfully updated.' }
@@ -70,6 +75,7 @@ class DiknasConversionsController < ApplicationController
   # DELETE /diknas_conversions/1
   # DELETE /diknas_conversions/1.json
   def destroy
+    authorize! :destroy, DiknasConversion 
     @diknas_conversion.destroy
     respond_to do |format|
       format.html { redirect_to diknas_conversions_url, notice: 'Diknas conversion was successfully destroyed.' }
@@ -78,6 +84,7 @@ class DiknasConversionsController < ApplicationController
   end
 
   def dry_run
+    authorize! :read, DiknasConversion 
     respond_to do |format|
       format.js { @student = Student.find params[:student_id] }
     end

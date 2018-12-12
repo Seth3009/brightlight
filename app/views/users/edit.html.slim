@@ -18,39 +18,10 @@ h4 Editing User
       .input-field.col.s2
         = label_tag "Roles:"
     .row 
-      .input-field.col.s2
-        = check_box_tag "user[roles][]", 'admin', @user.roles.include?(:admin), {id: :admin, multiple: true}
-        = label_tag :admin
-      .input-field.col.s2
-        = check_box_tag "user[roles][]", 'manager', @user.roles.include?(:manager), {id: :manager, multiple: true}
-        = label_tag :manager
-      .input-field.col.s2       
-        = check_box_tag "user[roles][]", 'teacher', @user.roles.include?(:teacher), {id: :teacher, multiple: true}
-        = label_tag :teacher      
-      .input-field.col.s2
-        = check_box_tag "user[roles][]", 'staff', @user.roles.include?(:staff), {id: :staff, multiple: true}
-        = label_tag :staff
-      .input-field.col.s2
-        = check_box_tag "user[roles][]", 'inventory', @user.roles.include?(:inventory), {id: :inventory, multiple: true}
-        = label_tag :inventory      
-      .input-field.col.s2       
-        = check_box_tag "user[roles][]", 'carpool', @user.roles.include?(:carpool), {id: :carpool, multiple: true}
-        = label_tag :carpool  
-      .input-field.col.s2       
-        = check_box_tag "user[roles][]", 'student', @user.roles.include?(:student), {id: :student, multiple: true}
-        = label_tag :student 
-      .input-field.col.s2
-        = check_box_tag "user[roles][]", 'hrd', @user.roles.include?(:hrd), {id: :hrd, multiple: true}
-        = label_tag :hrd
-      .input-field.col.s2
-        = check_box_tag "user[roles][]", 'purchasing', @user.roles.include?(:purchasing), {id: :purchasing, multiple: true}
-        = label_tag :purchasing
-      .input-field.col.s2
-        = check_box_tag "user[roles][]", 'buyer', @user.roles.include?(:buyer), {id: :buyer, multiple: true}
-        = label_tag :buyer
-      .input-field.col.s2
-        = check_box_tag "user[roles][]", 'approve_budget', @user.roles.include?(:approve_budget), {id: :approve_budget, multiple: true}
-        = label_tag :approve_budget
+      -User::ROLES.each do |role|
+        .input-field.col.s2
+          = check_box_tag "user[roles][]", role, @user.roles.include?(role), {id: role, multiple: true}
+          = label_tag role
 
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save

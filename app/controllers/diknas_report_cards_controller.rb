@@ -4,6 +4,7 @@ class DiknasReportCardsController < ApplicationController
   # GET /diknas_report_cards
   # GET /diknas_report_cards.json
   def index
+    authorize! :read, DiknasReportCard
     @diknas_report_cards = DiknasReportCard
                             .includes([:student, :academic_year, :academic_term, :grade_level])
                             .select([:student_id, :grade_level_id, :grade_section_id, :academic_year_id, :academic_term_id])
@@ -24,6 +25,7 @@ class DiknasReportCardsController < ApplicationController
   # GET /diknas_report_cards/1
   # GET /diknas_report_cards/1.json
   def show
+    authorize! :read, DiknasReportCard
     @academic_year = AcademicYear.find params[:year]
     @student = Student.find params[:id]
     @grade_level = GradeLevel.find params[:grade]
@@ -34,16 +36,19 @@ class DiknasReportCardsController < ApplicationController
 
   # GET /diknas_report_cards/new
   def new
+    authorize! :create, DiknasReportCard
     @diknas_report_card = DiknasReportCard.new
   end
 
   # GET /diknas_report_cards/1/edit
   def edit
+    authorize! :update, DiknasReportCard
   end
 
   # POST /diknas_report_cards
   # POST /diknas_report_cards.json
   def create
+    authorize! :create, DiknasReportCard
     @diknas_report_card = DiknasReportCard.new(diknas_report_card_params)
 
     respond_to do |format|
@@ -60,6 +65,7 @@ class DiknasReportCardsController < ApplicationController
   # PATCH/PUT /diknas_report_cards/1
   # PATCH/PUT /diknas_report_cards/1.json
   def update
+    authorize! :update, DiknasReportCard
     respond_to do |format|
       if @diknas_report_card.update(diknas_report_card_params)
         format.html { redirect_to @diknas_report_card, notice: 'Diknas report card was successfully updated.' }
@@ -74,6 +80,7 @@ class DiknasReportCardsController < ApplicationController
   # DELETE /diknas_report_cards/1
   # DELETE /diknas_report_cards/1.json
   def destroy
+    authorize! :destroy, DiknasReportCard
     @diknas_report_card.destroy
     respond_to do |format|
       format.html { redirect_to diknas_report_cards_url, notice: 'Diknas report card was successfully destroyed.' }
