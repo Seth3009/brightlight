@@ -20,6 +20,8 @@ br
     | ________________________
   .col.s4.center
     | ________________________
+    br
+    = Department.find_by_code('SOR').try(:manager).try(:name)
 .page-break
 
 
