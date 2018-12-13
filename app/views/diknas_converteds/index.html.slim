@@ -12,6 +12,12 @@ nav
         a.dropdown-button href="#!" data-activates="grade-options"
           span#grade = @grade_level.present? ? "#{@grade_level.name}" : "Grade" 
           i.material-icons.right arrow_drop_down
+    ul.right
+      li
+        -if params[:term].present? && params[:grade].present?
+          = link_to convert_diknas_report_cards_path(params.merge(term: params[:term], grade: params[:grade], recalc:1)), class:'red-text', data: {:confirm => 'Are you sure?'}
+            | Recalculate
+            i.material-icons.left donut_small
 
 ul#term-options.dropdown-content
   li  
