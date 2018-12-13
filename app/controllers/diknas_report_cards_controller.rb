@@ -109,6 +109,9 @@ class DiknasReportCardsController < ApplicationController
 
   def convert 
     authorize! :create, DiknasReportCard
+    if params[:recalc].present?
+      DiknasConverted.where(academic_term_id: params[:term], grade_level_id: params[:grade]).destroy_all
+    end
     DiknasReportCard.convert(academic_term_id: params[:term], grade_level_id: params[:grade])
     redirect_to diknas_converteds_path
   end
