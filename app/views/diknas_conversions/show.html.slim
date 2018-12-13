@@ -31,7 +31,7 @@ nav
       .label Grade
       .item = @diknas_conversion.grade_level.name
 
--if @diknas_conversion.conversions.present?
+-if @diknas_conversion.diknas_conversion_lists.present?
   .card-panel
     table.compact.striped
       thead
@@ -55,6 +55,7 @@ nav
           th Academic Year
           th Academic Term
           th Weight
+          th Substitute?
           th Notes
       tbody
         -@diknas_conversion.diknas_conversion_items.each do |conversion_item|
@@ -63,6 +64,8 @@ nav
             td = conversion_item.academic_year.try(:name)
             td = conversion_item.academic_term.try(:short_name)
             td = conversion_item.weight
+            td 
+              span.green = conversion_item.substitute ? '&#x2611;'.html_safe : ''
             td = conversion_item.notes
 
 nav
