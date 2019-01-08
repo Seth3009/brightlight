@@ -18,7 +18,8 @@ class RawFoodsController < ApplicationController
 
   # GET /raw_foods/new
   def new
-    @raw_food = RawFood.new
+    @raw_food = RawFood.new    
+    @people = ['Liter','Milli']
   end
 
   # GET /raw_foods/1/edit

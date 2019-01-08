@@ -21,10 +21,10 @@
         .row
             .input-field.col.s6
                 = f.label :food_type, class:'active'
-                = f.select :food_type, ["Solid","Liquid"]        
+                = f.select :food_type, ["Liquid","Solid"]
             .input-field.col.s6
                 = f.label :unit, class:'active'
-                = f.select :unit, ["Liter"]
+                = f.select :unit, ["Liter","Milliliter","Kilogram","Gram"]
     .modal-footer
         button.btn.btn-flat.btnsubmit.waves-effect.waves-light.modal-action.modal-close type="submit" Save
         a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
