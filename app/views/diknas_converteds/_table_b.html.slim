@@ -24,12 +24,13 @@
               - else
                 = course.diknas_conversion.diknas_course.name.titlecase
             td.center
-              - if course.p_score > 70
-                | TERLAMPAUI
-              - elsif course.p_score < 70
-                | BELUM TERCAPAI
-              - else
-                | TERCAPAI
+              - if course.p_score.present?
+                - if course.p_score > 70
+                  | TERLAMPAUI
+                - elsif course.p_score < 70
+                  | BELUM TERCAPAI
+                - else
+                  | TERCAPAI
             
         tr style="font-weight:bold;"
           td.center B.

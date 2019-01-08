@@ -69,19 +69,20 @@ class DiknasReportCard < ActiveRecord::Base
         DiknasConversion.where(academic_term_id: academic_term_id, grade_level_id: grade_level_id)
           .each do |diknas_conversion|
             score = diknas_conversion.value_for(student.id)
+            score = score.nan? || score == Float::INFINITY ? nil : score
             converted_item = dc.diknas_converted_items.find_by(diknas_conversion_id: diknas_conversion.id)
             if converted_item.present?
               converted_item.update(
                 p_score: score,
                 t_score: score
-              ) unless converted_item.p_score.nan? || converted_item.p_score == Float::INFINITY
+              ) 
             else
               converted_item = DiknasConvertedItem.new(
                 diknas_conversion_id: diknas_conversion.id,
                 p_score: score,
                 t_score: score
               )
-              dc.diknas_converted_items << converted_item unless converted_item.p_score.nan? || converted_item.p_score == Float::INFINITY
+              dc.diknas_converted_items << converted_item
             end
           end
       end

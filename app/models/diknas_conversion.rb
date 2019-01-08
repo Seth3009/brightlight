@@ -27,7 +27,7 @@ class DiknasConversion < ActiveRecord::Base
     values = course_values(student_id).reject(&:nil?) 
     average = values.sum.to_f / values.count
     
-    average.nan? || average == Float::INFINITY ? average : average.ceil # always round up
+    average.nan? || average == Float::INFINITY ? average : average.ceil.to_f # always round up
   end
 
   def course_values(student_id) 

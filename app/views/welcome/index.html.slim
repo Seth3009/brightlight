@@ -368,28 +368,26 @@
                 li
                   = link_to 'Activity Schedules', activity_schedules_path
 
-      - if signed_in? and current_user.admin?
-      .col.m4.s6
-        .card.horizontal.widget
-          .card-image.waves-effect.waves-block.waves-light
-            = image_tag '', class:'activator'
-          .card-stacked
-            = image_tag 'beta.jpg', size:'60x56', style:"position: absolute; right: 0"
-            .card-content
-              span.card-title.activator.grey-text.text-darken-4 
+      - if can? :read, DiknasConversion
+        .col.m4.s6
+          .card.horizontal.widget
+            .card-image.waves-effect.waves-block.waves-light
+              = image_tag 'raport_diknas.jpg', class:'activator'
+            .card-stacked
+              .card-content
+                span.card-title.activator.grey-text.text-darken-4 
+                  |Raport Diknas
+                  i.activator.material-icons.right more_vert
+                p SOR Raport Diknas
+            .card-reveal
+              span.card-title.grey-text.text-darken-4
                 |Raport Diknas
-                i.activator.material-icons.right more_vert
-              p Raport Diknas Convertion
-              p.red-text This feature is in beta testing. You are welcome to try it. Please report any problems to IT.
-          .card-reveal
-            span.card-title.grey-text.text-darken-4
-              |Raport Diknas
-              i.material-icons.right close
-            .card-content
-              ul
-                li
-                  = link_to 'Import Grade Book', diknas_report_cards_path
-                li
-                  = link_to 'Conversion Setting', diknas_conversions_path 
-                li
-                  = link_to 'Convert Grade Book', diknas_converteds_path
+                i.material-icons.right close
+              .card-content
+                ul
+                  li
+                    = link_to 'Import Grade Book', diknas_report_cards_path
+                  li
+                    = link_to 'Conversion Setting', diknas_conversions_path 
+                  li
+                    = link_to 'Convert Grade Book', diknas_converteds_path
