@@ -42,7 +42,7 @@
       .row
         .input-field.col.s2
           = f.label :currency, class: 'active'
-          = f.select :currency, [['USD', 'USD'], ['IDR', 'IDR']]          
+          = f.select :currency, [['USD', 'USD'], ['IDR', 'IDR']], {} ,  {class: "materialish"}
         .input-field.col.s2
           = f.label :price, class: 'active'
           = f.number_field :price, step: 0.01
