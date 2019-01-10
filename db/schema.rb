@@ -648,20 +648,6 @@ ActiveRecord::Schema.define(version: 20190110081821) do
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
 
-  create_table "diknas_academic_terms", force: :cascade do |t|
-    t.string   "name"
-    t.text     "notes"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "diknas_academic_years", force: :cascade do |t|
-    t.string   "name"
-    t.text     "notes"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "diknas_conversion_items", force: :cascade do |t|
     t.integer  "diknas_conversion_id"
     t.integer  "course_id"
@@ -669,8 +655,9 @@ ActiveRecord::Schema.define(version: 20190110081821) do
     t.integer  "academic_term_id"
     t.integer  "weight"
     t.text     "notes"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.boolean  "substitute",           default: false
   end
 
   add_index "diknas_conversion_items", ["academic_term_id"], name: "index_diknas_conversion_items_on_academic_term_id", using: :btree
@@ -732,14 +719,6 @@ ActiveRecord::Schema.define(version: 20190110081821) do
   add_index "diknas_converteds", ["grade_level_id"], name: "index_diknas_converteds_on_grade_level_id", using: :btree
   add_index "diknas_converteds", ["student_id"], name: "index_diknas_converteds_on_student_id", using: :btree
 
-  create_table "diknas_course", force: :cascade do |t|
-    t.string   "number"
-    t.string   "name"
-    t.text     "notes"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "diknas_courses", force: :cascade do |t|
     t.integer  "number"
     t.string   "name"
@@ -748,16 +727,6 @@ ActiveRecord::Schema.define(version: 20190110081821) do
     t.datetime "updated_at", null: false
     t.integer  "number2"
     t.integer  "sort_num"
-  end
-
-  create_table "diknas_gradebooks", force: :cascade do |t|
-    t.string   "studentname"
-    t.string   "grade"
-    t.string   "class"
-    t.string   "avg"
-    t.string   "semester"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
   end
 
   create_table "diknas_report_cards", force: :cascade do |t|
@@ -893,48 +862,6 @@ ActiveRecord::Schema.define(version: 20190110081821) do
   add_index "fine_scales", ["new_condition_id"], name: "index_fine_scales_on_new_condition_id", using: :btree
   add_index "fine_scales", ["old_condition_id"], name: "index_fine_scales_on_old_condition_id", using: :btree
 
-  create_table "food_packages", force: :cascade do |t|
-    t.string   "packaging"
-    t.float    "package_contents"
-    t.string   "unit"
-    t.integer  "raw_food_id"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.float    "qty",              default: 0.0
-    t.boolean  "is_active",        default: true
-  end
-
-  add_index "food_packages", ["raw_food_id"], name: "index_food_packages_on_raw_food_id", using: :btree
-
-  create_table "food_packs", force: :cascade do |t|
-    t.integer  "g1"
-    t.integer  "g2"
-    t.integer  "g3"
-    t.integer  "g4"
-    t.integer  "g5"
-    t.integer  "g6"
-    t.integer  "g7"
-    t.integer  "g8"
-    t.integer  "g9"
-    t.integer  "g10"
-    t.integer  "g11"
-    t.integer  "g12"
-    t.integer  "employee"
-    t.integer  "academic_year_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-  end
-
-  add_index "food_packs", ["academic_year_id"], name: "index_food_packs_on_academic_year_id", using: :btree
-
-  create_table "foods", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "ingredients", default: 0
-    t.boolean  "is_active",   default: true
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-  end
-
   create_table "grade_levels", force: :cascade do |t|
     t.string   "name"
     t.integer  "order_no"
@@ -1010,7 +937,7 @@ ActiveRecord::Schema.define(version: 20190110081821) do
   create_table "gradebook", force: :cascade do |t|
     t.string   "studentname"
     t.string   "grade"
-    t.string   "class"
+    t.string   "gradeclass"
     t.decimal  "avg"
     t.string   "semester"
     t.datetime "created_at",  null: false
@@ -1420,17 +1347,6 @@ ActiveRecord::Schema.define(version: 20190110081821) do
   add_index "purchase_orders", ["last_updated_by_id"], name: "index_purchase_orders_on_last_updated_by_id", using: :btree
   add_index "purchase_orders", ["requestor_id"], name: "index_purchase_orders_on_requestor_id", using: :btree
   add_index "purchase_orders", ["term_of_payment_id"], name: "index_purchase_orders_on_term_of_payment_id", using: :btree
-
-  create_table "raw_foods", force: :cascade do |t|
-    t.string   "name"
-    t.boolean  "is_stock"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.boolean  "is_active",  default: true
-    t.float    "stock",      default: 0.0
-    t.string   "unit"
-    t.string   "food_type",  default: "-"
-  end
 
   create_table "recurring_types", force: :cascade do |t|
     t.string   "name"
@@ -2064,8 +1980,6 @@ ActiveRecord::Schema.define(version: 20190110081821) do
   add_foreign_key "family_members", "families"
   add_foreign_key "family_members", "guardians"
   add_foreign_key "family_members", "students"
-  add_foreign_key "food_packages", "raw_foods"
-  add_foreign_key "food_packs", "academic_years"
   add_foreign_key "invoices", "academic_years"
   add_foreign_key "invoices", "students"
   add_foreign_key "invoices", "users"
