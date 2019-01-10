@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @food.name
+p
+  strong Ingredients:
+  = @food.ingredients
+p
+  strong Is active:
+  = @food.is_active
+
+= link_to 'Edit', edit_food_path(@food)
+'|
+= link_to 'Back', foods_path

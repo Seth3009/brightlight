@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181212030141) do
+ActiveRecord::Schema.define(version: 20190109055603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -862,6 +862,35 @@ ActiveRecord::Schema.define(version: 20181212030141) do
   end
 
   add_index "food_packages", ["raw_food_id"], name: "index_food_packages_on_raw_food_id", using: :btree
+
+  create_table "food_packs", force: :cascade do |t|
+    t.integer  "g1"
+    t.integer  "g2"
+    t.integer  "g3"
+    t.integer  "g4"
+    t.integer  "g5"
+    t.integer  "g6"
+    t.integer  "g7"
+    t.integer  "g8"
+    t.integer  "g9"
+    t.integer  "g10"
+    t.integer  "g11"
+    t.integer  "g12"
+    t.integer  "employee"
+    t.integer  "academic_year_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "food_packs", ["academic_year_id"], name: "index_food_packs_on_academic_year_id", using: :btree
+
+  create_table "foods", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "ingredients", default: 0
+    t.boolean  "is_active",   default: true
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
 
   create_table "grade_levels", force: :cascade do |t|
     t.string   "name"
@@ -1992,6 +2021,7 @@ ActiveRecord::Schema.define(version: 20181212030141) do
   add_foreign_key "family_members", "guardians"
   add_foreign_key "family_members", "students"
   add_foreign_key "food_packages", "raw_foods"
+  add_foreign_key "food_packs", "academic_years"
   add_foreign_key "invoices", "academic_years"
   add_foreign_key "invoices", "students"
   add_foreign_key "invoices", "users"

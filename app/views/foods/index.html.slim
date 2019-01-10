@@ -1,0 +1,25 @@
+h1 Listing foods
+
+table
+  thead
+    tr
+      th Name
+      th Ingredients
+      th Is active
+      th
+      th
+      th
+
+  tbody
+    - @foods.each do |food|
+      tr
+        td = food.name
+        td = food.ingredients
+        td = food.is_active
+        td = link_to 'Show', food
+        td = link_to 'Edit', edit_food_path(food)
+        td = link_to 'Destroy', food, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Food', new_food_path

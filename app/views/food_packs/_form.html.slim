@@ -1,0 +1,51 @@
+= form_for @food_pack do |f|
+  - if @food_pack.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@food_pack.errors.count, "error")} prohibited this food_pack from being saved:"
+      ul
+        - @food_pack.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :g1
+    = f.number_field :g1
+  .field
+    = f.label :g2
+    = f.number_field :g2
+  .field
+    = f.label :g3
+    = f.number_field :g3
+  .field
+    = f.label :g4
+    = f.number_field :g4
+  .field
+    = f.label :g5
+    = f.number_field :g5
+  .field
+    = f.label :g6
+    = f.number_field :g6
+  .field
+    = f.label :g7
+    = f.number_field :g7
+  .field
+    = f.label :g8
+    = f.number_field :g8
+  .field
+    = f.label :g9
+    = f.number_field :g9
+  .field
+    = f.label :g10
+    = f.number_field :g10
+  .field
+    = f.label :g11
+    = f.number_field :g11
+  .field
+    = f.label :g12
+    = f.number_field :g12
+  .field
+    = f.label :employee
+    = f.number_field :employee
+  .field
+    = f.label :academic_year_id
+    = f.collection_select :academic_year_id, AcademicYear.where(:id => 18..20) :id, :name
+  .actions = f.submit
