@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181212030141) do
+ActiveRecord::Schema.define(version: 20190110081821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -893,6 +893,48 @@ ActiveRecord::Schema.define(version: 20181212030141) do
   add_index "fine_scales", ["new_condition_id"], name: "index_fine_scales_on_new_condition_id", using: :btree
   add_index "fine_scales", ["old_condition_id"], name: "index_fine_scales_on_old_condition_id", using: :btree
 
+  create_table "food_packages", force: :cascade do |t|
+    t.string   "packaging"
+    t.float    "package_contents"
+    t.string   "unit"
+    t.integer  "raw_food_id"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.float    "qty",              default: 0.0
+    t.boolean  "is_active",        default: true
+  end
+
+  add_index "food_packages", ["raw_food_id"], name: "index_food_packages_on_raw_food_id", using: :btree
+
+  create_table "food_packs", force: :cascade do |t|
+    t.integer  "g1"
+    t.integer  "g2"
+    t.integer  "g3"
+    t.integer  "g4"
+    t.integer  "g5"
+    t.integer  "g6"
+    t.integer  "g7"
+    t.integer  "g8"
+    t.integer  "g9"
+    t.integer  "g10"
+    t.integer  "g11"
+    t.integer  "g12"
+    t.integer  "employee"
+    t.integer  "academic_year_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "food_packs", ["academic_year_id"], name: "index_food_packs_on_academic_year_id", using: :btree
+
+  create_table "foods", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "ingredients", default: 0
+    t.boolean  "is_active",   default: true
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
   create_table "grade_levels", force: :cascade do |t|
     t.string   "name"
     t.integer  "order_no"
@@ -1378,6 +1420,17 @@ ActiveRecord::Schema.define(version: 20181212030141) do
   add_index "purchase_orders", ["last_updated_by_id"], name: "index_purchase_orders_on_last_updated_by_id", using: :btree
   add_index "purchase_orders", ["requestor_id"], name: "index_purchase_orders_on_requestor_id", using: :btree
   add_index "purchase_orders", ["term_of_payment_id"], name: "index_purchase_orders_on_term_of_payment_id", using: :btree
+
+  create_table "raw_foods", force: :cascade do |t|
+    t.string   "name"
+    t.boolean  "is_stock"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.boolean  "is_active",  default: true
+    t.float    "stock",      default: 0.0
+    t.string   "unit"
+    t.string   "food_type",  default: "-"
+  end
 
   create_table "recurring_types", force: :cascade do |t|
     t.string   "name"
@@ -2011,6 +2064,8 @@ ActiveRecord::Schema.define(version: 20181212030141) do
   add_foreign_key "family_members", "families"
   add_foreign_key "family_members", "guardians"
   add_foreign_key "family_members", "students"
+  add_foreign_key "food_packages", "raw_foods"
+  add_foreign_key "food_packs", "academic_years"
   add_foreign_key "invoices", "academic_years"
   add_foreign_key "invoices", "students"
   add_foreign_key "invoices", "users"
@@ -2146,7 +2201,7 @@ ActiveRecord::Schema.define(version: 20181212030141) do
               max(loan_checks.created_at) AS max_date
              FROM loan_checks
             WHERE (loan_checks.matched = true)
-            GROUP BY loan_checks.loaned_to, loan_checks.matched, loan_checks.book_loan_id, loan_checks.academic_year_id) max_dates ON (((max_dates.book_loan_id = book_loans.id) AND (max_dates.academic_year_id = book_loans.academic_year_id))))
+            GROUP BY loan_checks.matched, loan_checks.book_loan_id, loan_checks.academic_year_id) max_dates ON (((max_dates.book_loan_id = book_loans.id) AND (max_dates.academic_year_id = book_loans.academic_year_id))))
        LEFT JOIN loan_checks l ON (((l.book_loan_id = book_loans.id) AND (l.academic_year_id = book_loans.academic_year_id) AND (l.loaned_to = book_loans.employee_id) AND (l.matched = true) AND (max_dates.book_loan_id = l.book_loan_id) AND (max_dates.max_date = l.created_at))));
   SQL
 
