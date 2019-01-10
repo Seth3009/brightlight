@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181121054623) do
+ActiveRecord::Schema.define(version: 20190110081821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -648,14 +648,73 @@ ActiveRecord::Schema.define(version: 20181121054623) do
   add_index "departments", ["manager_id"], name: "index_departments_on_manager_id", using: :btree
   add_index "departments", ["slug"], name: "index_departments_on_slug", unique: true, using: :btree
 
-  create_table "diknas_gradebooks", force: :cascade do |t|
-    t.string   "studentname"
-    t.string   "grade"
-    t.string   "class"
-    t.string   "avg"
-    t.string   "semester"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+  create_table "diknas_conversion_items", force: :cascade do |t|
+    t.integer  "diknas_conversion_id"
+    t.integer  "course_id"
+    t.integer  "academic_year_id"
+    t.integer  "academic_term_id"
+    t.integer  "weight"
+    t.text     "notes"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "diknas_conversion_items", ["academic_term_id"], name: "index_diknas_conversion_items_on_academic_term_id", using: :btree
+  add_index "diknas_conversion_items", ["academic_year_id"], name: "index_diknas_conversion_items_on_academic_year_id", using: :btree
+  add_index "diknas_conversion_items", ["course_id"], name: "index_diknas_conversion_items_on_course_id", using: :btree
+  add_index "diknas_conversion_items", ["diknas_conversion_id"], name: "index_diknas_conversion_items_on_diknas_conversion_id", using: :btree
+
+  create_table "diknas_conversions", force: :cascade do |t|
+    t.integer  "diknas_course_id"
+    t.integer  "academic_year_id"
+    t.integer  "academic_term_id"
+    t.float    "weight"
+    t.text     "notes"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "grade_level_id"
+  end
+
+  add_index "diknas_conversions", ["academic_term_id"], name: "index_diknas_conversions_on_academic_term_id", using: :btree
+  add_index "diknas_conversions", ["academic_year_id"], name: "index_diknas_conversions_on_academic_year_id", using: :btree
+  add_index "diknas_conversions", ["diknas_course_id"], name: "index_diknas_conversions_on_diknas_course_id", using: :btree
+
+  create_table "diknas_converted_items", force: :cascade do |t|
+    t.integer  "diknas_converted_id"
+    t.integer  "diknas_conversion_id"
+    t.float    "p_score"
+    t.float    "t_score"
+    t.text     "comment"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "diknas_converted_items", ["diknas_conversion_id"], name: "index_diknas_converted_items_on_diknas_conversion_id", using: :btree
+  add_index "diknas_converted_items", ["diknas_converted_id"], name: "index_diknas_converted_items_on_diknas_converted_id", using: :btree
+
+  create_table "diknas_converteds", force: :cascade do |t|
+    t.integer  "student_id"
+    t.integer  "academic_year_id"
+    t.integer  "academic_term_id"
+    t.integer  "grade_level_id"
+    t.text     "notes"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "diknas_converteds", ["academic_term_id"], name: "index_diknas_converteds_on_academic_term_id", using: :btree
+  add_index "diknas_converteds", ["academic_year_id"], name: "index_diknas_converteds_on_academic_year_id", using: :btree
+  add_index "diknas_converteds", ["grade_level_id"], name: "index_diknas_converteds_on_grade_level_id", using: :btree
+  add_index "diknas_converteds", ["student_id"], name: "index_diknas_converteds_on_student_id", using: :btree
+
+  create_table "diknas_courses", force: :cascade do |t|
+    t.integer  "number"
+    t.string   "name"
+    t.text     "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "number2"
+    t.integer  "sort_num"
   end
 
   create_table "diknas_report_cards", force: :cascade do |t|
@@ -664,11 +723,11 @@ ActiveRecord::Schema.define(version: 20181121054623) do
     t.integer  "grade_section_id"
     t.integer  "academic_year_id"
     t.integer  "academic_term_id"
-    t.string   "course_belongs_to"
     t.float    "average"
     t.text     "notes"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "course_id"
   end
 
   add_index "diknas_report_cards", ["academic_term_id"], name: "index_diknas_report_cards_on_academic_term_id", using: :btree
@@ -746,8 +805,8 @@ ActiveRecord::Schema.define(version: 20181121054623) do
     t.boolean  "is_active"
     t.integer  "family_no"
     t.integer  "user_id"
-    t.integer  "approver1"
-    t.integer  "approver2"
+    t.integer  "approver_id"
+    t.integer  "approver_assistant_id"
     t.boolean  "leaderships",                default: false
   end
 
@@ -790,6 +849,48 @@ ActiveRecord::Schema.define(version: 20181121054623) do
 
   add_index "fine_scales", ["new_condition_id"], name: "index_fine_scales_on_new_condition_id", using: :btree
   add_index "fine_scales", ["old_condition_id"], name: "index_fine_scales_on_old_condition_id", using: :btree
+
+  create_table "food_packages", force: :cascade do |t|
+    t.string   "packaging"
+    t.float    "package_contents"
+    t.string   "unit"
+    t.integer  "raw_food_id"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.float    "qty",              default: 0.0
+    t.boolean  "is_active",        default: true
+  end
+
+  add_index "food_packages", ["raw_food_id"], name: "index_food_packages_on_raw_food_id", using: :btree
+
+  create_table "food_packs", force: :cascade do |t|
+    t.integer  "g1"
+    t.integer  "g2"
+    t.integer  "g3"
+    t.integer  "g4"
+    t.integer  "g5"
+    t.integer  "g6"
+    t.integer  "g7"
+    t.integer  "g8"
+    t.integer  "g9"
+    t.integer  "g10"
+    t.integer  "g11"
+    t.integer  "g12"
+    t.integer  "employee"
+    t.integer  "academic_year_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "food_packs", ["academic_year_id"], name: "index_food_packs_on_academic_year_id", using: :btree
+
+  create_table "foods", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "ingredients", default: 0
+    t.boolean  "is_active",   default: true
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
 
   create_table "grade_levels", force: :cascade do |t|
     t.string   "name"
@@ -1277,6 +1378,17 @@ ActiveRecord::Schema.define(version: 20181121054623) do
   add_index "purchase_orders", ["requestor_id"], name: "index_purchase_orders_on_requestor_id", using: :btree
   add_index "purchase_orders", ["term_of_payment_id"], name: "index_purchase_orders_on_term_of_payment_id", using: :btree
 
+  create_table "raw_foods", force: :cascade do |t|
+    t.string   "name"
+    t.boolean  "is_stock"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.boolean  "is_active",  default: true
+    t.float    "stock",      default: 0.0
+    t.string   "unit"
+    t.string   "food_type",  default: "-"
+  end
+
   create_table "recurring_types", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -1658,6 +1770,8 @@ ActiveRecord::Schema.define(version: 20181121054623) do
     t.string   "slug"
     t.string   "place_of_birth"
     t.string   "language"
+    t.string   "nisn"
+    t.string   "nis"
   end
 
   add_index "students", ["family_no"], name: "index_students_on_family_no", using: :btree
@@ -1880,8 +1994,23 @@ ActiveRecord::Schema.define(version: 20181121054623) do
   add_foreign_key "delivery_items", "order_items"
   add_foreign_key "delivery_items", "users", column: "created_by_id"
   add_foreign_key "delivery_items", "users", column: "last_updated_by_id"
+  add_foreign_key "diknas_conversion_items", "academic_terms"
+  add_foreign_key "diknas_conversion_items", "academic_years"
+  add_foreign_key "diknas_conversion_items", "courses"
+  add_foreign_key "diknas_conversion_items", "diknas_conversions"
+  add_foreign_key "diknas_conversions", "academic_terms"
+  add_foreign_key "diknas_conversions", "academic_years"
+  add_foreign_key "diknas_conversions", "diknas_courses"
+  add_foreign_key "diknas_conversions", "grade_levels"
+  add_foreign_key "diknas_converted_items", "diknas_conversions"
+  add_foreign_key "diknas_converted_items", "diknas_converteds"
+  add_foreign_key "diknas_converteds", "academic_terms"
+  add_foreign_key "diknas_converteds", "academic_years"
+  add_foreign_key "diknas_converteds", "grade_levels"
+  add_foreign_key "diknas_converteds", "students"
   add_foreign_key "diknas_report_cards", "academic_terms"
   add_foreign_key "diknas_report_cards", "academic_years"
+  add_foreign_key "diknas_report_cards", "courses"
   add_foreign_key "diknas_report_cards", "grade_levels"
   add_foreign_key "diknas_report_cards", "grade_sections"
   add_foreign_key "diknas_report_cards", "students"
@@ -1891,6 +2020,8 @@ ActiveRecord::Schema.define(version: 20181121054623) do
   add_foreign_key "family_members", "families"
   add_foreign_key "family_members", "guardians"
   add_foreign_key "family_members", "students"
+  add_foreign_key "food_packages", "raw_foods"
+  add_foreign_key "food_packs", "academic_years"
   add_foreign_key "invoices", "academic_years"
   add_foreign_key "invoices", "students"
   add_foreign_key "invoices", "users"
@@ -2026,7 +2157,7 @@ ActiveRecord::Schema.define(version: 20181121054623) do
               max(loan_checks.created_at) AS max_date
              FROM loan_checks
             WHERE (loan_checks.matched = true)
-            GROUP BY loan_checks.loaned_to, loan_checks.matched, loan_checks.book_loan_id, loan_checks.academic_year_id) max_dates ON (((max_dates.book_loan_id = book_loans.id) AND (max_dates.academic_year_id = book_loans.academic_year_id))))
+            GROUP BY loan_checks.matched, loan_checks.book_loan_id, loan_checks.academic_year_id) max_dates ON (((max_dates.book_loan_id = book_loans.id) AND (max_dates.academic_year_id = book_loans.academic_year_id))))
        LEFT JOIN loan_checks l ON (((l.book_loan_id = book_loans.id) AND (l.academic_year_id = book_loans.academic_year_id) AND (l.loaned_to = book_loans.employee_id) AND (l.matched = true) AND (max_dates.book_loan_id = l.book_loan_id) AND (max_dates.max_date = l.created_at))));
   SQL
 
