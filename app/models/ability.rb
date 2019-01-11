@@ -136,7 +136,8 @@ class Ability
   
   def administrative
     can :manage, DiknasReportCard
-    can :manage, DiknasConversion do @user.has_role? :manager end
+    can :read, DiknasConversion
+    can :manage, DiknasConversion if @user.has_role? :manager 
     can :manage, DiknasConverted
     can :manage, DiknasCourse
     can :manage, Course

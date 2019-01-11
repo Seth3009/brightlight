@@ -47,31 +47,12 @@ ul#grade-options.dropdown-content
           td 
             = link_to diknas_conversion_path(diknas_conversion)
               i.material-icons visibility
-            = link_to edit_diknas_conversion_path(diknas_conversion)
-              i.material-icons edit
-            = link_to diknas_conversion, data: {:confirm => 'Are you sure?'}, :method => :delete
-              i.material-icons.red-text delete
+            -if can? :manage, DiknasConversion
+              = link_to edit_diknas_conversion_path(diknas_conversion)
+                i.material-icons edit
+              = link_to diknas_conversion, data: {:confirm => 'Are you sure?'}, :method => :delete
+                i.material-icons.red-text delete
 
-      / - @diknas_conversions.each.with_index do |diknas_conversion, i|
-        / - bg = i.even? ? "#dfdfdf" : "white"
-
-        / - diknas_conversion.diknas_conversion_items.each.with_index do |diknas_conversion_item, idx|
-        /   tr style="background:#{bg}"
-        /     td = diknas_conversion.diknas_course.name if idx==0
-        /     td = diknas_conversion.academic_term.name if idx==0
-        /     td = diknas_conversion.grade_level_id     if idx==0
-        /     td = diknas_conversion_item.course.name
-        /     td = diknas_conversion_item.academic_term.name
-        /     td = diknas_conversion_item.weight
-        /     td = diknas_conversion_item.notes
-        /     td 
-        /       -if idx==0
-        /         = link_to diknas_conversion_path(diknas_conversion)
-        /           i.material-icons visibility
-        /         = link_to edit_diknas_conversion_path(diknas_conversion)
-        /           i.material-icons edit
-        /         = link_to diknas_conversion, data: {:confirm => 'Are you sure?'}, :method => :delete
-        /           i.material-icons.red-text delete
 
 .toolbar.z-depth-1
   = will_paginate @diknas_conversions
