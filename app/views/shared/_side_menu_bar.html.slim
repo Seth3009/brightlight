@@ -175,7 +175,7 @@ li
 				li
 					= link_to 'Courses', courses_path
 
-- if can? :create, DiknasReportCard
+- if can? :manage, DiknasReportCard
 	li
 		.collapsible-header.waves-effect.waves-cyan
 			i.material-icons import_contacts
@@ -185,7 +185,8 @@ li
 			ul
 				li
 					= link_to 'Import Grade Book', diknas_report_cards_path
-					= link_to 'Conversion Setting', diknas_conversions_path 
+					- if can? :manage, DiknasConversion
+						= link_to 'Conversion Setting', diknas_conversions_path 
 					= link_to 'Convert Grade Book', diknas_converteds_path
 					
 li
