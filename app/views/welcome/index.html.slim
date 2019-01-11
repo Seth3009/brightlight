@@ -368,7 +368,7 @@
                 li
                   = link_to 'Activity Schedules', activity_schedules_path
 
-      - if can? :read, DiknasConversion
+      - if can? :manage, DiknasReportCard
         .col.m4.s6
           .card.horizontal.widget
             .card-image.waves-effect.waves-block.waves-light
@@ -387,7 +387,8 @@
                 ul
                   li
                     = link_to 'Import Grade Book', diknas_report_cards_path
-                  li
-                    = link_to 'Conversion Setting', diknas_conversions_path 
+                  - if can? :manage, DiknasConversion
+                    li
+                      = link_to 'Conversion Setting', diknas_conversions_path 
                   li
                     = link_to 'Convert Grade Book', diknas_converteds_path
