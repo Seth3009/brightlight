@@ -33,6 +33,28 @@
     = render 'supplies_transaction_items', f: f
 
     .toolbar.z-depth-1
-      button.btn.waves-effect.waves-light type="submit" name="save" data-disable-with="Please wait..." Save    
+      button.btn.waves-effect.waves-light type="submit" id="save" data-disable=true Save    
       = link_to 'Cancel', supplies_transactions_path, class: "waves-effect waves-light btn-flat"
 
+javascript:  
+  $("form#new_supplies_transaction").submit(function(e) { 
+    $('.btn').attr('data-disable','true')  
+    validateForm(e);
+  });
+
+  function validateForm(ev) {
+    var valid = true;    
+    $('.qty-field').each(function(i, elem) { 
+      var el = $(elem); 
+      if(el.val() == '') {
+        el.addClass('invalid-input') 
+        valid = false;    
+      }
+    });
+    if (!valid) {
+      alert("Qty cannot be blank!")
+      $('.btn').removeAttr('data-disable','data-disable')
+      ev.preventDefault();      
+    } 
+    
+  }
