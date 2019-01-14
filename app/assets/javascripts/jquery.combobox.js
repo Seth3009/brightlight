@@ -43,7 +43,8 @@
          });
 
         input.data("ui-autocomplete")._resizeMenu = function() {
-          this.menu.element.outerWidth( 500 );
+          var w = this.menu.element.parent().width();
+          this.menu.element.outerWidth( w );
         };
 
         // Our items have HTML tags.  The default rendering uses text()

@@ -322,7 +322,9 @@ form {
 
 .input-field .prefix ~ .ui-combobox {
 	margin-left: 3rem;
-	width: calc(100% - 3rem);
+	input.ui-widget {
+		width: calc(100% - 3rem);
+	}
 }
 
 .input-field .prefix ~ select {
