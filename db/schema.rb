@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< acdab8f49037dee996c4c730fbaa06b0e895784d
 ActiveRecord::Schema.define(version: 20190110081821) do
-=======
-ActiveRecord::Schema.define(version: 20181212065126) do
->>>>>>> Select with autocomplete
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
