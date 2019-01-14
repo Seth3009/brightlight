@@ -9,7 +9,7 @@ tr.nested-fields
       = f.hidden_field :in_out, class: 'trx_type'
   td.wd15
     .input-field
-      = f.number_field :qty, value: @supplies_transaction_item
+      = f.number_field :qty, value: @supplies_transaction_item, class: 'qty-field'
   td.wd15
     .input-field
       = label_tag :unit, '', class: 'active'
@@ -18,14 +18,3 @@ tr.nested-fields
     .input-field
       = link_to_remove_association f, class: "waves-effect waves-teal red-text"
         i.material-icons delete
-
-
-javascript:
-  $(document).on('change', '.product_qty', function() {
-      if($('.product_qty').val() < 1) {
-        $("#save").hide();
-      }
-      else {
-        $("#save").show();
-      }
-    });
