@@ -285,10 +285,11 @@ Rails.application.routes.draw do
 
   resources :purchase_orders do
     collection do
-      get 'list'
+      get 'report'
       get 'status'
     end
     member do
+      get 'list'
       get 'letter'
     end
   end

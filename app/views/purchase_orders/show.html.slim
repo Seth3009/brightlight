@@ -15,6 +15,9 @@ nav
           i.material-icons.left play 
     ul.right
       li
+        = link_to list_purchase_order_path(@purchase_order)
+          i.material-icons print
+      li
         = link_to letter_purchase_order_path(@purchase_order)
           i.material-icons print
       li
