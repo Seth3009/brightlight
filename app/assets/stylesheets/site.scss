@@ -664,6 +664,14 @@ nav {
 	    height: 56px;
 	    line-height: 52px;
 		}
+
+		select {
+			border: none;
+			margin-top: 5px;
+			option {
+				color: black;
+			}
+		}
 	}
 	.input-field {
 		padding: 0 15px;
@@ -1674,7 +1682,7 @@ section {
 // ============================================ Print ===========================================
 
 @media print {
-	nav { box-shadow: none !important }
+	nav { display: none }
 	.nav-wrapper { display: none }
 	header {
 		display: table-header-group;
