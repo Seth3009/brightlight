@@ -9,7 +9,7 @@ nav
         = link_to purchase_orders_path
           | Purchase Orders
           i.material-icons.left chevron_left
-      = form_tag(list_purchase_orders_path, method: :get) do
+      = form_tag(report_purchase_orders_path, method: :get) do
         li style="width:110px" class="text-align:center"
           = select_tag :year, year_options_for_select(selected: params[:year] || Date.today.year)
         li style="width:110px" class="text-align:center"
