@@ -36,9 +36,6 @@ h4 Book Assignment
 / The following javascript callback function will turn select elements in the dynamically created row 
 / into MaterializeCSS style selects.
 javascript:
-  $('#book_copy').on('cocoon:after-insert', function() {
-    $('select').material_select();
-  });
   $(document).ready(function() {
     var pressed = false;
     var chars = [];

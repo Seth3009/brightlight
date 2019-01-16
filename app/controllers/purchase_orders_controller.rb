@@ -1,5 +1,5 @@
 class PurchaseOrdersController < ApplicationController
-  before_action :set_purchase_order, only: [:show, :edit, :update, :destroy, :letter]
+  before_action :set_purchase_order, only: [:show, :list, :edit, :update, :destroy, :letter]
 
   # GET /purchase_orders
   # GET /purchase_orders.json
@@ -8,16 +8,24 @@ class PurchaseOrdersController < ApplicationController
     @purchase_orders = PurchaseOrder.all.includes([:requestor, :supplier, :order_items])
   end
 
+    # GET /purchase_orders/report
+  # GET /purchase_orders/report.json
+  def report
+    authorize! :read, PurchaseOrder
+    date = Date.new(params[:year].to_i, params[:month].to_i, params[:day].to_i) rescue Date.today
+    @purchase_orders = PurchaseOrder.where(order_date: date).includes([:requestor, :supplier, order_items: [:req_item]])
+  end
+
   # GET /purchase_orders/1
   # GET /purchase_orders/1.json
   def show
     authorize! :read, PurchaseOrder
   end
 
-  def list
+    # GET /purchase_orders/1/list
+  # GET /purchase_orders/1/list.json
+  def list 
     authorize! :read, PurchaseOrder
-    date = Date.new(params[:year].to_i, params[:month].to_i, params[:day].to_i) rescue Date.today
-    @purchase_orders = PurchaseOrder.where(order_date: date).includes([:requestor, :supplier, order_items: [:req_item]])
   end
 
   def status 

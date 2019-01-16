@@ -6,8 +6,6 @@ $(document).on('ready page:load', function () {
 		accordion : true 				// A setting that changes the collapsible behavior to expandable instead of the default accordion style
 	});
 
-	$('select').material_select();
-
 	$('ul.tabs').tabs();
 
 	$('.dropdown-button').dropdown({

@@ -1,3 +1,20 @@
+nav
+  .nav-wrapper
+    ul
+      li 
+        = link_to purchase_orders_path
+          | All Purchase Orders
+          i.material-icons.left chevron_left
+      li 
+        = link_to list_requisitions_path
+          | Process FPB
+          i.material-icons.left play 
+    ul.right
+      = link_to '#', onclick: 'window.print();return false;' 
+        | Print
+        i.material-icons.left print
+
+br
 -date = @purchase_order.order_date || Date.today
 div
   | Bandung, #{date.strftime("%d %B %Y")}

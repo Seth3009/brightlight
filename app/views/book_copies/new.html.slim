@@ -63,12 +63,6 @@
     = link_to 'Cancel', book_edition_book_copies_path(@book_edition), class: "waves-effect waves-light btn btn-flat"
 
 javascript:
-  // The following callback function will turn select elements in the dynamically created row 
-  // into MaterializeCSS style selects.
-  $('#book_copy').on('cocoon:after-insert', function() {
-    $('select').material_select();
-  });
-
   $("[name$='[barcode]']").codeScanner({
     minEntryChars: 11,
     onScan: function($element, barcode) {
@@ -105,7 +99,6 @@ javascript:
   var insert_values = function (barcode, el) {
     el.find("[name$='[barcode]']:first").val(barcode);
     el.find("[name$='[book_condition_id]']:first").val($("[name$='[book_condition_id]']:last").val());
-    el.find('select').material_select();
     el.find(".add_fields").trigger('click');      
   };
 
