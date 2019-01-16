@@ -1,0 +1,70 @@
+-title = 'Purchase List'
+h4 Daftar Belanja
+
+nav
+  .nav-wrapper
+    ul
+      li 
+        = link_to purchase_orders_path
+          | All Purchase Orders
+          i.material-icons.left chevron_left
+      li 
+        = link_to list_requisitions_path
+          | Process FPB
+          i.material-icons.left play 
+    ul.right
+      li
+        = link_to letter_purchase_order_path(@purchase_order)
+          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="PO Letter" description
+      li
+        = link_to edit_purchase_order_path(@purchase_order)
+          | Edit
+          i.material-icons.left edit
+      li
+        = link_to '#', onclick: 'window.print();return false;' 
+          | Print
+          i.material-icons.left print
+
+br
+table.compact
+  tbody
+    tr
+      td Supplier
+      td = @purchase_order.supplier.try(:company_name)
+      td Order #
+      td = @purchase_order.order_num
+
+    tr
+      td Address
+      td = "#{@purchase_order.supplier.try(:address1)}, #{@purchase_order.supplier.try(:city)}"
+      td Phone
+      td = @purchase_order.supplier.try(:phone)
+
+br
+table.compact.striped.bordered
+  thead
+    tr
+      th.wd25 Description
+      th.right-align Qty
+      th Unit
+      th.right-align Unit price
+      th.right-align Notes
+      th.right-align Total
+
+  tbody
+    - @purchase_order.order_items.each do |item|
+      tr.compact
+        td.wd25 
+          = item.description
+          i.material
+        td.right-align = item.quantity
+        td = item.unit
+        td.right-align = currency(item.unit_price, currency: item.currency)
+        td.right-align = item.notes
+        td.right-align = currency(item.line_amount, currency: item.currency)
+
+  tfoot
+    tr style="font-weight: bold; border-top: 3px double grey; border-bottom: 3px double grey"
+      td colspan=5 Notes
+      td.right-align = currency(@purchase_order.subtotal, currency: @purchase_order.currency)
+
