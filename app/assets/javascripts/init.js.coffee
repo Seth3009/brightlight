@@ -1,11 +1,5 @@
 window.App ||= {}
 
-App.init = ->
-  $('select').material_select()
-
-$(document).on "ready page:load", ->
-  App.init()
-
 # send get forms through turbolinks
 $(document).on "submit", "form[method=get]", ->
   Turbolinks.visit(this.action+(if this.action.indexOf('?') == -1 then '?' else '&')+$(this).serialize())
@@ -23,9 +17,5 @@ $(document).on 'ajax:complete', '.delete-badge', ->
   $(this).parent().html("")
   Materialize.toast "Badge removed", 4000, "green"
 
- # The following callback function will turn select elements in the dynamically created row 
-# into MaterializeCSS style selects.
-$(document).on 'cocoon:after-insert', ->
-  $('select').material_select()
 
 

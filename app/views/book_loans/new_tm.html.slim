@@ -43,9 +43,6 @@ h4 New Book Loan
     = link_to 'Cancel', employee_book_loans_path(@teacher), class: "waves-effect waves-light btn btn-flat"
 
 javascript:
-  $('#book_copy').on('cocoon:after-insert', function() {
-    $('select').material_select();
-  });
   $("[name$='[barcode]']").codeScanner({
     minEntryChars: 11,
     onScan: function($element, barcode) {

@@ -458,27 +458,6 @@ ActiveRecord::Schema.define(version: 20190110081821) do
   add_index "carpools", ["sort_order"], name: "index_carpools_on_sort_order", using: :btree
   add_index "carpools", ["transport_id"], name: "index_carpools_on_transport_id", using: :btree
 
-  create_table "cars", force: :cascade do |t|
-    t.string   "transport_name", limit: 255
-    t.string   "uid",            limit: 255
-    t.string   "family_no",      limit: 255
-    t.integer  "period"
-    t.string   "status",         limit: 255
-    t.string   "category",       limit: 255
-    t.datetime "arrival"
-    t.datetime "departure"
-    t.boolean  "loading",                    default: false, null: false
-    t.float    "sort_order"
-    t.string   "notes",          limit: 255
-    t.integer  "transport_id"
-    t.datetime "inserted_at",                                null: false
-    t.datetime "updated_at",                                 null: false
-    t.string   "period_hash",    limit: 32
-  end
-
-  add_index "cars", ["transport_id", "period_hash"], name: "transport_period_index", unique: true, using: :btree
-  add_index "cars", ["transport_id"], name: "cars_transport_id_index", using: :btree
-
   create_table "comments", force: :cascade do |t|
     t.string   "title",            limit: 50, default: ""
     t.text     "comment"
@@ -1492,10 +1471,6 @@ ActiveRecord::Schema.define(version: 20190110081821) do
   add_index "rosters", ["course_section_id"], name: "index_rosters_on_course_section_id", using: :btree
   add_index "rosters", ["student_id"], name: "index_rosters_on_student_id", using: :btree
 
-  create_table "schema_versions", primary_key: "version", force: :cascade do |t|
-    t.datetime "inserted_at"
-  end
-
   create_table "school_levels", force: :cascade do |t|
     t.string   "name"
     t.string   "code"
@@ -1939,7 +1914,6 @@ ActiveRecord::Schema.define(version: 20190110081821) do
   add_foreign_key "budgets", "users", column: "created_by_id"
   add_foreign_key "budgets", "users", column: "last_updated_by_id"
   add_foreign_key "carpools", "transports"
-  add_foreign_key "cars", "transports", name: "cars_transport_id_fkey"
   add_foreign_key "course_section_histories", "employees", column: "instructor_id"
   add_foreign_key "currencies", "users"
   add_foreign_key "deliveries", "employees", column: "accepted_by_id"

@@ -101,6 +101,9 @@ class Ability
     can :manage, Transport
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
+    can :approve, Requisition do |req|
+      req.supervisor == @user.employee          # User can only approve requisition that is sent to the respective user
+    end
     can_manage_own_leave_request
     can_manage_own_requisition    
   end

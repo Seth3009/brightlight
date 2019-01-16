@@ -5,7 +5,7 @@ class SuppliersController < ApplicationController
   # GET /suppliers.json
   def index
     authorize! :read, Supplier
-    @suppliers = Supplier.all.order(:id)
+    @suppliers = Supplier.all.order(:company_name)
   end
 
   # GET /suppliers/1
@@ -33,7 +33,7 @@ class SuppliersController < ApplicationController
 
     respond_to do |format|
       if @supplier.save
-        format.html { redirect_to @supplier, notice: 'Supplier was successfully created.' }
+        format.html { redirect_to suppliers_url, notice: 'Supplier was successfully created.' }
         format.json { render :show, status: :created, location: @supplier }
       else
         format.html { render :new }
@@ -48,7 +48,7 @@ class SuppliersController < ApplicationController
     authorize! :update, Supplier
     respond_to do |format|
       if @supplier.update(supplier_params)
-        format.html { redirect_to @supplier, notice: 'Supplier was successfully updated.' }
+        format.html { redirect_to suppliers_url, notice: 'Supplier was successfully updated.' }
         format.json { render :show, status: :ok, location: @supplier }
       else
         format.html { render :edit }

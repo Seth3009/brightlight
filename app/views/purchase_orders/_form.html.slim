@@ -12,7 +12,7 @@
           .input-field.col.s12
             i.material-icons.prefix store
             = f.label :supplier, class: 'active'
-            = f.select :supplier_id, options_for_select(Supplier.all.map { |s| [s.company_name, s.id, {'data-contact' => s.try(:contact_name), 'data-mobile' => s.try(:mobile)}] }, f.object.supplier_id), prompt: 'Select supplier'
+            = f.select :supplier_id, options_for_select(Supplier.all.map { |s| [s.company_name, s.id, {'data-contact' => s.try(:contact_name), 'data-mobile' => s.try(:mobile)}] }, f.object.supplier_id), class: 'combobox', prompt: 'Select supplier'
           .input-field.col.s12
             i.material-icons.prefix account_circle
             = f.label :contact, class: 'active'
@@ -43,10 +43,10 @@
           .input-field.col.s6
             = f.label :due_date, class: "active"
             = f.date_field :due_date
-          .input-field.col.s2
+          .input-field.col.s3
             = f.label :currency, class: 'active'
             = f.select :currency, [['IDR', 'IDR'], ['USD', 'USD'], ['SGD', 'SGD'], ['AUD', 'AUD'], ['GBP', 'GBP']]
-          .input-field.col.offset-s4
+          .input-field.col.s3.offset-s3
             = f.label :status, class: "active"
             = f.select :status, options_for_select(PurchaseOrder::Statuses.map{|k,v| [v[:description],v[:code]]})
           .input-field.col.s6
@@ -219,3 +219,9 @@ javascript:
     $(elem).closest('tr').next().toggle();
     $(elem).toggle();
   }
+
+  $(function() {
+    $( "#purchase_order_supplier_id" ).combobox();
+    $( "#purchase_order_supplier_id" ).hide();
+  });
+
