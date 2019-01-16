@@ -10,6 +10,7 @@ class FoodsController < ApplicationController
   # GET /foods/1
   # GET /foods/1.json
   def show
+    @recipes = @food.recipes
   end
 
   # GET /foods/new
@@ -69,6 +70,7 @@ class FoodsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def food_params
-      params.require(:food).permit(:name, :ingredients, :is_active)
+      params.require(:food).permit(:name, :ingredients, :is_active
+                                  {:recipes_attributes => [:food_id, :raw_food_id, :recipe_portion, :qty, :custom_size, :size_divider, :portion_size, :gr1_portion, :gr2_portion, :sol_portion, :sor_portion, :adult_portion, :_destroy]})
     end
 end

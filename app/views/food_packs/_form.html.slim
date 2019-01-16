@@ -47,5 +47,5 @@
     = f.number_field :employee
   .field
     = f.label :academic_year_id
-    = f.collection_select :academic_year_id, AcademicYear.where(:id => 18..20) :id, :name
+    = f.collection_select :academic_year_id, AcademicYear.where(:id => AcademicYear.current.id-3..AcademicYear.current.id), :id, :name
   .actions = f.submit

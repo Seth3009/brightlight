@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :food_packs
-  resources :foods
+  resources :food_packs  
   resources :employee_smartcards
   resources :stock_categories
   resources :stock_items
@@ -33,10 +32,15 @@ Rails.application.routes.draw do
   resources :book_conditions
   resources :student_activities
   
+
+  resources :foods do    
+    resources :recipes, shallow: true, except: [:edit]
+  end
+  
+
   resources :raw_foods do
     resources :food_packages, shallow: true, except: [:edit]
-  end
-  get 'food_packages/:id/edit' => 'food_packages#edit', as: :raw_food_food_package
+  end  
   
   resources :activity_schedules, shallow: true do
     member do

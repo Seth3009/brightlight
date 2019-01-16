@@ -1,0 +1,53 @@
+= form_for [@food, @recipe], remote:true do |f|
+  .modal-content
+    h4 Ingredient
+    - if @recipe.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@recipe.errors.count, "error")} prohibited this recipe from being saved:"
+        ul
+          - @recipe.errors.full_messages.each do |message|
+            li = message
+    .card-panel
+      .row
+        .input-field.col.s6  
+          = f.label :raw_food_id, class:'active'
+          = f.collection_select :raw_food_id, RawFood.all, :id, :name, prompt: true
+          = f.hidden_field :food_id, value:@food.id
+        .input-field.col.s3
+          = f.label :recipe_portion, class:'active'
+          = f.number_field :recipe_portion, disabled:true
+        .input-field.col.s3
+          = f.label :qty, class:'active'
+          = f.text_field :qty
+    h5 Detail Portion
+    .card-panel
+      .row
+        .input-field.col.s4
+          = f.label :custom_size, class:'active'
+          = f.text_field :custom_size
+        .input-field.col.s4
+          = f.label :size_divider, "Devide", class:'active'
+          = f.text_field :size_divider
+        .input-field.col.s4
+          = f.label :portion_size, "Actual qty", class:'active'
+          = f.text_field :portion_size, disabled:true
+      .row
+        .input-field.col.s2
+          = f.label :gr1_portion, "G1-G3", class:'active'
+          = f.text_field :gr1_portion
+        .input-field.col.s2
+          = f.label :gr2_portion, "G4-G6", class:'active'
+          = f.text_field :gr2_portion      
+        .input-field.col.s2
+          = f.label :sol_portion, "SOL", class:'active'
+          = f.text_field :sol_portion
+        .input-field.col.s2
+          = f.label :sor_portion, "SOR", class:'active'
+          = f.text_field :sor_portion
+        .input-field.col.s2
+          = f.label :adult_portion, "Adult", class:'active'
+          = f.text_field :adult_portion
+
+  .modal-footer
+    button.btn.btn-flat.btnsubmit.waves-effect.waves-light.modal-action.modal-close type="submit" Save
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

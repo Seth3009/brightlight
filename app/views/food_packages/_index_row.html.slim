@@ -8,12 +8,10 @@ tr id="row-#{food_package.id}"
          i.material-icons check_box
       - else
          i.material-icons check_box_outline_blank
-   td.center  
-      = link_to raw_food_food_package_url(food_package), remote: true, class: "waves-effect waves-teal"
-         i.material-icons edit
-      / - if food_package.is_active
-      /    = link_to food_package, data: {:confirm => 'Disable package?'}, :method => :delete, class:'red-text'
-      /       i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Disable" thumb_down
-      / - else
-      /    = link_to food_package, data: {:confirm => 'Enable package?'}, :method => :delete, class:'green-text'
-      /       i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Enable" thumb_up
+   td.center        
+      - if food_package.is_active
+         = link_to food_package, data: {:confirm => 'Disable package?'}, :method => :delete, class:'red-text'
+            i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Disable" thumb_down
+      - else
+         = link_to food_package, data: {:confirm => 'Enable package?'}, :method => :delete, class:'green-text'
+            i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Enable" thumb_up

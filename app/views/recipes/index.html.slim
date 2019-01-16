@@ -13,7 +13,7 @@ nav
           | Ingredients count: #{@food.ingredients.to_i}
     ul.right
       li
-        = link_to new_food_recipe_url(params[:id]), remote:true
+        = link_to new_food_recipe_url(params[:food_id]), remote:true
           | Add Ingredient
 .card-panel
   table.compact.striped
@@ -21,6 +21,7 @@ nav
       tr
         th Raw food
         th Food unit
+        th Std Qty
         th Size per slice
         th Divide
         th Portion in slice

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190109055603) do
+ActiveRecord::Schema.define(version: 20190115015300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1389,6 +1389,26 @@ ActiveRecord::Schema.define(version: 20190109055603) do
     t.string   "food_type",  default: "-"
   end
 
+  create_table "recipes", force: :cascade do |t|
+    t.integer  "food_id"
+    t.integer  "raw_food_id"
+    t.integer  "recipe_portion", default: 710
+    t.float    "qty",            default: 0.0
+    t.float    "custom_size",    default: 0.0
+    t.float    "size_divider",   default: 0.0
+    t.float    "portion_size",   default: 0.0
+    t.float    "gr1_portion",    default: 0.0
+    t.float    "gr2_portion",    default: 0.0
+    t.float    "sol_portion",    default: 0.0
+    t.float    "sor_portion",    default: 0.0
+    t.float    "adult_portion",  default: 0.0
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "recipes", ["food_id"], name: "index_recipes_on_food_id", using: :btree
+  add_index "recipes", ["raw_food_id"], name: "index_recipes_on_raw_food_id", using: :btree
+
   create_table "recurring_types", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -2059,6 +2079,8 @@ ActiveRecord::Schema.define(version: 20190109055603) do
   add_foreign_key "purchase_orders", "suppliers"
   add_foreign_key "purchase_orders", "users", column: "created_by_id"
   add_foreign_key "purchase_orders", "users", column: "last_updated_by_id"
+  add_foreign_key "recipes", "foods"
+  add_foreign_key "recipes", "raw_foods"
   add_foreign_key "reminders", "messages"
   add_foreign_key "reminders", "recurring_types"
   add_foreign_key "req_items", "order_items"
@@ -2157,7 +2179,7 @@ ActiveRecord::Schema.define(version: 20190109055603) do
               max(loan_checks.created_at) AS max_date
              FROM loan_checks
             WHERE (loan_checks.matched = true)
-            GROUP BY loan_checks.loaned_to, loan_checks.matched, loan_checks.book_loan_id, loan_checks.academic_year_id) max_dates ON (((max_dates.book_loan_id = book_loans.id) AND (max_dates.academic_year_id = book_loans.academic_year_id))))
+            GROUP BY loan_checks.matched, loan_checks.book_loan_id, loan_checks.academic_year_id) max_dates ON (((max_dates.book_loan_id = book_loans.id) AND (max_dates.academic_year_id = book_loans.academic_year_id))))
        LEFT JOIN loan_checks l ON (((l.book_loan_id = book_loans.id) AND (l.academic_year_id = book_loans.academic_year_id) AND (l.loaned_to = book_loans.employee_id) AND (l.matched = true) AND (max_dates.book_loan_id = l.book_loan_id) AND (max_dates.max_date = l.created_at))));
   SQL
 

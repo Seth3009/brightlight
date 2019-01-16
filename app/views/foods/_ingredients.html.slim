@@ -1,0 +1,16 @@
+tr id="row-#{recipe.id}"     
+  td = recipe.raw_food.name
+  td = recipe.raw_food.unit
+  td = recipe.custom_size
+  td = recipe.size_divider
+  td = recipe.portion_size
+  td = recipe.gr1_portion
+  td = recipe.gr2_portion
+  td = recipe.sol_portion
+  td = recipe.sor_portion
+  td = recipe.adult_portion
+  td
+    = link_to edit_recipe_path(recipe), remote: true, class: "waves-effect waves-teal"
+      i.material-icons edit
+    = link_to recipe, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'            
+      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
