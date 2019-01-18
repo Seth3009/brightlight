@@ -4,10 +4,17 @@ class RecipesController < ApplicationController
   # GET /recipes
   # GET /recipes.json
   def index
+    year = AcademicYear.current_id
+    food_pack = FoodPack.where(academic_year_id:year).first
     if params[:food_id].present?
       @food = Food.find(params[:food_id])
       @recipes = Recipe.where(food_id:@food.id)
-    end    
+    end   
+    @g1_g3 = FoodPack.g1_g3(food_pack)
+    @g4_g6 = FoodPack.g4_g6(food_pack)
+    @sol = FoodPack.sol(food_pack)
+    @sor = FoodPack.sor(food_pack)
+    @adult = food_pack.employee
   end
 
   # GET /recipes/1
@@ -18,7 +25,8 @@ class RecipesController < ApplicationController
   # GET /recipes/new
   def new
     @food = Food.find(params[:food_id])
-    @recipe = @food.recipes.new    
+    @recipe = @food.recipes.new  
+    @raw_foods = RawFood.select_raw_food
   end
 
   # GET /recipes/1/edit
@@ -34,7 +42,8 @@ class RecipesController < ApplicationController
     respond_to do |format|
       if @recipe.save
         format.html { redirect_to food_recipes_url(@recipe.food_id), notice: 'Recipe was successfully created.' }
-        format.json { render :show, status: :created, location: @recipe }
+        format.json { render :show, status: :created, location: @recipe }        
+        format.js 
       else
         format.html { render :new }
         format.json { render json: @recipe.errors, status: :unprocessable_entity }

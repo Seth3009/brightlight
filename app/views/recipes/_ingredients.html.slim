@@ -11,5 +11,12 @@ tr id="row-#{recipe.id}"
   td = recipe.sor_portion
   td = recipe.adult_portion
   td
+    - if recipe.portion_size != 0
+      = number_with_precision(((recipe.portion_size * recipe.gr1_portion * @g1_g3) + (recipe.portion_size * recipe.gr2_portion * @g4_g6) + (recipe.portion_size * recipe.sol_portion * @sol) + (recipe.portion_size * recipe.sor_portion * @sor) + (recipe.portion_size * recipe.adult_portion * @adult)), :precision => 2, :delimiter => ',') rescue "0"
+    - else
+      = number_with_precision(((recipe.qty/recipe.recipe_portion) * @g1_g3) + ((recipe.qty/recipe.recipe_portion) * @g4_g6) + ((recipe.qty/recipe.recipe_portion) * @sol) + ((recipe.qty/recipe.recipe_portion) * @sor) + ((recipe.qty/recipe.recipe_portion) * @adult), :precision => 2, :delimiter => ',') rescue "0"
+        
+    
+  td
     = link_to recipe, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'            
       i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete

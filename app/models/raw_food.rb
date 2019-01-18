@@ -23,4 +23,9 @@ class RawFood < ActiveRecord::Base
       self.find(raw_food).update(:is_active => true)
     end
   end
+
+  scope :select_raw_food , lambda {
+    joins("Left join recipes on raw_foods.id = recipes.raw_food_id")
+    .where("recipes.raw_food_id is NULL").order(:name)
+  }
 end

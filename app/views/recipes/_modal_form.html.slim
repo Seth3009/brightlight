@@ -11,7 +11,7 @@
       .row
         .input-field.col.s6  
           = f.label :raw_food_id, class:'active'
-          = f.collection_select :raw_food_id, RawFood.all, :id, :name, prompt: true
+          = f.collection_select :raw_food_id, @raw_foods, :id, :name, prompt: true
           = f.hidden_field :food_id, value:@food.id
         .input-field.col.s3
           = f.label :recipe_portion, class:'active'
