@@ -1,27 +1,54 @@
-h1 Listing food_suppliers
+.row 
+  .col.s6
+    h4 Supplier
+  .col.s5
+    = form_tag({controller:'food_suppliers', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{food_suppliers_path(v:'list')}"
+      }
 
-table
-  thead
-    tr
-      th Supplier
-      th Address
-      th Contact person
-      th Phone
-      th
-      th
-      th
+nav
+  .nav-wrapper
+    ul
+      li
+        
 
-  tbody
-    - @food_suppliers.each do |food_supplier|
+    ul.right      
+      li
+        = link_to new_food_supplier_path
+          | New Supplier
+          i.material-icons.left add
+
+.card-panel
+  table.compact.striped
+    thead
       tr
-        td = food_supplier.supplier
-        td = food_supplier.address
-        td = food_supplier.contact_person
-        td = food_supplier.phone
-        td = link_to 'Show', food_supplier
-        td = link_to 'Edit', edit_food_supplier_path(food_supplier)
-        td = link_to 'Destroy', food_supplier, data: {:confirm => 'Are you sure?'}, :method => :delete
+        th Supplier
+        th Address
+        th Contact person
+        th Phone
+        th
+        th
+        th
 
-br
+    tbody
+      - @food_suppliers.each do |food_supplier|
+        tr
+          td = food_supplier.supplier
+          td = food_supplier.address
+          td = food_supplier.contact_person
+          td = food_supplier.phone
+          td = link_to 'Show', food_supplier
+          td = link_to 'Edit', edit_food_supplier_path(food_supplier)
+          td = link_to 'Destroy', food_supplier, data: {:confirm => 'Are you sure?'}, :method => :delete
 
-= link_to 'New Food supplier', new_food_supplier_path
+  

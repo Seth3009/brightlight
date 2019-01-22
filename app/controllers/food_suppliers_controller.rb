@@ -5,6 +5,9 @@ class FoodSuppliersController < ApplicationController
   # GET /food_suppliers.json
   def index
     @food_suppliers = FoodSupplier.all
+    if params[:search]
+      @food_suppliers = @food_suppliers.where('UPPER(food_suppliers.supplier) LIKE ?', "%#{params[:search].upcase}%").order(:supplier)
+    end
   end
 
   # GET /food_suppliers/1
