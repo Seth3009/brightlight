@@ -31,6 +31,7 @@ tr.compact.nested-fields style="border-top: 1px solid #f46518"
     .input-field
       = number_field_tag :line_total, f.object.line_amount, readonly: true, class: "right-align"
       = f.hidden_field :line_amount
+      = hidden_field_tag :line_gross
   td
     span.toggle-remark
       i.material-icons.blue-text note_add

@@ -165,6 +165,7 @@ javascript:
   var calc_row_total = function(row) {
     var hidden_total_field = row.find("input[name$='[line_amount]']");
     var total_field = row.find("input[name$='line_total']");
+    var hidden_gross_field = row.find("input[name$='line_gross']");
     var qty = Number(row.find("input[name$='[quantity]']").val());
     var unit_price = Number(row.find("input[name$='[unit_price]']").val());
     var discount = Number(row.find("input[name$='[discount]']").val());
@@ -172,24 +173,25 @@ javascript:
     var non_recurring = Number(row.find("input[name$='[non_recurring]']").val());
     var shipping = Number(row.find("input[name$='[shipping]']").val());
     var line_total = qty*unit_price - discount + est_tax + non_recurring + shipping;
+    hidden_gross_field.val(qty*unit_price);
     total_field.val(line_total);
     hidden_total_field.val(line_total);
     return line_total;
   }
   
   var calc_total = function(field) {
-    return $.map($("#purchase_orders > tr:visible").find("input[name$='[" + field + "]']"), function(item) { 
+    return $.map($("#purchase_orders > tr:visible").find("input[name$='" + field + "']"), function(item) { 
         return Number($(item).val()) })
       .reduce(function(tot, val){return tot+val}, 0);
   };
   
   var calc_totals = function() {
     var total_qty, total_discount, total_est_tax, total_non_recurring, total_shipping, subtotal;
-    total_discount = calc_total('discount');
-    total_est_tax = calc_total('est_tax');
-    total_non_recurring = calc_total('non_recurring');
-    total_shipping = calc_total('shipping');
-    subtotal = calc_total('line_amount');
+    total_discount = calc_total('[discount]');
+    total_est_tax = calc_total('[est_tax]');
+    total_non_recurring = calc_total('[non_recurring]');
+    total_shipping = calc_total('[shipping]');
+    subtotal = calc_total('line_gross');
     var down_payment = Number($("#purchase_order_down_payment").val());
     var total_amount = subtotal - total_discount + total_est_tax + total_non_recurring + total_shipping;
     var remaining_amount = total_amount - down_payment;
