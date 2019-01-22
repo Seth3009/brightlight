@@ -3,8 +3,11 @@ class FoodsController < ApplicationController
 
   # GET /foods
   # GET /foods.json
-  def index
-    @foods = Food.all
+  def index      
+    @foods = Food.all.order(:name)
+    if params[:search]
+      @foods = @foods.where('UPPER(foods.name) LIKE ?', "%#{params[:search].upcase}%").order(:name)
+    end
   end
 
   # GET /foods/1
@@ -55,7 +58,14 @@ class FoodsController < ApplicationController
   # DELETE /foods/1
   # DELETE /foods/1.json
   def destroy
-    @food.destroy
+    authorize! :manage, Food
+    Food.disable_item(@food.id)
+    if @food.is_active? 
+      @notice = 'Raw food disabled.' 
+    else 
+      @notice = 'Raw food enabled.'
+    end 
+    # @food.destroy
     respond_to do |format|
       format.html { redirect_to foods_url, notice: 'Food was successfully destroyed.' }
       format.json { head :no_content }
@@ -70,7 +80,6 @@ class FoodsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def food_params
-      params.require(:food).permit(:name, :ingredients, :is_active
-                                  {:recipes_attributes => [:food_id, :raw_food_id, :recipe_portion, :qty, :custom_size, :size_divider, :portion_size, :gr1_portion, :gr2_portion, :sol_portion, :sor_portion, :adult_portion, :_destroy]})
+      params.require(:food).permit(:name, :ingredients, :is_active)
     end
 end

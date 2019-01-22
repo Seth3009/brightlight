@@ -9,4 +9,12 @@ class Food < ActiveRecord::Base
   def ingredient_count
     self.update_column :ingredients, recipes.count
   end
+
+  def self.disable_item(food)
+    if self.find(food).is_active?
+      self.find(food).update(:is_active => false)
+    else
+      self.find(food).update(:is_active => true)
+    end
+  end
 end

@@ -1,25 +1,46 @@
-h1 Listing foods
+.row 
+  .col.s6
+    h4 Food List
+  .col.s5
+    = form_tag({controller:'foods', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{foods_path(v:'list')}"
+      }
 
-table
-  thead
-    tr
-      th Name
-      th Ingredients
-      th Is active
-      th
-      th
-      th
+nav
+  .nav-wrapper
+    ul
+      li
+        / = link_to 'Catalog (PDF)', raw_foods_path(format: 'pdf'), target: '_blank'
 
-  tbody
-    - @foods.each do |food|
+    ul.right
+      / - if can? :manage, RawFood
+      li
+        = link_to new_food_path, remote: true
+          | New Food
+          i.material-icons.left add
+
+.card-panel
+  table.compact.striped
+    thead
       tr
-        td = food.name
-        td = food.ingredients
-        td = food.is_active
-        td = link_to 'Show', food
-        td = link_to 'Edit', edit_food_path(food)
-        td = link_to 'Destroy', food, data: {:confirm => 'Are you sure?'}, :method => :delete
-
-br
-
-= link_to 'New Food', new_food_path
+        th Name
+        th Ingredients
+        th Is active
+        th Actions
+        th
+        th
+    tbody#foods
+      - @foods.each do |food|
+        tr id="row-#{food.id}"
+          = render partial: 'index_row', locals: {food: food}
+    
