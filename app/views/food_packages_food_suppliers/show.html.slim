@@ -1,0 +1,18 @@
+p#notice = notice
+
+p
+  strong Food package:
+  = @food_packages_food_supplier.food_package
+p
+  strong Food supplier:
+  = @food_packages_food_supplier.food_supplier
+p
+  strong Price:
+  = @food_packages_food_supplier.price
+p
+  strong Date update:
+  = @food_packages_food_supplier.date_update
+
+= link_to 'Edit', edit_food_packages_food_supplier_path(@food_packages_food_supplier)
+'|
+= link_to 'Back', food_packages_food_suppliers_path
