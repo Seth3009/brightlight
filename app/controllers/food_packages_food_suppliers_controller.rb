@@ -13,7 +13,8 @@ class FoodPackagesFoodSuppliersController < ApplicationController
   end
 
   # GET /food_packages_food_suppliers/new
-  def new
+  def new    
+    @food_items = FoodPackage.select_food_item.all
     @food_packages_food_supplier = FoodPackagesFoodSupplier.new
   end
 
@@ -28,7 +29,7 @@ class FoodPackagesFoodSuppliersController < ApplicationController
 
     respond_to do |format|
       if @food_packages_food_supplier.save
-        format.html { redirect_to @food_packages_food_supplier, notice: 'Food packages food supplier was successfully created.' }
+        format.html { redirect_to :back, notice: 'Item added successfully' }
         format.json { render :show, status: :created, location: @food_packages_food_supplier }
       else
         format.html { render :new }

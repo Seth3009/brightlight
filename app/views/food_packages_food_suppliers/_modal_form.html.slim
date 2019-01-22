@@ -1,0 +1,24 @@
+= form_for @food_packages_food_supplier do |f|
+  .modal-content
+    - if @food_packages_food_supplier.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@food_packages_food_supplier.errors.count, "error")} prohibited this food_packages_food_supplier from being saved:"
+        ul
+          - @food_packages_food_supplier.errors.full_messages.each do |message|
+            li = message
+    
+    .row
+      .input-field.col.s6
+        = f.label :food_package, "Food Item", class: 'active'
+        = f.collection_select :food_package_id, @food_items, :id, :packaging
+        = f.hidden_field :food_supplier_id, value: params[:id]
+    .row       
+      .input-field.col.s6
+        = f.label :price, class: 'active'
+        = f.text_field :price
+      .input-field.col.s6
+        = f.label :date_update, class: 'active'
+        = f.date_field :date_update, value: Time.now.strftime('%Y-%m-%d')
+  .modal-footer
+    button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close.btnsubmit type="submit" Save
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

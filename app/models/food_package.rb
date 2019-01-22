@@ -18,4 +18,9 @@ class FoodPackage < ActiveRecord::Base
       self.find(food_package).update(:is_active => true)
     end
   end
+
+  scope :select_food_item , lambda {
+    joins("Left join food_packages_food_suppliers on food_packages.id = food_packages_food_suppliers.food_supplier_id")
+    .where("food_packages_food_suppliers.food_supplier_id is NULL").order(:packaging)
+  }
 end

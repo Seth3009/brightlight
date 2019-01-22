@@ -24,9 +24,9 @@ nav
         .brand-logo style="margin-left: 20px; font-size:1.5em"
           | Food Items
       li.right
-        / = link_to edit_department_path(@department)
-        /   | Edit
-        /   i.material-icons.left edit
+        = link_to new_item_supplier_path(), remote: true
+          | Add Items
+          i.material-icons.left add
 
 .card-panel
   table.compacted
@@ -41,3 +41,13 @@ nav
           td = food_packages_food_supplier.food_package.packaging          
           td = food_packages_food_supplier.price
           td = food_packages_food_supplier.date_update
+
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content
