@@ -47,7 +47,7 @@ nav
           td = food_supplier.address
           td = food_supplier.contact_person
           td = food_supplier.phone
-          td = link_to 'Show', food_supplier
+          td = link_to 'Show', food_supplier_items_path(food_supplier)
           td = link_to 'Edit', edit_food_supplier_path(food_supplier)
           td = link_to 'Destroy', food_supplier, data: {:confirm => 'Are you sure?'}, :method => :delete
 

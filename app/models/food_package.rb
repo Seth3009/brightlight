@@ -4,6 +4,7 @@ class FoodPackage < ActiveRecord::Base
   validates_presence_of :unit, :message => "Unit can't be blank"
   
   belongs_to :raw_food 
+  has_many :food_packages_food_suppliers
   after_save :update_stock
 
   def update_stock

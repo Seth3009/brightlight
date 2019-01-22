@@ -1,18 +1,43 @@
-p#notice = notice
+h4 = @food_supplier.present? ? @food_supplier.supplier : "--"
+.card-panel
+  .row
+    .col.s10
+      .list_description                              
+        dl.row
+          dd.col.s4
+            .label Address:
+            .item = @food_supplier.present? ? @food_supplier.address : "--"
+          dd.col.s4
+            .label Contact Person:
+            .item = @food_supplier.present? ? @food_supplier.contact_person : "--"
+          dd.col.s4
+            .label Phone:
+            .item = @food_supplier.present? ? @food_supplier.phone : "--"  
 
-p
-  strong Supplier:
-  = @food_supplier.supplier
-p
-  strong Address:
-  = @food_supplier.address
-p
-  strong Contact person:
-  = @food_supplier.contact_person
-p
-  strong Phone:
-  = @food_supplier.phone
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to food_suppliers_path
+          i.material-icons chevron_left
+      li
+        .brand-logo style="margin-left: 20px; font-size:1.5em"
+          | Food Items
+      li.right
+        / = link_to edit_department_path(@department)
+        /   | Edit
+        /   i.material-icons.left edit
 
-= link_to 'Edit', edit_food_supplier_path(@food_supplier)
-'|
-= link_to 'Back', food_suppliers_path
+.card-panel
+  table.compacted
+    thead
+      tr
+        th Items       
+        th Price
+        th Date update
+    tbody
+      - @food_packages_food_suppliers.each do |food_packages_food_supplier|
+        tr
+          td = food_packages_food_supplier.food_package.packaging          
+          td = food_packages_food_supplier.price
+          td = food_packages_food_supplier.date_update

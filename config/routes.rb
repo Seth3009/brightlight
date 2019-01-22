@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :food_packages_food_suppliers
-  resources :food_suppliers
   resources :food_packs  
   resources :employee_smartcards
   resources :stock_categories
@@ -34,6 +32,10 @@ Rails.application.routes.draw do
   resources :book_conditions
   resources :student_activities
   
+  resources :food_suppliers, except: [:show]
+  resources :food_packages_food_suppliers
+  
+  get 'food_suppliers/:id/foods' => 'food_suppliers#show', as: :food_supplier_items
 
   resources :foods do    
     resources :recipes, shallow: true, except: [:edit]
