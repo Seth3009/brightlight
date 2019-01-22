@@ -1,0 +1,18 @@
+p#notice = notice
+
+p
+  strong Supplier:
+  = @food_supplier.supplier
+p
+  strong Address:
+  = @food_supplier.address
+p
+  strong Contact person:
+  = @food_supplier.contact_person
+p
+  strong Phone:
+  = @food_supplier.phone
+
+= link_to 'Edit', edit_food_supplier_path(@food_supplier)
+'|
+= link_to 'Back', food_suppliers_path

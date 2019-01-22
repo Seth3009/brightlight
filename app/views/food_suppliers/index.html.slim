@@ -1,0 +1,27 @@
+h1 Listing food_suppliers
+
+table
+  thead
+    tr
+      th Supplier
+      th Address
+      th Contact person
+      th Phone
+      th
+      th
+      th
+
+  tbody
+    - @food_suppliers.each do |food_supplier|
+      tr
+        td = food_supplier.supplier
+        td = food_supplier.address
+        td = food_supplier.contact_person
+        td = food_supplier.phone
+        td = link_to 'Show', food_supplier
+        td = link_to 'Edit', edit_food_supplier_path(food_supplier)
+        td = link_to 'Destroy', food_supplier, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Food supplier', new_food_supplier_path
