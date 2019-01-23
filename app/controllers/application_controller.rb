@@ -69,7 +69,7 @@ class ApplicationController < ActionController::Base
   end 
 
   def unread_messages
-    Message.all.unread(current_user).includes(:creator)
+    Message.all.unread(current_user).joins('INNER JOIN "users" creator ON "creator"."id" = "messages"."creator_id"').select('messages.*, creator.image_url as avatar, creator.name as sender')
   end
 
   def not_found

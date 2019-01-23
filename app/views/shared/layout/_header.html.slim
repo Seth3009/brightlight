@@ -94,13 +94,13 @@ ul#notification-list.dropdown-content
     - unread_messages.each do |message| 
       li.unread-message data-id=message.id id="msgrec-#{message.id}"
         div.left
-          - if message.creator.image_url
-            = image_tag message.creator.image_url, alt: message.creator.name, class: 'user-avatar-navbar circle'
+          - if message.avatar
+            = image_tag message.avatar, alt: message.sender, class: 'user-avatar-navbar circle'
           - else
             i.material-icons.grey-text account_circle
         = link_to message, remote: true
           .from 
-            = message.creator.name
+            = message.sender
             .message-timeago.right = timeago_tag message.created_at, :nojs => true, :limit => 10.days.ago
           .subject = message.subject
   
