@@ -35,12 +35,18 @@ nav
         th Items       
         th Price
         th Date update
+        th Action
     tbody
       - @food_packages_food_suppliers.each do |food_packages_food_supplier|
         tr
           td = food_packages_food_supplier.food_package.packaging          
           td = food_packages_food_supplier.price
           td = food_packages_food_supplier.date_update
+          td
+            - if can? :update, food_packages_food_supplier
+              = link_to edit_food_packages_food_supplier_path(food_packages_food_supplier), remote: true
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+          
 
 
 #show-modal.modal.modal-fixed-footer

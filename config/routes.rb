@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   resources :student_activities
   
   resources :food_suppliers, except: [:show]
-  resources :food_packages_food_suppliers, only: [:create, :update, :destroy]
+  resources :food_packages_food_suppliers, except: [:new, :show]
   
   get 'food_suppliers/:id/items' => 'food_suppliers#show', as: :food_supplier_items
   get 'food_suppliers/:id/items/new' => 'food_packages_food_suppliers#new', as: :new_item_supplier

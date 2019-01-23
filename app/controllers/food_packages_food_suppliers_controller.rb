@@ -20,6 +20,7 @@ class FoodPackagesFoodSuppliersController < ApplicationController
 
   # GET /food_packages_food_suppliers/1/edit
   def edit
+    @food_items = FoodPackage.select_food_item.all
   end
 
   # POST /food_packages_food_suppliers
@@ -43,7 +44,7 @@ class FoodPackagesFoodSuppliersController < ApplicationController
   def update
     respond_to do |format|
       if @food_packages_food_supplier.update(food_packages_food_supplier_params)
-        format.html { redirect_to @food_packages_food_supplier, notice: 'Food packages food supplier was successfully updated.' }
+        format.html { redirect_to :back, notice: 'Food item was successfully updated.' }
         format.json { render :show, status: :ok, location: @food_packages_food_supplier }
       else
         format.html { render :edit }

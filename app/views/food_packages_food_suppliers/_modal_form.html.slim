@@ -6,12 +6,12 @@
         ul
           - @food_packages_food_supplier.errors.full_messages.each do |message|
             li = message
-    
-    .row
-      .input-field.col.s6
-        = f.label :food_package, "Food Item", class: 'active'
-        = f.collection_select :food_package_id, @food_items, :id, :packaging
-        = f.hidden_field :food_supplier_id, value: params[:id]
+    - if params[:action] =~/new/
+      .row
+        .input-field.col.s6
+          = f.label :food_package, "Food Item", class: 'active'
+          = f.collection_select :food_package_id, @food_items, :id, :packaging
+          = f.hidden_field :food_supplier_id, value: params[:id]
     .row       
       .input-field.col.s6
         = f.label :price, class: 'active'
