@@ -58,7 +58,13 @@ class FoodSuppliersController < ApplicationController
   # DELETE /food_suppliers/1
   # DELETE /food_suppliers/1.json
   def destroy
-    @food_supplier.destroy
+    FoodSupplier.disable_supplier(@food_supplier.id)
+    if @food_supplier.is_active? 
+      @notice = 'Supplier disabled' 
+    else 
+      @notice = 'Supplier enabled.'
+    end 
+    # @food_supplier.destroy
     respond_to do |format|
       format.html { redirect_to food_suppliers_url, notice: 'Food supplier was successfully destroyed.' }
       format.json { head :no_content }

@@ -36,9 +36,9 @@ nav
         th Address
         th Contact person
         th Phone
-        th
-        th
-        th
+        th.center Active
+        th.center Actions
+        
 
     tbody
       - @food_suppliers.each do |food_supplier|
@@ -46,10 +46,23 @@ nav
           td = food_supplier.supplier
           td = food_supplier.address
           td = food_supplier.contact_person
-          td = food_supplier.phone
-          td = link_to 'Show', food_supplier_items_path(food_supplier)
-          td = link_to 'Edit', edit_food_supplier_path(food_supplier)
-          td = link_to 'Destroy', food_supplier, data: {:confirm => 'Are you sure?'}, :method => :delete
+          td = food_supplier.phone   
+          td.center
+            - if food_supplier.is_active
+              i.material-icons check_box
+            - else
+              i.material-icons check_box_outline_blank       
+          td.center
+            = link_to food_supplier_items_path(food_supplier)
+              i.material-icons visibility
+            = link_to edit_food_supplier_path(food_supplier)
+              i.material-icons edit                   
+            - if food_supplier.is_active
+              = link_to food_supplier, data: {:confirm => 'Disable food supplier?'}, :method => :delete, class:'red-text'
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Disable" thumb_down
+            - else
+              = link_to food_supplier, data: {:confirm => 'Enable food supplier?'}, :method => :delete, class:'green-text'
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Enable" thumb_up
 
 #show-modal.modal.modal-fixed-footer
   .modal-content
