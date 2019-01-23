@@ -24,7 +24,7 @@ nav
 
     ul.right      
       li
-        = link_to new_food_supplier_path
+        = link_to new_food_supplier_path, remote: true
           | New Supplier
           i.material-icons.left add
 
@@ -51,4 +51,11 @@ nav
           td = link_to 'Edit', edit_food_supplier_path(food_supplier)
           td = link_to 'Destroy', food_supplier, data: {:confirm => 'Are you sure?'}, :method => :delete
 
-  
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content
