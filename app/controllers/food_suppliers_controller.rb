@@ -46,7 +46,7 @@ class FoodSuppliersController < ApplicationController
   def update
     respond_to do |format|
       if @food_supplier.update(food_supplier_params)
-        format.html { redirect_to @food_supplier, notice: 'Food supplier was successfully updated.' }
+        format.html { redirect_to :back, notice: 'Food supplier was successfully updated.' }
         format.json { render :show, status: :ok, location: @food_supplier }
       else
         format.html { render :edit }

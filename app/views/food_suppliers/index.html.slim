@@ -55,7 +55,7 @@ nav
           td.center
             = link_to food_supplier_items_path(food_supplier)
               i.material-icons visibility
-            = link_to edit_food_supplier_path(food_supplier)
+            = link_to edit_food_supplier_path(food_supplier), remote: true
               i.material-icons edit                   
             - if food_supplier.is_active
               = link_to food_supplier, data: {:confirm => 'Disable food supplier?'}, :method => :delete, class:'red-text'
