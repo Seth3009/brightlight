@@ -49,10 +49,14 @@ class BookCategoriesController < ApplicationController
   # DELETE /book_categories/1
   # DELETE /book_categories/1.json
   def destroy
-    @book_category.destroy
     respond_to do |format|
-      format.html { redirect_to book_categories_url, notice: 'Book category was successfully destroyed.' }
-      format.json { head :no_content }
+      if @book_category.destroy
+        format.html { redirect_to book_categories_url, notice: 'Book category was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to book_categories_url, alert: @book_category.errors.full_messages.join(". ") }
+        format.json { render json: @book_category.errors, status: :unprocessable_entity }
+      end
     end
   end
 
