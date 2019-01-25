@@ -44,6 +44,7 @@ class Ability
     can :manage, Product
     can :manage, ItemUnit
     can :manage, ItemCategory
+    can :manage, BookCategory
 	end
 
 	def manager
