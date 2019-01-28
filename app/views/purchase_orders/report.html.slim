@@ -40,22 +40,7 @@ table.compact.bordered.striped
       th.right-align Est. Price
   tbody
     - @items.each.with_index(1) do |item, i|
-      tr
-        td = "#{i}"
-        td = item.fpb 
-        td = item.requestor_name || "N/A"
-        td = item.description
-        td.right-align = "#{item.quantity} #{item.unit}"
-        td = item.budget || "--"
-        td = item.supplier
-        td.right-align = currency(item.line_amount, currency: item.currency)
+      tr id="po-#{item.id}"
+        = render partial: "order_row", locals: {i: i, item: item}
 
-css:
-  @media print {
-    nav {
-      display: none;
-    }
-    table, tr, td {
-      border: 0.5px solid grey;
-    }
-  }
+#show-modal.modal.modal-fixed-footer
