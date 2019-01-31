@@ -13,11 +13,11 @@ nav
         li
           = date_field_tag :date, params[:date]
         li 
-          = select_tag :item, options_from_collection_for_select(@items, :description, :description, params[:item]), prompt: 'Item'
+          = select_tag :item, options_from_collection_for_select(@items, :description, :description, params[:item]), prompt: 'Select Item'
         li
-          = select_tag :account, options_from_collection_for_select(@accounts, :id, :description, params[:account]), prompt: 'Account'
+          = select_tag :account, options_from_collection_for_select(@accounts, :id, :description, params[:account]), prompt: 'Select Account'
         li 
-          = select_tag :supplier, options_from_collection_for_select(@suppliers, :id, :company_name, params[:supplier]), prompt: 'Supplier'
+          = select_tag :supplier, options_from_collection_for_select(@suppliers, :id, :company_name, params[:supplier]), prompt: 'Select Supplier'
         li 
           = submit_tag "Filter", class: "btn btn-flat btn-small grey"
     ul.right
@@ -30,7 +30,6 @@ br
 table.compact.bordered.striped
   thead
     tr
-      th No
       th FPB
       th Requester
       th Item description
@@ -41,6 +40,6 @@ table.compact.bordered.striped
   tbody
     - @items.each.with_index(1) do |item, i|
       tr id="po-#{item.id}"
-        = render partial: "order_row", locals: {i: i, item: item}
+        = render partial: "order_row", locals: {item: item}
 
 #show-modal.modal.modal-fixed-footer

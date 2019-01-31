@@ -1,56 +1,21 @@
 class OrderItemsController < ApplicationController
-  before_action :set_order_item, only: [:show, :edit, :update, :destroy]
-
-  # GET /order_items
-  # GET /order_items.json
-  def index
-    @order_items = OrderItem.all
-  end
-
-  # GET /order_items/1
-  # GET /order_items/1.json
-  def show
-  end
-
-  # GET /order_items/new
-  def new
-    @order_item = OrderItem.new
-  end
-
-  # GET /order_items/1/edit
-  def edit
-  end
-
-  # POST /order_items
-  # POST /order_items.json
-  def create
-    @order_item = OrderItem.new(order_item_params)
-
-    respond_to do |format|
-      if @order_item.save
-        format.html { redirect_to @order_item, notice: 'Order item was successfully created.' }
-        format.json { render :show, status: :created, location: @order_item }
-      else
-        format.html { render :new }
-        format.json { render json: @order_item.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  before_action :set_order_item, only: [:edit, :destroy]
 
   # PATCH/PUT /order_items/1
   # PATCH/PUT /order_items/1.json
   def update
     respond_to do |format|
+      qry = OrderItem.po_record.where(id: params[:id])
+      qry = qry.where(purchase_orders: {order_date: params[:date]}) if params[:date]
+      @order_item = qry.take
       if @order_item.update(order_item_params)
-        format.html { redirect_to @order_item, notice: 'Order item was successfully updated.' }
-        format.json { render :show, status: :ok, location: @order_item }
+        format.js 
       else
-        format.html { render :edit }
-        format.json { render json: @order_item.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
-
+  
   # DELETE /order_items/1
   # DELETE /order_items/1.json
   def destroy
@@ -71,6 +36,7 @@ class OrderItemsController < ApplicationController
     def order_item_params
       params.require(:order_item).permit(:purchase_order_id, :stock_item__id, :quantity, :unit, 
         :min_delivery_qty, :pending_qty, :type, :line_amount, :unit_price, :currency, :deleted, :description, 
-        :status, :line_num, :extra1, :extra2)
+        :status, :line_num, 
+        :discount, :est_tax, :non_recurring, :shipping, :down_payment)
     end
 end

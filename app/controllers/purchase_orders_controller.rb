@@ -14,15 +14,9 @@ class PurchaseOrdersController < ApplicationController
     authorize! :read, PurchaseOrder
     date = Date.parse(params[:date]) rescue Date.today
 
-    @items = OrderItem.joins(:purchase_order)
-              .joins('left join employees on employees.id = purchase_orders.requestor_id')
-              .joins('left join suppliers on suppliers.id = purchase_orders.supplier_id')
-              .joins(:req_item)
-              .joins('left join requisitions on requisitions.id = req_items.requisition_id')
-              .joins('left join accounts on accounts.id = requisitions.account_id')
+    @items = OrderItem.po_record
               .where(purchase_orders: {order_date: date})
-              .select('order_items.*, purchase_orders.currency as currency, requisitions.id as fpb, employees.name as requestor_name, accounts.description as budget, suppliers.company_name as supplier')
-
+ 
     if params[:supplier].present?
       @items = @items.where(purchase_orders: {supplier_id: params[:supplier]})
     end
