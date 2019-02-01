@@ -224,7 +224,7 @@ class BookCopy < ActiveRecord::Base
     end
 
     def sync_book_label
-      self.copy_no = book_label.name      
+      self.copy_no = book_label.try(:name)
     end
 
     def sync_book_edition
