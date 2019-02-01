@@ -44,3 +44,11 @@ nav
         tr id="row-#{food.id}"
           = render partial: 'index_row', locals: {food: food}
     
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content

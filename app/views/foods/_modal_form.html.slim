@@ -1,0 +1,17 @@
+= form_for @food do |f|
+  .modal-content
+    - if @food.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@food.errors.count, "error")} prohibited this food from being saved:"
+        ul
+          - @food.errors.full_messages.each do |message|
+            li = message
+
+    .row
+      .input-field.col.s12
+        = f.label :name, class: 'active'
+        = f.text_field :name    
+    
+  .modal-footer
+    button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close.btnsubmit type="submit" Save
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
