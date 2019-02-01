@@ -10,14 +10,16 @@ nav
           | Purchase Orders
           i.material-icons.left chevron_left
       = form_tag(report_purchase_orders_path, method: :get) do
-        li style="width:110px" class="text-align:center"
-          = select_tag :year, year_options_for_select(selected: params[:year] || Date.today.year)
-        li style="width:110px" class="text-align:center"
-          = select_tag :month, month_options_for_select(selected: params[:month] || Date.today.month)
-        li style="width:110px" class="text-align:center"
-          = select_tag :day, options_for_select((1..31).map {|d| [d,d]}, params[:month] || Date.today.day)
+        li
+          = date_field_tag :date, params[:date]
         li 
-          = submit_tag "Go", class: "btn btn-flat btn-small grey"
+          = select_tag :item, options_from_collection_for_select(@items, :description, :description, params[:item]), prompt: 'Select Item'
+        li
+          = select_tag :account, options_from_collection_for_select(@accounts, :id, :description, params[:account]), prompt: 'Select Account'
+        li 
+          = select_tag :supplier, options_from_collection_for_select(@suppliers, :id, :company_name, params[:supplier]), prompt: 'Select Supplier'
+        li 
+          = submit_tag "Filter", class: "btn btn-flat btn-small grey"
     ul.right
       li
         = link_to 'Status Report', status_purchase_orders_path
@@ -28,7 +30,6 @@ br
 table.compact.bordered.striped
   thead
     tr
-      th No
       th FPB
       th Requester
       th Item description
@@ -37,24 +38,8 @@ table.compact.bordered.striped
       th Supplier
       th.right-align Est. Price
   tbody
-    - @purchase_orders.each.with_index(1) do |po, i|
-      - po.order_items.each.with_index(1) do |item, j|
-        tr
-          td = "#{i}.#{j}"
-          td = item.req_item.requisition.id 
-          td = item.try(:req_item).try(:requisition).try(:requester).try(:name) || "N/A"
-          td = item.description
-          td.right-align = "#{item.quantity} #{item.unit}"
-          td = item.req_item.requisition.budget rescue "--"
-          td = item.purchase_order.supplier.try(:company_name)
-          td.right-align = currency(item.line_amount, currency: po.currency)
+    - @items.each.with_index(1) do |item, i|
+      tr id="po-#{item.id}"
+        = render partial: "order_row", locals: {item: item}
 
-css:
-  @media print {
-    nav {
-      display: none;
-    }
-    table, tr, td {
-      border: 0.5px solid grey;
-    }
-  }
+#show-modal.modal.modal-fixed-footer

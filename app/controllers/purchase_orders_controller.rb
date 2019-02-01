@@ -8,12 +8,36 @@ class PurchaseOrdersController < ApplicationController
     @purchase_orders = PurchaseOrder.all.includes([:requestor, :supplier, :order_items])
   end
 
-    # GET /purchase_orders/report
+  # GET /purchase_orders/report
   # GET /purchase_orders/report.json
   def report
     authorize! :read, PurchaseOrder
-    date = Date.new(params[:year].to_i, params[:month].to_i, params[:day].to_i) rescue Date.today
-    @purchase_orders = PurchaseOrder.where(order_date: date).includes([:requestor, :supplier, order_items: [:req_item]])
+    date = Date.parse(params[:date]) rescue Date.today
+
+    @items = OrderItem.po_record
+              .where(purchase_orders: {order_date: date})
+ 
+    if params[:supplier].present?
+      @items = @items.where(purchase_orders: {supplier_id: params[:supplier]})
+    end
+    
+    if params[:account].present?
+      @items = @items.joins(:req_item)
+                .where(accounts: {id: params[:account]})
+    end
+
+    if params[:item].present?
+      @items = @items.where(description: params[:item])
+    end
+    
+    @accounts =  Account.joins(:requisitions)
+                  .joins('join req_items on requisitions.id = req_items.requisition_id')
+                  .joins('join order_items on order_items.id = req_items.order_item_id')
+                  .joins('join purchase_orders on purchase_orders.id = order_items.purchase_order_id')
+                  .where(purchase_orders: {order_date: date})
+                  .uniq
+    @suppliers = Supplier.joins(:purchase_orders)
+                  .where(purchase_orders: {order_date: date})
   end
 
   # GET /purchase_orders/1

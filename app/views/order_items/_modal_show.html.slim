@@ -1,0 +1,41 @@
+= form_for @order_item, remote: true do |f|
+  .modal-content
+    h5 Edit item
+
+    - if @order_item.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@order_item.errors.count, "error")} prohibited this order_item from being saved:"
+        ul
+          - @order_item.errors.full_messages.each do |message|
+            li = message
+    .row
+      .input-field.col.s6
+        = f.object.description
+      .input-field.col.s4
+        = f.label :quantity, class: 'active'
+        = f.text_field :quantity
+      .input-field.col.s2
+        = f.label :unit, class: 'active'
+        = f.text_field :unit
+      .input-field.col.s4
+        = f.label :unit_price, class: 'active'
+        = f.text_field :unit_price
+      .input-field.col.s4
+        = f.label :discount, class: 'active'
+        = f.text_field :discount
+      .input-field.col.s4
+        = f.label :est_tax, class: 'active'
+        = f.text_field :est_tax
+      .input-field.col.s4
+        = f.label :non_recurring, class: 'active'
+        = f.text_field :non_recurring
+      .input-field.col.s4
+        = f.label :shipping, class: 'active'
+        = f.text_field :shipping
+      .input-field.col.s4
+        = f.label :down_payment, class: 'active'
+        = f.text_field :down_payment
+      
+  .modal-footer
+    = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
+    button.btn.waves-effect.waves-light type="submit" Save
