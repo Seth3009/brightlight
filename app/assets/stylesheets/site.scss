@@ -1717,6 +1717,13 @@ section {
 	footer {
 		display:none;
 	}
+
+	table.bordered {
+		border: 0.5px solid grey;
+		td {
+			border: 0.5px solid grey;
+		}
+	} 
 	
 }
 

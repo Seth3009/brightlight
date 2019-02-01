@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190110081821) do
+ActiveRecord::Schema.define(version: 20190130044813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -457,6 +457,27 @@ ActiveRecord::Schema.define(version: 20190110081821) do
   add_index "carpools", ["barcode"], name: "index_carpools_on_barcode", using: :btree
   add_index "carpools", ["sort_order"], name: "index_carpools_on_sort_order", using: :btree
   add_index "carpools", ["transport_id"], name: "index_carpools_on_transport_id", using: :btree
+
+  create_table "cars", force: :cascade do |t|
+    t.string   "transport_name", limit: 255
+    t.string   "uid",            limit: 255
+    t.string   "family_no",      limit: 255
+    t.integer  "period"
+    t.string   "status",         limit: 255
+    t.string   "category",       limit: 255
+    t.datetime "arrival"
+    t.datetime "departure"
+    t.boolean  "loading",                    default: false, null: false
+    t.float    "sort_order"
+    t.string   "notes",          limit: 255
+    t.integer  "transport_id"
+    t.datetime "inserted_at",                                null: false
+    t.datetime "updated_at",                                 null: false
+    t.string   "period_hash",    limit: 32
+  end
+
+  add_index "cars", ["transport_id", "period_hash"], name: "transport_period_index", unique: true, using: :btree
+  add_index "cars", ["transport_id"], name: "cars_transport_id_index", using: :btree
 
   create_table "comments", force: :cascade do |t|
     t.string   "title",            limit: 50, default: ""
@@ -1140,15 +1161,15 @@ ActiveRecord::Schema.define(version: 20190110081821) do
   create_table "order_items", force: :cascade do |t|
     t.integer  "purchase_order_id"
     t.integer  "stock_item_id"
-    t.float    "quantity"
+    t.float    "quantity",           default: 0.0
     t.string   "unit"
-    t.float    "min_delivery_qty"
-    t.float    "pending_qty"
+    t.float    "min_delivery_qty",   default: 0.0
+    t.float    "pending_qty",        default: 0.0
     t.string   "type"
-    t.decimal  "line_amount"
-    t.decimal  "unit_price"
+    t.decimal  "line_amount",        default: 0.0
+    t.decimal  "unit_price",         default: 0.0
     t.string   "currency"
-    t.boolean  "deleted"
+    t.boolean  "deleted",            default: false
     t.string   "description"
     t.string   "status"
     t.integer  "line_num"
@@ -1156,13 +1177,13 @@ ActiveRecord::Schema.define(version: 20190110081821) do
     t.string   "notes"
     t.integer  "created_by_id"
     t.integer  "last_updated_by_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.decimal  "discount"
-    t.decimal  "est_tax"
-    t.decimal  "non_recurring"
-    t.decimal  "shipping"
-    t.decimal  "down_payment"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.decimal  "discount",           default: 0.0
+    t.decimal  "est_tax",            default: 0.0
+    t.decimal  "non_recurring",      default: 0.0
+    t.decimal  "shipping",           default: 0.0
+    t.decimal  "down_payment",       default: 0.0
     t.integer  "req_item_id"
     t.string   "code"
   end
@@ -1470,6 +1491,10 @@ ActiveRecord::Schema.define(version: 20190110081821) do
   add_index "rosters", ["academic_year_id"], name: "index_rosters_on_academic_year_id", using: :btree
   add_index "rosters", ["course_section_id"], name: "index_rosters_on_course_section_id", using: :btree
   add_index "rosters", ["student_id"], name: "index_rosters_on_student_id", using: :btree
+
+  create_table "schema_versions", primary_key: "version", force: :cascade do |t|
+    t.datetime "inserted_at"
+  end
 
   create_table "school_levels", force: :cascade do |t|
     t.string   "name"
@@ -1914,6 +1939,7 @@ ActiveRecord::Schema.define(version: 20190110081821) do
   add_foreign_key "budgets", "users", column: "created_by_id"
   add_foreign_key "budgets", "users", column: "last_updated_by_id"
   add_foreign_key "carpools", "transports"
+  add_foreign_key "cars", "transports", name: "cars_transport_id_fkey"
   add_foreign_key "course_section_histories", "employees", column: "instructor_id"
   add_foreign_key "currencies", "users"
   add_foreign_key "deliveries", "employees", column: "accepted_by_id"

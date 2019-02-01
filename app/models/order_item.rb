@@ -9,9 +9,21 @@ class OrderItem < ActiveRecord::Base
 
   validates :req_item_id, presence: true
   validates_uniqueness_of :req_item_id, message: "Requested item has been ordered before."
+  validates_numericality_of :quantity, greater_than_or_equal_to: 0
 
+  after_save :calc_line_amount
   after_save :sync_req_item
   before_destroy :remove_link_with_req_item
+
+  scope :po_record, lambda { 
+    joins(:purchase_order)
+    .joins('left join employees on employees.id = purchase_orders.requestor_id')
+    .joins('left join suppliers on suppliers.id = purchase_orders.supplier_id')
+    .joins(:req_item)
+    .joins('left join requisitions on requisitions.id = req_items.requisition_id')
+    .joins('left join accounts on accounts.id = requisitions.account_id')
+    .select('order_items.*, purchase_orders.currency as currency, requisitions.id as fpb, employees.name as requestor_name, accounts.description as budget, suppliers.company_name as supplier')
+  }
 
   def self.new_from_req_items(req_items)
     req_items.map {|req_item|
@@ -43,6 +55,10 @@ class OrderItem < ActiveRecord::Base
     def remove_link_with_req_item
       req_item.update_columns order_item_id: nil
       req_item.requisition.update_status
+    end
+
+    def calc_line_amount
+      update_column :line_amount, unit_price * quantity - discount + est_tax + non_recurring + shipping       # - down_payment
     end
 
 end

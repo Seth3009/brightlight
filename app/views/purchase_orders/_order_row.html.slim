@@ -1,0 +1,8 @@
+
+td = item.fpb 
+td = item.requestor_name || "N/A"
+td = link_to item.description, edit_order_item_path(item), remote: true
+td.right-align = "#{item.quantity} #{item.unit}"
+td = item.budget || "--"
+td = item.supplier
+td.right-align = currency(item.line_amount, currency: item.currency)

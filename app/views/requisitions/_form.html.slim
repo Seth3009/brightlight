@@ -55,5 +55,12 @@
       button.btn.waves-effect.waves-light type="submit" id="send_supv" name="send" value="supv" Send for Approval
     = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"
 
-
+javascript:
+  $(document).on('page:load ready', function() {
+    $("input#requisition_date_required").on("change", function(event) {
+      var date = $("input#requisition_date_required").val();
+      $("a.add_fields").data("associationInsertionTemplate", 
+        $("a.add_fields").data("associationInsertionTemplate").replace(/(needed_by_date").+(\/>)/, '$1 value="' + date + '" $2'));
+    });
+  });
 
