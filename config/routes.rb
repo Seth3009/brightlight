@@ -17,7 +17,6 @@ Rails.application.routes.draw do
   resources :stock_items
   resources :delivery_items
   resources :deliveries
-  resources :order_items
   resources :req_items
   resources :supplies_transaction_items
   resources :warehouses
@@ -293,6 +292,8 @@ Rails.application.routes.draw do
       get 'letter'
     end
   end
+
+  resources :order_items, only: [:edit, :update, :destroy]
 
   resources :accounts, only: [:index, :new, :create, :edit, :update, :destroy]  do
     collection do
