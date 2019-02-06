@@ -26,7 +26,7 @@ class RecipesController < ApplicationController
   def new
     @food = Food.find(params[:food_id])
     @recipe = @food.recipes.new  
-    @raw_foods = RawFood.select_raw_food
+    @raw_foods = RawFood.select_raw_food(@food.id)
   end
 
   # GET /recipes/1/edit

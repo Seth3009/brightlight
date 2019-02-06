@@ -24,8 +24,14 @@ class RawFood < ActiveRecord::Base
     end
   end
 
-  scope :select_raw_food , lambda {
-    joins("Left join recipes on raw_foods.id = recipes.raw_food_id")
-    .where("recipes.raw_food_id is NULL").order(:name)
-  }
+  def self.select_raw_food(food_id)
+    self.find_by_sql("select t1.name,t1.id,t2.raw_food_id,t2.food_id,t1.unit
+                    From (select id, name, unit from raw_foods) t1
+                    left join (select raw_food_id, food_id from recipes where food_id =" + food_id.to_s + ") t2
+                    on (t1.id = t2.raw_food_id) where t2.raw_food_id is null order by t1.name")
+  end
+
+  def dropdown_name
+    "#{name} (#{unit})"
+  end
 end

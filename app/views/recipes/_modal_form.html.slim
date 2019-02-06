@@ -11,12 +11,12 @@
       .row
         .input-field.col.s6  
           = f.label :raw_food_id, class:'active'
-          = f.collection_select :raw_food_id, @raw_foods, :id, :name, prompt: true
+          = f.collection_select :raw_food_id, @raw_foods, :id, :dropdown_name, prompt: true
           = f.hidden_field :food_id, value:@food.id
-        .input-field.col.s3
+        .input-field.col.s2
           = f.label :recipe_portion, class:'active'
           = f.number_field :recipe_portion, disabled:true
-        .input-field.col.s3
+        .input-field.col.s2
           = f.label :qty, class:'active'
           = f.text_field :qty
     h5 Detail Portion
