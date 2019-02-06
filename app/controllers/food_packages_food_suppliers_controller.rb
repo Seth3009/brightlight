@@ -13,9 +13,10 @@ class FoodPackagesFoodSuppliersController < ApplicationController
   end
 
   # GET /food_packages_food_suppliers/new
-  def new    
-    @food_items = FoodPackage.select_food_item.all
+  def new 
+    @food_supplier = FoodSupplier.find(1)       
     @food_packages_food_supplier = FoodPackagesFoodSupplier.new
+    @food_items = FoodPackage.select_food_item(@food_supplier.id)
   end
 
   # GET /food_packages_food_suppliers/1/edit

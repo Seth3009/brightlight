@@ -19,8 +19,10 @@ class FoodPackage < ActiveRecord::Base
     end
   end
 
-  scope :select_food_item , lambda {
-    joins("Left join food_packages_food_suppliers on food_packages.id = food_packages_food_suppliers.food_supplier_id")
-    .where("food_packages_food_suppliers.food_supplier_id is NULL").order(:packaging)
-  }
+  def self.select_food_item(food_supplier)
+    self.find_by_sql("select t1.packaging, t1.id, t2.food_package_id, t2.food_supplier_id 
+                    from (select id, packaging from food_packages) t1
+                    left join (select food_package_id, food_supplier_id from food_packages_food_suppliers where food_supplier_id =" + food_supplier.to_s + ") t2
+                    on (t1.id = t2.food_supplier_id) where t2.food_package_id is null order by t1.packaging")
+  end
 end
