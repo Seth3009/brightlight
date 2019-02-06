@@ -23,4 +23,11 @@ class BookLabel < ActiveRecord::Base
   def section_name
     name.match(/\d+[A-Z]/).to_s
   end
+
+  def self.for_select
+    [[ "None", [["--", nil]]]] +
+    GradeSection.joins(:book_labels).includes(:book_labels).order(:id).map {|gs| 
+      [ gs.name, gs.book_labels.map {|lbl| [lbl.name, lbl.id] } ]
+    }
+  end
 end

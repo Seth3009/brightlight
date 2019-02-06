@@ -62,7 +62,8 @@ nav
                   = ff.text_field :barcode
               td
                 .input-field
-                  = ff.grouped_collection_select :book_label_id, @book_labels_for_menu, :book_labels, :name, :id, :name, {prompt:true}, {class:'browser-default materialish'}
+                  /= ff.grouped_collection_select :book_label_id, @book_labels_for_menu, :book_labels, :name, :id, :name, {prompt:true}, {class:'browser-default materialish'}
+                  = ff.select :book_label_id, grouped_options_for_select(BookLabel.for_select, ff.object.book_label_id, prompt: true)
                     
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save
