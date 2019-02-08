@@ -40,7 +40,7 @@ nav
       - @food_packages_food_suppliers.each do |food_packages_food_supplier|
         tr
           td = food_packages_food_supplier.food_package.packaging          
-          td = food_packages_food_supplier.price
+          td = number_with_precision(food_packages_food_supplier.price, :precision => 0, :delimiter => ',') rescue "0"
           td = food_packages_food_supplier.date_update
           td
             - if can? :update, food_packages_food_supplier
