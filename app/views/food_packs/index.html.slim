@@ -1,47 +1,57 @@
 h1 Food Packs
 
-table
-  thead
-    tr
-      th G1
-      th G2
-      th G3
-      th G4
-      th G5
-      th G6
-      th G7
-      th G8
-      th G9
-      th G10
-      th G11
-      th G12
-      th Employee
-      th Academic year
-      th
-      th
-      th
 
-  tbody
-    - @food_packs.each do |food_pack|
+nav
+  .nav-wrapper
+    ul.right
+      / - if can? :manage, RawFood
+      li
+        = link_to new_food_pack_path
+          | New Pack
+          i.material-icons.left add
+.card-panel
+  table.compact.striped
+    thead
       tr
-        td = food_pack.g1
-        td = food_pack.g2
-        td = food_pack.g3
-        td = food_pack.g4
-        td = food_pack.g5
-        td = food_pack.g6
-        td = food_pack.g7
-        td = food_pack.g8
-        td = food_pack.g9
-        td = food_pack.g10
-        td = food_pack.g11
-        td = food_pack.g12
-        td = food_pack.employee
-        td = food_pack.academic_year.name
-        td = link_to 'Show', food_pack
-        td = link_to 'Edit', edit_food_pack_path(food_pack)
-        td = link_to 'Destroy', food_pack, data: {:confirm => 'Are you sure?'}, :method => :delete
+        th G1
+        th G2
+        th G3
+        th G4
+        th G5
+        th G6
+        th G7
+        th G8
+        th G9
+        th G10
+        th G11
+        th G12
+        th Employee
+        th Academic year
+        th
+        th
+        th
 
-br
+    tbody
+      - @food_packs.each do |food_pack|
+        tr
+          td = food_pack.g1
+          td = food_pack.g2
+          td = food_pack.g3
+          td = food_pack.g4
+          td = food_pack.g5
+          td = food_pack.g6
+          td = food_pack.g7
+          td = food_pack.g8
+          td = food_pack.g9
+          td = food_pack.g10
+          td = food_pack.g11
+          td = food_pack.g12
+          td = food_pack.employee
+          td = food_pack.academic_year.name
+          td = link_to 'Show', food_pack
+          td = link_to 'Edit', edit_food_pack_path(food_pack)
+          td = link_to 'Destroy', food_pack, data: {:confirm => 'Are you sure?'}, :method => :delete
 
-= link_to 'New Food pack', new_food_pack_path
+  br
+
+  = link_to 'New Food pack', new_food_pack_path
