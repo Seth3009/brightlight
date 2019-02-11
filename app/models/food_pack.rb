@@ -1,4 +1,5 @@
 class FoodPack < ActiveRecord::Base
+  validates :academic_year, presence: true, uniqueness: true
   belongs_to :academic_year
 
   

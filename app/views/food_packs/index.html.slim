@@ -3,8 +3,7 @@ h1 Food Packs
 
 nav
   .nav-wrapper
-    ul.right
-      / - if can? :manage, RawFood
+    ul.right      
       li
         = link_to new_food_pack_path
           | New Pack
@@ -52,6 +51,4 @@ nav
           td = link_to 'Edit', edit_food_pack_path(food_pack)
           td = link_to 'Destroy', food_pack, data: {:confirm => 'Are you sure?'}, :method => :delete
 
-  br
-
-  = link_to 'New Food pack', new_food_pack_path
+  

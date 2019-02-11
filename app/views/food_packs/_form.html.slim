@@ -59,9 +59,11 @@ nav
         .input-field.col.s12
           = f.label :employee, "Adults / Employees", class: 'active'
           = f.number_field :employee
-      / .input-field.col.s2
-      /   = f.label :academic_year_id
-      /   = f.collection_select :academic_year_id, AcademicYear.where(:id => AcademicYear.current.id-3..AcademicYear.current.id), :id, :name
+      - if params[:action] != ~/edit/   
+        .col.s6 style="background-color:#FFFAF0; border-radius: 10px;"
+          .input-field.col.s12
+            = f.label :academic_year_id, class: 'active'
+            = f.collection_select :academic_year_id, AcademicYear.where(:id => AcademicYear.current.id-2..AcademicYear.current.id+1), :id, :name
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light.btnsubmit type="submit" Save
     = link_to 'Cancel', food_packs_path(), class: "waves-effect waves-teal btn-flat"
