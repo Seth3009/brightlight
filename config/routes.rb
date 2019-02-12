@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :lunch_menus
   resources :food_packs  
   resources :employee_smartcards
   resources :stock_categories

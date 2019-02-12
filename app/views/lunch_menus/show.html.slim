@@ -1,0 +1,33 @@
+p#notice = notice
+
+p
+  strong Lunch date:
+  = @lunch_menu.lunch_date
+p
+  strong Food:
+  = @lunch_menu.food
+p
+  strong Adj g1:
+  = @lunch_menu.adj_g1
+p
+  strong Adj g4:
+  = @lunch_menu.adj_g4
+p
+  strong Adj sol:
+  = @lunch_menu.adj_sol
+p
+  strong Adj sor:
+  = @lunch_menu.adj_sor
+p
+  strong Adj adult:
+  = @lunch_menu.adj_adult
+p
+  strong Total adj:
+  = @lunch_menu.total_adj
+p
+  strong Academic year:
+  = @lunch_menu.academic_year
+
+= link_to 'Edit', edit_lunch_menu_path(@lunch_menu)
+'|
+= link_to 'Back', lunch_menus_path

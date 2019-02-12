@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190123073206) do
+ActiveRecord::Schema.define(version: 20190212043659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -655,14 +655,26 @@ ActiveRecord::Schema.define(version: 20190123073206) do
     t.integer  "academic_term_id"
     t.integer  "weight"
     t.text     "notes"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.boolean  "substitute",           default: false
   end
 
   add_index "diknas_conversion_items", ["academic_term_id"], name: "index_diknas_conversion_items_on_academic_term_id", using: :btree
   add_index "diknas_conversion_items", ["academic_year_id"], name: "index_diknas_conversion_items_on_academic_year_id", using: :btree
   add_index "diknas_conversion_items", ["course_id"], name: "index_diknas_conversion_items_on_course_id", using: :btree
   add_index "diknas_conversion_items", ["diknas_conversion_id"], name: "index_diknas_conversion_items_on_diknas_conversion_id", using: :btree
+
+  create_table "diknas_conversion_lists", force: :cascade do |t|
+    t.integer  "diknas_conversion_id"
+    t.integer  "conversion_id"
+    t.float    "weight"
+    t.string   "notes"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "diknas_conversion_lists", ["diknas_conversion_id"], name: "index_diknas_conversion_lists_on_diknas_conversion_id", using: :btree
 
   create_table "diknas_conversions", force: :cascade do |t|
     t.integer  "diknas_course_id"
@@ -1155,6 +1167,23 @@ ActiveRecord::Schema.define(version: 20190123073206) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "lunch_menus", force: :cascade do |t|
+    t.date     "lunch_date"
+    t.integer  "food_id"
+    t.integer  "adj_g1",           default: 0
+    t.integer  "adj_g4",           default: 0
+    t.integer  "adj_sol",          default: 0
+    t.integer  "adj_sor",          default: 0
+    t.integer  "adj_adult",        default: 0
+    t.integer  "total_adj",        default: 0
+    t.integer  "academic_year_id"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "lunch_menus", ["academic_year_id"], name: "index_lunch_menus_on_academic_year_id", using: :btree
+  add_index "lunch_menus", ["food_id"], name: "index_lunch_menus_on_food_id", using: :btree
 
   create_table "message_recipients", force: :cascade do |t|
     t.integer  "recipient_id"
@@ -2040,6 +2069,7 @@ ActiveRecord::Schema.define(version: 20190123073206) do
   add_foreign_key "diknas_conversion_items", "academic_years"
   add_foreign_key "diknas_conversion_items", "courses"
   add_foreign_key "diknas_conversion_items", "diknas_conversions"
+  add_foreign_key "diknas_conversion_lists", "diknas_conversions"
   add_foreign_key "diknas_conversions", "academic_terms"
   add_foreign_key "diknas_conversions", "academic_years"
   add_foreign_key "diknas_conversions", "diknas_courses"
@@ -2080,6 +2110,8 @@ ActiveRecord::Schema.define(version: 20190123073206) do
   add_foreign_key "loan_checks", "book_copies"
   add_foreign_key "loan_checks", "book_loans"
   add_foreign_key "loan_checks", "users"
+  add_foreign_key "lunch_menus", "academic_years"
+  add_foreign_key "lunch_menus", "foods"
   add_foreign_key "message_recipients", "messages"
   add_foreign_key "message_recipients", "msg_groups"
   add_foreign_key "message_recipients", "users", column: "recipient_id"
