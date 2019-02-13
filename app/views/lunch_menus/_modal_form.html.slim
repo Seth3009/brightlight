@@ -1,0 +1,36 @@
+= form_for @lunch_menu do |f|
+  .modal-content
+    - if @lunch_menu.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@lunch_menu.errors.count, "error")} prohibited this lunch_menu from being saved:"
+        ul
+          - @lunch_menu.errors.full_messages.each do |message|
+            li = message
+
+    .row
+      .input-field.col.s6     
+        = f.hidden_field :lunch_date, value: params[:d]    
+        = f.label :food_id, class:'active'
+        = f.text_field :food_id, prompt: "Type and choose food in this text field"
+    .row
+      .input-field.col.s2 
+        = f.label :adj_g1, "G1-G3", class:'active'
+        = f.number_field :adj_g1
+      .input-field.col.s2 
+        = f.label :adj_g4, "G4-G6", class:'active'
+        = f.number_field :adj_g4
+      .input-field.col.s2 
+        = f.label :adj_sol, "SOL", class:'active'
+        = f.number_field :adj_sol
+      .input-field.col.s2 
+        = f.label :adj_sor, "SOR", class:'active'
+        = f.number_field :adj_sor
+      .input-field.col.s2 
+        = f.label :adj_adult, "Adult", class:'active'
+        = f.number_field :adj_adult    
+      .input-field.col.s2 
+        = f.label :academic_year_id
+        = f.text_field :academic_year_id, value: @year
+  .modal-footer
+    button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" Save
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

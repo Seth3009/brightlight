@@ -1,0 +1,13 @@
+tr id="row-#{food_list.id}"  
+  td = food_list.food.name
+  td = food_list.adj_g1
+  td = food_list.adj_g4
+  td = food_list.adj_sol
+  td = food_list.adj_sor
+  td = food_list.adj_adult
+  td = food_list.total_adj + @food_pack.total
+  td
+    = link_to edit_lunch_menu_path(food_list), remote: true, class: "waves-effect waves-teal"
+      i.material-icons edit
+    = remote_link_to_delete food_list, message: "Food deleted", class: "left waves-effect waves-light red-text"
+      i.material-icons delete

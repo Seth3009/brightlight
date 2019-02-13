@@ -1,14 +1,10 @@
 class LunchMenusController < ApplicationController
   before_action :set_lunch_menu, only: [:show, :edit, :update, :destroy]
-
+  before_action :set_year, only: [:food_lists, :new, :edit, :update]
   # GET /lunch_menus
   # GET /lunch_menus.json
-  def index
-    if params[:d].present?
+  def index    
       @lunch_menus = LunchMenu.all
-    else
-      @lunch_menus = LunchMenu.all
-    end
   end
 
   # GET /lunch_menus/1
@@ -66,8 +62,7 @@ class LunchMenusController < ApplicationController
   end
 
   def food_lists
-    @food_lists = LunchMenu.where(lunch_date: params[:d]).all
-    @year = AcademicYear.current_id
+    @food_lists = LunchMenu.where(lunch_date: params[:d]).all    
     @food_pack = FoodPack.where(academic_year:@year).first    
   end
 
@@ -75,6 +70,10 @@ class LunchMenusController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_lunch_menu
       @lunch_menu = LunchMenu.find(params[:id])
+    end
+
+    def set_year
+      @year = AcademicYear.current_id          
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

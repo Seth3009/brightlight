@@ -1,14 +1,18 @@
 h4 #{Date.parse(params[:d]).try(:strftime, "%d %b %Y") rescue "-"} 
 
 nav
-  .navbar
+  .nav-wrapper
+    ul.right
+      li
+        = link_to new_lunch_menu_url(d:params[:d]), remote: true
+          | Add Food
+          i.material-icons.left add
 
   
 .card-panel
   table.compact style="margin: 1.2em 0"
     thead
       tr
-        th No
         th Food Name
         th Adj G1-G3
         th Adj G4-G6
@@ -16,14 +20,20 @@ nav
         th Adj SOR
         th Adj Adult
         th Total Packs
-    tbody      
-      - @food_lists.each_with_index do |food_list, index|
-        tr
-          td = index+1
-          td = food_list.food.name
-          td = food_list.adj_g1
-          td = food_list.adj_g4
-          td = food_list.adj_sol
-          td = food_list.adj_sor
-          td = food_list.adj_adult
-          td = food_list.total_adj + @food_pack.total
+        th Actions
+        
+    tbody#food_lists      
+      - @food_lists.each do |food_list|
+        tr id="row-#{food_list.id}"
+          = render partial: 'list_row', locals: {food_list: food_list}
+          
+
+            
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content
