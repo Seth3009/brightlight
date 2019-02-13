@@ -3,6 +3,10 @@ class LunchMenu < ActiveRecord::Base
   belongs_to :academic_year
 
   after_save :update_total
+
+  def start_time
+    self.lunch_date
+  end
   
   private
     def update_total      
