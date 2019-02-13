@@ -1,12 +1,54 @@
-h1 Listing lunch_menus
-.card-panel
-  = month_calendar events: @lunch_menus do |date, lunch_menus|
+h1 Lunch Menu Calendar
+
+= month_calendar events: @lunch_menus do |date, lunch_menus|
+  span.right
     = link_to date.day, lunch_menus_food_lists_url(d: date)
-    br
-    - lunch_menus.each do |lunch_menu|
+  br
+  - lunch_menus.each do |lunch_menu|
+    span style="font-size: 12px;"      
       = lunch_menu.food.name
       br
-    
+  
+
+css:
+
+  .calendar-heading a:hover {
+    text-decoration: underline;
+  }
+  .calendar-heading {
+    text-align: center;
+    font-size: 30px;
+  }
+
+  .calendar-title {
+    color: lightgreen;
+  }
+  .table thead th {
+    background-color: gray;
+    text-align: center;
+  }
+
+  .table td {
+    height: 100px !important;  
+    line-height:1em;  
+  }
+  .today {
+    background-color: lavender !important;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  td a:hover {
+    text-decoration: underline !important;
+    font-size: 20px;
+    color: blue;
+  }
+
+  .past {
+    color: lightgray !important;
+  } 
+
+  
 
 / table
 /   thead
