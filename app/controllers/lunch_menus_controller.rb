@@ -28,7 +28,7 @@ class LunchMenusController < ApplicationController
 
     respond_to do |format|
       if @lunch_menu.save
-        format.html { redirect_to @lunch_menu, notice: 'Lunch menu was successfully created.' }
+        format.html { redirect_to :back, notice: 'Lunch menu was successfully created.' }
         format.json { render :show, status: :created, location: @lunch_menu }
       else
         format.html { render :new }

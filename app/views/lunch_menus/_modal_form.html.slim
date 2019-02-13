@@ -11,7 +11,9 @@
       .input-field.col.s6     
         = f.hidden_field :lunch_date, value: params[:d]    
         = f.label :food_id, class:'active'
-        = f.text_field :food_id, prompt: "Type and choose food in this text field"
+        / = f.text_field :food_id, class:'food_id', placeholder: "Type your food name here", prompt: true
+        = text_field_tag :food, '', class: 'food_autocomplete', placeholder: "Type your food name here", prompt: true
+        = f.hidden_field :food_id, class:'food_id'
     .row
       .input-field.col.s2 
         = f.label :adj_g1, "G1-G3", class:'active'
@@ -28,9 +30,50 @@
       .input-field.col.s2 
         = f.label :adj_adult, "Adult", class:'active'
         = f.number_field :adj_adult    
-      .input-field.col.s2 
-        = f.label :academic_year_id
-        = f.text_field :academic_year_id, value: @year
+      
+        = f.hidden_field :academic_year_id, value: @year
   .modal-footer
     button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" Save
     a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+
+
+javascript:
+  $(document).on('focus', '.food_autocomplete', function() {
+    $(this).autocomplete({
+        source: "/foods?format=json",
+        max: 30,
+        minLength: 3,
+        create: function() {
+          $(this).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+            return $( "<li>" )
+              .append( "<div>" + item.name +"</div>" )
+              .appendTo( ul );
+          }
+        },
+        select: function( event, ui ) {
+          insert_food_values(event.target, ui.item); 
+          return false;
+        }
+      });  
+    
+    function insert_food_values(el, food) {            
+      $(".food_autocomplete").val(food.name)
+      $(".food_id").val(food.id)
+      console.log(food);      
+    }   
+  });
+
+
+  $(document).ready(function(){
+    $('.btn').attr('disabled',true);
+    $('.food_autocomplete').keyup(function(){
+        if($(this).val().length !=0)
+            $('.btn').attr('disabled', false);            
+        else
+            $('.btn').attr('disabled',true);
+            $(".food_id").val('')
+    })
+  });
+  
+
+  

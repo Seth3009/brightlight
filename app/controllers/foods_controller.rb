@@ -3,10 +3,15 @@ class FoodsController < ApplicationController
 
   # GET /foods
   # GET /foods.json
-  def index      
-    @foods = Food.all.order(:name)
-    if params[:search]
-      @foods = @foods.where('UPPER(foods.name) LIKE ?', "%#{params[:search].upcase}%").order(:name)
+  def index
+    respond_to do |format|      
+      @foods = Food.all.order(:name)
+      format.html {
+        if params[:search]
+          @foods = @foods.where('UPPER(foods.name) LIKE ?', "%#{params[:search].upcase}%").order(:name)
+        end
+      }
+      format.json { @foods = Food.search_query(params[:term]).active }
     end
   end
 

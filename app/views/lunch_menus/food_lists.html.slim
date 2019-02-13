@@ -1,7 +1,14 @@
-h4 #{Date.parse(params[:d]).try(:strftime, "%d %b %Y") rescue "-"} 
+h4 Food Menu on #{Date.parse(params[:d]).try(:strftime, "%d %b %Y") rescue "-"} 
 
 nav
   .nav-wrapper
+    ul
+      li
+        = link_to lunch_menus_path
+          i.material-icons chevron_left
+      li
+        .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Lunch Calendar 
     ul.right
       li
         = link_to new_lunch_menu_url(d:params[:d]), remote: true
@@ -10,18 +17,18 @@ nav
 
   
 .card-panel
-  table.compact style="margin: 1.2em 0"
+  table.compact
     thead
       tr
         th Food Name
-        th Adj G1-G3
-        th Adj G4-G6
-        th Adj SOL
-        th Adj SOR
-        th Adj Adult
-        th Total Packs
-        th Actions
-        
+        th.center Adj G1-G3
+        th.center Adj G4-G6
+        th.center Adj SOL
+        th.center Adj SOR
+        th.center Adj Adult
+        th.center Total Packs
+        th.center Actions
+
     tbody#food_lists      
       - @food_lists.each do |food_list|
         tr id="row-#{food_list.id}"
