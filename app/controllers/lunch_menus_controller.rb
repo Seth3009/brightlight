@@ -4,7 +4,11 @@ class LunchMenusController < ApplicationController
   # GET /lunch_menus
   # GET /lunch_menus.json
   def index
-    @lunch_menus = LunchMenu.all
+    if params[:d].present?
+      @lunch_menus = LunchMenu.all
+    else
+      @lunch_menus = LunchMenu.all
+    end
   end
 
   # GET /lunch_menus/1
@@ -59,6 +63,10 @@ class LunchMenusController < ApplicationController
       format.html { redirect_to lunch_menus_url, notice: 'Lunch menu was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def food_lists
+    
   end
 
   private

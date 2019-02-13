@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :lunch_menus
+  
   resources :food_packs  
   resources :employee_smartcards
   resources :stock_categories
@@ -33,6 +33,10 @@ Rails.application.routes.draw do
   resources :book_conditions
   resources :student_activities
   
+  resources :lunch_menus, except: [:show]
+  get 'lunch_menus/food_lists' => 'lunch_menus#food_lists', as: :lunch_menus_food_lists
+  
+
   resources :food_suppliers, except: [:show]
   resources :food_packages_food_suppliers, except: [:new, :show]
   

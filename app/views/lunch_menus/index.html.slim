@@ -1,7 +1,7 @@
 h1 Listing lunch_menus
 .card-panel
   = month_calendar events: @lunch_menus do |date, lunch_menus|
-    = link_to date.day, lunch_menus_path(ld: date)
+    = link_to date.day, lunch_menus_food_lists_url(d: date)
     br
     - lunch_menus.each do |lunch_menu|
       - if date < Date.today
