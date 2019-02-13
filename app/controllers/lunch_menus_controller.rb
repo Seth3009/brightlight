@@ -66,7 +66,9 @@ class LunchMenusController < ApplicationController
   end
 
   def food_lists
-    
+    @food_lists = LunchMenu.where(lunch_date: params[:d]).all
+    @year = AcademicYear.current_id
+    @food_pack = FoodPack.where(academic_year:@year).first    
   end
 
   private

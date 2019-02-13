@@ -4,10 +4,8 @@ h1 Listing lunch_menus
     = link_to date.day, lunch_menus_food_lists_url(d: date)
     br
     - lunch_menus.each do |lunch_menu|
-      - if date < Date.today
-        span style="text-decoration: line-through;"
-          = lunch_menu.food.name
-        br
+      = lunch_menu.food.name
+      br
     
 
 / table

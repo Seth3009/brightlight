@@ -1,3 +1,29 @@
 h4 #{Date.parse(params[:d]).try(:strftime, "%d %b %Y") rescue "-"} 
 
+nav
+  .navbar
+
+  
 .card-panel
+  table.compact style="margin: 1.2em 0"
+    thead
+      tr
+        th No
+        th Food Name
+        th Adj G1-G3
+        th Adj G4-G6
+        th Adj SOL
+        th Adj SOR
+        th Adj Adult
+        th Total Packs
+    tbody      
+      - @food_lists.each_with_index do |food_list, index|
+        tr
+          td = index+1
+          td = food_list.food.name
+          td = food_list.adj_g1
+          td = food_list.adj_g4
+          td = food_list.adj_sol
+          td = food_list.adj_sor
+          td = food_list.adj_adult
+          td = food_list.total_adj + @food_pack.total
