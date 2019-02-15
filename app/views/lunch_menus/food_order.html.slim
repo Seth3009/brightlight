@@ -1,0 +1,29 @@
+h4 Food Order
+
+
+nav
+  .nav-wrapper
+    ul        
+      li style="padding: 0 20px"         
+        | Choose date :
+      li
+        = date_field_tag 'start_date', params[:sd] || Date.today
+      li
+        | &nbsp to &nbsp &nbsp
+      li
+        = date_field_tag 'end_date', params[:ed] || Date.today  
+      li
+        | &nbsp &nbsp &nbsp
+      li
+        .waves-effect.waves-light.btn.blue#btnrefresh
+          | Refresh
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Foods
+    tbody#food_order
+      - @food_orders.each do |food_order|
+        tr
+          td = food_order.food.id

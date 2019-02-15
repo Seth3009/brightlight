@@ -66,6 +66,10 @@ class LunchMenusController < ApplicationController
     @food_pack = FoodPack.where(academic_year:@year).first    
   end
 
+  def food_order
+    @food_orders = LunchMenu.all
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_lunch_menu

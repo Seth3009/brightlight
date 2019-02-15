@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   
   resources :lunch_menus, except: [:show]
   get 'lunch_menus/food_lists' => 'lunch_menus#food_lists', as: :lunch_menus_food_lists
+  get 'lunch_menus/food_order' => 'lunch_menus#food_order', as: :lunch_menus_food_order
   
 
   resources :food_suppliers, except: [:show]
