@@ -67,7 +67,11 @@ class LunchMenusController < ApplicationController
   end
 
   def food_order
-    @food_orders = LunchMenu.all
+    @food_orders = RawFood.joins('left join recipes on recipes.raw_food_id = raw_foods.id')
+                          .joins('left join foods on foods.id = recipes.food_id')
+                          .joins('left join lunch_menus on lunch_menus.food_id = foods.id')
+                          .where('lunch_menus.lunch_date between ? and ?','2019-02-13','2019-02-13')
+                          .select('raw_foods.name, raw_foods.unit, recipes.recipe_portion')
   end
 
   private
