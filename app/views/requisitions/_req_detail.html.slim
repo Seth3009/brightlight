@@ -24,7 +24,7 @@
       = f.label :is_budgeted, 'Budgeted?'
     .input-field.col.m6
       = f.label 'Budget Account', class: 'active'
-      = f.select :account_id, options_for_select(@accounts.map { |a| ["#{a.acc_l4}: #{a.description}", a.id] }), prompt: 'Select budget account'
+      = f.select :account_id, options_for_select(@accounts.map { |a| ["#{a.acc_l4}: #{a.description}", a.id] }, @requisition.account_id), prompt: 'Select budget account'
     .input-field.col.offset-m3.m9
       = f.label :budget_notes
       = f.text_field :budget_notes
