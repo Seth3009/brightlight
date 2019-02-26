@@ -1,13 +1,13 @@
 table.compact.striped.responsive-table
   thead
     tr
-      th Employee
+      th  Employee
       th Leave date 
       th Leave notes
       th Category
       th Leave Type
       th Subs
-      th.center Approval
+      th Approval
       th Form Submit
       th Actions
       
@@ -31,17 +31,7 @@ table.compact.striped.responsive-table
             |Not Required
           -else
             |--        
-        td.center               
-          / -if leave_request.requires_supervisor_approval?           
-          /   -if leave_request.spv_approval.nil?
-          /     i.material-icons check_box_outline_blank
-          /   -elsif leave_request.spv_approval == true
-          /     i.material-icons check_box
-          /   -else
-          /     i.material-icons cancel
-          / -else
-          /   i.material-icons.grey-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Not required" check_box_outline_blank
-          / span &nbsp;&nbsp;&nbsp;
+        td.center                         
           -if leave_request.is_canceled?
             span.box.black
               | Canceled
@@ -60,7 +50,7 @@ table.compact.striped.responsive-table
               / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Rejected" cancel   
 
         td = leave_request.form_submit_date.nil? ? "--" : leave_request.form_submit_date.strftime("%d/%m/%Y")
-        td 
+        td
           = link_to leave_request_path(leave_request)
             i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="View" visibility
           - if @employee.id == @hrmanager.id || (if @hrvicemanager then @employee.id == @hrvicemanager.id end)
@@ -69,3 +59,6 @@ table.compact.striped.responsive-table
           - else             
             = link_to cancel_leave_request_path(leave_request), data: {:confirm => 'This action will cancel a leave request that has already been submitted. Are you sure?'}, :method => :delete, class:'red-text'
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete
+
+css:
+  th,td {height:30px;}

@@ -1,0 +1,123 @@
+-title 'Leave Request'
+-if params[:view].present?
+  h4 Leave Request (archive)
+-else
+  h4 Leave Request
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to (if params[:view] == 'archive' then :back else leave_requests_url() end)
+          i.material-icons.left chevron_left  
+      -if can?(:update, @leave_request) && @leave_request.draft?
+        li.right
+          = link_to edit_leave_request_path(@leave_request)
+            i.material-icons edit
+.card-panel
+  .leave-request-container 
+    .row
+        .col.s12
+          .label-text Employee   
+        .col.s12 
+          strong #{@leave_request.employee.try(:name)}
+          |  (#{@leave_request.employee.try(:job_title)})
+    
+    .row
+      .col.s12
+        .label-text Req'd date
+      .col.s12
+        | #{@leave_request.start_date.try(:strftime,"%d %b %Y")} To: #{@leave_request.end_date.try(:strftime,"%d %b %Y")}
+    .row
+      .col.s12
+        .label-text # of days/hours 
+      .col.s12
+        | #{@leave_request.hour}
+    .row
+      .col.s12
+        .label-text Leave for
+      .col.s12
+        | #{@leave_request.leave_type}
+    .row
+      .col.s12
+        .label-text Leave notes
+      .col.s12
+        | #{@leave_request.leave_note.nil? ? "--" : @leave_request.leave_note }
+    .row
+      .col.s12
+        .label-text Substitute  
+      .col.s12    
+        -if @leave_request.leave_subtitute == true
+          | Required
+        -elsif @leave_request.leave_subtitute == false
+          | Not Required
+        -else
+          | --
+    .row
+      .col.s12
+        .label-text Substitute Notes
+      .col.s12
+        | #{@leave_request.subtitute_notes.present? ? @leave_request.subtitute_notes.present? : "--" }  
+    .row
+      .col.s6
+        .label-text Submit date
+      .col.s6.center
+        | #{@leave_request.form_submit_date.try(:strftime, ("%d %B %Y")) || "Draft"}
+    .row
+      .col.s6
+        .label-text Approval Status
+      .col.s6.center
+        -if @leave_request.is_canceled?
+          span.box.black
+            | Canceled
+        -elsif @leave_request.employee_canceled?
+          span.box.black
+            | Empl. Canceled 
+        - else
+          -if @leave_request.hr_approval.nil? && @leave_request.spv_approval != false
+            span.box
+              | Progress
+            / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Submitted" check_box_outline_blank            
+          -elsif @leave_request.hr_approval == true
+            span.box.green
+              | Approved
+            / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Approved" check_box
+          -else
+            span.box.red
+              | Rejected
+            / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Rejected" cancel   
+    - if params[:page].present? || (can? :read_hr, LeaveRequest) == true
+      .row
+        .col.s12
+          .label-text SPV Notes
+        .col.s12
+          | #{@leave_request.spv_notes}
+      .row
+        .col.s12
+          .label-text HR Notes
+        .col.s12
+          | #{@leave_request.hr_notes}
+      
+    -if @leave_request.is_canceled?
+      .row
+        .col.s12
+          h6.center-align.red-text This leave request has been canceled
+- if params[:action] =~ /show/ && params[:approve].nil?
+  ul.collapsible data-collapsible="expandable"
+    li.comment-section
+          .collapsible-header.active
+            | Comments (#{@commentable.comments.count})
+            i.material-icons.arrow.left chevron_right
+            .right
+              = link_to "#"
+                |Add comment
+                i.material-icons.left add
+          .collapsible-body.container-padding
+            = render 'comments/comment_widget'
+
+
+javascript:
+  $(document).on('ready page:load', function(){
+    $('.collapsible').collapsible({
+      accordion: false
+    });
+  });
