@@ -1,8 +1,8 @@
 class LeaveRequestsController < ApplicationController
   before_action :set_leave_request, only: [:show, :edit, :update, :destroy, :cancel, :approve]
   before_action :set_employee, only: [:index, :new, :edit, :create, :update, :approve, :archives, :show]
-  
-  
+  before_filter :check_for_mobile
+    
   # GET /leave_requests
   # GET /leave_requests.json
   def index
