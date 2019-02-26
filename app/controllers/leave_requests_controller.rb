@@ -21,8 +21,7 @@ class LeaveRequestsController < ApplicationController
     @hr_approval_list = @leave_requests.hrlist
                         .where('hr_approval IS ?', nil)
                         .order(spv_date: :asc, form_submit_date: :asc, updated_at: :asc)
-    @hr_count = @hr_approval_list.count
-    
+    @hr_count = @hr_approval_list.count    
   end
 
   def archives

@@ -1,0 +1,70 @@
+table.compact.striped.responsive-table
+  thead
+    tr
+      th Submit on
+      th Leave date 
+      th Leave notes
+      th Category
+      th Leave Type
+      th Subs
+      th Approval                  
+      th Actions
+      
+      
+  tbody#leave_requests style="font-size:14px;" 
+    - @own_leave_requests.each do |leave_request|
+      tr
+        td
+          = leave_request.form_submit_date.nil? ? 'Draft' : leave_request.form_submit_date.try(:strftime,"%d %b %y")
+        td #{leave_request.start_date.try(:strftime,"%d %b %Y")} - #{leave_request.end_date.try(:strftime,"%d %b %Y")}
+        td = leave_request.hour 
+        td = leave_request.category? ? leave_request.category : "--"
+        td 
+          - if leave_request.leave_type == 'Sick' 
+            | Sick Without Med Note
+          - else 
+            = leave_request.leave_type
+        td 
+          -if leave_request.leave_subtitute == true
+            |Required
+          -elsif leave_request.leave_subtitute == false
+            |Not Required
+          -else
+            |--
+        td         
+          -if leave_request.form_submit_date.nil? 
+            | --
+          -elsif leave_request.is_canceled?
+              span.box.black
+                | Canceled
+          -elsif leave_request.employee_canceled?
+              span.box.black
+                | Canceled by me
+          - else
+            -if leave_request.hr_approval.nil? && leave_request.spv_approval != false
+              span.box
+                | Progress
+              / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Submitted" check_box_outline_blank            
+            -elsif leave_request.hr_approval == true
+              span.box.green
+                | Approved
+              / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Approved" check_box
+            -else
+              span.box.red
+                | Rejected
+              / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Rejected" cancel   
+
+        td
+          = link_to leave_request_path(leave_request)
+            i.material-icons visibility
+          - if leave_request.draft? && (can? :update, leave_request)
+            = link_to edit_leave_request_path(leave_request)
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+          - if leave_request.draft?
+            = link_to leave_request, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+          - if  leave_request.spv_approval.nil? && leave_request.employee_canceled == false && leave_request.submitted?
+            = link_to cancel_leave_request_path(leave_request,byemp:'yes'), data: {:confirm => 'You are going to cancel submitted leave request and your supervisor will be notified. Are you sure?'}, :method => :delete, class:'red-text'
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete
+javascript:
+  $('#datestart').datepicker({format: 'dd/mm/yyyy'});
