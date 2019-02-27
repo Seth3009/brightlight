@@ -1,7 +1,7 @@
 class Badge < ActiveRecord::Base
   validates :employee_id, :student_id, uniqueness: true, allow_blank: true
-  validates :employee_id, presence: {unless: :student_id?}
-  validates :student_id, presence: {unless: :employee_id?}
+  validates :employee_id, presence: true, unless: -> { student_id.present? || !active }
+  validates :student_id, presence: true, unless: -> { employee_id.present? || !active }
   validates :code, uniqueness: true
 
   belongs_to :employee

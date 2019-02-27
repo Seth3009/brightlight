@@ -34,7 +34,17 @@ class BadgesController < ApplicationController
   def destroy
     authorize! :destroy, Badge
     @badge = Badge.find(params[:id])
-    @badge.destroy
+    @badge.active = false
+    owner = if @badge.student_id.present? 
+              "student id #{@badge.student_id }" 
+            elsif @badge.employee_id.present? 
+              "employee id #{@badge.employee_id}"
+            else
+              "??? ERROR ???"
+            end
+    @badge.detail = "INACTIVE: belonged to #{owner}"
+    @badge.employee_id = @badge.student_id = nil
+    @badge.save
     respond_to do |format|
       format.json { head :no_content }
     end
