@@ -1,13 +1,13 @@
-table.compact.striped
+table.compact.striped.responsive-table
   thead
     tr
-      th Employee
+      th  Employee
       th Leave date 
       th Leave notes
       th Category
       th Leave Type
       th Subs
-      th SPV Approval
+      th Approval
       th Form Submit
       th Actions
       
@@ -31,33 +31,20 @@ table.compact.striped
             |Not Required
           -else
             |--        
-        td.center
+        td.center                         
           -if leave_request.is_canceled?
             span.box.black
-              | Canceled   
-          - else                                  
-            -if leave_request.spv_approval.nil?
-              i.material-icons check_box_outline_blank
-            -elsif leave_request.spv_approval == true
-              i.material-icons check_box
-            -else
-              i.material-icons cancel
-          
-          /   
-          / -else
-          /   i.material-icons.grey-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Not required" check_box_outline_blank
-          / span &nbsp;&nbsp;&nbsp;
-          
-          
-            / -if leave_request.hr_approval.nil? && leave_request.spv_approval != false
+              | Canceled
+          - else
+            -if leave_request.hr_approval.nil? && leave_request.spv_approval != false
               span.box
                 | Progress
               / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Submitted" check_box_outline_blank            
-            / -elsif leave_request.hr_approval == true
+            -elsif leave_request.hr_approval == true
               span.box.green
                 | Approved
               / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Approved" check_box
-            / -else
+            -else
               span.box.red
                 | Rejected
               / i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Rejected" cancel   
@@ -73,3 +60,6 @@ table.compact.striped
           - else             
             = link_to cancel_leave_request_path(leave_request), data: {:confirm => 'This action will cancel a leave request that has already been submitted. Are you sure?'}, :method => :delete, class:'red-text'
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete
+
+css:
+  th,td {height:30px;}

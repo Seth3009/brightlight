@@ -1,0 +1,39 @@
+= form_for @leave_request do |f|
+  = render 'detail_leave_request' 
+
+  -unless @leave_request.is_canceled? || @leave_request.employee_canceled?
+    nav
+      .nav-wrapper
+        .brand-logo style="margin-left: 20px; font-size:1.5em"
+          | Approval Action  
+
+    -if params[:page] == "spv" && can?(:approve, @leave_request)
+      -if @leave_request.pending_spv_approval?
+        .card-panel        
+          = label_tag "label_note", "Approval Notes", class: 'label'          
+          = f.text_field :spv_notes, :value => @leave_request.spv_notes, class: 'cat'
+        .toolbar.z-depth-1
+          .row
+            .col.s6.center
+              = button_tag class:"btn waves-effect waves-light center green", style:"width:100%;", type: "submit", name:"send", value:"spv-app", data: {confirm: "Approve this leave request?"}
+                i.material-icons.center thumb_up
+            .col.s6.center
+              = button_tag class:"btn waves-effect waves-light center red", style:"width:100%;", type: "submit", name:"send", value:"spv-den", data: {confirm: "Reject this leave request?"}
+                i.material-icons.center thumb_down
+      -else
+        .card-panel
+          p No action required
+    
+    -elsif params[:page] == "hr" && can?(:validate, LeaveRequest) && @leave_request.pending_hr_approval?
+      .card-panel        
+        = label_tag "label_note", "Approval Notes", class: 'label'
+        = f.text_field :hr_notes,  class: 'cat'
+      .toolbar.z-depth-1
+        .row
+          .col.s6.center
+            = button_tag class:"btn waves-effect waves-light center green", style:"width:100%;", type: "submit", name:"send", value:"hr-app", data: {confirm: "Approve this leave request?"}
+              i.material-icons.center thumb_up
+          .col.s6.center
+            = button_tag class:"btn waves-effect waves-light center red", style:"width:100%;", type: "submit", name:"send", value:"hr-den", data: {confirm: "Reject this leave request?"}
+              i.material-icons.center thumb_down
+    

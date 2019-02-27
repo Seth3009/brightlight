@@ -1,8 +1,8 @@
 class LeaveRequestsController < ApplicationController
   before_action :set_leave_request, only: [:show, :edit, :update, :destroy, :cancel, :approve]
   before_action :set_employee, only: [:index, :new, :edit, :create, :update, :approve, :archives, :show]
-  
-  
+  before_filter :check_for_mobile
+    
   # GET /leave_requests
   # GET /leave_requests.json
   def index
@@ -21,8 +21,7 @@ class LeaveRequestsController < ApplicationController
     @hr_approval_list = @leave_requests.hrlist
                         .where('hr_approval IS ?', nil)
                         .order(spv_date: :asc, form_submit_date: :asc, updated_at: :asc)
-    @hr_count = @hr_approval_list.count
-    
+    @hr_count = @hr_approval_list.count    
   end
 
   def archives

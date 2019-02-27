@@ -36,7 +36,7 @@ class LeaveRequest < ActiveRecord::Base
   }
 
   scope :hrlist, ->  { 
-    where("spv_approval = true")    
+    where("spv_approval = true or spv_approval is null")    
   }
 
   scope :hrlist_archive, ->  { 

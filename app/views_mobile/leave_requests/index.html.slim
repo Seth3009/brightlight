@@ -1,0 +1,41 @@
+h4 Leave Requests 
+h5 #{if params[:leave_date].present? then params[:leave_date].to_date.strftime('%d %b %Y') else Date.today.strftime('%d %b %Y') }
+
+nav
+  .nav-wrapper        
+    ul.right
+      li        
+        = link_to new_leave_request_path
+          | New
+          i.material-icons.left add
+
+
+ul.tabs.z-depth-1
+  li.tab.col.s2
+    -if can? :read, @own_leave_requests.first
+      a href='#tab1' 
+        |My LR
+        -if @own_count && @own_count > 0
+            span.emblem = @own_count          
+  - if can? :review, LeaveRequest    
+    li.tab.col.s2
+      a href='#tab2' 
+        |SPV
+        -if @spv_count && @spv_count > 0
+          span.emblem = @spv_count
+  - if can? :read_hr, LeaveRequest
+    li.tab.col.s2
+      a.active href='#tab3'
+        |HRD
+        -if @hr_count && @hr_count > 0
+          span.emblem = @hr_count
+
+.card
+  #tab1.tab-content
+    == render 'employee_list'
+  #tab2.tab-content
+    - if can? :review, LeaveRequest
+      == render "spv_list"
+  #tab3.tab-content
+    - if can? :read_hr, LeaveRequest
+      == render "hr_list"
