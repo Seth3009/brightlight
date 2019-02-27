@@ -36,13 +36,9 @@ class BookTitlesController < ApplicationController
         end
 
         if params[:term]
-<<<<<<< HEAD
-          @book_titles = @book_titles.search_query(params[:term])
-=======
           @book_titles = BookTitle
             .search_query(params[:term])
             .includes(:book_editions)
->>>>>>> Course section
         elsif params[:copy]
           redirect_to book_copy_path(params[:copy].upcase)
         end

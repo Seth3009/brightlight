@@ -1,10 +1,13 @@
 .nested-fields
-  .row
-    .input-field.col.s2
-      = f.label :grade_section, class: 'active'
-      = f.collection_select(:grade_section_id, GradeSection.all.order(:grade_level_id, :id), :id, :name, {prompt: true}, {:class => 'browser-default'})
-    .input-field.col.s3
-      = f.label :instructor, class: 'active'
-      = f.collection_select(:instructor_id, Employee.all_teachers, :id, :name, {prompt: true}, {:class => 'browser-default'})
-    .input-field.col.s1
-      = link_to_remove_association "Remove", f, class: "waves-effect waves-teal btn btn-flat red-text btn-small"
+  .input-field.col.s2
+    = f.label :grade_section, class: 'active'
+    = f.collection_select(:grade_section_id, GradeSection.all.order(:grade_level_id, :id), :id, :name, {prompt: true}, {:class => 'browser-default'})
+  .input-field.col.s3
+    = f.label :instructor, class: 'active'
+    = f.collection_select(:instructor_id, Employee.all_teachers, :id, :name, {prompt: true}, {:class => 'browser-default'})
+  .input-field.col.s6
+    = f.label :name
+    = f.text_field :name
+  .input-field.col.s1
+    = link_to_remove_association f, class: "waves-effect waves-teal red-text"
+      i.material-icons delete

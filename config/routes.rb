@@ -20,6 +20,10 @@ Rails.application.routes.draw do
   resources :food_order_items
   
   resources :food_packs, except: :show
+  
+  resources :course_schedules
+  resources :class_periods
+  resources :batches
   resources :employee_smartcards
   resources :stock_categories
   resources :stock_items

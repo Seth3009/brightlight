@@ -1,0 +1,24 @@
+p#notice = notice
+
+p
+  strong Course:
+  = @course_schedule.course
+p
+  strong Course section:
+  = @course_schedule.course_section
+p
+  strong Class period:
+  = @course_schedule.class_period
+p
+  strong Room:
+  = @course_schedule.room
+p
+  strong Active:
+  = @course_schedule.active
+p
+  strong Academic term:
+  = @course_schedule.academic_term
+
+= link_to 'Edit', edit_course_schedule_path(@course_schedule)
+'|
+= link_to 'Back', course_schedules_path
