@@ -35,3 +35,4 @@
 //= require settings
 //= require jquery.timepicker.min.js
 //= require jquery.combobox
+//= require tinymce
