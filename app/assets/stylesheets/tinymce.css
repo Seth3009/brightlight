@@ -1,3 +1,4 @@
+/*
 * {
   border: 0;
   padding: 0;
@@ -58,6 +59,7 @@ textarea {
   src: url(../fonts/aileron-ultra-light.eot?#iefix) format("embedded-opentype"), url(../fonts/aileron-ultra-light.woff) format("woff"), url(../fonts/aileron-ultra-light.ttf) format("truetype")
 } */
 
+*/
 
 .mce-container textarea {
   display: inline-block !important
@@ -65,6 +67,7 @@ textarea {
 
 .mce-content-body {
   font-size: 14px;
+  font-family: Georgia, 'Times New Roman', Times, serif
   color: rgba(0, 0, 0, 0.87);
   padding: 0 25px 25px
 }
