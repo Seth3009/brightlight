@@ -1,14 +1,3 @@
-# toolbar:
-#   - styleselect | bold italic | bullist numlist outdent indent | undo redo | image link
-#   - fontsizeselect | alignleft aligncenter alignright | forecolor backcolor | table
-# fontsize_formats:
-#   - 8pt 10pt 12pt 14pt 18pt 24pt 36pt
-# plugins:
-#   - image
-#   - link
-#   - textcolor
-#   - table
-
 default:
   menubar: false
   statusbar: false
@@ -17,8 +6,7 @@ default:
     - insertdatetime media contextmenu paste code wordcount
   toolbar: 
     - undo redo | bold italic forecolor backcolor  | alignleft aligncenter alignright alignjustify
-  content_css: '/assets/tinymce.css'
-  
+
 extended:
   menubar: false
   statusbar: false
