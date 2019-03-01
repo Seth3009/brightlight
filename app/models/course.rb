@@ -3,7 +3,8 @@ class Course < ActiveRecord::Base
   belongs_to :academic_year
   has_and_belongs_to_many :academic_terms
   belongs_to :employee
-
+  belongs_to :subject
+  
   validates :name, presence: true, uniqueness: true
   validates :academic_year, presence: true
 

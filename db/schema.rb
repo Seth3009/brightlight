@@ -540,6 +540,27 @@ ActiveRecord::Schema.define(version: 20190426005237) do
   add_index "cars", ["transport_id", "period_hash"], name: "transport_period_index", unique: true, using: :btree
   add_index "cars", ["transport_id"], name: "cars_transport_id_index", using: :btree
 
+  create_table "class_budgets", force: :cascade do |t|
+    t.integer  "department_id"
+    t.integer  "grade_level_id"
+    t.integer  "grade_section_id"
+    t.integer  "holder_id"
+    t.integer  "academic_year_id"
+    t.integer  "month"
+    t.decimal  "amount"
+    t.decimal  "balance"
+    t.decimal  "actual"
+    t.string   "notes"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "class_budgets", ["academic_year_id"], name: "index_class_budgets_on_academic_year_id", using: :btree
+  add_index "class_budgets", ["department_id"], name: "index_class_budgets_on_department_id", using: :btree
+  add_index "class_budgets", ["grade_level_id"], name: "index_class_budgets_on_grade_level_id", using: :btree
+  add_index "class_budgets", ["grade_section_id"], name: "index_class_budgets_on_grade_section_id", using: :btree
+  add_index "class_budgets", ["holder_id"], name: "index_class_budgets_on_holder_id", using: :btree
+
   create_table "class_periods", force: :cascade do |t|
     t.string   "name"
     t.time     "start_time"
