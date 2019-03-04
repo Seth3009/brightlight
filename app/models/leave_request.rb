@@ -39,6 +39,10 @@ class LeaveRequest < ActiveRecord::Base
     where("spv_approval = true or spv_approval is null")    
   }
 
+  scope :hrspv_list, -> { 
+    where("spv_approval = true") 
+  }
+
   scope :hrlist_archive, ->  { 
     submitted
     .select('leave_requests.*,employees.name as employee_name')
