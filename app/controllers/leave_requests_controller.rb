@@ -18,9 +18,15 @@ class LeaveRequestsController < ApplicationController
                           .where('form_submit_date = ? or spv_approval IS ?',Date.today, nil) 
                           .order(form_submit_date: :asc, updated_at: :asc)                         
     @spv_count = @supv_approval_list.count
-    @hr_approval_list = @leave_requests.hrlist
+    if @employee.id == @hrmanager.id || (if @hrvicemanager then @employee.id == @hrvicemanager.id end)
+      @hr_approval_list = @leave_requests.hrspv_list
                         .where('hr_approval IS ?', nil)
                         .order(spv_date: :asc, form_submit_date: :asc, updated_at: :asc)
+    else
+      @hr_approval_list = @leave_requests.hrlist
+                        .where('hr_approval IS ?', nil).where.not('form_submit_date IS ?', nil)
+                        .order(spv_date: :asc, form_submit_date: :asc, updated_at: :asc)
+    end
     @hr_count = @hr_approval_list.count    
   end
 
