@@ -40,7 +40,7 @@ table.compact.striped
               i.material-icons check_box_outline_blank
             -elsif leave_request.spv_approval == true
               span.box.green                
-                | &nbsp #{leave_request.spv_date.try(:strftime,"%d %b %Y")}
+                = leave_request.spv_date.try(:strftime,"%d %b %Y")
                 
             -else
               i.material-icons cancel
