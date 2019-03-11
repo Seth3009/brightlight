@@ -38,7 +38,7 @@
                 = f.text_field :barcode
               .input-field.col.s4
                 = f.label 'Label', class: 'active'
-                = f.grouped_collection_select :book_label_id, GradeSection.all.order(:grade_level_id, :id).includes(:book_labels), :book_labels, :name, :id, :name, {prompt:true}, {class:'browser-default materialish'}
+                = f.select :book_label_id, grouped_options_for_select(BookLabel.for_select, f.object.book_label_id, prompt: true)
               .input-field.col.s4
                 = f.label 'Status', class: 'active'
                 = f.collection_select :status_id, Status.all, :id, :name, prompt:true
