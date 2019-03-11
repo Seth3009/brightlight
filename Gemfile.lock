@@ -101,7 +101,7 @@ GEM
     factory_girl_rails (4.6.0)
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
-    faraday (0.9.1)
+    faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
     filterrific (2.0.5)
       rails (>= 3.1.0)
@@ -126,7 +126,7 @@ GEM
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
     json (1.8.6)
-    jwt (1.5.1)
+    jwt (2.1.0)
     launchy (2.4.3)
       addressable (~> 2.3)
     letter_opener (1.6.0)
@@ -157,23 +157,21 @@ GEM
     numbers_and_words (0.10.5)
       activesupport
       i18n
-    oauth2 (1.0.0)
-      faraday (>= 0.8, < 0.10)
-      jwt (~> 1.0)
+    oauth2 (1.4.1)
+      faraday (>= 0.8, < 0.16.0)
+      jwt (>= 1.0, < 3.0)
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
-      rack (~> 1.2)
+      rack (>= 1.2, < 3)
     omniauth (1.2.2)
       hashie (>= 1.2, < 4)
       rack (~> 1.0)
-    omniauth-google-oauth2 (0.2.8)
-      addressable (~> 2.3)
-      jwt (~> 1.0)
-      multi_json (~> 1.3)
+    omniauth-google-oauth2 (0.6.0)
+      jwt (>= 2.0)
       omniauth (>= 1.1.1)
-      omniauth-oauth2 (>= 1.1.1)
-    omniauth-oauth2 (1.3.1)
-      oauth2 (~> 1.0)
+      omniauth-oauth2 (>= 1.5)
+    omniauth-oauth2 (1.5.0)
+      oauth2 (~> 1.1)
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
     pg (0.18.4)
@@ -343,7 +341,7 @@ DEPENDENCIES
   nprogress-rails
   numbers_and_words
   omniauth
-  omniauth-google-oauth2
+  omniauth-google-oauth2 (~> 0.6.0)
   pg (~> 0.18.4)
   pivot_table
   pjax_rails

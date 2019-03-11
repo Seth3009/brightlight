@@ -68,7 +68,7 @@ gem 'rails-timeago', '~> 2.0'
 # Login with Devise & OmniAuth Google+ OAuth2
 gem 'devise'
 gem 'omniauth'
-gem 'omniauth-google-oauth2'
+gem 'omniauth-google-oauth2', '~> 0.6.0'
 
 # Nested form handling
 gem 'cocoon'
