@@ -38,3 +38,17 @@ nav
           td = number_with_precision(food_order.stock, :precision => 2, :delimiter => ',') rescue "0"
           td = number_with_precision(food_order.cur_qty - food_order.stock, :precision => 2, :delimiter => ',') rescue "0"
           
+javascript:
+  $(function(){
+    // bind click event to get data
+    $('#btnrefresh').on('click', function () {          
+        var date = $('#start_date').val(); 
+        var date2 = $('#end_date').val();
+        var url = new URL(window.location.href);
+        var page = url.searchParams.get("sd");                 
+        if (date) { // require a URL
+            window.location = "food_order?sd="+date+"&ed="+date2; // redirect              
+        }
+        return false;
+    });
+  });

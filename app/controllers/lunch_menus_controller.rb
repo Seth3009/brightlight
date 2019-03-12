@@ -74,7 +74,7 @@ class LunchMenusController < ApplicationController
     @sor = FoodPack.sor(@food_pack)
     @adult = @food_pack.employee
     
-    @food_orders = RawFood.food_order('2019-03-07','2019-03-07', @g1, @g2, @sol, @sor, @adult)
+    @food_orders = RawFood.food_order((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult)
     
   end
 
