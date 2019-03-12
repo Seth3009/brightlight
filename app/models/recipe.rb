@@ -19,4 +19,12 @@ class Recipe < ActiveRecord::Base
       end
     end
   end
+
+  def current_qty(g1,g2,sol,sor,adult)
+    if self.portion_size != 0
+      self.portion_size * ((self.gr1_portion * g1) + (self.gr2_portion * g2) + (self.sol_portion * sol) + (self.sor_portion * sor) + (self.adult_portion * adult))
+    else
+      (self.qty/self.recipe_portion) * (g1 + g2 + sol + sor + adult)
+    end
+  end
 end

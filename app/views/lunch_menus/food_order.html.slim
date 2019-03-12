@@ -22,13 +22,19 @@ nav
   table.compact.striped
     thead
       tr
-        th Foods
-        th Amount
+        th Food Name
         th Units
+        th Recipe Qty    
+        th Stock
+        th Order Qty    
+        
+        
     tbody#food_order
       - @food_orders.each do |food_order|
         tr
-          td = food_order.name
-          td = food_order.recipe_portion
-          td = food_order.unit
+          td = food_order.name 
+          td = food_order.unit           
+          td = number_with_precision(food_order.cur_qty, :precision => 2, :delimiter => ',') rescue "0"
+          td = number_with_precision(food_order.stock, :precision => 2, :delimiter => ',') rescue "0"
+          td = number_with_precision(food_order.cur_qty - food_order.stock, :precision => 2, :delimiter => ',') rescue "0"
           

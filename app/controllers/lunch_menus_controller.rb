@@ -1,6 +1,6 @@
 class LunchMenusController < ApplicationController
   before_action :set_lunch_menu, only: [:show, :edit, :update, :destroy]
-  before_action :set_year, only: [:food_lists, :new, :edit, :update]
+  before_action :set_year, only: [:food_lists, :food_order, :new, :edit, :update]
   # GET /lunch_menus
   # GET /lunch_menus.json
   def index    
@@ -66,12 +66,16 @@ class LunchMenusController < ApplicationController
     @food_pack = FoodPack.where(academic_year:@year).first    
   end
 
-  def food_order
-    @food_orders = RawFood.joins('left join recipes on recipes.raw_food_id = raw_foods.id')
-                          .joins('left join foods on foods.id = recipes.food_id')
-                          .joins('left join lunch_menus on lunch_menus.food_id = foods.id')
-                          .where('lunch_menus.lunch_date between ? and ?','2019-02-13','2019-02-13')
-                          .select('raw_foods.name, raw_foods.unit, recipes.recipe_portion')
+  def food_order        
+    @food_pack = FoodPack.find_by_academic_year_id(@year)    
+    @g1 = FoodPack.g1_g3(@food_pack)
+    @g2 = FoodPack.g4_g6(@food_pack)
+    @sol = FoodPack.sol(@food_pack)
+    @sor = FoodPack.sor(@food_pack)
+    @adult = @food_pack.employee
+    
+    @food_orders = RawFood.food_order('2019-03-07','2019-03-07', @g1, @g2, @sol, @sor, @adult)
+    
   end
 
   private
