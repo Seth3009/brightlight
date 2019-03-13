@@ -1312,6 +1312,11 @@ ul {
 	height: 80%;
 }
 
+.modal.small {
+	max-height: 400px !important;
+	width: 400px !important;
+}
+
 // =========================================== Carpool =========================================
 .carpool {
 	.entry-wrapper {

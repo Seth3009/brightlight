@@ -3,6 +3,8 @@ td = item.fpb
 td = item.requestor_name || "N/A"
 td = item.description
 td.right-align = "#{item.quantity} #{item.unit}"
-td = item.budget || "--"
+td 
+  = link_to edit_account_requisition_path(item.fpb, item: item.id), remote: true
+    = item.budget || "--"
 td = item.supplier
 td.right-align = link_to currency(item.line_amount, currency: item.currency), edit_order_item_path(item), remote: true
