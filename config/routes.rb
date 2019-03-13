@@ -266,6 +266,8 @@ Rails.application.routes.draw do
       get 'approve'
       post 'approve_requisition'
       post 'approve_budget'
+      get 'edit_account'
+      patch 'update_account'
     end
   end 
 

@@ -38,6 +38,8 @@ class PurchaseOrdersController < ApplicationController
                   .uniq
     @suppliers = Supplier.joins(:purchase_orders)
                   .where(purchase_orders: {order_date: date})
+
+    @grand_total = @items.sum :line_amount
   end
 
   # GET /purchase_orders/1

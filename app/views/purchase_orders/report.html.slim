@@ -41,5 +41,9 @@ table.compact.bordered.striped
     - @items.each.with_index(1) do |item, i|
       tr id="po-#{item.id}"
         = render partial: "order_row", locals: {item: item}
+  tfoot
+    tr
+      td.right-align colspan=6 Total
+      td.right-align = currency(@grand_total)
 
-#show-modal.modal.modal-fixed-footer
+#show-modal.modal.modal-fixed-footer.small

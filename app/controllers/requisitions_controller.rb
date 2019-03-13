@@ -1,5 +1,5 @@
 class RequisitionsController < ApplicationController
-  before_action :set_requisition, only: [:show, :edit, :update, :destroy, :approve]
+  before_action :set_requisition, only: [:show, :edit, :edit_account, :update, :update_account, :destroy, :approve]
 
   # GET /requisitions
   # GET /requisitions.json
@@ -60,6 +60,22 @@ class RequisitionsController < ApplicationController
     @manager = @employee.manager || @employee.supervisor
     @supervisors = Employee.active.supervisors.all
     @accounts = Account.for_department_id(@employee.department_id) rescue []
+  end
+
+  def edit_account
+    authorize! :update, @requisition
+    @item_id = params[:item]
+    @employee = @requisition.requester || current_user.employee
+    @accounts = Account.for_department_id(@employee.department_id) rescue []
+  end
+
+  def update_account
+    authorize! :update, @requisition
+    @requisition.update(requisition_params)
+    @order_item = OrderItem.po_record.where(id: params[:item_id]).take
+    respond_to do |format|
+      format.js 
+    end
   end
 
   # POST /requisitions
