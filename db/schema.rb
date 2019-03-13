@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190213030715) do
+ActiveRecord::Schema.define(version: 20190313075220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -862,6 +862,29 @@ ActiveRecord::Schema.define(version: 20190213030715) do
   add_index "fine_scales", ["new_condition_id"], name: "index_fine_scales_on_new_condition_id", using: :btree
   add_index "fine_scales", ["old_condition_id"], name: "index_fine_scales_on_old_condition_id", using: :btree
 
+  create_table "food_order_items", force: :cascade do |t|
+    t.integer  "food_order_id"
+    t.integer  "food_package_id"
+    t.float    "qty_order"
+    t.float    "qty_received"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "food_order_items", ["food_order_id"], name: "index_food_order_items_on_food_order_id", using: :btree
+  add_index "food_order_items", ["food_package_id"], name: "index_food_order_items_on_food_package_id", using: :btree
+
+  create_table "food_orders", force: :cascade do |t|
+    t.date     "date_order"
+    t.string   "order_notes"
+    t.integer  "food_supplier_id"
+    t.boolean  "is_completed"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "food_orders", ["food_supplier_id"], name: "index_food_orders_on_food_supplier_id", using: :btree
+
   create_table "food_packages", force: :cascade do |t|
     t.string   "packaging"
     t.float    "package_contents"
@@ -1243,15 +1266,15 @@ ActiveRecord::Schema.define(version: 20190213030715) do
   create_table "order_items", force: :cascade do |t|
     t.integer  "purchase_order_id"
     t.integer  "stock_item_id"
-    t.float    "quantity"
+    t.float    "quantity",           default: 0.0
     t.string   "unit"
-    t.float    "min_delivery_qty"
-    t.float    "pending_qty"
+    t.float    "min_delivery_qty",   default: 0.0
+    t.float    "pending_qty",        default: 0.0
     t.string   "type"
-    t.decimal  "line_amount"
-    t.decimal  "unit_price"
+    t.decimal  "line_amount",        default: 0.0
+    t.decimal  "unit_price",         default: 0.0
     t.string   "currency"
-    t.boolean  "deleted"
+    t.boolean  "deleted",            default: false
     t.string   "description"
     t.string   "status"
     t.integer  "line_num"
@@ -1259,13 +1282,13 @@ ActiveRecord::Schema.define(version: 20190213030715) do
     t.string   "notes"
     t.integer  "created_by_id"
     t.integer  "last_updated_by_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.decimal  "discount"
-    t.decimal  "est_tax"
-    t.decimal  "non_recurring"
-    t.decimal  "shipping"
-    t.decimal  "down_payment"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.decimal  "discount",           default: 0.0
+    t.decimal  "est_tax",            default: 0.0
+    t.decimal  "non_recurring",      default: 0.0
+    t.decimal  "shipping",           default: 0.0
+    t.decimal  "down_payment",       default: 0.0
     t.integer  "req_item_id"
     t.string   "code"
   end
@@ -2093,6 +2116,9 @@ ActiveRecord::Schema.define(version: 20190213030715) do
   add_foreign_key "family_members", "families"
   add_foreign_key "family_members", "guardians"
   add_foreign_key "family_members", "students"
+  add_foreign_key "food_order_items", "food_orders"
+  add_foreign_key "food_order_items", "food_packages"
+  add_foreign_key "food_orders", "food_suppliers"
   add_foreign_key "food_packages", "raw_foods"
   add_foreign_key "food_packages_food_suppliers", "food_packages"
   add_foreign_key "food_packages_food_suppliers", "food_suppliers"

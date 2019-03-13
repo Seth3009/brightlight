@@ -1,0 +1,18 @@
+p#notice = notice
+
+p
+  strong Date order:
+  = @food_order.date_order
+p
+  strong Order notes:
+  = @food_order.order_notes
+p
+  strong Food supplier:
+  = @food_order.food_supplier
+p
+  strong Is completed:
+  = @food_order.is_completed
+
+= link_to 'Edit', edit_food_order_path(@food_order)
+'|
+= link_to 'Back', food_orders_path
