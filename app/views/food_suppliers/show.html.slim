@@ -32,14 +32,16 @@ nav
   table.compacted
     thead
       tr
-        th Items       
+        th Raw Food
+        th Package       
         th Price
         th Date update
         th Action
     tbody
       - @food_packages_food_suppliers.each do |food_packages_food_supplier|
         tr
-          td = food_packages_food_supplier.food_package.packaging          
+          td = food_packages_food_supplier.food_package.raw_food.name          
+          td = food_packages_food_supplier.food_package.packaging
           td = number_with_precision(food_packages_food_supplier.price, :precision => 0, :delimiter => ',') rescue "0"
           td = food_packages_food_supplier.date_update.try(:strftime, "%d %b %Y") rescue "-"
           td

@@ -20,8 +20,8 @@ class FoodPackage < ActiveRecord::Base
   end
 
   def self.select_food_item(food_supplier)
-    self.find_by_sql("select t1.packaging, t1.id, t2.food_package_id, t2.food_supplier_id 
-                    from (select id, packaging from food_packages) t1
+    self.find_by_sql("select CONCAT(t1.name,' ',t1.packaging) as packaging, t1.id, t2.food_package_id, t2.food_supplier_id 
+                    from (select food_packages.id, packaging, name from food_packages left join raw_foods on raw_foods.id = food_packages.raw_food_id) t1
                     left join (select food_package_id, food_supplier_id from food_packages_food_suppliers where food_supplier_id =" + food_supplier.to_s + ") t2
                     on (t1.id = t2.food_supplier_id) where t2.food_package_id is null order by t1.packaging")
   end
