@@ -5,6 +5,7 @@ tr id="row-#{raw_food.id}"
       i.material-icons check_box
     - else
       i.material-icons check_box_outline_blank
+  td.center = raw_food.food_packages.count rescue "0"
   td.center 
     - if raw_food.is_active
       i.material-icons check_box
