@@ -21,7 +21,7 @@ class FoodPackagesFoodSuppliersController < ApplicationController
 
   # GET /food_packages_food_suppliers/1/edit
   def edit
-    @food_items = FoodPackage.select_food_item.all
+    @food_items = FoodPackage.select_food_item(params[:id])
   end
 
   # POST /food_packages_food_suppliers

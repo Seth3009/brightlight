@@ -41,7 +41,7 @@ nav
         tr
           td = food_packages_food_supplier.food_package.packaging          
           td = number_with_precision(food_packages_food_supplier.price, :precision => 0, :delimiter => ',') rescue "0"
-          td = food_packages_food_supplier.date_update
+          td = food_packages_food_supplier.date_update.try(:strftime, "%d %b %Y") rescue "-"
           td
             - if can? :update, food_packages_food_supplier
               = link_to edit_food_packages_food_supplier_path(food_packages_food_supplier), remote: true
