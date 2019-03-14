@@ -40,7 +40,7 @@ class Employee < ActiveRecord::Base
   }
   
   def superiors
-    [supervisor, manager, supervisor.supervisor, manager.supervisor].uniq.reject{|e| e == self}.reject &:nil?
+    [supervisor, manager, supervisor.try(:supervisor), manager.try(:supervisor)].uniq.reject{|e| e == self}.reject &:nil?
   end
 
   def self.with_role(role)
