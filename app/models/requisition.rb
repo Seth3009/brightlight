@@ -74,7 +74,8 @@ class Requisition < ActiveRecord::Base
     email.deliver_now
     notification = Message.new_from_email(email)
     notification.save
-    sent_to_purchasing = Date.today
+    self.sent_to_purchasing = Date.today
+    self.is_submitted = true
     save
   end
 
