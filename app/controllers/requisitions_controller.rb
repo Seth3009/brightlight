@@ -22,7 +22,7 @@ class RequisitionsController < ApplicationController
     authorize! :process, Requisition
     @pending_approval = Requisition.pending_approval
     @approved_requisitions = Requisition.approved
-    if params[:dept]
+    if params[:dept].present?
       @approved_requisitions = @approved_requisitions.where(department_id:params[:dept])
     end
     # if params[:active].present? && params[:active] == 0
