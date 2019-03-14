@@ -136,14 +136,14 @@ javascript:
       $("#purchase_orders > tr").each(function(_idx, row) { calc_row_total($(row)) });
       calc_totals();
     })
-    $(document).on("change", "select[name$='[description]']", function(event) {
-      insert_item(event.target);
-    })
     $(document).on('cocoon:after-remove', function(event) {
       calc_totals();
     });
-    $(document).on("change", "select#purchase_order_supplier_id", function(event) {
-      insert_contact_info(event.target);
+    $(document).on("change", "select#purchase_order_supplier_id", function() {
+      insert_contact_info();
+    });
+    $(".ui-widget.ui-autocomplete-input").blur( function() { 
+      $("select#purchase_order_supplier_id").trigger("change");
     });
     $(document).on("click", ".toggle-remark", function(event) {
       toggle_remark(event.target);
@@ -195,7 +195,7 @@ javascript:
     var down_payment = Number($("#purchase_order_down_payment").val());
     var total_amount = subtotal - total_discount + total_est_tax + total_non_recurring + total_shipping;
     var remaining_amount = total_amount - down_payment;
-    
+
     $("#purchase_order_subtotal").val(subtotal);
     $("#po_subtotal").val(subtotal);
     $("#purchase_order_discounts").val(total_discount);
