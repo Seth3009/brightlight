@@ -6,16 +6,16 @@
         - @food_order.errors.full_messages.each do |message|
           li = message
 
-  .field
-    = f.label :date_order
-    = f.date_select :date_order
-  .field
-    = f.label :order_notes
-    = f.text_field :order_notes
-  .field
-    = f.label :food_supplier
-    = f.text_field :food_supplier
-  .field
-    = f.label :is_completed
-    = f.check_box :is_completed
-  .actions = f.submit
+  = render 'order_head', f: f
+  
+nav.light
+  .nav-wrapper
+    ul
+      li
+        = link_to food_orders_path
+          i.material-icons.left chevron_left
+      li
+        .brand-logo style="margin-left: 20px; font-size:1.5em"
+          | Supplies Items
+
+= render 'order_items'

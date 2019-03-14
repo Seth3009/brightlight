@@ -1,0 +1,19 @@
+table.compact.striped
+  thead
+    tr
+      th Food Name
+      th Units
+      th Recipe Qty    
+      th Stock
+      th Order Qty  
+      
+      
+  tbody#lunch_order
+    - @lunch_orders.each do |lunch_order|
+      tr
+        td = lunch_order.name 
+        td = lunch_order.unit           
+        td = number_with_precision(lunch_order.cur_qty, :precision => 2, :delimiter => ',') rescue "0"
+        td = number_with_precision(lunch_order.stock, :precision => 2, :delimiter => ',') rescue "0"
+        td = number_with_precision(lunch_order.cur_qty - lunch_order.stock, :precision => 2, :delimiter => ',') rescue "0"
+        

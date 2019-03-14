@@ -1,0 +1,21 @@
+.card-panel
+  .row
+    .input-field.col.m2
+      = f.label :date_order, class: 'active'
+      = f.date_field :date_order, value: Time.now.strftime('%Y-%m-%d')
+    .input-field.col.m2
+      = f.label :food_supplier, class: 'active'
+      = f.collection_select :food_supplier, FoodSupplier.all, :id, :supplier
+    .input-field.col.m8
+      = f.label :order_notes, class: 'active'
+      = f.text_field :order_notes
+  .row
+    .input-field.col.m2
+      = label_tag 'Lunch Order Ref date:'    
+    .input-field.col.m2
+      = f.label :date1, class:'active'
+      = date_field_tag 'date1', params[:sd] || Date.today
+    .input-field.col.m2
+      = f.label :date2, class:'active'
+      = date_field_tag 'date2', params[:ed] || Date.today
+    

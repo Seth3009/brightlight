@@ -19,8 +19,11 @@ nav
           | Refresh
     ul.right
       li
-        = link_to "#"
-          | Create Order
+        = link_to food_orders_url(st:'no'), :target => '_blank'
+          | Non Stock Order
+      li
+        = link_to food_orders_url(st:'yes'), :target => '_blank'
+          | Stock Order
       
 
 .card-panel

@@ -14,7 +14,15 @@ class FoodOrdersController < ApplicationController
 
   # GET /food_orders/new
   def new
+    @year = AcademicYear.current_id
     @food_order = FoodOrder.new
+    @food_pack = FoodPack.find_by_academic_year_id(@year)    
+    @g1 = FoodPack.g1_g3(@food_pack)
+    @g2 = FoodPack.g4_g6(@food_pack)
+    @sol = FoodPack.sol(@food_pack)
+    @sor = FoodPack.sor(@food_pack)
+    @adult = @food_pack.employee    
+    @lunch_orders = RawFood.food_order_supplier((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult,params[:sp])                        
   end
 
   # GET /food_orders/1/edit
