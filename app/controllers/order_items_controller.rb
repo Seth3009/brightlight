@@ -1,14 +1,33 @@
 class OrderItemsController < ApplicationController
   before_action :set_order_item, only: [:edit, :destroy]
 
+  def edit
+    @date = Date.parse(params[:date]) rescue nil
+    @supplier = params[:supplier]
+    @account = params[:account]
+    @item = params[:item]
+    respond_to do |format|
+      format.js
+    end
+  end
+  
   # PATCH/PUT /order_items/1
   # PATCH/PUT /order_items/1.json
   def update
     respond_to do |format|
-      qry = OrderItem.po_record.where(id: params[:id])
-      qry = qry.where(purchase_orders: {order_date: params[:date]}) if params[:date]
-      @order_item = qry.take
+      @order_item = OrderItem.with_po_records.where(id: params[:id]).take
+      @date = Date.parse(params[:date]) rescue nil
+      @supplier = params[:supplier]
+      @account = params[:account]
+      @item = params[:item]
+      @all_items = OrderItem.po_records(
+        date: @date, 
+        supplier: @supplier,
+        account: @account,
+        item: @item
+      )
       if @order_item.update(order_item_params)
+        @grand_total = @all_items.sum :line_amount
         format.js 
       else
         format.js

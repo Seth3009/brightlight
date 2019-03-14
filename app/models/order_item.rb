@@ -15,7 +15,7 @@ class OrderItem < ActiveRecord::Base
   after_save :sync_req_item
   before_destroy :remove_link_with_req_item
 
-  scope :po_record, lambda { 
+  scope :with_po_records, lambda { 
     joins(:purchase_order)
     .joins('left join employees on employees.id = purchase_orders.requestor_id')
     .joins('left join suppliers on suppliers.id = purchase_orders.supplier_id')
@@ -23,8 +23,18 @@ class OrderItem < ActiveRecord::Base
     .joins('left join requisitions on requisitions.id = req_items.requisition_id')
     .joins('left join accounts on accounts.id = requisitions.account_id')
     .select('order_items.*, purchase_orders.currency as currency, requisitions.id as fpb, employees.name as requestor_name, accounts.description as budget, suppliers.company_name as supplier')
+    .order('requisitions.id')
   }
 
+  def self.po_records(date: nil, supplier: nil, account: nil, item: nil)
+    records = self.with_po_records
+    records = records.where(purchase_orders: {order_date: date}) if date.present?
+    records = records.where(purchase_orders: {supplier_id: supplier}) if supplier.present?
+    records = records.where(accounts: {id: account}) if account.present?
+    records = records.where(description: item) if item.present?
+    records
+  end
+  
   def self.new_from_req_items(req_items)
     req_items.map {|req_item|
       new(description: req_item.description,

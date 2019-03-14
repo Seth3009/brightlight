@@ -1,4 +1,4 @@
-= form_for @requisition, url: {action: "update_account"}, method: :patch, remote: true do |f|
+= form_for @requisition, url: {action: "update_account"}, method: :patch do |f|
   .modal-content
     h5 Update budget account
 
@@ -8,8 +8,11 @@
       .input-field.col.s12
         = f.label :account, class: 'active'
         = f.select :account_id, options_for_select(@accounts.map { |a| ["#{a.acc_l4}: #{a.description}", a.id] }, @requisition.account_id), prompt: 'Select budget account'
-        = hidden_field_tag :item_id, @item_id
-        
+        = hidden_field_tag :date, @date
+        = hidden_field_tag :supplier, @supplier
+        = hidden_field_tag :account, @account
+        = hidden_field_tag :item, @item
+
   .modal-footer
     = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
     button.btn.waves-effect.waves-light type="submit" Save

@@ -64,17 +64,24 @@ class RequisitionsController < ApplicationController
 
   def edit_account
     authorize! :update, @requisition
-    @item_id = params[:item]
     @employee = @requisition.requester || current_user.employee
     @accounts = Account.for_department_id(@employee.department_id) rescue []
+    @date = Date.parse(params[:date]) rescue nil
+    @supplier = params[:supplier]
+    @account = params[:account]
+    @item = params[:item]
   end
 
   def update_account
     authorize! :update, @requisition
     @requisition.update(requisition_params)
-    @order_item = OrderItem.po_record.where(id: params[:item_id]).take
+    @order_item = OrderItem.with_po_records.where(id: params[:item]).take
+    @date = Date.parse(params[:date]) rescue nil
+    @supplier = params[:supplier]
+    @account = params[:account]
+    @item = params[:item]
     respond_to do |format|
-      format.js 
+      format.html { redirect_to report_purchase_orders_path params.merge(date: @date, supplier: @supplier, account: @account, item: @item).symbolize_keys }
     end
   end
 
