@@ -5,7 +5,7 @@ class PurchaseOrdersController < ApplicationController
   # GET /purchase_orders.json
   def index
     authorize! :read, PurchaseOrder
-    @purchase_orders = PurchaseOrder.all.includes([:requestor, :supplier, :order_items])
+    @purchase_orders = PurchaseOrder.all.includes([:requestor, :supplier, :order_items]).order(:id)
   end
 
   # GET /purchase_orders/report
