@@ -1,6 +1,6 @@
 class Department < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
-	has_many :employees, dependent: :restrict_with_error
+	has_many :employees, -> { active }, dependent: :restrict_with_error
 	has_many :budgets, dependent: :restrict_with_error
   has_many :budget_items, through: :budgets
   has_many :account_departments
