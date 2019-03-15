@@ -304,17 +304,14 @@
         .card-image.waves-effect.waves-block.waves-light
           = image_tag 'purchase-order.jpg', class:'activator'
         .card-stacked
-          / = image_tag 'beta.jpg', size:'60x56', style:"position: absolute; right: 0"
           .card-content
             span.card-title.activator.grey-text.text-darken-4 
               |Purchasing
-              .beta BETA
               i.activator.material-icons.right more_vert
             p Submit and manage your Purchase Requests
             = link_to requisitions_path
               .left Purchase Request
               i.material-icons chevron_right
-            p.red-text.small-text This feature is in beta testing. You are welcome to try it. Please report any problems to IT.
         .card-reveal
           span.card-title.grey-text.text-darken-4
             |Purchase Request
