@@ -40,7 +40,11 @@ nav
         tr id="ref-#{employee.id}"
           td = link_to employee.name, employee
           td = employee.job_title
-          td = link_to employee.department || "--"
+          td
+            -if employee.department.present? 
+              = link_to employee.department.name, employee.department
+            -else
+              | --
           td.badge 
             - if employee.badge.present? 
               = '&#9745;'.html_safe 
