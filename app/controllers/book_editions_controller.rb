@@ -15,13 +15,16 @@ class BookEditionsController < ApplicationController
       session[:view_style] = ''
     end
     
-    @book_editions = BookEdition.with_number_of_copies
+    @book_editions = BookEdition.with_number_of_copies.paginate(page: params[:page], per_page: items_per_page)
      
     respond_to do |format|      
       format.html { 
         @book_editions = @book_editions.search_query(params[:search]) if params[:search] 
-        @book_editions = @book_editions.order("#{sort_column} #{sort_direction}")
-                          .paginate(page: params[:page], per_page: items_per_page)
+        unless params[:column].present? && params[:direction].present?
+          @book_editions = @book_editions.order(updated_at: :desc)
+        else
+          @book_editions = @book_editions.order("#{sort_column} #{sort_direction}")                            
+        end
       }
       format.json { @book_editions = @book_editions.search_query(params[:term]) if params[:term] } 
     end

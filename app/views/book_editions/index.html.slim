@@ -8,28 +8,36 @@
       .input-field
         input type="hidden" name="v" value=@view_style
         - if params[:search].present?
-          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
-            | highlight_off
+          = link_to url_for(search:"",v:@view_style)
+            i.material-icons.prefix style='cursor:pointer'
+              | highlight_off
+            input.icon-prefix type="text" name="search" placeholder="Title or ISBN" value=params[:search]  
         - else
           i.material-icons.prefix search
-        input.icon-prefix type="text" name="search" placeholder="Title or ISBN" value=params[:search]    
-    javascript:
-      function reset_form() {
-        window.location="#{book_editions_path(v:'list')}"
-      }
+          input.icon-prefix type="text" name="search" placeholder="Title or ISBN" value=params[:search]    
 
 nav
   .nav-wrapper
     ul 
       li
         = link_to 'Condition Summary', summary_book_editions_path
-    ul
-      li.right
-        = link_to book_editions_path(search:params[:search])
-          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
-      li.right
+    ul.right
+      li
+        - if @view_style == :block      
+          - if params[:column].present? && params[:direction].present?
+            = link_to 'See recents', url_for(o:'recents', v:@view_style)
+          - else
+            = link_to 'Sort by title', url_for(column:'title', direction:'asc', v:@view_style)
+        - else
+          - if params[:column].present? && params[:direction].present?
+            = link_to 'See recents', url_for(o:'recents', v:@view_style)
+
+      li
         = link_to book_editions_path({v:'list',search:params[:search]})
           i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
+      li
+        = link_to book_editions_path(search:params[:search])
+          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_list
 
 .card-panel
   - if @view_style == :list
@@ -56,11 +64,12 @@ nav
               = link_to book_edition_book_copies_path(book_edition)                  
                 .copies = book_edition.copies
             - if can? :manage, BookEdition
-              td 
-                = link_to edit_book_edition_path(book_edition)
-                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
-                = link_to book_edition, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'            
-                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+              td
+                div 
+                  = link_to edit_book_edition_path(book_edition)
+                    i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+                  = link_to book_edition, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'            
+                    i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
 
   - else
     table.compact.striped
