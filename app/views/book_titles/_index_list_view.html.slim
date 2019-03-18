@@ -10,10 +10,11 @@ table.compact.striped
     tbody
       - @book_titles.each do |book_title|
         tr id="title-#{book_title.id}"
-          td.wd5
-            input.checkbox type="checkbox" id="cb-#{book_title.id}" name="merge[#{book_title.id}]" onchange="toggle_toolbar_menu()"
-            / This label is required for Materialize CSS to work
-            = label_tag "cb-#{book_title.id}", ""
+          -if can? :manage, BookTitle
+            td.wd5
+              input.checkbox type="checkbox" id="cb-#{book_title.id}" name="merge[#{book_title.id}]" onchange="toggle_toolbar_menu()"
+              / This label is required for Materialize CSS to work
+              = label_tag "cb-#{book_title.id}", ""
           td = book_title.title
           td 
             div = book_title.authors
