@@ -4,11 +4,15 @@ class FoodPackagesController < ApplicationController
   # GET /food_packages
   # GET /food_packages.json
   def index
-    if params[:raw_food_id].present?
-      @raw_food = RawFood.find(params[:raw_food_id])
-      @food_packages = FoodPackage.where(raw_food_id:@raw_food.id).order(:packaging)     
+    respond_to do |format|
+      format.html {
+        if params[:raw_food_id].present?
+          @raw_food = RawFood.find(params[:raw_food_id])
+          @food_packages = FoodPackage.where(raw_food_id:@raw_food.id).order(:packaging)     
+        end
+      }
+      format.json { @food_packages = FoodPackage.all }
     end
-
   end
 
   # GET /food_packages/1
@@ -74,6 +78,12 @@ class FoodPackagesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to :back, notice: @notice }
       format.json { head :no_content }
+    end
+  end
+
+  def food_packages_list
+    respond_to do |format|      
+      format.json { @food_packages = FoodPackage.search_query(params[:term]) }
     end
   end
 

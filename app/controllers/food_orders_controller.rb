@@ -22,7 +22,7 @@ class FoodOrdersController < ApplicationController
     @sol = FoodPack.sol(@food_pack)
     @sor = FoodPack.sor(@food_pack)
     @adult = @food_pack.employee    
-    @lunch_orders = RawFood.food_order_supplier((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult,params[:sp])                        
+    @lunch_orders = RawFood.food_order((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult)                        
   end
 
   # GET /food_orders/1/edit
@@ -77,6 +77,7 @@ class FoodOrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def food_order_params
-      params.require(:food_order).permit(:date_order, :order_notes, :food_supplier_id, :is_completed)
+      params.require(:food_order).permit(:date_order, :order_notes, :food_supplier_id, :is_completed,
+                                        {food_order_items_attributes: [:id, :food_order_id, :food_package_id, :qty_order, :qty_received, :_destroy]})
     end
 end

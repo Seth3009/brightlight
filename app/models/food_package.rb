@@ -7,6 +7,28 @@ class FoodPackage < ActiveRecord::Base
   has_many :food_packages_food_suppliers
   after_save :update_stock
 
+  scope :search_query, lambda { |query|
+    return nil  if query.blank?   
+      # condition query, parse into individual keywords
+      terms = query.downcase.split(/\s+/)
+
+      # replace "*" with "%" for wildcard searches,
+      # append '%', remove duplicate '%'s
+      terms = terms.map { |e|
+        ('%' + e.gsub('*', '%') + '%').gsub(/%+/, '%')
+      }
+      # configure number of OR conditions for provision
+      # of interpolation arguments. Adjust this if you
+      # change the number of OR conditions.
+      num_or_conds = 2      
+      joins("left join raw_foods on raw_foods.id = food_packages.raw_food_id").where(
+        terms.map { |term|
+          "(LOWER(name) LIKE ? OR LOWER(packaging) LIKE ?)"
+        }.join(' AND '),
+        *terms.map { |e| [e] * num_or_conds }.flatten
+      )
+  }
+
   def update_stock
     raw_food.total_stock
   end    

@@ -54,6 +54,8 @@ Rails.application.routes.draw do
   resources :raw_foods do
     resources :food_packages, shallow: true, except: [:edit]
   end  
+
+  get 'food_packages_list' => 'food_packages#food_packages_list', as: :food_packages_list
   
   resources :activity_schedules, shallow: true do
     member do
