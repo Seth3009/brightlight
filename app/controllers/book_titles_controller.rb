@@ -25,9 +25,12 @@ class BookTitlesController < ApplicationController
         @subject = Subject.find_by_id params[:subject] if params[:subject]
         @book_titles = BookTitle
           .includes([:book_editions, :subject])
-          .order("#{sort_column} #{sort_direction}")
           .paginate(page: params[:page], per_page: items_per_page)
-
+        unless params[:column].present? && params[:direction].present?
+          @book_titles = @book_titles.order(updated_at: :desc)
+        else
+          @book_titles = @book_titles.order("#{sort_column} #{sort_direction}")
+        end
         if @subject && params[:subject] != 'all'
           @book_titles = @book_titles.where(subject: @subject)
         end

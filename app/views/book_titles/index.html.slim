@@ -51,7 +51,16 @@ ul#subject-options.dropdown-content
             span#subject = @subject.present? ? "#{@subject.name}" : "Select subject" 
             i.material-icons.right arrow_drop_down
 
-      ul.right     
+      ul.right
+        li
+          - if @view_style == :block      
+            - if params[:column].present? && params[:direction].present?
+              = link_to 'Show recent', url_for(v:@view_style)
+            - else
+              = link_to 'Sort by title', url_for(column:'title', direction:'asc', v:@view_style)
+          - else
+            - if params[:column].present? && params[:direction].present?
+              = link_to 'See recents', url_for(v:@view_style)
         li
           = link_to book_titles_path({v:'list',search:params[:search]})
             i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
