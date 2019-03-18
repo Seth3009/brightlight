@@ -1937,8 +1937,12 @@ td.barby-cell.on { background: #000; }
 		.comment-text {
 			font-size: 14px;
 			color: $dark-grey;
-			line-height: 14px;
+			line-height: 1.2rem;
 			word-wrap: break-word;
+			p {
+				padding: 0;
+				margin-bottom: 1em;
+			}
 		}
 	}
 	.comment-footer {

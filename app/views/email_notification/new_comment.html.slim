@@ -20,7 +20,7 @@ html
               strong = @comment.commentable.id
           tr 
             td Description
-            td = @comment.commentable.description
+            td =raw @comment.commentable.description
           tr 
             td Comment
             td = @comment.comment
