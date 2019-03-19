@@ -1,28 +1,27 @@
 table.compact.striped
+  thead
+    tr
+      th
+      th = sort_link :title
+      th = sort_link :authors
+      th = sort_link :subject_id, 'Subject'
+      th
   tbody
-    thead
-      tr
-        th
-        th = sort_link :title
-        th = sort_link :authors
-        th = sort_link :subject_id, 'Subject'
-        th
-    tbody
-      - @book_titles.each do |book_title|
-        tr id="title-#{book_title.id}"
-          -if can? :manage, BookTitle
-            td.wd5
-              input.checkbox type="checkbox" id="cb-#{book_title.id}" name="merge[#{book_title.id}]" onchange="toggle_toolbar_menu()"
-              / This label is required for Materialize CSS to work
-              = label_tag "cb-#{book_title.id}", ""
-          td = book_title.title
-          td 
-            div = book_title.authors
-            div
-              em = book_title.publisher
-          td = book_title.subject.try(:name) || "--"
-          td 
-            = link_to book_title
-              i.material-icons visibility
-            = link_to edit_book_title_path(book_title)
-              i.material-icons edit
+    - @book_titles.each do |book_title|
+      tr id="title-#{book_title.id}"
+        -if can? :manage, BookTitle
+          td.wd5
+            input.checkbox type="checkbox" id="cb-#{book_title.id}" name="merge[#{book_title.id}]" onchange="toggle_toolbar_menu()"
+            / This label is required for Materialize CSS to work
+            = label_tag "cb-#{book_title.id}", ""
+        td = book_title.title
+        td 
+          div = book_title.authors
+          div
+            em = book_title.publisher
+        td = book_title.subject.try(:name) || "--"
+        td 
+          = link_to book_title
+            i.material-icons visibility
+          = link_to edit_book_title_path(book_title)
+            i.material-icons edit
