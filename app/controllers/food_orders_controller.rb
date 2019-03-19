@@ -36,7 +36,7 @@ class FoodOrdersController < ApplicationController
 
     respond_to do |format|
       if @food_order.save
-        format.html { redirect_to @food_order, notice: 'Food order was successfully created.' }
+        format.html { redirect_to food_orders_url, notice: 'Food order was successfully created.' }
         format.json { render :show, status: :created, location: @food_order }
       else
         format.html { render :new }

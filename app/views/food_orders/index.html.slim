@@ -24,8 +24,12 @@ nav
         tr
           td = food_order.date_order
           td = food_order.order_notes
-          td = food_order.food_supplier
-          td = food_order.is_completed
+          td = food_order.food_supplier.supplier
+          td 
+            - if food_order.is_completed == false
+              i.material-icons check_box_outline_blank
+            - else 
+              i.material-icons check_box
           td = link_to 'Show', food_order
           td = link_to 'Edit', edit_food_order_path(food_order)
           td = link_to 'Destroy', food_order, data: {:confirm => 'Are you sure?'}, :method => :delete

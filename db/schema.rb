@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190313075220) do
+ActiveRecord::Schema.define(version: 20190319021213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -878,9 +878,9 @@ ActiveRecord::Schema.define(version: 20190313075220) do
     t.date     "date_order"
     t.string   "order_notes"
     t.integer  "food_supplier_id"
-    t.boolean  "is_completed"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.boolean  "is_completed",     default: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
 
   add_index "food_orders", ["food_supplier_id"], name: "index_food_orders_on_food_supplier_id", using: :btree

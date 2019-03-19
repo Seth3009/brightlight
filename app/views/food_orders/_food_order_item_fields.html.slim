@@ -11,53 +11,52 @@ tr.nested-fields
       = text_field_tag :package_contents
   td.wd210
     .input-field    
-      = text_field_tag :qty_order
+      = f.number_field :qty_order
   
   td.wd10
     .input-field
       = link_to_remove_association f, class: "waves-effect waves-teal red-text"
         i.material-icons delete
 
-
 javascript:
-  $(document).on('focus', '.foodname_autocomplete', function() {
-    $(this).autocomplete({
-        source: "/food_packages_list?format=json",
-        max: 30,
-        minLength: 3,
-        create: function() {
-          $(this).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-            return $( "<li>" )
-              .append( "<div>" + item.food_name + " | " + item.packaging +"</div>" )
-              .appendTo( ul );
+    $(document).on('focus', '.foodname_autocomplete', function() {
+      $(this).autocomplete({
+          source: "/food_packages_list?format=json",
+          max: 30,
+          minLength: 3,
+          create: function() {
+            $(this).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+              return $( "<li>" )
+                .append( "<div>" + item.food_name + " | " + item.packaging +"</div>" )
+                .appendTo( ul );
+            }
+          },
+          select: function( event, ui ) {
+            insert_product_values(event.target, ui.item); 
+            return false;
           }
-        },
-        select: function( event, ui ) {
-          insert_product_values(event.target, ui.item); 
-          return false;
-        }
-      });  
-    
-    function insert_product_values(el, food_package) {
-      let row = $(el).closest('tr');
-      $(el).val(food_package.food_name);
-      console.log(food_package);
-      insert_values(food_package, row);
-    }   
-  });
+        });  
+      
+      function insert_product_values(el, food_package) {
+        let row = $(el).closest('tr');
+        $(el).val(food_package.food_name);
+        console.log(food_package);
+        insert_values(food_package, row);
+      }   
+    });
 
-  $(document).on('change', '.foodname_autocomplete', function() {
-    if($(this).val() === '') {
-      $(this).closest('tr').find(".food_package_id").val(null);
-    }
-  });
-  
+    $(document).on('change', '.foodname_autocomplete', function() {
+      if($(this).val() === '') {
+        $(this).closest('tr').find(".food_package_id").val(null);
+      }
+    });
+    
 
-  var insert_values = function (data, el) {
-    var food_package = data;
-  
-    el.find("[name='packaging']").val(food_package.packaging);
-    el.find("[name='package_contents']").val(food_package.package_contents + " " + food_package.unit);
+    var insert_values = function (data, el) {
+      var food_package = data;
     
-    
-  };
+      el.find("[name='packaging']").val(food_package.packaging);
+      el.find("[name='package_contents']").val(food_package.package_contents + " " + food_package.unit);
+      el.find(".food_package_id").val(food_package.id)
+      
+    };
