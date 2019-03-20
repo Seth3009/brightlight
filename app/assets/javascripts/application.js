@@ -28,7 +28,7 @@
 //= require rails-timeago
 //= require init
 //= require turbolinks
-//= require book_copies
+//= require context_menu
 //= require book_fines
 //= require messages
 //= require requisitions
