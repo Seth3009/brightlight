@@ -59,7 +59,8 @@ class MessagesController < ApplicationController
   def destroy
     @message.destroy
     respond_to do |format|
-      format.html { redirect_to messages_url, notice: 'Message was successfully destroyed.' }
+      format.html { redirect_to messages_url, notice: 'Message was deleted.' }
+      # format.js { head: no_content }
       format.json { head :no_content }
     end
   end
@@ -69,6 +70,29 @@ class MessagesController < ApplicationController
     @message.message_recipients.where(recipient_id: params["user_id"]).update_all is_read: true
     respond_to do |format|
       format.json { render json: {unread: Message.unread(current_user).count} }
+    end
+  end
+
+  # POST /messages/mark
+  def mark
+    if params[:all] == "yes"
+      MessageRecipient.where(recipient_id: current_user.id).update_all is_read: params[:read]
+    else
+      @messages = params[:mark].map {|id,on| id}
+      MessageRecipient.where(message_id: @messages).where(recipient_id: current_user.id).update_all is_read: params[:read]
+    end
+    respond_to do |format|
+      format.html { redirect_to messages_path }
+      format.js
+    end
+  end
+
+  # DELETE /messages
+  def delete 
+    @messages = Message.where(id: params[:merge].map(&:id))
+    @messages.destroy_all
+    respond_to do |format|
+      format.js { head :no_content }
     end
   end
 

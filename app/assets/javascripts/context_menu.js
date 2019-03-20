@@ -16,4 +16,3 @@ $(document).on("ready page:load page:change", function(){
     toggle_menu();
   }.bind(this));
 });
-

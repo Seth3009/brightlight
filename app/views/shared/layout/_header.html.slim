@@ -55,14 +55,15 @@ ul#user-profile-options.dropdown-content
       |Sign out
       = image_tag "logout.png", size:"30x40", class:"left"
 
-ul#users-list.dropdown-content
-  li 
-    = link_to "/?impersonate=#{devise_current_user.id}"
-      | Myself
-  - User.all.order(:name).each do |user|
-    li
-      = link_to "/?impersonate=#{user.id}"
-        = user.name
+-if Rails.env.development?
+  ul#users-list.dropdown-content
+    li 
+      = link_to "/?impersonate=#{devise_current_user.id}"
+        | Myself
+    - User.all.order(:name).each do |user|
+      li
+        = link_to "/?impersonate=#{user.id}"
+          = user.name
 
 ul#app-options.dropdown-content
   li 
@@ -91,6 +92,15 @@ ul#notification-list.dropdown-content
     li
       .subject You have no unread messages
   - else
+    li.grey.lighten-1
+      .left
+        = link_to messages_path
+          |All messages
+          i.material-icons.left view_list
+      .right
+        = link_to mark_messages_path(read: true, all: "yes"), method: :post
+          |Mark all read
+          i.material-icons.right check
     - unread_messages.each do |message| 
       li.unread-message data-id=message.id id="msgrec-#{message.id}"
         div.left

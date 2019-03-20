@@ -66,14 +66,6 @@
                                                PATCH    /deliveries/:id(.:format)                                         deliveries#update
                                                PUT      /deliveries/:id(.:format)                                         deliveries#update
                                                DELETE   /deliveries/:id(.:format)                                         deliveries#destroy
-                                   order_items GET      /order_items(.:format)                                            order_items#index
-                                               POST     /order_items(.:format)                                            order_items#create
-                                new_order_item GET      /order_items/new(.:format)                                        order_items#new
-                               edit_order_item GET      /order_items/:id/edit(.:format)                                   order_items#edit
-                                    order_item GET      /order_items/:id(.:format)                                        order_items#show
-                                               PATCH    /order_items/:id(.:format)                                        order_items#update
-                                               PUT      /order_items/:id(.:format)                                        order_items#update
-                                               DELETE   /order_items/:id(.:format)                                        order_items#destroy
                                      req_items GET      /req_items(.:format)                                              req_items#index
                                                POST     /req_items(.:format)                                              req_items#create
                                   new_req_item GET      /req_items/new(.:format)                                          req_items#new
@@ -549,6 +541,8 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                            approve_requisition GET      /requisitions/:id/approve(.:format)                               requisitions#approve
                approve_requisition_requisition POST     /requisitions/:id/approve_requisition(.:format)                   requisitions#approve_requisition
                     approve_budget_requisition POST     /requisitions/:id/approve_budget(.:format)                        requisitions#approve_budget
+                      edit_account_requisition GET      /requisitions/:id/edit_account(.:format)                          requisitions#edit_account
+                    update_account_requisition PATCH    /requisitions/:id/update_account(.:format)                        requisitions#update_account
                                   requisitions GET      /requisitions(.:format)                                           requisitions#index
                                                POST     /requisitions(.:format)                                           requisitions#create
                                new_requisition GET      /requisitions/new(.:format)                                       requisitions#new
@@ -568,6 +562,8 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                DELETE   /budgets/:id(.:format)                                            budgets#destroy
                                   budget_items GET      /budget_items(.:format)                                           budget_items#index
                                    budget_item GET      /budget_items/:id(.:format)                                       budget_items#show
+                                 mark_messages POST     /messages/mark(.:format)                                          messages#mark
+                               delete_messages DELETE   /messages/delete(.:format)                                        messages#delete
                              mark_read_message POST     /messages/:id/mark_read(.:format)                                 messages#mark_read
                                       messages GET      /messages(.:format)                                               messages#index
                                                POST     /messages(.:format)                                               messages#create
@@ -589,6 +585,10 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PATCH    /purchase_orders/:id(.:format)                                    purchase_orders#update
                                                PUT      /purchase_orders/:id(.:format)                                    purchase_orders#update
                                                DELETE   /purchase_orders/:id(.:format)                                    purchase_orders#destroy
+                               edit_order_item GET      /order_items/:id/edit(.:format)                                   order_items#edit
+                                    order_item PATCH    /order_items/:id(.:format)                                        order_items#update
+                                               PUT      /order_items/:id(.:format)                                        order_items#update
+                                               DELETE   /order_items/:id(.:format)                                        order_items#destroy
                                import_accounts POST     /accounts/import(.:format)                                        accounts#import
                                       accounts GET      /accounts(.:format)                                               accounts#index
                                                POST     /accounts(.:format)                                               accounts#create

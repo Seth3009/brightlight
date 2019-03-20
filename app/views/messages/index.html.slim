@@ -1,32 +1,54 @@
 - title "Messages"
 h4 Messages
 
-nav
-  .nav-wrapper
-    ul.right
-      li
-        = link_to new_message_path, remote: true
-          i.material-icons.left add
+= form_tag do
+  nav
+    .nav-wrapper
+      .context-buttons style="display:none;"
+        ul
+          li
+            button.icon formaction="#{mark_messages_path(read: true)}" 
+              | Mark read
+              i.material-icons.left drafts
+          li
+            button.icon formaction="#{mark_messages_path(read: false)}" 
+              | Mark unread
+              i.material-icons.left mail
+          li
+            button.icon.red-text formaction="#{delete_messages_path}"
+              | Delete
+              i.material-icons.left delete
+      ul.right
+        li
+          = link_to new_message_path, remote: true
+            i.material-icons.left add
 
-.card-panel
-  table
-    thead
-      tr
-        th From
-        th Subject
-        th Date
-        th
-        th
-
-    tbody
-      - @messages.each do |message|
+  .card-panel
+    table.compact.striped
+      thead
         tr
-          td = message.creator.name          
-          td = message.subject
-          td = timeago_tag message.created_at, :nojs => true, :limit => 10.days.ago
-          td 
-            = link_to message
-              i.material-icons visibility
-          td
-            = link_to message, data: {id: message.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
-              i.material-icons delete
+          th style="width:20px"
+            input.allcheckboxes type="checkbox" id="message-all" name="message[all]"
+              = label_tag "message-all", ""
+          th style="width:20px"
+          th Subject
+          th Date
+          th
+          th
+
+      tbody
+        - @messages.each do |message|
+          tr id="row-#{message.id}"
+            td style="width:20px"
+              input.checkbox type="checkbox" id="message-#{message.id}" name="mark[#{message.id}]"
+              = label_tag "message-#{message.id}", ""
+            td.blue-text.right-align style="width:20px" 
+              = "&#9899;".html_safe unless message.is_read   
+            td = message.subject
+            td = timeago_tag message.created_at, :nojs => true, :limit => 10.days.ago
+            td 
+              = link_to message, remote: true
+                i.material-icons visibility
+            td
+              = remote_link_to_delete message, message: "Message was deleted"
+                i.material-icons delete

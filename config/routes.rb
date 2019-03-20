@@ -278,7 +278,12 @@ Rails.application.routes.draw do
   end
 
   resources :budget_items, only: [:index, :show]
+  
   resources :messages do 
+    collection do
+      post 'mark'
+      delete 'delete'
+    end
     member do
       post 'mark_read'
     end

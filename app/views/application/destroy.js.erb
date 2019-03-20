@@ -1,0 +1,4 @@
+$('.delete-link').bind('ajax:success', function() {
+  $(this).closest("tr").remove();
+  Materialize.toast("***"+$(this).data("message"), 4000, "green");
+});
