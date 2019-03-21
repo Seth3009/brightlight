@@ -1,2 +1,15 @@
 $("#modal-message-content").html("<%=j render 'message_record'%>");
-$('#show-message-modal').openModal();
+$('#show-message-modal').openModal({
+  complete:  function() {
+    $("#msgrec-"+<%= @message.id%>).hide();
+    $.ajax({
+      url:  "/messages/"+<%= @message.id%>+"/mark_read/",
+      data: {user_id: <%= current_user.id %>},
+      type: 'POST'
+    }).done(function(response) {
+        $(".inbox-badge").html(response["unread"]);
+        if (response["unread"] == 0) {$(".inbox-badge").hide()};
+        $("tr#row-<%= @message.id%> span.flag").hide();
+    });
+  }
+});

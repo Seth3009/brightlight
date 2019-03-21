@@ -5,8 +5,8 @@ class MessagesController < ApplicationController
   # GET /messages.json
   def index
     respond_to do |format|
-      format.html { @messages = Message.includes(:creator).for(current_user) } # from application_controller
-      format.json { @messages = Message.includes(:creator).for(params[:id]) rescue [] }  
+      format.html { @messages = Message.includes(:creator).for(current_user).order(updated_at: :desc) } # from application_controller
+      format.json { @messages = Message.includes(:creator).for(params[:id]).order(updated_at: :desc) rescue [] }  
     end
   end
 
@@ -60,7 +60,7 @@ class MessagesController < ApplicationController
     @message.destroy
     respond_to do |format|
       format.html { redirect_to messages_url, notice: 'Message was deleted.' }
-      # format.js { head: no_content }
+      format.js 
       format.json { head :no_content }
     end
   end

@@ -43,7 +43,7 @@ h4 Messages
               input.checkbox type="checkbox" id="message-#{message.id}" name="mark[#{message.id}]"
               = label_tag "message-#{message.id}", ""
             td.blue-text.right-align style="width:20px" 
-              = "&#9899;".html_safe unless message.is_read   
+              span.flag = "&#9899;".html_safe unless message.is_read   
             td = message.subject
             td = timeago_tag message.created_at, :nojs => true, :limit => 10.days.ago
             td 

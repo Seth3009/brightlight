@@ -63,10 +63,6 @@ class AccountsController < ApplicationController
     end
   end
 
-  def delete 
-    puts "DELETE"
-  end
-
   # POST /import
   def import
     authorize! :create, Account

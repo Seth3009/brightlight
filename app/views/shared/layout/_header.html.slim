@@ -88,19 +88,15 @@ ul#app-options.dropdown-content
       i.material-icons.left directions_car
 
 ul#notification-list.dropdown-content
+  li.grey.lighten-1
+    .left
+      = link_to messages_path
+        |All messages
+        i.material-icons.left view_list
   - if unread_messages.blank?
     li
-      .subject You have no unread messages
+      .subject You have no new messages
   - else
-    li.grey.lighten-1
-      .left
-        = link_to messages_path
-          |All messages
-          i.material-icons.left view_list
-      .right
-        = link_to mark_messages_path(read: true, all: "yes"), method: :post
-          |Mark all read
-          i.material-icons.right check
     - unread_messages.each do |message| 
       li.unread-message data-id=message.id id="msgrec-#{message.id}"
         div.left
