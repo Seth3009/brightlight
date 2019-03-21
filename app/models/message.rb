@@ -25,6 +25,7 @@ class Message < ActiveRecord::Base
     html = Nokogiri::HTML(email.body.to_s)
     body = html.search('//body').to_s
     message = Message.new subject: email.subject, creator: User.find_by_email(email.from), body: body
+
     if email.to
       email.to.each do |address|
         recipient = User.find_by_email(address)

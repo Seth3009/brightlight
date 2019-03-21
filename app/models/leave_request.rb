@@ -197,7 +197,6 @@ class LeaveRequest < ActiveRecord::Base
     sender = comment.user.employee     
     # Send email to requester and sender, except the comment originator
     addressee = [self.employee, sender].reject {|n| n.id == comment.user.employee.try(:id)}
-    to = addressee.map {|e| "#{e.name} <#{e.try(:email)}>"}.join(", ")
-    EmailNotification.new_comment_lr comment, to
+    EmailNotification.new_comment_lr comment, addressee.map { |e| %("#{e.name}" <#{e.try(:email)}>) }
   end
 end

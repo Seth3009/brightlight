@@ -34,21 +34,25 @@ class Requisition < ActiveRecord::Base
   scope :pending_supv_approval, lambda { |employee|
     where(department: employee.try(:department))
     .where.not(sent_to_supv: nil).where(is_supv_approved: nil).where(supervisor_id: employee.id)
+    .order(:id)
   }
 
   scope :pending_budget_approval, lambda { |employee|
     where(is_supv_approved: true)
     .where.not(sent_for_bgt_approval: nil).where(is_budget_approved: nil).where(budget_approver_id: employee.id)
+    .order(:id)
   }
 
   scope :pending_approval, lambda {
     where('(sent_to_supv is not null AND is_supv_approved is null)
             OR (sent_for_bgt_approval is not null and is_budget_approved is null)')
+    .order(:id)
   }
 
   scope :approved, lambda {
     where('(is_supv_approved = true AND is_budget_approved = true)
            OR (is_supv_approved = true AND is_budgeted = true)')
+    .order(:id)
   }
 
   def send_for_approval(approver, type)
@@ -106,8 +110,7 @@ class Requisition < ActiveRecord::Base
     purchasing = Employee.find_by_email /<(.+)>/.match(purchasing_email)[1]
     # Send email to requester, supervisor and purchasing, except the comment originator
     addressee = [self.requester, self.supervisor, purchasing].reject {|n| n.id == comment.user.employee.try(:id)}
-    to = addressee.map {|e| "#{e.name} <#{e.try(:email)}>"}.join(", ")
-    EmailNotification.new_comment comment, to
+    EmailNotification.new_comment comment, addressee.map { |e| %("#{e.name}" <#{e.try(:email)}>) }
   end
 
   def user

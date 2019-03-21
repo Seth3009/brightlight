@@ -18,6 +18,7 @@ class Comment < ActiveRecord::Base
   def send_notification
     email = self.commentable.create_email_from_comment(self)
     email.deliver_now
+    
     notification = Message.new_from_email(email)
     notification.save
   end
