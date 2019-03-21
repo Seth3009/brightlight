@@ -282,7 +282,7 @@ Rails.application.routes.draw do
   resources :messages do 
     collection do
       post 'mark'
-      delete 'delete'
+      post 'delete'
     end
     member do
       post 'mark_read'

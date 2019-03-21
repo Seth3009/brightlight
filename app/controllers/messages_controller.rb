@@ -5,8 +5,8 @@ class MessagesController < ApplicationController
   # GET /messages.json
   def index
     respond_to do |format|
-      format.html { @messages = Message.includes(:creator).for(current_user).order(updated_at: :desc) } # from application_controller
-      format.json { @messages = Message.includes(:creator).for(params[:id]).order(updated_at: :desc) rescue [] }  
+      format.html { @messages = Message.includes(:creator).for(current_user).uniq.order(updated_at: :desc) } # from application_controller
+      format.json { @messages = Message.includes(:creator).for(params[:id]).uniq.order(updated_at: :desc) rescue [] }  
     end
   end
 
@@ -89,9 +89,10 @@ class MessagesController < ApplicationController
 
   # DELETE /messages
   def delete 
-    @messages = Message.where(id: params[:merge].map(&:id))
+    @messages = Message.where(id: params[:mark].map {|id,on| id})
     @messages.destroy_all
     respond_to do |format|
+      format.html { redirect_to messages_path, notice: "Messages have been deleted" }
       format.js { head :no_content }
     end
   end
