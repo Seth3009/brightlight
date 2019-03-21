@@ -56,7 +56,7 @@ class FoodOrderItemsController < ApplicationController
   def destroy
     @food_order_item.destroy
     respond_to do |format|
-      format.html { redirect_to food_order_items_url, notice: 'Food order item was successfully destroyed.' }
+      format.html { redirect_to :back, notice: 'Food order item was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

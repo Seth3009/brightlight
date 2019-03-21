@@ -6,7 +6,9 @@
           th Package
           th Content
           th Qty Order
-          th Action
+          / th Total
+          / th Unit
+          th.center Action
         tbody#food_order
-          = f.fields_for :food_order_items, @food_order.food_order_items.build  do |food_order_item|
+          = f.fields_for :food_order_items, @food_order.food_order_items.build do |food_order_item|
             = render partial: 'food_orders/food_order_item_fields', locals: { f: food_order_item }

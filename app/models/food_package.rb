@@ -7,7 +7,7 @@ class FoodPackage < ActiveRecord::Base
   has_many :food_packages_food_suppliers
   after_save :update_stock
 
-  scope :search_query, lambda { |query|
+  scope :search_query, lambda { |query, food_supplier|
     return nil  if query.blank?   
       # condition query, parse into individual keywords
       terms = query.downcase.split(/\s+/)
@@ -21,7 +21,10 @@ class FoodPackage < ActiveRecord::Base
       # of interpolation arguments. Adjust this if you
       # change the number of OR conditions.
       num_or_conds = 2      
-      joins("left join raw_foods on raw_foods.id = food_packages.raw_food_id").where(
+      joins("left join raw_foods on raw_foods.id = food_packages.raw_food_id")
+      .joins("left join food_packages_food_suppliers on food_packages_food_suppliers.food_package_id = food_packages.id")
+      .where("food_packages_food_suppliers.food_supplier_id = ? and raw_foods.is_stock = ?", food_supplier, true)      
+      .where(
         terms.map { |term|
           "(LOWER(name) LIKE ? OR LOWER(packaging) LIKE ?)"
         }.join(' AND '),
@@ -29,6 +32,10 @@ class FoodPackage < ActiveRecord::Base
       )
   }
 
+  def unit_food
+    "#{Measurement.parse(package_contents.to_s + unit).convert_to(self.raw_food.unit).quantity}"
+  end
+  
   def update_stock
     raw_food.total_stock
   end    

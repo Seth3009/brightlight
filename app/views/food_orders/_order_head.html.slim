@@ -5,9 +5,9 @@
       = f.date_field :date_order, value: Time.now.strftime('%Y-%m-%d')
     .input-field.col.m2
       = f.label :food_supplier_id, class: 'active'
-      = f.collection_select :food_supplier_id, FoodSupplier.all, :id, :supplier
+      = f.collection_select :food_supplier_id, FoodSupplier.all, :id, :supplier, id:'food_supplier'
     .input-field.col.m8
-      = f.label :order_notes, class: 'active'
+      = f.label :order_notes, id:'notes', class: 'active'
       = f.text_field :order_notes
   .row
     .input-field.col.m2
@@ -18,4 +18,20 @@
     .input-field.col.m2
       = f.label :date2, class:'active'
       = date_field_tag 'date2', params[:ed] || Date.today
+    .input.waves-effect.waves-light.btn.blue#btnorder
+      | Lunch Order
     
+javascript:  
+  $(function(){
+    // bind click event to get data
+    $('#btnorder').on('click', function () {          
+        var date1 = $('#date1').val(); 
+        var date2 = $('#date2').val();
+        var url = new URL(window.location.href);
+        var page = url.searchParams.get("view");        
+        if (date1) { // require a URL
+            window.location = "new?sd=" + date1 + "&ed=" + date2; // redirect                            
+        }
+        return false;
+    });
+  });

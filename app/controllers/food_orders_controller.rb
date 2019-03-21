@@ -4,12 +4,13 @@ class FoodOrdersController < ApplicationController
   # GET /food_orders
   # GET /food_orders.json
   def index
-    @food_orders = FoodOrder.all
+    @food_orders = FoodOrder.filter_query(params[:m] || Date.today.month.to_i, params[:y] || Date.today.year.to_i)
   end
 
   # GET /food_orders/1
   # GET /food_orders/1.json
   def show
+    @food_order_items = FoodOrderItem.where(food_order_id:params[:id])
   end
 
   # GET /food_orders/new
@@ -64,7 +65,7 @@ class FoodOrdersController < ApplicationController
   def destroy
     @food_order.destroy
     respond_to do |format|
-      format.html { redirect_to food_orders_url, notice: 'Food order was successfully destroyed.' }
+      format.html { redirect_to :back, notice: 'Food order was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

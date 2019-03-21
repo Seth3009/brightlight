@@ -83,7 +83,7 @@ class FoodPackagesController < ApplicationController
 
   def food_packages_list
     respond_to do |format|      
-      format.json { @food_packages = FoodPackage.search_query(params[:term]) }
+      format.json { @food_packages = FoodPackage.search_query(params[:term],params[:sp])}
     end
   end
 

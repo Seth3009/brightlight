@@ -23,7 +23,11 @@
             ' Add row
             i.material-icons.left playlist_add 
 
-  = render 'food_order_items', f: f
+  .row
+    .col.s4
+      = render 'items'          
+    .col.s8
+      = render 'food_order_items', f: f
 
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" name="save" data-disable-with="Please wait..." Save    

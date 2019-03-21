@@ -6,6 +6,11 @@ class FoodOrder < ActiveRecord::Base
     allow_destroy: true,
     reject_if: proc { |attributes| attributes['food_package_id'].blank? || attributes['qty_order'].blank? }
 
+  scope :filter_query, lambda { |m,y|
+    where("EXTRACT(MONTH from date_order) = ?",m)
+    .where("EXTRACT(YEAR from date_order) = ?",y)
+  }
+
   private
     def has_at_least_one_food_order_item     
       errors.add :food_order, 'must have at least one food item' if food_order_items.empty?
