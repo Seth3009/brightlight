@@ -1,9 +1,32 @@
 = form_for @account do |f|
-  - if @account.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@account.errors.count, "error")} prohibited this account from being saved:"
-      ul
-        - @account.errors.full_messages.each do |message|
-          li = message
+  .card
+    .card-content
+      - if @account.errors.any?
+        #error_explanation
+          h2 = "#{pluralize(@account.errors.count, "error")} prohibited this account from being saved:"
+          ul
+            - @account.errors.full_messages.each do |message|
+              li = message
+      .row
+        .col.s3.input-field
+          = f.label :acc_l1
+          = f.text_field :acc_l1
+        .col.s3.input-field
+          = f.label :acc_l2
+          = f.text_field :acc_l2
+        .col.s3.input-field
+          = f.label :acc_l3
+          = f.text_field :acc_l3
+        .col.s3.input-field
+          = f.label :acc_l4
+          = f.text_field :acc_l4
+        .col.s6.input-field
+          = f.label :description
+          = f.text_field :description
+        .col.s6.input-field
+          = f.label :notes
+          = f.text_field :notes
 
-  .actions = f.submit
+    .card-action
+      button.btn.waves-effect.waves-light type="submit" Save
+      = link_to 'Cancel', book_categories_path, class: "waves-effect waves-teal btn-flat"
