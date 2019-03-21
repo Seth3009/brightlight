@@ -1,26 +1,32 @@
-h4 Leave Requests (Archive)
+h4 Non Stock Food Order
 
 nav
   .nav-wrapper        
     ul.right
       li
         a.dropdown-button href="#!" data-activates="supplier-options"
-          span#dept = @dept_filter.present? ? "#{@dept_filter.name}" : "Supplier" 
+          span#supplier = @supplier_filter.present? ? "#{@supplier_filter.supplier}" : "Supplier" 
           i.material-icons.right arrow_drop_down
     ul        
       li style="padding: 0 20px"         
         | Leave Date :
       li
-        = date_field_tag 'leave_date', params[:sd] || Date.today
+        = date_field_tag 'start', params[:sd] || Date.today
       li
         | &nbsp to &nbsp &nbsp
       li
-        = date_field_tag 'leave_date_end', params[:ed] || Date.today  
+        = date_field_tag 'end', params[:ed] || Date.today  
       li
         | &nbsp &nbsp &nbsp
       li
         .waves-effect.waves-light.btn.blue#btnrefresh
           | Refresh
+    ul#supplier-options.dropdown-content
+      li  
+        = link_to 'All', non_stock_order_path(params.merge(supplier:'all').symbolize_keys)
+      - FoodSupplier.order(:supplier).all.each do |supplier|
+        li 
+          = link_to supplier.supplier, non_stock_order_path(params.merge(supplier: supplier.id).symbolize_keys)  
 
 .card-panel
   .row
@@ -42,6 +48,20 @@ nav
             td = lunch_order.unit.to_unit           
             td = number_with_precision(lunch_order.cur_qty, :precision => 2, :delimiter => ',') rescue "0"
             td = number_with_precision(lunch_order.cur_qty - lunch_order.stock, :precision => 2, :delimiter => ',') rescue "0"
-            / td = lunch_order.food_packages_food_suppliers.price
-            td = lunch_order.price
+            td = number_with_precision(lunch_order.price, :precision => 0, :delimiter => ',') rescue "0"
             td = lunch_order.supplier
+
+javascript:
+  $(function(){
+      // bind click event to get data
+      $('#btnrefresh').on('click', function () {          
+          var date = $('#start').val(); 
+          var date2 = $('#end').val();
+          var url = new URL(window.location.href);
+          var page = url.searchParams.get("view");        
+          if (date) { // require a URL
+              window.location = "non_stock_order?sd="+date+"&ed="+date2; // redirect              
+          }
+          return false;
+      });
+    });

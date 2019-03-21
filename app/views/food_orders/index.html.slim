@@ -12,11 +12,11 @@ nav
       li
         = link_to new_food_order_path
           | Stock Item Order
-          i.material-icons.left add
+          
       li
-        = link_to new_food_order_path(stock:'no')
+        = link_to non_stock_order_path
           | Non Stock Item Order
-          i.material-icons.left add
+          
 .card-panel
   table.compact.striped
     thead

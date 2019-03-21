@@ -43,7 +43,12 @@ class RawFood < ActiveRecord::Base
                     group by raw_foods.id order by raw_foods.name") 
   end
 
-  def self.food_order_non_stock(from,to, g1, g2, sol, sor, adult)
+  def self.food_order_non_stock(from,to, g1, g2, sol, sor, adult, param)
+    if param == "all"
+      supp = ""
+    else
+      supp = " where id = " + param 
+    end
     self.find_by_sql("select t1.*, t2.supplier,t2.price from
                     (select raw_foods.*, 
                     SUM(CASE WHEN recipes.portion_size > 0
@@ -64,7 +69,7 @@ class RawFood < ActiveRecord::Base
                               and a2.price = a1.min_price) r
                               left join (select food_packages.* from food_packages) r1				  
                               on r.food_package_id = r1.id) v
-                              left join (select food_suppliers.* from food_suppliers) z
+                              left join (select food_suppliers.* from food_suppliers"+ supp +") z
                               on z.id = v.food_supplier_id 
                     ) t2 on (t1.id = t2.raw_food_id) where t2.supp_id != 0 order by t2.supplier,t1.name") 
   end

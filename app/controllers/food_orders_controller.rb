@@ -4,7 +4,7 @@ class FoodOrdersController < ApplicationController
   # GET /food_orders
   # GET /food_orders.json
   def index
-    @food_orders = FoodOrder.filter_query(params[:m] || Date.today.month.to_i, params[:y] || Date.today.year.to_i)
+    @food_orders = FoodOrder.filter_query(params[:m] || Date.today.month.to_i, params[:y] || Date.today.year.to_i).order(:date_order,:created_at)
   end
 
   # GET /food_orders/1
@@ -23,7 +23,7 @@ class FoodOrdersController < ApplicationController
     @sol = FoodPack.sol(@food_pack)
     @sor = FoodPack.sor(@food_pack)
     @adult = @food_pack.employee    
-    @lunch_orders = RawFood.food_order((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult, 'true')                        
+    @lunch_orders = RawFood.food_order((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult)                        
   end
 
   # GET /food_orders/1/edit
@@ -79,7 +79,11 @@ class FoodOrdersController < ApplicationController
     @sol = FoodPack.sol(@food_pack)
     @sor = FoodPack.sor(@food_pack)
     @adult = @food_pack.employee    
-    @lunch_orders = RawFood.food_order_non_stock((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult)    
+    @lunch_orders = RawFood.food_order_non_stock((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult,"all")    
+    if params[:supplier].present? && params[:supplier] != 'all'
+      @supplier_filter = FoodSupplier.find(params[:supplier])
+      @lunch_orders = RawFood.food_order_non_stock((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult,params[:supplier])
+    end
   end
 
   private
