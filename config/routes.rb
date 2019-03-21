@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   
   resources :food_order_items
-  resources :food_orders
+  
   resources :food_packs  
   resources :employee_smartcards
   resources :stock_categories
@@ -56,7 +56,8 @@ Rails.application.routes.draw do
   end  
 
   get 'food_packages_list' => 'food_packages#food_packages_list', as: :food_packages_list
-  
+  get 'food_orders/non_stock_order' => 'food_orders#non_stock_order', as: :non_stock_order
+  resources :food_orders
   resources :activity_schedules, shallow: true do
     member do
       get 'students'

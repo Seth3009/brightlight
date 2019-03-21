@@ -1,0 +1,47 @@
+h4 Leave Requests (Archive)
+
+nav
+  .nav-wrapper        
+    ul.right
+      li
+        a.dropdown-button href="#!" data-activates="supplier-options"
+          span#dept = @dept_filter.present? ? "#{@dept_filter.name}" : "Supplier" 
+          i.material-icons.right arrow_drop_down
+    ul        
+      li style="padding: 0 20px"         
+        | Leave Date :
+      li
+        = date_field_tag 'leave_date', params[:sd] || Date.today
+      li
+        | &nbsp to &nbsp &nbsp
+      li
+        = date_field_tag 'leave_date_end', params[:ed] || Date.today  
+      li
+        | &nbsp &nbsp &nbsp
+      li
+        .waves-effect.waves-light.btn.blue#btnrefresh
+          | Refresh
+
+.card-panel
+  .row
+    table.compact.striped
+      thead
+        tr
+          th Food Name
+          th Units
+          th Recipe Qty   
+          th Order Qty  
+          th Price
+          th Supplier
+          
+          
+      tbody#lunch_order
+        - @lunch_orders.each do |lunch_order|
+          tr
+            td = lunch_order.name 
+            td = lunch_order.unit.to_unit           
+            td = number_with_precision(lunch_order.cur_qty, :precision => 2, :delimiter => ',') rescue "0"
+            td = number_with_precision(lunch_order.cur_qty - lunch_order.stock, :precision => 2, :delimiter => ',') rescue "0"
+            / td = lunch_order.food_packages_food_suppliers.price
+            td = lunch_order.price
+            td = lunch_order.supplier

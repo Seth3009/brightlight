@@ -1,6 +1,6 @@
 class FoodOrdersController < ApplicationController
   before_action :set_food_order, only: [:show, :edit, :update, :destroy]
-
+  
   # GET /food_orders
   # GET /food_orders.json
   def index
@@ -23,7 +23,7 @@ class FoodOrdersController < ApplicationController
     @sol = FoodPack.sol(@food_pack)
     @sor = FoodPack.sor(@food_pack)
     @adult = @food_pack.employee    
-    @lunch_orders = RawFood.food_order((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult)                        
+    @lunch_orders = RawFood.food_order((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult, 'true')                        
   end
 
   # GET /food_orders/1/edit
@@ -68,6 +68,18 @@ class FoodOrdersController < ApplicationController
       format.html { redirect_to :back, notice: 'Food order was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def non_stock_order
+    @year = AcademicYear.current_id
+    @food_order = FoodOrder.new
+    @food_pack = FoodPack.find_by_academic_year_id(@year)    
+    @g1 = FoodPack.g1_g3(@food_pack)
+    @g2 = FoodPack.g4_g6(@food_pack)
+    @sol = FoodPack.sol(@food_pack)
+    @sor = FoodPack.sor(@food_pack)
+    @adult = @food_pack.employee    
+    @lunch_orders = RawFood.food_order_non_stock((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult)    
   end
 
   private
