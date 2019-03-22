@@ -1,5 +1,3 @@
-h1 Lunch Menu Calendar
-
 = month_calendar events: @lunch_menus do |date, lunch_menus|
   span.right
     = link_to date.day, lunch_menus_food_lists_url(d: date)
