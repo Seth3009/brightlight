@@ -1,12 +1,17 @@
-h4 Non Stock Food Order
-
-nav
+/ h4 Non Stock Food Order
+= render 'form_pemesanan_header'
+nav.hideprint
   .nav-wrapper        
     ul.right
+      li
+        = link_to '#', onclick: 'window.print();return false;' 
+          | Print
+          i.material-icons.left print
       li
         a.dropdown-button href="#!" data-activates="supplier-options"
           span#supplier = @supplier_filter.present? ? "#{@supplier_filter.supplier}" : "Supplier" 
           i.material-icons.right arrow_drop_down
+      
     ul        
       li style="padding: 0 20px"         
         | Leave Date :
@@ -33,23 +38,25 @@ nav
     table.compact.striped
       thead
         tr
+          th No.
           th Food Name
           th Units
           th Recipe Qty   
           th Order Qty  
-          th Price
-          th Supplier
+          th.hideprint Price
+          th.hideprint Supplier
           
           
       tbody#lunch_order
-        - @lunch_orders.each do |lunch_order|
+        - @lunch_orders.each_with_index do |lunch_order, idx|
           tr
+            td = idx+1
             td = lunch_order.name 
             td = lunch_order.unit.to_unit           
             td = number_with_precision(lunch_order.cur_qty, :precision => 2, :delimiter => ',') rescue "0"
             td = number_with_precision(lunch_order.cur_qty - lunch_order.stock, :precision => 2, :delimiter => ',') rescue "0"
-            td = number_with_precision(lunch_order.price, :precision => 0, :delimiter => ',') rescue "0"
-            td = lunch_order.supplier
+            td.hideprint = number_with_precision(lunch_order.price, :precision => 0, :delimiter => ',') rescue "0"
+            td.hideprint = lunch_order.supplier
 
 javascript:
   $(function(){

@@ -10,7 +10,10 @@ class FoodOrdersController < ApplicationController
   # GET /food_orders/1
   # GET /food_orders/1.json
   def show
-    @food_order_items = FoodOrderItem.where(food_order_id:params[:id])
+    @food_order_items = FoodOrderItem.where(food_order_id:@food_order.id)
+                        .joins('left join food_packages_food_suppliers on (food_packages_food_suppliers.food_supplier_id = ' + @food_order.food_supplier_id.to_s + ' and food_packages_food_suppliers.food_package_id = food_order_items.food_package_id)')
+                        .select('food_order_items.*, food_packages_food_suppliers.*')
+                        
   end
 
   # GET /food_orders/new
@@ -83,6 +86,16 @@ class FoodOrdersController < ApplicationController
     if params[:supplier].present? && params[:supplier] != 'all'
       @supplier_filter = FoodSupplier.find(params[:supplier])
       @lunch_orders = RawFood.food_order_non_stock((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult,params[:supplier])
+    end
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf:         "Order #{(@sol)}",
+               disposition: 'inline',
+               template:    'food_orders/non_stock_order.pdf.slim',
+               layout:      'pdf.html',
+               show_as_html: params.key?('screen')
+      end
     end
   end
 

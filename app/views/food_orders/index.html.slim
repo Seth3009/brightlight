@@ -40,7 +40,7 @@ nav
             - else 
               i.material-icons check_box
           td 
-            = link_to food_order_path(food_order), remote: true
+            = link_to food_order_path(food_order)
               i.material-icons visibility          
             = link_to food_order_path(food_order), data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete

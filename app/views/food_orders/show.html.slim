@@ -1,18 +1,40 @@
-p#notice = notice
+= render 'form_pemesanan_header'
 
-p
-  strong Date order:
-  = @food_order.date_order
-p
-  strong Order notes:
-  = @food_order.order_notes
-p
-  strong Food supplier:
-  = @food_order.food_supplier
-p
-  strong Is completed:
-  = @food_order.is_completed
+  
+nav.hideprint
+  .nav-wrapper 
+    ul
+      li
+        = link_to food_orders_path
+          | Food Order List
+          i.material-icons.left chevron_left       
+    ul.right
+      li
+        = link_to '#', onclick: 'window.print();return false;' 
+          | Print
+          i.material-icons.left print
+            
+.card-panel
+    table.compact
+      thead
+        th Food Name
+        th Package
+        th Content
+        th Qty Order
+        th.hideprint Price
+        th.hideprint Total
+        th.hideprint Action
+      tbody
+        - @food_order_items.each do |item|
+          tr
+            td = item.food_package.raw_food.name
+            td = item.food_package.packaging
+            td = item.food_package.package_contents.to_s + " " + item.food_package.unit
+            td = item.qty_order
+            td.hideprint = number_with_precision(item.price, :precision => 0, :delimiter => ',') rescue "0"
+            td.hideprint = number_with_precision(item.price*item.qty_order, :precision => 0, :delimiter => ',') rescue "0"
+            td.hideprint
+              = link_to item, data: {:confirm => 'Are you sure?'}, :method => :delete
+                i.material-icons.red-text delete 
 
-= link_to 'Edit', edit_food_order_path(@food_order)
-'|
-= link_to 'Back', food_orders_path
+p Notes: #{@food_order.order_notes}
