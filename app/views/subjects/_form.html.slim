@@ -19,7 +19,7 @@
         .input-field.col.s12
             = f.hidden_field :code, value: 'BC' + @subject_code.to_s
     .card-action
-      button.btn.waves-effect.waves-light type="submit" Save
+      button.btn.waves-effect.waves-light type="submit" data-disable=true Save
       = link_to 'Cancel', subjects_path, class: "waves-effect waves-teal btn-flat"
       - if params[:action] =~ /edit/
         = link_to 'Delete', @subject, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"

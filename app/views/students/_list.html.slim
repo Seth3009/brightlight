@@ -24,7 +24,7 @@
     = will_paginate students 
 
   .card-action
-    button.btn.waves-effect.waves-light type="submit" Add
+    button.btn.waves-effect.waves-light type="submit" data-disable=true Add
     = link_to "Cancel", :back, class: "waves-effect waves-teal btn-flat"
 
 = hidden_field_tag :year, year_id

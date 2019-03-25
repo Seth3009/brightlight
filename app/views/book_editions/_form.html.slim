@@ -68,7 +68,7 @@
           
   .toolbar.z-depth-1
     .actions.col.s12 
-      button.btn.waves-effect.waves-light type="submit" Save
+      button.btn.waves-effect.waves-light type="submit" data-disable=true Save
       = link_to 'Cancel', @book_edition, class: "waves-effect waves-teal btn-flat"
       - if params[:action] =~ /edit/
         = link_to 'Delete', @book_edition, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"

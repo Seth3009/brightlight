@@ -66,5 +66,5 @@ nav
                   = ff.select :book_label_id, grouped_options_for_select(BookLabel.for_select, ff.object.book_label_id, prompt: true)
                     
   .toolbar.z-depth-1
-    button.btn.waves-effect.waves-light type="submit" Save
+    button.btn.waves-effect.waves-light type="submit" data-disable=true Save
     = link_to 'Cancel', book_edition_book_copies_path(@book_edition), class: "waves-effect waves-light btn btn-flat"

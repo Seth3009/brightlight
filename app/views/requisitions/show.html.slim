@@ -68,7 +68,7 @@ nav
           li.collection-item.row
             = form_tag new_purchase_order_path, method: :get do
               .label.left Requested Items
-              button.right.btn#create-po-button type="submit" disabled=true Create PO
+              button.right.btn#create-po-button type="submit" data-disable=true disabled=true Create PO
               table.compact.striped
                 thead
                   tr

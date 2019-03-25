@@ -5,7 +5,7 @@
 				label Create new copy
 				= f.text_field :barcode, {placeholder:'Scan/enter Barcode'}
 			.col.s2
-				button.btn.btn-floating.waves-effect.waves-light.teal name='commit' type='submit'
+				button.btn.btn-floating.waves-effect.waves-light.teal name='commit' data-disable=true type='submit'
 					i.material-icons add
 			.col.s11
 				= f.grouped_collection_select :book_label_id, GradeSection.all.order(:grade_level_id, :id), :book_labels, :name, :id, :name, {prompt:true}, {class:'browser-default materialish'}

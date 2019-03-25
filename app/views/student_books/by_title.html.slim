@@ -30,7 +30,7 @@ ul#year-options.dropdown-content
           = link_to 'PDF Format', by_title_student_books_path(year:params[:year],s:params[:s],t:params[:t], format: :pdf), target: '_blank'
         - if @student_books.present? and !@disable_edit
           li  
-            button.btn.waves-effect.waves-light type="submit" Save 
+            button.btn.waves-effect.waves-light type="submit" data-disable=true Save 
       ul.right
         li 
           a.dropdown-button href="#!" data-activates="year-options"
@@ -57,7 +57,7 @@ ul#year-options.dropdown-content
       .page-break    
     - if !@disable_edit
       .toolbar.z-depth-1
-        button.btn.waves-effect.waves-light type="submit" Save
+        button.btn.waves-effect.waves-light type="submit" data-disable=true Save
   - else
     #message.card-panel.grey.lighten-1
       .center.white-text Please choose Grade Level, Class and Book Title

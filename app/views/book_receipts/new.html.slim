@@ -48,7 +48,7 @@ h4 Add Book to Receipt Form
   = hidden_field_tag :r, @roster_no
 
   .toolbar.z-depth-1
-    button.btn.waves-effect.waves-light type="submit" Save
+    button.btn.waves-effect.waves-light type="submit" data-disable=true Save
     = link_to 'Cancel', book_receipts_path(gs:params[:gs],r:params[:r],year:params[:year]), class: "waves-effect waves-light btn btn-flat"
 
 javascript:

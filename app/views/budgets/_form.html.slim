@@ -90,6 +90,6 @@
         = render 'budget_item_fields', f: budget_item
 
   .toolbar.z-depth-1
-    button.btn.waves-effect.waves-light type="submit" name="save" Save
-    button.btn.waves-effect.waves-light type="submit" name="send" Send for Approval
+    button.btn.waves-effect.waves-light type="submit" name="save" data-disable=true Save
+    button.btn.waves-effect.waves-light type="submit" name="send" data-disable=true Send for Approval
     = link_to 'Cancel', budgets_path, class: "waves-effect waves-light btn-flat"

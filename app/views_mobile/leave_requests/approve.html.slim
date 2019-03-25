@@ -15,10 +15,10 @@
         .toolbar.z-depth-1
           .row
             .col.s6.center
-              = button_tag class:"btn waves-effect waves-light center green", style:"width:100%;", type: "submit", name:"send", value:"spv-app", data: {confirm: "Approve this leave request?"}
+              = button_tag class:"btn waves-effect waves-light center green", style:"width:100%;", type: "submit", name:"send", value:"spv-app", data: {disable: true, confirm: "Approve this leave request?"}
                 i.material-icons.center thumb_up
             .col.s6.center
-              = button_tag class:"btn waves-effect waves-light center red", style:"width:100%;", type: "submit", name:"send", value:"spv-den", data: {confirm: "Reject this leave request?"}
+              = button_tag class:"btn waves-effect waves-light center red", style:"width:100%;", type: "submit", name:"send", value:"spv-den", data: {disable: true, confirm: "Reject this leave request?"}
                 i.material-icons.center thumb_down
       -else
         .card-panel
@@ -31,9 +31,9 @@
       .toolbar.z-depth-1
         .row
           .col.s6.center
-            = button_tag class:"btn waves-effect waves-light center green", style:"width:100%;", type: "submit", name:"send", value:"hr-app", data: {confirm: "Approve this leave request?"}
+            = button_tag class:"btn waves-effect waves-light center green", style:"width:100%;", type: "submit", name:"send", value:"hr-app", data: {disable: true, confirm: "Approve this leave request?"}
               i.material-icons.center thumb_up
           .col.s6.center
-            = button_tag class:"btn waves-effect waves-light center red", style:"width:100%;", type: "submit", name:"send", value:"hr-den", data: {confirm: "Reject this leave request?"}
+            = button_tag class:"btn waves-effect waves-light center red", style:"width:100%;", type: "submit", name:"send", value:"hr-den", data: {disable: true, confirm: "Reject this leave request?"}
               i.material-icons.center thumb_down
     

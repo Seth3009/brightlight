@@ -38,5 +38,5 @@
           = f.collection_select :academic_year, AcademicYear.list_for_menu, :id, :name, selected: @book_loan.academic_year_id
           = f.hidden_field :user
   .toolbar.actions
-    button.btn.waves-effect.waves-light type="submit" Save
+    button.btn.waves-effect.waves-light type="submit" data-disable=true Save
     = link_to 'Cancel', :back, class: "waves-effect waves-teal btn-flat"

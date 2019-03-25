@@ -31,7 +31,7 @@
   /   i.material-icons.left playlist_add
 
   .card-panel
-    button.btn.waves-effect.waves-light type="submit" Save
+    button.btn.waves-effect.waves-light type="submit" data-disable=true Save
     = link_to 'Cancel', grade_levels_path, class: "waves-effect waves-teal btn-flat"
     - if params[:action] =~ /edit/
       = link_to 'Delete', @grade_level, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red" 

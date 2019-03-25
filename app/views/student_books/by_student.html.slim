@@ -143,9 +143,9 @@ ul#year-options.dropdown-content
       .page-break    
     - if !@disable_edit
       .toolbar.z-depth-1
-        button.btn.waves-effect.waves-light type="submit" Save
+        button.btn.waves-effect.waves-light type="submit" data-disable=true Save
         - if @next_in_list
-          button.btn.waves-effect.waves-light type="submit" name="next" value=@next_in_list.student_id Save & Next
+          button.btn.waves-effect.waves-light type="submit" data-disable=true name="next" value=@next_in_list.student_id Save & Next
   - else
     #message.card-panel.grey.lighten-1
       .center.white-text Please choose Grade Level, Class and Student

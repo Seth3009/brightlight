@@ -113,7 +113,7 @@
           
   .toolbar.z-depth-1 
     = link_to 'Cancel', purchase_orders_path, class: "waves-effect waves-teal btn-flat"
-    button.btn.waves-effect.waves-light type="submit" Save
+    button.btn.waves-effect.waves-light type="submit" data-disable=true Save
     - if params[:action] =~ /edit/
       = link_to 'Delete', @purchase_order, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-teal red"
 

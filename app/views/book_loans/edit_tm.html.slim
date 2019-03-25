@@ -57,5 +57,5 @@
           = f.collection_select :book_category_id, BookCategory.all, :id, :name, prompt: true
 
   .toolbar.action
-    button.btn.waves-effect.waves-light type='Submit' Save
+    button.btn.waves-effect.waves-light type='Submit' data-disable=true Save
     = link_to "Close", employee_book_loans_path(@teacher, year: params[:year]), class:"modal-action modal-close waves-effect waves-light btn-flat"

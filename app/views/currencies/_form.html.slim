@@ -18,7 +18,7 @@
         = f.text_field :rate
         = f.hidden_field :user, value: current_user
       .col.s5
-        button.btn.waves-effect.waves-light type="submit" Save
+        button.btn.waves-effect.waves-light type="submit" data-disable=true Save
         - if params[:action] =~ /edit/
           = link_to 'Cancel', :back, class: "waves-effect waves-light btn-flat"
         - else

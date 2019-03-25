@@ -39,12 +39,12 @@ h4 Purchase Request Approval
  
   .toolbar.z-depth-1
     - unless @requisition.is_submitted
-      button.btn.waves-effect.waves-light type="submit" name="approve" Submit      
+      button.btn.waves-effect.waves-light type="submit" data-disable=true name="approve" Submit      
       - if params[:appvl] == 'supv'
-        = button_tag class:"btn waves-effect waves-light", type: "submit", name:"send", id:"send_budget", value:"budget", disabled: (@button_state ? false : true) 
+        = button_tag class:"btn waves-effect waves-light", type: "submit", name:"send", id:"send_budget", value:"budget", disabled: (@button_state ? false : true), data: {disable: true}
           | Send for Approval
     - else
-      button.btn type="submit" disabled=true Already submitted
+      button.btn type="submit" data-disable=true disabled=true Already submitted
     = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"
 
   nav

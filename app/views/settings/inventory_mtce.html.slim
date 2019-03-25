@@ -15,7 +15,7 @@ ul class="collapsible" data-collapsible="expandable"
               .label New Academic Year
               = select_tag :standard_book_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
             .col.s2
-              button.btn.waves-effect.waves-light type="submit" Create
+              button.btn.waves-effect.waves-light type="submit" data-disable=true Create
             .col.s7 
               h6 Create Standard Books
               .label Description        
@@ -40,7 +40,7 @@ ul class="collapsible" data-collapsible="expandable"
                       .label Academic Year 
                       = select_tag :finalize_student_books_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
                     .col.s2
-                      button.btn.waves-effect.waves-light type="submit" id="finalize-student-books-button" disabled="disabled" Finalize 
+                      button.btn.waves-effect.waves-light type="submit" id="finalize-student-books-button" disabled="disabled" data-disable=true Finalize 
                       .label Select Grades
                       input.allcheckboxes type="checkbox" id="finalize_student_books-all" name="finalize_student_books[all]" data-total="#{GradeLevel.count}"
                       = label_tag "finalize_student_books-all", "All grades"
@@ -64,7 +64,7 @@ ul class="collapsible" data-collapsible="expandable"
                       .label New Academic Year 
                       = select_tag :prepare_book_receipts_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
                     .col.s2
-                      button.btn.waves-effect.waves-light type="submit" id="prepare_book_receipts-button" disabled="disabled" Prepare 
+                      button.btn.waves-effect.waves-light type="submit" id="prepare_book_receipts-button" disabled="disabled" data-disable=true Prepare 
                       .label Select Grades
                       input.allcheckboxes type="checkbox" id="prepare_book_receipts-all" name="prepare_book_receipts[all]" data-total="#{GradeLevel.count}"
                       = label_tag "prepare_book_receipts-all", "All grades"
@@ -89,7 +89,7 @@ ul class="collapsible" data-collapsible="expandable"
                       .label Academic Year 
                       = select_tag :receipt_condition_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
                     .col.s2
-                      button.btn.waves-effect.waves-light type="submit" id="finalize_condition_book_receipts-button" disabled="disabled" data-confirm="Are you sure?" Finalize
+                      button.btn.waves-effect.waves-light type="submit" id="finalize_condition_book_receipts-button" data-disable=true disabled="disabled" data-confirm="Are you sure?" Finalize
                       .label Select Grades
                       input.allcheckboxes type="checkbox" id="finalize_condition_book_receipts-all" name="finalize_condition_book_receipts[all]" data-total="#{GradeLevel.count}"
                       = label_tag "finalize_condition_book_receipts-all", "All grades"
@@ -113,7 +113,7 @@ ul class="collapsible" data-collapsible="expandable"
                       .label Academic Year 
                       = select_tag :prepare_student_book_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
                     .col.s2
-                      button.btn.waves-effect.waves-light type="submit" id="prepare_student_books-button" disabled="disabled" Create
+                      button.btn.waves-effect.waves-light type="submit" id="prepare_student_books-button" disabled="disabled" data-disable=true Create
                       .label Select Grades
                       input.allcheckboxes type="checkbox" id="prepare_student_books-all" name="prepare_student_books[all]" data-total="#{GradeLevel.count}"
                       = label_tag "prepare_student_books-all", "All grades"
@@ -144,7 +144,7 @@ ul class="collapsible" data-collapsible="expandable"
                       .label New Academic Year
                       = select_tag :teacher_loan_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
                     .col.s2
-                      button.btn.waves-effect.waves-light type="submit" Create
+                      button.btn.waves-effect.waves-light type="submit" data-disable=true Create
                     .col.s7 
                       h6 Initialize Teacher Book Loans
                       .label Description
@@ -180,7 +180,7 @@ ul class="collapsible" data-collapsible="expandable"
                           .label Description
                           | This will move book loans from one teacher to another.
                         .col.s12
-                          button.btn.waves-effect.waves-light type="submit" Move
+                          button.btn.waves-effect.waves-light type="submit" data-disable=true Move
       
   li 
     .collapsible-header.waves-effect.waves-light.large-letter      
@@ -194,7 +194,7 @@ ul class="collapsible" data-collapsible="expandable"
               .label Academic Year
               = select_tag :fines_academic_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
             .col.s2
-              button.btn.waves-effect.waves-light type="submit" id="calculate-fines-button" disabled="disabled" Calculate
+              button.btn.waves-effect.waves-light type="submit" id="calculate-fines-button" disabled="disabled" data-disable=true Calculate
               br
               .label Select Grades
               input.allcheckboxes type="checkbox" id="fines_grade-all" name="fines_grade[all]" data-total="#{GradeLevel.count}"

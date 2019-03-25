@@ -46,7 +46,7 @@
         = render 'course_section_fields', f: course_section
 
   .toolbar.z-depth-1
-    button.btn.waves-effect.waves-light type="submit" Save
+    button.btn.waves-effect.waves-light type="submit" data-disable=true Save
     = link_to 'Cancel', @course, class: "waves-effect waves-light btn-flat"
     - if params[:action] =~ /edit/
       = link_to 'Delete', @course, data: {confirm: 'Are you sure?'}, method: :delete, class: "right btn waves-effect waves-light red"

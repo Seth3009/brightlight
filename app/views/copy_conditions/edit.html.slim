@@ -26,5 +26,5 @@ h4 Editing Book Condition
       		p.grey-text = "#{@user.name} (#{@user.email}), #{@copy_condition.updated_at}"
 
   .toolbar.z-depth-1
-  	button.btn.waves-effect.waves-light type="submit" Save
+  	button.btn.waves-effect.waves-light type="submit" data-disable=true Save
   	= link_to "Cancel", book_copy_conditions_path(@copy_condition.book_copy), class:'btn waves-effect waves-light btn-flat'
