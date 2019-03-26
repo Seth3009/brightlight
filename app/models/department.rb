@@ -26,6 +26,10 @@ class Department < ActiveRecord::Base
     end
   end
 
+  def managers
+    [manager, vice_manager]
+  end
+
 	def to_s
 		name 
 	end
