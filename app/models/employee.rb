@@ -11,7 +11,7 @@ class Employee < ActiveRecord::Base
   has_many :book_loans, dependent: :restrict_with_error
   has_many :grade_sections, foreign_key: "homeroom_id"
 	has_many :course_sections, foreign_key: "instructor_id"
-	has_one :manager, through: :department
+  has_one :manager, through: :department
 	has_many :leave_requests
   has_many :supplies_transaction
   has_one :employee_smartcard
@@ -40,7 +40,10 @@ class Employee < ActiveRecord::Base
   }
   
   def superiors
-    [supervisor, manager, supervisor.try(:supervisor), manager.try(:supervisor)].uniq.reject{|e| e == self}.reject &:nil?
+    [supervisor, department.try(:managers), supervisor.try(:supervisor), manager.try(:supervisor)]
+      .flatten.uniq
+      .reject{|e| e == self}
+      .reject &:nil?
   end
 
   def self.with_role(role)
