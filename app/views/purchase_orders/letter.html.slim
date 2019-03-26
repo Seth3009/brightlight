@@ -22,14 +22,6 @@ br
 div
   | Bandung, #{date.strftime("%d %B %Y")}
 br
-/ table.compact
-/   tr 
-/     td style="padding: 0; width: 65px" No. PO
-/     td = @purchase_order.order_num
-/   tr
-/     td style="padding: 0; width: 65px"  Hal
-/     td = @purchase_order.contact
-
 div
   span style="display: inline-block; width: 65px" No. PO
   span = @purchase_order.order_num
@@ -63,8 +55,8 @@ table.compact.bordered
       td Item
       td Order
       td Code
-      td Unit Price
-      td Total (incl. disc)
+      td.right-align Unit Price
+      td.right-align Total (incl. disc)
       td Notes
   tbody
     - discount = total = 0
@@ -76,40 +68,40 @@ table.compact.bordered
         td = item.description
         td = "#{item.quantity} #{item.unit}"
         td = item.code
-        td = item.unit_price
-        td = item.line_amount
+        td.right-align = currency(item.unit_price, currency: item.currency)
+        td.right-align = currency(item.line_amount, currency: item.currency)
         td = item.notes
   tfoot style="background-color: lightgrey"
     tr
       td
-      td colspan=4 Jumlah
-      td = total
+      td.right-align colspan=4 Jumlah
+      td.right-align = currency(total, currency: @purchase_order.currency)
       td
     tr
       td
-      td colspan=4 Discount 
-      td = discount
+      td.right-align colspan=4 Discount 
+      td.right-align = currency(discount, currency: @purchase_order.currency)
       td
     tr
       td
-      td colspan=4 Total Tagihan 
-      td = @purchase_order.total_amount
+      td.right-align colspan=4 Total Tagihan 
+      td.right-align = currency(@purchase_order.total_amount, currency: @purchase_order.currency)
       td
 
 p Adapun ketentuan waktu pengiriman dan pembayaran adalah sbb.:
 
 table.compact.bordered
-  thead
-    tr
+  tbody
+    tr.grey.lighten-2
       td.wd50 Waktu dan Tempan Pengiriman Barang
       td.wd50 Pembayaran Tagihan
-  tbody
     tr
       td 
         |Tanggal: ASAP
         br Pukul 09:00 - 14:00 WIB
         br Alamat:
-      td
+
+      td rowspan=3
         ul
           li Pembayaran akan ditransfer segera setelah barang pesanan kami terima.
           li Kwitansi asli mohon dikirimkan bersamaan dengan barang pesanan (kwitansi bermeterai Rp6.000)
@@ -118,6 +110,11 @@ table.compact.bordered
             strong a.c : #{@supplier.bank_acct_no}
           li
             strong a.n : #{@supplier.bank_acct_name}
+    tr.grey.lighten-2
+      td Catatan untuk supplier
+    tr
+      td = @purchase_order.instructions || "--"
+
 
 p Demikianlah pesanan barang yang dapat kami sampaikan, untuk contact person dapat menghubungi Bag. Pembelian di no. telp 022-86813919 (Nori).
 p Atas perhatian dan kerjasamanya kami ucapkan terima kasih.

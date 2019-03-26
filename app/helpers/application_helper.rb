@@ -53,7 +53,7 @@ module ApplicationHelper
   end
 
   def currency(amount, currency: currency)
-    unit_display = {"IDR" => "", "USD" => "$"}
+    unit_display = {"IDR" => "Rp", "USD" => "$"}
     unit_precision = {"IDR" => 0, "USD" => 2}
     number_to_currency(amount, unit: "#{unit_display[currency]}", precision: unit_precision[currency] || 0, delimiter: ',')
   end
