@@ -1,0 +1,20 @@
+h4 Food Item Receive
+= form_tag update_multiple_order_item_path, method: :put do
+  nav
+    .nav-wrapper
+      ul
+        li  
+          button.btn.waves-effect.waves-light type="submit" Save 
+  .card-panel 
+      table.compact.striped
+        thead  
+          tr.compact-row     
+            th Food Name
+            th Food Package
+            th Food Content
+            th Qty order
+            th Qty Receive      
+        tbody#items
+          - @food_order_items.each do |item| 
+            = render partial: 'item_order_table', locals: {item: item}
+            

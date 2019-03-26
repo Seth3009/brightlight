@@ -1,5 +1,5 @@
 class FoodOrdersController < ApplicationController
-  before_action :set_food_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_food_order, only: [:show, :edit, :update, :destroy, :item_receive]
   
   # GET /food_orders
   # GET /food_orders.json
@@ -95,6 +95,20 @@ class FoodOrdersController < ApplicationController
                template:    'food_orders/non_stock_order.pdf.slim',
                layout:      'pdf.html',
                show_as_html: params.key?('screen')
+      end
+    end
+  end
+
+  def item_receive
+    @food_order_items = FoodOrderItem.where(food_order_id:params[:id])
+  end
+
+  def update_multiple_item
+    respond_to do |format|
+      if FoodOrderItem.update(params[:food_order_items].keys, params[:food_order_items].values)
+        format.html { redirect_to food_orders_path, notice: 'Food items was successfully updated.' }
+      else
+        format.html { render :back }
       end
     end
   end
