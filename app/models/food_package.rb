@@ -5,6 +5,7 @@ class FoodPackage < ActiveRecord::Base
   
   belongs_to :raw_food 
   has_many :food_packages_food_suppliers
+  has_many :food_order_items
   after_save :update_stock
 
   scope :search_query, lambda { |query, food_supplier|
@@ -38,7 +39,16 @@ class FoodPackage < ActiveRecord::Base
   
   def update_stock
     raw_food.total_stock
-  end    
+  end  
+  
+  def update_qty
+    qty = 0
+    @items = food_order_items.all
+    @items.each do |item|
+      qty = qty + item.qty_received
+    end
+    self.update_column :qty, qty
+  end
 
   def self.disable_item(food_package)
     if self.find(food_package).is_active?

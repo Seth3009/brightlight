@@ -11,11 +11,11 @@ nav
     ul.right      
       li
         = link_to new_food_order_path
-          | Stock Item Order
+          | Stock Order
           
       li
         = link_to non_stock_order_path
-          | Non Stock Item Order
+          | Non Stock Order
           
 .card-panel
   table.compact.striped
@@ -44,7 +44,7 @@ nav
           td 
             - if food_order.food_order_items.present?
               = link_to item_receive_path(food_order)
-                i.material-icons.yellow visibility
+                i.material-icons local_grocery_store
               = link_to food_order_path(food_order)
                 i.material-icons visibility          
             = link_to food_order_path(food_order), data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'

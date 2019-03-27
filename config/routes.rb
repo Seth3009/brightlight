@@ -58,8 +58,13 @@ Rails.application.routes.draw do
   get 'food_packages_list' => 'food_packages#food_packages_list', as: :food_packages_list
   get 'food_orders/non_stock_order' => 'food_orders#non_stock_order', as: :non_stock_order
   get 'food_orders/:id/item_receive' => 'food_orders#item_receive', as: :item_receive
-  put 'food_orders/update_multiple_item' => 'food_orders#update_multiple_item', as: :update_multiple_order_item
-  resources :food_orders
+  
+  resources :food_orders, shallow: true do
+    member do
+      put 'update_multiple_item'
+    end
+  end
+
   resources :activity_schedules, shallow: true do
     member do
       get 'students'

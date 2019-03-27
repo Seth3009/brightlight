@@ -1,20 +1,53 @@
-h4 Food Item Receive
-= form_tag update_multiple_order_item_path, method: :put do
+h4 Food Item Receive from #{@food_order.food_supplier.supplier} 
+h5 Order date #{@food_order.date_order.try(:strftime,"%d/%m/%Y") rescue '-'}
+= form_tag update_multiple_item_food_order_path(), id:'myform', method: :put do
   nav
     .nav-wrapper
       ul
-        li  
-          button.btn.waves-effect.waves-light type="submit" Save 
+        li
+          = link_to food_orders_path
+            i.material-icons.left chevron_left
+            | Food Orders
+      ul.right
+        - if @food_order.is_completed? == false
+          li   
+            = check_box_tag :is_completed,'', @food_order.is_completed
+            = label_tag :is_completed
+            input type="hidden" name="complete_var" id="complete_var" 
+          li
+            button.btn.waves-effect.waves-light type='submit' Save
+        - else
+          li
+            | Order Completed &nbsp &nbsp
   .card-panel 
       table.compact.striped
         thead  
           tr.compact-row     
             th Food Name
-            th Food Package
-            th Food Content
+            th Food Package            
             th Qty order
-            th Qty Receive      
+            th Qty Receive 
+            th Unit     
         tbody#items
           - @food_order_items.each do |item| 
             = render partial: 'item_order_table', locals: {item: item}
             
+javascript:
+  $(function() {
+    $('#is_completed').on('change', function() {        
+      $('#complete_var').val(this.checked);
+    });
+  })
+
+  $(function (){
+    $('.btn').on('click', function() {
+      if ($('#complete_var').val() == "true") {
+        var submit = confirm("Order status changed to complete.\nContinue?");
+        if (submit==true){
+          $('#myform').submit();        
+        }
+        else {return false;}
+      }
+    })
+  })
+  

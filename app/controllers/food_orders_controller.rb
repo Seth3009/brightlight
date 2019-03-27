@@ -1,10 +1,10 @@
 class FoodOrdersController < ApplicationController
-  before_action :set_food_order, only: [:show, :edit, :update, :destroy, :item_receive]
+  before_action :set_food_order, only: [:show, :edit, :update, :destroy, :item_receive, :update_completed,:update_multiple_item]
   
   # GET /food_orders
   # GET /food_orders.json
   def index
-    @food_orders = FoodOrder.filter_query(params[:m] || Date.today.month.to_i, params[:y] || Date.today.year.to_i).order(:date_order,:created_at)
+    @food_orders = FoodOrder.filter_query(params[:m] || Date.today.month.to_i, params[:y] || Date.today.year.to_i).order(:is_completed,:date_order,:created_at)
   end
 
   # GET /food_orders/1
@@ -31,6 +31,7 @@ class FoodOrdersController < ApplicationController
 
   # GET /food_orders/1/edit
   def edit
+    @food_order = FoodOrder.find(params[:order])
   end
 
   # POST /food_orders
@@ -100,13 +101,14 @@ class FoodOrdersController < ApplicationController
   end
 
   def item_receive
-    @food_order_items = FoodOrderItem.where(food_order_id:params[:id])
+    @food_order_items = FoodOrderItem.where(food_order_id:@food_order)  
   end
 
   def update_multiple_item
     respond_to do |format|
       if FoodOrderItem.update(params[:food_order_items].keys, params[:food_order_items].values)
         format.html { redirect_to food_orders_path, notice: 'Food items was successfully updated.' }
+        @food_order.update(is_completed: params[:complete_var])
       else
         format.html { render :back }
       end
