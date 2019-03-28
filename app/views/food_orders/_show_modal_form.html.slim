@@ -1,0 +1,48 @@
+.modal-content
+  h5 Food Order
+  .card-panel
+    table
+      tr
+        td
+          .list_description
+            dl.row
+              dd.col.s5
+                .label Order Date
+                .item = @food_order.date_order.try(:strftime,"%d/%m/%Y")           
+              dd.col.s5
+                .label Supplier
+                .item = @food_order.food_supplier.supplier
+              dd.col.s2
+                .label Completed?
+                .item.center
+                  - if @food_order.is_completed == true
+                    i.material-icons check_box
+                  - else
+                    i.material-icons check_box_outline_blank
+            dl.row
+              dd.col.s12
+                .label Order Notes
+                .item = @food_order.order_notes
+              
+  .card-panel
+      table.compact.striped
+        thead
+          th Food Name
+          th Package
+          th Content
+          th Qty Order
+          th Qty Received
+          th Action
+        tbody
+          - @food_order_items.each do |item|
+            tr
+              td = item.food_package.raw_food.name
+              td = item.food_package.packaging
+              td = item.food_package.package_contents.to_s + " " + item.food_package.unit
+              td = item.qty_order
+              td = item.qty_received || 0
+              td
+                = link_to item, data: {:confirm => 'Are you sure?'}, :method => :delete
+                  i.material-icons.red-text delete 
+.modal-footer
+  a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

@@ -1,0 +1,74 @@
+.row 
+  .col.s6
+    h4 Supplier
+  .col.s5
+    = form_tag({controller:'food_suppliers', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{food_suppliers_path(v:'list')}"
+      }
+
+nav
+  .nav-wrapper
+    ul
+      li
+        
+
+    ul.right      
+      li
+        = link_to new_food_supplier_path, remote: true
+          | New Supplier
+          i.material-icons.left add
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Supplier
+        th Address
+        th Contact person
+        th Phone
+        th.center Active
+        th.center Actions
+        
+
+    tbody
+      - @food_suppliers.each do |food_supplier|
+        tr
+          td = food_supplier.supplier
+          td = food_supplier.address
+          td = food_supplier.contact_person
+          td = food_supplier.phone   
+          td.center
+            - if food_supplier.is_active
+              i.material-icons check_box
+            - else
+              i.material-icons check_box_outline_blank       
+          td.center
+            = link_to food_supplier_items_path(food_supplier)
+              i.material-icons visibility
+            = link_to edit_food_supplier_path(food_supplier), remote: true
+              i.material-icons edit                   
+            - if food_supplier.is_active
+              = link_to food_supplier, data: {:confirm => 'Disable food supplier?'}, :method => :delete, class:'red-text'
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Disable" thumb_down
+            - else
+              = link_to food_supplier, data: {:confirm => 'Enable food supplier?'}, :method => :delete, class:'green-text'
+                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Enable" thumb_up
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content

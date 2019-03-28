@@ -1,0 +1,2 @@
+$("tbody#raw_foods").append("<%=j render partial:'index_row', locals: {raw_food: @raw_food}%>");
+Materialize.toast("<%= @raw_food.try(:name)%> created.", 4000, "green")

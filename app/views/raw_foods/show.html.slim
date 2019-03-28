@@ -1,0 +1,37 @@
+- title "#{@raw_food.name}"
+
+h4 #{@raw_food.name}
+
+nav.light
+  .nav-wrapper
+    ul
+      li
+        = link_to raw_foods_path
+          i.material-icons.left chevron_left
+      li
+        .brand-logo style="margin-left: 20px; font-size:1.5em"
+          - if @raw_food.is_stock?
+            | Stock Product
+          - else
+            | Non Stock Product
+    ul.right
+      li
+        = link_to new_raw_food_food_package_url(params[:id])
+          | Add Product
+          i.material-icons.left add
+
+h5 Product's packages
+= form_for @raw_food do |f|
+  .card-panel
+    .row.header.compact
+      .col.s4 Packaging 
+      .col.s2 Qty
+      .col.s2 Unit
+      .col.s2.center Action
+    .row.compact
+      = f.fields_for :food_packages, @raw_food do |food_package|
+          .nested-fields
+            = render 'food_packages_fields', f: food_package
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" Save
+    = link_to 'Cancel', raw_foods_path, class: "waves-effect waves-light btn-flat"

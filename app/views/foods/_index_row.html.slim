@@ -1,0 +1,21 @@
+tr id="row-#{food.id}" 
+  td = food.name
+  td = food.ingredients
+  td
+    - if food.is_active
+      i.material-icons check_box
+    - else
+      i.material-icons check_box_outline_blank
+  td
+    = link_to food_recipes_path(food), class: 'green-text'
+      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View ingredients" visibility
+    - if can? :update, food
+      = link_to edit_food_path(food), remote: true
+        i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+    - if can? :destroy, food
+      - if food.is_active
+        = link_to food, data: {:confirm => 'Disable food?'}, :method => :delete, class:'red-text'
+          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Disable" thumb_down
+      - else
+        = link_to food, data: {:confirm => 'Enable food?'}, :method => :delete, class:'green-text'
+          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Enable" thumb_up

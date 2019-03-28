@@ -1,0 +1,2 @@
+$("tr#row-<%= @raw_food.id%>").replaceWith("<%=j render partial:'index_row', locals: {raw_food: @raw_food}%>");
+Materialize.toast("<%= @raw_food.try(:name)%> updated.", 4000, "green")

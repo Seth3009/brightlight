@@ -1,0 +1,63 @@
+.row 
+  .col.s6
+    h4 Raw Foods
+  .col.s5
+    = form_tag({controller:'raw_foods', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{raw_foods_path(v:'list')}"
+      }
+
+
+nav
+  .nav-wrapper
+    ul
+      li
+        / = link_to 'Catalog (PDF)', raw_foods_path(format: 'pdf'), target: '_blank'
+
+    ul.right
+      / - if can? :manage, RawFood
+      li
+        = link_to new_raw_food_path, remote: true
+          | New Product
+          i.material-icons.left add
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Name
+        th.center Stock items
+        th.center Packages
+        th.center Is Active
+        th.center Total Stock
+        th.center Actions
+        
+
+    tbody#raw_foods
+      - @raw_foods.each do |raw_food|
+        tr id="row-#{raw_food.id}"
+          = render partial: 'index_row', locals: {raw_food: raw_food}
+
+
+
+/ - if @raw_foods.length >= 20   
+/   .toolbar.z-index-1
+/     = will_paginate @raw_foods
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content

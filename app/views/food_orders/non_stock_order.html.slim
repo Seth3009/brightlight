@@ -1,0 +1,74 @@
+/ h4 Non Stock Food Order
+= render 'form_pemesanan_header'
+nav.hideprint
+  .nav-wrapper        
+    ul.right
+      li
+        = link_to '#', onclick: 'window.print();return false;' 
+          | Print
+          i.material-icons.left print
+      li
+        a.dropdown-button href="#!" data-activates="supplier-options"
+          span#supplier = @supplier_filter.present? ? "#{@supplier_filter.supplier}" : "Supplier" 
+          i.material-icons.right arrow_drop_down
+      
+    ul        
+      li style="padding: 0 20px"         
+        | Leave Date :
+      li
+        = date_field_tag 'start', params[:sd] || Date.today
+      li
+        | &nbsp to &nbsp &nbsp
+      li
+        = date_field_tag 'end', params[:ed] || Date.today  
+      li
+        | &nbsp &nbsp &nbsp
+      li
+        .waves-effect.waves-light.btn.blue#btnrefresh
+          | Refresh
+    ul#supplier-options.dropdown-content
+      li  
+        = link_to 'All', non_stock_order_path(params.merge(supplier:'all').symbolize_keys)
+      - FoodSupplier.order(:supplier).all.each do |supplier|
+        li 
+          = link_to supplier.supplier, non_stock_order_path(params.merge(supplier: supplier.id).symbolize_keys)  
+
+.card-panel
+  .row
+    table.compact.striped
+      thead
+        tr
+          th No.
+          th Food Name
+          th Units
+          th Recipe Qty   
+          th Order Qty  
+          th.hideprint Price
+          th.hideprint Supplier
+          
+          
+      tbody#lunch_order
+        - @lunch_orders.each_with_index do |lunch_order, idx|
+          tr
+            td = idx+1
+            td = lunch_order.name 
+            td = lunch_order.unit.to_unit           
+            td = number_with_precision(lunch_order.cur_qty, :precision => 2, :delimiter => ',') rescue "0"
+            td = number_with_precision(lunch_order.cur_qty - lunch_order.stock, :precision => 2, :delimiter => ',') rescue "0"
+            td.hideprint = number_with_precision(lunch_order.price, :precision => 0, :delimiter => ',') rescue "0"
+            td.hideprint = lunch_order.supplier
+
+javascript:
+  $(function(){
+      // bind click event to get data
+      $('#btnrefresh').on('click', function () {          
+          var date = $('#start').val(); 
+          var date2 = $('#end').val();
+          var url = new URL(window.location.href);
+          var page = url.searchParams.get("view");        
+          if (date) { // require a URL
+              window.location = "non_stock_order?sd="+date+"&ed="+date2; // redirect              
+          }
+          return false;
+      });
+    });

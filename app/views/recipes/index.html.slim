@@ -1,0 +1,50 @@
+- title "Recipe of #{@food.name}"
+
+h4 #{@food.name} #{' (Status not use)' if @food.is_active == false}
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to foods_url
+          i.material-icons.left chevron_left
+      li
+        .brand-logo style="margin-left: 20px; font-size:1.5em"
+          | Ingredients count: #{@food.ingredients.to_i}
+    ul.right
+      li
+        = link_to new_food_recipe_url(params[:food_id]), remote:true
+          | Add Ingredient
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Raw food
+        th Food unit
+        th Std Qty
+        th Size per slice
+        th Divide
+        th Portion in slice
+        th G1-G3
+        th G4-G6
+        th SOL
+        th SOR
+        th Adult
+        th Current Qty
+        th Actions
+
+        
+    tbody#recipes
+      - @recipes.each do |recipe|
+        tr id="row-#{recipe.id}"
+          = render partial: 'ingredients', locals: {recipe: recipe} 
+
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content
