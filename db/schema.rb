@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190326045853) do
+ActiveRecord::Schema.define(version: 20190328033253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -861,6 +861,25 @@ ActiveRecord::Schema.define(version: 20190326045853) do
 
   add_index "fine_scales", ["new_condition_id"], name: "index_fine_scales_on_new_condition_id", using: :btree
   add_index "fine_scales", ["old_condition_id"], name: "index_fine_scales_on_old_condition_id", using: :btree
+
+  create_table "food_deliveries", force: :cascade do |t|
+    t.date     "delivery_date"
+    t.string   "deliver_to"
+    t.string   "notes"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "food_delivery_items", force: :cascade do |t|
+    t.integer  "food_delivery_id"
+    t.integer  "food_package_id"
+    t.float    "qty"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "food_delivery_items", ["food_delivery_id"], name: "index_food_delivery_items_on_food_delivery_id", using: :btree
+  add_index "food_delivery_items", ["food_package_id"], name: "index_food_delivery_items_on_food_package_id", using: :btree
 
   create_table "food_order_items", force: :cascade do |t|
     t.integer  "food_order_id"
@@ -2117,6 +2136,8 @@ ActiveRecord::Schema.define(version: 20190326045853) do
   add_foreign_key "family_members", "families"
   add_foreign_key "family_members", "guardians"
   add_foreign_key "family_members", "students"
+  add_foreign_key "food_delivery_items", "food_deliveries"
+  add_foreign_key "food_delivery_items", "food_packages"
   add_foreign_key "food_order_items", "food_orders"
   add_foreign_key "food_order_items", "food_packages"
   add_foreign_key "food_orders", "food_suppliers"

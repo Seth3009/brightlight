@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Delivery date:
+  = @food_delivery.delivery_date
+p
+  strong Deliver to:
+  = @food_delivery.deliver_to
+p
+  strong Notes:
+  = @food_delivery.notes
+
+= link_to 'Edit', edit_food_delivery_path(@food_delivery)
+'|
+= link_to 'Back', food_deliveries_path

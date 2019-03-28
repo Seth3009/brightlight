@@ -1,0 +1,25 @@
+h1 Listing food_deliveries
+
+table
+  thead
+    tr
+      th Delivery date
+      th Deliver to
+      th Notes
+      th
+      th
+      th
+
+  tbody
+    - @food_deliveries.each do |food_delivery|
+      tr
+        td = food_delivery.delivery_date
+        td = food_delivery.deliver_to
+        td = food_delivery.notes
+        td = link_to 'Show', food_delivery
+        td = link_to 'Edit', edit_food_delivery_path(food_delivery)
+        td = link_to 'Destroy', food_delivery, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Food delivery', new_food_delivery_path
