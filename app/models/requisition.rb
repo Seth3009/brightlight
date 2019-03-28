@@ -20,6 +20,7 @@ class Requisition < ActiveRecord::Base
   validates :department, presence: true
   validates :requester, presence: true
   validates :description, presence: true
+  validates_inclusion_of :is_budgeted, in: [true, false], message: 'is required. Please indicate whether the request is budgeted or not'
   validate  :at_least_one_req_item
 
   acts_as_commentable

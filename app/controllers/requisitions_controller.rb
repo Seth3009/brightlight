@@ -58,8 +58,10 @@ class RequisitionsController < ApplicationController
     authorize! :update, @requisition
     @employee = @requisition.requester || current_user.employee
     @manager = @employee.manager || @employee.supervisor
-    @supervisors = Employee.active.supervisors.all
+    @department = @requisition.department || @employee.department
     @accounts = Account.for_department_id(@employee.department_id) rescue []
+    @approver_list = @requisition.requester.superiors
+    @budget_approver_list = Employee.budget_approvers
   end
 
   def edit_account
@@ -162,6 +164,8 @@ class RequisitionsController < ApplicationController
         @error = 'Error updating purchase request.'
         format.html do 
           @employee = @requisition.requester || current_user.employee
+          @department = @requisition.department || @employee.department
+          @accounts = Account.for_department_id(@employee.department_id) rescue []
           @supervisors = Employee.supervisors.all
           render :edit 
         end
