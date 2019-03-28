@@ -181,6 +181,7 @@ class RequisitionsController < ApplicationController
     authorize! :approve_budget, @requisition if params[:appvl] == 'budget'
     @employee = @requisition.requester
     @manager = @employee.manager || @employee.supervisor
+    @department = @requisition.department || @employee.department
     @supervisors = Employee.active.supervisors.all
     @accounts = Account.for_department_id(@employee.department_id) rescue []
     @button_state = !@requisition.is_budgeted && @requisition.is_supv_approved && !@requisition.is_budget_approved && @requisition.budget_approver_id

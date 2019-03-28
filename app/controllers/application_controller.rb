@@ -68,8 +68,13 @@ class ApplicationController < ActionController::Base
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end 
 
-  def unread_messages
-    Message.all.unread(current_user).joins('INNER JOIN "users" creator ON "creator"."id" = "messages"."creator_id"').select('messages.*, creator.image_url as avatar, creator.name as sender')
+  def unread_messages(max_age:1.month, max_num:30)
+    Message.all.unread(current_user)
+    .joins('INNER JOIN "users" creator ON "creator"."id" = "messages"."creator_id"')
+    .where('messages.created_at > ?', Date.today-max_age)
+    .order(created_at: :desc)
+    .limit(max_num)
+    .select('messages.*, creator.image_url as avatar, creator.name as sender')
   end
 
   def not_found

@@ -30,15 +30,6 @@
         span.red-text = "(*required)"
       = f.radio_button :is_budgeted, false, {class: "with-gap"}
       = f.label :is_budgeted, "No", value: false   
-    / .input-field.col.m1.right-align
-    /   = f.label :is_budgeted, 'Budgeted?', class: 'active'
-    /   = radio_button_tag "requisition[is_budgeted]", 1, f.object.is_budgeted, class: "with-gap"
-    /   = label_tag "requisition[is_budgeted]_1", "Yes"
-    / .input-field.col.m1
-    /   = f.label :is_budgeted, class: 'active'
-    /     span.red-text = "(*required)"
-    /   = radio_button_tag "requisition[is_budgeted]", 0, !f.object.is_budgeted, class: "with-gap"
-    /   = label_tag "requisition[is_budgeted]_0", "No"
       
     .input-field.col.m7
       = f.label 'Budget Account', class: 'active'
