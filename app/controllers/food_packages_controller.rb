@@ -11,7 +11,7 @@ class FoodPackagesController < ApplicationController
           @food_packages = FoodPackage.where(raw_food_id:@raw_food.id).order(:packaging)     
         end
       }
-      format.json { @food_packages = FoodPackage.all }
+      format.json { @food_packages = FoodPackage.search_index_query(params[:term]).all }
     end
   end
 

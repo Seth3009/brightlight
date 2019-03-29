@@ -1,1 +1,13 @@
 .card-panel
+  .row
+    table.compact
+      thead
+        th Food name
+        th Food package
+        th Contents
+        th Qty
+        th 
+
+      tbody#food_delivery
+        = f.fields_for :food_delivery_items, @food_delivery.food_delivery_items.build do |food_delivery_item|
+          = render partial: 'food_deliveries/food_delivery_item_fields', locals: { f: food_delivery_item }

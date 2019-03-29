@@ -70,6 +70,6 @@ class FoodDeliveriesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def food_delivery_params
       params.require(:food_delivery).permit(:delivery_date, :deliver_to, :notes,
-      {food_delivery_items_attributes: [:food_delivery_id, :food_package_id, :qty, :_destroy]})
+                                    {food_delivery_items_attributes: [:food_delivery_id, :food_package_id, :qty, :_destroy]})
     end
 end

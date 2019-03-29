@@ -52,11 +52,12 @@ Rails.application.routes.draw do
     resources :recipes, shallow: true, except: [:edit]
   end
   
-
+  
   resources :raw_foods do
     resources :food_packages, shallow: true, except: [:edit]
   end  
 
+  get 'food_packages' => 'food_packages#index', as: :food_packages
   get 'food_packages_list' => 'food_packages#food_packages_list', as: :food_packages_list
   get 'food_orders/non_stock_order' => 'food_orders#non_stock_order', as: :non_stock_order
   get 'food_orders/:id/item_receive' => 'food_orders#item_receive', as: :item_receive

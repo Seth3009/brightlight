@@ -1,6 +1,6 @@
 class FoodDelivery < ActiveRecord::Base
   has_many :food_delivery_items,  dependent: :destroy
-  validate :has_at_least_one_food__item
+  validate :has_at_least_one_food_item
 
   accepts_nested_attributes_for :food_delivery_items,
     allow_destroy: true,
