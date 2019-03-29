@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :events
+  resources :approvers
   resources :diknas_conversions do
     member do
       get 'dry_run'

@@ -1,0 +1,39 @@
+= form_for @approver do |f|
+  - if @approver.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@approver.errors.count, "error")} prohibited this approver from being saved:"
+      ul
+        - @approver.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :employee
+    = f.text_field :employee
+  .field
+    = f.label :category
+    = f.text_field :category
+  .field
+    = f.label :department
+    = f.text_field :department
+  .field
+    = f.label :event
+    = f.text_field :event
+  .field
+    = f.label :start_date
+    = f.date_select :start_date
+  .field
+    = f.label :end_date
+    = f.date_select :end_date
+  .field
+    = f.label :level
+    = f.number_field :level
+  .field
+    = f.label :type
+    = f.text_field :type
+  .field
+    = f.label :notes
+    = f.text_field :notes
+  .field
+    = f.label :active
+    = f.check_box :active
+  .actions = f.submit

@@ -1,0 +1,36 @@
+p#notice = notice
+
+p
+  strong Employee:
+  = @approver.employee
+p
+  strong Category:
+  = @approver.category
+p
+  strong Department:
+  = @approver.department
+p
+  strong Event:
+  = @approver.event
+p
+  strong Start date:
+  = @approver.start_date
+p
+  strong End date:
+  = @approver.end_date
+p
+  strong Level:
+  = @approver.level
+p
+  strong Type:
+  = @approver.type
+p
+  strong Notes:
+  = @approver.notes
+p
+  strong Active:
+  = @approver.active
+
+= link_to 'Edit', edit_approver_path(@approver)
+'|
+= link_to 'Back', approvers_path

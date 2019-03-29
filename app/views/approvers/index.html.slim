@@ -1,0 +1,39 @@
+h1 Listing approvers
+
+table
+  thead
+    tr
+      th Employee
+      th Category
+      th Department
+      th Event
+      th Start date
+      th End date
+      th Level
+      th Type
+      th Notes
+      th Active
+      th
+      th
+      th
+
+  tbody
+    - @approvers.each do |approver|
+      tr
+        td = approver.employee
+        td = approver.category
+        td = approver.department
+        td = approver.event
+        td = approver.start_date
+        td = approver.end_date
+        td = approver.level
+        td = approver.type
+        td = approver.notes
+        td = approver.active
+        td = link_to 'Show', approver
+        td = link_to 'Edit', edit_approver_path(approver)
+        td = link_to 'Destroy', approver, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Approver', new_approver_path
