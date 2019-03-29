@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :class_budgets
   resources :events
   resources :approvers
   resources :diknas_conversions do

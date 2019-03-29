@@ -210,7 +210,7 @@ class RequisitionsController < ApplicationController
                                           :department_id, :requester_id, :supervisor_id, :notes, :req_appvl_notes, :total_amt, 
                                           :is_supv_approved, :is_budget_approved, :is_submitted, :sent_to_supv, :sent_to_purchasing, 
                                           :sent_for_bgt_approval, :is_rejected, :reject_reason, :active,
-                                          :budget_approved_date, :supv_approved_date,
+                                          :budget_approved_date, :supv_approved_date, :event_id, :class_budget_id, :budget_type,
                                           :budget_approver_id, :bgt_appvl_notes, :purch_receiver_id, :receive_notes,
                                           :created_by, :last_updated_by, :account_id,
                                           {req_items_attributes: [:id, :requisition_id, :description, :qty_reqd, :unit, :est_price, :actual_price, 

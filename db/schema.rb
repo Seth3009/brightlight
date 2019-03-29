@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190329013633) do
+ActiveRecord::Schema.define(version: 20190329075745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -524,6 +524,27 @@ ActiveRecord::Schema.define(version: 20190329013633) do
 
   add_index "cars", ["transport_id", "period_hash"], name: "transport_period_index", unique: true, using: :btree
   add_index "cars", ["transport_id"], name: "cars_transport_id_index", using: :btree
+
+  create_table "class_budgets", force: :cascade do |t|
+    t.integer  "department_id"
+    t.integer  "grade_level_id"
+    t.integer  "grade_section_id"
+    t.integer  "holder_id"
+    t.integer  "academic_year_id"
+    t.integer  "month"
+    t.decimal  "amount"
+    t.decimal  "balance"
+    t.decimal  "actual"
+    t.string   "notes"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "class_budgets", ["academic_year_id"], name: "index_class_budgets_on_academic_year_id", using: :btree
+  add_index "class_budgets", ["department_id"], name: "index_class_budgets_on_department_id", using: :btree
+  add_index "class_budgets", ["grade_level_id"], name: "index_class_budgets_on_grade_level_id", using: :btree
+  add_index "class_budgets", ["grade_section_id"], name: "index_class_budgets_on_grade_section_id", using: :btree
+  add_index "class_budgets", ["holder_id"], name: "index_class_budgets_on_holder_id", using: :btree
 
   create_table "class_periods", force: :cascade do |t|
     t.string   "name"
@@ -1670,14 +1691,19 @@ ActiveRecord::Schema.define(version: 20190329013633) do
     t.date     "sent_for_bgt_approval"
     t.string   "status"
     t.integer  "account_id"
+    t.string   "budget_type"
+    t.integer  "event_id"
+    t.integer  "class_budget_id"
   end
 
   add_index "requisitions", ["account_id"], name: "index_requisitions_on_account_id", using: :btree
   add_index "requisitions", ["budget_approver_id"], name: "index_requisitions_on_budget_approver_id", using: :btree
   add_index "requisitions", ["budget_id"], name: "index_requisitions_on_budget_id", using: :btree
   add_index "requisitions", ["budget_item_id"], name: "index_requisitions_on_budget_item_id", using: :btree
+  add_index "requisitions", ["class_budget_id"], name: "index_requisitions_on_class_budget_id", using: :btree
   add_index "requisitions", ["created_by_id"], name: "index_requisitions_on_created_by_id", using: :btree
   add_index "requisitions", ["department_id"], name: "index_requisitions_on_department_id", using: :btree
+  add_index "requisitions", ["event_id"], name: "index_requisitions_on_event_id", using: :btree
   add_index "requisitions", ["last_updated_by_id"], name: "index_requisitions_on_last_updated_by_id", using: :btree
   add_index "requisitions", ["purch_receiver_id"], name: "index_requisitions_on_purch_receiver_id", using: :btree
   add_index "requisitions", ["req_approver_id"], name: "index_requisitions_on_req_approver_id", using: :btree
@@ -2174,6 +2200,10 @@ ActiveRecord::Schema.define(version: 20190329013633) do
   add_foreign_key "budgets", "users", column: "last_updated_by_id"
   add_foreign_key "carpools", "transports"
   add_foreign_key "cars", "transports", name: "cars_transport_id_fkey"
+  add_foreign_key "class_budgets", "academic_years"
+  add_foreign_key "class_budgets", "departments"
+  add_foreign_key "class_budgets", "grade_levels"
+  add_foreign_key "class_budgets", "grade_sections"
   add_foreign_key "course_schedules", "academic_terms"
   add_foreign_key "course_schedules", "class_periods"
   add_foreign_key "course_schedules", "course_sections"
@@ -2278,12 +2308,14 @@ ActiveRecord::Schema.define(version: 20190329013633) do
   add_foreign_key "requisitions", "accounts"
   add_foreign_key "requisitions", "budget_items"
   add_foreign_key "requisitions", "budgets"
+  add_foreign_key "requisitions", "class_budgets"
   add_foreign_key "requisitions", "departments"
   add_foreign_key "requisitions", "employees", column: "budget_approver_id"
   add_foreign_key "requisitions", "employees", column: "purch_receiver_id"
   add_foreign_key "requisitions", "employees", column: "req_approver_id"
   add_foreign_key "requisitions", "employees", column: "requester_id"
   add_foreign_key "requisitions", "employees", column: "supervisor_id"
+  add_foreign_key "requisitions", "events"
   add_foreign_key "requisitions", "users", column: "created_by_id"
   add_foreign_key "requisitions", "users", column: "last_updated_by_id"
   add_foreign_key "room_accesses", "badges"

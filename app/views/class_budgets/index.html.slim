@@ -1,0 +1,39 @@
+h1 Listing class_budgets
+
+table
+  thead
+    tr
+      th Department
+      th Grade level
+      th Grade section
+      th Holder
+      th Academic year
+      th Month
+      th Amount
+      th Balance
+      th Actual
+      th Notes
+      th
+      th
+      th
+
+  tbody
+    - @class_budgets.each do |class_budget|
+      tr
+        td = class_budget.department
+        td = class_budget.grade_level
+        td = class_budget.grade_section
+        td = class_budget.holder
+        td = class_budget.academic_year
+        td = class_budget.month
+        td = class_budget.amount
+        td = class_budget.balance
+        td = class_budget.actual
+        td = class_budget.notes
+        td = link_to 'Show', class_budget
+        td = link_to 'Edit', edit_class_budget_path(class_budget)
+        td = link_to 'Destroy', class_budget, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Class budget', new_class_budget_path
