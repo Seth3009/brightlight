@@ -31,7 +31,7 @@ class LunchMenusController < ApplicationController
         format.html { redirect_to :back, notice: 'Lunch menu was successfully created.' }
         format.json { render :show, status: :created, location: @lunch_menu }
       else
-        format.html { render :new }
+        format.html { redirect_to :back, alert: 'Invalid Data' }
         format.json { render json: @lunch_menu.errors, status: :unprocessable_entity }
       end
     end

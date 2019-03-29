@@ -8,13 +8,23 @@ class RecipesController < ApplicationController
     food_pack = FoodPack.where(academic_year_id:year).first
     if params[:food_id].present?
       @food = Food.find(params[:food_id])
-      @recipes = Recipe.where(food_id:@food.id)
-    end   
-    @g1_g3 = FoodPack.g1_g3(food_pack)
-    @g4_g6 = FoodPack.g4_g6(food_pack)
-    @sol = FoodPack.sol(food_pack)
-    @sor = FoodPack.sor(food_pack)
-    @adult = food_pack.employee
+      if @food.present?
+        @recipes = Recipe.where(food_id:@food.id)
+        if food_pack.present? 
+          format.html do
+            @g1_g3 = FoodPack.g1_g3(food_pack)
+            @g4_g6 = FoodPack.g4_g6(food_pack)
+            @sol = FoodPack.sol(food_pack)
+            @sor = FoodPack.sor(food_pack)
+            @adult = food_pack.employee
+          end
+        end
+      else  
+        format.html { redirect_to :back, alert: 'Please fill in the Food pack for this academic year first.'}
+      end
+    else
+      format.html { redirect_to :back, alert: 'Please fill in the Food pack for this academic year first.'}
+    end
   end
 
   # GET /recipes/1
@@ -25,8 +35,8 @@ class RecipesController < ApplicationController
   # GET /recipes/new
   def new
     @food = Food.find(params[:food_id])
-    @recipe = @food.recipes.new  
     @raw_foods = RawFood.select_raw_food(@food.id)
+    @recipe = @food.recipes.new     
   end
 
   # GET /recipes/1/edit
@@ -45,7 +55,7 @@ class RecipesController < ApplicationController
         format.json { render :show, status: :created, location: @recipe }        
         format.js 
       else
-        format.html { render :new }
+        format.html { redirect_to :back, alert: 'Invalid data' }
         format.json { render json: @recipe.errors, status: :unprocessable_entity }
       end
     end

@@ -1,6 +1,7 @@
 class LunchMenu < ActiveRecord::Base
   belongs_to :food
   belongs_to :academic_year
+  validates_presence_of :food_id
 
   after_save :update_total
 

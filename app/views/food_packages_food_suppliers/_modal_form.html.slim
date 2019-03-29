@@ -11,7 +11,7 @@
         .input-field.col.s6
           = f.label :food_package, "Food Item", class: 'active'
           = f.collection_select :food_package_id, @food_items, :id, :packaging
-          = f.hidden_field :food_supplier_id, value: params[:id]
+          = f.hidden_field :food_supplier_id, value: @food_supplier
     .row       
       .input-field.col.s6
         = f.label :price, class: 'active'
