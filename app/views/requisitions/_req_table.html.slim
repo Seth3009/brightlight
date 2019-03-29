@@ -3,9 +3,9 @@
     thead
       tr
         th
-        th Req no
-        th Description
-        th Required date
+        th = sort_link "id", "Req no"
+        th = sort_link "description", "Description"
+        th = sort_link "date_required", "Required date"
         th Requester
         th Approval
         th Total

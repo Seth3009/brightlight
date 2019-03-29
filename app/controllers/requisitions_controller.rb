@@ -7,7 +7,7 @@ class RequisitionsController < ApplicationController
     authorize! :read, Requisition
 
     @employee = current_user.employee
-    @requisitions = Requisition.where(requester_id: @employee.id)
+    @requisitions = Requisition.where(requester_id: @employee.id).order("#{sort_column} #{sort_direction}")
 
     if @employee.try(:is_manager?)
       @approver = current_user.employee
@@ -36,7 +36,7 @@ class RequisitionsController < ApplicationController
   # GET /requisitions/1.json
   def show
     authorize! :read, @requisition
-    @req_items = @requisition.req_items
+    @req_items = @requisition.req_items.order(:id)
     @budget_line = "#{@requisition.budget_item.try(:description)} #{@requisition.budget_item.try(:month)}/#{@requisition.budget_item.try(:academic_year).try(:name)} "
     @commentable = @requisition
   end
@@ -219,5 +219,9 @@ class RequisitionsController < ApplicationController
                                                                   :needed_by_date, :id, :created_by, :last_updated_by, :_destroy]},
                                           {comments_attributes: [:id, :title, :comment, :user_id, :commentable_id, :commentable_type, :role]}
                                           )
+    end
+
+    def sortable_columns 
+      [:id, :description, :date_required, :requester]
     end
 end
