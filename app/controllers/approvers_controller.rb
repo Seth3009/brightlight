@@ -10,6 +10,9 @@ class ApproversController < ApplicationController
   # GET /approvers/1
   # GET /approvers/1.json
   def show
+    respond_to do |format|
+      format.js
+    end
   end
 
   # GET /approvers/new
@@ -28,7 +31,7 @@ class ApproversController < ApplicationController
 
     respond_to do |format|
       if @approver.save
-        format.html { redirect_to @approver, notice: 'Approver was successfully created.' }
+        format.html { redirect_to approvers_url, notice: 'Approver was successfully created.' }
         format.json { render :show, status: :created, location: @approver }
       else
         format.html { render :new }
@@ -42,7 +45,7 @@ class ApproversController < ApplicationController
   def update
     respond_to do |format|
       if @approver.update(approver_params)
-        format.html { redirect_to @approver, notice: 'Approver was successfully updated.' }
+        format.html { redirect_to approvers_url, notice: 'Approver was successfully updated.' }
         format.json { render :show, status: :ok, location: @approver }
       else
         format.html { render :edit }

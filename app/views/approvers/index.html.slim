@@ -1,39 +1,40 @@
-h1 Listing approvers
+h4 Listing approvers
 
-table
-  thead
-    tr
+nav
+  .nav-wrapper
+    ul
+      li.right.tooltipped data-position="bottom" data-delay="50" data-tooltip="Add new approver"         
+        = link_to new_approver_path
+          | New Approver
+          i.material-icons.left playlist_add
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
       th Employee
       th Category
-      th Department
-      th Event
+      th Department/Event
       th Start date
       th End date
-      th Level
-      th Type
       th Notes
-      th Active
-      th
-      th
-      th
+      th Actions
+    tbody
+      - @approvers.each do |approver|
+        tr id="row-#{approver.id}"
+          td = approver.employee
+          td = approver.category
+          td = approver.department.try(:name) || approver.event.try(:name)
+          td = approver.start_date
+          td = approver.end_date
+          td = approver.notes
+          td 
+            = link_to approver, remote: true
+              i.material-icons visibility
+            = link_to edit_approver_path(approver)
+              i.material-icons edit
+            = remote_link_to_delete approver, message: "Approver has been desdeseleted", class: "left waves-effect waves-light red-text"
+              i.material-icons delete
 
-  tbody
-    - @approvers.each do |approver|
-      tr
-        td = approver.employee
-        td = approver.category
-        td = approver.department
-        td = approver.event
-        td = approver.start_date
-        td = approver.end_date
-        td = approver.level
-        td = approver.type
-        td = approver.notes
-        td = approver.active
-        td = link_to 'Show', approver
-        td = link_to 'Edit', edit_approver_path(approver)
-        td = link_to 'Destroy', approver, data: {:confirm => 'Are you sure?'}, :method => :delete
-
-br
-
-= link_to 'New Approver', new_approver_path
+#show-modal.modal.modal-fixed-footer
+  #show-modal-content

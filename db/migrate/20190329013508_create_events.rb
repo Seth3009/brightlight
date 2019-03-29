@@ -4,7 +4,7 @@ class CreateEvents < ActiveRecord::Migration
       t.string :name
       t.belongs_to :department, index: true, foreign_key: true
       t.string :description
-      t.belongs_to :manager, index: true, foreign_key: true
+      t.belongs_to :manager, references: :employees, index: true
       t.date :start_date
       t.date :end_date
 
