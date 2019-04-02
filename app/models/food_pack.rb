@@ -24,7 +24,7 @@ class FoodPack < ActiveRecord::Base
     def update_total      
       sum_pack = self.g1 + self.g2 + self.g3 + self.g4 + self.g5 + self.g6
                + self.g7 + self.g8 + self.g9 + self.g10 + self.g11 + self.g12 + self.employee
-      self.update_column :total_adj, sum_pack
+      self.update_column :total, sum_pack
     end
 
 end

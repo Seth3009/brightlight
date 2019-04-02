@@ -1,6 +1,6 @@
 class FoodPacksController < ApplicationController
-  before_action :set_food_pack, only: [:show, :edit, :update, :destroy]
-
+  before_action :set_food_pack, only: [:edit, :update, :destroy]
+  
   # GET /food_packs
   # GET /food_packs.json
   def index
@@ -28,7 +28,7 @@ class FoodPacksController < ApplicationController
 
     respond_to do |format|
       if @food_pack.save
-        format.html { redirect_to @food_pack, notice: 'Food pack was successfully created.' }
+        format.html { redirect_to food_packs_path, notice: 'Food pack was successfully created.' }
         format.json { render :show, status: :created, location: @food_pack }
       else
         format.html { render :new }
@@ -42,7 +42,7 @@ class FoodPacksController < ApplicationController
   def update
     respond_to do |format|
       if @food_pack.update(food_pack_params)
-        format.html { redirect_to @food_pack, notice: 'Food pack was successfully updated.' }
+        format.html { redirect_to food_packs_path, notice: 'Food pack was successfully updated.' }
         format.json { render :show, status: :ok, location: @food_pack }
       else
         format.html { render :edit }

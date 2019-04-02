@@ -14,7 +14,7 @@ class FoodPackagesFoodSuppliersController < ApplicationController
 
   # GET /food_packages_food_suppliers/new
   def new 
-    @food_supplier = FoodSupplier.find(1)       
+    @food_supplier = FoodSupplier.find(params[:id])       
     @food_packages_food_supplier = FoodPackagesFoodSupplier.new
     @food_items = FoodPackage.select_food_item(@food_supplier.id)
   end
@@ -34,7 +34,7 @@ class FoodPackagesFoodSuppliersController < ApplicationController
         format.html { redirect_to :back, notice: 'Item added successfully' }
         format.json { render :show, status: :created, location: @food_packages_food_supplier }
       else
-        format.html { render :new }
+        format.html { redirect_to :back, alert: "Food Package can't be empty" }
         format.json { render json: @food_packages_food_supplier.errors, status: :unprocessable_entity }
       end
     end

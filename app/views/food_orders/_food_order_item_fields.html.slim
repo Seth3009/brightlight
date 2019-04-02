@@ -12,6 +12,7 @@ tr.nested-fields
   td.wd10
     .input-field    
       = f.number_field :qty_order, class:'qty_order'
+      = f.hidden_field :qty_received, value:0
   / td.wd10
   /   .input-field
   /     = text_field_tag :total,'',class:'total_qty', disabled:'disabled'

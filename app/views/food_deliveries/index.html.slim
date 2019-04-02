@@ -1,0 +1,50 @@
+h4 Food Deliveries #{params[:m].present? ? Date::MONTHNAMES[params[:m].to_i] : Date::MONTHNAMES[Date.today.month.to_i]} #{params[:y] || Date.today.year}
+
+nav
+  .nav-wrapper
+    ul
+      ul
+        li  
+          = select_year(Date.strptime("1-"+ (params[:m] ? params[:m] : Date.today.month.to_s)  +"-"+ (params[:y] ? params[:y] : Date.today.year.to_s) ,"%d-%m-%Y"),{},name: 'trx_year')        
+        li
+          = select_month(Date.strptime("1-"+(params[:m] ? params[:m] : Date.today.month.to_s)  +"-"+ (params[:y] ? params[:y] : Date.today.year.to_s),"%d-%m-%Y"),{},name: 'trx_month')
+    ul.right      
+      li
+        = link_to new_food_delivery_path
+          | New Deliveries
+          
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Delivery date
+        th Deliver to
+        th Notes
+        th Actions      
+
+  
+
+    tbody
+      - @food_deliveries.each do |food_delivery|
+        tr
+          td = food_delivery.delivery_date.try(:strftime,'%d %b %Y')
+          td = food_delivery.deliver_to
+          td = food_delivery.notes
+          td
+            = link_to edit_food_delivery_path(food_delivery)
+              i.material-icons edit
+            = link_to food_delivery_path(food_delivery), data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+
+javascript:
+  $(function(){
+    // bind change event to select
+    $('#date_month').on('change', function () {          
+        var month = $('#date_month').val();
+        var year = $('#date_year').val();
+        if (month) { // require a URL
+            window.location = "/food_deliveries?m="+month+"&y="+year; // redirect              
+        }
+        return false;
+    });
+  });

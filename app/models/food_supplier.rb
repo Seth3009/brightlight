@@ -1,6 +1,7 @@
 class FoodSupplier < ActiveRecord::Base
   has_many :food_packages_food_suppliers
-
+  validates :supplier, presence: true, uniqueness: true
+  validates :contact_person, presence: true
 
   def self.disable_supplier(food_supplier)
     if self.find(food_supplier).is_active?

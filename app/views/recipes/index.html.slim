@@ -10,7 +10,7 @@ nav
           i.material-icons.left chevron_left
       li
         .brand-logo style="margin-left: 20px; font-size:1.5em"
-          | Ingredients count: #{@food.ingredients.to_i}
+          | Ingredients count: #{@recipes.count}
     ul.right
       li
         = link_to new_food_recipe_url(params[:food_id]), remote:true

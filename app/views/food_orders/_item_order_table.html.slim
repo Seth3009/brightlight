@@ -1,0 +1,11 @@
+= fields_for "food_order_items[]", item do |f|
+  tr id="row-#{item.id}"  
+    td.wd15 = item.food_package.raw_food.name 
+    td.wd10 = item.food_package.packaging
+    td.wd3 = item.qty_order
+    td.wd3 
+        - if item.food_order.is_completed?
+            = item.qty_received
+        - else
+            = f.number_field :qty_received
+    td.wd5 = item.food_package.package_unit

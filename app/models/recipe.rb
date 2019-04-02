@@ -1,6 +1,7 @@
 class Recipe < ActiveRecord::Base
   belongs_to :food
   belongs_to :raw_food
+  validates_presence_of :raw_food, :message => "Invalid Data"
 
   after_destroy :item_count_food_ingredient
   after_save :item_count_food_ingredient

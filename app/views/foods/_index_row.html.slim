@@ -1,6 +1,6 @@
 tr id="row-#{food.id}" 
   td = food.name
-  td = food.ingredients
+  td = food.recipes.count
   td
     - if food.is_active
       i.material-icons check_box

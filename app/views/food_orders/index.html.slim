@@ -1,4 +1,4 @@
-h4 Food Orders #{Date::MONTHNAMES[params[:m].to_i || Date.today.month.to_i]} #{params[:y] || Date.today.year}
+h4 Food Orders #{params[:m].present? ? Date::MONTHNAMES[params[:m].to_i] : Date::MONTHNAMES[Date.today.month.to_i]} #{params[:y] || Date.today.year}
 
 nav
   .nav-wrapper
@@ -11,11 +11,11 @@ nav
     ul.right      
       li
         = link_to new_food_order_path
-          | Stock Item Order
+          | Stock Order
           
       li
         = link_to non_stock_order_path
-          | Non Stock Item Order
+          | Non Stock Order
           
 .card-panel
   table.compact.striped
@@ -24,6 +24,7 @@ nav
         th Date order
         th Order notes
         th Food supplier
+        th Item Qty
         th Is completed
         th Actions
         
@@ -34,16 +35,20 @@ nav
           td = food_order.date_order.try(:strftime, "%d %b %Y")
           td = food_order.order_notes
           td = food_order.food_supplier.supplier
+          td = food_order.food_order_items.count
           td 
             - if food_order.is_completed == false
               i.material-icons check_box_outline_blank
             - else 
               i.material-icons check_box
           td 
-            = link_to food_order_path(food_order)
-              i.material-icons visibility          
+            - if food_order.food_order_items.present?
+              = link_to item_receive_path(food_order)
+                i.material-icons local_grocery_store
+              = link_to food_order_path(food_order)
+                i.material-icons visibility          
             = link_to food_order_path(food_order), data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete Food Order" delete
 
 #show-modal.modal.modal-fixed-footer
   #show-modal-content

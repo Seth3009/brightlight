@@ -32,10 +32,10 @@ class FoodSuppliersController < ApplicationController
 
     respond_to do |format|
       if @food_supplier.save
-        format.html { redirect_to @food_supplier, notice: 'Food supplier was successfully created.' }
+        format.html { redirect_to :back, notice: 'Food supplier was successfully created.' }
         format.json { render :show, status: :created, location: @food_supplier }
       else
-        format.html { render :new }
+        format.html { redirect_to :back, alert:"Supplier name and contact person can't be blank" }
         format.json { render json: @food_supplier.errors, status: :unprocessable_entity }
       end
     end

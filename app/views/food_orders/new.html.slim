@@ -1,3 +1,4 @@
 h4 New Food Order
-
-= render 'form'
+- if @food_pack.present?
+  = render 'form'
+- else
