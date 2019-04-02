@@ -16,7 +16,7 @@
     .row 
       .input-field.col.m3
         = f.label :supervisor, class: 'active'
-        = f.collection_select :supervisor_id, @employee.superiors, :id, :name, prompt: "Select approver", selected: @requisition.supervisor_id || @manager.try(:id) 
+        = f.collection_select :supervisor_id, @approver_list, :id, :employee_name, prompt: "Select approver", selected: @requisition.supervisor_id || @manager.try(:id) 
       - if @requisition.sent_to_supv && can?(:approve, @requisition)
         .input-field.col.m3
           = f.check_box :is_supv_approved

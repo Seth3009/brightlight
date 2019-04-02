@@ -49,6 +49,7 @@ class RequisitionsController < ApplicationController
       @department = @employee.department
       @accounts = Account.for_department_id(@employee.department_id) rescue []
       @manager = @employee.manager || @employee.supervisor
+      @approver_list = Approver.with_names.for_purchase_requests.department @department
     end
     @requisition = Requisition.new
   end
@@ -60,7 +61,7 @@ class RequisitionsController < ApplicationController
     @manager = @employee.manager || @employee.supervisor
     @department = @requisition.department || @employee.department
     @accounts = Account.for_department_id(@employee.department_id) rescue []
-    @approver_list = @requisition.requester.superiors
+    @approver_list = Approver.for_purchase_requests.department @department
     @budget_approver_list = Employee.budget_approvers
   end
 
@@ -102,6 +103,7 @@ class RequisitionsController < ApplicationController
             if @requisition.send_for_approval(approver, 'supv')
               redirect_to @requisition, notice: 'Purchase request has been saved and sent for approval.' 
             else
+              @approver_list = Approver.with_names.for_purchase_requests.department @department
               redirect_to edit_requisition_path(@requisition), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
             end
           else
@@ -114,6 +116,7 @@ class RequisitionsController < ApplicationController
           @employee = @requisition.requester || current_user.employee
           @department = @employee.department
           @accounts = Account.for_department_id(@employee.department_id) rescue []
+          @approver_list = Approver.with_names.for_purchase_requests.department @department
           render :new 
         }
         format.json { render json: @requisition.errors, status: :unprocessable_entity }

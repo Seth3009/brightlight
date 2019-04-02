@@ -4,7 +4,19 @@ class ApproversController < ApplicationController
   # GET /approvers
   # GET /approvers.json
   def index
-    @approvers = Approver.all
+    @approvers = Approver.with_names.order("#{sort_column} #{sort_direction}")   
+    cat = params[:cat] || session[:cat]
+    dept = params[:dept] || session[:dept]
+    if cat.present? && cat != 'all'
+      @approvers = @approvers.where(category: params[:cat]) 
+      @category = params[:cat]     
+    end
+    if dept.present? && dept != 'all'
+      @approvers = @approvers.where(department: params[:dept])
+      @department = Department.find(params[:dept])
+    end
+    session[:dept] = nil if dept == 'all'
+    session[:cat] = nil if cat == 'all'
   end
 
   # GET /approvers/1
@@ -74,4 +86,8 @@ class ApproversController < ApplicationController
     def approver_params
       params.require(:approver).permit(:employee_id, :category, :department_id, :event_id, :start_date, :end_date, :level, :type, :notes, :active)
     end
+
+    def sortable_columns 
+      [:employee_name, :department_name, :category]
+    end 
 end
