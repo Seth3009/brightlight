@@ -1,15 +1,40 @@
-p#notice = notice
 
-p
-  strong Delivery date:
-  = @food_delivery.delivery_date
-p
-  strong Deliver to:
-  = @food_delivery.deliver_to
-p
-  strong Notes:
-  = @food_delivery.notes
+.card-panel
+  .row
+    .col.s10
+      .list_description
+        dl.row
+          dd.col.s4
+            .label Delivery Date:
+            .item = @food_delivery.delivery_date.try(:strftime, "%d %B %Y")
+          dd.col.s4
+            .label Deliver to:
+            .item = @food_delivery.deliver_to
+        dl.row
+          dd.col.s12
+            .label Notes :
+            .item =  @food_delivery.notes
+/ .actions = f.submit
 
-= link_to 'Edit', edit_food_delivery_path(@food_delivery)
-'|
-= link_to 'Back', food_deliveries_path
+nav.light
+  .nav-wrapper
+
+.card-panel
+  table.compact
+    thead
+      tr
+        th Food Name
+        th Package
+        th Qty
+        th Unit
+        th Actions
+    tbody
+      - @food_delivery_items.each do |item|
+        tr
+          td = item.food_package.raw_food.name
+          td = item.food_package.packaging
+          td = item.qty
+          td = item.food_package.unit
+          td 
+            = link_to food_delivery_item_path(item), data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete

@@ -22,16 +22,18 @@ class FoodOrdersController < ApplicationController
     @food_order = FoodOrder.new
     @food_pack = FoodPack.find_by_academic_year_id(@year) 
     respond_to do |format|
-      if @food_pack.present?   
-        @g1 = FoodPack.g1_g3(@food_pack)
-        @g2 = FoodPack.g4_g6(@food_pack)
-        @sol = FoodPack.sol(@food_pack)
-        @sor = FoodPack.sor(@food_pack)
-        @adult = @food_pack.employee    
-        @lunch_orders = RawFood.food_order((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult)                        
-      else
-        format.html { redirect_to food_orders_url, alert: 'Please fill in the Food pack for this academic year first.'}
-      end
+      format.html {
+        if @food_pack.present?   
+          @g1 = FoodPack.g1_g3(@food_pack)
+          @g2 = FoodPack.g4_g6(@food_pack)
+          @sol = FoodPack.sol(@food_pack)
+          @sor = FoodPack.sor(@food_pack)
+          @adult = @food_pack.employee    
+          @lunch_orders = RawFood.food_order((params[:sd] || Date.today).to_s,(params[:ed] || Date.today).to_s, @g1, @g2, @sol, @sor, @adult)                        
+        else
+          format.html { redirect_to food_orders_url, alert: 'Please fill in the Food pack for this academic year first.'}
+        end
+      }
     end
   end
 

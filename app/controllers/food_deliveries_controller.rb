@@ -10,6 +10,7 @@ class FoodDeliveriesController < ApplicationController
   # GET /food_deliveries/1
   # GET /food_deliveries/1.json
   def show
+    @food_delivery_items = FoodDeliveryItem.where(food_delivery_id:@food_delivery.id)
   end
 
   # GET /food_deliveries/new
