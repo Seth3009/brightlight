@@ -1,0 +1,9 @@
+= fields_for "food_delivery_items[]", item do |f|
+  tr id="row-#{item.id}"
+    td.wd20 = item.food_package.raw_food.name 
+    td.wd20 = item.food_package.packaging
+    td.wd10 = f.number_field :qty
+    td.wd10 = item.food_package.unit
+    td.wd10
+      = link_to food_delivery_item_path(item), data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+        i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete

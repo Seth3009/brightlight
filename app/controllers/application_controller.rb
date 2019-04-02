@@ -99,6 +99,16 @@ class ApplicationController < ActionController::Base
     end
   end
   helper_method :mobile_device?
+  
+  def unit_list(type)
+    if type.downcase == 'solid'
+      unit_list = ["Kilograms","Grams"]
+    elsif type.downcase == 'liquid'
+      unit_list = ["Liters","Milliliters"]
+    else
+      unit_list = ["unknown unit"]
+    end
+  end  
 
   protected
 

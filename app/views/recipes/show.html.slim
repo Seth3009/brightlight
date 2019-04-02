@@ -1,0 +1,42 @@
+p#notice = notice
+
+p
+  strong Food:
+  = @recipe.food
+p
+  strong Raw food:
+  = @recipe.raw_food
+p
+  strong Recipe portion:
+  = @recipe.recipe_portion
+p
+  strong Qty:
+  = @recipe.qty
+p
+  strong Custom size:
+  = @recipe.custom_size
+p
+  strong Size divider:
+  = @recipe.size_divider
+p
+  strong Portion size:
+  = @recipe.portion_size
+p
+  strong Gr1 portion:
+  = @recipe.gr1_portion
+p
+  strong Gr2 portion:
+  = @recipe.gr2_portion
+p
+  strong Sol portion:
+  = @recipe.sol_portion
+p
+  strong Sor portion:
+  = @recipe.sor_portion
+p
+  strong Adult portion:
+  = @recipe.adult_portion
+
+/ = link_to 'Edit', edit_recipe_path(@recipe)
+/ '|
+/ = link_to 'Back', food_recipes_path

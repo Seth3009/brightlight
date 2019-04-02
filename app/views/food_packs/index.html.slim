@@ -1,0 +1,54 @@
+h4 Food Packs
+
+
+nav
+  .nav-wrapper
+    ul.right      
+      li
+        = link_to new_food_pack_path
+          | New Pack
+          i.material-icons.left add
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th G1
+        th G2
+        th G3
+        th G4
+        th G5
+        th G6
+        th G7
+        th G8
+        th G9
+        th G10
+        th G11
+        th G12
+        th Employee
+        th Academic year
+        th Actions
+       
+
+    tbody
+      - @food_packs.each do |food_pack|
+        tr
+          td = food_pack.g1
+          td = food_pack.g2
+          td = food_pack.g3
+          td = food_pack.g4
+          td = food_pack.g5
+          td = food_pack.g6
+          td = food_pack.g7
+          td = food_pack.g8
+          td = food_pack.g9
+          td = food_pack.g10
+          td = food_pack.g11
+          td = food_pack.g12
+          td = food_pack.employee
+          td = food_pack.academic_year.name
+          td 
+            = link_to edit_food_pack_path(food_pack)
+              i.material-icons edit
+            = link_to food_pack_path(food_pack), data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete Food Pack" delete
+  

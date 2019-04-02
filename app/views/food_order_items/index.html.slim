@@ -1,0 +1,27 @@
+h1 Listing food_order_items
+
+table
+  thead
+    tr
+      th Food order
+      th Food package
+      th Qty order
+      th Qty received
+      th
+      th
+      th
+
+  tbody
+    - @food_order_items.each do |food_order_item|
+      tr
+        td = food_order_item.food_order
+        td = food_order_item.food_package
+        td = food_order_item.qty_order
+        td = food_order_item.qty_received
+        td = link_to 'Show', food_order_item
+        td = link_to 'Edit', edit_food_order_item_path(food_order_item)
+        td = link_to 'Destroy', food_order_item, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Food order item', new_food_order_item_path

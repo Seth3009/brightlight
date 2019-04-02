@@ -16,6 +16,8 @@ gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
+# Use simple_calendar for calendar view
+gem "simple_calendar", "~> 2.0"
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
@@ -120,6 +122,9 @@ gem 'roo', '~> 2.3.2'
 
 # For connecting to SQL server
 gem 'tiny_tds'
+
+# To define measurements unit
+gem 'ruby-measurement'
   
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -1,0 +1,28 @@
+tr id="row-#{raw_food.id}"  
+  td = raw_food.name  
+  td.center 
+    - if raw_food.is_stock
+      i.material-icons check_box
+    - else
+      i.material-icons check_box_outline_blank
+  td.center = raw_food.food_packages.count rescue "0"
+  td.center 
+    - if raw_food.is_active
+      i.material-icons check_box
+    - else
+      i.material-icons check_box_outline_blank
+  td.center = (raw_food.stock.to_s + " " + raw_food.unit) if raw_food.stock
+  td.actions.center
+    = link_to raw_food_food_packages_path(raw_food), class: 'green-text'
+      i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View package" visibility
+    - if can? :update, raw_food
+      = link_to edit_raw_food_path(raw_food), remote: true
+        i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+    - if can? :destroy, raw_food
+      - if raw_food.is_active
+        = link_to raw_food, data: {:confirm => 'Disable raw food?'}, :method => :delete, class:'red-text'
+          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Disable" thumb_down
+      - else
+        = link_to raw_food, data: {:confirm => 'Enable raw food?'}, :method => :delete, class:'green-text'
+          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Enable" thumb_up
+    

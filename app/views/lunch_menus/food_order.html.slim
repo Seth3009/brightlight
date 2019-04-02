@@ -1,0 +1,62 @@
+h4 Food Order
+
+
+nav
+  .nav-wrapper
+    ul        
+      li style="padding: 0 20px"         
+        | Choose date :
+      li
+        = date_field_tag 'start_date', params[:sd] || Date.today
+      li
+        | &nbsp to &nbsp &nbsp
+      li
+        = date_field_tag 'end_date', params[:ed] || Date.today  
+      li
+        | &nbsp &nbsp &nbsp
+      li
+        .waves-effect.waves-light.btn.blue#btnrefresh
+          | Refresh
+    ul.right
+      li
+        = link_to food_orders_url(st:'no'), :target => '_blank'
+          | Non Stock Order
+      li
+        = link_to food_orders_url(st:'yes'), :target => '_blank'
+          | Stock Order
+      
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Food Name
+        th Units
+        th Recipe Qty    
+        th Stock
+        th Order Qty    
+        
+        
+    tbody#food_order
+      - @food_orders.each do |food_order|
+        tr
+          td = food_order.name 
+          td = food_order.unit           
+          td = number_with_precision(food_order.cur_qty, :precision => 2, :delimiter => ',') rescue "0"
+          td = number_with_precision(food_order.stock, :precision => 2, :delimiter => ',') rescue "0"
+          td = number_with_precision(food_order.cur_qty - food_order.stock, :precision => 2, :delimiter => ',') rescue "0"
+          
+javascript:
+  $(function(){
+    // bind click event to get data
+    $('#btnrefresh').on('click', function () {          
+        var date = $('#start_date').val(); 
+        var date2 = $('#end_date').val();
+        var url = new URL(window.location.href);
+        var page = url.searchParams.get("sd");                 
+        if (date) { // require a URL
+            window.location = "food_order?sd="+date+"&ed="+date2; // redirect              
+        }
+        return false;
+    });
+  });

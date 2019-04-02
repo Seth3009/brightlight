@@ -1,0 +1,49 @@
+= form_for [@raw_food, @food_package] do |f|
+  .card-panel
+    - if @food_package.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@food_package.errors.count, "error")} prohibited this food_package from being saved:"
+        ul
+          - @food_package.errors.full_messages.each do |message|
+            li = message
+    .row
+      .input-field.col.s4
+        = f.label :packaging, class:'active'
+        = f.text_field :packaging, placeholder:'describe the package name', id:'packaging_input', class:'food'
+      .input-field.col.s4
+        = f.label :package_contents, class:'active'
+        = f.text_field :package_contents, placeholder:'fill amount of contents', id:'content_input', class:'food'
+      .input-field.col.s4
+        = f.label :unit, class:'active'
+        / = f.select :unit,@measurement.map{|measure| [measure,measure]}, id:"mes"
+        = f.select :unit, @measurement.map{|measure| [measure,measure]}, prompt:true, id:'unit_input', class:'food'
+              
+        = f.hidden_field :raw_food_id, value:@raw_food.id if @raw_food
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light.btnsubmit type="submit" Save
+    = link_to 'Cancel', raw_food_food_packages_path(@food_package.raw_food_id), class: "waves-effect waves-teal btn-flat"
+
+javascript: 
+  
+  if($('.food').val() ==  "") 
+   $('.btnsubmit').attr('disabled', true);
+  
+  $('.food').keyup(function(){
+        if($('#packaging_input').val() !=  "" && $('#content_input').val() !=  "" && $('#unit_input').val() != "Please select"  ) 
+            $('.btnsubmit').attr('disabled', false);    
+    else
+      $('.btnsubmit').attr('disabled', true);   
+  });
+
+  $('#content_input').keypress(function(eve) {
+    if ((eve.which != 46 || $(this).val().indexOf('.') != -1) && (eve.which < 48 || eve.which > 57) || (eve.which == 46 && $(this).caret().start == 0)) {
+      eve.preventDefault();
+    }
+
+    // this part is when left part of number is deleted and leaves a . in the leftmost position. For example, 33.25, then 33 is deleted
+    $('#content_input').keyup(function(eve) {
+      if ($(this).val().indexOf('.') == 0) {
+        $(this).val($(this).val().substring(1));
+      }
+    });
+  });

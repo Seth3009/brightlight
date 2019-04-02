@@ -1,0 +1,67 @@
+h4 Food Orders #{params[:m].present? ? Date::MONTHNAMES[params[:m].to_i] : Date::MONTHNAMES[Date.today.month.to_i]} #{params[:y] || Date.today.year}
+
+nav
+  .nav-wrapper
+    ul
+      ul
+        li  
+          = select_year(Date.strptime("1-"+ (params[:m] ? params[:m] : Date.today.month.to_s)  +"-"+ (params[:y] ? params[:y] : Date.today.year.to_s) ,"%d-%m-%Y"),{},name: 'trx_year')        
+        li
+          = select_month(Date.strptime("1-"+(params[:m] ? params[:m] : Date.today.month.to_s)  +"-"+ (params[:y] ? params[:y] : Date.today.year.to_s),"%d-%m-%Y"),{},name: 'trx_month')
+    ul.right      
+      li
+        = link_to new_food_order_path
+          | Stock Order
+          
+      li
+        = link_to non_stock_order_path
+          | Non Stock Order
+          
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Date order
+        th Order notes
+        th Food supplier
+        th Item Qty
+        th Is completed
+        th Actions
+        
+
+    tbody
+      - @food_orders.each do |food_order|
+        tr
+          td = food_order.date_order.try(:strftime, "%d %b %Y")
+          td = food_order.order_notes
+          td = food_order.food_supplier.supplier
+          td = food_order.food_order_items.count
+          td 
+            - if food_order.is_completed == false
+              i.material-icons check_box_outline_blank
+            - else 
+              i.material-icons check_box
+          td 
+            - if food_order.food_order_items.present?
+              = link_to item_receive_path(food_order)
+                i.material-icons local_grocery_store
+              = link_to food_order_path(food_order)
+                i.material-icons visibility          
+            = link_to food_order_path(food_order), data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete Food Order" delete
+
+#show-modal.modal.modal-fixed-footer
+  #show-modal-content
+
+javascript:
+  $(function(){
+    // bind change event to select
+    $('#date_month').on('change', function () {          
+        var month = $('#date_month').val();
+        var year = $('#date_year').val();
+        if (month) { // require a URL
+            window.location = "/food_orders?m="+month+"&y="+year; // redirect              
+        }
+        return false;
+    });
+  });
