@@ -1,5 +1,4 @@
-tr.nested-fields
-  tr.nested-fields   
+tr.nested-fields    
   td.wd30
     .input-field    
       = text_field_tag :food_name, '', class: 'foodname_autocomplete' 
@@ -14,7 +13,7 @@ tr.nested-fields
     .input-field    
       = f.number_field :qty, class:'qty'
   td.wd10
-    .input-field.center
+    .input-field
       = link_to_remove_association f, class: "waves-effect waves-teal red-text"
         i.material-icons delete
 
@@ -64,11 +63,4 @@ javascript:
     
   };
 
-  $(document).on('change', '.qty', function() {
-      if($('.product_qty').val() < 1) {
-        $("#save").hide();
-      }
-      else {
-        $("#save").show();
-      }
-    });
+  

@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   
   resources :food_delivery_items
-  resources :food_deliveries
+  
   resources :food_order_items
   
   resources :food_packs, except: :show
@@ -63,6 +63,12 @@ Rails.application.routes.draw do
   get 'food_orders/:id/item_receive' => 'food_orders#item_receive', as: :item_receive
   
   resources :food_orders, shallow: true do
+    member do
+      put 'update_multiple_item'
+    end
+  end
+
+  resources :food_deliveries, shallow: true ,except: [:show] do
     member do
       put 'update_multiple_item'
     end

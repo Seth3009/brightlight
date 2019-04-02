@@ -1,3 +1,25 @@
 h4 Editing Food Delivery
+= form_tag update_multiple_item_food_delivery_path(), id:'myform', method: :put do
+  nav
+    .nav-wrapper
+      ul
+        li
+          = link_to food_deliveries_path
+            i.material-icons.left chevron_left
+            | Food Orders
+      ul.right
+        li
+          button.btn.waves-effect.waves-light type='submit' Save
 
-== render 'form'
+  .card-panel 
+      table.compact
+        thead  
+          tr.compact-row     
+            th Food Name
+            th Package
+            th Qty
+            th Unit
+            th Actions   
+        tbody#items
+          - @food_delivery_items.each do |item| 
+            = render partial: 'delivery_item_table', locals: {item: item}

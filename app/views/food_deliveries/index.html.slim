@@ -1,4 +1,4 @@
-h4 Food Orders #{Date::MONTHNAMES[params[:m].to_i || Date.today.month.to_i]} #{params[:y] || Date.today.year}
+h4 Food Deliveries #{params[:m].present? ? Date::MONTHNAMES[params[:m].to_i] : Date::MONTHNAMES[Date.today.month.to_i]} #{params[:y] || Date.today.year}
 
 nav
   .nav-wrapper
@@ -31,9 +31,20 @@ nav
           td = food_delivery.deliver_to
           td = food_delivery.notes
           td
-            = link_to food_delivery_path(food_delivery)
-              i.material-icons visibility
             = link_to edit_food_delivery_path(food_delivery)
               i.material-icons edit
             = link_to food_delivery_path(food_delivery), data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+
+javascript:
+  $(function(){
+    // bind change event to select
+    $('#date_month').on('change', function () {          
+        var month = $('#date_month').val();
+        var year = $('#date_year').val();
+        if (month) { // require a URL
+            window.location = "/food_deliveries?m="+month+"&y="+year; // redirect              
+        }
+        return false;
+    });
+  });

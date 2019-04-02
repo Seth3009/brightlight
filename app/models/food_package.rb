@@ -6,7 +6,9 @@ class FoodPackage < ActiveRecord::Base
   belongs_to :raw_food 
   has_many :food_packages_food_suppliers
   has_many :food_order_items
+  has_many :food_delivery_items
   after_save :update_stock
+  after_destroy :update_stock
 
   scope :search_index_query, lambda { |query|
     return nil  if query.blank?   
@@ -66,12 +68,18 @@ class FoodPackage < ActiveRecord::Base
   
   def update_qty
     qty = 0
-    @items = food_order_items.all
-    @items.each do |item|
-      qty = qty + item.qty_received
+    @items_in = food_order_items.all
+    @items_out = food_delivery_items.all
+    @items_in.each do |item|
+      qty = qty + (item.qty_received || 0)
+    end
+    @items_out.each do |item|
+      qty = qty - (item.qty || 0)
     end
     self.update_column :qty, qty
   end
+
+  
 
   def self.disable_item(food_package)
     if self.find(food_package).is_active?
