@@ -1,6 +1,6 @@
 .row 
-  .col.s6
-    h4 Product Stock
+  .col.s7
+    h4 Product Stock Until #{params[:td].present? ? Date.parse(params[:td]).try(:strftime, "%d %B %Y") : Date.today.try(:strftime, "%d %B %Y") }
   .col.s5
     = form_tag({controller:'products', action:'supplies_stocks'}, {method:'get'}) do
       .input-field
@@ -17,6 +17,16 @@
       }
 nav
   .nav-wrapper
+    ul        
+      li style="padding: 0 20px"         
+        | Stock Until :
+      li
+        = date_field_tag 'to_date', params[:td] || Date.today  
+      li
+        | &nbsp &nbsp &nbsp
+      li
+        .waves-effect.waves-light.btn.blue#btnrefresh
+          | Refresh
     ul.right
       - if can? :read, Product
         li
@@ -41,3 +51,15 @@ nav
         tr id="row-#{supplies_stock.id}"
           = render partial: 'supplies_stock_row', locals: {supplies_stock: supplies_stock}
           
+javascript:
+  $(function(){
+      // bind click event to get data
+      $('#btnrefresh').on('click', function () {          
+          var date = $('#to_date').val(); 
+          var url = new URL(window.location.href);
+          if (date) { // require a URL
+              window.location = "supplies_stocks?td="+date // redirect              
+          }
+          return false;
+      });
+    });
