@@ -26,7 +26,9 @@ class Requisition < ActiveRecord::Base
   acts_as_commentable
   accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
 
-  Statuses = {:wappr  => {code: "WAPPR",  description: "Waiting for Approval"},
+  Statuses = {:new    => {code: "NEW",    description: "New"},
+              :wappr  => {code: "WAPPR",  description: "Waiting for Approval"},
+              :wbgapv => {code: "WBGAPV", description: "Waiting for Budget Approval"},
               :appvd  => {code: "APPVD",  description: "Approved"},
               :open   => {code: "OPEN",   description: "Purchase Order created"},
               :close  => {code: "CLOSE",  description: "All items ordered"},
@@ -63,8 +65,10 @@ class Requisition < ActiveRecord::Base
       notification = Message.new_from_email(email)
       notification.save
       if type == 'supv'
+        self.update_attributes status: Requisition.status_code(:wappr)
         self.update_attributes sent_to_supv: Date.today, supervisor: approver
       elsif type == 'budget'
+        self.update_attributes status: Requisition.status_code(:wbgapv)
         self.update_attributes sent_for_bgt_approval: Date.today
       end
     else
@@ -79,17 +83,18 @@ class Requisition < ActiveRecord::Base
     email.deliver_now
     notification = Message.new_from_email(email)
     notification.save
+    self.status = Requisition.status_code(:appvd)
     self.sent_to_purchasing = Date.today
     self.is_submitted = true
     save
   end
 
   def pending_supv_approval?
-    sent_to_supv != nil && is_supv_approved == nil
+    status == Requisition.status_code(:wappr) # && sent_to_supv != nil && is_supv_approved == nil
   end
 
   def pending_budget_approval?
-    !is_budgeted && sent_for_bgt_approval != nil && is_budget_approved == nil
+    status == Requisition.status_code(:wbgapv) #&& !is_budgeted && sent_for_bgt_approval != nil && is_budget_approved == nil
   end
 
   def draft?
@@ -128,14 +133,18 @@ class Requisition < ActiveRecord::Base
     end
   end
 
+  def self.status_code(status)
+    Requisition::Statuses[status][:code]
+  end
+
   def update_status
     unordered_items_count = number_of_unordered_items
     if unordered_items_count == 0
-      update_columns(status: Requisition::Statuses[:close][:code])
+      update_columns(status: Requisition.status_code(:close))
     elsif unordered_items_count != req_items.count
-      update_columns(status: Requisition::Statuses[:open][:code])
+      update_columns(status: Requisition.status_code(:open))
     else
-      update_columns(status: Requisition::Statuses[:appvd][:code])
+      update_columns(status: Requisition.status_code(:appvd))
     end
   end
   

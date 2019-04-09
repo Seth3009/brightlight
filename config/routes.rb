@@ -264,11 +264,12 @@ Rails.application.routes.draw do
   resources :requisitions do
     collection do
       get 'list'
+      post 'send'
     end
     member do
       get 'approve'
       post 'approve_requisition'
-      post 'approve_budget'
+      post 'approve_update'
       get 'edit_account'
       patch 'update_account'
     end

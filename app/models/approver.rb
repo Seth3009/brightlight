@@ -16,7 +16,8 @@ class Approver < ActiveRecord::Base
   scope :for_leave_requests, -> { where(category: 'LR') }
   scope :for_purchase_requests, -> { where(category: 'PR') }
   scope :for_events, -> { where(category: 'EV') }
-  scope :department, -> (department) { where(department: department) }
+  scope :for_budget, -> { where(category: 'BGT') }
+  scope :for_department, -> (department) { where(department: department) }
   
   def self.for(category:, department:)
     where(category: category, department: department)

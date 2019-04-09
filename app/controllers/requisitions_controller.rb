@@ -61,8 +61,8 @@ class RequisitionsController < ApplicationController
     @manager = @employee.manager || @employee.supervisor
     @department = @requisition.department || @employee.department
     @accounts = Account.for_department_id(@employee.department_id) rescue []
-    @approver_list = Approver.for_purchase_requests.department @department
-    @budget_approver_list = Employee.budget_approvers
+    @approver_list = Approver.for_purchase_requests.for_department @department
+    @budget_approver_list = Approver.for_budget
   end
 
   def edit_account
@@ -95,21 +95,10 @@ class RequisitionsController < ApplicationController
     @requisition = Requisition.new(requisition_params)
     @requisition.created_by = current_user
     @requisition.last_updated_by = current_user
+    @requisition.status = Requisition.status_code :new
     respond_to do |format|
       if @requisition.save
-        format.html do 
-          if params[:send]
-            approver = @requisition.supervisor || @requisition.requester.manager || @requisition.requester.supervisor
-            if @requisition.send_for_approval(approver, 'supv')
-              redirect_to @requisition, notice: 'Purchase request has been saved and sent for approval.' 
-            else
-              @approver_list = Approver.with_names.for_purchase_requests.department @department
-              redirect_to edit_requisition_path(@requisition), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
-            end
-          else
-            redirect_to @requisition, notice: 'Purchase request has been successfully created.' 
-          end 
-        end
+        format.html { redirect_to @requisition, notice: 'Purchase request has been successfully created.' }           
         format.json { render :show, status: :created, location: @requisition }
       else
         format.html { 
@@ -122,6 +111,24 @@ class RequisitionsController < ApplicationController
         format.json { render json: @requisition.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def send
+    authorize! :create, Requisition
+    @requisition = Requisition.new(requisition_params)
+    @requisition.created_by = current_user
+    @requisition.last_updated_by = current_user
+    @requisition.save unless @requisition.persisted?
+    if @requisition.pending_supv_approval?
+      if @requisition.send_for_approval(approver, 'supv')
+        redirect_to @requisition, notice: 'Purchase request has been saved and sent for approval.' 
+      elsif 
+        @approver_list = Approver.with_names.for_purchase_requests.department @department
+        redirect_to edit_requisition_path(@requisition), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
+      end
+    else
+      
+    end 
   end
 
   # PATCH/PUT /requisitions/1
@@ -188,6 +195,58 @@ class RequisitionsController < ApplicationController
     @supervisors = Employee.active.supervisors.all
     @accounts = Account.for_department_id(@employee.department_id) rescue []
     @button_state = !@requisition.is_budgeted && @requisition.is_supv_approved && !@requisition.is_budget_approved && @requisition.budget_approver_id
+  end
+
+  # POST update_approval
+  def update_approval
+    authorize! :approve, @requisition
+    respond_to do |format|
+      @requisition.supv_approved_date ||= Date.today if requisition_params["is_supv_approved"] == "1"
+      @requisition.budget_approved_date ||= Date.today if requisition_params["is_budget_approved"] == "1"
+      @requisition.budget = @requisition.budget_item.try(:budget)
+      if @requisition.update(requisition_params)
+        if params[:send]
+          if params[:send] == 'supv'
+            approver = @requisition.supervisor || @requisition.requester.supervisor || @requisition.requester.manager
+          else
+            approver = @requisition.budget_approver
+          end
+          if @requisition.send_for_approval(approver, params[:send])
+            @message = 'Purchase request has been sent for approval.'
+            format.html { redirect_to @requisition, notice: @message }
+            format.json { render :show, status: :ok, location: @requisition }
+            format.js
+          else
+            @error = 'Error: Purchase request cannot be sent for approval.'
+            format.html { redirect_to edit_requisition_path(@requisition), alert: @error }
+            format.json { render :show, status: :ok, location: @requisition }
+            format.js
+          end
+        elsif params[:approve] && @requisition.approved?
+          @requisition.send_to_purchasing 
+          @message = 'Purchase request has been sent for approval.'
+          format.html { redirect_to @requisition, notice: @message }
+          format.json { render :show, status: :ok, location: @requisition }
+          format.js
+        else
+          @message = 'Purchase request was successfully saved.'
+          format.html { redirect_to @requisition, notice: @message }
+          format.json { render :show, status: :ok, location: @requisition }
+          format.js
+        end
+      else
+        @error = 'Error updating purchase request.'
+        format.html do 
+          @employee = @requisition.requester || current_user.employee
+          @department = @requisition.department || @employee.department
+          @accounts = Account.for_department_id(@employee.department_id) rescue []
+          @supervisors = Employee.supervisors.all
+          render :edit 
+        end
+        format.json { render json: @requisition.errors, status: :unprocessable_entity }
+        format.js
+      end
+    end
   end
 
   # DELETE /requisitions/1
