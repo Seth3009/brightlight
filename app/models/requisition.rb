@@ -1,4 +1,6 @@
 class Requisition < ActiveRecord::Base
+  include AASM 
+
   belongs_to :department
   belongs_to :requester, class_name: 'Employee'
   belongs_to :supervisor, class_name: 'Employee'
@@ -57,6 +59,42 @@ class Requisition < ActiveRecord::Base
            OR (is_supv_approved = true AND is_budgeted = true)')
     .order(:id)
   }
+
+  aasm column: :status do
+    state :draft, initial: true
+    state :level1, :level2, :level3
+    state :approved, :rejected
+    state :open, :canceled, :closed 
+
+    event :submit do
+      transitions from: :draft, to: :level1
+      after do
+        send_for_approval :level1
+      end
+    end
+
+    event :l1_approve do
+      transitions from: :level1, to: :approved, if: :budgeted?
+      transitions from: :level1, to: :level2, if: :unbudgeted?
+      transitions from: :level1, to: :rejected, unless: :l1_approved?
+      after do
+        notify_requester :level1 if is_budgeted?
+      end
+    end
+
+    event :l2_approve do
+      transitions from: :level2, to: :level3, if: :l2_approve?
+      transitions from: :level2, to: :rejected, unless: :l2_approved?
+    end
+
+    event :l3_approve do
+      transitions from: :level3, to: :approved, if: :l3_approve?
+      transitions from: :level3, to: :rejected, unless: :l3_approved?
+    end
+
+    
+
+  end
 
   def send_for_approval(approver, type)
     if approver
