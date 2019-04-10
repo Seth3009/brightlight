@@ -55,7 +55,7 @@ class OrderItemsController < ApplicationController
     def order_item_params
       params.require(:order_item).permit(:purchase_order_id, :stock_item__id, :quantity, :unit, 
         :min_delivery_qty, :pending_qty, :type, :line_amount, :unit_price, :currency, :deleted, :description, 
-        :status, :line_num, 
+        :status, :line_num, :actual_amt,
         :discount, :est_tax, :non_recurring, :shipping, :down_payment)
     end
 end

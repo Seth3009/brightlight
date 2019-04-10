@@ -7,4 +7,9 @@ td
   = link_to edit_account_requisition_path(item.fpb, date: @date, supplier: @supplier, account: @account, item: @item), remote: true
     = item.budget || "--"
 td = item.supplier
-td.right-align = link_to currency(item.line_amount, currency: item.currency), edit_order_item_path(item, date: @date, supplier: @supplier, account: @account, item: @item), remote: true
+td.right-align 
+  = link_to edit_order_item_path(item, date: @date, supplier: @supplier, account: @account, item: @item, tab: 'est'), remote: true
+    = currency(item.line_amount, currency: item.currency)
+td.right-align 
+  = link_to edit_order_item_path(item, date: @date, supplier: @supplier, account: @account, item: @item, tab: 'act'), remote: true
+    = item.actual_amt ? currency(item.actual_amt, currency: item.currency) : "N/A"

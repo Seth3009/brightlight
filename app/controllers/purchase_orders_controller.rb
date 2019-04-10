@@ -184,6 +184,6 @@ class PurchaseOrdersController < ApplicationController
         :instructions, :subtotal, :discounts, :est_tax, :non_recurring, :shipping, :down_payment, :description,
         {:order_items_attributes => [:stock_item__id, :quantity, :unit, :min_delivery_qty, :pending_qty, :type, :line_amount, 
           :unit_price, :currency, :deleted, :description, :status, :line_num, :extra1, :extra2, :req_item_id, :remark,
-          :discount, :est_tax, :non_recurring, :shipping, :_destroy, :id ]})
+          :discount, :est_tax, :non_recurring, :shipping, :actual_amt, :_destroy, :id ]})
     end
 end

@@ -8,37 +8,44 @@
         ul
           - @order_item.errors.full_messages.each do |message|
             li = message
-    .row
-      .input-field.col.s12
-        = f.object.description
-      .input-field.col.s6
-        = f.label :quantity, class: 'active'
-        = f.text_field :quantity
-      .input-field.col.s6
-        = f.label :unit, class: 'active'
-        = f.text_field :unit
-      .input-field.col.s6
-        = f.label :unit_price, class: 'active'
-        = f.text_field :unit_price
-      .input-field.col.s6
-        = f.label :discount, class: 'active'
-        = f.text_field :discount
-      .input-field.col.s6
-        = f.label :est_tax, class: 'active'
-        = f.text_field :est_tax
-      .input-field.col.s6
-        = f.label :non_recurring, class: 'active'
-        = f.text_field :non_recurring
-      .input-field.col.s6
-        = f.label :shipping, class: 'active'
-        = f.text_field :shipping
-      .input-field.col.s6
-        = f.label :down_payment, class: 'active'
-        = f.text_field :down_payment
-        = hidden_field_tag :date, @date
-        = hidden_field_tag :supplier, @supplier
-        = hidden_field_tag :account, @account
-        = hidden_field_tag :item, @item
+    
+    -if params[:tab] == "est"
+      .row
+        .input-field.col.s12
+          = f.object.description
+        .input-field.col.s6
+          = f.label :quantity, class: 'active'
+          = f.text_field :quantity
+        .input-field.col.s6
+          = f.label :unit, class: 'active'
+          = f.text_field :unit
+        .input-field.col.s6
+          = f.label :unit_price, class: 'active'
+          = f.text_field :unit_price
+        .input-field.col.s6
+          = f.label :discount, class: 'active'
+          = f.text_field :discount
+        .input-field.col.s6
+          = f.label :est_tax, class: 'active'
+          = f.text_field :est_tax
+        .input-field.col.s6
+          = f.label :non_recurring, class: 'active'
+          = f.text_field :non_recurring
+        .input-field.col.s6
+          = f.label :shipping, class: 'active'
+          = f.text_field :shipping
+        .input-field.col.s6
+          = f.label :down_payment, class: 'active'
+          = f.text_field :down_payment
+    -else
+      .row
+        .input-field.col.s12
+          = f.label :actual_amt, class: 'active'
+          = f.text_field :actual_amt
+    = hidden_field_tag :date, @date
+    = hidden_field_tag :supplier, @supplier
+    = hidden_field_tag :account, @account
+    = hidden_field_tag :item, @item
 
   .modal-footer
     = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"

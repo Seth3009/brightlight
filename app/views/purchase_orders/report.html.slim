@@ -37,6 +37,7 @@ table.compact.bordered.striped
       th Budget Item
       th Supplier
       th.right-align Est. Price
+      th.right-align Actual Price
   tbody
     - @items.each.with_index(1) do |item, i|
       tr id="po-#{item.id}"

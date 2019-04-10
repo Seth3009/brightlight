@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190329075745) do
+ActiveRecord::Schema.define(version: 20190410051125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1421,6 +1421,7 @@ ActiveRecord::Schema.define(version: 20190329075745) do
     t.decimal  "down_payment",       default: 0.0
     t.integer  "req_item_id"
     t.string   "code"
+    t.decimal  "actual_amt"
   end
 
   add_index "order_items", ["created_by_id"], name: "index_order_items_on_created_by_id", using: :btree
@@ -1711,19 +1712,14 @@ ActiveRecord::Schema.define(version: 20190329075745) do
     t.date     "sent_for_bgt_approval"
     t.string   "status"
     t.integer  "account_id"
-    t.string   "budget_type"
-    t.integer  "event_id"
-    t.integer  "class_budget_id"
   end
 
   add_index "requisitions", ["account_id"], name: "index_requisitions_on_account_id", using: :btree
   add_index "requisitions", ["budget_approver_id"], name: "index_requisitions_on_budget_approver_id", using: :btree
   add_index "requisitions", ["budget_id"], name: "index_requisitions_on_budget_id", using: :btree
   add_index "requisitions", ["budget_item_id"], name: "index_requisitions_on_budget_item_id", using: :btree
-  add_index "requisitions", ["class_budget_id"], name: "index_requisitions_on_class_budget_id", using: :btree
   add_index "requisitions", ["created_by_id"], name: "index_requisitions_on_created_by_id", using: :btree
   add_index "requisitions", ["department_id"], name: "index_requisitions_on_department_id", using: :btree
-  add_index "requisitions", ["event_id"], name: "index_requisitions_on_event_id", using: :btree
   add_index "requisitions", ["last_updated_by_id"], name: "index_requisitions_on_last_updated_by_id", using: :btree
   add_index "requisitions", ["purch_receiver_id"], name: "index_requisitions_on_purch_receiver_id", using: :btree
   add_index "requisitions", ["req_approver_id"], name: "index_requisitions_on_req_approver_id", using: :btree
@@ -2330,14 +2326,12 @@ ActiveRecord::Schema.define(version: 20190329075745) do
   add_foreign_key "requisitions", "accounts"
   add_foreign_key "requisitions", "budget_items"
   add_foreign_key "requisitions", "budgets"
-  add_foreign_key "requisitions", "class_budgets"
   add_foreign_key "requisitions", "departments"
   add_foreign_key "requisitions", "employees", column: "budget_approver_id"
   add_foreign_key "requisitions", "employees", column: "purch_receiver_id"
   add_foreign_key "requisitions", "employees", column: "req_approver_id"
   add_foreign_key "requisitions", "employees", column: "requester_id"
   add_foreign_key "requisitions", "employees", column: "supervisor_id"
-  add_foreign_key "requisitions", "events"
   add_foreign_key "requisitions", "users", column: "created_by_id"
   add_foreign_key "requisitions", "users", column: "last_updated_by_id"
   add_foreign_key "room_accesses", "badges"
