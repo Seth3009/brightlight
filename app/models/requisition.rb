@@ -26,6 +26,8 @@ class Requisition < ActiveRecord::Base
   acts_as_commentable
   accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
 
+  before_save :update_total
+
   Statuses = {:wappr  => {code: "WAPPR",  description: "Waiting for Approval"},
               :appvd  => {code: "APPVD",  description: "Approved"},
               :open   => {code: "OPEN",   description: "Purchase Order created"},
@@ -35,25 +37,25 @@ class Requisition < ActiveRecord::Base
   scope :pending_supv_approval, lambda { |employee|
     where(department: employee.try(:department))
     .where.not(sent_to_supv: nil).where(is_supv_approved: nil).where(supervisor_id: employee.id)
-    .order(:id)
+    .includes(:requester)
   }
 
   scope :pending_budget_approval, lambda { |employee|
     where(is_supv_approved: true)
     .where.not(sent_for_bgt_approval: nil).where(is_budget_approved: nil).where(budget_approver_id: employee.id)
-    .order(:id)
+    .includes(:requester)
   }
 
   scope :pending_approval, lambda {
     where('(sent_to_supv is not null AND is_supv_approved is null)
             OR (sent_for_bgt_approval is not null and is_budget_approved is null)')
-    .order(:id)
+    .includes(:requester)
   }
 
   scope :approved, lambda {
     where('(is_supv_approved = true AND is_budget_approved = true)
            OR (is_supv_approved = true AND is_budgeted = true)')
-    .order(:id)
+    .includes(:requester)
   }
 
   def send_for_approval(approver, type)
@@ -148,4 +150,7 @@ class Requisition < ActiveRecord::Base
       return errors.add :base, "Must have at least one item" if req_items.reject{|item| item._destroy == true}.empty?
     end
 
+    def update_total
+      self.total_amt = self.req_items.sum :est_price
+    end
 end

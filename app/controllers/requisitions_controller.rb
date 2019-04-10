@@ -20,8 +20,8 @@ class RequisitionsController < ApplicationController
   # GET /requisitions/list
   def list
     authorize! :process, Requisition
-    @pending_approval = Requisition.pending_approval
-    @approved_requisitions = Requisition.approved
+    @pending_approval = Requisition.pending_approval.order("#{sort_column} #{sort_direction}")
+    @approved_requisitions = Requisition.approved.order("#{sort_column} #{sort_direction}")
     if params[:dept].present?
       @approved_requisitions = @approved_requisitions.where(department_id:params[:dept])
     end
@@ -222,6 +222,6 @@ class RequisitionsController < ApplicationController
     end
 
     def sortable_columns 
-      [:id, :description, :date_required, :requester]
+      [:id, :description, :sent_to_purchasing, :date_required, :requester]
     end
 end

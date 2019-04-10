@@ -5,10 +5,11 @@
         th
         th = sort_link "id", "Req no"
         th = sort_link "description", "Description"
+        th = sort_link "sent_to_purchasing", "Date submitted"
         th = sort_link "date_required", "Required date"
         th Requester
         th Approval
-        th Total
+        th.right-align Total
         th Actions
 
     tbody
@@ -21,11 +22,12 @@
               i.material-icons.green-text done_all
           td = requisition.id
           td = requisition.description
+          td = requisition.sent_to_purchasing
           td = requisition.date_required
           td = requisition.requester
           td 
-            - if requisition.is_supv_approved
-              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor approved" check_box
+            - if requisition.is_supv_approved            
+              i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor approved" check_box
             - elsif requisition.is_supv_approved == false
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Supervisor did not approve" cancel
             - else
@@ -38,7 +40,7 @@
               - else
                 i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Budget approval" check_box_outline_blank
 
-          td = requisition.total_amt
+          td.right-align = currency requisition.total_amt
           td 
             = link_to requisition
               i.material-icons.tooltipped data-position="right" data-delay="30" data-tooltip="View" visibility
