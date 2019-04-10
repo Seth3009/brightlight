@@ -1,0 +1,21 @@
+p#notice = notice
+
+p
+  strong Student:
+  = @student_tardy.student
+p
+  strong Grade:
+  = @student_tardy.grade
+p
+  strong Reason:
+  = @student_tardy.reason
+p
+  strong Employee:
+  = @student_tardy.employee
+p
+  strong Academic year:
+  = @student_tardy.academic_year
+
+= link_to 'Edit', edit_student_tardy_path(@student_tardy)
+'|
+= link_to 'Back', student_tardies_path

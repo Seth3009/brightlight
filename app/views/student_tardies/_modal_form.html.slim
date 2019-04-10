@@ -1,0 +1,33 @@
+= form_for @student_tardy do |f|
+  .modal-content
+    - if @student_tardy.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@student_tardy.errors.count, "error")} prohibited this student_tardy from being saved:"
+        ul
+          - @student_tardy.errors.full_messages.each do |message|
+            li = message
+
+    .row
+      .input-field.col.s9
+        = label_tag :student, "Student Name", class:'active'
+        = text_field_tag :student
+        = f.hidden_field :student_id
+      .input-field.col.s3
+        = f.label :grade, "Grade", class:'active'
+        = f.text_field :grade, disabled:'disabled'
+    .row
+      .input-field.col.s12
+        = f.label :reason, class:'active'
+        = f.text_field :reason
+    .row
+      .input-field.col.s4
+        = check_box_tag :homeroom, "Homeroom"
+        = label_tag :homeroom
+      .input-field.col.s8
+        = label_tag :teacher, "Teacher Name", class:'active'
+        = text_field_tag :teacher
+        = f.hidden_field :employee_id
+
+  .modal-footer
+    button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" data-disable=true Save
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

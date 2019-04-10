@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :student_tardies
   resources :diknas_conversions do
     member do
       get 'dry_run'

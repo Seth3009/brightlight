@@ -1,0 +1,44 @@
+h4 Student Tardies
+
+nav
+  .nav-wrapper
+    - if can? :create, StudentTardy
+      ul.right
+        li        
+          = link_to new_student_tardy_path, remote:true
+            | New
+            i.material-icons.left add
+
+.card-panel
+  table
+    thead
+      tr
+        th Student
+        th Grade
+        th Reason
+        th Employee
+        th Academic year
+        th
+        th
+        th
+
+    tbody
+      - @student_tardies.each do |student_tardy|
+        tr
+          td = student_tardy.student
+          td = student_tardy.grade
+          td = student_tardy.reason
+          td = student_tardy.employee
+          td = student_tardy.academic_year
+          td = link_to 'Show', student_tardy
+          td = link_to 'Edit', edit_student_tardy_path(student_tardy)
+          td = link_to 'Destroy', student_tardy, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content
