@@ -27,7 +27,8 @@ class OrderItemsController < ApplicationController
         item: @item
       )
       if @order_item.update(order_item_params)
-        @grand_total = @all_items.sum :line_amount
+        @est_total = @all_items.sum :line_amount
+        @act_total = @all_items.sum :actual_amt
         format.js 
       else
         format.js

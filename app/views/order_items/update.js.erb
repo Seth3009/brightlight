@@ -2,7 +2,8 @@
   Materialize.toast("Order item could not be updated successfully", 5000, 'red');
 <% else %>
   $("tr#po-<%= @order_item.id %>").html("<%=j render(partial: 'purchase_orders/order_row', locals: {item: @order_item})%>");
-  $("#grand-total").html("<%= currency(@grand_total)%>");
+  $("#est-total").html("<%= currency(@est_total)%>");
+  $("#act-total").html("<%= currency(@act_total)%>");
   $('#show-modal').closeModal();
   Materialize.toast("Order item has been updated successfully (Total: <%= currency(@grand_total)%>)", 5000, 'green');
 <% end %>

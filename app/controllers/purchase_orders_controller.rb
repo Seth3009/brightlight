@@ -32,7 +32,8 @@ class PurchaseOrdersController < ApplicationController
     @suppliers = Supplier.joins(:purchase_orders)
                   .where(purchase_orders: {order_date: @date})
 
-    @grand_total = @items.sum :line_amount
+    @est_total = @items.sum :line_amount
+    @act_total = @items.sum :actual_amt
   end
 
   # GET /purchase_orders/1
