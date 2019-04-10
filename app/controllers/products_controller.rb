@@ -109,9 +109,11 @@ class ProductsController < ApplicationController
     authorize! :read, Product
     respond_to do |format|
       format.html
-        @supplies_stocks = Product.select('products.*, (sum(CASE WHEN in_out =' + "'IN'" + ' THEN qty ELSE 0 END) - sum(CASE WHEN in_out =' + "'OUT'" + ' THEN qty ELSE 0 END)) as stock')
-                          .joins('left join supplies_transaction_items on supplies_transaction_items.product_id = products.id')
-                          .group('products.id').order("#{sort_column} #{sort_direction}")
+        @supplies_stocks = Product.supplies_stock((params[:td] || Date.today.to_s),sort_column,sort_direction)
+                                  
+        # @supplies_stocks = Product.select('products.*, (sum(CASE WHEN in_out =' + "'IN'" + ' THEN qty ELSE 0 END) - sum(CASE WHEN in_out =' + "'OUT'" + ' THEN qty ELSE 0 END)) as stock')
+        #                   .joins('left join supplies_transaction_items on supplies_transaction_items.product_id = products.id')
+        #                   .group('products.id').order("#{sort_column} #{sort_direction}")
         if params[:search]
           @supplies_stocks = @supplies_stocks.where('UPPER(products.name) LIKE ?', "%#{params[:search].upcase}%").order("#{sort_column} #{sort_direction}")     
         end                  

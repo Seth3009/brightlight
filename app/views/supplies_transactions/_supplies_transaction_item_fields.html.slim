@@ -18,3 +18,15 @@ tr.nested-fields
     .input-field
       = link_to_remove_association f, class: "waves-effect waves-teal red-text"
         i.material-icons delete
+
+javascript:
+  $(function() {
+    var tabindex = 0;
+    $('.qty-field,select').each(function() {
+        if (this.type != "hidden") {
+            var $input = $(this);
+            $input.attr("tabindex", tabindex);
+            tabindex++;
+        }
+    });
+  });

@@ -43,6 +43,16 @@ class Product < ActiveRecord::Base
     end
   end
 
+  def self.supplies_stock(date,sort,direction)
+    self.find_by_sql("select t1.id,t1.name, t1.barcode, t1.min_stock, t1.item_unit_id, t1.packs, t1.packs_unit, t1.is_active, (sum(CASE WHEN in_out = 'IN' THEN qty ELSE 0 END) - sum(CASE WHEN in_out ='OUT' THEN qty ELSE 0 END)) as stock from
+    (select products.* from products) t1
+    left join (select supplies_transaction_items.*, supplies_transactions.transaction_date from supplies_transaction_items left join supplies_transactions
+          on supplies_transactions.id = supplies_transaction_items.supplies_transaction_id where supplies_transactions.transaction_date <= '" + date + "') t2
+    on (t2.product_id = t1.id)
+    group by t1.id, t1.name,t1.barcode,t1.min_stock,t1.item_unit_id, t1.packs, t1.packs_unit, t1.is_active
+    order by " + sort + " " + direction)
+  end
+
   private 
     def assign_barcode
       update_columns barcode: sprintf("SPL-9%06i", id)
