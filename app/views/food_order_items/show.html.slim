@@ -1,0 +1,18 @@
+p#notice = notice
+
+p
+  strong Food order:
+  = @food_order_item.food_order
+p
+  strong Food package:
+  = @food_order_item.food_package
+p
+  strong Qty order:
+  = @food_order_item.qty_order
+p
+  strong Qty received:
+  = @food_order_item.qty_received
+
+= link_to 'Edit', edit_food_order_item_path(@food_order_item)
+'|
+= link_to 'Back', food_order_items_path

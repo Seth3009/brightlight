@@ -1,0 +1,27 @@
+h1 Listing food_packages_food_suppliers
+
+table
+  thead
+    tr
+      th Food package
+      th Food supplier
+      th Price
+      th Date update
+      th
+      th
+      th
+
+  tbody
+    - @food_packages_food_suppliers.each do |food_packages_food_supplier|
+      tr
+        td = food_packages_food_supplier.food_package
+        td = food_packages_food_supplier.food_supplier
+        td = food_packages_food_supplier.price
+        td = food_packages_food_supplier.date_update
+        td = link_to 'Show', food_packages_food_supplier
+        td = link_to 'Edit', edit_food_packages_food_supplier_path(food_packages_food_supplier)
+        td = link_to 'Destroy', food_packages_food_supplier, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Food packages food supplier', new_food_packages_food_supplier_path

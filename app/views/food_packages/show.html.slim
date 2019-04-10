@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Packaging:
+  = @food_package.packaging
+p
+  strong Qty:
+  = @food_package.qty
+p
+  strong Unit:
+  = @food_package.unit
+
+= link_to 'Edit', edit_food_package_path(@food_package)
+'|
+/ = link_to 'Back', food_packages_path

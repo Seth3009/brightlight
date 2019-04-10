@@ -1,0 +1,36 @@
+= form_for @lunch_menu do |f|
+  - if @lunch_menu.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@lunch_menu.errors.count, "error")} prohibited this lunch_menu from being saved:"
+      ul
+        - @lunch_menu.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :lunch_date
+    = f.date_select :lunch_date
+  .field
+    = f.label :food_id
+    = f.text_field :food_id
+  .field
+    = f.label :adj_g1
+    = f.number_field :adj_g1
+  .field
+    = f.label :adj_g4
+    = f.number_field :adj_g4
+  .field
+    = f.label :adj_sol
+    = f.number_field :adj_sol
+  .field
+    = f.label :adj_sor
+    = f.number_field :adj_sor
+  .field
+    = f.label :adj_adult
+    = f.number_field :adj_adult
+  .field
+    = f.label :total_adj
+    = f.number_field :total_adj
+  .field
+    = f.label :academic_year_id
+    = f.text_field :academic_year_id
+  .actions = f.submit

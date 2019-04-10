@@ -1,0 +1,42 @@
+- title "Packages of #{@raw_food.name}"
+
+h4 = @raw_food.name
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to raw_foods_path
+          i.material-icons.left chevron_left
+      li
+        .brand-logo style="margin-left: 20px; font-size:1.5em"
+          | Stock remains : #{number_with_precision(@raw_food.stock, :precision => 2, :delimiter => ',').to_s} #{@raw_food.unit}
+    ul.right
+      li
+        / - if can? :manage, FoodPackage
+        = link_to new_raw_food_food_package_url, remote:true
+          | New Package
+          i.material-icons.left add
+.card-panel  
+  table#fp_table.compact.striped
+    thead
+      tr        
+        th Packaging
+        th Package Contents        
+        th Qty
+        th Total
+        th Is Active
+        th.center Actions
+
+    tbody#food_packages
+      - @food_packages.each do |food_package|
+        tr id="row-#{food_package.id}"
+          = render partial: 'index_row', locals: {food_package: food_package} 
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content

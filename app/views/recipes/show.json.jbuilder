@@ -1,0 +1,1 @@
+json.extract! @recipe, :id, :food_id, :raw_food_id, :recipe_portion, :qty, :custom_size, :size_divider, :portion_size, :gr1_portion, :gr2_portion, :sol_portion, :sor_portion, :adult_portion, :created_at, :updated_at

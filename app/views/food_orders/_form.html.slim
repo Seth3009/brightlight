@@ -1,0 +1,34 @@
+= form_for @food_order do |f|
+  - if @food_order.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@food_order.errors.count, "error")} prohibited this food_order from being saved:"
+      ul
+        - @food_order.errors.full_messages.each do |message|
+          li = message
+
+  = render 'order_head', f: f
+  
+  nav.light
+    .nav-wrapper
+      ul
+        li
+          = link_to food_orders_path
+            i.material-icons.left chevron_left
+        li
+          .brand-logo style="margin-left: 20px; font-size:1.5em"
+            | Food Orders
+      ul.right#add-row
+        li
+          = link_to_add_association f, :food_order_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#food_order'
+            ' Add row
+            i.material-icons.left playlist_add 
+
+  .row
+    .col.s4
+      = render 'items'          
+    .col.s8
+      = render 'food_order_items', f: f
+
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" name="save" data-disable-with="Please wait..." Save    
+    = link_to 'Cancel', food_orders_path, class: "waves-effect waves-light btn-flat"

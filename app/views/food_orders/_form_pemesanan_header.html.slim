@@ -1,0 +1,23 @@
+
+- if params[:action] =~ /non_stock_order/  
+  p style="font-size:30px; text-align:center; font-weight:bold; height:10px;"
+    | Form Pemesanan Barang Non Stock
+  p style="font-size:18px; text-align:center; text-transform:capitalize; height:10px;"
+    | Untuk Persediaan tanggal #{params[:sd].try(:strftime,"%d/%m/%Y") || Date.today.try(:strftime,"%d/%m/%Y") } s/d #{params[:ed].try(:strftime,"%d/%m/%Y") || Date.today.try(:strftime,"%d/%m/%Y")}
+  p style="font-size:18px; text-align:center; text-transform:capitalize; "
+    | Supplier - #{@supplier_filter.present? ? @supplier_filter.supplier : "All"}
+- else
+  p style="font-size:30px; text-align:center; font-weight:bold; height:10px;"
+    | Form Pemesanan Barang Stock
+  p style="font-size:18px; text-align:center; text-transform:capitalize; height:10px;"
+    | Tanggal order #{@food_order.date_order.try(:strftime,"%d/%m/%Y") || Date.today.try(:strftime,"%d/%m/%Y") }
+  p style="font-size:18px; text-align:center; text-transform:capitalize; "
+    | Supplier - #{@food_order.food_supplier.supplier.present? ? @food_order.food_supplier.supplier : "-"}
+
+  
+css:
+  @media print{
+    .hideprint{
+      display:none;
+    }
+  }

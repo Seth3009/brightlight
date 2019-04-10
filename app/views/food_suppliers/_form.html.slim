@@ -1,0 +1,21 @@
+= form_for @food_supplier do |f|
+  - if @food_supplier.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@food_supplier.errors.count, "error")} prohibited this food_supplier from being saved:"
+      ul
+        - @food_supplier.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :supplier
+    = f.text_field :supplier
+  .field
+    = f.label :address
+    = f.text_field :address
+  .field
+    = f.label :contact_person
+    = f.text_field :contact_person
+  .field
+    = f.label :phone
+    = f.text_field :phone
+  .actions = f.submit

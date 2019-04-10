@@ -1,0 +1,85 @@
+= month_calendar events: @lunch_menus do |date, lunch_menus|
+  span.right
+    = link_to date.day, lunch_menus_food_lists_url(d: date)
+  br
+  - lunch_menus.each do |lunch_menu|
+    span style="font-size: 12px;"      
+      = lunch_menu.food.name
+      br
+  
+
+css:
+
+  .calendar-heading a:hover {
+    text-decoration: underline;
+  }
+  .calendar-heading {
+    text-align: center;
+    font-size: 30px;
+  }
+
+  .calendar-title {
+    color: lightgreen;
+  }
+  .table thead th {
+    background-color: gray;
+    text-align: center;
+  }
+
+  .table td {
+    height: 100px !important;  
+    line-height:1em;  
+  }
+  .today {
+    background-color: lavender !important;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  td a:hover {
+    text-decoration: underline !important;
+    font-size: 20px;
+    color: blue;
+  }
+
+  .past {
+    color: lightgray !important;
+  } 
+
+  
+
+/ table
+/   thead
+/     tr
+/       th Lunch date
+/       th Food
+/       th Adj g1
+/       th Adj g4
+/       th Adj sol
+/       th Adj sor
+/       th Adj adult
+/       th Total adj
+/       th Academic year
+/       th
+/       th
+/       th
+
+/   tbody
+/     - @lunch_menus.each do |lunch_menu|
+/       tr
+/         td = lunch_menu.lunch_date
+/         td = lunch_menu.food
+/         td = lunch_menu.adj_g1
+/         td = lunch_menu.adj_g4
+/         td = lunch_menu.adj_sol
+/         td = lunch_menu.adj_sor
+/         td = lunch_menu.adj_adult
+/         td = lunch_menu.total_adj
+/         td = lunch_menu.academic_year
+/         td = link_to 'Show', lunch_menu
+/         td = link_to 'Edit', edit_lunch_menu_path(lunch_menu)
+/         td = link_to 'Destroy', lunch_menu, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+/ br
+
+/ = link_to 'New Lunch menu', new_lunch_menu_path

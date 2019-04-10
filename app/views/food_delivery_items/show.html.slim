@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Food delivery:
+  = @food_delivery_item.food_delivery
+p
+  strong Food package:
+  = @food_delivery_item.food_package
+p
+  strong Qty:
+  = @food_delivery_item.qty
+
+= link_to 'Edit', edit_food_delivery_item_path(@food_delivery_item)
+'|
+= link_to 'Back', food_delivery_items_path

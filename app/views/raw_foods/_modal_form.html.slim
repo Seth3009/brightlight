@@ -1,0 +1,40 @@
+= form_for @raw_food, remote:true do |f|
+    .modal-content
+        - if @raw_food.persisted?
+            h4 Editing #{@raw_food.name}
+        - else 
+            h4 New Supply
+        - if @raw_food.errors.any?
+            #error_explanation
+            h6 = "#{pluralize(@raw_food.errors.count, "error")} prohibited this raw food from being saved:"
+            ul
+                - @raw_food.errors.full_messages.each do |message|
+                li = message
+
+        .row
+            .input-field.col.s6  
+                = f.label :name, class:'active'
+                = f.text_field :name
+            .input-field.col.s6                  
+                = f.check_box :is_stock
+                = f.label :is_stock
+        .row
+            .input-field.col.s6
+                = f.label :food_type, class:'active'
+                = f.select :food_type, ["Liquid","Solid"]
+            .input-field.col.s6
+                = f.label :unit, class:'active'
+                = f.select :unit, ["Liter","Milliliter","Kilogram","Gram"]
+    .modal-footer
+        button.btn.btn-flat.btnsubmit.waves-effect.waves-light.modal-action.modal-close type="submit" Save
+        a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+
+javascript:
+    if($('#raw_food_name').val() ==  "") 
+        $('.btnsubmit').attr('disabled', true);
+    $('#raw_food_name').keyup(function(){
+        if($('#raw_food_name').val() !=  "" )
+            $('.btnsubmit').attr('disabled', false);    
+        else
+            $('.btnsubmit').attr('disabled', true);   
+    });

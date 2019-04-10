@@ -66,6 +66,14 @@
                                                PATCH    /deliveries/:id(.:format)                                         deliveries#update
                                                PUT      /deliveries/:id(.:format)                                         deliveries#update
                                                DELETE   /deliveries/:id(.:format)                                         deliveries#destroy
+                                   order_items GET      /order_items(.:format)                                            order_items#index
+                                               POST     /order_items(.:format)                                            order_items#create
+                                new_order_item GET      /order_items/new(.:format)                                        order_items#new
+                               edit_order_item GET      /order_items/:id/edit(.:format)                                   order_items#edit
+                                    order_item GET      /order_items/:id(.:format)                                        order_items#show
+                                               PATCH    /order_items/:id(.:format)                                        order_items#update
+                                               PUT      /order_items/:id(.:format)                                        order_items#update
+                                               DELETE   /order_items/:id(.:format)                                        order_items#destroy
                                      req_items GET      /req_items(.:format)                                              req_items#index
                                                POST     /req_items(.:format)                                              req_items#create
                                   new_req_item GET      /req_items/new(.:format)                                          req_items#new
@@ -257,6 +265,22 @@
                                                PATCH    /diknas_converteds/:id(.:format)                                  diknas_converteds#update
                                                PUT      /diknas_converteds/:id(.:format)                                  diknas_converteds#update
                                                DELETE   /diknas_converteds/:id(.:format)                                  diknas_converteds#destroy
+                        raw_food_food_packages GET      /raw_foods/:raw_food_id/food_packages(.:format)                   food_packages#index
+                                               POST     /raw_foods/:raw_food_id/food_packages(.:format)                   food_packages#create
+                     new_raw_food_food_package GET      /raw_foods/:raw_food_id/food_packages/new(.:format)               food_packages#new
+                             edit_food_package GET      /food_packages/:id/edit(.:format)                                 food_packages#edit
+                                  food_package GET      /food_packages/:id(.:format)                                      food_packages#show
+                                               PATCH    /food_packages/:id(.:format)                                      food_packages#update
+                                               PUT      /food_packages/:id(.:format)                                      food_packages#update
+                                               DELETE   /food_packages/:id(.:format)                                      food_packages#destroy
+                                     raw_foods GET      /raw_foods(.:format)                                              raw_foods#index
+                                               POST     /raw_foods(.:format)                                              raw_foods#create
+                                  new_raw_food GET      /raw_foods/new(.:format)                                          raw_foods#new
+                                 edit_raw_food GET      /raw_foods/:id/edit(.:format)                                     raw_foods#edit
+                                      raw_food GET      /raw_foods/:id(.:format)                                          raw_foods#show
+                                               PATCH    /raw_foods/:id(.:format)                                          raw_foods#update
+                                               PUT      /raw_foods/:id(.:format)                                          raw_foods#update
+                                               DELETE   /raw_foods/:id(.:format)                                          raw_foods#destroy
                     students_activity_schedule GET      /activity_schedules/:id/students(.:format)                        activity_schedules#students
                 add_students_activity_schedule POST     /activity_schedules/:id/add_students(.:format)                    activity_schedules#add_students
               remove_student_activity_schedule DELETE   /activity_schedules/:id/remove_student(.:format)                  activity_schedules#remove_student

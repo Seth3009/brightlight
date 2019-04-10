@@ -1,0 +1,54 @@
+.row 
+  .col.s6
+    h4 Food List
+  .col.s5
+    = form_tag({controller:'foods', action:'index'}, {method:'get'}) do 
+      .input-field
+        input type="hidden" name="v" value=@view_style
+        - if params[:search].present?
+          i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
+            | highlight_off
+        - else
+          i.material-icons.prefix search
+        input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]    
+    javascript:
+      function reset_form() {
+        window.location="#{foods_path(v:'list')}"
+      }
+
+nav
+  .nav-wrapper
+    ul
+      li
+        / = link_to 'Catalog (PDF)', raw_foods_path(format: 'pdf'), target: '_blank'
+
+    ul.right
+      / - if can? :manage, RawFood
+      li
+        = link_to new_food_path, remote: true
+          | New Food
+          i.material-icons.left add
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Name
+        th Ingredients
+        th Is active
+        th Actions
+        th
+        th
+    tbody#foods
+      - @foods.each do |food|
+        tr id="row-#{food.id}"
+          = render partial: 'index_row', locals: {food: food}
+    
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content
