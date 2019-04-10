@@ -23,18 +23,6 @@ class CopyCondition < ActiveRecord::Base
   def synchronize_book_copy_condition
     # Update book_copy.book_condition_id
     book_copy.update_column :book_condition_id, book_condition_id
-    
-    # Get related student_book record
-    student_book = StudentBook.where(academic_year:AcademicYear.current_id).where(book_copy:book_copy).take
-    # if the record exists, update either the student_book.initial_copy_condition_id
-    # of the end_copy_condition_id if it present
-    unless student_book.blank?
-      if student_book.end_copy_condition_id.present?
-        student_book.update_column :end_copy_condition_id, book_condition_id
-      else
-        student_book.update_column :initial_copy_condition_id, book_condition_id
-      end
-    end
   end
 
 end
