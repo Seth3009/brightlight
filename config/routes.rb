@@ -264,7 +264,7 @@ Rails.application.routes.draw do
   resources :requisitions do
     collection do
       get 'list'
-      post 'send'
+      post 'submit'
     end
     member do
       get 'approve'

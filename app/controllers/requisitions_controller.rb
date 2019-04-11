@@ -1,5 +1,5 @@
 class RequisitionsController < ApplicationController
-  before_action :set_requisition, only: [:show, :edit, :edit_account, :update, :update_account, :destroy, :approve]
+  before_action :set_requisition, only: [:show, :edit, :send, :edit_account, :update, :update_account, :destroy, :approve]
 
   # GET /requisitions
   # GET /requisitions.json
@@ -48,8 +48,6 @@ class RequisitionsController < ApplicationController
     if @employee.present?
       @department = @employee.department
       @accounts = Account.for_department_id(@employee.department_id) rescue []
-      @manager = @employee.manager || @employee.supervisor
-      @approver_list = Approver.with_names.for_purchase_requests.department @department
     end
     @requisition = Requisition.new
   end
@@ -98,14 +96,19 @@ class RequisitionsController < ApplicationController
     @requisition.status = Requisition.status_code :new
     respond_to do |format|
       if @requisition.save
-        format.html { redirect_to @requisition, notice: 'Purchase request has been successfully created.' }           
+        format.html do
+          if params[:send]
+            redirect_to send_requisition_path @requisition
+          else
+            redirect_to @requisition, notice: 'Purchase request draft has been successfully created.'
+          end
+        end
         format.json { render :show, status: :created, location: @requisition }
       else
         format.html { 
           @employee = @requisition.requester || current_user.employee
           @department = @employee.department
           @accounts = Account.for_department_id(@employee.department_id) rescue []
-          @approver_list = Approver.with_names.for_purchase_requests.department @department
           render :new 
         }
         format.json { render json: @requisition.errors, status: :unprocessable_entity }
@@ -113,22 +116,11 @@ class RequisitionsController < ApplicationController
     end
   end
 
-  def send
-    authorize! :create, Requisition
-    @requisition = Requisition.new(requisition_params)
-    @requisition.created_by = current_user
-    @requisition.last_updated_by = current_user
-    @requisition.save unless @requisition.persisted?
-    if @requisition.pending_supv_approval?
-      if @requisition.send_for_approval(approver, 'supv')
-        redirect_to @requisition, notice: 'Purchase request has been saved and sent for approval.' 
-      elsif 
-        @approver_list = Approver.with_names.for_purchase_requests.department @department
-        redirect_to edit_requisition_path(@requisition), alert: "Cannot send for approval. Maybe supervisor field is blank? #{@requisition.requester.supervisor.name}"
-      end
-    else
-      
-    end 
+  # POST /requisition/1/submit
+  def submit
+    authorize! :create, @requisition
+    @requisition.submit!
+    redirect_to @requisition, notice: 'Purchase request has been saved and sent for approval.' 
   end
 
   # PATCH/PUT /requisitions/1
