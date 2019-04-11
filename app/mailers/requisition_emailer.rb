@@ -14,4 +14,10 @@ class RequisitionEmailer < ActionMailer::Base
     @po = po
     mail(to: %("#{@requester.name}" <#{@requester.email}>), subject: "Your purchase request (#{requisition.id}) has been processed.")
   end
+
+  def notify_purchasing(requisition, addressee)
+    @requisition = requisition
+    @addressee = addressee
+    mail(to: addressee, subject: "New Purchase Request #{requisition.id}.")
+  end 
 end

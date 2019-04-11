@@ -69,55 +69,92 @@ class Requisition < ActiveRecord::Base
     event :submit do
       transitions from: :draft, to: :level1
       after do
-        send_for_approval :level1
+        notify_approvers level:1
       end
     end
 
     event :l1_approve do
       transitions from: :level1, to: :approved, if: :budgeted?
-      transitions from: :level1, to: :level2, if: :unbudgeted?
-      transitions from: :level1, to: :rejected, unless: :l1_approved?
+      transitions from: :level1, to: :level2, unless: :budgeted?
+      transitions from: :level1, to: :rejected, if: :l1_rejected?
       after do
-        notify_requester :level1 if is_budgeted?
+        if is_budgeted
+          notify_requester :level1
+          notify_purchasing
+        else
+          notify_approvers level: 2
+        end
+        notify_requester if l1_rejected?
       end
     end
 
     event :l2_approve do
-      transitions from: :level2, to: :level3, if: :l2_approve?
-      transitions from: :level2, to: :rejected, unless: :l2_approved?
+      transitions from: :level2, to: :level3, if: :l2_approved?
+      transitions from: :level2, to: :rejected, if: :l2_rejected?
+      after do
+        notify_requester if l2_rejected?
+        notify_approvers level: 3
+      end
     end
 
     event :l3_approve do
-      transitions from: :level3, to: :approved, if: :l3_approve?
-      transitions from: :level3, to: :rejected, unless: :l3_approved?
+      transitions from: :level3, to: :approved, if: :l3_approved?
+      transitions from: :level3, to: :rejected, if: :l3_rejected?
+      after do
+        notify_requester
+        notify_purchasing if l3_approved?
+      end
     end
 
-    
-
+    event :open_order do
+      transitions from: :approved, to: :open
+    end
+  
   end
 
-  def send_for_approval(approver, type)
-    if approver
-      email = EmailNotification.req_approval(self, approver, type)
-      email.deliver_now
-      notification = Message.new_from_email(email)
-      notification.save
-      if type == 'supv'
-        self.update_attributes status: Requisition.status_code(:wappr)
-        self.update_attributes sent_to_supv: Date.today, supervisor: approver
-      elsif type == 'budget'
-        self.update_attributes status: Requisition.status_code(:wbgapv)
-        self.update_attributes sent_for_bgt_approval: Date.today
-      end
-    else
-      return false
-    end
-    return true
-  end 
+  def budgeted?
+    self.is_budgeted
+  end
 
-  def send_to_purchasing
+  def l1_approved?
+    self.approvables.level(1).any? &:approved
+  end
+
+  def l2_approved?
+    self.approvables.level(2).any? &:approved
+  end
+
+  def l3_approved?
+    self.approvables.level(3).any? &:approved
+  end
+
+  def l1_rejected?
+    self.approvables.level(1).any? {|x| x.approved == false}
+  end
+
+  def l2_rejected?
+    self.approvables.level(2).any? {|x| x.approved == false}
+  end
+
+  def l3_rejected?
+    self.approvables.level(3).any? {|x| x.approved == false}
+  end
+
+  def notify_approvers(level: 1)
+    email = RequisitionEmailer.approval(self, level: level)
+    email.deliver_now
+    notification = Message.new_from_email(email)
+    notification.save
+    if level == 1
+      self.update_attributes sent_to_supv: Date.today
+    else
+      self.update_attributes sent_for_bgt_approval: Date.today
+    end
+  end
+
+  def notify_purchasing
     purchasing_email = Rails.application.config.purchasing_email_address
-    email = EmailNotification.requisition_to_purchasing(self, purchasing_email)
+    email = RequisitionEmailer.notify_purchasing(self, purchasing_email)
     email.deliver_now
     notification = Message.new_from_email(email)
     notification.save
@@ -127,16 +164,50 @@ class Requisition < ActiveRecord::Base
     save
   end
 
+  # def send_for_approval(approver, type)
+  #   if approver
+  #     email = EmailNotification.req_approval(self, approver, type)
+  #     email.deliver_now
+  #     notification = Message.new_from_email(email)
+  #     notification.save
+  #     if type == 'supv'
+  #       self.update_attributes status: Requisition.status_code(:wappr)
+  #       self.update_attributes sent_to_supv: Date.today, supervisor: approver
+  #     elsif type == 'budget'
+  #       self.update_attributes status: Requisition.status_code(:wbgapv)
+  #       self.update_attributes sent_for_bgt_approval: Date.today
+  #     end
+  #   else
+  #     return false
+  #   end
+  #   return true
+  # end 
+
+  # def send_to_purchasing
+  #   purchasing_email = Rails.application.config.purchasing_email_address
+  #   email = EmailNotification.requisition_to_purchasing(self, purchasing_email)
+  #   email.deliver_now
+  #   notification = Message.new_from_email(email)
+  #   notification.save
+  #   self.status = Requisition.status_code(:appvd)
+  #   self.sent_to_purchasing = Date.today
+  #   self.is_submitted = true
+  #   save
+  # end
+
   def pending_supv_approval?
-    status == Requisition.status_code(:wappr) # && sent_to_supv != nil && is_supv_approved == nil
+    # status == Requisition.status_code(:wappr) # && sent_to_supv != nil && is_supv_approved == nil
+    self.level1? 
   end
 
   def pending_budget_approval?
-    status == Requisition.status_code(:wbgapv) #&& !is_budgeted && sent_for_bgt_approval != nil && is_budget_approved == nil
+    # status == Requisition.status_code(:wbgapv) #&& !is_budgeted && sent_for_bgt_approval != nil && is_budget_approved == nil
+    self.level2? || self.level3?
   end
 
   def draft?
-    !submitted?
+    # !submitted?
+    self.draft?
   end
 
   def submitted?
@@ -144,7 +215,8 @@ class Requisition < ActiveRecord::Base
   end
 
   def approved?
-    (is_supv_approved && is_budget_approved) || (is_supv_approved && is_budgeted)
+    # (is_supv_approved && is_budget_approved) || (is_supv_approved && is_budgeted)
+    self.approved?
   end
 
   # Call back from comment

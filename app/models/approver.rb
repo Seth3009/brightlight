@@ -16,10 +16,10 @@ class Approver < ActiveRecord::Base
   scope :for_leave_requests, -> { where(category: 'LR') }
   scope :for_purchase_requests, -> { where(category: 'PR') }
   scope :for_events, -> { where(category: 'EV') }
-  scope :for_budget, -> { where(category: 'BGT') }
-  scope :for_department, -> (department) { where(department: department) }
+  scope :level, -> (lvl) { where(level: lvl) }
+  scope :for_department, -> (dept) { where(department: dept) }
   
-  def self.for(category:, department:)
-    where(category: category, department: department)
+  def self.for(category:, department:, level: 1)
+    where(category: category, department: department, level: level)
   end
 end
