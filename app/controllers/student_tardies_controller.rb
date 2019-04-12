@@ -30,6 +30,7 @@ class StudentTardiesController < ApplicationController
       if @student_tardy.save
         format.html { redirect_to student_tardies_url, notice: 'Student tardy was successfully created.' }
         format.json { render :show, status: :created, location: @student_tardy }
+        format.js
       else
         format.html { render :new }
         format.json { render json: @student_tardy.errors, status: :unprocessable_entity }
@@ -44,6 +45,7 @@ class StudentTardiesController < ApplicationController
       if @student_tardy.update(student_tardy_params)
         format.html { redirect_to @student_tardy, notice: 'Student tardy was successfully updated.' }
         format.json { render :show, status: :ok, location: @student_tardy }
+        format.js
       else
         format.html { render :edit }
         format.json { render json: @student_tardy.errors, status: :unprocessable_entity }

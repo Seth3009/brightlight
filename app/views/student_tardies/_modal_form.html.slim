@@ -1,4 +1,4 @@
-= form_for @student_tardy do |f|
+= form_for @student_tardy, remote:true do |f|
   .modal-content
     - if @student_tardy.errors.any?
       #error_explanation

@@ -31,23 +31,17 @@ nav
         th Student
         th Grade
         th Reason
-        th Employee
+        th Teacher
         th Academic year
         th Actions
         
 
-    tbody
+    tbody#student_tardies
       - @student_tardies.each do |student_tardy|
-        tr
-          td = student_tardy.date_tardy.try(:strftime, "%m/%d/%Y")
-          td = student_tardy.student.name
-          td = student_tardy.grade_section.name
-          td = student_tardy.reason
-          td = student_tardy.employee
-          td = student_tardy.academic_year.name
-          td 
-            = link_to student_tardy, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
-              i.material-icons.left delete
+        tr id="row-#{student_tardy.id}"
+          = render partial: 'index_row', locals: {student_tardy: student_tardy}
+        
+          
 
 #show-modal.modal.modal-fixed-footer
   .modal-content
