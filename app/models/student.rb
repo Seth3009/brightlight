@@ -33,8 +33,9 @@ class Student < ActiveRecord::Base
 
 	scope :for_section, lambda {|section, year:AcademicYear.current|
 		joins('INNER JOIN "grade_sections_students" ON "grade_sections_students"."student_id" = "students"."id"	INNER JOIN "grade_sections" ON "grade_sections"."id" = "grade_sections_students"."grade_section_id"') 
+		.joins('INNER JOIN "employees" ON "employees"."id" = "grade_sections"."homeroom_id"')
 		.where(grade_sections_students: {grade_section: section, academic_year: year})
-		.select('students.id, students.name, students.family_no, grade_sections_students.grade_section_id, grade_sections_students.order_no, grade_sections.name as grade')
+		.select('students.id, students.name, students.family_no, grade_sections_students.grade_section_id, grade_sections_students.order_no, grade_sections.name as grade, grade_sections.homeroom_id, employees.name as homeroom')
 			.order('grade_sections_students.order_no')
 	}
 

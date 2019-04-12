@@ -10,29 +10,30 @@ nav
             i.material-icons.left add
 
 .card-panel
-  table
+  table.compact.striped
     thead
       tr
+        th Date
         th Student
         th Grade
         th Reason
         th Employee
         th Academic year
-        th
-        th
-        th
+        th Actions
+        
 
     tbody
       - @student_tardies.each do |student_tardy|
         tr
-          td = student_tardy.student
+          td = student_tardy.created_at.try(:strftime, "%d/%m/%Y")
+          td = student_tardy.student.name
           td = student_tardy.grade
           td = student_tardy.reason
           td = student_tardy.employee
-          td = student_tardy.academic_year
-          td = link_to 'Show', student_tardy
-          td = link_to 'Edit', edit_student_tardy_path(student_tardy)
-          td = link_to 'Destroy', student_tardy, data: {:confirm => 'Are you sure?'}, :method => :delete
+          td = student_tardy.academic_year.name
+          td 
+            = link_to student_tardy, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+              i.material-icons.left delete
 
 #show-modal.modal.modal-fixed-footer
   .modal-content

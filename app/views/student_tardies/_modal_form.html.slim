@@ -6,28 +6,107 @@
         ul
           - @student_tardy.errors.full_messages.each do |message|
             li = message
-
     .row
-      .input-field.col.s9
-        = label_tag :student, "Student Name", class:'active'
-        = text_field_tag :student
-        = f.hidden_field :student_id
       .input-field.col.s3
         = f.label :grade, "Grade", class:'active'
-        = f.text_field :grade, disabled:'disabled'
+        = f.collection_select :grade, GradeSection.all.order(:id) ,:id, :name
+    .row    
+      .input-field.col.s7
+        = label_tag :student, "Student Name", class:'active'
+        = text_field_tag :student, '', class:'student_autocomplete'
+        = f.hidden_field :student_id, class:'student_id'
+        = f.hidden_field :academic_year_id, value:AcademicYear.current_id  
+      .input-field.col.s5
+        = label_tag :teacher, "Teacher", class:'active'
+        = text_field_tag :homeroom_name, '', class:'homeroom_name'
+        = f.hidden_field :employee_id, class:'homeroom_id'
+      
     .row
       .input-field.col.s12
         = f.label :reason, class:'active'
         = f.text_field :reason
-    .row
-      .input-field.col.s4
-        = check_box_tag :homeroom, "Homeroom"
-        = label_tag :homeroom
-      .input-field.col.s8
-        = label_tag :teacher, "Teacher Name", class:'active'
-        = text_field_tag :teacher
-        = f.hidden_field :employee_id
+    
+
 
   .modal-footer
     button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" data-disable=true Save
     a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+
+javascript:
+  $(document).on('focus', '.student_autocomplete', function() {
+    $(this).autocomplete({
+        source: "/students?format=json&section="+$('#student_tardy_grade').val(),
+        max: 30,
+        minLength: 3,
+        create: function() {
+          $(this).data( "ui-autocomplete" )._renderItem = function( ul, student ) {
+            return $( "<li>" )
+              .append( "<div>" + student.name + "</div>" )
+              .appendTo( ul );
+          }
+        },
+        select: function( event, ui ) {
+          insert_student_values(event.target, ui.item); 
+          return false;
+        }
+      });  
+    
+    function insert_student_values(el, student) {
+      let row = $(el).closest('tr');
+      $(el).val(student.name);
+      $(".student_id").val(student.id);
+      $(".student_grade").val(student.grade);
+      $(".homeroom_name").val(student.homeroom);
+      $(".homeroom_id").val(student.homeroom_id);
+      console.log(student);      
+    }   
+  });
+
+  $(document).on('keyup', '.student_autocomplete', function() {
+    if($(this).val() === '') {
+      $(this).closest('tr').find(".student_id").val(null); 
+      $(this).closest('tr').find(".homeroom_id").val(null);  
+      $(".homeroom_name").val('');    
+    }
+  });
+
+  $(document).on('change', '#student_tardy_grade', function() {
+      $('.student_autocomplete').val('');
+      $('.homeroom_name').val('');
+      $('.homeroom_id').val('');
+  });
+
+  $(document).on('focus', '.homeroom_name', function() {
+    $(this).autocomplete({
+        source: "/employees?format=json",
+        max: 30,
+        minLength: 3,
+        create: function() {
+          $(this).data( "ui-autocomplete" )._renderItem = function( ul, employee ) {
+            return $( "<li>" )
+              .append( "<div>" + employee.name +"</div>" )
+              .appendTo( ul );
+          }
+        },
+        select: function( event, ui ) {
+          insert_homeroom_values(event.target, ui.item); 
+          return false;
+        }
+      });  
+    
+    function insert_homeroom_values(el, employee) {
+      let row = $(el).closest('tr');
+      $(el).val(employee.name);
+      $(".homeroom_id").val(employee.id);      
+      $(".homeroom_name").val(employee.homeroom);      
+      console.log(employee);
+    }   
+  });
+  
+  $("form").on("keypress", function (e) {
+    if (e.keyCode == 13) {
+        return false;
+    }
+  });
+
+ 
