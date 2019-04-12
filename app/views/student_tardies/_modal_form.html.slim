@@ -8,14 +8,15 @@
             li = message
     .row
       .input-field.col.s3
-        = f.label :grade, "Grade", class:'active'
-        = f.collection_select :grade, GradeSection.all.order(:id) ,:id, :name
+        = f.label :grade_section_id, "Grade", class:'active'
+        = f.collection_select :grade_section_id, GradeSection.all.order(:id) ,:id, :name
     .row    
       .input-field.col.s7
         = label_tag :student, "Student Name", class:'active'
         = text_field_tag :student, '', class:'student_autocomplete'
         = f.hidden_field :student_id, class:'student_id'
         = f.hidden_field :academic_year_id, value:AcademicYear.current_id  
+        = f.hidden_field :date_tardy, value: Date.today
       .input-field.col.s5
         = label_tag :teacher, "Teacher", class:'active'
         = text_field_tag :homeroom_name, '', class:'homeroom_name'
@@ -35,7 +36,7 @@
 javascript:
   $(document).on('focus', '.student_autocomplete', function() {
     $(this).autocomplete({
-        source: "/students?format=json&section="+$('#student_tardy_grade').val(),
+        source: "/students?format=json&section="+$('#student_tardy_grade_section_id').val(),
         max: 30,
         minLength: 3,
         create: function() {
@@ -54,8 +55,7 @@ javascript:
     function insert_student_values(el, student) {
       let row = $(el).closest('tr');
       $(el).val(student.name);
-      $(".student_id").val(student.id);
-      $(".student_grade").val(student.grade);
+      $(".student_id").val(student.id);      
       $(".homeroom_name").val(student.homeroom);
       $(".homeroom_id").val(student.homeroom_id);
       console.log(student);      

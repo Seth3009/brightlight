@@ -3,6 +3,20 @@ h4 Student Tardies
 nav
   .nav-wrapper
     - if can? :create, StudentTardy
+      ul        
+        li style="padding: 0 20px"         
+          | Date :
+        li
+          = date_field_tag 'from_date', params[:fd] || Date.today
+        li
+          | &nbsp to &nbsp &nbsp
+        li
+          = date_field_tag 'to_date', params[:td] || Date.today  
+        li
+          | &nbsp &nbsp &nbsp
+        li
+          .waves-effect.waves-light.btn.blue#btnrefresh
+            | Refresh
       ul.right
         li        
           = link_to new_student_tardy_path, remote:true
@@ -25,9 +39,9 @@ nav
     tbody
       - @student_tardies.each do |student_tardy|
         tr
-          td = student_tardy.created_at.try(:strftime, "%d/%m/%Y")
+          td = student_tardy.date_tardy.try(:strftime, "%m/%d/%Y")
           td = student_tardy.student.name
-          td = student_tardy.grade
+          td = student_tardy.grade_section.name
           td = student_tardy.reason
           td = student_tardy.employee
           td = student_tardy.academic_year.name
@@ -43,3 +57,17 @@ nav
     
 #edit-modal.modal.modal-fixed-footer
   #edit-modal-content
+
+javascript:
+  $(function(){
+      // bind click event to get data
+      $('#btnrefresh').on('click', function () {          
+          var date = $('#from_date').val(); 
+          var date2 = $('#to_date').val();
+          var url = new URL(window.location.href);                  
+          if (date) { // require a URL
+              window.location = "student_tardies?fd="+date+"&td="+date2; // redirect              
+          }
+          return false;
+      });
+    });

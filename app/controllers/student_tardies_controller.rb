@@ -4,7 +4,7 @@ class StudentTardiesController < ApplicationController
   # GET /student_tardies
   # GET /student_tardies.json
   def index
-    @student_tardies = StudentTardy.all
+    @student_tardies = StudentTardy.where(date_tardy:(params[:fd] || Date.today)..(params[:td] || Date.today))
   end
 
   # GET /student_tardies/1
@@ -28,7 +28,7 @@ class StudentTardiesController < ApplicationController
 
     respond_to do |format|
       if @student_tardy.save
-        format.html { redirect_to @student_tardy, notice: 'Student tardy was successfully created.' }
+        format.html { redirect_to student_tardies_url, notice: 'Student tardy was successfully created.' }
         format.json { render :show, status: :created, location: @student_tardy }
       else
         format.html { render :new }
@@ -69,6 +69,6 @@ class StudentTardiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def student_tardy_params
-      params.require(:student_tardy).permit(:student_id, :grade, :reason, :employee_id, :academic_year_id)
+      params.require(:student_tardy).permit(:student_id, :grade, :reason, :employee_id, :academic_year_id, :date_tardy, :grade_section_id)
     end
 end
