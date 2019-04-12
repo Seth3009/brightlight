@@ -1,5 +1,5 @@
 class RequisitionsController < ApplicationController
-  before_action :set_requisition, only: [:show, :edit, :send, :edit_account, :update, :update_account, :destroy, :approve]
+  before_action :set_requisition, only: [:show, :edit, :submit, :edit_account, :update, :update_approval, :update_account, :destroy, :approve]
 
   # GET /requisitions
   # GET /requisitions.json
@@ -97,8 +97,8 @@ class RequisitionsController < ApplicationController
     respond_to do |format|
       if @requisition.save
         format.html do
-          if params[:send]
-            redirect_to send_requisition_path @requisition
+          if params[:submit]
+            redirect_to submit_requisition_path(@requisition, method: :post)
           else
             redirect_to @requisition, notice: 'Purchase request draft has been successfully created.'
           end
@@ -118,7 +118,7 @@ class RequisitionsController < ApplicationController
 
   # POST /requisition/1/submit
   def submit
-    authorize! :create, @requisition
+    authorize! :manage, @requisition
     @requisition.submit!
     redirect_to @requisition, notice: 'Purchase request has been saved and sent for approval.' 
   end
@@ -179,65 +179,30 @@ class RequisitionsController < ApplicationController
 
   # GET /requisitions/1/approve
   def approve
-    authorize! :approve, @requisition if params[:appvl] == 'supv'
-    authorize! :approve_budget, @requisition if params[:appvl] == 'budget'
+    authorize! :approve, @requisition if @requisition.level1?
+    authorize! :approve_budget, @requisition if @requisition.level2? || @requisition.level3?
     @employee = @requisition.requester
-    @manager = @employee.manager || @employee.supervisor
-    @department = @requisition.department || @employee.department
-    @supervisors = Employee.active.supervisors.all
+    @department = @requisition.department
     @accounts = Account.for_department_id(@employee.department_id) rescue []
-    @button_state = !@requisition.is_budgeted && @requisition.is_supv_approved && !@requisition.is_budget_approved && @requisition.budget_approver_id
+    @approval = @requisition.approvals.joins(:approver).where(approvers: {employee_id: current_user.employee.try(:id)}).take
   end
 
   # POST update_approval
   def update_approval
-    authorize! :approve, @requisition
+    authorize! :approve, @requisition if @requisition.level1?
+    authorize! :approve_budget, @requisition if @requisition.level2? || @requisition.level3?
     respond_to do |format|
-      @requisition.supv_approved_date ||= Date.today if requisition_params["is_supv_approved"] == "1"
-      @requisition.budget_approved_date ||= Date.today if requisition_params["is_budget_approved"] == "1"
-      @requisition.budget = @requisition.budget_item.try(:budget)
-      if @requisition.update(requisition_params)
-        if params[:send]
-          if params[:send] == 'supv'
-            approver = @requisition.supervisor || @requisition.requester.supervisor || @requisition.requester.manager
-          else
-            approver = @requisition.budget_approver
-          end
-          if @requisition.send_for_approval(approver, params[:send])
-            @message = 'Purchase request has been sent for approval.'
-            format.html { redirect_to @requisition, notice: @message }
-            format.json { render :show, status: :ok, location: @requisition }
-            format.js
-          else
-            @error = 'Error: Purchase request cannot be sent for approval.'
-            format.html { redirect_to edit_requisition_path(@requisition), alert: @error }
-            format.json { render :show, status: :ok, location: @requisition }
-            format.js
-          end
-        elsif params[:approve] && @requisition.approved?
-          @requisition.send_to_purchasing 
-          @message = 'Purchase request has been sent for approval.'
-          format.html { redirect_to @requisition, notice: @message }
-          format.json { render :show, status: :ok, location: @requisition }
-          format.js
-        else
-          @message = 'Purchase request was successfully saved.'
-          format.html { redirect_to @requisition, notice: @message }
-          format.json { render :show, status: :ok, location: @requisition }
-          format.js
-        end
-      else
-        @error = 'Error updating purchase request.'
-        format.html do 
-          @employee = @requisition.requester || current_user.employee
-          @department = @requisition.department || @employee.department
-          @accounts = Account.for_department_id(@employee.department_id) rescue []
-          @supervisors = Employee.supervisors.all
-          render :edit 
-        end
-        format.json { render json: @requisition.errors, status: :unprocessable_entity }
-        format.js
+      if @requisition.level1?
+        @requisition.supv_approved_date ||= Date.today 
+        @requisition.l1_approve!
+      elsif @requisition.level2?
+        @requisition.l2_approve!
+      elsif @requisition.level3?
+        @requisition.l3_approve!
+        @requisition.budget_approved_date ||= Date.today 
       end
+      @requisition.update(requisition_params)
+      format.html { redirect_to @requisition }
     end
   end
 
@@ -271,7 +236,8 @@ class RequisitionsController < ApplicationController
                                                                   :currency, :notes, :qty_ordered, :order_date, :qty_delivered, :delivery_date,
                                                                   :qty_accepted, :acceptance_date, :qty_rejected, :acceptance_notes, :reject_notes,
                                                                   :needed_by_date, :id, :created_by, :last_updated_by, :_destroy]},
-                                          {comments_attributes: [:id, :title, :comment, :user_id, :commentable_id, :commentable_type, :role]}
+                                          {comments_attributes: [:id, :title, :comment, :user_id, :commentable_id, :commentable_type, :role]},
+                                          {approvals_attributes: [:id, :level, :approver_id, :approve, :notes]}
                                           )
     end
 end

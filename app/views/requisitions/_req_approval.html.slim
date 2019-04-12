@@ -1,0 +1,16 @@
+h4 Purchase Request Approval
+
+= form_for @requisition, url: {action: :update_approval} do |f|
+
+  = render 'req_detail', f: f
+  nav
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Items
+      ul.right
+        li
+          = link_to_add_association f, :req_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#requisition'
+            ' Add Item
+            i.material-icons.left playlist_add
+  
+  = render 'req_items', f: f

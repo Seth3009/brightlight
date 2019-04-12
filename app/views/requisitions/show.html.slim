@@ -131,7 +131,8 @@ nav
                   .item = @requisition.req_appvl_notes || "--"
                 - elsif can? :update, @requisition 
                   #submit-button
-                    = link_to requisition_path(@requisition, send:'supv'), data: {params: {requisition: {active: true}}}, method: 'patch', remote: true, class: 'btn waves-effect waves-light'
+                    /= link_to requisition_path(@requisition, send:'supv'), data: {params: {requisition: {active: true}}}, method: 'patch', remote: true, class: 'btn waves-effect waves-light'
+                    = link_to submit_requisition_path(@requisition), method: :post, class: 'btn waves-effect waves-light'
                       | Send for approval 
           li.collection-item.row
             .col.m3

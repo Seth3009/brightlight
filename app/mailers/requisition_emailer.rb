@@ -1,10 +1,9 @@
 class RequisitionEmailer < ActionMailer::Base
   default from: "Brightlight <brightlight@cahayabangsa.org>"
 
-  def approval(requisition:, level: 1)
+  def approval(requisition, level: 1)
     @requisition = requisition
-    @type = type
-    @addressee = @requisition.approvables.level(level).map { |approver| %("#{approver.name}" <#{approver.email}>) }
+    @addressee = @requisition.approvals.level(level).map { |approval| %("#{approval.approver.employee.name}" <#{approval.approver.employee.email}>) }
     mail(to: @addressee, subject: "Approval required: Purchase Request #{requisition.id}.")
   end
 

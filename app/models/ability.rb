@@ -63,7 +63,7 @@ class Ability
       req.budget_approver == @user.employee     # User can only approve requisition that is sent to the respective user
     end
     can :approve, Requisition do |req|
-      req.supervisor == @user.employee          # User can only approve requisition that is sent to the respective user
+      req.approvals.map {|a| a.approver.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
     end
     can :manage, Budget, budget_holder: @user.employee
     can :manage, BudgetItem do |budget_item| 

@@ -88,6 +88,6 @@ class ApproversController < ApplicationController
     end
 
     def sortable_columns 
-      [:employee_name, :department_name, :category]
+      [:employee_name, :department_name, :category, :level]
     end 
 end

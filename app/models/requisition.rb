@@ -16,8 +16,10 @@ class Requisition < ActiveRecord::Base
   has_many :req_items, -> { order(:id) }, dependent: :destroy
   has_many :po_reqs
   has_many :purchase_orders, through: :po_reqs
+  has_many :approvals, as: :approvable
 
   accepts_nested_attributes_for :req_items, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :approvals
 
   validates :department, presence: true
   validates :requester, presence: true
@@ -60,7 +62,7 @@ class Requisition < ActiveRecord::Base
     .order(:id)
   }
 
-  aasm column: :status do
+  aasm do
     state :draft, initial: true
     state :level1, :level2, :level3
     state :approved, :rejected
@@ -69,7 +71,8 @@ class Requisition < ActiveRecord::Base
     event :submit do
       transitions from: :draft, to: :level1
       after do
-        notify_approvers level:1
+        set_approvals level: 1
+        notify_approvers level: 1
       end
     end
 
@@ -110,6 +113,10 @@ class Requisition < ActiveRecord::Base
       transitions from: :approved, to: :open
     end
   
+  end
+
+  def set_approvals(level: 1)
+    self.approvals << Approval.new_from_approvers(Approver.for(category:'PR', department: self.department, level: 1)) 
   end
 
   def budgeted?
@@ -205,19 +212,13 @@ class Requisition < ActiveRecord::Base
     self.level2? || self.level3?
   end
 
-  def draft?
-    # !submitted?
-    self.draft?
-  end
-
   def submitted?
     sent_to_supv.present?
   end
 
-  def approved?
-    # (is_supv_approved && is_budget_approved) || (is_supv_approved && is_budgeted)
-    self.approved?
-  end
+  # def approved?
+  #   # (is_supv_approved && is_budget_approved) || (is_supv_approved && is_budgeted)
+  # end
 
   # Call back from comment
   def create_email_from_comment(comment)

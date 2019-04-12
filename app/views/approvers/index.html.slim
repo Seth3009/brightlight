@@ -40,12 +40,9 @@ ul#department-options.dropdown-content
       tr
       th = sort_link :employee_name, "Employee"
       th = sort_link :category
+      th = sort_link :level
       th = sort_link :department_name, "Department"
       th = sort_link :event_name, "Event"
-      / th Employee
-      / th Category
-      / th Department
-      / th Event
       th Start date
       th End date
       th Notes
@@ -55,6 +52,7 @@ ul#department-options.dropdown-content
         tr id="row-#{approver.id}"
           td = approver.employee_name
           td = approver.category
+          td = approver.level
           td = approver.department_name
           td = approver.event_name
           td = approver.start_date

@@ -19,7 +19,7 @@ class Approver < ActiveRecord::Base
   scope :level, -> (lvl) { where(level: lvl) }
   scope :for_department, -> (dept) { where(department: dept) }
   
-  def self.for(category:, department:, level: 1)
+  def self.for(category:, department: nil, level: 1)
     where(category: category, department: department, level: level)
   end
 end

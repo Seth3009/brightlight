@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190329075745) do
+ActiveRecord::Schema.define(version: 20190412043157) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,19 @@ ActiveRecord::Schema.define(version: 20190329075745) do
 
   add_index "activity_schedules", ["academic_year_id"], name: "index_activity_schedules_on_academic_year_id", using: :btree
 
+  create_table "approvals", force: :cascade do |t|
+    t.string   "approvable_type"
+    t.integer  "approvable_id"
+    t.integer  "level"
+    t.integer  "approver_id"
+    t.boolean  "approve"
+    t.string   "notes"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "approvals", ["approver_id"], name: "index_approvals_on_approver_id", using: :btree
+
   create_table "approvers", force: :cascade do |t|
     t.integer  "employee_id"
     t.string   "category"
@@ -131,33 +144,6 @@ ActiveRecord::Schema.define(version: 20190329075745) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
-
-  create_table "batch_students", force: :cascade do |t|
-    t.integer  "batch_id"
-    t.integer  "student_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "batch_students", ["batch_id"], name: "index_batch_students_on_batch_id", using: :btree
-  add_index "batch_students", ["student_id"], name: "index_batch_students_on_student_id", using: :btree
-
-  create_table "batches", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "course_id"
-    t.integer  "course_section_id"
-    t.integer  "academic_year_id"
-    t.integer  "academic_term_id"
-    t.date     "start_date"
-    t.date     "end_date"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-  end
-
-  add_index "batches", ["academic_term_id"], name: "index_batches_on_academic_term_id", using: :btree
-  add_index "batches", ["academic_year_id"], name: "index_batches_on_academic_year_id", using: :btree
-  add_index "batches", ["course_id"], name: "index_batches_on_course_id", using: :btree
-  add_index "batches", ["course_section_id"], name: "index_batches_on_course_section_id", using: :btree
 
   create_table "book_assignments", id: false, force: :cascade do |t|
     t.integer  "book_copy_id"
@@ -546,16 +532,6 @@ ActiveRecord::Schema.define(version: 20190329075745) do
   add_index "class_budgets", ["grade_section_id"], name: "index_class_budgets_on_grade_section_id", using: :btree
   add_index "class_budgets", ["holder_id"], name: "index_class_budgets_on_holder_id", using: :btree
 
-  create_table "class_periods", force: :cascade do |t|
-    t.string   "name"
-    t.time     "start_time"
-    t.time     "end_time"
-    t.string   "school"
-    t.string   "is_break"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "comments", force: :cascade do |t|
     t.string   "title",            limit: 50, default: ""
     t.text     "comment"
@@ -590,23 +566,6 @@ ActiveRecord::Schema.define(version: 20190329075745) do
   add_index "copy_conditions", ["book_condition_id"], name: "index_copy_conditions_on_book_condition_id", using: :btree
   add_index "copy_conditions", ["book_copy_id"], name: "index_copy_conditions_on_book_copy_id", using: :btree
   add_index "copy_conditions", ["user_id"], name: "index_copy_conditions_on_user_id", using: :btree
-
-  create_table "course_schedules", force: :cascade do |t|
-    t.integer  "course_id"
-    t.integer  "course_section_id"
-    t.integer  "class_period_id"
-    t.integer  "room_id"
-    t.boolean  "active"
-    t.integer  "academic_term_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-  end
-
-  add_index "course_schedules", ["academic_term_id"], name: "index_course_schedules_on_academic_term_id", using: :btree
-  add_index "course_schedules", ["class_period_id"], name: "index_course_schedules_on_class_period_id", using: :btree
-  add_index "course_schedules", ["course_id"], name: "index_course_schedules_on_course_id", using: :btree
-  add_index "course_schedules", ["course_section_id"], name: "index_course_schedules_on_course_section_id", using: :btree
-  add_index "course_schedules", ["room_id"], name: "index_course_schedules_on_room_id", using: :btree
 
   create_table "course_section_histories", force: :cascade do |t|
     t.string   "name"
@@ -660,7 +619,6 @@ ActiveRecord::Schema.define(version: 20190329075745) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.string   "slug"
-    t.integer  "subject_id"
   end
 
   add_index "courses", ["academic_term_id"], name: "index_courses_on_academic_term_id", using: :btree
@@ -668,7 +626,6 @@ ActiveRecord::Schema.define(version: 20190329075745) do
   add_index "courses", ["employee_id"], name: "index_courses_on_employee_id", using: :btree
   add_index "courses", ["grade_level_id"], name: "index_courses_on_grade_level_id", using: :btree
   add_index "courses", ["slug"], name: "index_courses_on_slug", unique: true, using: :btree
-  add_index "courses", ["subject_id"], name: "index_courses_on_subject_id", using: :btree
 
   create_table "currencies", force: :cascade do |t|
     t.string   "foreign"
@@ -972,6 +929,25 @@ ActiveRecord::Schema.define(version: 20190329075745) do
   add_index "fine_scales", ["new_condition_id"], name: "index_fine_scales_on_new_condition_id", using: :btree
   add_index "fine_scales", ["old_condition_id"], name: "index_fine_scales_on_old_condition_id", using: :btree
 
+  create_table "food_deliveries", force: :cascade do |t|
+    t.date     "delivery_date"
+    t.string   "deliver_to"
+    t.string   "notes"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  create_table "food_delivery_items", force: :cascade do |t|
+    t.integer  "food_delivery_id"
+    t.integer  "food_package_id"
+    t.float    "qty"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "food_delivery_items", ["food_delivery_id"], name: "index_food_delivery_items_on_food_delivery_id", using: :btree
+  add_index "food_delivery_items", ["food_package_id"], name: "index_food_delivery_items_on_food_package_id", using: :btree
+
   create_table "food_order_items", force: :cascade do |t|
     t.integer  "food_order_id"
     t.integer  "food_package_id"
@@ -1004,6 +980,7 @@ ActiveRecord::Schema.define(version: 20190329075745) do
     t.datetime "updated_at",                      null: false
     t.float    "qty",              default: 0.0
     t.boolean  "is_active",        default: true
+    t.string   "package_unit"
   end
 
   add_index "food_packages", ["raw_food_id"], name: "index_food_packages_on_raw_food_id", using: :btree
@@ -1401,6 +1378,7 @@ ActiveRecord::Schema.define(version: 20190329075745) do
     t.decimal  "down_payment",       default: 0.0
     t.integer  "req_item_id"
     t.string   "code"
+    t.decimal  "actual_amt"
   end
 
   add_index "order_items", ["created_by_id"], name: "index_order_items_on_created_by_id", using: :btree
@@ -1694,6 +1672,7 @@ ActiveRecord::Schema.define(version: 20190329075745) do
     t.string   "budget_type"
     t.integer  "event_id"
     t.integer  "class_budget_id"
+    t.string   "aasm_state"
   end
 
   add_index "requisitions", ["account_id"], name: "index_requisitions_on_account_id", using: :btree
@@ -2175,15 +2154,10 @@ ActiveRecord::Schema.define(version: 20190329075745) do
   add_foreign_key "account_departments", "accounts"
   add_foreign_key "account_departments", "departments"
   add_foreign_key "activity_schedules", "academic_years"
+  add_foreign_key "approvals", "approvers"
   add_foreign_key "approvers", "departments"
   add_foreign_key "approvers", "employees"
   add_foreign_key "approvers", "events"
-  add_foreign_key "batch_students", "batches"
-  add_foreign_key "batch_students", "students"
-  add_foreign_key "batches", "academic_terms"
-  add_foreign_key "batches", "academic_years"
-  add_foreign_key "batches", "course_sections"
-  add_foreign_key "batches", "courses"
   add_foreign_key "book_fines", "grade_levels"
   add_foreign_key "book_fines", "grade_sections"
   add_foreign_key "book_fines", "student_books"
@@ -2204,13 +2178,7 @@ ActiveRecord::Schema.define(version: 20190329075745) do
   add_foreign_key "class_budgets", "departments"
   add_foreign_key "class_budgets", "grade_levels"
   add_foreign_key "class_budgets", "grade_sections"
-  add_foreign_key "course_schedules", "academic_terms"
-  add_foreign_key "course_schedules", "class_periods"
-  add_foreign_key "course_schedules", "course_sections"
-  add_foreign_key "course_schedules", "courses"
-  add_foreign_key "course_schedules", "rooms"
   add_foreign_key "course_section_histories", "employees", column: "instructor_id"
-  add_foreign_key "courses", "subjects"
   add_foreign_key "currencies", "users"
   add_foreign_key "deliveries", "employees", column: "accepted_by_id"
   add_foreign_key "deliveries", "employees", column: "checked_by_id"
@@ -2251,6 +2219,8 @@ ActiveRecord::Schema.define(version: 20190329075745) do
   add_foreign_key "family_members", "families"
   add_foreign_key "family_members", "guardians"
   add_foreign_key "family_members", "students"
+  add_foreign_key "food_delivery_items", "food_deliveries"
+  add_foreign_key "food_delivery_items", "food_packages"
   add_foreign_key "food_order_items", "food_orders"
   add_foreign_key "food_order_items", "food_packages"
   add_foreign_key "food_orders", "food_suppliers"
