@@ -7,17 +7,21 @@
           - @student_tardy.errors.full_messages.each do |message|
             li = message
     .row
-      .input-field.col.s3
-        = f.label :grade_section_id, "Grade", class:'active'
-        = f.collection_select :grade_section_id, GradeSection.all.order(:id) ,:id, :name
-    .row    
-      .input-field.col.s7
+      .input-field.col.s9
         = label_tag :student, "Student Name", class:'active'
-        = text_field_tag :student, '', class:'student_autocomplete'
+        = text_field_tag :student, '', class:'student_autocomplete',placeholder:"Type student's name or Student's grade or Family number"
         = f.hidden_field :student_id, class:'student_id'
         = f.hidden_field :academic_year_id, value:AcademicYear.current_id  
         = f.hidden_field :date_tardy, value: Date.today
-      .input-field.col.s5
+        = f.hidden_field :grade_section_id, class:'grade_section'
+      .input-field.col.s3
+        = label_tag :family_no, "Family Number", class:'active'
+        = text_field_tag :family_no, '', class:'family_no', disabled:'disabled'
+    .row    
+      .input-field.col.s3
+        = label_tag :grade, "Grade", class:'active'
+        = text_field_tag :grade, '', class:'grade', disabled:'disabled'
+      .input-field.col.s9
         = label_tag :teacher, "Teacher", class:'active'
         = text_field_tag :homeroom_name, '', class:'homeroom_name'
         = f.hidden_field :employee_id, class:'homeroom_id'
@@ -36,13 +40,13 @@
 javascript:
   $(document).on('focus', '.student_autocomplete', function() {
     $(this).autocomplete({
-        source: "/students?format=json&section="+$('#student_tardy_grade_section_id').val(),
+        source: "/students/tardy_list?format=json",
         max: 30,
-        minLength: 3,
+        minLength: 2,
         create: function() {
           $(this).data( "ui-autocomplete" )._renderItem = function( ul, student ) {
             return $( "<li>" )
-              .append( "<div>" + student.name + "</div>" )
+              .append( "<div>" + student.family_no + " " + student.name + " [ " + student.grade + " ]</div>" )
               .appendTo( ul );
           }
         },
@@ -58,6 +62,9 @@ javascript:
       $(".student_id").val(student.id);      
       $(".homeroom_name").val(student.homeroom);
       $(".homeroom_id").val(student.homeroom_id);
+      $(".grade_section").val(student.grade_section);
+      $(".grade").val(student.grade);
+      $(".family_no").val(student.family_no);
       console.log(student);      
     }   
   });
@@ -65,8 +72,11 @@ javascript:
   $(document).on('keyup', '.student_autocomplete', function() {
     if($(this).val() === '') {
       $(this).closest('tr').find(".student_id").val(null); 
-      $(this).closest('tr').find(".homeroom_id").val(null);  
-      $(".homeroom_name").val('');    
+      $(this).closest('tr').find(".homeroom_id").val(null); 
+      $(this).closest('tr').find(".grade_section").val(null);  
+      $(".homeroom_name").val(''); 
+      $(".grade").val('');
+      $(".family_no").val('');   
     }
   });
 
@@ -98,7 +108,7 @@ javascript:
       let row = $(el).closest('tr');
       $(el).val(employee.name);
       $(".homeroom_id").val(employee.id);      
-      $(".homeroom_name").val(employee.homeroom);      
+      $(".homeroom_name").val(employee.name);      
       console.log(employee);
     }   
   });

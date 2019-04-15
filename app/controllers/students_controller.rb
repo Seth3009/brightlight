@@ -34,6 +34,19 @@ class StudentsController < ApplicationController
     end
   end
 
+  def student_tardy_list
+    respond_to do |format|
+      format.json {
+        @students = Student.current
+                    .select('students.id, students.name, students.family_no, grade_sections_students.grade_section_id,
+                    grade_sections_students.order_no, grade_sections.name as grade , grade_sections.homeroom_id, employees.name as homeroom')
+                    .order('students.name')
+        if params[:term].present?
+          @students = @students.student_tardy_search(params[:term])
+        end
+      }
+    end
+  end
   # GET /students/1
   # GET /students/1.json
   def show
