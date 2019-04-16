@@ -38,29 +38,25 @@ class Requisition < ActiveRecord::Base
               :close  => {code: "CLOSE",  description: "All items ordered"},
               :cancel => {code: "CANCEL", description: "Canceled"}}
 
+  scope :with_approval_by, lambda { |employee| 
+    joins(approvals: [:approver])
+    .where('approvers.employee_id = ?', employee.id)
+  }
   scope :pending_supv_approval, lambda { |employee|
-    where(department: employee.try(:department))
-    .where.not(sent_to_supv: nil).where(is_supv_approved: nil).where(supervisor_id: employee.id)
-    .order(:id)
+    with_approval_by(employee)
+    .where('approvals.approve is null')
   }
+  scope :pending_approval, lambda { where(aasm_state: ['level1', 'level2', 'level3']) }
+  scope :approved, lambda { where(aasm_state: 'approved') }
+  scope :draft, lambda { where(aasm_state: 'draft') }
+  scope :rejected, lambda { where(aasm_state: 'rejected') }
 
-  scope :pending_budget_approval, lambda { |employee|
-    where(is_supv_approved: true)
-    .where.not(sent_for_bgt_approval: nil).where(is_budget_approved: nil).where(budget_approver_id: employee.id)
-    .order(:id)
-  }
+  # scope :pending_budget_approval, lambda { |employee|
+  #   where(is_supv_approved: true)
+  #   .where.not(sent_for_bgt_approval: nil).where(is_budget_approved: nil).where(budget_approver_id: employee.id)
+  #   .order(:id)
+  # }
 
-  scope :pending_approval, lambda {
-    where('(sent_to_supv is not null AND is_supv_approved is null)
-            OR (sent_for_bgt_approval is not null and is_budget_approved is null)')
-    .order(:id)
-  }
-
-  scope :approved, lambda {
-    where('(is_supv_approved = true AND is_budget_approved = true)
-           OR (is_supv_approved = true AND is_budgeted = true)')
-    .order(:id)
-  }
 
   aasm do
     state :draft, initial: true
@@ -79,34 +75,36 @@ class Requisition < ActiveRecord::Base
     event :l1_approve do
       transitions from: :level1, to: :approved, if: :budgeted?
       transitions from: :level1, to: :level2, unless: :budgeted?
-      transitions from: :level1, to: :rejected, if: :l1_rejected?
       after do
         if is_budgeted
-          notify_requester :level1
-          notify_purchasing
+          notify_purchasing 
         else
+          set_approvals level: 2
           notify_approvers level: 2
         end
-        notify_requester if l1_rejected?
       end
     end
 
     event :l2_approve do
       transitions from: :level2, to: :level3, if: :l2_approved?
-      transitions from: :level2, to: :rejected, if: :l2_rejected?
       after do
-        notify_requester if l2_rejected?
+        set_approvals level: 3
         notify_approvers level: 3
       end
     end
 
     event :l3_approve do
       transitions from: :level3, to: :approved, if: :l3_approved?
-      transitions from: :level3, to: :rejected, if: :l3_rejected?
       after do
-        notify_requester
         notify_purchasing if l3_approved?
       end
+    end
+
+    event :reject do
+      transitions from: [:level1, :level2, :level3], to: :rejected,
+        after: Proc.new {|level| 
+          notify_requester reason: :rejected, level: level
+        }
     end
 
     event :open_order do
@@ -115,8 +113,13 @@ class Requisition < ActiveRecord::Base
   
   end
 
-  def set_approvals(level: 1)
-    self.approvals << Approval.new_from_approvers(Approver.for(category:'PR', department: self.department, level: 1)) 
+  def set_approvals(level:)
+    approvers = if level == 3 
+                  Approver.for(category:'PR', level: level)
+                else
+                  Approver.for(category:'PR', department: self.department, level: level)  
+                end
+    self.approvals << Approval.new_from_approvers(approvers) 
   end
 
   def budgeted?
@@ -124,27 +127,36 @@ class Requisition < ActiveRecord::Base
   end
 
   def l1_approved?
-    self.approvables.level(1).any? &:approved
+    self.approvals.level(1).any? &:approve
   end
 
   def l2_approved?
-    self.approvables.level(2).any? &:approved
+    self.approvals.level(2).any? &:approve
   end
 
   def l3_approved?
-    self.approvables.level(3).any? &:approved
+    self.approvals.level(3).any? &:approve
   end
 
   def l1_rejected?
-    self.approvables.level(1).any? {|x| x.approved == false}
+    self.approvals.level(1).any? {|x| x.approve == false}
   end
 
   def l2_rejected?
-    self.approvables.level(2).any? {|x| x.approved == false}
+    self.approvals.level(2).any? {|x| x.approve == false}
   end
 
   def l3_rejected?
-    self.approvables.level(3).any? {|x| x.approved == false}
+    self.approvals.level(3).any? {|x| x.approve == false}
+  end
+
+  def notify_requester(reason:, level:)
+    if reason == :rejected
+      email = RequisitionEmailer.not_approved(self, level: level)
+      email.deliver_now
+      notification = Message.new_from_email(email)
+      notification.save
+    end
   end
 
   def notify_approvers(level: 1)
@@ -160,8 +172,7 @@ class Requisition < ActiveRecord::Base
   end
 
   def notify_purchasing
-    purchasing_email = Rails.application.config.purchasing_email_address
-    email = RequisitionEmailer.notify_purchasing(self, purchasing_email)
+    email = RequisitionEmailer.requisition_to_purchasing(self)
     email.deliver_now
     notification = Message.new_from_email(email)
     notification.save
@@ -171,36 +182,11 @@ class Requisition < ActiveRecord::Base
     save
   end
 
-  # def send_for_approval(approver, type)
-  #   if approver
-  #     email = EmailNotification.req_approval(self, approver, type)
-  #     email.deliver_now
-  #     notification = Message.new_from_email(email)
-  #     notification.save
-  #     if type == 'supv'
-  #       self.update_attributes status: Requisition.status_code(:wappr)
-  #       self.update_attributes sent_to_supv: Date.today, supervisor: approver
-  #     elsif type == 'budget'
-  #       self.update_attributes status: Requisition.status_code(:wbgapv)
-  #       self.update_attributes sent_for_bgt_approval: Date.today
-  #     end
-  #   else
-  #     return false
-  #   end
-  #   return true
-  # end 
-
-  # def send_to_purchasing
-  #   purchasing_email = Rails.application.config.purchasing_email_address
-  #   email = EmailNotification.requisition_to_purchasing(self, purchasing_email)
-  #   email.deliver_now
-  #   notification = Message.new_from_email(email)
-  #   notification.save
-  #   self.status = Requisition.status_code(:appvd)
-  #   self.sent_to_purchasing = Date.today
-  #   self.is_submitted = true
-  #   save
-  # end
+  def is_pending_approval_by(employee)
+    approvals.joins(:approver).where('approvers.employee_id = ?', employee.id)
+    .where(approvals: {approve: nil}).present? &&
+    !(['approved', 'rejected'].include? aasm_state)
+  end
 
   def pending_supv_approval?
     # status == Requisition.status_code(:wappr) # && sent_to_supv != nil && is_supv_approved == nil
@@ -215,10 +201,6 @@ class Requisition < ActiveRecord::Base
   def submitted?
     sent_to_supv.present?
   end
-
-  # def approved?
-  #   # (is_supv_approved && is_budget_approved) || (is_supv_approved && is_budgeted)
-  # end
 
   # Call back from comment
   def create_email_from_comment(comment)

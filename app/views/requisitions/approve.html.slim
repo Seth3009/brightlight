@@ -11,10 +11,34 @@ h4 Purchase Request Approval
       .brand-logo style="margin-left: 20px; font-size:1.5em"
         | Approval Action
   .card-panel
-    .row
+    table.compact.striped
+      thead
+        tr
+          th Name
+          th Approval
+          th Date
+          th Notes
+      tbody
+        - @requisition.approvals.where(approve: true).each do |approval|
+          tr 
+            td = approval.approver.try(:employee).try(:name) || "--"
+            td 
+              - if approval.approve == true
+                |Approved
+                i.material-icons.left check_box
+              - elsif approval.approve == false
+                |Not approved
+                i.material-icons.left cancel
+              - else
+                i.material-icons.left check_box_outline_blank
+            td = approval.updated_at.strftime("%d %b %Y") if approval.approve.present?
+            td = approval.notes 
+    br
+    .row.red.lighten-4
       = f.fields_for :approvals do |ff|
         -if ff.object.approver.employee == current_user.employee
-          = ff.hidden_field :level, value: (@requisition.level1? ? 1 : @requisition.level2? ? 2 : 3)
+          .input-field.col.m2
+            = current_user.employee.try(:name)
           .input-field.col.m1.right-align
             = ff.label :approve, 'Approve?', class: 'active'
             = ff.radio_button :approve, true, {class: "with-gap"}
@@ -22,7 +46,7 @@ h4 Purchase Request Approval
           .input-field.col.m1
             = ff.radio_button :approve, false, {class: "with-gap"}
             = ff.label :approve, "No", value: false 
-          .input-field.col.m7
+          .input-field.col.m8
             = ff.label :notes, "Approval Notes"
             = ff.text_field :notes
 
@@ -54,7 +78,7 @@ h4 Purchase Request Approval
  
   .toolbar.z-depth-1
     - unless @requisition.is_submitted
-      button.btn.waves-effect.waves-light type="submit" data-disable=true name="approve" Submit      
+      button.btn.waves-effect.waves-light type="submit" name="approve" Submit      
       - if params[:appvl] == 'supv'
         = button_tag class:"btn waves-effect waves-light", type: "submit", name:"send", id:"send_budget", value:"budget", disabled: (@button_state ? false : true), data: {disable: true}
           | Send for Approval

@@ -3,19 +3,11 @@ h4 Purchase Requests
 
 nav
   .nav-wrapper
-
     ul.right
       li
         = link_to new_requisition_path
           | New
           i.material-icons.left add
-
-ul#dept-options.dropdown-content
-  li  
-    = link_to 'All', requisitions_path(params.merge(dept:'all').symbolize_keys)
-  - Department.all.each do |dept|
-    li 
-      = link_to dept.name, requisitions_path(params.merge(dept: dept.code).symbolize_keys)    
 
 ul.tabs.z-depth-1
   li.tab.col.s4
@@ -25,32 +17,31 @@ ul.tabs.z-depth-1
   - if can? :review, Requisition    
     li.tab.col.s4
       a href='#tab2' 
-        |Dept Approval
-        -if @pending_my_approval && @pending_my_approval.count > 0
-          span.emblem = @pending_my_approval.count
+        |Requisition Approval 
+        / -if @pending_my_approval && @pending_my_approval.count > 0
+        /   span.emblem = @pending_my_approval.count
           
-  - if can? :approve_budget, @pending_budget_approval.try(:take)
-    li.tab.col.s4
-      a href='#tab3' 
-        |Budget Approval
-        -if @pending_budget_approval && @pending_budget_approval.count > 0
-          span.emblem = @pending_budget_approval.count 
+  / - if can? :approve_budget, @pending_budget_approval.try(:take)
+  /   li.tab.col.s4
+  /     a href='#tab3' 
+  /       |Budget Approval
+  /       -if @pending_budget_approval && @pending_budget_approval.count > 0
+  /         span.emblem = @pending_budget_approval.count 
 
 .card-panel
   #tab1.tab-content
     == render partial: 'req_table', locals: { requisitions: @requisitions }
       
   #tab2.tab-content
-    -if @employee.try(:is_manager?)
-      == render partial: 'req_table', locals: { requisitions: @dept_requisitions }
-    -elsif can? :process, Requisition
-      == render partial: 'req_table', locals: { requisitions: @pending_approval }
+    == render partial: 'req_table', locals: { requisitions: @with_my_approval }
+    / -elsif can? :process, Requisition
+    /   == render partial: 'req_table', locals: { requisitions: @pending_approval }
 
-  #tab3.tab-content
-    -if can? :approve_budget, @pending_budget_approval.try(:take)
-      | Cannot approve budget
-    -if can? :review, Requisition
-      == render partial: 'req_table', locals: { requisitions: @pending_budget_approval }
+  / #tab3.tab-content
+  /   -if can? :approve_budget, @pending_budget_approval.try(:take)
+  /     | Cannot approve budget
+  /   -if can? :review, Requisition
+  /     == render partial: 'req_table', locals: { requisitions: @pending_budget_approval }
 
 #show-modal.modal.modal-fixed-footer
   .modal-content

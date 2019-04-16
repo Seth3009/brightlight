@@ -270,7 +270,7 @@ Rails.application.routes.draw do
       patch 'update_approval'
       get 'edit_account'
       patch 'update_account'
-      post 'submit'
+      get 'submit'
     end
   end 
 
