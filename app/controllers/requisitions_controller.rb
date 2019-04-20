@@ -254,7 +254,7 @@ class RequisitionsController < ApplicationController
                                                                   :qty_accepted, :acceptance_date, :qty_rejected, :acceptance_notes, :reject_notes,
                                                                   :needed_by_date, :id, :created_by, :last_updated_by, :_destroy]},
                                           {comments_attributes: [:id, :title, :comment, :user_id, :commentable_id, :commentable_type, :role]},
-                                          {approvals_attributes: [:id, :level, :approver_id, :approve, :notes]}
+                                          {approvals_attributes: [:id, :level, :approver_id, :approve, :sign_date, :notes]}
                                           )
     end
 end

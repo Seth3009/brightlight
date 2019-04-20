@@ -91,7 +91,7 @@ class Requisition < ActiveRecord::Base
     end
 
     event :l3_approve do
-      transitions from: :level3, to: :approved, if: :l3_approved?
+      transitions from: :level3, to: :approved
       after do
         set_inactive level: 3
         notify_purchasing if l3_approved?
@@ -101,6 +101,7 @@ class Requisition < ActiveRecord::Base
     event :reject do
       transitions from: [:level1, :level2, :level3], to: :rejected,
         after: Proc.new {|level| 
+          set_inactive level: level
           notify_requester reason: :rejected, level: level
         }
     end
