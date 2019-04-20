@@ -90,6 +90,9 @@ class Ability
     can [:read,:create], LoanCheck
     can [:create,:read,:update,:destroy], Carpool
     can [:create,:read, :update, :destroy], Requisition, requester: @user.employee
+    can :approve, Requisition do |req|
+      req.approvals.map {|a| a.approver.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
+    end
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
     can_manage_own_leave_request
