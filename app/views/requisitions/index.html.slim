@@ -3,28 +3,49 @@ h4 Purchase Requests
 
 nav
   .nav-wrapper
+    -if @i_am_approver
+      ul
+        li
+          a.dropdown-button href="#!" data-activates="show-options"
+            span = params[:my] == 'action' ? "Showing my approvals" : "Showing my requests"
+            i.material-icons.right arrow_drop_down
     ul.right
       li
         = link_to new_requisition_path
           | New
           i.material-icons.left add
 
+ul#show-options.dropdown-content
+  li
+    = link_to "Show my approvals", requisitions_path(my: 'action') 
+  li
+    = link_to "Show my Requests", requisitions_path(my: 'list') 
+
 ul.tabs.z-depth-1
-  li.tab.col.s4
-    -if can? :read, @requisitions.first
-      a href='#tab1' My Purchase Requests
-
-  - if can? :review, Requisition    
-    li.tab.col.s4
-      a href='#tab2' 
-        |Requisition Approval 
-
+  li.tab.col.s3
+    a.active href='#tab1' 
+      |Pending Approval
+      - if @pending_approval.count > 0
+        span.emblem = @pending_approval.count
+  li.tab.col.s3
+    a href='#tab2' Approved
+  li.tab.col.s3
+    a href='#tab3' Draft
+  li.tab.col.s3
+    a href='#tab4' Rejected
+          
 .card-panel
   #tab1.tab-content
-    == render partial: 'req_table', locals: { requisitions: @requisitions }
+    == render partial: 'req_table', locals: { requisitions: @pending_approval }
       
   #tab2.tab-content
-    == render partial: 'req_table', locals: { requisitions: @with_my_approval }
+    == render partial: 'req_table', locals: { requisitions: @approved_requisitions }
+
+  #tab3.tab-content
+    == render partial: 'req_table', locals: { requisitions: @draft_requisitions }
+      
+  #tab4.tab-content
+    == render partial: 'req_table', locals: { requisitions: @rejected_requisitions }
 
 #show-modal.modal.modal-fixed-footer
   .modal-content

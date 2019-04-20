@@ -21,24 +21,22 @@ nav
 
 ul.tabs.z-depth-1
   li.tab.col.s3
-    a.active href='#tab1' Approved
-  li.tab.col.s3
-    a href='#tab2' 
+    a href='#tab1' 
       |Pending Approval
       - if @pending_approval.count > 0
         span.emblem = @pending_approval.count
   li.tab.col.s3
-    a.active href='#tab3' Draft
+    a.active href='#tab2' Approved
   li.tab.col.s3
-    a.active href='#tab4' Rejected
+    a href='#tab3' Draft
+  li.tab.col.s3
+    a href='#tab4' Rejected
           
 .card-panel
   #tab1.tab-content
-    == render partial: 'req_table', locals: { requisitions: @approved_requisitions }
-      
-  #tab2.tab-content
     == render partial: 'req_table', locals: { requisitions: @pending_approval }
-
+  #tab2.tab-content
+    == render partial: 'req_table', locals: { requisitions: @approved_requisitions }
   #tab3.tab-content
     == render partial: 'req_table', locals: { requisitions: @draft_requisitions }
       

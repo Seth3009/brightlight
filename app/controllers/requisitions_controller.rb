@@ -5,10 +5,21 @@ class RequisitionsController < ApplicationController
   # GET /requisitions.json
   def index
     authorize! :read, Requisition
-
     @employee = current_user.employee
-    @requisitions = Requisition.where(requester_id: @employee.id)
-    @with_my_approval = Requisition.with_approval_by(@employee)
+    approver_list = Approver.for_purchase_requests.where(employee: @employee)
+    @i_am_approver = approver_list.present?
+    @approval_levels = approver_list.map &:level
+    if params[:my] == "action"
+      @approved_requisitions = Requisition.approved.with_approval_by(@employee).order(:id)
+      @pending_approval = Requisition.pending_approval.with_approval_by(@employee).order(:id)
+      @draft_requisitions = Requisition.draft.with_approval_by(@employee).order(:id)
+      @rejected_requisitions = Requisition.rejected.with_approval_by(@employee).order(:id)
+    elsif params[:my] == "list" || params[:my].blank?
+      @approved_requisitions = Requisition.approved.where(requester_id: @employee.id).order(:id)
+      @pending_approval = Requisition.pending_approval.where(requester_id: @employee.id).order(:id)
+      @draft_requisitions = Requisition.draft.where(requester_id: @employee.id).order(:id)
+      @rejected_requisitions = Requisition.rejected.where(requester_id: @employee.id).order(:id)
+    end
   end
 
   # GET /requisitions/list
