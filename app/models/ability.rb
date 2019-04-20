@@ -102,7 +102,7 @@ class Ability
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
     can :approve, Requisition do |req|
-      req.supervisor == @user.employee          # User can only approve requisition that is sent to the respective user
+      req.approvals.map {|a| a.approver.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
     end
     can_manage_own_leave_request
     can_manage_own_requisition    
