@@ -41,6 +41,7 @@ class Requisition < ActiveRecord::Base
   scope :with_approval_by, lambda { |employee| 
     joins(approvals: [:approver])
     .where('approvers.employee_id = ?', employee.id)
+    .uniq
   }
   scope :pending_supv_approval, lambda { |employee|
     with_approval_by(employee)

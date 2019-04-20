@@ -178,7 +178,8 @@ class RequisitionsController < ApplicationController
     @employee = @requisition.requester
     @department = @requisition.department
     @accounts = Account.for_department_id(@employee.department_id) rescue []
-    @approval = @requisition.approvals.joins(:approver).where(approvers: {employee_id: current_user.employee.try(:id)}).take
+    @approvals = @requisition.approvals.joins(:approver).where(approvers: {employee_id: current_user.employee.try(:id)}).to_a
+    @approvals.reject! {|a| a.level == 1 if @requisition.level2? }   # don't show level 1 approval if it's in level 2 already
   end
 
   # POST update_approval

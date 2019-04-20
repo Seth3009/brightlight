@@ -18,15 +18,6 @@ ul.tabs.z-depth-1
     li.tab.col.s4
       a href='#tab2' 
         |Requisition Approval 
-        / -if @pending_my_approval && @pending_my_approval.count > 0
-        /   span.emblem = @pending_my_approval.count
-          
-  / - if can? :approve_budget, @pending_budget_approval.try(:take)
-  /   li.tab.col.s4
-  /     a href='#tab3' 
-  /       |Budget Approval
-  /       -if @pending_budget_approval && @pending_budget_approval.count > 0
-  /         span.emblem = @pending_budget_approval.count 
 
 .card-panel
   #tab1.tab-content
@@ -34,14 +25,6 @@ ul.tabs.z-depth-1
       
   #tab2.tab-content
     == render partial: 'req_table', locals: { requisitions: @with_my_approval }
-    / -elsif can? :process, Requisition
-    /   == render partial: 'req_table', locals: { requisitions: @pending_approval }
-
-  / #tab3.tab-content
-  /   -if can? :approve_budget, @pending_budget_approval.try(:take)
-  /     | Cannot approve budget
-  /   -if can? :review, Requisition
-  /     == render partial: 'req_table', locals: { requisitions: @pending_budget_approval }
 
 #show-modal.modal.modal-fixed-footer
   .modal-content
