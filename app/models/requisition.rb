@@ -51,13 +51,7 @@ class Requisition < ActiveRecord::Base
   scope :approved, lambda { where(aasm_state: 'approved') }
   scope :draft, lambda { where(aasm_state: 'draft') }
   scope :rejected, lambda { where(aasm_state: 'rejected') }
-
-  # scope :pending_budget_approval, lambda { |employee|
-  #   where(is_supv_approved: true)
-  #   .where.not(sent_for_bgt_approval: nil).where(is_budget_approved: nil).where(budget_approver_id: employee.id)
-  #   .order(:id)
-  # }
-
+  scope :active, lambda { where(active: true) }
 
   aasm do
     state :draft, initial: true
@@ -77,6 +71,7 @@ class Requisition < ActiveRecord::Base
       transitions from: :level1, to: :approved, if: :budgeted?
       transitions from: :level1, to: :level2, unless: :budgeted?
       after do
+        set_inactive level: 1
         if is_budgeted
           notify_purchasing 
         else
@@ -89,6 +84,7 @@ class Requisition < ActiveRecord::Base
     event :l2_approve do
       transitions from: :level2, to: :level3, if: :l2_approved?
       after do
+        set_inactive level: 2
         set_approvals level: 3
         notify_approvers level: 3
       end
@@ -97,6 +93,7 @@ class Requisition < ActiveRecord::Base
     event :l3_approve do
       transitions from: :level3, to: :approved, if: :l3_approved?
       after do
+        set_inactive level: 3
         notify_purchasing if l3_approved?
       end
     end
@@ -121,6 +118,10 @@ class Requisition < ActiveRecord::Base
                   Approver.for(category:'PR', department: self.department, level: level)  
                 end
     self.approvals << Approval.new_from_approvers(approvers) 
+  end
+
+  def set_inactive(level:)
+    self.approvals.level(level).update_all active: false 
   end
 
   def budgeted?
@@ -184,7 +185,7 @@ class Requisition < ActiveRecord::Base
   end
 
   def is_pending_approval_by(employee)
-    approvals.joins(:approver).where('approvers.employee_id = ?', employee.id)
+    approvals.active.joins(:approver).where('approvers.employee_id = ?', employee.id)
     .where(approvals: {approve: nil}).present? &&
     !(['approved', 'rejected'].include? aasm_state)
   end

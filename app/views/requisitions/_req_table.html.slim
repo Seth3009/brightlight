@@ -40,7 +40,3 @@
             - if requisition.is_pending_approval_by current_user.employee
               = link_to approve_requisition_path(requisition), class:'btn btn-small'
                 |Approval
-                /i.material-icons thumbs_up_down
-            / - if requisition.pending_budget_approval? and can?(:approve_budget, requisition)
-            /   = link_to approve_requisition_path(requisition, appvl: 'budget')
-            /     i.material-icons thumbs_up_down

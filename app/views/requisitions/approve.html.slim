@@ -38,6 +38,7 @@ h4 Purchase Request Approval
       = f.fields_for :approvals, @approvals do |ff|
         .input-field.col.m2
           = current_user.employee.try(:name)
+          = ff.hidden_field sign_date, value: Date.today
         .input-field.col.m1.right-align
           = ff.label :approve, 'Approve?', class: 'active'
           = ff.radio_button :approve, true, {class: "with-gap"}

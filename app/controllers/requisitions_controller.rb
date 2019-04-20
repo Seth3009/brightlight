@@ -8,7 +8,6 @@ class RequisitionsController < ApplicationController
     @employee = current_user.employee
     approver_list = Approver.for_purchase_requests.where(employee: @employee)
     @i_am_approver = approver_list.present?
-    @approval_levels = approver_list.map &:level
     if params[:my] == "action"
       @approved_requisitions = Requisition.approved.with_approval_by(@employee).order(:id)
       @pending_approval = Requisition.pending_approval.with_approval_by(@employee).order(:id)
