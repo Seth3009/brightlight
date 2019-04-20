@@ -203,19 +203,19 @@ class RequisitionsController < ApplicationController
         if approvals.level(1).any? {|a| a.approve == true }
           @requisition.l1_approve!
         elsif approvals.level(1).any? {|a| a.approve == false }
-          @requisition.reject!
+          @requisition.reject! 1
         end
       elsif @requisition.level2?
         if approvals.level(2).any? {|a| a.approve == true }
           @requisition.l2_approve!
         elsif approvals.level(2).any? {|a| a.approve == false }
-          @requisition.reject!
+          @requisition.reject! 2
         end
       elsif @requisition.level3?
         if approvals.level(3).any? {|a| a.approve == true }
           @requisition.l3_approve!
         elsif approvals.level(3).any? {|a| a.approve == false }
-          @requisition.reject!
+          @requisition.reject! 3
         end
         @requisition.budget_approved_date ||= Date.today 
       end
