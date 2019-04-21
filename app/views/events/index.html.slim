@@ -1,31 +1,41 @@
-h1 Listing events
+h4 Listing events
 
-table
-  thead
-    tr
-      th Name
-      th Department
-      th Description
-      th Manager
-      th Start date
-      th End date
-      th
-      th
-      th
+nav
+  .nav-wrapper
+    ul.right
+      li 
+        = link_to new_event_path
+          |New Event
+          i.material-icons.left add
 
-  tbody
-    - @events.each do |event|
+.card-panel
+  table.compact.striped
+    thead
       tr
-        td = event.name
-        td = event.department
-        td = event.description
-        td = event.manager
-        td = event.start_date
-        td = event.end_date
-        td = link_to 'Show', event
-        td = link_to 'Edit', edit_event_path(event)
-        td = link_to 'Destroy', event, data: {:confirm => 'Are you sure?'}, :method => :delete
+        th Name
+        th Department
+        th Description
+        th PIC
+        th Start date
+        th End date
+        th Actions
 
-br
 
-= link_to 'New Event', new_event_path
+    tbody
+      - @events.each do |event|
+        tr id="row-#{event.id}"
+          td = event.name
+          td = event.department
+          td = event.description
+          td = event.manager
+          td = event.start_date
+          td = event.end_date
+          td 
+            = link_to event
+              i.material-icons.left visibility
+            = link_to edit_event_path(event)
+              i.material-icons.left edit
+            = remote_link_to_delete event, message: "Event has been deleted", class: "left waves-effect waves-light red-text"
+              i.material-icons delete
+
+

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190420102022) do
+ActiveRecord::Schema.define(version: 20190421064850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -891,8 +891,13 @@ ActiveRecord::Schema.define(version: 20190420102022) do
     t.date     "end_date"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.string   "aasm_state"
+    t.boolean  "active"
+    t.integer  "creator_id"
+    t.decimal  "budget"
   end
 
+  add_index "events", ["creator_id"], name: "index_events_on_creator_id", using: :btree
   add_index "events", ["department_id"], name: "index_events_on_department_id", using: :btree
   add_index "events", ["manager_id"], name: "index_events_on_manager_id", using: :btree
 

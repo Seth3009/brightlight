@@ -1,4 +1,6 @@
 class Event < ActiveRecord::Base
+  include AASM
+  
   belongs_to :department
   belongs_to :manager, class_name: 'Employee'
   belongs_to :creator, class_name: 'Employee'
