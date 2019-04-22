@@ -95,10 +95,11 @@ javascript:
     if(setCheck!=this){
       setCheck=this;
       $("#student_books_"+id+"_end_copy_condition_id").prop("value", condition);
+      $(this).closest("tr").removeClass('red lighten-4');
     } else { 
       $(this).prop("checked", false);
       $("#student_books_"+id+"_end_copy_condition_id").prop("value", null);
+      $(this).closest("tr").addClass('red lighten-4');
       setCheck=null;
     }
-    console.log("Setting: "+id+" to "+condition);
   });
