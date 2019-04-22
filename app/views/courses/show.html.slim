@@ -48,7 +48,7 @@ nav
           li.tab.col.s6
             a href='#tab1' Sections
           li.tab.col.s6
-            a href='#tab2' Textbooks
+            a href='#tab2' Course Texts
 
         #tab1
           .card-content
@@ -89,8 +89,8 @@ nav
                         p = course_text.book_title.publisher || '--'
                         .label Link
                         = link_to course_text.book_title
-                          | Visit link
-                          i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show" visibility
+                          | Book Title 
+                          i.material-icons.left open_in_new
               / table.striped
               /   tbody
               /   - @course.course_texts.each do |course_text|

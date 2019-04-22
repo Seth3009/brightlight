@@ -39,6 +39,7 @@ class BookTitlesController < ApplicationController
           @book_titles = BookTitle
             .search_query(params[:term])
             .includes(:book_editions)
+            .paginate(page: params[:page], per_page: items_per_page)
         elsif params[:copy]
           redirect_to book_copy_path(params[:copy].upcase)
         end

@@ -1,4 +1,4 @@
-h4 Textbooks for #{@course.name} (#{@course.number})
+h4 Course texts for #{@course.name} (#{@course.number})
 
 nav
   .nav-wrapper
@@ -6,16 +6,17 @@ nav
       li
         = link_to @course
           i.material-icons chevron_left
-      li.right
-        = link_to course_course_texts_path(@course)
-          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_module
-      li.right
-        = link_to course_course_texts_path(@course, {v:'list'})
-          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
-      li.right
+    ul.right
+      li
         a.waves-effect.waves-light.modal-trigger href="#add-new-title" 
           | Add text book
           i.material-icons.left add
+      li
+        = link_to course_course_texts_path(@course)
+          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
+      li
+        = link_to course_course_texts_path(@course, {v:'block'})
+          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_module
 
 - if @view_style == :list
   .card-panel
@@ -26,6 +27,7 @@ nav
           th Title
           th Author
           th Publisher
+          th Category
           th Actions
 
       tbody
@@ -35,8 +37,10 @@ nav
               td = link_to course_text.book_title.title, course_text.book_title
               td = course_text.book_title.authors
               td = course_text.book_title.publisher
+              td = course_text.book_category.try(:code)
             - else
               td Missing data for Book Title id: #{course_text.book_title_id}
+              td
               td
               td
             td
@@ -66,7 +70,6 @@ nav
             .label Publisher
             p = course_text.book_title.publisher
 
-
 #add-new-title.modal.modal-fixed-footer.ui-front
   = form_tag ({controller: "course_texts", action: "create"}) do
     .modal-content
@@ -77,6 +80,12 @@ nav
           = text_field_tag :title_field, '', class: 'title_autocomplete' 
           = hidden_field :course_text, :course_id, {value: @course.id}
           = hidden_field :course_text, :book_title_id
+        .input-field.col.s12
+          = label_tag :book_category, 'Select book category', class: 'active'
+          = collection_select :course_text, :book_category_id, BookCategory.all, :id, :name, prompt: 'Select category'
+        .input-field.col.s12
+          = label_tag :notes
+          = text_field :course_text, :notes
       .row
         .col.s3
           img#book-cover.list_image
@@ -95,14 +104,12 @@ nav
         minLength: 3,
         create: function() {
           $(this).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-            console.log("CREATE", item);
             return $( "<li>" )
               .append( "<div>" + item.label +"</div>" )
               .appendTo( ul );
           }
         },
         select: function(event, ui) {
-          console.log("SELECT", ui.item);
           event.preventDefault();
           $('#add-button').prop('disabled', false);
           insert_values(ui.item);
