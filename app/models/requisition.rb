@@ -19,7 +19,7 @@ class Requisition < ActiveRecord::Base
   has_many :approvals, as: :approvable
 
   accepts_nested_attributes_for :req_items, reject_if: :all_blank, allow_destroy: true
-  accepts_nested_attributes_for :approvals
+  accepts_nested_attributes_for :approvals, reject_if: :all_blank
 
   validates :department, presence: true
   validates :requester, presence: true
