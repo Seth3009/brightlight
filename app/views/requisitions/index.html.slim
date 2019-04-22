@@ -7,7 +7,7 @@ nav
       ul
         li
           a.dropdown-button href="#!" data-activates="show-options"
-            span = params[:my] == 'action' ? "Showing my approvals" : "Showing my requests"
+            span = params[:my] == 'action' || @i_am_approver ? "Showing my approvals" : "Showing my requests"
             i.material-icons.right arrow_drop_down
     ul.right
       li
