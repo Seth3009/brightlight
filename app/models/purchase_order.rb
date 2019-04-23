@@ -76,7 +76,7 @@ class PurchaseOrder < ActiveRecord::Base
   end
 
   def status_description
-    self.status.try(:capitalize)
+    self.status.try(:humanize)
   end
 
   def unique_requests

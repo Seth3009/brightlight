@@ -35,12 +35,15 @@ nav
         ul.collection
           li.collection-item.row
             .col.s6.m2
-              .label Req. No.
+              .label No.
               .item = @requisition.id
             .col.s6.m2
-              .label Req. Date
+              .label Required Date
               .item = @requisition.date_required
-            .col.s12.m8
+            .col.s6.m2
+              .label Status
+              .item = @requisition.aasm.current_state.to_s.humanize
+            .col.s12.m6
               .label Description
               .item = @requisition.description
           li.collection-item.row

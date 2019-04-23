@@ -75,7 +75,7 @@ nav
             .item = @purchase_order.currency
           .record-field.s2
             .label Status
-            .item = @purchase_order.status.try(:upcase)
+            .item = @purchase_order.status.humanize
 
 h5 Items
 .card-panel
