@@ -1,5 +1,5 @@
 class PurchaseOrdersController < ApplicationController
-  before_action :set_purchase_order, only: [:show, :list, :edit, :update, :destroy, :letter]
+  before_action :set_purchase_order, only: [:show, :list, :edit, :update, :destroy, :letter, :print, :mark]
 
   # GET /purchase_orders
   # GET /purchase_orders.json
@@ -144,11 +144,32 @@ class PurchaseOrdersController < ApplicationController
   def letter
     authorize! :create, PurchaseOrder
     @supplier = @purchase_order.supplier
-    if params[:template].present?
-      letter_using_template(params[:template])
+    if @supplier.blank?
+      redirect_to @purchase_order, alert: 'Supplier info is missing'
     else
-      letter_html
+      if params[:template].present?
+        letter_using_template(params[:template])
+      else
+        letter_html
+      end
     end
+  end
+
+  def print
+    authorize! :create, PurchaseOrder
+    @purchase_order.order! unless @purchase_order.ordered?
+    respond_to do |format|
+      format.js { head :no_content }
+    end
+  end
+
+  def mark
+    authorize! :update, PurchaseOrder
+    case params[:mark]
+    when 'acknowledge'
+      @purchase_order.acknowledge! if @purchase_order.ordered?
+    end
+    redirect_to @purchase_order
   end
 
   private

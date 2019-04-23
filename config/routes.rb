@@ -343,6 +343,8 @@ Rails.application.routes.draw do
     member do
       get 'list'
       get 'letter'
+      get 'print'
+      get 'mark'
     end
   end
 

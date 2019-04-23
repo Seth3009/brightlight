@@ -46,10 +46,7 @@
           .input-field.col.s3
             = f.label :currency, class: 'active'
             = f.select :currency, [['IDR', 'IDR'], ['USD', 'USD'], ['SGD', 'SGD'], ['AUD', 'AUD'], ['GBP', 'GBP']]
-          .input-field.col.s3.offset-s3
-            = f.label :status, class: "active"
-            = f.select :status, options_for_select(PurchaseOrder::Statuses.map{|k,v| [v[:description],v[:code]]})
-          .input-field.col.s6
+          .input-field.col.offset-s3.s6
             = f.label :buyer, class: "active"
             = f.collection_select :buyer_id, @buyers, :id, :name, class:'material-select'
   nav.light

@@ -27,6 +27,7 @@ class OrderItemsController < ApplicationController
         item: @item
       )
       if @order_item.update(order_item_params)
+        @order_item.purchase_order.order! unless @order_item.purchase_order.ordered?
         @est_total = @all_items.sum :line_amount
         @act_total = @all_items.sum :actual_amt
         format.js 

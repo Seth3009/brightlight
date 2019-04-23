@@ -43,6 +43,12 @@ nav
           i.material-icons.prefix phone
           .label Phone
           .item = @purchase_order.phone_contact
+      - if @purchase_order.ordered? && can?(:update, @purchase_order)
+        .card-panel
+          div PO letter has been sent and received by vendor. Change status to pending delivery. 
+          .right = link_to 'Yes', mark_purchase_order_path(mark:'acknowledge'), class:'btn btn-small'
+          br
+
     .col.s12.m6
       .card-panel
         .row
@@ -69,7 +75,7 @@ nav
             .item = @purchase_order.currency
           .record-field.s2
             .label Status
-            .item = PurchaseOrder::Statuses[@purchase_order.status.to_i]
+            .item = @purchase_order.status.try(:upcase)
 
 h5 Items
 .card-panel
@@ -85,6 +91,8 @@ h5 Items
         th.right-align Non-reccuring
         th.right-align Shipping
         th.right-align Total
+        -unless @purchase_order.requested?
+          th.right-align Actual
         th.right-align Link
 
     tbody
@@ -101,13 +109,20 @@ h5 Items
           td.right-align = currency(item.non_recurring, currency: item.currency)
           td.right-align = currency(item.shipping, currency: item.currency)
           td.right-align = currency(item.line_amount, currency: item.currency)
+          -unless @purchase_order.requested?
+            td.right-align = currency(item.actual_amt, currency: item.currency) || 'N/A'
           td 
             -if item.req_item.requisition
               = link_to item.req_item.requisition, target: 'blank'
                 i.material-icons.right.tooltipped data-position="bottom" data-delay="50" data-tooltip="Purchase Request" open_in_new
             -if item.remark.present?
               i.material-icons.right.orange-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="#{item.remark}" speaker_notes
-
+    tfoot
+      tr.compact
+        td.right-align colspan=8 Subtotal
+        td.right-align = currency(@purchase_order.order_items.sum(:line_amount), currency: @purchase_order.currency) || 'N/A'
+        -unless @purchase_order.requested?
+          td.right-align = currency(@purchase_order.order_items.sum(:actual_amt), currency: @purchase_order.currency) || 'N/A'
 .row
   .col.s12.m8
     .card-panel

@@ -1,4 +1,6 @@
 class PurchaseOrder < ActiveRecord::Base
+  include AASM 
+
   belongs_to :department
   belongs_to :requestor, class_name: 'Employee'
   belongs_to :approver, class_name: 'Employee'
@@ -18,11 +20,41 @@ class PurchaseOrder < ActiveRecord::Base
 
   after_create :assign_po_number
 
-  Statuses = {:reqstd => {code: "REQSTD", description: "Requested"}, 
-              :order  => {code: "ORDER", description: "Ordered"}, 
-              :pendv  => {code: "PENDV", description: "Pending Delivery"}, 
-              :recvd  => {code: "RECVD", description: "Received"}, 
-              :cancel => {code: "CANCEL", description:  "Canceled"}}
+  aasm column: 'status' do
+    state :requested, initial: true
+    state :ordered
+    state :pending_delivery
+    state :received
+    state :canceled
+
+    event :order do
+      transitions from: :requested, to: :ordered
+      after do
+        notify_requesters
+      end
+    end
+
+    event :acknowledge do
+      transitions from: :ordered, to: :pending_delivery
+      after do
+        fill_in_actuals
+      end
+    end
+
+    event :receive do
+      transitions from: [:ordered, :pending_delivery], to: :received
+      after do
+        notify_requesters
+      end
+    end
+
+    event :cancel do
+      transitions from: [:requested, :ordered, :pending_delivery], to: :canceled
+      after do
+        notify_requesters
+      end
+    end
+  end
 
   def self.new_from_requisition(req)
     purchase_order = PurchaseOrder.new 
@@ -44,7 +76,7 @@ class PurchaseOrder < ActiveRecord::Base
   end
 
   def status_description
-    PurchaseOrder::Statuses[self.status.downcase.to_sym][:description] rescue nil
+    self.status.try(:capitalize)
   end
 
   def unique_requests
@@ -53,8 +85,18 @@ class PurchaseOrder < ActiveRecord::Base
 
   def notify_requesters
     self.unique_requests.each do |req|
-      email = EmailNotification.po_processed(req, self).deliver_now
-      Message.create_from_email(email)
+      unless req.open?
+        req.open_order!
+        email = PurchaseOrderEmailer.notify_requesters(req, self).deliver_now
+        Message.create_from_email(email)
+      end
+    end
+  end
+
+  def fill_in_actuals
+    self.order_items.each do |item|
+      item.actual_amt = item.line_amount
+      item.save
     end
   end
 

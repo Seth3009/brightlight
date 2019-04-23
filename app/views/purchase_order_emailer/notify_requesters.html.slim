@@ -1,0 +1,32 @@
+doctype html
+html
+  head
+    = stylesheet_link_tag "email", media: "all", 'data-turbolinks-track' => true
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+  body
+    div style="margin-left:30px; width=85%; font-size:16px"
+
+      p A Purchase Order related to your purchase request has changed status.
+
+      table.description-list
+        tbody
+          tr
+            td Requester
+            td 
+              strong = @requisition.requester.try(:name)
+          tr 
+            td Purchase Request
+            td = link_to "Purchase Request No. #{@requisition.id}", @requisition
+          tr 
+            td Purchase Order
+            td = link_to "Purchase Request No. #{@po.id}", @po
+          tr 
+            td New status
+            td = @po.aasm.current_state.upcase
+
+      P Please contact Purchasing (Ms. Nori, ext. 36) for any question.
+
+      p Thank you for using <i>Brightlight</i>. 
+    
+    = render 'footer'

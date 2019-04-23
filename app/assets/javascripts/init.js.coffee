@@ -17,4 +17,6 @@ $(document).on 'ajax:success', '.delete-link', ->
   $(this).closest("tr").remove()
   Materialize.toast $(this).data("message"), 4000, "green"
 
-
+$(document).on 'click', '.go-print', ->
+  window.print()
+  return false

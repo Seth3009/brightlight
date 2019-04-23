@@ -10,7 +10,7 @@ nav
           | Process FPB
           i.material-icons.left play 
     ul.right
-      = link_to '#', onclick: 'window.print();return false;' 
+      = link_to print_purchase_order_path(@purchase_order), remote: true, class: 'go-print'
         | Print
         i.material-icons.left print
 
