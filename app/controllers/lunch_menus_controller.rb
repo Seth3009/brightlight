@@ -58,6 +58,7 @@ class LunchMenusController < ApplicationController
     respond_to do |format|
       format.html { redirect_to lunch_menus_url, notice: 'Lunch menu was successfully destroyed.' }
       format.json { head :no_content }
+      format.js { head :no_content }
     end
   end
 

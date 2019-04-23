@@ -60,7 +60,7 @@ class MessagesController < ApplicationController
     @message.destroy
     respond_to do |format|
       format.html { redirect_to messages_url, notice: 'Message was deleted.' }
-      format.js 
+      format.js { head :no_content }
       format.json { head :no_content }
     end
   end

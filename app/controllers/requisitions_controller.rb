@@ -195,6 +195,7 @@ class RequisitionsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to requisitions_url, notice: 'Purchase request was successfully deleted.' }
       format.json { head :no_content }
+      format.js { head :no_content }
     end
   end
 

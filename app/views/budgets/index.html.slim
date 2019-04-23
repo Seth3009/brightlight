@@ -59,8 +59,8 @@ ul#year-options.dropdown-content
               = link_to edit_budget_path(budget)
                 i.material-icons edit
             - if can? :destroy, budget
-              = link_to budget, data: {id: budget.id, confirm: 'This will delete the budget and related budget items. Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
-                i.material-icons delete
+              = remote_link_to_delete budget, confirm: 'This will delete the budget and related budget items. Are you sure?', message: "Budget was successfully deleted"
+                  i.material-icons delete
 
 #form-upload-modal.modal
   = form_tag({action: :import}, multipart: true) do

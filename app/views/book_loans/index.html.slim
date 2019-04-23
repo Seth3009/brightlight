@@ -84,7 +84,7 @@ nav
               td 
                 = link_to book_loan, remote: true
                   i.material-icons visibility
-                = link_to book_loan, data: {id: book_loan.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
+                = remote_link_to_delete book_loan, message: "Book loan was successfully deleted"
                   i.material-icons delete
 
     - else 
@@ -114,9 +114,3 @@ javascript:
       var url = window.location.href;
       return url.split("?")[0];     
   }
-
-  $('.delete-link').bind('ajax:complete', function() {
-    var id = $(this).data("id");
-    $("tr#row-"+id).remove();
-    Materialize.toast("Book Loan record deleted", 4000, "green");
-  });

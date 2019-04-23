@@ -112,8 +112,9 @@ nav
                 i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="View" visibility
               = link_to edit_book_fine_path(book_fine)
                 i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
-              = link_to book_fine, data: {id: book_fine.id, :confirm => 'Are you sure?'}, :method => :delete, remote:true, class:'red-text delete-link'
-                i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+              = remote_link_to_delete book_fine, message: "Book fine was successfully deleted"
+                  i.material-icons delete
+ 
       - if @student.present?
         tr 
           td colspan=3
@@ -138,9 +139,3 @@ nav
     
 #show-modal.modal.modal-fixed-footer
 
-javascript:
-  $('.delete-link').bind('ajax:complete', function() {
-    var id = $(this).data("id");
-    $("tr#row-"+id).remove();
-    Materialize.toast("Book Fine record deleted", 4000, "green");
-  });

@@ -50,8 +50,9 @@
             - if requisition.draft?
               = link_to edit_requisition_path(requisition)
                 i.material-icons.tooltipped data-position="right" data-delay="50" data-tooltip="Edit" edit
-              = link_to requisition, data: {id: requisition.id, confirm: 'Are you sure?'}, :method => :delete, class:"red-text delete-link", remote: true
-                i.material-icons.tooltipped data-position="right" data-delay="50" data-tooltip="Delete" delete
+              = remote_link_to_delete requisition, message: "Purchase request was successfully deleted"
+                  i.material-icons delete
+
             |&nbsp;&nbsp;
             - if requisition.pending_supv_approval? and can?(:approve, requisition)
               = link_to approve_requisition_path(requisition, appvl: 'supv')

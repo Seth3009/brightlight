@@ -54,6 +54,7 @@ class TemplateTargetsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to template_targets_url, notice: 'Template target was successfully destroyed.' }
       format.json { head :no_content }
+      format.js { head :no_content }
     end
   end
 

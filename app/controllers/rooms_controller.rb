@@ -67,6 +67,7 @@ class RoomsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to rooms_url, notice: 'Room was successfully destroyed.' }
       format.json { head :no_content }
+      format.js { head :no_content }
     end
   end
 

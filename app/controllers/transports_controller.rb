@@ -127,6 +127,7 @@ class TransportsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to transports_url, notice: 'Transport was successfully destroyed.' }
       format.json { head :no_content }
+      format.js { head :no_content }
     end
   end
 

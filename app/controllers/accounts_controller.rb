@@ -59,7 +59,7 @@ class AccountsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to accounts_url, notice: 'Account was successfully destroyed.' }
       format.json { head :no_content }
-      format.js
+      format.js { head :no_content }
     end
   end
 

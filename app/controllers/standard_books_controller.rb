@@ -126,6 +126,7 @@ class StandardBooksController < ApplicationController
     respond_to do |format|
       format.html { redirect_to standard_books_url, notice: 'Standard book was successfully destroyed.' }
       format.json { head :no_content }
+      format.js { head :no_content }
     end
   end
 
