@@ -142,13 +142,15 @@ table.description-list {
 }
 
 td.actions {
+	min-width: 112px;
 	a {
-		padding-right: 0 15px;
+		margin-right: 0;
 	}
 }
 
 td > a > i.material-icons {
-	margin-right: 10px;
+	margin-right: 5px;
+	margin-left: 5px;
 }
 
 table.medium {

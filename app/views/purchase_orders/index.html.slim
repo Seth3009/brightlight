@@ -24,23 +24,23 @@ nav
         th Order num
         th Supplier
         th Items
-        th.wd10 Order date
+        th Order date
         th.right-align Total amount
         th Requestor
-        th.wd10 Status
-        th.wd10 Actions
+        th Status
+        th Actions
 
     tbody
       - @purchase_orders.each do |purchase_order|
         tr
           td = purchase_order.order_num
           td = purchase_order.supplier.try(:company_name)
-          td = purchase_order.order_items.map {|item| item.description}.join(", ") if purchase_order.order_items
-          td.wd10 = purchase_order.order_date
+          td = purchase_order.order_items.map {|item| item.description}.join(", ").truncate(130) if purchase_order.order_items
+          td = purchase_order.order_date
           td.right-align = currency(purchase_order.total_amount, currency: purchase_order.currency)
           td = purchase_order.requestor
-          td.wd10 = purchase_order.status_description
-          td.wd10
+          td = purchase_order.status_description
+          td.actions
             = link_to purchase_order
               i.material-icons visibility
             - if can? :update, PurchaseOrder
