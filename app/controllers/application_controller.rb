@@ -57,6 +57,10 @@ class ApplicationController < ActionController::Base
   	session[:year_id] ||= AcademicYear.current_id
   end
 
+  def current_employee
+    current_user.employee 
+  end
+
   # rescue_from (ActiveRecord::RecordNotFound) { |exception| handle_exception(exception, 404) }
   
   def sort_column    

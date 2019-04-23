@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190410051125) do
+ActiveRecord::Schema.define(version: 20190421064850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,21 @@ ActiveRecord::Schema.define(version: 20190410051125) do
   end
 
   add_index "activity_schedules", ["academic_year_id"], name: "index_activity_schedules_on_academic_year_id", using: :btree
+
+  create_table "approvals", force: :cascade do |t|
+    t.string   "approvable_type"
+    t.integer  "approvable_id"
+    t.integer  "level"
+    t.integer  "approver_id"
+    t.boolean  "approve"
+    t.string   "notes"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.date     "sign_date"
+    t.boolean  "active",          default: true
+  end
+
+  add_index "approvals", ["approver_id"], name: "index_approvals_on_approver_id", using: :btree
 
   create_table "approvers", force: :cascade do |t|
     t.integer  "employee_id"
@@ -932,8 +947,13 @@ ActiveRecord::Schema.define(version: 20190410051125) do
     t.date     "end_date"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.string   "aasm_state"
+    t.boolean  "active"
+    t.integer  "creator_id"
+    t.decimal  "budget"
   end
 
+  add_index "events", ["creator_id"], name: "index_events_on_creator_id", using: :btree
   add_index "events", ["department_id"], name: "index_events_on_department_id", using: :btree
   add_index "events", ["manager_id"], name: "index_events_on_manager_id", using: :btree
 
@@ -1712,14 +1732,20 @@ ActiveRecord::Schema.define(version: 20190410051125) do
     t.date     "sent_for_bgt_approval"
     t.string   "status"
     t.integer  "account_id"
+    t.string   "budget_type"
+    t.integer  "event_id"
+    t.integer  "class_budget_id"
+    t.string   "aasm_state"
   end
 
   add_index "requisitions", ["account_id"], name: "index_requisitions_on_account_id", using: :btree
   add_index "requisitions", ["budget_approver_id"], name: "index_requisitions_on_budget_approver_id", using: :btree
   add_index "requisitions", ["budget_id"], name: "index_requisitions_on_budget_id", using: :btree
   add_index "requisitions", ["budget_item_id"], name: "index_requisitions_on_budget_item_id", using: :btree
+  add_index "requisitions", ["class_budget_id"], name: "index_requisitions_on_class_budget_id", using: :btree
   add_index "requisitions", ["created_by_id"], name: "index_requisitions_on_created_by_id", using: :btree
   add_index "requisitions", ["department_id"], name: "index_requisitions_on_department_id", using: :btree
+  add_index "requisitions", ["event_id"], name: "index_requisitions_on_event_id", using: :btree
   add_index "requisitions", ["last_updated_by_id"], name: "index_requisitions_on_last_updated_by_id", using: :btree
   add_index "requisitions", ["purch_receiver_id"], name: "index_requisitions_on_purch_receiver_id", using: :btree
   add_index "requisitions", ["req_approver_id"], name: "index_requisitions_on_req_approver_id", using: :btree
@@ -2191,15 +2217,16 @@ ActiveRecord::Schema.define(version: 20190410051125) do
   add_foreign_key "account_departments", "accounts"
   add_foreign_key "account_departments", "departments"
   add_foreign_key "activity_schedules", "academic_years"
-  add_foreign_key "approvers", "departments"
-  add_foreign_key "approvers", "employees"
-  add_foreign_key "approvers", "events"
   add_foreign_key "batch_students", "batches"
   add_foreign_key "batch_students", "students"
   add_foreign_key "batches", "academic_terms"
   add_foreign_key "batches", "academic_years"
   add_foreign_key "batches", "course_sections"
   add_foreign_key "batches", "courses"
+  add_foreign_key "approvals", "approvers"
+  add_foreign_key "approvers", "departments"
+  add_foreign_key "approvers", "employees"
+  add_foreign_key "approvers", "events"
   add_foreign_key "book_fines", "grade_levels"
   add_foreign_key "book_fines", "grade_sections"
   add_foreign_key "book_fines", "student_books"
@@ -2326,12 +2353,14 @@ ActiveRecord::Schema.define(version: 20190410051125) do
   add_foreign_key "requisitions", "accounts"
   add_foreign_key "requisitions", "budget_items"
   add_foreign_key "requisitions", "budgets"
+  add_foreign_key "requisitions", "class_budgets"
   add_foreign_key "requisitions", "departments"
   add_foreign_key "requisitions", "employees", column: "budget_approver_id"
   add_foreign_key "requisitions", "employees", column: "purch_receiver_id"
   add_foreign_key "requisitions", "employees", column: "req_approver_id"
   add_foreign_key "requisitions", "employees", column: "requester_id"
   add_foreign_key "requisitions", "employees", column: "supervisor_id"
+  add_foreign_key "requisitions", "events"
   add_foreign_key "requisitions", "users", column: "created_by_id"
   add_foreign_key "requisitions", "users", column: "last_updated_by_id"
   add_foreign_key "room_accesses", "badges"

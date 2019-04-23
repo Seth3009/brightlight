@@ -1,0 +1,70 @@
+h4 Listing approvers
+
+nav
+  .nav-wrapper
+    ul
+      li
+        a.dropdown-button href="#!" data-activates="category-options"
+          span#category = @category.present? ? "#{@category}" : "All categories" 
+          i.material-icons.right arrow_drop_down
+      li
+        a.dropdown-button href="#!" data-activates="department-options"
+          span#department = @department.present? ? "#{@department.name}" : "All departments" 
+          i.material-icons.right arrow_drop_down
+      / li
+      /   a.dropdown-button href="#!" data-activates="event-options"
+      /     span#grade = @event.present? ? "#{@event.name}" : "All events" 
+      /     i.material-icons.right arrow_drop_down
+    ul.right
+      li.tooltipped data-position="bottom" data-delay="50" data-tooltip="Add new approver"         
+        = link_to new_approver_path
+          | New Approver
+          i.material-icons.left playlist_add
+
+ul#category-options.dropdown-content
+  li  
+    = link_to 'All categories', approvers_path(params.merge(cat:'all').symbolize_keys)
+  - [['Leave Request','LR'], ['Purchase Request', 'PR'], ['Events','EV']].each do |cat|
+    li 
+      = link_to cat.first, approvers_path(params.merge(cat:cat.last))
+ul#department-options.dropdown-content
+  li  
+    = link_to 'All departments', approvers_path(params.merge(dept:'all').symbolize_keys)
+  - Department.order(:id).each do |dept|
+    li 
+      = link_to dept.name, approvers_path(params.merge(dept:dept.id))
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+      th = sort_link :employee_name, "Employee"
+      th = sort_link :category
+      th = sort_link :level
+      th = sort_link :department_name, "Department"
+      th = sort_link :event_name, "Event"
+      th Start date
+      th End date
+      th Notes
+      th Actions
+    tbody
+      - @approvers.each do |approver|
+        tr id="row-#{approver.id}"
+          td = approver.employee_name
+          td = approver.category
+          td = approver.level
+          td = approver.department_name
+          td = approver.event_name
+          td = approver.start_date
+          td = approver.end_date
+          td = approver.notes
+          td 
+            = link_to approver, remote: true
+              i.material-icons visibility
+            = link_to edit_approver_path(approver)
+              i.material-icons edit
+            = remote_link_to_delete approver, message: "Approver has been deleted", class: "left waves-effect waves-light red-text"
+              i.material-icons delete
+
+#show-modal.modal.modal-fixed-footer
+  #show-modal-content

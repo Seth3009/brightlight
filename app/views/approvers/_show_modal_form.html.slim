@@ -1,0 +1,27 @@
+.modal-content
+  h4 Approver Entry
+  .row
+    .col.s3.label Approver:
+    .col.s9 = @approver.employee
+    .col.s3.label Category:
+    .col.s9 = @approver.category || "--"
+    .col.s3.label Department:
+    .col.s9 = @approver.department.try(:name) || "--"
+    .col.s3.label Event:
+    .col.s9 = @approver.event.try(:name) || "--"
+    .col.s3.label Start date:
+    .col.s9 = @approver.start_date || "--"
+    .col.s3.label End date:
+    .col.s9 = @approver.end_date || "--"
+    .col.s3.label Level:
+    .col.s9 = @approver.level || "--"
+    .col.s3.label Type:
+    .col.s9 = @approver.type || "--"
+    .col.s3.label Notes:
+    .col.s9 = @approver.notes || "--"
+    .col.s3.label Active:
+    .col.s9 = @approver.active
+
+.modal-footer
+  a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+

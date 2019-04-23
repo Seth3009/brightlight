@@ -1,4 +1,28 @@
                                         Prefix Verb     URI Pattern                                                       Controller#Action
+                                 class_budgets GET      /class_budgets(.:format)                                          class_budgets#index
+                                               POST     /class_budgets(.:format)                                          class_budgets#create
+                              new_class_budget GET      /class_budgets/new(.:format)                                      class_budgets#new
+                             edit_class_budget GET      /class_budgets/:id/edit(.:format)                                 class_budgets#edit
+                                  class_budget GET      /class_budgets/:id(.:format)                                      class_budgets#show
+                                               PATCH    /class_budgets/:id(.:format)                                      class_budgets#update
+                                               PUT      /class_budgets/:id(.:format)                                      class_budgets#update
+                                               DELETE   /class_budgets/:id(.:format)                                      class_budgets#destroy
+                                        events GET      /events(.:format)                                                 events#index
+                                               POST     /events(.:format)                                                 events#create
+                                     new_event GET      /events/new(.:format)                                             events#new
+                                    edit_event GET      /events/:id/edit(.:format)                                        events#edit
+                                         event GET      /events/:id(.:format)                                             events#show
+                                               PATCH    /events/:id(.:format)                                             events#update
+                                               PUT      /events/:id(.:format)                                             events#update
+                                               DELETE   /events/:id(.:format)                                             events#destroy
+                                     approvers GET      /approvers(.:format)                                              approvers#index
+                                               POST     /approvers(.:format)                                              approvers#create
+                                  new_approver GET      /approvers/new(.:format)                                          approvers#new
+                                 edit_approver GET      /approvers/:id/edit(.:format)                                     approvers#edit
+                                      approver GET      /approvers/:id(.:format)                                          approvers#show
+                                               PATCH    /approvers/:id(.:format)                                          approvers#update
+                                               PUT      /approvers/:id(.:format)                                          approvers#update
+                                               DELETE   /approvers/:id(.:format)                                          approvers#destroy
                      dry_run_diknas_conversion GET      /diknas_conversions/:id/dry_run(.:format)                         diknas_conversions#dry_run
                             diknas_conversions GET      /diknas_conversions(.:format)                                     diknas_conversions#index
                                                POST     /diknas_conversions(.:format)                                     diknas_conversions#create
@@ -563,10 +587,10 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                DELETE   /smart_cards/:id(.:format)                                        smart_cards#destroy
                              list_requisitions GET      /requisitions/list(.:format)                                      requisitions#list
                            approve_requisition GET      /requisitions/:id/approve(.:format)                               requisitions#approve
-               approve_requisition_requisition POST     /requisitions/:id/approve_requisition(.:format)                   requisitions#approve_requisition
-                    approve_budget_requisition POST     /requisitions/:id/approve_budget(.:format)                        requisitions#approve_budget
+                   update_approval_requisition POST     /requisitions/:id/update_approval(.:format)                       requisitions#update_approval
                       edit_account_requisition GET      /requisitions/:id/edit_account(.:format)                          requisitions#edit_account
                     update_account_requisition PATCH    /requisitions/:id/update_account(.:format)                        requisitions#update_account
+                            submit_requisition POST     /requisitions/:id/submit(.:format)                                requisitions#submit
                                   requisitions GET      /requisitions(.:format)                                           requisitions#index
                                                POST     /requisitions(.:format)                                           requisitions#create
                                new_requisition GET      /requisitions/new(.:format)                                       requisitions#new
@@ -575,6 +599,9 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                                PATCH    /requisitions/:id(.:format)                                       requisitions#update
                                                PUT      /requisitions/:id(.:format)                                       requisitions#update
                                                DELETE   /requisitions/:id(.:format)                                       requisitions#destroy
+                                edit_approvals GET      /approvals/edit(.:format)                                         approvals#edit
+                                     approvals PATCH    /approvals(.:format)                                              approvals#update
+                                               PUT      /approvals(.:format)                                              approvals#update
                                 import_budgets POST     /budgets/import(.:format)                                         budgets#import
                                        budgets GET      /budgets(.:format)                                                budgets#index
                                                POST     /budgets(.:format)                                                budgets#create
@@ -587,7 +614,7 @@ autocomplete_book_edition_title_standard_books GET      /standard_books/autocomp
                                   budget_items GET      /budget_items(.:format)                                           budget_items#index
                                    budget_item GET      /budget_items/:id(.:format)                                       budget_items#show
                                  mark_messages POST     /messages/mark(.:format)                                          messages#mark
-                               delete_messages DELETE   /messages/delete(.:format)                                        messages#delete
+                               delete_messages POST     /messages/delete(.:format)                                        messages#delete
                              mark_read_message POST     /messages/:id/mark_read(.:format)                                 messages#mark_read
                                       messages GET      /messages(.:format)                                               messages#index
                                                POST     /messages(.:format)                                               messages#create

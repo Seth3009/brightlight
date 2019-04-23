@@ -1,0 +1,22 @@
+= form_for approval do |f|
+  nav
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Approval Action
+  .card-panel
+    .row
+      = f.hidden_field :level, value: (@requisition.level1? ? 1 : @requisition.level2? ? 2 : 3)
+      .input-field.col.m1.right-align
+        = f.label :approve, 'Approve?', class: 'active'
+        = f.radio_button :approve, true, {class: "with-gap"}
+        = f.label :approve, "Yes", value: true
+      .input-field.col.m1
+        = f.radio_button :approve, false, {class: "with-gap"}
+        = f.label :approve, "No", value: false 
+      .input-field.col.m7
+        = f.label :notes, "Approval Notes"
+        = f.text_field :notes, disabled: params[:appvl] != 'supv'
+  
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" data-disable=true name="approve" Submit      
+    /s= link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"

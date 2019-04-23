@@ -8,34 +8,34 @@
 
   = render 'req_detail', f: f
 
-  nav.light
-    .nav-wrapper
-      .brand-logo style="margin-left: 20px; font-size:1.5em"
-        | Approval
-  .card-panel
-    .row 
-      .input-field.col.m3
-        = f.label :supervisor, class: 'active'
-        = f.collection_select :supervisor_id, @employee.superiors, :id, :name, prompt: "Select approver", selected: @requisition.supervisor_id || @manager.try(:id) 
-      - if @requisition.sent_to_supv && can?(:approve, @requisition)
-        .input-field.col.m3
-          = f.check_box :is_supv_approved
-          = f.label :is_supv_approved, @requisition.is_supv_approved ? 'Request approved' : 'Approve request'
-        .input-field.col.m6
-          = f.label :req_appvl_notes, "Approval Notes"
-          = f.text_field :req_appvl_notes
+  / nav.light
+  /   .nav-wrapper
+  /     .brand-logo style="margin-left: 20px; font-size:1.5em"
+  /       | Approval
+  / .card-panel
+  /   .row 
+  /     .input-field.col.m3
+  /       = f.label :supervisor, class: 'active'
+  /       = f.collection_select :supervisor_id, @approver_list, :id, :employee_name, prompt: "Select approver", selected: @requisition.supervisor_id || @manager.try(:id) 
+  /     - if @requisition.sent_to_supv && can?(:approve, @requisition)
+  /       .input-field.col.m3
+  /         = f.check_box :is_supv_approved
+  /         = f.label :is_supv_approved, @requisition.is_supv_approved ? 'Request approved' : 'Approve request'
+  /       .input-field.col.m6
+  /         = f.label :req_appvl_notes, "Approval Notes"
+  /         = f.text_field :req_appvl_notes
     
-    .row.budget-approval 
-      .input-field.col.m3
-        = f.label :budget_approver, class: 'active'
-        = f.collection_select :budget_approver_id, Employee.budget_approvers, :id, :name, prompt: "Select budget approver"
-      - if @requisition.sent_for_bgt_approval && can?(:approve_budget, @requisition)
-        .input-field.col.m3
-          = f.check_box :is_budget_approved
-          = f.label :is_budget_approved, 'Approve Budget'
-        .input-field.col.m6
-          = f.label :reject_reason, "Budget notes"
-          = f.text_field :reject_reason
+  /   .row.budget-approval 
+  /     .input-field.col.m3
+  /       = f.label :budget_approver, class: 'active'
+  /       = f.collection_select :budget_approver_id, Employee.budget_approvers, :id, :name, prompt: "Select budget approver"
+  /     - if @requisition.sent_for_bgt_approval && can?(:approve_budget, @requisition)
+  /       .input-field.col.m3
+  /         = f.check_box :is_budget_approved
+  /         = f.label :is_budget_approved, 'Approve Budget'
+  /       .input-field.col.m6
+  /         = f.label :reject_reason, "Budget notes"
+  /         = f.text_field :reject_reason
 
   nav.light
     .nav-wrapper
@@ -50,9 +50,9 @@
   = render 'req_items', f: f
 
   .toolbar.z-depth-1
-    button.btn.waves-effect.waves-light type="submit" data-disable=true name="save" Save
-    - unless @requisition.sent_to_supv
-      button.btn.waves-effect.waves-light type="submit" id="send_supv" name="send" data-disable=true value="supv" Send for Approval
+    button.btn.waves-effect.waves-light type="submit" data-disable=true name="save" Save Draft
+    - if @requisition.draft?
+      button.btn.waves-effect.waves-light type="submit" data-disable=true name="submit" Submit
     = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"
 
 javascript:

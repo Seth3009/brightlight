@@ -1,0 +1,38 @@
+doctype html
+html
+  head
+    = stylesheet_link_tag "email", media: "all", 'data-turbolinks-track' => true
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+  body
+    div style="margin-left:30px; width=85%; font-size:16px"
+
+      p You have a pending event PIC request that requires your approval.
+
+      table.description-list
+        tbody
+          tr
+            td Requester
+            td 
+              strong = @event.creator.try(:name)
+          tr 
+            td Event Name
+            td 
+              strong = @event.name
+          tr 
+            td Description
+            td = @event.description
+          tr 
+            td Event PIC
+            td = @event.manager.try(:name)
+          tr
+            td Link
+            td = link_to "Event #{@event.name}", @event
+
+      p You can access the approval page for the event from the following link.
+      p = link_to "Approval for Event #{@event.name}", approve_event_url(@event) , style:"text-decoration:underline"
+
+      p Thank you for using <i>Brightlight</i>. 
+    
+    = render 'footer'
+

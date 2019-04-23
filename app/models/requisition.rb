@@ -1,4 +1,6 @@
 class Requisition < ActiveRecord::Base
+  include AASM 
+
   belongs_to :department
   belongs_to :requester, class_name: 'Employee'
   belongs_to :supervisor, class_name: 'Employee'
@@ -14,8 +16,10 @@ class Requisition < ActiveRecord::Base
   has_many :req_items, -> { order(:id) }, dependent: :destroy
   has_many :po_reqs
   has_many :purchase_orders, through: :po_reqs
+  has_many :approvals, as: :approvable
 
   accepts_nested_attributes_for :req_items, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :approvals, reject_if: :all_blank
 
   validates :department, presence: true
   validates :requester, presence: true
@@ -28,82 +32,179 @@ class Requisition < ActiveRecord::Base
 
   before_save :update_total
 
-  Statuses = {:wappr  => {code: "WAPPR",  description: "Waiting for Approval"},
+  Statuses = {:new    => {code: "NEW",    description: "New"},
+              :wappr  => {code: "WAPPR",  description: "Waiting for Approval"},
+              :wbgapv => {code: "WBGAPV", description: "Waiting for Budget Approval"},
               :appvd  => {code: "APPVD",  description: "Approved"},
               :open   => {code: "OPEN",   description: "Purchase Order created"},
               :close  => {code: "CLOSE",  description: "All items ordered"},
               :cancel => {code: "CANCEL", description: "Canceled"}}
 
+  scope :with_approval_by, lambda { |employee| 
+    joins(approvals: [:approver])
+    .where('approvers.employee_id = ?', employee.id)
+    .uniq
+  }
   scope :pending_supv_approval, lambda { |employee|
-    where(department: employee.try(:department))
-    .where.not(sent_to_supv: nil).where(is_supv_approved: nil).where(supervisor_id: employee.id)
-    .includes(:requester)
+    with_approval_by(employee)
+    .where('approvals.approve is null')
   }
+  scope :pending_approval, lambda { where(aasm_state: ['level1', 'level2', 'level3']) }
+  scope :approved, lambda { where(aasm_state: 'approved') }
+  scope :draft, lambda { where(aasm_state: 'draft') }
+  scope :rejected, lambda { where(aasm_state: 'rejected') }
+  scope :active, lambda { where(active: true) }
 
-  scope :pending_budget_approval, lambda { |employee|
-    where(is_supv_approved: true)
-    .where.not(sent_for_bgt_approval: nil).where(is_budget_approved: nil).where(budget_approver_id: employee.id)
-    .includes(:requester)
-  }
+  aasm do
+    state :draft, initial: true
+    state :level1, :level2, :level3
+    state :approved, :rejected
+    state :open, :canceled, :closed 
 
-  scope :pending_approval, lambda {
-    where('(sent_to_supv is not null AND is_supv_approved is null)
-            OR (sent_for_bgt_approval is not null and is_budget_approved is null)')
-    .includes(:requester)
-  }
+    event :submit do
+      transitions from: :draft, to: :level1
+      after do
+        set_approvals level: 1
+        notify_approvers level: 1
+      end
+    end
 
-  scope :approved, lambda {
-    where('(is_supv_approved = true AND is_budget_approved = true)
-           OR (is_supv_approved = true AND is_budgeted = true)')
-    .includes(:requester)
-  }
+    event :l1_approve do
+      transitions from: :level1, to: :approved, if: :budgeted?
+      transitions from: :level1, to: :level2, unless: :budgeted?
+      after do
+        set_inactive level: 1
+        if is_budgeted
+          notify_purchasing 
+        else
+          set_approvals level: 2
+          notify_approvers level: 2
+        end
+      end
+    end
 
-  def send_for_approval(approver, type)
-    if approver
-      email = EmailNotification.req_approval(self, approver, type)
+    event :l2_approve do
+      transitions from: :level2, to: :level3, if: :l2_approved?
+      after do
+        set_inactive level: 2
+        set_approvals level: 3
+        notify_approvers level: 3
+      end
+    end
+
+    event :l3_approve do
+      transitions from: :level3, to: :approved
+      after do
+        set_inactive level: 3
+        notify_purchasing if l3_approved?
+      end
+    end
+
+    event :reject do
+      transitions from: [:level1, :level2, :level3], to: :rejected,
+        after: Proc.new {|level| 
+          set_inactive level: level
+          notify_requester reason: :rejected, level: level
+        }
+    end
+
+    event :open_order do
+      transitions from: :approved, to: :open
+    end
+  
+  end
+
+  def set_approvals(level:)
+    approvers = if level == 3 
+                  Approver.for(category:'PR', level: level)
+                else
+                  Approver.for(category:'PR', department: self.department, level: level)  
+                end
+    self.approvals << Approval.new_from_approvers(approvers) 
+  end
+
+  def set_inactive(level:)
+    self.approvals.level(level).update_all active: false 
+  end
+
+  def budgeted?
+    self.is_budgeted
+  end
+
+  def l1_approved?
+    self.approvals.level(1).any? &:approve
+  end
+
+  def l2_approved?
+    self.approvals.level(2).any? &:approve
+  end
+
+  def l3_approved?
+    self.approvals.level(3).any? &:approve
+  end
+
+  def l1_rejected?
+    self.approvals.level(1).any? {|x| x.approve == false}
+  end
+
+  def l2_rejected?
+    self.approvals.level(2).any? {|x| x.approve == false}
+  end
+
+  def l3_rejected?
+    self.approvals.level(3).any? {|x| x.approve == false}
+  end
+
+  def notify_requester(reason:, level:)
+    if reason == :rejected
+      email = RequisitionEmailer.not_approved(self, level: level)
       email.deliver_now
       notification = Message.new_from_email(email)
       notification.save
-      if type == 'supv'
-        self.update_attributes sent_to_supv: Date.today, supervisor: approver
-      elsif type == 'budget'
-        self.update_attributes sent_for_bgt_approval: Date.today
-      end
-    else
-      return false
     end
-    return true
-  end 
+  end
 
-  def send_to_purchasing
-    purchasing_email = Rails.application.config.purchasing_email_address
-    email = EmailNotification.requisition_to_purchasing(self, purchasing_email)
+  def notify_approvers(level: 1)
+    email = RequisitionEmailer.approval(self, level: level)
     email.deliver_now
     notification = Message.new_from_email(email)
     notification.save
+    if level == 1
+      self.update_attributes sent_to_supv: Date.today
+    else
+      self.update_attributes sent_for_bgt_approval: Date.today
+    end
+  end
+
+  def notify_purchasing
+    email = RequisitionEmailer.requisition_to_purchasing(self)
+    email.deliver_now
+    notification = Message.new_from_email(email)
+    notification.save
+    self.status = Requisition.status_code(:appvd)
     self.sent_to_purchasing = Date.today
     self.is_submitted = true
     save
   end
 
+  def is_pending_approval_by(employee)
+    approvals.active.joins(:approver).where('approvers.employee_id = ?', employee.id)
+    .where(approvals: {approve: nil}).present? &&
+    !(['approved', 'rejected'].include? aasm_state)
+  end
+
   def pending_supv_approval?
-    sent_to_supv != nil && is_supv_approved == nil
+    # status == Requisition.status_code(:wappr) # && sent_to_supv != nil && is_supv_approved == nil
+    self.level1? 
   end
 
   def pending_budget_approval?
-    !is_budgeted && sent_for_bgt_approval != nil && is_budget_approved == nil
-  end
-
-  def draft?
-    !submitted?
+    # status == Requisition.status_code(:wbgapv) #&& !is_budgeted && sent_for_bgt_approval != nil && is_budget_approved == nil
+    self.level2? || self.level3?
   end
 
   def submitted?
     sent_to_supv.present?
-  end
-
-  def approved?
-    (is_supv_approved && is_budget_approved) || (is_supv_approved && is_budgeted)
   end
 
   # Call back from comment
@@ -130,14 +231,18 @@ class Requisition < ActiveRecord::Base
     end
   end
 
+  def self.status_code(status)
+    Requisition::Statuses[status][:code]
+  end
+
   def update_status
     unordered_items_count = number_of_unordered_items
     if unordered_items_count == 0
-      update_columns(status: Requisition::Statuses[:close][:code])
+      update_columns(status: Requisition.status_code(:close))
     elsif unordered_items_count != req_items.count
-      update_columns(status: Requisition::Statuses[:open][:code])
+      update_columns(status: Requisition.status_code(:open))
     else
-      update_columns(status: Requisition::Statuses[:appvd][:code])
+      update_columns(status: Requisition.status_code(:appvd))
     end
   end
   

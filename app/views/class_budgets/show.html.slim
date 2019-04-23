@@ -1,0 +1,36 @@
+p#notice = notice
+
+p
+  strong Department:
+  = @class_budget.department
+p
+  strong Grade level:
+  = @class_budget.grade_level
+p
+  strong Grade section:
+  = @class_budget.grade_section
+p
+  strong Holder:
+  = @class_budget.holder
+p
+  strong Academic year:
+  = @class_budget.academic_year
+p
+  strong Month:
+  = @class_budget.month
+p
+  strong Amount:
+  = @class_budget.amount
+p
+  strong Balance:
+  = @class_budget.balance
+p
+  strong Actual:
+  = @class_budget.actual
+p
+  strong Notes:
+  = @class_budget.notes
+
+= link_to 'Edit', edit_class_budget_path(@class_budget)
+'|
+= link_to 'Back', class_budgets_path

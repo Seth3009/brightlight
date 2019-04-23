@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  resources :class_budgets
+  resources :events
+  resources :approvers
   resources :diknas_conversions do
     member do
       get 'dry_run'
@@ -307,10 +310,10 @@ Rails.application.routes.draw do
     end
     member do
       get 'approve'
-      post 'approve_requisition'
-      post 'approve_budget'
+      patch 'update_approval'
       get 'edit_account'
       patch 'update_account'
+      get 'submit'
     end
   end 
 
