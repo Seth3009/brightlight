@@ -84,11 +84,16 @@ class Requisition < ActiveRecord::Base
     end
 
     event :l2_approve do
-      transitions from: :level2, to: :level3, if: :l2_approved?
+      transitions from: :level2, to: :approved, if: :budgeted?
+      transitions from: :level2, to: :level3, unless: :budgeted?
       after do
         set_inactive level: 2
-        set_approvals level: 3
-        notify_approvers level: 3
+        if is_budgeted
+          notify_purchasing 
+        else
+          set_approvals level: 3
+          notify_approvers level: 3
+        end
       end
     end
 
