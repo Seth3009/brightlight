@@ -24,11 +24,11 @@ nav
         th Order num
         th Supplier
         th Items
-        th Order date
+        th.wd10 Order date
         th.right-align Total amount
         th Requestor
-        th Status
-        th Actions
+        th.wd10 Status
+        th.wd10 Actions
 
     tbody
       - @purchase_orders.each do |purchase_order|
@@ -36,16 +36,17 @@ nav
           td = purchase_order.order_num
           td = purchase_order.supplier.try(:company_name)
           td = purchase_order.order_items.map {|item| item.description}.join(", ") if purchase_order.order_items
-          td = purchase_order.order_date
+          td.wd10 = purchase_order.order_date
           td.right-align = currency(purchase_order.total_amount, currency: purchase_order.currency)
           td = purchase_order.requestor
-          td = purchase_order.status_description
-          td 
+          td.wd10 = purchase_order.status_description
+          td.wd10
             = link_to purchase_order
               i.material-icons visibility
-            = link_to edit_purchase_order_path(purchase_order)
-              i.material-icons edit
-            = link_to purchase_order, data: {:confirm => 'Are you sure?'}, :method => :delete
-              i.material-icons.tooltipped.red-text data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+            - if can? :update, PurchaseOrder
+              = link_to edit_purchase_order_path(purchase_order)
+                i.material-icons edit
+              = link_to purchase_order, data: {:confirm => 'Are you sure?'}, :method => :delete
+                i.material-icons.tooltipped.red-text data-position="bottom" data-delay="50" data-tooltip="Delete" delete
 
 

@@ -67,6 +67,7 @@ class Ability
       budget_item.budget.budget_holder == @user.employee 
     end
     can :read, :all
+    can :read, PurchaseOrder, requestor: @user.employee
     can :review, LeaveRequest
     can [:approve, :read, :update], LeaveRequest do |lr|
       lr.employee.approver_id == @user.employee.id || lr.employee.approver_assistant_id == @user.employee.id  # Manager can only approve leave requests of employees in his/her department
@@ -92,6 +93,7 @@ class Ability
     end
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
+    can :read, PurchaseOrder, requestor: @user.employee
     can_manage_own_leave_request
     can_manage_own_requisition    
   end
@@ -105,6 +107,7 @@ class Ability
     can :approve, Requisition do |req|
       req.approvals.includes(approver: :employee).map {|a| a.approver.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
     end
+    can :read, PurchaseOrder, requestor: @user.employee
     can_manage_own_leave_request
     can_manage_own_requisition    
   end

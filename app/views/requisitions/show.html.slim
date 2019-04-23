@@ -72,7 +72,8 @@ nav
           li.collection-item.row
             = form_tag new_purchase_order_path, method: :get do
               .label.left Requested Items
-              button.right.btn#create-po-button type="submit" data-disable=true disabled=true Create PO
+              -if can? :process, Requisition
+                button.right.btn#create-po-button type="submit" data-disable=true disabled=true Create PO
               table.compact.striped
                 thead
                   tr
@@ -82,8 +83,7 @@ nav
                     th Unit
                     th Est. Unit Price
                     th Req'd Date
-                    -if can? :process, Requisition
-                      th PO No.
+                    th PO No.
 
                 tbody
                   - @req_items.each.with_index(1) do |req_item, i|
@@ -94,17 +94,16 @@ nav
                       td = req_item.unit
                       td = "#{req_item.currency}#{req_item.est_price}"
                       td = req_item.needed_by_date
-                      -if can? :process, Requisition
-                        td 
-                          -if req_item.order_item.present?
-                            = link_to purchase_order_path(req_item.order_item.purchase_order), target: 'blank'
-                              = req_item.order_item.purchase_order.order_num
-                              i.material-icons.left open_in_new
-                          -else
-                            = hidden_field_tag :req, @requisition.id
-                            input.checkbox type="checkbox" id="reqitem-#{req_item.id}" name="items[#{req_item.id}]"
-                            / This label is required by Materialize CSS for the checkbox to work
-                            = label_tag "reqitem-#{req_item.id}", ""
+                      td 
+                        -if req_item.order_item.present?
+                          = link_to purchase_order_path(req_item.order_item.purchase_order), target: 'blank'
+                            = req_item.order_item.purchase_order.order_num
+                            i.material-icons.left open_in_new
+                        -elsif can? :process, Requisition
+                          = hidden_field_tag :req, @requisition.id
+                          input.checkbox type="checkbox" id="reqitem-#{req_item.id}" name="items[#{req_item.id}]"
+                          / This label is required by Materialize CSS for the checkbox to work
+                          = label_tag "reqitem-#{req_item.id}", ""
     li
       .collapsible-header.active
         | Approval
