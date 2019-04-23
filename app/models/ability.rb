@@ -59,9 +59,6 @@ class Ability
     end
     can_manage_own_requisition
     can :review, Requisition
-    # can :update, Requisition do |req|
-    #   req.budget_approver == @user.employee     # User can only approve requisition that is sent to the respective user
-    # end
     can :approve, Requisition do |req|
       req.approvals.map {|a| a.approver.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
     end
@@ -104,8 +101,9 @@ class Ability
     can :manage, Transport
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
+    can [:create,:read, :update, :destroy], Requisition, requester: @user.employee
     can :approve, Requisition do |req|
-      req.approvals.map {|a| a.approver.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
+      req.approvals.includes(approver: :employee).map {|a| a.approver.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
     end
     can_manage_own_leave_request
     can_manage_own_requisition    
