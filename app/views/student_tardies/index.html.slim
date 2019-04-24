@@ -42,6 +42,8 @@ nav
           = render partial: 'index_row', locals: {student_tardy: student_tardy}
         
           
+/ iframe id ="pdf_source" src="#{request.protocol}#{request.host_with_port}/student_tardies/9" style="width:700px;height:500px; display:none;"
+
 
 #show-modal.modal.modal-fixed-footer
   .modal-content
@@ -65,3 +67,23 @@ javascript:
           return false;
       });
     });
+
+  /*$(document).ready(function() {
+    pdf = document.getElementById('pdf_source');
+    pdf.focus();
+
+    setTimeout(function(){
+        pdf.contentWindow.print();
+    }, 3000);
+    });
+  */
+css:
+  table{
+    table-layout: fixed;
+  }
+  td {
+    word-wrap:break-word;
+    }
+  th {
+    width:100%;
+    }

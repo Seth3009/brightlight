@@ -28,9 +28,9 @@ class StudentTardiesController < ApplicationController
 
     respond_to do |format|
       if @student_tardy.save
-        format.html { redirect_to student_tardies_url, notice: 'Student tardy was successfully created.' }
+        format.html { redirect_to @student_tardy, notice: 'Student tardy was successfully created.' }
         format.json { render :show, status: :created, location: @student_tardy }
-        format.js
+        format.js { render :show}
       else
         format.html { render :new }
         format.json { render json: @student_tardy.errors, status: :unprocessable_entity }

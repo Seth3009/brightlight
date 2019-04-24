@@ -1,21 +1,72 @@
-p#notice = notice
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to student_tardies_url  
+          i.material-icons chevron_left
+    ul.right
+        li        
+          = link_to new_student_tardy_path, remote:true
+            | New
+            i.material-icons.left add
+.card-panel  
+  h4 Tardy Slip
+  p.student_tardy_id style="display:none;"
+    = @student_tardy.id 
+  .row
+    .col.s2
+      strong Student: 
+    .col.s10.borders
+      
+      = @student_tardy.student.name
+  .row
+    .col.s2
+      strong Grade: 
+    .col.s4.borders
+      = @student_tardy.grade_section.name
+    .col.s2
+      strong Time: 
+    .col.s4.borders
+      = @student_tardy.created_at.try(:strftime, "%I:%M %p")
+  .row
+    .col.s12.word_wrap
+      strong Reason: 
+      = @student_tardy.reason 
 
-p
-  strong Student:
-  = @student_tardy.student
-p
-  strong Grade:
-  = @student_tardy.grade
-p
-  strong Reason:
-  = @student_tardy.reason
-p
-  strong Employee:
-  = @student_tardy.employee
-p
-  strong Academic year:
-  = @student_tardy.academic_year
 
-= link_to 'Edit', edit_student_tardy_path(@student_tardy)
-'|
-= link_to 'Back', student_tardies_path
+
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content
+
+javascript:
+  /*
+  $(document).ready(function() {
+    
+      window.print();
+      return false;
+    
+  });
+  */
+
+css:
+  .borders {    
+    border: 1px solid #000;
+  }
+  .word_wrap {
+    word-wrap:break-word
+  }
+  
+  @media print {
+    body {
+      font: 7pt Arial, sans-serif;
+      width:100%;
+      height:100%;      
+    }
+  }

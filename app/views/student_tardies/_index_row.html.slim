@@ -1,4 +1,6 @@
 tr id="row-#{student_tardy.id}"
+  / iframe id ="#{student_tardy.id}" src="#{request.protocol}#{request.host_with_port}/student_tardies/#{student_tardy.id}" style="width:700px;height:500px; display:none;"
+  
   td = student_tardy.date_tardy.try(:strftime, "%m/%d/%Y")
   td = student_tardy.student.name
   td = student_tardy.grade_section.name
@@ -6,5 +8,19 @@ tr id="row-#{student_tardy.id}"
   td = student_tardy.employee
   td = student_tardy.academic_year.name
   td 
+    = link_to '#', onclick:"frames['frame'].print()"
+      i.material-icons.left print
     = link_to student_tardy, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
       i.material-icons.left delete
+
+
+javascript:
+  function print_tardy() {        
+    pdf = document.getElementById("#{student_tardy.id}");
+    console.log(pdf);
+    pdf.focus();
+
+    setTimeout(function(){
+        pdf.contentWindow.print();
+    }, 3000);
+  }
