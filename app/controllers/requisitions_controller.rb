@@ -8,12 +8,13 @@ class RequisitionsController < ApplicationController
     @employee = current_user.employee
     approver_list = Approver.for_purchase_requests.where(employee: @employee)
     @i_am_approver = approver_list.present?
-    if params[:my] == "action" || @i_am_approver
+    params[:my] = "action" if params[:my].blank? && @i_am_approver
+    if params[:my] == "action"
       @approved_requisitions = Requisition.approved.with_approval_by(@employee).order(:id)
       @pending_approval = Requisition.pending_approval.with_approval_by(@employee).order(:id)
       @draft_requisitions = Requisition.draft.with_approval_by(@employee).order(:id)
       @rejected_requisitions = Requisition.rejected.with_approval_by(@employee).order(:id)
-    elsif params[:my] == "list" || params[:my].blank?
+    elsif params[:my] == "list"
       @approved_requisitions = Requisition.approved.where(requester_id: @employee.id).order(:id)
       @pending_approval = Requisition.pending_approval.where(requester_id: @employee.id).order(:id)
       @draft_requisitions = Requisition.draft.where(requester_id: @employee.id).order(:id)
@@ -132,33 +133,7 @@ class RequisitionsController < ApplicationController
     authorize! :update, @requisition
     @requisition.last_updated_by = current_user
     respond_to do |format|
-      # @requisition.supv_approved_date ||= Date.today if requisition_params["is_supv_approved"] == "1"
-      # @requisition.budget_approved_date ||= Date.today if requisition_params["is_budget_approved"] == "1"
-      # @requisition.budget = @requisition.budget_item.try(:budget)
       if @requisition.update(requisition_params)
-        # if params[:send]
-        #   if params[:send] == 'supv'
-        #     approver = @requisition.supervisor || @requisition.requester.supervisor || @requisition.requester.manager
-        #   else
-        #     approver = @requisition.budget_approver
-        #   end
-        #   if @requisition.send_for_approval(approver, params[:send])
-        #     @message = 'Purchase request has been sent for approval.'
-        #     format.html { redirect_to @requisition, notice: @message }
-        #     format.json { render :show, status: :ok, location: @requisition }
-        #     format.js
-        #   else
-        #     @error = 'Error: Purchase request cannot be sent for approval.'
-        #     format.html { redirect_to edit_requisition_path(@requisition), alert: @error }
-        #     format.json { render :show, status: :ok, location: @requisition }
-        #     format.js
-        #   end
-        # elsif params[:approve] && @requisition.approved?
-        #   @requisition.send_to_purchasing 
-        #   @message = 'Purchase request has been sent for approval.'
-        #   format.html { redirect_to @requisition, notice: @message }
-        #   format.json { render :show, status: :ok, location: @requisition }
-        #   format.js
         if params[:submit]
           format.html { redirect_to submit_requisition_path(@requisition) }
         else
