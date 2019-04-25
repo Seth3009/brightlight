@@ -69,7 +69,7 @@ javascript:
         var card = input.trim();       
         $.getJSON("/employees/" + card + ".json", null, function (employee) {
           console.log("Scanned employee", employee);
-          window.location.href= "/supplies_transactions/new_supplies?employee_id=" + employee.id + "&employee=" + employee.name;    
+          window.location.href= "/supplies_transactions/new?employee_id=" + employee.id + "&employee=" + employee.name;    
         }).fail(function(xhr){
           Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
         });            

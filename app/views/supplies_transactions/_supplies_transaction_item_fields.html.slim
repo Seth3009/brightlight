@@ -30,3 +30,39 @@ javascript:
         }
     });
   });
+
+  $(document).ready(function(){
+    $("select.select_type").change(function(){
+      var select_type = $(this).children("option:selected").val();
+      $('.trx_type').val(select_type);
+    });
+  });
+
+  $("[name$='[barcode]']").codeScanner({
+    minEntryChars: 11, onScan: function($element, input) {        
+    var barcode = input.trim();
+    $.getJSON("/products/"+barcode+".json", null, function (data) {
+      if ($("tr:last").find("[name$='[barcode]']").val() != "") {
+        $(".add_fields").trigger('click');
+        $('.product_autocomplete').prop('disabled', true);
+      } else if (!$("tr:last").is(":visible")) {
+        $("tr:last").show();
+      }
+      insert_values(data,$("tr:last"));        
+    }).fail(function(xhr){
+      Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
+    });            
+    }
+  });
+    
+
+  var insert_values = function (data, el) {
+    var product = data;
+    el.find("[name$='[barcode]']").val(product.barcode);
+    el.find("[name='name']").val(product.name);
+    el.find(".units").html("<p>"+product.unit+"</p>");    
+    el.find(".product_id").val(product.id);
+    el.find("[name$='[item_unit_id]']").val(product.item_unit_id);
+    el.find(".qty-field").val(1);
+    el.find(".trx_type").val($( "select.select_type").val());
+  };
