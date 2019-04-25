@@ -28,7 +28,7 @@
         = f.label :department_id, class: 'active'
         = f.collection_select :department_id, Department.order(:name), :id, :name, prompt: true
       .input-field.col.s4
-        = f.label :manager_id, class: 'active'
+        = f.label "Person in Charge", class: 'active'
         = f.collection_select :manager_id, Employee.active.order(:name), :id, :name, prompt: true
       .input-field.col.s2
         = f.label :start_date, class: 'active'
@@ -37,3 +37,24 @@
         = f.label :end_date, class: 'active'
         = f.date_field :end_date
 
+  nav.light
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Approver: person(s) authorized to approve purchases
+      ul.right
+        li
+          = link_to_add_association f, :approvers, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#requisition'
+            ' Add Person
+            i.material-icons.left playlist_add
+  
+  = render 'approvers', f: f
+
+javascript:
+  $(document).on("change", "#event_manager_id", function(ev) {
+    var id = $(ev.target).val();
+    $("a.add_fields").click();
+    $("[name$='[employee_id]']:last").val(id);
+    $("[name$='[department_id]']:last").val($("#event_department_id").val());
+    $("[name$='[start_date]']:last").val($("#event_start_date").val());
+    $("[name$='[end_date]']:last").val($("#event_end_date").val());
+  });

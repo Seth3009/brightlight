@@ -2,11 +2,10 @@ class RequisitionEmailer < ActionMailer::Base
   default from: "Brightlight <brightlight@cahayabangsa.org>"
   PURCHASING_EMAIL_ADDRESS = Rails.application.config.purchasing_email_address
 
-  def approval(requisition, level: 1)
+  def approval(requisition, approvers)
     @requisition = requisition
     @requester = requisition.requester
     requester_email = %("#{@requester.name}" <#{@requester.email}>)
-    approvers = @requisition.approvals.level(level)
     @addressee = approvers.map { |approval| %("#{approval.approver.employee.name}" <#{approval.approver.employee.email}>) }
     mail(to: @addressee, cc: requester_email, subject: "Approval required: Purchase Request No. #{requisition.id}.")
   end

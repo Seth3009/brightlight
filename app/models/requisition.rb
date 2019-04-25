@@ -12,7 +12,8 @@ class Requisition < ActiveRecord::Base
   belongs_to :budget_item
   belongs_to :created_by, class_name: 'User'
   belongs_to :last_updated_by, class_name: 'User'
-  
+  belongs_to :event
+
   has_many :req_items, -> { order(:id) }, dependent: :destroy
   has_many :po_reqs
   has_many :purchase_orders, through: :po_reqs
@@ -57,15 +58,22 @@ class Requisition < ActiveRecord::Base
 
   aasm do
     state :draft, initial: true
+    state :approval_for_event
     state :level1, :level2, :level3
     state :approved, :rejected
     state :open, :canceled, :closed 
 
     event :submit do
       transitions from: :draft, to: :level1
+      transitions from: :draft, to: :approval_for_event, if: :event?
       after do
-        set_approvals level: 1
-        notify_approvers level: 1
+        if event?
+          set_approvals event: self.event
+          notify_approvers event: self.event
+        else
+          set_approvals level: 1
+          notify_approvers level: 1
+        end
       end
     end
 
@@ -119,17 +127,25 @@ class Requisition < ActiveRecord::Base
   
   end
 
-  def set_approvals(level:)
-    approvers = if level == 3 
-                  Approver.for(category:'PR', level: level)
-                else
-                  Approver.for(category:'PR', department: self.department, level: level)  
-                end
+  def set_approvals(level: nil, event: nil)
+    if event.present?
+      approvers = Approver.for(category:'PR', event: event)
+    else
+      approvers = if level == 3 
+                    Approver.for(category:'PR', level: level)
+                  else
+                    Approver.for(category:'PR', department: self.department, level: level)  
+                  end
+    end
     self.approvals << Approval.new_from_approvers(approvers) 
   end
 
   def set_inactive(level:)
     self.approvals.level(level).update_all active: false 
+  end
+
+  def event?
+    self.event_id.present?
   end
 
   def budgeted?
@@ -169,8 +185,9 @@ class Requisition < ActiveRecord::Base
     end
   end
 
-  def notify_approvers(level: 1)
-    email = RequisitionEmailer.approval(self, level: level)
+  def notify_approvers(level: 1, event: nil)
+    approvers = self.approvals.level(level)
+    email = RequisitionEmailer.approval(self, approvers)
     email.deliver_now
     notification = Message.new_from_email(email)
     notification.save

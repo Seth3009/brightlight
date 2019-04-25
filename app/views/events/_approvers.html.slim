@@ -1,0 +1,10 @@
+.card-panel
+  .row
+    strong.col.s3 Name
+    strong.col.s2 Start Date
+    strong.col.s2 End Date
+    strong.col.s3 Notes
+  #requisition
+    = f.fields_for :approvers do |approver|
+      = render 'approver_fields', f: approver
+
