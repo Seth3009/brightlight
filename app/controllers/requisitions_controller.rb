@@ -14,7 +14,7 @@ class RequisitionsController < ApplicationController
       @pending_approval = Requisition.pending_approval.with_approval_by(@employee).order(:id)
       @draft_requisitions = Requisition.draft.with_approval_by(@employee).order(:id)
       @rejected_requisitions = Requisition.rejected.with_approval_by(@employee).order(:id)
-    elsif params[:my] == "list"
+    elsif params[:my] == "list" || params[:my].blank?
       @approved_requisitions = Requisition.approved.where(requester_id: @employee.id).order(:id)
       @pending_approval = Requisition.pending_approval.where(requester_id: @employee.id).order(:id)
       @draft_requisitions = Requisition.draft.where(requester_id: @employee.id).order(:id)
