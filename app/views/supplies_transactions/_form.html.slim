@@ -23,12 +23,12 @@
             ' Add row
             i.material-icons.left playlist_add
   
-  / ul.collapsible data-collapsible="expandable"
-  /   li
-  /     .collapsible-header                
-  /       div.right 
-  /         input.checkbox-toggle type="checkbox" id="use-scanner"
-  /         = label_tag "use-scanner", "Use scanner"
+  ul.collapsible data-collapsible="expandable"
+    li
+      .collapsible-header                
+        div.right 
+          input.checkbox-toggle type="checkbox" id="use-scanner"
+          = label_tag "use-scanner", "Use scanner"
   - if params[:employee_id].present?
     = render 'supplies_transaction_items', f: f
 
@@ -62,5 +62,31 @@ javascript:
   $("form").on("keypress", function (e) {
     if (e.keyCode == 13) {
         return false;
+    }
+  });
+
+  $(document).ready(function(){
+    $("#use-scanner").attr('checked','checked')
+    $("#use-scanner").change();
+  });
+
+  $("#use-scanner").change(function() {
+    $("tr.nested-fields").each(function(){
+      v = $(this).find(".product_id").attr('value');
+      if (v == undefined) {
+        if ($("#use-scanner").is(":checked")) {
+          $(this).hide();
+        } else {
+          $(this).show();
+        }
+      } 
+    });
+    if (!$("#use-scanner").is(":checked")) {
+      if ($("tr:last").find(".barcode").val() != "") {
+        $(".add_fields").trigger('click');
+      }
+      $("#add-row").show();
+    } else {
+      $("#add-row").hide();
     }
   });
