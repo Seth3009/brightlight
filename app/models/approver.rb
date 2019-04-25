@@ -19,7 +19,11 @@ class Approver < ActiveRecord::Base
   scope :level, -> (lvl) { where(level: lvl) }
   scope :for_department, -> (dept) { where(department: dept) }
   
-  def self.for(category:, department: nil, level: 1)
-    where(category: category, department: department, level: level)
+  def self.for(category:, department: nil, event: nil, level: 1)
+    if event.present?
+      where(category: category, event: event)
+    else
+      where(category: category, department: department, level: level)
+    end
   end
 end

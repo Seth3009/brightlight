@@ -1,0 +1,16 @@
+.row.compact.nested-fields
+  .input-field.col.s3
+    = f.collection_select :employee_id, Employee.all.active, :id, :name, prompt: 'Select employee'
+  .input-field.col.s2
+    = f.date_field :start_date
+  .input-field.col.s2
+    = f.date_field :end_date
+  .input-field.col.s3
+    = f.text_field :notes
+    = f.hidden_field :level, value: 1
+    = f.hidden_field :category, value: 'PR'
+    = f.hidden_field :active, value: true
+    = f.hidden_field :department_id
+  .input-field.col.s2 style="padding-top:8px"
+    = link_to_remove_association f, class: "waves-effect waves-teal red-text"
+      i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete

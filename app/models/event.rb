@@ -5,6 +5,9 @@ class Event < ActiveRecord::Base
   belongs_to :manager, class_name: 'Employee'
   belongs_to :creator, class_name: 'Employee'
   has_many :approvals, as: :approvable
+  has_many :approvers
+
+  accepts_nested_attributes_for :approvers, reject_if: :all_blank, allow_destroy: true
 
   aasm do
     state :draft, initial: true
@@ -52,7 +55,7 @@ class Event < ActiveRecord::Base
   end
 
   def set_approvals(level:)
-    approvers = Approver.for(category:'PR', department: self.department, level: level)  
+    approvers = Approver.for(category:'EV', department: self.department, level: level)  
     self.approvals << Approval.new_from_approvers(approvers) 
   end
 
