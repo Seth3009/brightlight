@@ -1,2 +1,3 @@
 $("tbody#student_tardies").append("<%=j render partial:'index_row', locals: {student_tardy: @student_tardy}%>");
 Materialize.toast("Tardy slip for <%= @student_tardy.try(:student).try(:name)%> created.", 4000, "green")
+window.location.replace("<%= student_tardy_path(@student_tardy) %>");
