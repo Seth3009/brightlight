@@ -1,40 +1,50 @@
 .card-panel
-  .row  
-    .input-field.col.m3
-      = f.label :req_no
-      - if @requisition.persisted?
-        = f.text_field :id
-    .input-field.col.m6
-      = f.label :description
-      = f.text_field :description
-    .input-field.col.m3
-      = f.label :date_required, class: 'active'
-      = f.date_field :date_required 
-    .input-field.col.m3
-      = f.label :requester, class: 'active'
-      = f.hidden_field :requester_id, value: @employee.id
-      = text_field_tag :requester, @employee.name, disabled: true
-    .input-field.col.m9
-      = f.label :notes
-      = f.text_field :notes
-    .input-field.col.m3
-      = f.label :department, class: 'active'
-      = f.hidden_field :department_id, value: @department.id
-      = text_field_tag :department, @department.name, disabled: true
-    .input-field.col.m1.right-align
-      = f.label :is_budgeted, 'Budgeted?', class: 'active'
-      = f.radio_button :is_budgeted, true, {class: "with-gap"}
-      = f.label :is_budgeted, "Yes", value: true
-    .input-field.col.m1
-      = f.label :is_budgeted, class: 'active'
-        span.red-text = "(*required)"
-      = f.radio_button :is_budgeted, false, {class: "with-gap"}
-      = f.label :is_budgeted, "No", value: false   
-      
-    .input-field.col.m7
-      = f.label 'Budget Account', class: 'active'
-      = f.select :account_id, options_for_select(@accounts.map { |a| ["#{a.acc_l4}: #{a.description}", a.id] }, @requisition.account_id), prompt: 'Select budget account'
-    .input-field.col.offset-m3.m9
-      = f.label :budget_notes
-      = f.text_field :budget_notes
+  .row
+    .col.s12.m3
+      .row
+        .input-field.col.s12
+          = f.label :req_no
+          = f.text_field :id, disabled: true
+        .input-field.col.s12
+          = f.label :requester, class: 'active'
+          = f.hidden_field :requester_id, value: @employee.id
+          = text_field_tag :requester, @employee.name, disabled: true
+        .input-field.col.s12
+          = f.label :department, class: 'active'
+          = f.hidden_field :department_id, value: @department.id
+          = text_field_tag :department, @department.name, disabled: true
+    .col.s12.m6
+      .row
+        .input-field.col.s12.m9
+          = f.label :description
+          = f.text_field :description
+        .input-field.col.s12.m3
+          = f.label :date_required, class: 'active'
+          = f.date_field :date_required 
+        .input-field.col.s12
+          = f.label :notes
+          = f.text_field :notes
+        .input-field.col.s6.m2.right-align
+          = f.label :is_budgeted, 'Budgeted?', class: 'active'
+          = f.radio_button :is_budgeted, true, {class: "with-gap"}
+          = f.label :is_budgeted, "Yes", value: true
+        .input-field.col.s6.m2
+          = f.label :is_budgeted, class: 'active'
+            span.red-text = "(*required)"
+          = f.radio_button :is_budgeted, false, {class: "with-gap"}
+          = f.label :is_budgeted, "No", value: false   
+        .input-field.col.s12.m8
+          = f.label 'Budget Account', class: 'active'
+          = f.select :account_id, options_for_select(@accounts.map { |a| ["#{a.acc_l4}: #{a.description}", a.id] }, @requisition.account_id), prompt: 'Select budget account'
+        .input-field.col.s12
+          = f.label :budget_notes
+          = f.text_field :budget_notes
+    .col.s12.m3
+      .row
+        .col.s12
+          .label FOR EVENT PURCHASES
+          p.grey-text.text-darken-2 Select corresponding event if this purchase is related to an event.
+        .input-field.col.s12
+          = f.label 'Select event', class: 'active'
+          = f.collection_select :event_id, Event.all, :id, :name, prompt: 'Select event'
   

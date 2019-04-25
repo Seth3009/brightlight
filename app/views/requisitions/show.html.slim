@@ -58,7 +58,6 @@ nav
               .item = @requisition.notes      
           li.collection-item.row
             .col.s6.m2
-              /= check_box_tag :is_budgeted, true, @requisition.is_budgeted
               .label Budgeted?
               -if @requisition.is_budgeted
                 |Yes
@@ -72,6 +71,14 @@ nav
             .col.s6.m6
               .label Budget notes
               .item = @requisition.budget_notes
+          -if @requisition.event_id.present?
+            li.collection-item.row
+              .col.s6.m2
+                .label Event
+                .item = @requisition.event.name
+              .col.s6.m6
+                .label Description
+                .item = @requisition.event.description
           li.collection-item.row
             = form_tag new_purchase_order_path, method: :get do
               .label.left Requested Items
@@ -134,79 +141,7 @@ nav
                     i.material-icons.left check_box_outline_blank
                 td = approval.updated_at.strftime("%d %b %Y") if !approval.approve.nil?
                 td = approval.notes 
-              
-          / li.collection-item.row.no-bottom-border
-          /   .col.m3
-          /     .label Supervisor
-          /     .item = @requisition.supervisor || "--"
-          /   .col.m3
-          /     .label Approval
-          /     - if @requisition.is_supv_approved
-          /       |Approved
-          /       i.material-icons.left.tooltipped.green-text data-position="bottom" data-delay="50" data-tooltip="Supervisor approved" check_box
-          /     - elsif @requisition.is_supv_approved == false
-          /       |Not approved
-          /       i.material-icons.left.tooltipped.red-text data-position="bottom" data-delay="50" data-tooltip="Supervisor did not approve" cancel
-          /     - else
-          /       i.material-icons.left check_box_outline_blank
-          /   .col.m6
-          /     - if @requisition.pending_supv_approval? && can?(:approve, @requisition)
-          /       .label Go to approval page
-          /       = link_to "Approval", approve_requisition_path(@requisition, appvl: 'supv'), class:"btn btn-small btn-flat waves-effect waves-light"
-          /     - else
-          /       - if @requisition.is_supv_approved || @requisition.sent_to_supv
-          /         .label Approval Notes
-          /         .item = @requisition.req_appvl_notes || "--"
-          /       - elsif can? :update, @requisition 
-          /         #submit-button
-          /           /= link_to requisition_path(@requisition, send:'supv'), data: {params: {requisition: {active: true}}}, method: 'patch', remote: true, class: 'btn waves-effect waves-light'
-          /           = link_to submit_requisition_path(@requisition), method: :post, class: 'btn waves-effect waves-light'
-          /             | Send for approval 
-          / li.collection-item.row
-          /   .col.m3
-          /     .label Date sent to supervisor
-          /     .item = @requisition.sent_to_supv || "--"
-          /   .col.m3
-          /     .label Date approved by supervisor
-          /     .item = @requisition.supv_approved_date || "--"
-          /   - if @requisition.is_supv_approved
-          /     .col.m3
-          /       .label By
-          /       .item = @requisition.supervisor.try(:name) || "--"
 
-          / - unless @requisition.is_budgeted
-          /   li.collection-item.row.no-bottom-border
-          /     .col.m3
-          /       .label Budget Approver
-          /       .item = @requisition.budget_approver || "--"
-          /     .col.m3
-          /       .label Budget Approval
-          /       - if @requisition.is_budget_approved
-          /         |Approved
-          /         i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Budget approved" check_box
-          /       - elsif @requisition.is_budget_approved == false
-          /         |Not approved
-          /         i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Budget not approved" cancel
-          /       - else
-          /         i.material-icons.left check_box_outline_blank
-          /     .col.m6
-          /       - if !@requisition.pending_supv_approval? && can?(:approve_budget, @requisition)
-          /         .label Go to approval page
-          /         = link_to "Approval", approve_requisition_path(@requisition, appvl: 'budget'), class:"btn btn-small btn-flat waves-effect waves-light"
-          /       - else
-          /         .label Budget Notes
-          /         .item = @requisition.bgt_appvl_notes || "--"
-          /   li.collection-item.row
-          /     .col.m3
-          /       .label Date sent for budget approval
-          /       .item = @requisition.sent_for_bgt_approval || "--"
-          /     .col.m3
-          /       .label Date approved for budget
-          /       .item = @requisition.budget_approved_date || "--"
-          /     - if @requisition.is_budget_approved
-          /       .col.m3
-          /         .label By
-          /         .item = @requisition.budget_approver.try(:name) || "--"
     li.comment-section
       .collapsible-header.active
         | Comments (#{@commentable.comments.count})
