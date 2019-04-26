@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
 
   resources :class_budgets
-  resources :events
   resources :approvers
   resources :diknas_conversions do
     member do
@@ -359,6 +358,14 @@ Rails.application.routes.draw do
   resources :suppliers do
     collection do
       post 'import'
+    end
+  end
+
+  resources :events, except: :show do
+    collection do
+      post 'submit'
+      get 'approve'
+      post 'update_approval'
     end
   end
 

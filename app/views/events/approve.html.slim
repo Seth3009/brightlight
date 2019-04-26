@@ -1,0 +1,37 @@
+h4 Event approval page
+
+= form_tag update_approval_events_path do
+  nav
+    .nav-wrapper
+      ul.context-buttons style='display:none'
+        li
+          button.btn type="submit"
+            | Submit
+            i.material-icons.left send
+
+  .card-panel
+    table.compact.striped
+      thead
+        tr
+          th
+            input.allcheckboxes type="checkbox" id="event-all" name="event[all]"
+            = label_tag "event-all", ""
+          th Name
+          th Department
+          th Description
+          th PIC
+          th Start date
+          th End date
+
+      tbody
+        - @events.each do |event|
+          tr id="row-#{event.id}"
+            td
+              input.checkbox type="checkbox" id="event-#{event.id}" name="event[#{event.id}]"
+              = label_tag "event-#{event.id}", ""
+            td = event.name
+            td = event.department
+            td = event.description
+            td = event.manager
+            td = event.start_date
+            td = event.end_date

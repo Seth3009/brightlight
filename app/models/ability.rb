@@ -94,6 +94,7 @@ class Ability
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
     can :read, PurchaseOrder, requestor: @user.employee
+    can [:create,:read,:update], Event, creator: @user.employee
     can_manage_own_leave_request
     can_manage_own_requisition    
   end

@@ -1,12 +1,10 @@
 class EventEmailer < ActionMailer::Base
   default from: "Brightlight <brightlight@cahayabangsa.org>"
 
-  def approval(event)
-    @event = event
-    @cc = [event.creator, event.manager].map {|person| %("#{person.name}" <#{person.email}>)}
-    approvers = @requisition.approvals.level(level)
-    @addressee = approvers.map { |approval| %("#{approval.approver.employee.name}" <#{approval.approver.employee.email}>) }
-    mail(to: @addressee, cc: @cc, subject: "Approval required: Event #{event.name}.")
+  def approval(addressee, events)
+    @addressee = addressee
+    @events = Event.find(events)
+    mail(to: @addressee, subject: "Approval required for events")
   end
 
 

@@ -8,7 +8,10 @@ class Event < ActiveRecord::Base
   has_many :approvers
 
   accepts_nested_attributes_for :approvers, reject_if: :all_blank, allow_destroy: true
-
+  
+  scope :active, -> { where(active: true) }
+  scope :current, -> { where(academic_year_id: AcademicYear.current_id) }
+  
   aasm do
     state :draft, initial: true
     state :submitted
@@ -19,7 +22,6 @@ class Event < ActiveRecord::Base
       transitions from: [:draft, :rejected, :canceled], to: :submitted
       after do
         set_approvals level: 1
-        notify_approvers level: 1
       end
     end
 
@@ -27,7 +29,6 @@ class Event < ActiveRecord::Base
       transitions from: :submitted, to: :approved
       after do
         set_inactive level: 1
-        notify_creator
       end
     end
 
@@ -35,22 +36,15 @@ class Event < ActiveRecord::Base
       transitions from: :submitted, to: :rejected
       after do
         set_inactive level: 1
-        notify_creator
       end
     end
 
     event :cancel do
       transitions from: :approved, to: :canceled
-      after do
-        notify_creator
-      end
     end
 
     event :close do
       transitions from: :approved, to: :close
-      after do
-        notify_creator
-      end
     end
   end
 
@@ -72,6 +66,21 @@ class Event < ActiveRecord::Base
     email.deliver_now
     notification = Message.new_from_email(email)
     notification.save
+  end
+
+  def self.notify_approvers(event_ids)
+    approver_and_events = Approver.joins(:approvals)
+      .where(approvals: {approvable_type:'Event', approvable_id: event_ids})
+      .joins(:employee)
+      .select('approvers.*, employees.email as email, approvals.approvable_id as event_id')
+      .order('employees.id')
+      .reduce({}){|map, a| map[a.email] ? map.merge(a.email => map[a.email].push(a.event_id)) : map.merge(a.email => [a.event_id]) }
+    approver_and_events.each do |email, events|
+      email = EventEmailer.approval(email, events)
+      email.deliver_now
+      notification = Message.new_from_email(email)
+      notification.save
+    end
   end
 end
 
