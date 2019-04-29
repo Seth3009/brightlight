@@ -229,6 +229,21 @@ class Requisition < ActiveRecord::Base
     sent_to_supv.present?
   end
 
+  def approval_string
+    case aasm_state
+    when 'draft'
+      "-"
+    when 'level1', 'level2', 'level3'
+      "Approval pending"
+    when 'approved', 'open'
+      "Approved"
+    when 'rejected'
+      "Rejected"
+    else
+      "Closed"
+    end
+  end
+
   # Call back from comment
   def create_email_from_comment(comment)
     # Purchasing email is set in Rails configuration file

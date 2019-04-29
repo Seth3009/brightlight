@@ -25,7 +25,7 @@
           td = requisition.sent_to_purchasing
           td = requisition.date_required
           td = requisition.requester
-          td.wd10 = requisition.approved? ? 'Approved' : requisition.rejected? ? 'Rejected' : 'Approval pending'
+          td.wd10 = requisition.approval_string
           td.wd10.right-align = requisition.total_amt
           td.wd10
             = link_to requisition
