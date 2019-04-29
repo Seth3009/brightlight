@@ -7,6 +7,9 @@ class Event < ActiveRecord::Base
   has_many :approvals, as: :approvable
   has_many :approvers
 
+  validates :manager, presence: true
+  validates :name, presence: true
+
   accepts_nested_attributes_for :approvers, reject_if: :all_blank, allow_destroy: true
   
   scope :active, -> { where(active: true) }
@@ -49,7 +52,8 @@ class Event < ActiveRecord::Base
   end
 
   def set_approvals(level:)
-    approvers = Approver.for(category:'EV', department: self.department, level: level)  
+    dept = self.department || self.manager.department
+    approvers = Approver.for(category:'EV', department: dept, level: level)
     self.approvals << Approval.new_from_approvers(approvers) 
   end
 
