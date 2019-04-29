@@ -51,7 +51,7 @@ class Requisition < ActiveRecord::Base
     .where('approvals.approve is null')
   }
   scope :pending_approval, lambda { where(aasm_state: ['level1', 'level2', 'level3']) }
-  scope :approved, lambda { where(aasm_state: 'approved') }
+  scope :approved, lambda { where("aasm_state = 'approved' OR aasm_state = 'open'") }
   scope :draft, lambda { where(aasm_state: 'draft') }
   scope :rejected, lambda { where(aasm_state: 'rejected') }
   scope :active, lambda { where(active: true) }
