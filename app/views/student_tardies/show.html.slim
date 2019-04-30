@@ -15,24 +15,35 @@ nav
     = @student_tardy.id 
   .row
     .col.s2
-      strong Student: 
-    .col.s10.borders
-      
+      strong Name: 
+    .col.s10.borders.left_pos
       = @student_tardy.student.name
   .row
     .col.s2
       strong Grade: 
-    .col.s4.borders
+    .col.s4.borders.left_pos
       = @student_tardy.grade_section.name
     .col.s2
       strong Time: 
-    .col.s4.borders
+    .col.s4.borders.left_pos
       = @student_tardy.created_at.try(:strftime, "%I:%M %p")
   .row
-    .col.s12.word_wrap
+    .col.s2
       strong Reason: 
+    .col.s10.word_wrap.left_pos
       = @student_tardy.reason 
-
+      
+  br
+  br
+  .row   
+    .col.s6.center.offset-s6
+      strong 
+        = Date.today.try(:strftime, "%d %B %Y") + "\n"
+        | Acknowledged by,
+        br
+        br
+        br
+        | (#{current_user.name})
 
 
 
@@ -53,20 +64,43 @@ javascript:
       return false;
     }
   });
-  
 
+  $(window).codeScanner({
+    minEntryChars: 10,
+    maxEntryTime: 500,
+    onScan: function($element, input) {             
+      var card = input.trim();       
+      $.getJSON("/students/" + card + ".json", null, function (student) {
+        console.log("Scanned student", student);
+        var url= "/student_tardies/new?student_id=" + student.id + "&student=" + student.name;
+        if (student != null) {          
+          $.rails.handleRemote($('<a>', { href: url, 'data-method': 'GET' }));
+        }
+      }).fail(function(xhr){
+        Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
+      });            
+    }
+  });
+  
+ 
 css:
   .borders {    
     border: 1px solid #000;
+    width: 100%;
   }
   .word_wrap {
-    word-wrap:break-word
-  }
+    word-wrap:break-word;
+    }
+  
   
   @media print {
     body {
-      font: 7pt Arial, sans-serif;
+      font: 6pt Arial, sans-serif;
       width:100%;
-      height:100%;      
+      height:100%; 
     }
+    .left_pos {
+      position: relative;
+      left: 2px;
+    }    
   }

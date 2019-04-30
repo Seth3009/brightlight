@@ -1,24 +1,21 @@
-= form_for @student_tardy do |f|
-  - if @student_tardy.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@student_tardy.errors.count, "error")} prohibited this student_tardy from being saved:"
-      ul
-        - @student_tardy.errors.full_messages.each do |message|
-          li = message
-
-  .field
-    = f.label :student
-    = f.text_field :student
-  .field
-    = f.label :grade
-    = f.text_field :grade
-  .field
-    = f.label :reason
-    = f.text_field :reason
-  .field
-    = f.label :employee
-    = f.text_field :employee
-  .field
-    = f.label :academic_year
-    = f.text_field :academic_year
-  .actions = f.submit
+.row
+  .input-field.col.s9
+    = f.label :student, "Student Name", class:'active'
+    = f.text_field :student, value:@student.name, disabled:'disabled'
+    = f.hidden_field :student_id, class:'student_id', value: @student.id
+    = f.hidden_field :academic_year_id, value:AcademicYear.current_id  
+    = f.hidden_field :date_tardy, value: Date.today
+    = f.hidden_field :grade_section_id, class:'grade_section', value:@grade.id
+  .input-field.col.s3
+    = f.label :family_no, "Family Number", class:'active'
+    = f.text_field :family_no, class:'family_no', value:@student.family_no, disabled:'disabled'
+.row    
+  .input-field.col.s3
+    = f.label :grade, "Grade", class:'active'
+    = f.text_field :grade, class:'grade', disabled:'disabled', value:@grade.name
+  .input-field.col.s9
+    = label_tag :teacher, "Teacher", class:'active'
+    = text_field_tag :homeroom_name, '', class:'homeroom_name', value:@homeroom.name
+    = f.hidden_field :employee_id, class:'homeroom_id', value:@homeroom.id
+  
+= render 'reason', f:f

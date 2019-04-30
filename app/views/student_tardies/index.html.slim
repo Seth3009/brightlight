@@ -40,21 +40,30 @@ nav
       - @student_tardies.each do |student_tardy|
         tr id="row-#{student_tardy.id}"
           = render partial: 'index_row', locals: {student_tardy: student_tardy}
-        
-          
-/ iframe id ="pdf_source" src="#{request.protocol}#{request.host_with_port}/student_tardies/9" style="width:700px;height:500px; display:none;"
 
 
-#show-modal.modal.modal-fixed-footer
-  .modal-content
-    #modal-content
-  .modal-footer
-    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
     
 #edit-modal.modal.modal-fixed-footer
   #edit-modal-content
 
 javascript:
+  $(window).codeScanner({
+    minEntryChars: 10,
+    maxEntryTime: 500,
+    onScan: function($element, input) {             
+      var card = input.trim();       
+      $.getJSON("/students/" + card + ".json", null, function (student) {
+        console.log("Scanned student", student);
+        var url= "/student_tardies/new?student_id=" + student.id + "&student=" + student.name;
+        if (student != null) {          
+          $.rails.handleRemote($('<a>', { href: url, 'data-method': 'GET' }));
+        }
+      }).fail(function(xhr){
+        Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
+      });            
+    }
+  });
+
   $(function(){
       // bind click event to get data
       $('#btnrefresh').on('click', function () {          
@@ -68,15 +77,7 @@ javascript:
       });
     });
 
-  /*$(document).ready(function() {
-    pdf = document.getElementById('pdf_source');
-    pdf.focus();
-
-    setTimeout(function(){
-        pdf.contentWindow.print();
-    }, 3000);
-    });
-  */
+  
 css:
   table{
     table-layout: fixed;
@@ -87,3 +88,4 @@ css:
   th {
     width:100%;
     }
+  

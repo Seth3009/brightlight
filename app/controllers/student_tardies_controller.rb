@@ -14,7 +14,14 @@ class StudentTardiesController < ApplicationController
 
   # GET /student_tardies/new
   def new
+    
     @student_tardy = StudentTardy.new
+    if params[:student_id]
+      @student = Student.find(params[:student_id])
+      @grade = @student.current_grade_section
+      @homeroom = Employee.find(@grade.homeroom_id)
+    end
+    
   end
 
   # GET /student_tardies/1/edit
@@ -28,7 +35,7 @@ class StudentTardiesController < ApplicationController
 
     respond_to do |format|
       if @student_tardy.save
-        format.html { redirect_to @student_tardy, notice: 'Student tardy was successfully created.' }
+        format.html { redirect_to :nothing, notice: 'Student tardy was successfully created.' }
         format.json { render :show, status: :created, location: @student_tardy }
         format.js 
       else

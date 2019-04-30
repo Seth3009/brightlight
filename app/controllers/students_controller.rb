@@ -52,6 +52,15 @@ class StudentsController < ApplicationController
   def show
     authorize! :read, Student
     @current_grade = @student.current_grade_section
+    respond_to do |format|
+      if @student
+        format.html 
+        format.json 
+      else
+        format.html { not_found }
+        format.json { render json: {errors:"Invalid Card"}, status: :unprocessable_entity }
+      end
+    end
   end
 
   # GET /students/new
@@ -128,7 +137,11 @@ class StudentsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_student
-      @student = Student.where(id: params[:id]).includes([:student_admission_info]).first
+      if params[:id].length > 9 
+        @student = Student.joins(:badge).where(badges: {code: params[:id]}).take
+      else
+        @student = Student.where(id: params[:id]).includes([:student_admission_info]).first
+      end      
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

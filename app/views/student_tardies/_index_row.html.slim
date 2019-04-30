@@ -8,26 +8,18 @@ tr id="row-#{student_tardy.id}"
   td = student_tardy.employee
   td = student_tardy.academic_year.name
   td 
-    = link_to '#', onclick:"printExternal('http://222.168.2.148:3000/student_tardies/#{student_tardy.id}')"
+    = link_to '#', onclick:"printExternal('#{student_tardy_url(student_tardy.id)}')"
       i.material-icons.left print
     = link_to student_tardy, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
       i.material-icons.left delete
 
 
 javascript:
-  function printExternal(url) {
+  function printExternal(url) {   
     var printWindow = window.open( url, 'Print', 'width=950, height=500, toolbar=0, resizable=0');
     printWindow.addEventListener('load', function(){
         printWindow.print();
         printWindow.close();
     }, true);
   }
-  function print_tardy() {        
-    pdf = document.getElementById("#{student_tardy.id}");
-    console.log(pdf);
-    pdf.focus();
-
-    setTimeout(function(){
-        pdf.contentWindow.print();
-    }, 3000);
-  }
+  
