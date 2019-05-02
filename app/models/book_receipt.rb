@@ -10,12 +10,12 @@ class BookReceipt < ActiveRecord::Base
   belongs_to :course
   belongs_to :course_text
 
-  validates :book_copy, presence:true
+  #validates :book_copy, presence:true
   validates :academic_year, presence:true
   validates :grade_section, presence:true
   validates :grade_level, presence:true
   validates :roster_no, presence:true
-  validates :book_copy, uniqueness: {scope: [:academic_year_id]}
+  # validates :book_copy, uniqueness: {scope: [:academic_year_id]}
   # validates :initial_condition, presence:true
 
   after_save :update_book_copy_condition
@@ -34,6 +34,37 @@ class BookReceipt < ActiveRecord::Base
       n = self.initialize_with_student_books grade_section: grade_section, previous_year: previous_year_id, new_year: new_year_id
     end
     n
+  end
+
+  def self.initialize_with_standard_books(year_id, grade_levels)
+    GradeLevel.where(id: grade_levels).each do |grade_level|
+      StandardBook.where(academic_year_id: year_id, grade_level: grade_level).each do |std_book|
+        grade_level.grade_sections.each do |grade_section|
+          if grade_section.capacity
+            (1..grade_section.capacity).each do |num|
+              new_from_student_book(year_id, grade_section, std_book, num).save
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def self.new_from_student_book(year_id, grade_section, std_book, roster_no)
+    student_book = StudentBook.where(
+      academic_year_id: year_id, 
+      grade_section_id: grade_section.id,
+      book_edition_id: std_book.book_edition_id,
+      roster_no: roster_no).take
+    BookReceipt.new academic_year_id: year_id,
+      grade_section_id: grade_section.id,
+      grade_level_id: grade_section.grade_level_id,
+      book_edition_id: std_book.book_edition_id,
+      roster_no: roster_no,
+      book_copy_id: student_book.try(:book_copy_id),
+      barcode: student_book.try(:barcode),
+      copy_no: student_book.try(:copy_no),
+      initial_condition_id: student_book.try(:book_copy).try(:latest_condition)
   end
 
   def self.initialize_with_student_books_for_grade(previous_year_id, new_year_id, grade_section_id)
