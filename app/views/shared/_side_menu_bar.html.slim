@@ -167,14 +167,18 @@ li
 		| School
 	.collapsible-body
 		ul
-			li
-				= link_to 'Grade Levels', grade_levels_path
-			li
-				= link_to 'Departments', departments_path
+			-if can? :manage, GradeLevel
+				li
+					= link_to 'Grade Levels', grade_levels_path
+			-if can? :manage, Department
+				li
+					= link_to 'Departments', departments_path
 			-if can? :manage, Course
 				li
 					= link_to 'Courses', courses_path
-
+			-if can? :manage, StudentTardy
+				li
+					= link_to 'Student Tardy', student_tardies_url
 - if can? :manage, DiknasReportCard
 	li
 		.collapsible-header.waves-effect.waves-cyan
@@ -189,25 +193,26 @@ li
 						= link_to 'Conversion Setting', diknas_conversions_path 
 					= link_to 'Convert Grade Book', diknas_converteds_path
 					
-li
-	.collapsible-header.waves-effect.waves-cyan
-		i.material-icons restaurant_menu
-		i.mdi-navigation-chevron-right.right
-		| Food & Beverage
-	.collapsible-body
-		ul
-			li
-				= link_to 'Food Packs', food_packs_path
-			li
-				= link_to 'Raw Food', raw_foods_path
-			li
-				= link_to 'Food Supplier', food_suppliers_path
-			li
-				= link_to 'Food List', foods_path
-			li
-				= link_to 'Lunch Menu', lunch_menus_path	
-			li
-				= link_to 'Food Order', food_orders_path
+- if can? :manage, Food
+	li
+		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons restaurant_menu
+			i.mdi-navigation-chevron-right.right
+			| Food & Beverage
+		.collapsible-body
+			ul
+				li
+					= link_to 'Food Packs', food_packs_path
+				li
+					= link_to 'Raw Food', raw_foods_path
+				li
+					= link_to 'Food Supplier', food_suppliers_path
+				li
+					= link_to 'Food List', foods_path
+				li
+					= link_to 'Lunch Menu', lunch_menus_path	
+				li
+					= link_to 'Food Order', food_orders_path
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons people
