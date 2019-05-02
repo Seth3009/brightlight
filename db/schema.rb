@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190502021008) do
+ActiveRecord::Schema.define(version: 20190502011845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -657,19 +657,11 @@ ActiveRecord::Schema.define(version: 20190502021008) do
     t.datetime "updated_at",       null: false
     t.integer  "instructor_id"
     t.string   "slug"
-    t.integer  "instructor2_id"
-    t.integer  "aide_id"
-    t.boolean  "sem1"
-    t.boolean  "sem2"
-    t.integer  "location_id"
   end
 
-  add_index "course_sections", ["aide_id"], name: "index_course_sections_on_aide_id", using: :btree
   add_index "course_sections", ["course_id"], name: "index_course_sections_on_course_id", using: :btree
   add_index "course_sections", ["grade_section_id"], name: "index_course_sections_on_grade_section_id", using: :btree
-  add_index "course_sections", ["instructor2_id"], name: "index_course_sections_on_instructor2_id", using: :btree
   add_index "course_sections", ["instructor_id"], name: "index_course_sections_on_instructor_id", using: :btree
-  add_index "course_sections", ["location_id"], name: "index_course_sections_on_location_id", using: :btree
   add_index "course_sections", ["slug"], name: "index_course_sections_on_slug", unique: true, using: :btree
 
   create_table "course_texts", force: :cascade do |t|
@@ -1365,16 +1357,6 @@ ActiveRecord::Schema.define(version: 20190502021008) do
   create_table "loan_types", force: :cascade do |t|
     t.string   "code"
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "locations", force: :cascade do |t|
-    t.string   "code"
-    t.string   "name"
-    t.string   "building"
-    t.string   "purpose"
-    t.string   "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -2290,7 +2272,6 @@ ActiveRecord::Schema.define(version: 20190502021008) do
   add_foreign_key "course_schedules", "courses"
   add_foreign_key "course_schedules", "rooms"
   add_foreign_key "course_section_histories", "employees", column: "instructor_id"
-  add_foreign_key "course_sections", "locations"
   add_foreign_key "course_texts", "book_categories"
   add_foreign_key "course_texts", "book_editions"
   add_foreign_key "courses", "course_departments"

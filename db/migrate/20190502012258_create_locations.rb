@@ -6,6 +6,7 @@ class CreateLocations < ActiveRecord::Migration
       t.string :building
       t.string :purpose
       t.string :notes
+      t.integer :capacity
 
       t.timestamps null: false
     end
