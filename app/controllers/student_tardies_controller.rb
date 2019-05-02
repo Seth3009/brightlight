@@ -4,6 +4,7 @@ class StudentTardiesController < ApplicationController
   # GET /student_tardies
   # GET /student_tardies.json
   def index
+    authorize! :manage, StudentTardy
     @student_tardies = StudentTardy.where(date_tardy:(params[:fd] || Date.today)..(params[:td] || Date.today))
   end
 
@@ -14,7 +15,7 @@ class StudentTardiesController < ApplicationController
 
   # GET /student_tardies/new
   def new
-    
+    authorize! :manage, StudentTardy
     @student_tardy = StudentTardy.new
     if params[:student_id]
       @student = Student.find(params[:student_id])
@@ -31,6 +32,7 @@ class StudentTardiesController < ApplicationController
   # POST /student_tardies
   # POST /student_tardies.json
   def create
+    authorize! :manage, StudentTardy
     @student_tardy = StudentTardy.new(student_tardy_params)
 
     respond_to do |format|
@@ -48,6 +50,7 @@ class StudentTardiesController < ApplicationController
   # PATCH/PUT /student_tardies/1
   # PATCH/PUT /student_tardies/1.json
   def update
+    authorize! :manage, StudentTardy
     respond_to do |format|
       if @student_tardy.update(student_tardy_params)
         format.html { redirect_to @student_tardy, notice: 'Student tardy was successfully updated.' }
@@ -63,6 +66,7 @@ class StudentTardiesController < ApplicationController
   # DELETE /student_tardies/1
   # DELETE /student_tardies/1.json
   def destroy
+    authorize! :manage, StudentTardy
     @student_tardy.destroy
     respond_to do |format|
       format.html { redirect_to student_tardies_url, notice: 'Student tardy was successfully destroyed.' }
