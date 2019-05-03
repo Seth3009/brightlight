@@ -11,8 +11,6 @@ namespace :data do
 
     sheet.each_with_index(header) do |row,i|
 			next if i < 1
-
-      puts "Importing row #{i}. #{row[:title]} #{row[:section]}"
       
       department = CourseDepartment.find_or_create_by(name: row[:department])
       location = Location.find_or_create_by(name: row[:room])
@@ -36,6 +34,8 @@ namespace :data do
         location_id: location.id,
         instructor_id: row[:instructor_id]
       )
+
+      puts "Row #{i}.#{row[:department]}/#{department.id} #{row[:title]}/#{course.id} #{row[:section]}/#{course_section.id} #{Employee.where(id:row[:instructor_id]).take.try(:name) || 'N/A'}"
     end
   end
 end

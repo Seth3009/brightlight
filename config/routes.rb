@@ -140,6 +140,7 @@ Rails.application.routes.draw do
     resources :course_texts, shallow: true
     resources :course_sections, except: :new, shallow: true do
       member do
+        get  'edit_students'
         post 'add_students'
       end
     end

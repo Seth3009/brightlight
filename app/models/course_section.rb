@@ -6,7 +6,7 @@ class CourseSection < ActiveRecord::Base
   belongs_to :instructor, class_name: "Employee"
   belongs_to :instructor2, class_name: "Employee"
   belongs_to :aide, class_name: "Employee"
-  belongs_to :locations
+  belongs_to :location
 
   has_many :rosters, dependent: :destroy
   has_many :students, through: :rosters

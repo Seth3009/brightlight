@@ -1,18 +1,4 @@
-h4 = @course_section.name
-
-.card-panel
-  .list_description
-    dl.row
-      dd.col.s4
-        .label Course Name
-        .item
-          - if @course_section.course.present?
-            = link_to @course_section.course.name, @course_section.course
-          - else
-            .red-text Error! Course doesn't exist.
-      dd.col.s4
-        .label Instructor
-        .item = @course_section.instructor.present? ? link_to(@course_section.instructor.name, @course_section.instructor) : "--"
+h4 = "#{@course_section.course.try(:name)} / #{@course_section.name}"
 
 nav
   .nav-wrapper
@@ -21,10 +7,42 @@ nav
         = link_to @course_section.course
           i.material-icons.left chevron_left
           = @course_section.course.name
-      - if can? :update, @course_section
-        li.right
+    - if can? :update, @course_section
+      ul.right
+        li
           = link_to edit_course_section_path(@course_section)
-            | Edit
+            | Edit Info
+            i.material-icons.left edit
+.card-panel
+  .list_description
+    dl.row
+      dd.col.s3
+        .label Course Name
+        .item
+          - if @course_section.course.present?
+            = link_to @course_section.course.name, @course_section.course
+          - else
+            .red-text Error! Course doesn't exist.
+        .label Section
+        .item = @course_section.name
+      dd.col.s3
+        .label Instructors
+        ul
+          li = "(1) #{@course_section.instructor.try(:name) || '--'}"
+          li = "(2) #{@course_section.instructor2.try(:name) || '--'}"
+          li = "(Aide) #{@course_section.aide.try(:name) || '--'}"
+            /.item = @course_section.instructor.present? ? link_to(@course_section.instructor.name, @course_section.instructor) : "--"
+      dd.col.s3
+        .label Room location
+        .item = @course_section.location.try(:name) || '--'
+
+- if can? :update, @course_section
+  nav.light
+    .nav-wrapper
+      ul.right
+        li
+          = link_to edit_students_course_section_path(@course_section)
+            | Edit Students
             i.material-icons.left edit
 
 .card-panel
@@ -33,11 +51,14 @@ nav
     thead
       th No
       th Name
+      th Grade
     tbody
       - i = 0
-      - @course_section.students.each do |student|
+      - @students.each do |student|
         tr
           td style="width:40px"
             = "#{i += 1}. "
           td
             = link_to student.name, student
+          td 
+            = student.gs_name

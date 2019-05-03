@@ -38,16 +38,30 @@ class Student < ActiveRecord::Base
 			.order('grade_sections_students.order_no')
 	}
 
+	scope :with_grade_section, lambda {|year: AcademicYear.current|
+		joins(:grade_sections_students)
+		.where(grade_sections_students: {academic_year: year})
+		.joins('left join grade_sections on grade_sections.id = grade_sections_students.grade_section_id')
+		.joins('left join grade_levels on grade_levels.id = grade_sections.grade_level_id')
+		.select('students.*, grade_sections.id as gs_id, grade_sections.name as gs_name, grade_levels.id as gl_id, grade_levels.name as gl_name')
+	}
+
 	scope :search_name, lambda { |name| where('UPPER(students.name) LIKE ?', "%#{name.upcase}%") }
 
   filterrific(
-    default_filter_params: { sorted_by: 'created_at_desc' },
+    default_filter_params: { sorted_by: 'name_asc' },
     available_filters: [
       :sorted_by,
-      :search_query,
+			:search_query,
+			:with_grade_level_id,
       :filtered_by
     ]
-  )
+	)
+	
+	scope :with_grade_level_id, lambda { |grade_level_id|
+		with_grade_section
+		.where('grade_levels.id = ?', grade_level_id)
+	}
 
   scope :search_query, lambda { |query|
     return nil  if query.blank?
@@ -76,22 +90,25 @@ class Student < ActiveRecord::Base
     # extract the sort direction from the param value.
     direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
     case sort_option.to_s
-    when /^created_at_/
-      order("students.created_at #{ direction }")
     when /^name/
-      order("LOWER(students.name) #{ direction }")
+			order("LOWER(students.name) #{ direction }")
+		when /^grade_level/
+			with_grade_section.order("grade_levels.name #{ direction}, LOWER(students.name) asc")
+		when /^grade_section/
+			with_grade_section.order("grade_sections.name #{ direction}, LOWER(students.name) asc")
     when /^family_no/
       order("LOWER(students.family_no) #{ direction }")
     else
       raise(ArgumentError, "Invalid sort option: #{ sort_option.inspect }")
     end
-  }
+	}
 
   def self.options_for_sorted_by
     [
       ['Name (a-z)', 'name_asc'],
-      ['Admission No', 'admission_no_asc'],
-      ['Family No', 'family_id_asc']
+			['Grade Level', 'grade_level_asc'],
+			['Grade Section', 'grade_section_asc'],
+      ['Family No', 'family_no_asc']
     ]
   end
 

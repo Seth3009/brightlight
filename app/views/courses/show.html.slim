@@ -1,5 +1,22 @@
 h4 = @course.name 
 
+nav
+  .nav-wrapper
+    ul
+      li 
+        = link_to courses_path
+          |All courses
+          i.material-icons.left chevron_left
+    ul.right
+      li 
+        = link_to edit_course_path(@course)
+          | Edit
+          i.material-icons.left edit
+      li
+        = link_to course_course_texts_path(@course) 
+          | Edit Course Texts
+          i.material-icons.left book
+
 .row
   .col.s12
     .card-panel
@@ -20,7 +37,7 @@ h4 = @course.name
         dl.row
           dd.col.s2
             .label Grade
-            .item = @course.grade_level.name
+            .item = @course.grade_level.try(:name) || "N/A"
           dd.col.s2
             .label Year
             .item = @course.academic_year.name
@@ -29,17 +46,6 @@ h4 = @course.name
             - for term in @course.academic_terms
               .item = term.name
 
-nav
-  .nav-wrapper
-    ul.right
-      li 
-        = link_to edit_course_path(@course)
-          | Edit
-          i.material-icons.left edit
-      li
-        = link_to course_course_texts_path(@course) 
-          | Edit Course Texts
-          i.material-icons.left book
 .row
   .col.s12
     .card   

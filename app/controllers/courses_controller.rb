@@ -13,6 +13,8 @@ class CoursesController < ApplicationController
     else
       @courses = Course.paginate(page: params[:page], per_page: items_per_page)
     end
+    year = params[:year] ? params[:year] : AcademicYear.current_id
+    @courses = @courses.where(academic_year_id: year)
   end
 
   # GET /courses/1

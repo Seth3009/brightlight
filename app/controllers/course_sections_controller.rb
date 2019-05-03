@@ -1,5 +1,5 @@
 class CourseSectionsController < ApplicationController
-  before_action :set_course_section, only: [:show, :edit, :update, :destroy]
+  before_action :set_course_section, only: [:show, :edit, :edit_students, :update, :destroy]
   load_and_authorize_resource
 
   # GET /course_sections
@@ -18,17 +18,24 @@ class CourseSectionsController < ApplicationController
   # GET /course_sections/1.json
   def show
     @course = @course_section.course
+    @students = @course_section.students.with_grade_section
   end
 
   # GET /course_sections/1/edit
-  def edit
+  def edit 
+    authorize! :update, @course_section
+  end
+
+  # GET /course_sections/1/edit_students
+  def edit_students
     authorize! :update, @course_section
     @academic_year = params[:year] ? AcademicYear.find(params[:year]) : AcademicYear.current
     @filterrific = initialize_filterrific(
       Student,
       params[:filterrific],
       select_options: {
-        sorted_by: Student.options_for_sorted_by
+        sorted_by: Student.options_for_sorted_by,
+        with_grade_level_id: GradeLevel.options_for_select
       }
     ) or return
 
@@ -113,6 +120,6 @@ class CourseSectionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def course_section_params
-      params.require(:course_section).permit(:name, :instructor_id)
+      params.require(:course_section).permit(:name, :instructor_id, :instructor2_id, :aide_id, :location_id)
     end
 end
