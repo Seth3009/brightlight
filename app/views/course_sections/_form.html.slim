@@ -2,7 +2,7 @@
   .card-panel
     .list_description
       dl.row
-        dd.col.s4
+        dd.col.s12.m4
           .label Course
           .input-field
             = f.label 'Course'
@@ -10,7 +10,7 @@
           .input-field
             = f.label :name
             = f.text_field :name
-        dd.col.s4
+        dd.col.s12.m4
           .label Instructors
           .input-field
             = f.label :instructor, class: 'active'
@@ -21,7 +21,7 @@
           .input-field
             = f.label :aide, class: 'active'
             = f.collection_select :aide_id, Employee.active.order(:name), :id, :name, prompt: 'Select name'
-        dd.col.s4
+        dd.col.s12.m4
           .label Location
           .input-field
             = f.label :location, class: 'active'
@@ -29,4 +29,4 @@
 
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" data-disable=true Save
-    = link_to 'Cancel', courses_path, class: "waves-effect waves-teal btn-flat"
+    = link_to 'Cancel', @course_section, class: "waves-effect waves-teal btn-flat"

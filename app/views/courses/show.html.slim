@@ -60,15 +60,21 @@ nav
           .card-content
             h5 Course Sections
             - if @course.course_sections.present?
-              table.striped
+              table.compact.striped
                 thead
                   th Section
                   th Instructor
+                  th Actions
                 tbody
                 - @course.course_sections.each do |section|
                   tr
                     td = link_to(section.name, section)
                     td = link_to(section.instructor.name, section.instructor) if section.instructor
+                    td 
+                      = link_to section
+                        i.material-icons visibility
+                      = link_to edit_course_section_path section
+                        i.material-icons edit
             - else
               p.red-text No sections
 
