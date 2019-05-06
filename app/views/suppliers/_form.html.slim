@@ -61,10 +61,47 @@
   nav.light
     .nav-wrapper
       .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Bank Information
+  .card-panel
+    .row
+      .col.s12.m4
+        h5 Bank 1
+        .input-field
+          = f.label :bank
+          = f.text_field :bank
+        .input-field
+          = f.label :bank_branch
+          = f.text_field :bank_branch
+        .input-field
+          = f.label :bank_acct_name
+          = f.text_field :bank_acct_name
+        .input-field
+          = f.label :bank_acct_no
+          = f.text_field :bank_acct_no
+      .col.s12.m4
+        h5 Bank 2
+        .input-field
+          = f.label :bank2, "Bank 2"
+          = f.text_field :bank2
+        .input-field
+          = f.label :bank2_branch, "Bank 2 Branch"
+          = f.text_field :bank2_branch
+        .input-field
+          = f.label :bank2_acct_name, "Bank 2 Account Name"
+          = f.text_field :bank2_acct_name
+        .input-field
+          = f.label :bank2_acct_no, "Bank 2 Account No"
+          = f.text_field :bank2_acct_no
+      .input-field.col.s12.m4
+        = f.label :payment_method
+        = f.text_field :payment_method
+
+  nav.light
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
         | Detail
   .card-panel
     .row
-
       .input-field.col.s4
         = f.label :category
         = f.text_field :category
@@ -80,6 +117,7 @@
       .input-field.col.s12
         = f.label :notes
         = f.text_field :notes
+
 
   .toolbar.z-depth-1 
     = link_to 'Cancel', suppliers_path, class: "waves-effect waves-teal btn-flat"

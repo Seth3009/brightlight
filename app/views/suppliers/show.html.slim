@@ -57,7 +57,7 @@ nav
       .item = @supplier.acctg_phone || '--'
 
     .col.s4
-      .section-head BANK
+      .section-head BANK 1
       -if @supplier.bank.present?
         .label Bank:
         .item = @supplier.bank || '--'
@@ -69,6 +69,7 @@ nav
         .item = @supplier.bank_acct_no || '--'
 
       -if @supplier.bank2.present?
+        .section-head BANK 2
         .label Bank:
         .item = @supplier.bank2 || '--'
         .label Branch:
