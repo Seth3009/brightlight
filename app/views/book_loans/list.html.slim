@@ -57,11 +57,11 @@ div
               li
                 .cat Edit:
               li 
-                = select_tag :convert, options_for_select([['Return to check','return_to_check'], ['Check to return','check_to_return']]), prompt: "Select conversion type"
+                = select_tag :convert, options_for_select([['Return to check','return_to_check'], ['Check to return','check_to_return']]), prompt: "Convert"
               li           
-                = select_tag :batch_return, options_for_select([['Return','R'], ['Return to inventory','RI']]), prompt: "Select return type"
+                = select_tag :batch_return, options_for_select([['Return','R'], ['Return to inventory','RI']]), prompt: "Return type"
               li 
-                = select_tag :book_catg, options_from_collection_for_select(BookCategory.all, :id, :name), prompt: "Select Category"
+                = select_tag :book_catg, options_from_collection_for_select(BookCategory.all, :id, :name), prompt: "Category"
               li 
                 button.btn type='submit' name='batch' data-disable=true Go!
             - if can? :delete, BookLoan
@@ -86,8 +86,7 @@ div
           ul.right.hide-on-med-and-down
             li
               a.dropdown-button href="#!" data-activates="inventory-menu" data-year="#{@academic_year.id}" data-beloworigin="true" 
-                |Actions
-                i.material-icons.right arrow_drop_down
+                i.material-icons more_vert
             li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Scan book to check/return"
               = link_to scan_employee_book_loans_path(@teacher, year: @academic_year.id)              
                 | Check
@@ -118,11 +117,6 @@ div
             = link_to employee_book_loans_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg], format: :xls), target: '_blank'            
               | Export to Excel
               = image_tag 'xls80-black.png', class:'left'
-          -if can? :manage, BookLoan
-            li  
-              = link_to fix_check_employee_book_loans_path(@teacher, year: @academic_year.id), data: {:confirm => confirm_msg}
-                | Change all Return status to Check
-                i.material-icons.left checkbox
           li
             = link_to scan_employee_book_loans_path(@teacher, year: @academic_year.id)
               | Scan book to check or return
