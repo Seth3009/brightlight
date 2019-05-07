@@ -331,6 +331,15 @@ class BookLoansController < ApplicationController
       BookLoan.not_disposed.where(id:selected_ids).update_all return_status: params[:batch_return], return_date: Date.today
       @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
     end
+    if params[:convert].present?
+      case params[:convert]
+      when 'return_to_check'
+        BookLoan.not_disposed.where(id:selected_ids).change_status_return_to_check(employee_id: params[:employee_id], year_id: params[:year])
+      when 'check_to_return'
+        BookLoan.not_disposed.where(id:selected_ids).change_status_check_to_return(employee_id: params[:employee_id], year_id: params[:year])
+      end
+      @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
+    end
     if params[:delete]
       BookLoan.not_disposed.where(id:selected_ids).destroy_all
       ids_to_remove = selected_ids
@@ -373,34 +382,6 @@ class BookLoansController < ApplicationController
       end
     end
   end
-
-  def change_status_return_to_check
-    empl = params[:employee_id]
-    year = params[:year]
-    
-    loans = BookLoan.where(academic_year_id: year, employee_id: empl, return_status: 'R')
-    if loans.present?
-      loans.each do |bl|
-        bl.loan_checks << LoanCheck.new(
-          academic_year_id: year,
-          loaned_to: empl,
-          scanned_for: empl,
-          book_copy_id: bl.book_copy_id, 
-          emp_flag: true, 
-          matched: true,
-          user_id: bl.user_id
-        )
-        bl.return_status = nil
-        bl.return_date = nil
-        bl.save
-      end
-      redirect_to employee_book_loans_path(employee_id: empl), notice: 'Book loan status was successfully changed to CHECK.'
-    else
-      redirect_to employee_book_loans_path(employee_id: empl), alert: 'No loans with Return status found. Did you select the corrent year?'
-    end
-  end
-
-  ####
 
   private
     # Use callbacks to share common setup or constraints between actions.

@@ -36,15 +36,9 @@ ul#inventory-menu.dropdown-content.menu
     = link_to employee_book_loans_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg], format: :xls), target: '_blank'
       |Export to Excel
       = image_tag 'xls80-orange.png', class: 'left'
-  -if can? :manage, BookLoan 
-    -confirm_msg = "This will change ALL loans status for this teacher in academic year #{@academic_year.name} to Check. Are you sure?"
-    li  
-      = link_to fix_check_employee_book_loans_path(@teacher, year: @academic_year.id), data: {:confirm => confirm_msg}
-        | Change all Return status to Check
-        i.material-icons.left checkbox
 
 div
-  = form_tag list_action_book_loans_path(employee_id:params[:employee_id], page:params[:page]), remote:true do 
+  = form_tag list_action_book_loans_path(employee_id:params[:employee_id], year: @academic_year.id, page:params[:page]), remote:true do 
     nav
       .nav-wrapper
         #context-buttons style="display:none;"
@@ -62,6 +56,8 @@ div
             - if can? :manage, BookLoan
               li
                 .cat Edit:
+              li 
+                = select_tag :convert, options_for_select([['Return to check','return_to_check'], ['Check to return','check_to_return']]), prompt: "Select conversion type"
               li           
                 = select_tag :batch_return, options_for_select([['Return','R'], ['Return to inventory','RI']]), prompt: "Select return type"
               li 

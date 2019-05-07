@@ -117,6 +117,45 @@ class BookLoan < ActiveRecord::Base
     student.grade_section_with_academic_year_id(self.academic_year_id).try(:name) if student.present?
   end
 
+  def self.change_status_check_to_return(employee_id: employee_id, year_id: year_id)   
+    loans = BookLoan.where(academic_year_id: year_id, employee_id: employee_id)
+    if loans.present?
+      loans.each do |bl|
+        check = bl.loan_checks.order(id: :desc).take
+        bl.return_status = 'R'
+        bl.return_date = check.created_at
+        bl.user_id = check.user_id
+        bl.save
+      end
+      true 
+    else
+      false
+    end
+  end
+
+  def self.change_status_return_to_check(employee_id: employee_id, year_id: year_id)
+    loans = BookLoan.where(academic_year_id: year_id, employee_id: employee_id, return_status: 'R')
+    if loans.present?
+      loans.each do |bl|
+        bl.loan_checks << LoanCheck.new(
+          academic_year_id: year_id,
+          loaned_to: employee_id,
+          scanned_for: employee_id,
+          book_copy_id: bl.book_copy_id, 
+          emp_flag: true, 
+          matched: true,
+          user_id: bl.user_id
+        )
+        bl.return_status = nil
+        bl.return_date = nil
+        bl.save
+      end
+      true
+    else
+      false
+    end
+  end
+  
   private
 
   # Whenever return status is changed, also change book_copy status
