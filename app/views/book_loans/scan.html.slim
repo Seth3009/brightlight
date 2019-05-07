@@ -1,7 +1,21 @@
-- title "Teacher's book check and return"
- 
-h4 Teacher's book check and return 
+-if params[:check] == 'only'
+  - title "Scan to check"
+  h4 Teacher's book scan to check
 
+  .card-panel.red.lighten-4 
+    |This process is only used for checking books. For End-of-year Checkout Process, please click here: 
+    = link_to "Checkout", scan_employee_book_loans_path(@teacher, check:'out', year: @academic_year_id)  
+
+-else
+  - title "Scan to check out/return"
+  h4 Teacher's book scan to check out
+  .card-panel.red.lighten-4 
+    |This process is used for End-of-year Checkout Process. If you want to check the book, please click here: 
+    = link_to scan_employee_book_loans_path(@teacher, check:'only', year: @academic_year_id)  
+      |Scan to Check
+      i.material-icons open_in_new
+    p For books that you want to return to inventory, please check the <em>Return to Inventory</em> checkbox.
+  
 nav
   .nav-wrapper
     .brand-logo style="margin-left: 20px; font-size:1.5em"
@@ -19,12 +33,11 @@ nav
       .collapsible-header
         | Manual input
         i.material-icons.left keyboard
-        .input-field.right-in-header
-          = check_box_tag :return_to_inventory 
-          = label_tag :return_to_inventory
-        .input-field.right-in-header
-          = check_box_tag :return 
-          = label_tag :return
+        -unless params[:check] == 'only'
+          .input-field.right-in-header
+            = check_box_tag :return_to_inventory 
+            = label_tag :return_to_inventory
+
       .collapsible-body
         .container style="margin-top:1px"
           .row
@@ -39,10 +52,10 @@ nav
       .collapsible-header 
         | Scan bar code
         = hidden_field_tag :barcode
-        .input-field.right-in-header
-          = check_box_tag :return 
-          = label_tag :return
-
+        -unless params[:check] == 'only'
+          .input-field.right-in-header
+            = check_box_tag :return_to_inventory 
+            = label_tag :return_to_inventory
               
 .card-panel#returns style="display:none"
   .row
@@ -66,31 +79,23 @@ nav
 
 javascript:
   $(document).ready(function(){
-    var toggleOutput = function() {
-      $("#returns").toggle($("#return").is(':checked'));
-      $("#checks").toggle(!$("#return").is(':checked'));
-      $("#return_to_inventory").prop("disabled", !$("#return").is(':checked'));
-    };
-    $("#return").on("change", toggleOutput.bind(this));
-    $("#return_to_inventory").on("change", function(){
-      $("#return").prop("checked", $(this).is(':checked'));
-      $("#return").prop("disabled", $(this).is(':checked'));
-      toggleOutput();
-    });
     $("#barcode").keyup(function () {
       $(this).val($(this).val().toUpperCase());
     });
   });
+  var param = function(name) {
+    return (location.search.split(name + '=')[1] || '').split('&')[0];
+  }
   $("#barcode").codeScanner({
     minEntryChars: 11,
     onScan: function($element, input) {
       var barcode = input.trim();
       var acad_year = $("#acad_year option:selected").val();
       $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}+"&year="+acad_year, null, function (data) {
-        if ($("#return").is(':checked')) {
-          update_book_loan(data);
-        } else {
+        if (param('check') == 'only') {
           check_book_loan(data);
+        } else {
+          update_book_loan(data);
         }              
       }).fail(function(xhr){
         Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
@@ -103,10 +108,10 @@ javascript:
       e.stopPropagation();
       var barcode = $("#barcode").val().trim();
       $.getJSON("/book_copies/"+barcode+".json?empl="+#{@teacher.id}+"&year="+acad_year, null, function (data) {
-        if ($("#return").is(':checked') || $("#return_to_inventory").is(':checked')) {
-          update_book_loan(data);
-        } else {
+        if (param('check') == 'only') {
           check_book_loan(data);
+        } else {
+          update_book_loan(data);
         }
       }).fail(function(xhr){
         Materialize.toast($.parseJSON(xhr.responseText).errors, 5000, 'red');

@@ -19,6 +19,10 @@ ul#catg-options.dropdown-content
       = link_to catg.name, employee_book_loans_path(params.merge(book_catg: catg.id).symbolize_keys)
 
 ul#inventory-menu.dropdown-content.menu
+  li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Scan book to check/return"
+    = link_to scan_employee_book_loans_path(@teacher, check:'only', year: @academic_year.id)              
+      | Check only
+      = image_tag 'barcode-white.png', class:"left"
   li
     = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg])
       | Book Receipt
@@ -87,9 +91,9 @@ div
             li
               a.dropdown-button href="#!" data-activates="inventory-menu" data-year="#{@academic_year.id}" data-beloworigin="true" 
                 i.material-icons more_vert
-            li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Scan book to check/return"
-              = link_to scan_employee_book_loans_path(@teacher, year: @academic_year.id)              
-                | Check
+            li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Scan book for EOY check-out"
+              = link_to scan_employee_book_loans_path(@teacher, check:'out', year: @academic_year.id)              
+                | EOY Checkout
                 = image_tag 'barcode-white.png', class:"left"
             - if can? :manage, BookLoan
               li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Add book"
