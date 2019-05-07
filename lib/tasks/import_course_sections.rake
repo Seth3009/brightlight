@@ -23,7 +23,7 @@ namespace :data do
       grade_level_id = course.number.match /(\d{2})[A-Z].+/
       course.update(
         name: row[:title],
-        grade_level_id: grade_level_id[1],
+        grade_level_id: grade_level_id ? grade_level_id[1] : nil,
         course_department_id: department.id
       )
       course_section = CourseSection.find_or_create_by(
