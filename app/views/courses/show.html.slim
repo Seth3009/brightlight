@@ -1,31 +1,15 @@
 h4 = @course.name 
 
-.row
-  .col.s12
-    .card-panel
-      .list_description
-        dl.row
-          dd.col.s2
-            .label Course Number
-            .item = @course.number
-          dd.col.s10
-            .label Description
-            .item = @course.description
-        dl.row
-          dd.col.s2
-            .label Grade
-            .item = @course.grade_level.name
-          dd.col.s4
-            .label Year
-            .item = @course.academic_year.name
-          dd.col.s4
-            .label Terms
-            - for term in @course.academic_terms
-              .item = term.name
-
 nav
   .nav-wrapper
-    ul.right
+    a.right.button-collapse.sidenav-trigger href="#" data-activates="sidenav-menu"
+      i.material-icons menu
+    ul
+      li 
+        = link_to courses_path
+          |All courses
+          i.material-icons.left chevron_left
+    ul.right.hide-on-med-and-down
       li 
         = link_to edit_course_path(@course)
           | Edit
@@ -34,6 +18,43 @@ nav
         = link_to course_course_texts_path(@course) 
           | Edit Course Texts
           i.material-icons.left book
+    .side-nav#sidenav-menu
+      li 
+        = link_to edit_course_path(@course)
+          | Edit
+          i.material-icons.left edit
+      li
+        = link_to course_course_texts_path(@course) 
+          | Edit Course Texts
+          i.material-icons.left book
+
+.card-panel
+  .list_description
+    dl.row
+      dd.col.s12.m4
+        .label Course Number
+        .item = @course.number
+      dd.col.s12.m4
+        .label Course Name
+        .item = @course.name
+      dd.col.s12.m4
+        .label Subject
+        .item = @course.subject.try(:name)            
+      dd.col.s12.m12
+        .label Description
+        .item = @course.description
+    dl.row
+      dd.col.s12.m4
+        .label Grade
+        .item = @course.grade_level.try(:name) || '--'
+      dd.col.s12.m4
+        .label Year
+        .item = @course.academic_year.try(:name) || '--'
+      dd.col.s12.m4
+        .label Terms
+        - for term in @course.academic_terms
+          .item = term.name
+
 .row
   .col.s12
     .card   
@@ -42,21 +63,27 @@ nav
           li.tab.col.s6
             a href='#tab1' Sections
           li.tab.col.s6
-            a href='#tab2' Textbooks
+            a href='#tab2' Course Texts
 
         #tab1
           .card-content
             h5 Course Sections
             - if @course.course_sections.present?
-              table.striped
+              table.compact.striped
                 thead
                   th Section
                   th Instructor
+                  th Actions
                 tbody
                 - @course.course_sections.each do |section|
                   tr
                     td = link_to(section.name, section)
                     td = link_to(section.instructor.name, section.instructor) if section.instructor
+                    td 
+                      = link_to section
+                        i.material-icons visibility
+                      = link_to edit_course_section_path section
+                        i.material-icons edit
             - else
               p.red-text No sections
 
@@ -65,39 +92,25 @@ nav
             - if @course.course_texts.present?
               .row
                 - @course.course_texts.each do |course_text|
-                  .col.s12.m3.l3
+                  .col.s12.m2.l2
                     .card.book-info
-                      .card-image
+                      .card-image style="width:150px"
                         - thumbnail = course_text.book_title.image_url.present? ? course_text.book_title.image_url : 'book-icon.png' 
                         = image_tag(thumbnail, class: 'activator')           
                       .book-title.activator
                         = course_text.book_title.title
-                        i.material-icons.right more_vert
-                      .card-action
-                        = link_to course_text.book_title
-                          i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show" visibility
-                        = link_to course_text, data: {:confirm => 'Are you sure?'}, :method => :delete
-                          i.material-icons.left.red-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove" delete
                       .card-reveal
                         .card-title.grey-text
                           i.material-icons.right close
-                        p  = course_text.book_title.title             
+                        .label Title
+                        strong = course_text.book_title.title             
                         .label Author
-                        p = course_text.book_title.authors
+                        p = course_text.book_title.authors || '--'
                         .label Publisher
-                        p = course_text.book_title.publisher
-              / table.striped
-              /   tbody
-              /   - @course.course_texts.each do |course_text|
-              /     - textbook = course_text.book_title
-              /     - if textbook
-              /       tr
-              /         td style="vertical-align:top"
-              /           - thumbnail = textbook.image_url.present? ? textbook.image_url : 'book-icon.png'
-              /           = link_to textbook
-              /             = image_tag(thumbnail, class: 'list_image')
-              /         td 
-              /           em = link_to(textbook.title, textbook)
-              /           p  = textbook.authors
+                        p = course_text.book_title.publisher || '--'
+                        .label Link
+                        = link_to course_text.book_title
+                          | Book Title 
+                          i.material-icons.left open_in_new
             - else
               p.red-text No textbooks

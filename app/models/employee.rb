@@ -21,7 +21,7 @@ class Employee < ActiveRecord::Base
     allow_destroy: true,
     reject_if: proc { |attributes| attributes['book_copy_id'].blank? }
 
-	scope :all_teachers, lambda { where(job_title:'Teacher') }
+	scope :all_teachers, lambda { where(department_id: Department.academic.map(&:id) ).order(:name) }
   scope :active, lambda { where(is_active:true).order(:name) }
 	scope :with_book_loans, lambda { |year|
 		joins(:book_loans)

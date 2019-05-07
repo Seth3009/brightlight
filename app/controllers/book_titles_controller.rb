@@ -36,14 +36,18 @@ class BookTitlesController < ApplicationController
         end
 
         if params[:term]
-          @book_titles = @book_titles.search_query(params[:term])
+          @book_titles = BookTitle
+            .search_query(params[:term])
+            .includes(:book_editions)
+            .paginate(page: params[:page], per_page: items_per_page)
         elsif params[:copy]
           redirect_to book_copy_path(params[:copy].upcase)
         end
       }
       format.json {
         search = params[:term] || ""
-        @book_titles = BookTitle.where('title LIKE ?', "%#{search}%")
+        @book_titles = BookTitle
+          .search_query(params[:term])
           .includes(:book_editions)
           .paginate(page: params[:page], per_page:40)
       }

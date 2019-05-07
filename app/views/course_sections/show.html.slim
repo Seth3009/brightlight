@@ -1,31 +1,58 @@
-h4 = @course_section.name
+h4 = "#{@course_section.course.try(:name)} / #{@course_section.name}"
 
+nav
+  .nav-wrapper
+    a.right.button-collapse.sidenav-trigger href="#" data-activates="sidenav-menu"
+      i.material-icons menu
+    ul
+      li
+        = link_to @course_section.course
+          i.material-icons.left chevron_left
+          = @course_section.course.name
+    - if can? :update, @course_section
+      ul.right.hide-on-med-and-down
+        li
+          = link_to edit_course_section_path(@course_section)
+            | Edit
+            i.material-icons.left edit
+        li
+          = link_to edit_students_course_section_path(@course_section)
+            | Edit Students
+            i.material-icons.left group_add
+
+    .side-nav#sidenav-menu
+      - if can? :update, @course_section
+        ul.right
+          li
+            = link_to edit_course_section_path(@course_section)
+              | Edit
+              i.material-icons.left edit
+          li
+            = link_to edit_students_course_section_path(@course_section)
+              | Edit Students
+              i.material-icons.left group_add
 .card-panel
   .list_description
     dl.row
-      dd.col.s4
+      dd.col.s12.m4
         .label Course Name
         .item
           - if @course_section.course.present?
             = link_to @course_section.course.name, @course_section.course
           - else
             .red-text Error! Course doesn't exist.
-      dd.col.s4
-        .label Instructor
-        .item = @course_section.instructor.present? ? link_to(@course_section.instructor.name, @course_section.instructor) : "--"
-
-nav
-  .nav-wrapper
-    ul
-      li
-        = link_to @course_section.course
-          i.material-icons.left chevron_left
-          = @course_section.course.name
-      - if can? :update, @course_section
-        li.right
-          = link_to edit_course_section_path(@course_section)
-            | Edit
-            i.material-icons.left edit
+        .label Section
+        .item = @course_section.name
+      dd.col.s12.m4
+        .label Instructors
+        ul
+          li = "(1) #{@course_section.instructor.try(:name) || '--'}"
+          li = "(2) #{@course_section.instructor2.try(:name) || '--'}"
+          li = "(Aide) #{@course_section.aide.try(:name) || '--'}"
+            /.item = @course_section.instructor.present? ? link_to(@course_section.instructor.name, @course_section.instructor) : "--"
+      dd.col.s12.m4
+        .label Room location
+        .item = @course_section.location.try(:name) || '--'
 
 .card-panel
   .label Students
@@ -33,11 +60,15 @@ nav
     thead
       th No
       th Name
+      th Grade
     tbody
       - i = 0
-      - @course_section.students.each do |student|
+      - @students.each do |student|
         tr
           td style="width:40px"
             = "#{i += 1}. "
           td
             = link_to student.name, student
+          td 
+            = student.gs_name
+

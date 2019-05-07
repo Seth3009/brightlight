@@ -20,6 +20,10 @@ Rails.application.routes.draw do
   resources :food_order_items
   
   resources :food_packs, except: :show
+  
+  resources :course_schedules
+  resources :class_periods
+  resources :batches
   resources :employee_smartcards
   resources :stock_categories
   resources :stock_items
@@ -134,7 +138,12 @@ Rails.application.routes.draw do
   
   resources :courses do
     resources :course_texts, shallow: true
-    resources :course_sections, except: :new, shallow: true
+    resources :course_sections, except: :new, shallow: true do
+      member do
+        get  'edit_students'
+        post 'add_students'
+      end
+    end
   end
 
   get  'book_copies/disposed_index' => 'book_copies#disposed_index', as: :book_copies_disposed_index

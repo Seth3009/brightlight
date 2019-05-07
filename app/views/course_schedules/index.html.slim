@@ -1,0 +1,31 @@
+h1 Listing course_schedules
+
+table
+  thead
+    tr
+      th Course
+      th Course section
+      th Class period
+      th Room
+      th Active
+      th Academic term
+      th
+      th
+      th
+
+  tbody
+    - @course_schedules.each do |course_schedule|
+      tr
+        td = course_schedule.course
+        td = course_schedule.course_section
+        td = course_schedule.class_period
+        td = course_schedule.room
+        td = course_schedule.active
+        td = course_schedule.academic_term
+        td = link_to 'Show', course_schedule
+        td = link_to 'Edit', edit_course_schedule_path(course_schedule)
+        td = link_to 'Destroy', course_schedule, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Course schedule', new_course_schedule_path

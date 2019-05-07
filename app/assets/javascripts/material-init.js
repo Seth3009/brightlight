@@ -24,6 +24,13 @@ $(document).on('ready page:load', function () {
 		edge: 'right'
 	});
 
+	$('.sidenav-trigger').sideNav({
+		menuWidth: 260, 		// Default is 300
+		edge: 'right', 			// Choose the horizontal origin
+		closeOnClick: true, 	
+		draggable: true 		// Choose whether you can drag to open on touch screens
+	});   
+
 	$('.modal-trigger').leanModal();
 
 	// $(".datepicker").pickadate({

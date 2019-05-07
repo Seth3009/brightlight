@@ -1,0 +1,27 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @batch.name
+p
+  strong Course:
+  = @batch.course
+p
+  strong Course section:
+  = @batch.course_section
+p
+  strong Academic year:
+  = @batch.academic_year
+p
+  strong Academic term:
+  = @batch.academic_term
+p
+  strong Start date:
+  = @batch.start_date
+p
+  strong End date:
+  = @batch.end_date
+
+= link_to 'Edit', edit_batch_path(@batch)
+'|
+= link_to 'Back', batches_path

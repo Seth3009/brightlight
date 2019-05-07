@@ -5,12 +5,12 @@ class CourseTextsController < ApplicationController
   # GET /course_texts
   # GET /course_texts.json
   def index
-    @course_texts = @course.course_texts
-    if params[:v] == 'list'
-      @view_style = :list
-      session[:view_style] = 'list'
-    else
+    @course_texts = @course.course_texts.order(:book_category_id)
+    if params[:v] == 'block'
       @view_style = :block
+      session[:view_style] = 'block'
+    else
+      @view_style = :list
       session[:view_style] = ''
     end
   end
@@ -87,6 +87,6 @@ class CourseTextsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def course_text_params
-      params.require(:course_text).permit(:course_id, :book_title_id)
+      params.require(:course_text).permit(:course_id, :book_title_id, :book_edition_id, :book_category_id, :notes)
     end
 end

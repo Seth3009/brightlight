@@ -6,13 +6,16 @@ class CoursesController < ApplicationController
   # GET /courses.json
   def index
     authorize! :read, Course 
-    items_per_page = 20
+    items_per_page = 30
+    @courses = Course.all
     if params[:grade]
-      @courses = Course.with_grade_level(params[:grade]).paginate(page: params[:page], per_page: items_per_page)
+      @courses = @courses.with_grade_level(params[:grade])
       @grade = GradeLevel.where(id: params[:grade])
-    else
-      @courses = Course.paginate(page: params[:page], per_page: items_per_page)
     end
+    @academic_year = AcademicYear.find(params[:year]) rescue AcademicYear.current
+    @courses = @courses.where(academic_year_id: @academic_year.id)
+      .order(:grade_level_id)
+      .paginate(page: params[:page], per_page: items_per_page)
   end
 
   # GET /courses/1
@@ -86,12 +89,12 @@ class CoursesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course
-      @course = Course.find(params[:id])
+      @course = Course.includes(course_texts: [:book_title]).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def course_params
-      params.require(:course).permit(:name, :number, :description, :grade_level_id, :academic_year_id, :academic_term_id, :employee_id,
+      params.require(:course).permit(:name, :number, :description, :grade_level_id, :academic_year_id, :academic_term_id, :employee_id, :subject_id,
                                     {:academic_term_ids => []},
                                     {:course_sections_attributes => [:id, :name, :grade_section_id, :instructor_id, :_destroy]},
                                     {:course_texts_attributes => [:id, :book_title_id, :order_no, :_destroy]})

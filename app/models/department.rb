@@ -9,6 +9,8 @@ class Department < ActiveRecord::Base
   belongs_to :vice_manager, class_name: "Employee", foreign_key: 'vice_manager_id'
   after_save :update_approver_employee
 
+  scope :academic, -> { where(:code => ['EC', 'GS', 'SOL', 'SOR', 'CURR']) }
+
   def update_approver_employee    
     employees = Employee.where(department_id: self.id).all
     if employees.present?

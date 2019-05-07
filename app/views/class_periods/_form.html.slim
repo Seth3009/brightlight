@@ -1,0 +1,24 @@
+= form_for @class_period do |f|
+  - if @class_period.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@class_period.errors.count, "error")} prohibited this class_period from being saved:"
+      ul
+        - @class_period.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :start_time
+    = f.time_select :start_time
+  .field
+    = f.label :end_time
+    = f.time_select :end_time
+  .field
+    = f.label :school
+    = f.text_field :school
+  .field
+    = f.label :is_break
+    = f.text_field :is_break
+  .actions = f.submit

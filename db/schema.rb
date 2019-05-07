@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190426005237) do
+ActiveRecord::Schema.define(version: 20190502021008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -606,6 +606,15 @@ ActiveRecord::Schema.define(version: 20190426005237) do
   add_index "copy_conditions", ["book_copy_id"], name: "index_copy_conditions_on_book_copy_id", using: :btree
   add_index "copy_conditions", ["user_id"], name: "index_copy_conditions_on_user_id", using: :btree
 
+  create_table "course_departments", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "notes"
+    t.boolean  "active",      default: true
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
   create_table "course_schedules", force: :cascade do |t|
     t.integer  "course_id"
     t.integer  "course_section_id"
@@ -648,11 +657,19 @@ ActiveRecord::Schema.define(version: 20190426005237) do
     t.datetime "updated_at",       null: false
     t.integer  "instructor_id"
     t.string   "slug"
+    t.integer  "instructor2_id"
+    t.integer  "aide_id"
+    t.boolean  "sem1"
+    t.boolean  "sem2"
+    t.integer  "location_id"
   end
 
+  add_index "course_sections", ["aide_id"], name: "index_course_sections_on_aide_id", using: :btree
   add_index "course_sections", ["course_id"], name: "index_course_sections_on_course_id", using: :btree
   add_index "course_sections", ["grade_section_id"], name: "index_course_sections_on_grade_section_id", using: :btree
+  add_index "course_sections", ["instructor2_id"], name: "index_course_sections_on_instructor2_id", using: :btree
   add_index "course_sections", ["instructor_id"], name: "index_course_sections_on_instructor_id", using: :btree
+  add_index "course_sections", ["location_id"], name: "index_course_sections_on_location_id", using: :btree
   add_index "course_sections", ["slug"], name: "index_course_sections_on_slug", unique: true, using: :btree
 
   create_table "course_texts", force: :cascade do |t|
@@ -677,14 +694,17 @@ ActiveRecord::Schema.define(version: 20190426005237) do
     t.integer  "academic_year_id"
     t.integer  "academic_term_id"
     t.integer  "employee_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.string   "slug"
     t.integer  "subject_id"
+    t.integer  "course_department_id"
+    t.string   "level"
   end
 
   add_index "courses", ["academic_term_id"], name: "index_courses_on_academic_term_id", using: :btree
   add_index "courses", ["academic_year_id"], name: "index_courses_on_academic_year_id", using: :btree
+  add_index "courses", ["course_department_id"], name: "index_courses_on_course_department_id", using: :btree
   add_index "courses", ["employee_id"], name: "index_courses_on_employee_id", using: :btree
   add_index "courses", ["grade_level_id"], name: "index_courses_on_grade_level_id", using: :btree
   add_index "courses", ["slug"], name: "index_courses_on_slug", unique: true, using: :btree
@@ -1345,6 +1365,17 @@ ActiveRecord::Schema.define(version: 20190426005237) do
   create_table "loan_types", force: :cascade do |t|
     t.string   "code"
     t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.string   "code"
+    t.string   "name"
+    t.string   "building"
+    t.string   "purpose"
+    t.string   "notes"
+    t.integer  "capacity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -2260,8 +2291,10 @@ ActiveRecord::Schema.define(version: 20190426005237) do
   add_foreign_key "course_schedules", "courses"
   add_foreign_key "course_schedules", "rooms"
   add_foreign_key "course_section_histories", "employees", column: "instructor_id"
+  add_foreign_key "course_sections", "locations"
   add_foreign_key "course_texts", "book_categories"
   add_foreign_key "course_texts", "book_editions"
+  add_foreign_key "courses", "course_departments"
   add_foreign_key "courses", "subjects"
   add_foreign_key "currencies", "users"
   add_foreign_key "deliveries", "employees", column: "accepted_by_id"

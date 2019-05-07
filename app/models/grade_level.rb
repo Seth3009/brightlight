@@ -16,4 +16,8 @@ class GradeLevel < ActiveRecord::Base
     roman = arr[self.find(id).id.to_i-7]
     return roman
   end
+
+  def self.options_for_select
+		order(:id).map {|grade| [grade.name, grade.id]}
+	end
 end

@@ -3,8 +3,10 @@ class Course < ActiveRecord::Base
   belongs_to :academic_year
   has_and_belongs_to_many :academic_terms
   belongs_to :employee
-
-  validates :name, presence: true, uniqueness: true
+  belongs_to :subject
+  belongs_to :course_department
+  
+  validates :number, presence: true, uniqueness: {scope: [:academic_year_id, :academic_term_id]}
   validates :academic_year, presence: true
 
   has_many :course_sections, dependent: :destroy

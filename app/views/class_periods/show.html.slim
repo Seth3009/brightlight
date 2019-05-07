@@ -1,0 +1,21 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @class_period.name
+p
+  strong Start time:
+  = @class_period.start_time
+p
+  strong End time:
+  = @class_period.end_time
+p
+  strong School:
+  = @class_period.school
+p
+  strong Is break:
+  = @class_period.is_break
+
+= link_to 'Edit', edit_class_period_path(@class_period)
+'|
+= link_to 'Back', class_periods_path

@@ -1,5 +1,5 @@
 class CourseSectionsController < ApplicationController
-  before_action :set_course_section, only: [:show, :edit, :update, :destroy]
+  before_action :set_course_section, only: [:show, :edit, :edit_students, :update, :destroy]
   load_and_authorize_resource
 
   # GET /course_sections
@@ -18,11 +18,41 @@ class CourseSectionsController < ApplicationController
   # GET /course_sections/1.json
   def show
     @course = @course_section.course
+    @students = @course_section.students.with_grade_section
   end
 
   # GET /course_sections/1/edit
-  def edit
+  def edit 
     authorize! :update, @course_section
+  end
+
+  # GET /course_sections/1/edit_students
+  def edit_students
+    authorize! :update, @course_section
+    @academic_year = params[:year] ? AcademicYear.find(params[:year]) : AcademicYear.current
+    @filterrific = initialize_filterrific(
+      Student,
+      params[:filterrific],
+      select_options: {
+        sorted_by: Student.options_for_sorted_by,
+        with_grade_level_id: GradeLevel.options_for_select
+      }
+    ) or return
+
+    @students = @filterrific.find.page(params[:page])
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
+
+    # Recover from invalid param sets, e.g., when a filter refers to the
+    # database id of a record that doesn’t exist any more.
+    # In this case we reset filterrific and discard all filter params.
+  rescue ActiveRecord::RecordNotFound => e
+    # There is an issue with the persisted param_set. Reset it.
+    puts "Had to reset filterrific params: #{ e.message }"
+    redirect_to(reset_filterrific_url(format: :html)) and return
   end
 
   # POST /course_sections
@@ -68,6 +98,20 @@ class CourseSectionsController < ApplicationController
     end
   end
 
+  def add_students
+    authorize! :update, @course_section
+    academic_year_id = params[:year]
+    params[:add].map {|id,on| Student.find(id)}.each do |student|
+      @roster = Roster.new(course_section: @course_section, student:student, academic_year_id: academic_year_id || current_academic_year_id)
+      if @roster.save
+        next
+      else
+        redirect_to edit_course_section_path, alert: 'Students already added' and return
+      end
+    end
+    redirect_to course_section_path(@course_section, year:params[:year]), notice: 'Students successfully added'
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course_section
@@ -76,6 +120,6 @@ class CourseSectionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def course_section_params
-      params.require(:course_section).permit(:name, :instructor_id)
+      params.require(:course_section).permit(:name, :instructor_id, :instructor2_id, :aide_id, :location_id)
     end
 end

@@ -1,0 +1,29 @@
+h1 Listing class_periods
+
+table
+  thead
+    tr
+      th Name
+      th Start time
+      th End time
+      th School
+      th Is break
+      th
+      th
+      th
+
+  tbody
+    - @class_periods.each do |class_period|
+      tr
+        td = class_period.name
+        td = class_period.start_time
+        td = class_period.end_time
+        td = class_period.school
+        td = class_period.is_break
+        td = link_to 'Show', class_period
+        td = link_to 'Edit', edit_class_period_path(class_period)
+        td = link_to 'Destroy', class_period, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Class period', new_class_period_path

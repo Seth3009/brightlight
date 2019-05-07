@@ -1,0 +1,33 @@
+h1 Listing batches
+
+table
+  thead
+    tr
+      th Name
+      th Course
+      th Course section
+      th Academic year
+      th Academic term
+      th Start date
+      th End date
+      th
+      th
+      th
+
+  tbody
+    - @batches.each do |batch|
+      tr
+        td = batch.name
+        td = batch.course
+        td = batch.course_section
+        td = batch.academic_year
+        td = batch.academic_term
+        td = batch.start_date
+        td = batch.end_date
+        td = link_to 'Show', batch
+        td = link_to 'Edit', edit_batch_path(batch)
+        td = link_to 'Destroy', batch, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Batch', new_batch_path
