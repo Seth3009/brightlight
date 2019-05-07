@@ -2,7 +2,7 @@
   .card-panel
     - if @course.errors.any?
       #error_explanation
-        h2 = "#{pluralize(@course.errors.count, "error")} prohibited this Grade Level from being saved:"
+        h2 = "#{pluralize(@course.errors.count, "error")} prohibited this Course from being saved:"
         ul
           - @course.errors.full_messages.each do |message|
             li = message

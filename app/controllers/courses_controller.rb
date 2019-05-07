@@ -6,15 +6,16 @@ class CoursesController < ApplicationController
   # GET /courses.json
   def index
     authorize! :read, Course 
-    items_per_page = 20
+    items_per_page = 30
+    @courses = Course.all
     if params[:grade]
-      @courses = Course.with_grade_level(params[:grade]).paginate(page: params[:page], per_page: items_per_page)
+      @courses = @courses.with_grade_level(params[:grade])
       @grade = GradeLevel.where(id: params[:grade])
-    else
-      @courses = Course.paginate(page: params[:page], per_page: items_per_page)
     end
-    year = params[:year] ? params[:year] : AcademicYear.current_id
-    @courses = @courses.where(academic_year_id: year)
+    @academic_year = AcademicYear.find(params[:year]) rescue AcademicYear.current
+    @courses = @courses.where(academic_year_id: @academic_year.id)
+      .order(:grade_level_id)
+      .paginate(page: params[:page], per_page: items_per_page)
   end
 
   # GET /courses/1

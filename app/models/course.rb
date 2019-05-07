@@ -6,7 +6,7 @@ class Course < ActiveRecord::Base
   belongs_to :subject
   belongs_to :course_department
   
-  validates :number, presence: true, uniqueness: {scope: [:academic_year_id]}
+  validates :number, presence: true, uniqueness: {scope: [:academic_year_id, :academic_term_id]}
   validates :academic_year, presence: true
 
   has_many :course_sections, dependent: :destroy

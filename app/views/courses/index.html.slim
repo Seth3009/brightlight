@@ -9,10 +9,9 @@ nav
           i.material-icons.right arrow_drop_down
           i.material-icons.left filter_list
       li
-        a.dropdown-button href="#!" data-activates="year-list"
-          = params[:year] ? "#{AcademicYear.find(params[:year]).try(:name)}" : AcademicYear.current.name
+        a.dropdown-button href="#!" data-activates="year-options" data-beloworigin="true" 
+          span#year = params[:year].present? && params[:year].downcase == 'all' ? 'All' : (@academic_year.present? ? "#{@academic_year.name}" : "Academic Year") 
           i.material-icons.right arrow_drop_down
-
     ul.right
       li.tooltipped data-position="bottom" data-delay="50" data-tooltip="Create new course"
         = link_to new_course_path
@@ -24,11 +23,12 @@ nav
         li
           = link_to courses_path(grade:grade.id)
             = "#{grade.name}"
-    ul#year-list.dropdown-content
+    ul#year-options.dropdown-content
+      li  
+        = link_to 'All', courses_path(params.merge(year:'all').symbolize_keys)
       - AcademicYear.list_for_menu.each do |year|
-        li
-          = link_to courses_path(params.merge(year: year.id))
-            = year.name
+        li 
+          = link_to year.name, courses_path(params.merge(year: year.id).symbolize_keys)
 
 .card-panel
   table.compact.striped
