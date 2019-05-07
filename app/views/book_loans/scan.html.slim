@@ -56,26 +56,27 @@ nav
           .input-field.right-in-header
             = check_box_tag :return_to_inventory 
             = label_tag :return_to_inventory
-              
-.card-panel#returns style="display:none"
-  .row
-    table.compact
-      thead
-        th Barcode
-        th Title 
-        th Return status
-        th Return date
-      tbody#book_loans
 
-.card-panel#checks
-  .row 
-    table.compact 
-      thead 
-        th Barcode 
-        th Title 
-        th Loaned to 
-        th Valid?
-      tbody#loan_checks 
+-if params[:check] == 'only'  
+  .card-panel#checks
+    .row 
+      table.compact 
+        thead 
+          th Barcode 
+          th Title 
+          th Loaned to 
+          th Valid?
+        tbody#loan_checks
+-else  
+  .card-panel#returns
+    .row
+      table.compact
+        thead
+          th Barcode
+          th Title 
+          th Return status
+          th Return date
+        tbody#book_loans
 
 javascript:
   $(document).ready(function(){
@@ -142,7 +143,7 @@ javascript:
         .done(function(m) {
             Materialize.toast('Book checked', 5000, 'green');
             var status = "Returned";
-            if (book.return_status == 'RI') status += " to inventory";
+            if (return_status == 'RI') status += " to inventory";
             $("tbody#book_loans").prepend("<tr><td>"+book.barcode+"</td><td>"+book.book_edition.title+"</td><td>"+status+"</td><td>"+today.toUTCString()+"</td></tr>");
         })
         .fail(function(xhr) {
