@@ -5,7 +5,7 @@ nav
     ul
       li.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show only selected grade"
         a.dropdown-button href="#!" data-activates="grades-list"
-          = params[:grade] ? "#{GradeLevel.find(params[:grade]).try(:name)}" : "Filter grade"
+          = @grade ? "#{GradeLevel.find(params[:grade]).try(:name)}" : "Filter grade"
           i.material-icons.right arrow_drop_down
           i.material-icons.left filter_list
       li
@@ -19,6 +19,8 @@ nav
           i.material-icons.left playlist_add
 
     ul#grades-list.dropdown-content
+      li  
+        = link_to 'All', courses_path(params.merge(grade:'all').symbolize_keys)
       - GradeLevel.all.each do |grade|
         li
           = link_to courses_path(grade:grade.id)

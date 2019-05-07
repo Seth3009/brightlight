@@ -8,7 +8,7 @@ class CoursesController < ApplicationController
     authorize! :read, Course 
     items_per_page = 30
     @courses = Course.all
-    if params[:grade]
+    if params[:grade] && params[:grade] != 'all'
       @courses = @courses.with_grade_level(params[:grade])
       @grade = GradeLevel.where(id: params[:grade])
     end
