@@ -14,13 +14,13 @@ class BookReceiptsController < ApplicationController
       @grade_section_name = @grade_section.name
       @book_labels = BookLabel.where(grade_section:@grade_section).order(:book_no)
       @book_copies = BookReceipt.where(academic_year:@academic_year,grade_section:@grade_section)
-                      .not_disposed
-                      .joins(:book_edition)
+                      .joins('left join book_editions on book_editions.id = book_receipts.book_edition_id')
                       .select('book_receipts.*, book_editions.title as title')
                       .order("#{sort_column} #{sort_direction}")
                       .includes([:book_edition, :book_copy, :initial_condition])
 
-      @number_of_students = @book_copies.maximum(:roster_no)
+      @number_of_students = BookReceipt.where(academic_year:@academic_year,grade_section:@grade_section).maximum(:roster_no)
+      @roster_numbers = BookReceipt.where(academic_year:@academic_year,grade_section:@grade_section).order(:roster_no).pluck(:roster_no).uniq
     end
     if params[:r].present?
       @roster_no = params[:r].to_i
@@ -159,8 +159,8 @@ class BookReceiptsController < ApplicationController
         if BookReceipt.where(academic_year_id:academic_year_id).where("grade_level_id in (?)", grades).count > 0
           @error = "Error: Book receipts have been created for some of the selected grade levels #{AcademicYear.find(academic_year_id).name}"
         else
-          n = BookReceipt.initialize_book_receipts academic_year_id-1, academic_year_id, grades
-          @message = "Preparation completed (#{n})."
+          BookReceipt.initialize_book_receipts academic_year_id-1, academic_year_id, grades
+          @message = "Preparation completed."
         end
       end
     end
@@ -227,7 +227,7 @@ class BookReceiptsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book_receipt
-      @book_receipt = BookReceipt.not_disposed.find(params[:id])
+      @book_receipt = BookReceipt.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -18,7 +18,7 @@ class BookReceipt < ActiveRecord::Base
   # validates :book_copy, uniqueness: {scope: [:academic_year_id]}
   # validates :initial_condition, presence:true
 
-  after_save :update_book_copy_condition
+  # after_save :update_book_copy_condition
 
   scope :not_disposed, lambda { 
     where('book_receipts.book_copy_id NOT IN (
@@ -27,22 +27,17 @@ class BookReceipt < ActiveRecord::Base
   }
 
   def self.initialize_book_receipts(previous_year_id, new_year_id, grade_levels)
-    n = 0
-    GradeSection.where("grade_level_id in (?)", grade_levels).each do |grade_section|
-      #self.initialize_with_student_books_for_grade(previous_year_id, new_year_id, grade_section.id)
-      puts "Preparing #{grade_section.name}"
-      n = self.initialize_with_student_books grade_section: grade_section, previous_year: previous_year_id, new_year: new_year_id
-    end
-    n
+    initialize_with_standard_books(previous_year_id, new_year_id, grade_levels)
   end
 
-  def self.initialize_with_standard_books(year_id, grade_levels)
+  def self.initialize_with_standard_books(previous_year_id, new_year_id, grade_levels)
+    textbook_category = BookCategory.find_by_code 'TB'
     GradeLevel.where(id: grade_levels).each do |grade_level|
-      StandardBook.where(academic_year_id: year_id, grade_level: grade_level).each do |std_book|
+      StandardBook.where(academic_year_id: new_year_id, book_category: textbook_category, grade_level: grade_level).each do |std_book|
         grade_level.grade_sections.each do |grade_section|
           if grade_section.capacity
             (1..grade_section.capacity).each do |num|
-              new_from_student_book(year_id, grade_section, std_book, num).save
+              create_from_student_book(previous_year_id, new_year_id, grade_section, std_book, num)
             end
           end
         end
@@ -50,21 +45,38 @@ class BookReceipt < ActiveRecord::Base
     end
   end
 
-  def self.new_from_student_book(year_id, grade_section, std_book, roster_no)
-    student_book = StudentBook.where(
-      academic_year_id: year_id, 
-      grade_section_id: grade_section.id,
-      book_edition_id: std_book.book_edition_id,
-      roster_no: roster_no).take
-    BookReceipt.new academic_year_id: year_id,
+  POOR = BookCondition.find_by_slug('poor').id
+  MISSING = BookCondition.find_by_slug('missing').id
+
+  def self.create_from_student_book(previous_year_id, new_year_id, grade_section, std_book, roster_no)
+    book_receipt = BookReceipt.new academic_year_id: new_year_id,
       grade_section_id: grade_section.id,
       grade_level_id: grade_section.grade_level_id,
-      book_edition_id: std_book.book_edition_id,
       roster_no: roster_no,
-      book_copy_id: student_book.try(:book_copy_id),
-      barcode: student_book.try(:barcode),
-      copy_no: student_book.try(:copy_no),
-      initial_condition_id: student_book.try(:book_copy).try(:latest_condition)
+      book_edition_id: std_book.book_edition_id
+
+    all_editions = std_book.book_title.book_editions.map(&:id)
+    student_book = StudentBook.find_by(
+        academic_year_id: previous_year_id, 
+        grade_section_id: grade_section.id,
+        book_edition_id: all_editions,
+        roster_no: roster_no)
+    
+    if student_book.present?
+      book_condition_id = student_book.book_copy.try(:latest_condition).try(:id)
+
+      unless book_condition_id == POOR || book_condition_id == MISSING 
+        book_receipt.book_copy_id = student_book.book_copy_id
+        book_receipt.barcode      = student_book.barcode
+        book_receipt.copy_no      = student_book.copy_no
+        book_receipt.book_edition_id = student_book.book_edition_id
+        book_receipt.initial_condition_id = book_condition_id
+      end
+    else
+      puts "#{roster_no} Student book not found #{std_book.book_title.title}"
+    end
+
+    book_receipt.save
   end
 
   def self.initialize_with_student_books_for_grade(previous_year_id, new_year_id, grade_section_id)

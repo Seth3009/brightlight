@@ -10,12 +10,19 @@ ul class="collapsible" data-collapsible="expandable"
     .collapsible-body
       .container-padding
         = form_tag prepare_standard_books_path, remote:true do 
-          .row
+          #initialize_standard_books.row
             .col.s2
               .label New Academic Year
               = select_tag :standard_book_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
             .col.s2
-              button.btn.waves-effect.waves-light type="submit" data-disable=true Create
+              button.btn.waves-effect.waves-light type="submit" id="initialize_standard_books-button" disabled="disabled" data-disable=true Create 
+              .label Select Grades
+              input.allcheckboxes type="checkbox" id="initialize_standard_books-all" name="initialize_standard_books[all]" data-total="#{GradeLevel.count}"
+              = label_tag "initialize_standard_books-all", "All grades"
+              - @grade_levels.each do |grade|
+                div style="width:300px"
+                  input.checkbox.initialize_standard_books type="checkbox" id="initialize_standard_books-#{grade.id}" name="initialize_standard_books[#{grade.id}]"
+                  = label_tag "initialize_standard_books-#{grade.id}", grade.name
             .col.s7 
               h6 Create Standard Books
               .label Description        
@@ -40,13 +47,13 @@ ul class="collapsible" data-collapsible="expandable"
                       .label Academic Year 
                       = select_tag :finalize_student_books_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
                     .col.s2
-                      button.btn.waves-effect.waves-light type="submit" id="finalize-student-books-button" disabled="disabled" data-disable=true Finalize 
+                      button.btn.waves-effect.waves-light type="submit" id="finalize_student_books-button" disabled="disabled" data-disable=true Finalize 
                       .label Select Grades
                       input.allcheckboxes type="checkbox" id="finalize_student_books-all" name="finalize_student_books[all]" data-total="#{GradeLevel.count}"
                       = label_tag "finalize_student_books-all", "All grades"
                       - @grade_levels.each do |grade|
                         div style="width:300px"
-                          input.checkbox type="checkbox" id="finalize_student_books-#{grade.id}" name="finalize_student_books[#{grade.id}]"
+                          input.checkbox.finalize_student_books type="checkbox" id="finalize_student_books-#{grade.id}" name="finalize_student_books[#{grade.id}]"
                           = label_tag "finalize_student_books-#{grade.id}", grade.name
                     .col.s7
                       h6 Finalize Book Conditions
@@ -70,7 +77,7 @@ ul class="collapsible" data-collapsible="expandable"
                       = label_tag "prepare_book_receipts-all", "All grades"
                       - @grade_levels.each do |grade|
                         div style="width:300px"
-                          input.checkbox type="checkbox" id="prepare_book_receipts-#{grade.id}" name="prepare_book_receipts[#{grade.id}]"
+                          input.checkbox.prepare_book_receipts type="checkbox" id="prepare_book_receipts-#{grade.id}" name="prepare_book_receipts[#{grade.id}]"
                           = label_tag "prepare_book_receipts-#{grade.id}", grade.name
                     .col.s7
                       h6 Prepare Book Receipts
@@ -95,7 +102,7 @@ ul class="collapsible" data-collapsible="expandable"
                       = label_tag "finalize_condition_book_receipts-all", "All grades"
                       - @grade_levels.each do |grade|
                         div style="width:300px"
-                          input.checkbox type="checkbox" id="finalize_condition_book_receipts-#{grade.id}" name="finalize_condition_book_receipts[#{grade.id}]"
+                          input.checkbox.finalize_condition_book_receipts type="checkbox" id="finalize_condition_book_receipts-#{grade.id}" name="finalize_condition_book_receipts[#{grade.id}]"
                           = label_tag "finalize_condition_book_receipts-#{grade.id}", grade.name  
                     .col.s7
                       h6 Finalize Book Condition from Receipts
@@ -119,7 +126,7 @@ ul class="collapsible" data-collapsible="expandable"
                       = label_tag "prepare_student_books-all", "All grades"
                       - @grade_levels.each do |grade|
                         div style="width:300px"
-                          input.checkbox type="checkbox" id="prepare_student_books-#{grade.id}" name="prepare_student_books[#{grade.id}]"
+                          input.checkbox.prepare_student_books type="checkbox" id="prepare_student_books-#{grade.id}" name="prepare_student_books[#{grade.id}]"
                           = label_tag "prepare_student_books-#{grade.id}", grade.name 
                     .col.s7
                       h6 Create Student Book Loans from Receipts
@@ -194,14 +201,14 @@ ul class="collapsible" data-collapsible="expandable"
               .label Academic Year
               = select_tag :fines_academic_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
             .col.s2
-              button.btn.waves-effect.waves-light type="submit" id="calculate-fines-button" disabled="disabled" data-disable=true Calculate
+              button.btn.waves-effect.waves-light type="submit" id="calculate_book_fines-button" disabled="disabled" data-disable=true Calculate
               br
               .label Select Grades
               input.allcheckboxes type="checkbox" id="fines_grade-all" name="fines_grade[all]" data-total="#{GradeLevel.count}"
               = label_tag "fines_grade-all", "All grades"
               - @grade_levels.each do |grade|
                 div style="width:300px"
-                  input.checkbox type="checkbox" id="fines_grade-#{grade.id}" name="fines_grade[#{grade.id}]"
+                  input.checkbox.calculate_book_fines type="checkbox" id="fines_grade-#{grade.id}" name="fines_grade[#{grade.id}]"
                   = label_tag "fines_grade-#{grade.id}", grade.name
             .col.s7 
               h6 Calculate Textbook Fines

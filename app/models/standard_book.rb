@@ -16,12 +16,13 @@ class StandardBook < ActiveRecord::Base
 
   scope :current_year, lambda { where(academic_year:AcademicYear.current) }
 
-  def self.initialize_from_previous_year (prev_academic_year_id, new_academic_year_id)
+  def self.initialize_from_previous_year (prev_academic_year_id, new_academic_year_id, grade_levels)
     columns = [:book_title_id, :book_edition_id, :book_category_id, :grade_level_id, :grade_section_id,
                 :academic_year_id, :isbn, :refno, :quantity, :grade_subject_code, :grade_name,
                 :group, :category, :bkudid]
     values = []
-    StandardBook.where(academic_year_id: prev_academic_year_id).each do |sb|
+    
+    StandardBook.where(academic_year_id: prev_academic_year_id, grade_level_id: grade_levels).each do |sb|
       data = [sb.book_title_id, sb.book_edition_id, sb.book_category_id, sb.grade_level_id, sb.grade_section_id,
                 new_academic_year_id, sb.isbn, sb.refno, sb.quantity, sb.grade_subject_code, sb.grade_name,
                 sb.group, sb.category, sb.bkudid]
