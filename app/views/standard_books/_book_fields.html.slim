@@ -1,15 +1,22 @@
 tr
-  td style="vertical-align:top"
-    - thumbnail = book_edition.small_thumbnail.present? ? book_edition.small_thumbnail : 'book-icon.png' 
-    = image_tag(thumbnail, class: 'list_image')
   td
-    .list_description
-      dl.row
-        dt = book_edition.title
-        dd = book_edition.subtitle
-        dd.col.s6
-          .label Author
-          .item = book_edition.authors || 'N/A'
-        dd.col.s6
-          .label Publisher
-          .item = book_edition.publisher || 'N/A'
+    .row
+      .col.s12
+        h6 = book_title.title
+    .row
+      - book_title.book_editions.each do |book_edition|
+        .col.s12.m6.l4
+          .col.s12.m6.l6
+            - thumbnail = book_edition.small_thumbnail.present? ? book_edition.small_thumbnail : 'book-icon.png' 
+            = image_tag(thumbnail, class: 'list_image')
+          .col.s12.m6.l6
+            .label Author
+            .item = book_edition.authors || 'N/A'
+            .label Publisher
+            .item = book_edition.publisher || 'N/A'
+            .label ISBN
+            .item = book_edition.isbn
+        
+  td
+    = remote_link_to_delete standard_book, message: "Book has been removed", class: "left waves-effect waves-light red-text"
+      i.material-icons delete 

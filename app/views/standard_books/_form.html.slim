@@ -3,7 +3,7 @@
     .nav-wrapper
       ul
         li 
-          = link_to grade_level_standard_books_path(@grade_level)
+          = link_to standard_books_path(params.merge(year:params[:year],grade_level_id:params[:grade_level_id]).symbolize_keys)
             i.material-icons.left chevron_left
         li.right
           button.btn.waves-effect.waves-light type="submit" data-disable=true Save

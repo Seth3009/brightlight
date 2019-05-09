@@ -191,7 +191,7 @@ Rails.application.routes.draw do
   end
 
   # For some reasons this line should be placed before the "resources :standard_books" line for autocomplete to work
-  get 'standard_books/autocomplete_book_edition_title' => 'standard_books/autocomplete_book_edition_title', as: :autocomplete_book_edition_title_standard_books
+  # get 'standard_books/autocomplete_book_edition_title' => 'standard_books/autocomplete_book_edition_title', as: :autocomplete_book_edition_title_standard_books
 
   resources :grade_levels do
     collection do
@@ -209,11 +209,9 @@ Rails.application.routes.draw do
         get 'assign'
       end
     end
-
-    resources :standard_books, shallow: true
   end
 
-  resources :standard_books, only:[:index,:update] do
+  resources :standard_books do
     collection do
       post 'prepare'
     end

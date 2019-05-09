@@ -5,11 +5,11 @@ class StandardBook < ActiveRecord::Base
   belongs_to :grade_level
   belongs_to :grade_section
   belongs_to :academic_year
-  delegate :subject, to: :book_title, allow_nil: true
-  delegate :title, to: :book_edition, allow_nil: true
+  belongs_to :subject
+  delegate :title, to: :book_title, allow_nil: true
 
-  validates :book_edition, uniqueness: {scope: [:grade_level, :track, :book_category, :academic_year]}
-  validates :book_edition, presence: true
+  validates :book_title, uniqueness: {scope: [:grade_level, :track, :book_category, :academic_year]}
+  validates :book_title, presence: true
   validates :grade_level, presence: true
   validates :academic_year, presence: true 
   validates :book_category, presence: true
