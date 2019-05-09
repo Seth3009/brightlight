@@ -82,8 +82,8 @@ nav
           tr id="row-#{standard_book.id}"
             td = i+1
             td 
-              = link_to standard_book.book_edition
-                .tooltipped data-position="bottom" data-delay="50" data-tooltip="Book Edition" = standard_book.title.truncate(60) 
+              = link_to standard_book.book_title
+                .tooltipped data-position="bottom" data-delay="50" data-tooltip="Book Title" = standard_book.title.truncate(60) 
             td = standard_book.book_title.subject.name rescue "--"
             td = standard_book.book_category.try(:code)
             td = standard_book.track || "--"

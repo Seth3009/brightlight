@@ -37,7 +37,7 @@ class BookReceipt < ActiveRecord::Base
         grade_level.grade_sections.each do |grade_section|
           if grade_section.capacity
             (1..grade_section.capacity).each do |num|
-              create_from_student_book(previous_year_id, grade_section, std_book, num)
+              create_from_student_book(previous_year_id, new_year_id, grade_section, std_book, num)
             end
           end
         end
@@ -45,28 +45,35 @@ class BookReceipt < ActiveRecord::Base
     end
   end
 
-  def self.create_from_student_book(year_id, grade_section, std_book, roster_no)
-    student_book = StudentBook.where(
-      academic_year_id: year_id, 
+  POOR = BookCondition.find_by_slug('poor').id
+  MISSING = BookCondition.find_by_slug('missing').id
+
+  def self.create_from_student_book(previous_year_id, new_year_id, grade_section, std_book, roster_no)
+    book_receipt = BookReceipt.new academic_year_id: new_year_id,
       grade_section_id: grade_section.id,
-      book_edition_id: std_book.book_edition_id,
-      roster_no: roster_no).take
-    
-    book_condition = student_book.try(:book_copy).try(:latest_condition)
-    poor = BookCondition.find_by_slug 'poor'
-    missing = BookCondition.find_by_slug 'missing'
+      grade_level_id: grade_section.grade_level_id,
+      roster_no: roster_no,
+      book_edition_id: std_book.book_edition_id
 
-    book_receipt = BookReceipt.new academic_year_id: year_id,
+    all_editions = std_book.book_title.book_editions.map(&:id)
+    student_book = StudentBook.find_by(
+        academic_year_id: previous_year_id, 
         grade_section_id: grade_section.id,
-        grade_level_id: grade_section.grade_level_id,
-        book_edition_id: std_book.book_edition_id,
-        roster_no: roster_no
+        book_edition_id: all_editions,
+        roster_no: roster_no)
+    
+    if student_book.present?
+      book_condition_id = student_book.book_copy.try(:latest_condition).try(:id)
 
-    unless book_condition == poor || book_condition == missing 
-      book_receipt.book_copy_id = student_book.try(:book_copy_id)
-      book_receipt.barcode      = student_book.try(:barcode)
-      book_receipt.copy_no      = student_book.try(:copy_no)
-      book_receipt.initial_condition_id = book_condition.try(:id)
+      unless book_condition_id == POOR || book_condition_id == MISSING 
+        book_receipt.book_copy_id = student_book.book_copy_id
+        book_receipt.barcode      = student_book.barcode
+        book_receipt.copy_no      = student_book.copy_no
+        book_receipt.book_edition_id = student_book.book_edition_id
+        book_receipt.initial_condition_id = book_condition_id
+      end
+    else
+      puts "#{roster_no} Student book not found #{std_book.book_title.title}"
     end
 
     book_receipt.save
