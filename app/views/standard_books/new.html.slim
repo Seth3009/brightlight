@@ -1,11 +1,11 @@
 h4 New Standard Book
 
-= form_for [@grade_level,@standard_book], remote:true do |f|
+= form_for @standard_book, remote:true do |f|
   nav
     .nav-wrapper
       ul
         li.right
-          = link_to 'Done', grade_level_standard_books_path(@grade_level), class:'btn waves-effect waves-light'
+          = link_to 'Done', standard_books_path(params.merge(year:params[:year],grade_level_id:params[:grade_level_id]).symbolize_keys), class:'btn waves-effect waves-light'
 
   - if @standard_book.errors.any?
     .card-panel
@@ -36,24 +36,27 @@ h4 New Standard Book
         = f.label :notes
         = f.text_field :notes
       .input-field.col.s11
-        = f.hidden_field :book_edition_id
         = f.hidden_field :book_title_id
         = label_tag :book_edition_title, "Book Title", class: 'active'
         = text_field_tag :book_edition_title, "", id: "title_autocomplete", placeholder: "Search book title" 
     
   .card-panel
-    table#book_list
+    table#book_list.striped
 
 javascript:
   $( function() {
     $( "#title_autocomplete" ).autocomplete({
-      source: "/book_editions?format=json",
+      source: "/book_titles?include=editions&format=json",
       max: 50,
       minLength: 2,
       create: function() {
         $(this).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+          var num_editions = item.book_editions.length;
+          var isbns = item.book_editions.map( function(edition) {
+            return edition.isbn13 ? edition.isbn13 : edition.isbn10 ? edition.isbn10 : "-"
+          });
           return $( "<li>" )
-            .append( "<div>" + item.title + " ISBN: " + (item.isbn13 ? item.isbn13 : item.isbn10 ? item.isbn10 : "-" )+"</div>" )
+            .append( "<div>" + item.title + "(" + num_editions +" editions) " + " ISBN: " + isbns + "</div>" )
             .appendTo( ul );
         }
       },
@@ -63,10 +66,8 @@ javascript:
     });
   } );
 
-  function insert_row(edition) {
-    console.log( "Selected: " + edition.value + " id " + edition.id );
-    $("#standard_book_book_edition_id").val(edition.id);
-    $("#standard_book_book_title_id").val(edition.book_title_id);
+  function insert_row(title) {
+    $("#standard_book_book_title_id").val(title.id);
+    $("#title_autocomplete").val(" ");
     $("#new_standard_book").submit();
-    $("#title_autocomplete").val("");
   }

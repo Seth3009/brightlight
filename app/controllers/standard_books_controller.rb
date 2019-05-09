@@ -13,9 +13,18 @@ class StandardBooksController < ApplicationController
     authorize! :read, StandardBook
     @items_per_page = 25
 
+    @standard_books = StandardBook.all.includes([:book_title,:book_edition,:subject, :academic_year,:book_category])
+
+    if params[:year].present?
+      @academic_year = AcademicYear.find_by_id params[:year]
+      @standard_books = @standard_books.where(academic_year:@academic_year) if params[:year].upcase != 'ALL'
+    else
+      @standard_books = @standard_books.where(academic_year:current_academic_year_id)
+    end
+
     if params[:grade_level_id].present?
       @grade_level = GradeLevel.find params[:grade_level_id]
-      @standard_books = StandardBook.where(grade_level:@grade_level).includes([:book_title,:book_edition,:academic_year,:book_category])
+      @standard_books = @standard_books.where(grade_level:@grade_level)
 
       if params[:track].present?
         if params[:track].upcase != 'ALL'
@@ -23,28 +32,19 @@ class StandardBooksController < ApplicationController
           @standard_books = @standard_books.where(track:@track)
         end
       end
-
-      @subjects = Subject.all
-      @subject = Subject.find_by_id params[:subject] if params[:subject]
-      if @subject && params[:subject] != 'all'
-        @standard_books = @standard_books.includes(book_title: :subject).joins(:book_title).where(book_titles: {subject_id: @subject.id})
-      end
-
-      if params[:year].present?
-        @academic_year = AcademicYear.find_by_id params[:year]
-        @standard_books = @standard_books.where(academic_year:@academic_year) if params[:year].upcase != 'ALL'
-      else
-        @standard_books = @standard_books.where(academic_year:current_academic_year_id)
-      end
-
-      if params[:category].present? and params[:category].upcase != 'ALL'
-        @category = BookCategory.find_by_code params[:category]
-        @standard_books = @standard_books.where(book_category:@category)
-      end
-
-      # @standard_books = @standard_books.order("#{sort_column} #{sort_direction}") if params[:column].present?
-      @standard_books = @standard_books.paginate(page: params[:page], per_page: @items_per_page)
     end
+    if params[:subject] && params[:subject] != 'all'
+      @subject = Subject.find params[:subject]
+      @standard_books = @standard_books.where(subject_id: params[:subject])
+    end
+
+    if params[:category].present? and params[:category].upcase != 'ALL'
+      @category = BookCategory.find_by_code params[:category]
+      @standard_books = @standard_books.where(book_category:@category)
+    end
+
+    # @standard_books = @standard_books.order("#{sort_column} #{sort_direction}") if params[:column].present?
+    @standard_books = @standard_books.paginate(page: params[:page], per_page: @items_per_page)
 
     respond_to do |format|
       format.html
@@ -105,7 +105,7 @@ class StandardBooksController < ApplicationController
     authorize! :update, StandardBook
     respond_to do |format|
       if @standard_book.update(standard_book_params)
-        format.html { redirect_to grade_level_standard_books_path(grade_level_id:@standard_book.grade_level_id,year:@standard_book.academic_year.id, track:@standard_book.track), notice: 'Standard book was successfully updated.' }
+        format.html { redirect_to standard_books_path(grade_level_id:@standard_book.grade_level_id,year:@standard_book.academic_year.id, track:@standard_book.track), notice: 'Standard book was successfully updated.' }
         format.json { render :show, status: :ok, location: @standard_book }
       else
         format.html { 
@@ -156,7 +156,7 @@ class StandardBooksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def standard_book_params
-      params.require(:standard_book).permit(:book_title_id, :book_edition_id, :book_category_id, :isbn, :refno, :quantity, :grade_subject_code, :grade_name, :grade_level_id, :grade_section_id, :group, :category, :bkudid, :notes, :academic_year_id, :track)
+      params.require(:standard_book).permit(:book_title_id, :book_edition_id, :book_category_id, :isbn, :refno, :quantity,  :subject_id, :grade_subject_code, :grade_name, :grade_level_id, :grade_section_id, :group, :category, :bkudid, :notes, :academic_year_id, :track)
     end
 
     # def sortable_columns 

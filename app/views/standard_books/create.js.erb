@@ -1,1 +1,1 @@
-$("#book_list").prepend("<%=j render(partial: 'book_fields', locals: {book_edition:@standard_book.book_edition})%>");
+$("#book_list").prepend("<%=j render(partial: 'book_fields', locals: {standard_book: @standard_book, book_title:@standard_book.book_title})%>");

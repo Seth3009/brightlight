@@ -14,7 +14,8 @@
     = link_to scan_employee_book_loans_path(@teacher, check:'only', year: @academic_year_id)  
       |Scan to Check
       i.material-icons open_in_new
-    p For books that you want to return to inventory, please check the <em>Return to Inventory</em> checkbox.
+    -if can? :manage, BookLoan
+      p For books that you want to return to inventory, please check the <em>Return to Inventory</em> checkbox.
   
 nav
   .nav-wrapper
@@ -52,10 +53,6 @@ nav
       .collapsible-header 
         | Scan bar code
         = hidden_field_tag :barcode
-        -unless params[:check] == 'only'
-          .input-field.right-in-header
-            = check_box_tag :return_to_inventory 
-            = label_tag :return_to_inventory
 
 -if params[:check] == 'only'  
   .card-panel#checks

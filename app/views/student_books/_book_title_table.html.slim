@@ -48,7 +48,7 @@
             = fields_for "student_books[]", book do |f|
               - initial_condition = book.initial_copy_condition # book.book_copy.start_condition_in_year(@year_id) if book.book_copy.present?
               - end_condition = book.end_copy_condition_id
-              tr id=book.id class="#{book_copy.disposed ? 'disposed-book' : ''}"
+              tr id=book.id class="#{book_copy.disposed ? 'disposed-book' : ''} #{end_condition ? '' : 'red lighten-4'}"
                 td.wd5 = i+1
                 td.wd10 = link_to book.barcode, book_copy
                 td.wd5 style='text-align:center;' 
