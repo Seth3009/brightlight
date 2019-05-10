@@ -1,7 +1,7 @@
 class DiknasConvertedItem < ActiveRecord::Base
   belongs_to :diknas_converted
   belongs_to :diknas_conversion
-
+  validates :p_score, :t_score, presence: true
 
   def self.in_words(int)
     huruf = Array.new
