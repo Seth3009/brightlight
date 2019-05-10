@@ -25,7 +25,7 @@ nav
     tbody
       - @records.each do |rec|
         tr
-          td = Course.find(rec[:course_id]).try(:name)
+          td = Course.find(rec[:course_id]).try(:number_and_name)
           td = rec[@terms.first]
           td = rec[@terms.last]
 
