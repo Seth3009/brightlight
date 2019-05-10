@@ -60,7 +60,7 @@ nav
       tbody
         -@diknas_conversion.diknas_conversion_items.each do |conversion_item|
           tr  
-            td = conversion_item.course.try(:name)
+            td = conversion_item.course.try(:number_and_name)
             td = conversion_item.academic_year.try(:name)
             td = conversion_item.academic_term.try(:short_name)
             td = conversion_item.weight

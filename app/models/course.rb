@@ -22,8 +22,8 @@ class Course < ActiveRecord::Base
     course_texts.present?
   end
 
-  def name_and_number
-    "#{name} - #{number}"
+  def number_and_name
+    "#{number} - #{name}"
   end
 
 end
