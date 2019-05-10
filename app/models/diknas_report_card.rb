@@ -8,8 +8,8 @@ class DiknasReportCard < ActiveRecord::Base
 
   validates_presence_of :student_id, :grade_level_id, :academic_year_id, :academic_term_id, :course_id
 
-  def self.value_for(student_id: student_id, academic_year_id: academic_year_id, academic_term_id: academic_term_id, course_id: course_id) 
-    record = DiknasReportCard.find_by student_id: student_id, academic_year_id: academic_year_id, academic_term_id: academic_term_id, course_id: course_id
+  def self.value_for(student_id: student_id, academic_term_id: academic_term_id, course_id: course_id) 
+    record = DiknasReportCard.find_by student_id: student_id, academic_term_id: academic_term_id, course_id: course_id
     record.try(:average)
   end
   

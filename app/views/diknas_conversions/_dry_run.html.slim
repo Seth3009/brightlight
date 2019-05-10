@@ -17,7 +17,7 @@ table.compact.striped style="width: 80%"
       tr
         td = Course.find(ci.course_id).try(:name)
         td = AcademicTerm.find(ci.academic_term_id).try(:short_name)
-        td = DiknasReportCard.value_for student_id: @student.id, academic_year_id: ci.academic_year_id, academic_term_id: ci.academic_term_id, course_id: ci.course_id
+        td = DiknasReportCard.value_for student_id: @student.id, academic_term_id: ci.academic_term_id, course_id: ci.course_id
 
   tfoot
     tr style="font-weight: bold; border-top: 1px solid grey"

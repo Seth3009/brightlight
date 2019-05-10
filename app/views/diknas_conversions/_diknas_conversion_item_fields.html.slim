@@ -1,10 +1,7 @@
 .nested-fields
-  .col.s2
+  .col.s3
     .input-field
-      = f.collection_select :course_id, Course.all.order(:name), :id, :name, prompt: true
-  .col.s2
-    .input-field
-      = f.collection_select :academic_year_id, AcademicYear.list_for_menu(5,0), :id, :name, prompt: true
+      = f.collection_select :course_id, Course.all.order(:name), :id, :name_and_number, prompt: true
   .col.s2
     .input-field
       = f.collection_select :academic_term_id, AcademicTerm.list_for_menu(5,0), :id, :name, prompt: true
@@ -15,7 +12,7 @@
     .input-field
       = f.check_box :substitute
       = f.label :substitute, "Subs"
-  .col.s3
+  .col.s4
     .input-field
       = f.text_field :notes
   .col.s1
