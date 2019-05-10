@@ -13,9 +13,14 @@ nav
           i.material-icons.right arrow_drop_down
     ul.right
       li
-        = link_to convert_diknas_report_cards_path(params.merge(term: params[:term], grade: params[:grade]))
-          | Convert
-          i.material-icons.left donut_small
+        -if params[:term] && params[:grade]
+          = link_to convert_diknas_report_cards_path(params.merge(term: params[:term], grade: params[:grade]))
+            | Convert
+            i.material-icons.left donut_small
+        -else
+          .disabled-menu.tooltipped data-position="bottom" data-delay="30" data-tooltip="Please select academic term and grade"
+            | Convert
+            i.material-icons.left donut_small
       li
         = link_to "#form-upload-modal", class:"modal-trigger" 
           | Import

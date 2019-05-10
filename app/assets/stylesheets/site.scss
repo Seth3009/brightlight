@@ -673,6 +673,11 @@ nav {
 				color: black;
 			}
 		}
+		.disabled-menu {
+			padding: 0 12px;
+			color: #7f7f7f !important;
+			cursor: not-allowed;
+		}
 	}
 	.input-field {
 		padding: 0 15px;
