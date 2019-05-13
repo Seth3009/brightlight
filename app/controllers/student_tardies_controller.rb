@@ -11,6 +11,7 @@ class StudentTardiesController < ApplicationController
   # GET /student_tardies/1
   # GET /student_tardies/1.json
   def show
+    render layout: false
   end
 
   # GET /student_tardies/new

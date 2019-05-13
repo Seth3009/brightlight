@@ -1,60 +1,60 @@
-nav
-  .nav-wrapper
-    ul
-      li
-        = link_to student_tardies_url  
-          i.material-icons chevron_left
-    ul.right
-        li        
-          = link_to new_student_tardy_path, remote:true
-            | New
-            i.material-icons.left add
-.card-panel  
-  h4 Tardy Slip
-  p.student_tardy_id style="display:none;"
-    = @student_tardy.id 
-  .row
-    .col.s2
-      strong Name: 
-    .col.s10.borders.left_pos
+/ nav
+/   .nav-wrapper
+/     ul
+/       li
+/         = link_to student_tardies_url  
+/           i.material-icons chevron_left
+/     ul.right
+/         li        
+/           = link_to new_student_tardy_path, remote:true
+/             | New
+/             i.material-icons.left add
+/ .card-panel  
+h1 style="text-align:center;" Tardy Slip
+p.student_tardy_id style="display:none;"
+  = @student_tardy.id 
+.line
+    strong Name:
+    span.left_pos
       = @student_tardy.student.name
-  .row
-    .col.s2
-      strong Grade: 
-    .col.s4.borders.left_pos
-      = @student_tardy.grade_section.name
-    .col.s2
-      strong Time: 
-    .col.s4.borders.left_pos
-      = @student_tardy.created_at.try(:strftime, "%I:%M %p")
-  .row
-    .col.s2
-      strong Reason: 
-    .col.s10.word_wrap.left_pos
-      = @student_tardy.reason 
-      
-  br
-  br
-  .row   
-    .col.s6.center.offset-s6
-      strong 
-        = Date.today.try(:strftime, "%d %B %Y") + "\n"
-        | Acknowledged by,
-        br
-        br
-        br
-        | (#{current_user.name})
-
-
-
-#show-modal.modal.modal-fixed-footer
-  .modal-content
-    #modal-content
-  .modal-footer
-    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+.line
+  strong Grade: 
+  span.left_pos
+    = @student_tardy.grade_section.name
+  strong Time: 
+  span.left_pos
+     = @student_tardy.created_at.try(:strftime, "%I:%M")
+.line
+  strong Reason: 
+.line
+  span.word_wrap.left_pos
+    = @student_tardy.reason 
     
-#edit-modal.modal.modal-fixed-footer
-  #edit-modal-content
+br
+br
+.row   
+  .col.s6.center.offset-s6
+    strong 
+      = Date.today.try(:strftime, "%d %B %Y") + "\n"
+      br
+      | Acknowledged by,
+      br
+      br
+      br
+      | (#{current_user.name})
+br
+p -
+
+
+
+/ #show-modal.modal.modal-fixed-footer
+/   .modal-content
+/     #modal-content
+/   .modal-footer
+/     a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+/ #edit-modal.modal.modal-fixed-footer
+/   #edit-modal-content
 
 javascript:
   
@@ -84,9 +84,15 @@ javascript:
   
  
 css:
-  .borders {    
+  .line {
+    display: flex;
+  }
+  .line > span  {  
+    box-sizing: border-box;  
     border: 1px solid #000;
-    width: 100%;
+    padding : 2px;
+    margin: 5px;
+    width: 95%;    
   }
   .word_wrap {
     word-wrap:break-word;
@@ -95,8 +101,8 @@ css:
   
   @media print {
     body {
-      font: 6pt Arial, sans-serif;
-      width:100%;
+      font: 9pt Arial, sans-serif;
+      width:95%;
       height:100%; 
     }
     .left_pos {

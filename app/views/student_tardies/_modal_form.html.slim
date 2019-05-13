@@ -5,10 +5,10 @@
     - else      
       = render 'form_manual', f:f
   .modal-footer
-    button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" data-disable=true Save
+    button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" id="btn_save" data-disable=true Save
     a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
 
-javascript:
+javascript:   
   $(document).on('focus', '.homeroom_name', function() {
     $(this).autocomplete({
         source: "/employees?format=json",
