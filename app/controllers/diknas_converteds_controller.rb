@@ -34,9 +34,23 @@ class DiknasConvertedsController < ApplicationController
     .joins('left join diknas_courses on diknas_courses.id = diknas_conversions.diknas_course_id')
     @ipa = @diknas_converted_items.where('lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ?','kimia','biologi','fisika')
     if @ipa.present?
-      @diknas_converted_items = @diknas_converted_items.order('diknas_courses.number')
+      case @diknas_converted.grade_level.id
+      when 10
+        @diknas_converted_items = @diknas_converted_items.order('diknas_courses.ipa10')
+      when 11
+        @diknas_converted_items = @diknas_converted_items.order('diknas_courses.ipa11')
+      else
+        @diknas_converted_items = @diknas_converted_items.order('diknas_courses.ipa12')
+      end
     else
-      @diknas_converted_items = @diknas_converted_items.order('diknas_courses.number2')
+      case @diknas_converted.grade_level.id
+      when 10
+        @diknas_converted_items = @diknas_converted_items.order('diknas_courses.ips10')
+      when 11
+        @diknas_converted_items = @diknas_converted_items.order('diknas_courses.ips11')
+      else
+        @diknas_converted_items = @diknas_converted_items.order('diknas_courses.ips12')
+      end
     end
   end
 
@@ -138,9 +152,23 @@ class DiknasConvertedsController < ApplicationController
           @row = 2
           @ipa = @diknas.where('lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ?','kimia','biologi','fisika')
           if @ipa.present?
-            @diknas = @diknas.order('diknas_courses.number')
+            case @grade_name
+            when 10
+              @diknas = @diknas.order('diknas_courses.ipa10')
+            when 11
+              @diknas = @diknas.order('diknas_courses.ipa11')
+            else
+              @diknas = @diknas.order('diknas_courses.ipa12')
+            end
           else
-            @diknas = @diknas.order('diknas_courses.number2')
+            case @grade_name
+            when 10
+              @diknas = @diknas.order('diknas_courses.ips10')
+            when 11
+              @diknas = @diknas.order('diknas_courses.ips11')
+            else
+              @diknas = @diknas.order('diknas_courses.ips12')
+            end
           end
         end
       end

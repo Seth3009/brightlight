@@ -1,9 +1,9 @@
 = form_for @diknas_course, remote:true do |f|
   .modal-content
     - if @diknas_course.persisted?
-      h4 Editing #{@diknas_course.name} 
+      h4 Editing #{@diknas_course.name} (#{@grade_level.name})
     - else 
-      h4 New Department
+      h4 New Course #{@grade_level.name}
     - if @diknas_course.errors.any?
       #error_explanation
         h6 = "#{pluralize(@diknas_course.errors.count, "error")} prohibited this department from being saved:"
@@ -16,10 +16,23 @@
         = f.text_field :sort_num
       .input-field.col.s1
         = f.label '#IPA', class: 'active'
-        = f.text_field :number
+        - case params[:g] || params[:g] == 10
+        - when 10
+            = f.text_field 'ipa10'
+        - when 11
+            = f.text_field 'ipa11'
+        - else
+            = f.text_field 'ipa12'
+        
       .input-field.col.s1
         = f.label '#IPS', class: 'active'
-        = f.text_field :number2
+        - case params[:g] || params[:g] == 10
+        - when 10
+            = f.text_field 'ips10'
+        - when 11
+            = f.text_field 'ips11'
+        - else
+            = f.text_field 'ips12'
       .input-field.col.s4
         = f.label 'Mata Pelajaran', class: 'active'
         = f.text_field :name

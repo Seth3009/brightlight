@@ -1,13 +1,23 @@
-h4 Diknas Course List
+h4 Diknas Course List #{@grade_level.name}
 
+ul#grade-options.dropdown-content
+  - GradeLevel.where(:id=>10..12).all.order(:id).each do |grade|
+    li 
+      = link_to grade.name, diknas_courses_url(g:grade.id)
 nav
   .nav-wrapper
+    ul
+      li
+        a.dropdown-button href="#!" data-activates="grade-options" data-beloworigin="true" 
+          span#grade = @grade_level.present? ? @grade_level.name : 'Choose grade'
+          i.material-icons.right arrow_drop_down
     ul.right
       li
         - if can? :manage, DiknasCourse
-          = link_to new_diknas_course_path
+          = link_to new_diknas_course_path, remote: true
             | New Diknas Course
             i.material-icons.left add
+
 .card-panel
   table.striped.bordered.compact
     thead

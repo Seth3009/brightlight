@@ -1,7 +1,7 @@
 tr id="row-#{diknas_course.id}"
   td.center = diknas_course.sort_num
-  td.center = diknas_course.number
-  td.center = diknas_course.number2
+  td.center = diknas_course.try('ipa')
+  td.center = diknas_course.try('ips')
   td = diknas_course.name.titlecase
   td = diknas_course.notes
   td.center

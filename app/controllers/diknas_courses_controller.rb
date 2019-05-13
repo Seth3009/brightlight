@@ -4,7 +4,12 @@ class DiknasCoursesController < ApplicationController
   # GET /diknas_courses
   # GET /diknas_courses.json
   def index
-    @diknas_courses = DiknasCourse.all.order(:number)
+    if params[:g]
+      @grade_level = GradeLevel.find(params[:g])
+    else
+      @grade_level = GradeLevel.find(10)
+    end
+    @diknas_courses = DiknasCourse.grade_option(params[:g]||10).all.order('ipa','ips')
   end
 
   # GET /diknas_courses/1
@@ -14,11 +19,21 @@ class DiknasCoursesController < ApplicationController
 
   # GET /diknas_courses/new
   def new
+    if params[:g]
+      @grade_level = GradeLevel.find(params[:g])
+    else
+      @grade_level = GradeLevel.find(10)
+    end
     @diknas_course = DiknasCourse.new
   end
 
   # GET /diknas_courses/1/edit
   def edit
+    if params[:g]
+      @grade_level = GradeLevel.find(params[:g])
+    else
+      @grade_level = GradeLevel.find(10)
+    end
   end
 
   # POST /diknas_courses
@@ -70,6 +85,6 @@ class DiknasCoursesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def diknas_course_params
-      params.require(:diknas_course).permit(:number,:number2, :sort_num, :name, :notes)
+      params.require(:diknas_course).permit(:ipa10,:ips10,:ipa11, :ips11, :ipa12, :ips12, :sort_num, :name, :notes)
     end
 end
