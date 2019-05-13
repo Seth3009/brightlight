@@ -8,15 +8,19 @@ nav
           i.material-icons chevron_left
     ul.right
       li
+        a.waves-effect.waves-light.modal-trigger href="#init-titles" 
+          | Initialize
+          i.material-icons.left.tooltipped data-position="bottom" data-delay="30" data-tooltip="Copy from teacher's books" queue
+      li
         a.waves-effect.waves-light.modal-trigger href="#add-new-title" 
-          | Add text book
-          i.material-icons.left add
+          | Add
+          i.material-icons.left.tooltipped data-position="bottom" data-delay="30" data-tooltip="Add new book" add
       li
         = link_to course_course_texts_path(@course)
-          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="List view"  list
+          i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="List view"  list
       li
         = link_to course_course_texts_path(@course, {v:'block'})
-          i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Expanded view"  view_module
+          i.material-icons.tooltipped data-position="bottom" data-delay="30" data-tooltip="Expanded view"  view_module
 
 - if @view_style == :list
   .card-panel
@@ -51,7 +55,7 @@ nav
     - @course_texts.each do |course_text|
       .col.s12.m2.l2
         .card.book-info
-          .card-image
+          .card-image style="max-width:200px"
             - thumbnail = course_text.book_title.image_url.present? ? course_text.book_title.image_url : 'book-icon.png' 
             = image_tag(thumbnail, class: 'list_image activator')           
           .book-title.activator
@@ -69,6 +73,27 @@ nav
             p = course_text.book_title.authors
             .label Publisher
             p = course_text.book_title.publisher
+
+#init-titles.modal.modal-fixed-footer.ui-front.medium
+  = form_tag ({controller: "course_texts", action: "init"}) do
+    .modal-content
+      h5 Initialize course text with book loans
+      .row      
+        .input-field.col.s12
+          = label_tag :employee, 'Enter employee', class:'active'            
+          = select_tag :employee_id, options_from_collection_for_select(Employee.active.order(:name),:id,:name, @course.course_sections.first.instructor_id)
+        .input-field.col.s12
+          = label_tag :academic_year, 'Enter Year', class:'active'  
+          = select_tag :academic_year_id, options_from_collection_for_select(AcademicYear.list_for_menu,:id,:name, AcademicYear.current_id)
+        .input-field.col.s12
+          = label_tag :book_category, 'Select book category', class: 'active'
+          = collection_select :course_text, :book_category_id, BookCategory.all, :id, :name, prompt: 'Select category'
+        .input-field.col.s12
+          = label_tag :notes
+          = text_field :course_text, :notes
+    .modal-footer
+      button#add-button.waves-effect.waves-light.modal-action.btn.btn-default type="submit" Add
+      a.waves-effect.waves-light.modal-action.modal-close.btn-flat href="#!" Cancel
 
 #add-new-title.modal.modal-fixed-footer.ui-front.medium
   = form_tag ({controller: "course_texts", action: "create"}) do

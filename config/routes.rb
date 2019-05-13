@@ -137,7 +137,11 @@ Rails.application.routes.draw do
   end
   
   resources :courses do
-    resources :course_texts, shallow: true
+    resources :course_texts, shallow: true do
+      collection do 
+        post 'init'
+      end
+    end
     resources :course_sections, except: :new, shallow: true do
       member do
         get  'edit_students'
