@@ -328,7 +328,9 @@ class BookLoansController < ApplicationController
       @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
     end
     if params[:batch_return].present?
-      BookLoan.not_disposed.where(id:selected_ids).update_all return_status: params[:batch_return], return_date: Date.today
+      BookLoan.not_disposed.where(id:selected_ids).each do |bl| 
+        bl.update return_status: params[:batch_return], return_date: Date.today
+      end
       @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
     end
     if params[:convert].present?

@@ -420,6 +420,7 @@ class StudentBooksController < ApplicationController
     params[:book_loans].each do |key, values|
       book_loan = BookLoan.where(academic_year_id:@current_year, book_copy_id:values[:book_copy_id]).take
       book_loan.update(return_date: values[:return_date],
+                       return_status: 'R',
                        user_id: values[:user_id],
                        notes: values[:notes],
                        student_no: values[:student_no])
