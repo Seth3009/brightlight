@@ -31,16 +31,24 @@ class DiknasReportCard < ActiveRecord::Base
       terms = academic_year.academic_terms.order(:start_date).map &:id
       course = Course.find_by_number(row[:course])
 
-      diknas_report_card = DiknasReportCard.new(
-        student_id:       student.id,
+      diknas_report_card = DiknasReportCard.find_by(student_id: student.id,
         grade_level_id:   row[:grade],
         course_id:        course.id,
-        average:          row[:average],
-        academic_year_id: academic_year.id,
         academic_term_id: terms[row[:academic_term]-1]
       )
-      diknas_report_card.save
-
+      if diknas_report_card.present?
+        diknas_report_card.update average: row[:average]
+      else
+        diknas_report_card = DiknasReportCard.new(
+          student_id:       student.id,
+          grade_level_id:   row[:grade],
+          course_id:        course.id,
+          average:          row[:average],
+          academic_year_id: academic_year.id,
+          academic_term_id: terms[row[:academic_term]-1]
+        )
+        diknas_report_card.save
+      end
     end 
   end
 

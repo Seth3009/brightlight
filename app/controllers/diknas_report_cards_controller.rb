@@ -113,7 +113,7 @@ class DiknasReportCardsController < ApplicationController
       DiknasConverted.where(academic_term_id: params[:term], grade_level_id: params[:grade]).destroy_all
     end
     DiknasReportCard.convert(academic_term_id: params[:term], grade_level_id: params[:grade])
-    redirect_to diknas_converteds_path
+    redirect_to diknas_converteds_path(term: params[:term], grade: params[:grade])
   end
 
   private

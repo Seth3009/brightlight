@@ -147,6 +147,33 @@ ActiveRecord::Schema.define(version: 20190513045346) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "batch_students", force: :cascade do |t|
+    t.integer  "batch_id"
+    t.integer  "student_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "batch_students", ["batch_id"], name: "index_batch_students_on_batch_id", using: :btree
+  add_index "batch_students", ["student_id"], name: "index_batch_students_on_student_id", using: :btree
+
+  create_table "batches", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "course_id"
+    t.integer  "course_section_id"
+    t.integer  "academic_year_id"
+    t.integer  "academic_term_id"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "batches", ["academic_term_id"], name: "index_batches_on_academic_term_id", using: :btree
+  add_index "batches", ["academic_year_id"], name: "index_batches_on_academic_year_id", using: :btree
+  add_index "batches", ["course_id"], name: "index_batches_on_course_id", using: :btree
+  add_index "batches", ["course_section_id"], name: "index_batches_on_course_section_id", using: :btree
+
   create_table "book_assignments", id: false, force: :cascade do |t|
     t.integer  "book_copy_id"
     t.integer  "student_id"
@@ -534,6 +561,16 @@ ActiveRecord::Schema.define(version: 20190513045346) do
   add_index "class_budgets", ["grade_section_id"], name: "index_class_budgets_on_grade_section_id", using: :btree
   add_index "class_budgets", ["holder_id"], name: "index_class_budgets_on_holder_id", using: :btree
 
+  create_table "class_periods", force: :cascade do |t|
+    t.string   "name"
+    t.time     "start_time"
+    t.time     "end_time"
+    t.string   "school"
+    t.string   "is_break"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "comments", force: :cascade do |t|
     t.string   "title",            limit: 50, default: ""
     t.text     "comment"
@@ -639,8 +676,13 @@ ActiveRecord::Schema.define(version: 20190513045346) do
     t.integer "course_id"
     t.integer "book_title_id"
     t.integer "order_no"
+    t.integer "book_category_id"
+    t.integer "book_edition_id"
+    t.string  "notes"
   end
 
+  add_index "course_texts", ["book_category_id"], name: "index_course_texts_on_book_category_id", using: :btree
+  add_index "course_texts", ["book_edition_id"], name: "index_course_texts_on_book_edition_id", using: :btree
   add_index "course_texts", ["book_title_id"], name: "index_course_texts_on_book_title_id", using: :btree
   add_index "course_texts", ["course_id"], name: "index_course_texts_on_course_id", using: :btree
 
@@ -666,6 +708,7 @@ ActiveRecord::Schema.define(version: 20190513045346) do
   add_index "courses", ["employee_id"], name: "index_courses_on_employee_id", using: :btree
   add_index "courses", ["grade_level_id"], name: "index_courses_on_grade_level_id", using: :btree
   add_index "courses", ["slug"], name: "index_courses_on_slug", unique: true, using: :btree
+  add_index "courses", ["subject_id"], name: "index_courses_on_subject_id", using: :btree
 
   create_table "currencies", force: :cascade do |t|
     t.string   "foreign"
@@ -1163,7 +1206,7 @@ ActiveRecord::Schema.define(version: 20190513045346) do
   create_table "gradebook", force: :cascade do |t|
     t.string   "studentname"
     t.string   "grade"
-    t.string   "class"
+    t.string   "gradeclass"
     t.decimal  "avg"
     t.string   "semester"
     t.datetime "created_at",  null: false
@@ -1971,23 +2014,6 @@ ActiveRecord::Schema.define(version: 20190513045346) do
   add_index "student_books", ["prev_academic_year_id"], name: "index_student_books_on_prev_academic_year_id", using: :btree
   add_index "student_books", ["student_id"], name: "index_student_books_on_student_id", using: :btree
 
-  create_table "student_tardies", force: :cascade do |t|
-    t.integer  "student_id"
-    t.string   "grade"
-    t.string   "reason"
-    t.integer  "employee_id"
-    t.integer  "academic_year_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-    t.date     "date_tardy"
-    t.integer  "grade_section_id"
-  end
-
-  add_index "student_tardies", ["academic_year_id"], name: "index_student_tardies_on_academic_year_id", using: :btree
-  add_index "student_tardies", ["employee_id"], name: "index_student_tardies_on_employee_id", using: :btree
-  add_index "student_tardies", ["grade_section_id"], name: "index_student_tardies_on_grade_section_id", using: :btree
-  add_index "student_tardies", ["student_id"], name: "index_student_tardies_on_student_id", using: :btree
-
   create_table "students", force: :cascade do |t|
     t.string   "name"
     t.string   "first_name"
@@ -2237,6 +2263,12 @@ ActiveRecord::Schema.define(version: 20190513045346) do
   add_foreign_key "approvers", "departments"
   add_foreign_key "approvers", "employees"
   add_foreign_key "approvers", "events"
+  add_foreign_key "batch_students", "batches"
+  add_foreign_key "batch_students", "students"
+  add_foreign_key "batches", "academic_terms"
+  add_foreign_key "batches", "academic_years"
+  add_foreign_key "batches", "course_sections"
+  add_foreign_key "batches", "courses"
   add_foreign_key "book_fines", "grade_levels"
   add_foreign_key "book_fines", "grade_sections"
   add_foreign_key "book_fines", "student_books"
@@ -2257,6 +2289,11 @@ ActiveRecord::Schema.define(version: 20190513045346) do
   add_foreign_key "class_budgets", "departments"
   add_foreign_key "class_budgets", "grade_levels"
   add_foreign_key "class_budgets", "grade_sections"
+  add_foreign_key "course_schedules", "academic_terms"
+  add_foreign_key "course_schedules", "class_periods"
+  add_foreign_key "course_schedules", "course_sections"
+  add_foreign_key "course_schedules", "courses"
+  add_foreign_key "course_schedules", "rooms"
   add_foreign_key "course_section_histories", "employees", column: "instructor_id"
   add_foreign_key "course_sections", "locations"
   add_foreign_key "course_texts", "book_categories"
@@ -2380,9 +2417,6 @@ ActiveRecord::Schema.define(version: 20190513045346) do
   add_foreign_key "student_activities", "academic_years"
   add_foreign_key "student_activities", "activity_schedules"
   add_foreign_key "student_activities", "students"
-  add_foreign_key "student_tardies", "academic_years"
-  add_foreign_key "student_tardies", "employees"
-  add_foreign_key "student_tardies", "students"
   add_foreign_key "supplies_transaction_items", "item_categories"
   add_foreign_key "supplies_transaction_items", "item_units"
   add_foreign_key "supplies_transaction_items", "products"

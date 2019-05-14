@@ -18,8 +18,8 @@ class DiknasConversion < ActiveRecord::Base
       .order([:academic_term_id, :grade_level_id, 'diknas_courses.name'])
   end
 
-  def self.value_for(student_id, diknas_course_id, academic_year_id, academic_term_id)
-    find_by(diknas_course_id: diknas_course_id, academic_year_id: academic_year_id, academic_term_id: academic_term_id)
+  def self.value_for(student_id, diknas_course_id, academic_term_id)
+    find_by(diknas_course_id: diknas_course_id, academic_term_id: academic_term_id)
     .value_for student_id
   end
 
