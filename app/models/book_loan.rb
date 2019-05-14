@@ -24,8 +24,8 @@ class BookLoan < ActiveRecord::Base
   has_one  :student_book
 
   around_destroy :make_book_status_available
-  before_save :sync_status_available, if: :return_status_changed? 
-  before_save :sync_status_onloan,    if: :loan_status_changed?
+  before_save :sync_status_available
+  before_save :sync_status_onloan
   before_create :sync_status_onloan
 
   scope :current, lambda { where(academic_year: AcademicYear.current) }
@@ -149,6 +149,7 @@ class BookLoan < ActiveRecord::Base
         bl.return_status = nil
         bl.return_date = nil
         bl.save
+        bl.book_copy.update_column :status_id, 2
       end
       true
     else
