@@ -123,7 +123,7 @@ class BookCopy < ActiveRecord::Base
   end
 
   def active_loan
-    BookLoan.where(book_copy_id: self.id, return_date: nil)
+    BookLoan.where(book_copy_id: self.id, return_status: nil)
       .order(academic_year_id: :desc, created_at: :desc)
       .includes([:employee, :student])
       .take
