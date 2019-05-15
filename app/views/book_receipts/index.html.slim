@@ -1,9 +1,8 @@
 - if @student.present?
-  h5 Loan Receipt Form for 
+  h5 Student Book Receipt Form for 
   h4 #{@student.name} (#{@grade_section.name})
 - else
-  h4 Loan Receipt Form #{@academic_year.name}
-  h5 Student Textbooks 
+  h4 Student Book Receipt Form #{@academic_year.name}
 
 ul#grade-options.dropdown-content
   - GradeLevel.all.order(:id).each do |grade|

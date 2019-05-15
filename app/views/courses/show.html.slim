@@ -94,11 +94,16 @@ nav
                 - @course.course_texts.each do |course_text|
                   .col.s12.m2.l2
                     .card.book-info
-                      .card-image style="width:150px"
+                      .card-image.activator
                         - thumbnail = course_text.book_title.image_url.present? ? course_text.book_title.image_url : 'book-icon.png' 
-                        = image_tag(thumbnail, class: 'activator')           
-                      .book-title.activator
-                        = course_text.book_title.title
+                        div style="margin: 0 auto; max-width:150px"
+                          = image_tag(thumbnail, class: 'center-align activator')  
+                          - unless course_text.book_title.image_url.present?
+                            strong = course_text.book_title.title
+                      .card-content style="padding: 10px 0 10px 10px !important"
+                        i.material-icons.right.activator more_vert
+                        .book-title.activator
+                          = course_text.book_title.title
                       .card-reveal
                         .card-title.grey-text
                           i.material-icons.right close

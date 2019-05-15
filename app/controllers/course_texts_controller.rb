@@ -1,5 +1,5 @@
 class CourseTextsController < ApplicationController
-  before_action :set_course, only: [:index, :create]
+  before_action :set_course, only: [:index, :create, :init]
   before_action :set_course_text, only: [:show, :edit, :update, :destroy]
 
   # GET /course_texts
@@ -71,6 +71,24 @@ class CourseTextsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to course_course_texts_path(@course), notice: 'Course text was successfully removed.' }
       format.json { head :no_content }
+    end
+  end
+
+  # POST /course_texts/1/init
+  def init
+    authorize! :update, @course
+
+    @employee = Employee.find params[:employee_id]
+    @year = AcademicYear.find params[:academic_year_id]
+    
+    respond_to do |format|
+      if CourseText.create_from_book_loans(employee: @employee, academic_year: @year, course: @course)
+        format.html { redirect_to course_course_texts_path(@course), notice: 'Course text was successfully initialized.' }
+        format.json { render :show, status: :ok, location: @course_text }
+      else
+        format.html { render :edit }
+        format.json { render json: @course_text.errors, status: :unprocessable_entity }
+      end
     end
   end
 

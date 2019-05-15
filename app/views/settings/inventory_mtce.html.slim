@@ -15,7 +15,6 @@ ul class="collapsible" data-collapsible="expandable"
               .label New Academic Year
               = select_tag :standard_book_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
             .col.s2
-              button.btn.waves-effect.waves-light type="submit" id="initialize_standard_books-button" disabled="disabled" data-disable=true Create 
               .label Select Grades
               input.allcheckboxes type="checkbox" id="initialize_standard_books-all" name="initialize_standard_books[all]" data-total="#{GradeLevel.count}"
               = label_tag "initialize_standard_books-all", "All grades"
@@ -25,8 +24,11 @@ ul class="collapsible" data-collapsible="expandable"
                   = label_tag "initialize_standard_books-#{grade.id}", grade.name
             .col.s7 
               h6 Create Standard Books
-              .label Description        
-              | This will create new Standard Books records based on previous academic year's Standard Books.
+              .label Description
+              .card-panel        
+                | This will create new Standard Books records based on previous academic year's Standard Books.
+                br
+                button.btn.waves-effect.waves-light type="submit" class="initialize_standard_books-button" disabled="disabled" data-disable=true Create 
   
   li 
     .collapsible-header.waves-effect.waves-light.large-letter
@@ -47,7 +49,7 @@ ul class="collapsible" data-collapsible="expandable"
                       .label Academic Year 
                       = select_tag :finalize_student_books_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
                     .col.s2
-                      button.btn.waves-effect.waves-light type="submit" id="finalize_student_books-button" disabled="disabled" data-disable=true Finalize 
+
                       .label Select Grades
                       input.allcheckboxes type="checkbox" id="finalize_student_books-all" name="finalize_student_books[all]" data-total="#{GradeLevel.count}"
                       = label_tag "finalize_student_books-all", "All grades"
@@ -58,7 +60,11 @@ ul class="collapsible" data-collapsible="expandable"
                     .col.s7
                       h6 Finalize Book Conditions
                       .label Description
-                      | This will finalize student books condition checking and prepare starting conditions for each student book copy for the next academic year.
+                      .card-panel
+                        | This will finalize student books condition checking and prepare starting conditions for each student book copy for the next academic year.
+                        br
+                        button.btn.waves-effect.waves-light type="submit" class="finalize_student_books-button" disabled="disabled" data-disable=true Finalize 
+
           li 
             .collapsible-header.waves-effect.waves-light.grey.darken-1.white-text       
               | Prepare Book Receipts
@@ -71,7 +77,6 @@ ul class="collapsible" data-collapsible="expandable"
                       .label New Academic Year 
                       = select_tag :prepare_book_receipts_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
                     .col.s2
-                      button.btn.waves-effect.waves-light type="submit" id="prepare_book_receipts-button" disabled="disabled" data-disable=true Prepare 
                       .label Select Grades
                       input.allcheckboxes type="checkbox" id="prepare_book_receipts-all" name="prepare_book_receipts[all]" data-total="#{GradeLevel.count}"
                       = label_tag "prepare_book_receipts-all", "All grades"
@@ -82,8 +87,19 @@ ul class="collapsible" data-collapsible="expandable"
                     .col.s7
                       h6 Prepare Book Receipts
                       .label Description
-                      | This will prepare book receipt forms for each student based on the finalized Student Book conditions.
-                      | Please select the right academic year. It should be the <em>new</em> academic year. 
+                      .card-panel
+                        | This will prepare book receipt forms for each student based on the finalized Student Book conditions.
+                        | Please select the right academic year. It should be the <em>new</em> academic year.
+                        br
+                        button.btn.waves-effect.waves-light type="submit" value="prepare" class="prepare_book_receipts-button" name="commit" disabled="disabled" data-disable=true Create
+                      br
+                      br
+                      .label Delete records
+                      .card-panel.red.lighten-3
+                        | Click this button to delete the selected book receipts.
+                        br
+                        button.btn.waves-effect.waves-light.red type="submit" value="delete" class="prepare_book_receipts-button" name="commit" disabled="disabled" data-confirm="Are you sure?" data-disable=true Delete 
+ 
           li 
             .collapsible-header.waves-effect.waves-light.grey.darken-1.white-text      
               | Finalize Book Condition from Receipts
@@ -96,7 +112,6 @@ ul class="collapsible" data-collapsible="expandable"
                       .label Academic Year 
                       = select_tag :receipt_condition_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
                     .col.s2
-                      button.btn.waves-effect.waves-light type="submit" id="finalize_condition_book_receipts-button" data-disable=true disabled="disabled" data-confirm="Are you sure?" Finalize
                       .label Select Grades
                       input.allcheckboxes type="checkbox" id="finalize_condition_book_receipts-all" name="finalize_condition_book_receipts[all]" data-total="#{GradeLevel.count}"
                       = label_tag "finalize_condition_book_receipts-all", "All grades"
@@ -107,7 +122,11 @@ ul class="collapsible" data-collapsible="expandable"
                     .col.s7
                       h6 Finalize Book Condition from Receipts
                       .label Description
-                      | This will create this year's initial book conditions based on book conditions inputted in Book Receipt Form.
+                      .card-panel
+                        | This will create this year's initial book conditions based on book conditions inputted in Book Receipt Form.
+                        br
+                        button.btn.waves-effect.waves-light type="submit" class="finalize_condition_book_receipts-button" data-disable=true disabled="disabled" data-confirm="Are you sure?" Finalize
+
           li 
             .collapsible-header.waves-effect.waves-light.grey.darken-1.white-text      
               | Create Student Book Loans from Receipts
@@ -120,7 +139,6 @@ ul class="collapsible" data-collapsible="expandable"
                       .label Academic Year 
                       = select_tag :prepare_student_book_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
                     .col.s2
-                      button.btn.waves-effect.waves-light type="submit" id="prepare_student_books-button" disabled="disabled" data-disable=true Create
                       .label Select Grades
                       input.allcheckboxes type="checkbox" id="prepare_student_books-all" name="prepare_student_books[all]" data-total="#{GradeLevel.count}"
                       = label_tag "prepare_student_books-all", "All grades"
@@ -131,7 +149,10 @@ ul class="collapsible" data-collapsible="expandable"
                     .col.s7
                       h6 Create Student Book Loans from Receipts
                       .label Description
-                      | This will create new Student Book Loan records based on Student Book Receipt Form.
+                      .card-panel
+                        | This will create new Student Book Loan records based on Student Book Receipt Form.
+                        br
+                        button.btn.waves-effect.waves-light type="submit" class="prepare_student_books-button" disabled="disabled" data-disable=true Create
   li 
     .collapsible-header.waves-effect.waves-light.large-letter
       | Teacher's Books
@@ -151,11 +172,15 @@ ul class="collapsible" data-collapsible="expandable"
                       .label New Academic Year
                       = select_tag :teacher_loan_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
                     .col.s2
-                      button.btn.waves-effect.waves-light type="submit" data-disable=true Create
+                      |
                     .col.s7 
                       h6 Initialize Teacher Book Loans
                       .label Description
-                      | This will create new Teacher Book Loan records based on returned books from previous academic year loan records.
+                      .card-panel
+                        | This will create new Teacher Book Loan records based on returned books from previous academic year loan records.
+                        br
+                        button.btn.waves-effect.waves-light type="submit" data-disable=true Create
+
           li 
             .collapsible-header.waves-effect.waves-light.grey.darken-1.white-text       
               | Move book loans
@@ -185,9 +210,10 @@ ul class="collapsible" data-collapsible="expandable"
                         .col.s12
                           h6 Move book loans
                           .label Description
-                          | This will move book loans from one teacher to another.
-                        .col.s12
-                          button.btn.waves-effect.waves-light type="submit" data-disable=true Move
+                          .card-panel
+                            | This will move book loans from one teacher to another.
+                            br
+                            button.btn.waves-effect.waves-light type="submit" data-disable=true Move
       
   li 
     .collapsible-header.waves-effect.waves-light.large-letter      
@@ -201,7 +227,6 @@ ul class="collapsible" data-collapsible="expandable"
               .label Academic Year
               = select_tag :fines_academic_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
             .col.s2
-              button.btn.waves-effect.waves-light type="submit" id="calculate_book_fines-button" disabled="disabled" data-disable=true Calculate
               br
               .label Select Grades
               input.allcheckboxes type="checkbox" id="fines_grade-all" name="fines_grade[all]" data-total="#{GradeLevel.count}"
@@ -213,7 +238,11 @@ ul class="collapsible" data-collapsible="expandable"
             .col.s7 
               h6 Calculate Textbook Fines
               .label Description        
-              | This will create new Textbook Fine records based on the student book conditions (Borrow Condition vs. Return Condition). 
-              br 
-              br
-              | Please make sure that the Student Books' conditions are up-to-date (Student Books by Student or by Title). Also make sure that each Book Edition has correct and non-empty <em>price</em> and <em>currency</em>.
+              .card-panel
+                | This will create new Textbook Fine records based on the student book conditions (Borrow Condition vs. Return Condition). 
+                br 
+                br
+                | Please make sure that the Student Books' conditions are up-to-date (Student Books by Student or by Title). Also make sure that each Book Edition has correct and non-empty <em>price</em> and <em>currency</em>.
+                br
+                br
+                button.btn.waves-effect.waves-light type="submit" class="calculate_book_fines-button" disabled="disabled" data-disable=true Calculate
