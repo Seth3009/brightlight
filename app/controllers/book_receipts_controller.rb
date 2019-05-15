@@ -156,11 +156,16 @@ class BookReceiptsController < ApplicationController
 
     respond_to do |format|
       format.js do
-        if BookReceipt.where(academic_year_id:academic_year_id).where("grade_level_id in (?)", grades).count > 0
-          @error = "Error: Book receipts have been created for some of the selected grade levels #{AcademicYear.find(academic_year_id).name}"
-        else
-          BookReceipt.initialize_book_receipts academic_year_id-1, academic_year_id, grades
-          @message = "Preparation completed."
+        if params[:commit] == 'prepare'
+          if BookReceipt.where(academic_year_id:academic_year_id).where("grade_level_id in (?)", grades).count > 0
+            @error = "Error: Book receipts have been created for some of the selected grade levels #{AcademicYear.find(academic_year_id).name}"
+          else
+            BookReceipt.initialize_book_receipts academic_year_id-1, academic_year_id, grades
+            @message = "Preparation completed."
+          end
+        elsif params[:commit] == 'delete'
+          BookReceipt.where(academic_year_id:academic_year_id).where("grade_level_id in (?)", grades).destroy_all
+          @message = "Selected Book Receipts were successfully deleted"
         end
       end
     end

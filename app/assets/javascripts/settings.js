@@ -3,7 +3,7 @@ $(document).on("ready page:load", function(){
 
 	var init_checkboxes = function(group) {
 		var group_id = "#"+group;
-		var button_id = "#"+group+"-button";
+		var button_id = "."+group+"-button";
 		var toggle_button = function() {
 			var checked = $(group_id + ' input.checkbox:checked').length > 0;
 			if (checked) {
