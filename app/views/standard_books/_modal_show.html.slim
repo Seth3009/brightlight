@@ -2,14 +2,13 @@
   table
     tr
       td style="vertical-align:top"
-        - thumbnail = @standard_book.book_edition.present? ? @standard_book.book_edition.small_thumbnail : 'book-icon.png' 
+        - thumbnail = @standard_book.book_title.try(:image_url).present? ? @standard_book.book_title.image_url : 'book-icon.png' 
         = image_tag(thumbnail, class: 'list_image')
       td
         .label Standard Book
         .list_description
           dl
-            h4 = @standard_book.book_edition.title
-            dd = @standard_book.book_edition.subtitle
+            h4 = @standard_book.book_title.title
           dl.row
             dd.col.s4
               .label Grade Level

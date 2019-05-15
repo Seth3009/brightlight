@@ -12,7 +12,7 @@ class StandardBooksController < ApplicationController
   def index
     authorize! :read, StandardBook
     @items_per_page = 25
-
+    
     @standard_books = StandardBook.all.includes([:book_title,:book_edition,:subject, :academic_year,:book_category])
 
     if params[:year].present?
@@ -45,6 +45,7 @@ class StandardBooksController < ApplicationController
 
     # @standard_books = @standard_books.order("#{sort_column} #{sort_direction}") if params[:column].present?
     @standard_books = @standard_books.paginate(page: params[:page], per_page: @items_per_page)
+    @starting_num = (@standard_books.current_page-1) * @items_per_page
 
     respond_to do |format|
       format.html

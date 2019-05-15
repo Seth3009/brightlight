@@ -78,7 +78,7 @@ nav
     tbody
       - @standard_books.each_with_index do |standard_book, i|
         tr id="row-#{standard_book.id}"
-          td = i+1
+          td = i + 1 + @starting_num
           td 
             = link_to standard_book.book_title
               .tooltipped data-position="bottom" data-delay="50" data-tooltip="Book Title" = standard_book.title.truncate(60) 
