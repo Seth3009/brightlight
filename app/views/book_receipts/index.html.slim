@@ -14,10 +14,11 @@ ul#section-options.dropdown-content
     li
       = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterRosterOptions(#{section.id}, '#{section.name}');"
 ul#roster-options.dropdown-content
+  - max_roster_nos = BookReceipt.where(academic_year_id:18).group(:grade_section_id).order(:grade_section_id).maximum(:roster_no)
   - @grade_sections.each do |section|
     li = link_to 'All', book_receipts_path(gs:"#{section.id}",year:params[:year]), class:"section-#{section.id}", style:"display:#{section==@grade_section ? 'block' : 'none'}"
-    - if max_num = section.book_receipts.where(academic_year:@academic_year).maximum(:roster_no)
-      - max_num.times do |number|
+    - if max_roster_nos[section.id]
+      - max_roster_nos[section.id].times do |number|
         li 
           = link_to number+1, book_receipts_path(gs:"#{section.id}",r:"#{number+1}", year:params[:year]), class:"section-#{section.id}", style:"display:#{section==@grade_section ? 'block' : 'none'}"
 ul#year-options.dropdown-content
