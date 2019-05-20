@@ -85,20 +85,6 @@ class BookLoan < ActiveRecord::Base
     BookLoan.import columns, values
   end
 
-  def self.initialize_teacher_loans_from_course_text(course_id, academic_year_id, employee_id, user_id)
-    columns = [:book_copy_id, :book_edition_id, :book_title_id, :person_id, :book_category_id, :loan_type_id,
-                :out_date, :due_date, :academic_year_id, :user_id, :barcode, :refno,
-                :prev_academic_year_id, :loan_status, :bkudid, :employee_id, :deleted_flag]
-    values = []
-    BookLoan.not_disposed.where(academic_year_id: previous_year_id).where.not(employee_id: nil).where.not(return_status: 'RI').each do |bl|
-      data = [bl.book_copy_id, bl.book_edition_id, bl.book_title_id, bl.person_id, bl.book_category_id, bl.loan_type_id,
-                Date.today, Date.today+360, new_year_id, user_id, bl.barcode, bl.refno,
-                previous_year_id, 'B', bl.bkudid, bl.employee_id, false]
-      values << data
-    end
-    BookLoan.import columns, values
-  end
-
   # BookLoan.move_all_books(from:Employee.find(3),to:Employee.find(4),from_year:AcademicYear.current_id-1,to_year:AcademicYear.current, current_user)
   def self.move_all_books(from:, to:, from_year:, to_year:, exclude_unreturned_books: true, user_id:)
     source = Employee.find(from.id)
