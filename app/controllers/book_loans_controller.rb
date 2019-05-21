@@ -391,7 +391,7 @@ class BookLoansController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_loan_params
-      params.require(:book_loan).permit(:book_copy_id, :book_edition_id, :book_title_id, :user_id, :book_category_id,
+      params.require(:book_loan).permit(:book_copy_id, :book_edition_id, :book_title_id, :user_id, :book_category_id, :course_id, :course_section_id,
         :loan_type_id, :out_date, :due_date, :academic_year_id, :barcode, :return_date, :loan_status, :return_status, :notes)
     end
 

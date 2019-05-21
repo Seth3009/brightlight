@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190502021008) do
+ActiveRecord::Schema.define(version: 20190521072224) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -371,6 +371,8 @@ ActiveRecord::Schema.define(version: 20190502021008) do
     t.string   "employee_no"
     t.integer  "student_id"
     t.boolean  "deleted_flag"
+    t.integer  "course_id"
+    t.integer  "course_section_id"
   end
 
   add_index "book_loans", ["academic_year_id"], name: "index_book_loans_on_academic_year_id", using: :btree
@@ -378,6 +380,8 @@ ActiveRecord::Schema.define(version: 20190502021008) do
   add_index "book_loans", ["book_copy_id"], name: "index_book_loans_on_book_copy_id", using: :btree
   add_index "book_loans", ["book_edition_id"], name: "index_book_loans_on_book_edition_id", using: :btree
   add_index "book_loans", ["book_title_id"], name: "index_book_loans_on_book_title_id", using: :btree
+  add_index "book_loans", ["course_id"], name: "index_book_loans_on_course_id", using: :btree
+  add_index "book_loans", ["course_section_id"], name: "index_book_loans_on_course_section_id", using: :btree
   add_index "book_loans", ["employee_id"], name: "index_book_loans_on_employee_id", using: :btree
   add_index "book_loans", ["loan_type_id"], name: "index_book_loans_on_loan_type_id", using: :btree
   add_index "book_loans", ["person_id"], name: "index_book_loans_on_person_id", using: :btree
@@ -856,13 +860,17 @@ ActiveRecord::Schema.define(version: 20190502021008) do
   add_index "diknas_converteds", ["student_id"], name: "index_diknas_converteds_on_student_id", using: :btree
 
   create_table "diknas_courses", force: :cascade do |t|
-    t.integer  "number"
+    t.integer  "ipa10"
     t.string   "name"
     t.text     "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "number2"
+    t.integer  "ips10"
     t.integer  "sort_num"
+    t.integer  "ipa12"
+    t.integer  "ips12"
+    t.integer  "ipa11"
+    t.integer  "ips11"
   end
 
   create_table "diknas_report_cards", force: :cascade do |t|
@@ -2268,6 +2276,8 @@ ActiveRecord::Schema.define(version: 20190502021008) do
   add_foreign_key "book_fines", "grade_levels"
   add_foreign_key "book_fines", "grade_sections"
   add_foreign_key "book_fines", "student_books"
+  add_foreign_key "book_loans", "course_sections"
+  add_foreign_key "book_loans", "courses"
   add_foreign_key "book_titles", "grade_levels"
   add_foreign_key "budget_items", "budgets"
   add_foreign_key "budget_items", "users", column: "created_by_id"
