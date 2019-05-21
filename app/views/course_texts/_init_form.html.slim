@@ -1,0 +1,20 @@
+= form_tag ({controller: "course_texts", action: "init"}) do
+  .modal-content
+    h5 Initialize course text with book loans
+    .row      
+      .input-field.col.s12
+        = label_tag :employee, 'Enter employee', class:'active'            
+        = select_tag :employee_id, options_from_collection_for_select(Employee.active.order(:name),:id,:name, @course.course_sections.first.instructor_id)
+      .input-field.col.s12
+        = label_tag :academic_year, 'Enter Year', class:'active'  
+        = select_tag :academic_year_id, options_from_collection_for_select(AcademicYear.list_for_menu,:id,:name, AcademicYear.current_id)
+      .input-field.col.s12
+        = label_tag :book_category, 'Select book category', class: 'active'
+        = select_tag :book_category_id, book_category_options_for_select(), prompt: 'Select category'
+        /= collection_select :course_text, :book_category_id, BookCategory.all, :id, :name, prompt: 'Select category'
+      .input-field.col.s12
+        = label_tag :notes
+        = text_field :course_text, :notes
+  .modal-footer
+    button#add-button.waves-effect.waves-light.modal-action.btn.btn-default type="submit" Add
+    a.waves-effect.waves-light.modal-action.modal-close.btn-flat href="#!" Cancel

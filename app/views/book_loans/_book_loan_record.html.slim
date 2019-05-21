@@ -15,9 +15,15 @@
         .item = book_loan.book_category.try(:name) || '--'
     dl.row          
       - if book_loan.employee.present?
-        dd.col.s6
+        dd.col.s4
           .label Borrower:
           .item = book_loan.employee.name  || '--'
+        dd.col.s4
+          .label Course:
+          .item = book_loan.course.try(:name) || '--'
+        dd.col.s4
+          .label Course Section:
+          .item = book_loan.course_section.try(:name) || '--'
       - if book_loan.student.present?
         dd.col.s6
           .label Borrower:

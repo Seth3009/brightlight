@@ -8,11 +8,11 @@ nav
           i.material-icons chevron_left
     ul.right
       li
-        a.waves-effect.waves-light.modal-trigger href="#init-titles" 
+        = link_to copy_course_course_texts_path(@course), remote: true
           | Initialize
           i.material-icons.left.tooltipped data-position="bottom" data-delay="30" data-tooltip="Copy from teacher's books" queue
       li
-        a.waves-effect.waves-light.modal-trigger href="#add-new-title" 
+        = link_to new_course_course_text_path(@course), remote: true
           | Add
           i.material-icons.left.tooltipped data-position="bottom" data-delay="30" data-tooltip="Add new book" add
       li
@@ -48,8 +48,10 @@ nav
               td
               td
             td
-              = link_to course_text, data: {:confirm => 'Are you sure?'}, :method => :delete
-                i.material-icons.red-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove" delete
+              = link_to edit_course_text_path(course_text), remote: true
+                i.material-icons edit
+              = remote_link_to_delete course_text, message: "Book has been removed", class: "left waves-effect waves-light red-text"
+                i.material-icons delete
 - else
   .row
     - @course_texts.each do |course_text|
@@ -63,8 +65,8 @@ nav
           .card-action
             = link_to course_text.book_title
               i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show" visibility
-            = link_to course_text, data: {:confirm => 'Are you sure?'}, :method => :delete
-              i.material-icons.left.red-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove" delete
+            = link_to course_text, message: "Book has been removed", class: "left waves-effect waves-light", remote: true, method: :delete
+              i.material-icons.red-text delete
           .card-reveal
             .card-title.grey-text
               i.material-icons.right close
@@ -74,79 +76,35 @@ nav
             .label Publisher
             p = course_text.book_title.publisher
 
-#init-titles.modal.modal-fixed-footer.ui-front.medium
-  = form_tag ({controller: "course_texts", action: "init"}) do
-    .modal-content
-      h5 Initialize course text with book loans
-      .row      
-        .input-field.col.s12
-          = label_tag :employee, 'Enter employee', class:'active'            
-          = select_tag :employee_id, options_from_collection_for_select(Employee.active.order(:name),:id,:name, @course.course_sections.first.instructor_id)
-        .input-field.col.s12
-          = label_tag :academic_year, 'Enter Year', class:'active'  
-          = select_tag :academic_year_id, options_from_collection_for_select(AcademicYear.list_for_menu,:id,:name, AcademicYear.current_id)
-        .input-field.col.s12
-          = label_tag :book_category, 'Select book category', class: 'active'
-          = collection_select :course_text, :book_category_id, BookCategory.all, :id, :name, prompt: 'Select category'
-        .input-field.col.s12
-          = label_tag :notes
-          = text_field :course_text, :notes
-    .modal-footer
-      button#add-button.waves-effect.waves-light.modal-action.btn.btn-default type="submit" Add
-      a.waves-effect.waves-light.modal-action.modal-close.btn-flat href="#!" Cancel
+#modal-form.modal.modal-fixed-footer.ui-front.medium
 
-#add-new-title.modal.modal-fixed-footer.ui-front.medium
-  = form_tag ({controller: "course_texts", action: "create"}) do
-    .modal-content
-      h5 Adding new text book
-      .row      
-        .input-field.col.s12
-          = label_tag :title_field, 'Enter book title', class:'active'
-          = text_field_tag :title_field, '', class: 'title_autocomplete' 
-          = hidden_field :course_text, :course_id, {value: @course.id}
-          = hidden_field :course_text, :book_title_id
-        .input-field.col.s12
-          = label_tag :book_category, 'Select book category', class: 'active'
-          = collection_select :course_text, :book_category_id, BookCategory.all, :id, :name, prompt: 'Select category'
-        .input-field.col.s12
-          = label_tag :notes
-          = text_field :course_text, :notes
-      .row
-        .col.s3
-          img#book-cover.list_image
-        .col.s9
-          h5#selected
-          p#authors
-          p#publisher
-    .modal-footer
-      button#add-button.waves-effect.waves-light.modal-action.btn.btn-default disabled=true type="submit" Add
-      a.waves-effect.waves-light.modal-action.modal-close.btn-flat href="#!" Cancel
 
-  javascript:
-    $(document).on('focus', '.title_autocomplete', function() {
-      $('.title_autocomplete').autocomplete({
-        source: "/book_titles.json",
-        minLength: 3,
-        create: function() {
-          $(this).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-            return $( "<li>" )
-              .append( "<div>" + item.label +"</div>" )
-              .appendTo( ul );
-          }
-        },
-        select: function(event, ui) {
-          event.preventDefault();
-          $('#add-button').prop('disabled', false);
-          insert_values(ui.item);
+javascript:
+  $(document).on('focus', '.title_autocomplete', function() {
+    $('.title_autocomplete').autocomplete({
+      source: "/book_titles.json",
+      minLength: 3,
+      create: function() {
+        $(this).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+          return $( "<li>" )
+            .append( "<div>" + item.label +"</div>" )
+            .appendTo( ul );
         }
-      });
-      function insert_values(item ) {
-        $("#course_text_book_title_id").val(item.value);
-        $("#selected").html(item.title);
-        $("#authors").html(item.authors);
-        $("#publisher").html(item.publisher);
-        $("#book-cover").attr("src", item.image_url);
-        $("#title_field").val("");
-        $("#book-cover").scrollTop(0);
+      },
+      select: function(event, ui) {
+        event.preventDefault();
+        $('#add-button').prop('disabled', false);
+        insert_values(ui.item);
       }
     });
+    function insert_values(item ) {
+      $("#course_text_book_title_id").val(item.value);
+      $("#selected").html(item.title);
+      $("#authors").html(item.authors);
+      $("#publisher").html(item.publisher);
+      $("#book-cover").attr("src", item.image_url);
+      $("#title_field").val("");
+      $("#book-cover").scrollTop(0);
+    };
+    
+  });

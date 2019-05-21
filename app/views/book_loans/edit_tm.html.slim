@@ -55,7 +55,13 @@
         .input_field.col.s3
           = f.label :book_category
           = f.collection_select :book_category_id, BookCategory.all, :id, :name, prompt: true
-
+      dl.row
+        .input_field.col.s3
+          = f.label :course
+          = f.collection_select :course, Course.all.order(:number), :id, :name, prompt: 'Select course'
+        .input_field.col.s3
+          = f.label :course_section
+          = f.collection_select :course_section, CourseSection.all.order(:course_id, :name), :id, :name, prompt: 'Select course section'
   .toolbar.action
     button.btn.waves-effect.waves-light type='Submit' data-disable=true Save
     = link_to "Close", employee_book_loans_path(@teacher, year: params[:year]), class:"modal-action modal-close waves-effect waves-light btn-flat"
