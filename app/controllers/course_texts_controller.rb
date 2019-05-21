@@ -1,11 +1,11 @@
 class CourseTextsController < ApplicationController
-  before_action :set_course, only: [:index, :create, :init]
-  before_action :set_course_text, only: [:show, :edit, :update, :destroy]
+  before_action :set_course, only: [:index, :new, :create, :init, :copy]
+  before_action :set_course_text, only: [:edit, :update, :destroy]
 
   # GET /course_texts
   # GET /course_texts.json
   def index
-    @course_texts = @course.course_texts.order(:book_category_id)
+    @course_texts = @course.course_texts.order(:book_category_id).includes(:book_title, :book_category)
     if params[:v] == 'block'
       @view_style = :block
       session[:view_style] = 'block'
@@ -13,11 +13,6 @@ class CourseTextsController < ApplicationController
       @view_style = :list
       session[:view_style] = ''
     end
-  end
-
-  # GET /course_texts/1
-  # GET /course_texts/1.json
-  def show
   end
 
   # GET /course_texts/new
@@ -72,6 +67,10 @@ class CourseTextsController < ApplicationController
       format.html { redirect_to course_course_texts_path(@course), notice: 'Course text was successfully removed.' }
       format.json { head :no_content }
     end
+  end
+
+  def copy
+    authorize! :update, @course
   end
 
   # POST /course_texts/1/init

@@ -1,0 +1,24 @@
+= form_for @course_text do |f|
+  .modal-content
+    h5 Editing text book
+    .row
+      .input-field.col.s12
+        = label_tag :title_field, 'Enter book title', class:'active'
+        = text_field_tag :title_field, @course_text.book_title.title, class: 'title_autocomplete' 
+        = f.hidden_field :book_title_id
+      .input-field.col.s12
+        = f.label :book_category, 'Select book category', class: 'active'
+        = f.collection_select :book_category_id, BookCategory.all, :id, :name, prompt: 'Select category'
+      .input-field.col.s12
+        = f.label :notes
+        = f.text_field :notes
+    .row
+      .col.s3
+        img#book-cover.list_image src="#{@course_text.book_title.image_url}"
+      .col.s9
+        h5#selected
+        p#authors
+        p#publisher
+  .modal-footer
+    button#add-button.waves-effect.waves-light.modal-action.btn.btn-default type="submit" Submit
+    a.waves-effect.waves-light.modal-action.modal-close.btn-flat href="#!" Cancel

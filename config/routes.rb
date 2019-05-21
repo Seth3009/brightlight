@@ -139,6 +139,7 @@ Rails.application.routes.draw do
   resources :courses do
     resources :course_texts, shallow: true do
       collection do 
+        get 'copy'
         post 'init'
       end
     end
