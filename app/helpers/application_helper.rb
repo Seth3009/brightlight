@@ -67,6 +67,10 @@ module ApplicationHelper
     options_for_select (1..12).map {|m| Date.new(Date.today.year,m,1)}.map{|d| [d.strftime("%b"),d.month] }, selected
   end
 
+  def book_category_options_for_select(selected: nil)
+    options_for_select [['-All-','all'], ['-Blank-', nil]] + BookCategory.all.map {|category| [category.name, category.id] }, selected
+  end
+
   def impersonating?
     session[:impersonated_user_id].present?
   end 
