@@ -50,8 +50,8 @@ nav
             td
               = link_to edit_course_text_path(course_text), remote: true
                 i.material-icons edit
-              = link_to course_text, data: {:confirm => 'Are you sure?'}, :method => :delete
-                i.material-icons.red-text delete
+              = remote_link_to_delete course_text, message: "Book has been removed", class: "left waves-effect waves-light red-text"
+                i.material-icons delete
 - else
   .row
     - @course_texts.each do |course_text|
@@ -65,8 +65,8 @@ nav
           .card-action
             = link_to course_text.book_title
               i.material-icons.left.tooltipped data-position="bottom" data-delay="50" data-tooltip="Show" visibility
-            = link_to course_text, data: {:confirm => 'Are you sure?'}, :method => :delete
-              i.material-icons.left.red-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove" delete
+            = link_to course_text, message: "Book has been removed", class: "left waves-effect waves-light", remote: true, method: :delete
+              i.material-icons.red-text delete
           .card-reveal
             .card-title.grey-text
               i.material-icons.right close

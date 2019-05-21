@@ -66,6 +66,7 @@ class CourseTextsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to course_course_texts_path(@course), notice: 'Course text was successfully removed.' }
       format.json { head :no_content }
+      format.js { head :no_content }
     end
   end
 
@@ -79,9 +80,10 @@ class CourseTextsController < ApplicationController
 
     @employee = Employee.find params[:employee_id]
     @year = AcademicYear.find params[:academic_year_id]
+    @category = params[:book_category_id]
     
     respond_to do |format|
-      if CourseText.create_from_book_loans(employee: @employee, academic_year: @year, course: @course)
+      if CourseText.create_from_book_loans(employee: @employee, academic_year: @year, category: @category, course: @course)
         format.html { redirect_to course_course_texts_path(@course), notice: 'Course text was successfully initialized.' }
         format.json { render :show, status: :ok, location: @course_text }
       else
