@@ -65,24 +65,3 @@
   .toolbar.action
     button.btn.waves-effect.waves-light type='Submit' data-disable=true Save
     = link_to "Close", employee_book_loans_path(@teacher, year: params[:year]), class:"modal-action modal-close waves-effect waves-light btn-flat"
-
-javascript:
-  $(document).on("ready page:load", function(){
-    $("#book_loan_course_id").on("change", function() {
-      var course_id = $(this).val();
-      $.ajax({
-        url: "/courses/"+course_id+"/course_sections.json",
-        dataType: "json",
-        success: function(data) {
-          var options = '<option value="">--None--</option>';
-          options += $.map( data, function( item ) {
-            return '<option value="'+item.id+'">'+item.name+'</option>';
-          });
-          $("#book_loan_course_section_id").html( options );
-        },
-        fail: function() {
-          return;
-        }
-      })
-    });
-  });

@@ -45,7 +45,7 @@ div
   = form_tag list_action_book_loans_path(employee_id:params[:employee_id], year: @academic_year.id, page:params[:page]), remote:true do 
     nav
       .nav-wrapper
-        #context-buttons style="display:none;"
+        .context-menus style="display:none;"
           ul.left  
             - if can? :manage, BookLoan      
               li 
@@ -56,22 +56,7 @@ div
                 = select_tag :to_year, options_from_collection_for_select(AcademicYear.list_for_menu,:id,:name,AcademicYear.current_id)
               li  
                 button.btn type='submit' name='move' data-disable=true Go!
-          ul.right
-            - if can? :manage, BookLoan
-              li
-                .cat Edit:
-              li 
-                = select_tag :convert, options_for_select([['Return to check','return_to_check'], ['Check to return','check_to_return']]), prompt: "Convert"
-              li           
-                = select_tag :batch_return, options_for_select([['Return','R'], ['Return to inventory','RI']]), prompt: "Return type"
-              li 
-                = select_tag :book_catg, options_from_collection_for_select(BookCategory.all, :id, :name), prompt: "Category"
-              li 
-                button.btn type='submit' name='batch' data-disable=true Go!
-            - if can? :delete, BookLoan
-              li style="height: 54px"
-                button.icon type='submit' name='delete' data-disable=true data-confirm="Are you sure to delete selected book loan records?"
-                  i.material-icons.red-text delete
+        
         #default-buttons
           ul
             li
@@ -99,7 +84,28 @@ div
               li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Add book"
                 = link_to new_employee_book_loans_path(@teacher, book_catg: params[:book_catg], year: params[:year])
                   i.material-icons.left add
-        
+    nav.context-menus style="display:none"
+      .nav-wrapper
+        ul
+          - if can? :manage, BookLoan
+            li
+              .cat Edit:
+            li 
+              = select_tag :convert, options_for_select([['Return to check','return_to_check'], ['Check to return','check_to_return']]), prompt: "Convert"
+            li           
+              = select_tag :batch_return, options_for_select([['Return','R'], ['Return to inventory','RI']]), prompt: "Return type"
+            li 
+              = select_tag :book_catg, options_from_collection_for_select(BookCategory.all, :id, :name), prompt: "Category"
+            li 
+              = select_tag :book_loan_course_id, options_from_collection_for_select(Course.current, :id, :number_and_name), prompt: "Course"
+            li 
+              = select_tag :book_loan_course_section_id, []
+            li 
+              button.btn type='submit' name='batch' data-disable=true Go!
+          - if can? :delete, BookLoan
+            li style="height: 54px"
+              button.icon type='submit' name='delete' data-disable=true data-confirm="Are you sure to delete selected book loan records?"
+                i.material-icons.red-text delete
         / a href="#" data-activates="sidenav-menu" class="right button-collapse" style="margin-right:10px"
         /   i.material-icons menu
 
@@ -221,10 +227,10 @@ javascript:
   };
   var toggle_menu = function() {
     if ($('input.checkbox:checked').length > 0) {
-      $('#context-buttons').show();
+      $('.context-menus').show();
       $('#default-buttons').hide();
     } else {
-      $('#context-buttons').hide(); 
+      $('.context-menus').hide(); 
       $('#default-buttons').show();
     }
   };

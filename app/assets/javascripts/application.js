@@ -30,6 +30,7 @@
 //= require turbolinks
 //= require context_menu
 //= require book_fines
+//= require book_loans
 //= require messages
 //= require settings
 //= require jquery.timepicker.min.js

@@ -333,6 +333,14 @@ class BookLoansController < ApplicationController
       end
       @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
     end
+    if params[:book_loan_course_id].present?
+      BookLoan.not_disposed.where(id:selected_ids).update_all course_id: params[:book_loan_course_id]
+      @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
+    end
+    if params[:book_loan_course_section_id].present?
+      BookLoan.not_disposed.where(id:selected_ids).update_all course_section_id: params[:book_loan_course_section_id]
+      @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
+    end
     if params[:convert].present?
       case params[:convert]
       when 'return_to_check'
