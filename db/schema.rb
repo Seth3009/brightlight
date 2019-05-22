@@ -1210,7 +1210,7 @@ ActiveRecord::Schema.define(version: 20190521072224) do
   create_table "gradebook", force: :cascade do |t|
     t.string   "studentname"
     t.string   "grade"
-    t.string   "class"
+    t.string   "gradeclass"
     t.decimal  "avg"
     t.string   "semester"
     t.datetime "created_at",  null: false

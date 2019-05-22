@@ -17,7 +17,8 @@ class Course < ActiveRecord::Base
   accepts_nested_attributes_for :course_texts, allow_destroy: true, reject_if: :all_blank
 
   scope :with_grade_level, lambda {|grade_level| joins(:grade_level).where(grade_levels: {id: grade_level}) }
-
+  scope :current, lambda { where(academic_year_id: AcademicYear.current_id) }
+  
   def has_course_texts?
     course_texts.present?
   end
