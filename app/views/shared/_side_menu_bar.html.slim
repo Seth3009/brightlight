@@ -217,27 +217,8 @@ li
 					= link_to 'Lunch Menu', lunch_menus_path	
 				li
 					= link_to 'Food Order', food_orders_path
-li
-	.collapsible-header.waves-effect.waves-cyan
-		i.material-icons restaurant_menu
-		i.mdi-navigation-chevron-right.right
-		| Food & Beverage
-	.collapsible-body
-		ul
-			li
-				= link_to 'Food Packs', food_packs_path
-			li
-				= link_to 'Raw Food', raw_foods_path
-			li
-				= link_to 'Food Supplier', food_suppliers_path
-			li
-				= link_to 'Food List', foods_path
-			li
-				= link_to 'Lunch Menu', lunch_menus_path	
-			li
-				= link_to 'Food Order', food_orders_path
-			li
-				= link_to 'Food Delivery', food_deliveries_path
+				li
+					= link_to 'Food Delivery', food_deliveries_path
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons people
@@ -251,8 +232,6 @@ li
 				a href="/guardians" Guardians
 			li
 				a href="/employees" Employees
-			/ li
-			/ 	a href="/employees?q=staff" Staff
 - if can? :read, Carpool
 	li 
 		.collapsible-header.waves-effect.waves-cyan
