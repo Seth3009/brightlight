@@ -15,20 +15,20 @@
         .item = book_loan.book_category.try(:name) || '--'
     dl.row          
       - if book_loan.employee.present?
-        dd.col.s4
+        dd.col.s12
           .label Borrower:
           .item = book_loan.employee.name  || '--'
-        dd.col.s4
+        dd.col.s12.m9
           .label Course:
-          .item = book_loan.course.try(:name) || '--'
-        dd.col.s4
+          .item = book_loan.course.try(:number_and_name) || '--'
+        dd.col.s12.m3
           .label Course Section:
           .item = book_loan.course_section.try(:name) || '--'
       - if book_loan.student.present?
-        dd.col.s6
+        dd.col.s12
           .label Borrower:
           .item = book_loan.student.name  || '--'
-        dd.col.s3
+        dd.col.s12
           .label Grade:
           .item = book_loan.student.current_grade_section.try(:name) || '--'
     dl.row

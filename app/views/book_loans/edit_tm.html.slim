@@ -76,11 +76,9 @@ javascript:
         success: function(data) {
           var options = '<option value="">--None--</option>';
           options += $.map( data, function( item ) {
-            var options = '<option value="'+item.id+'">'+item.name+'</option>';
-            return options;
+            return '<option value="'+item.id+'">'+item.name+'</option>';
           });
           $("#book_loan_course_section_id").html( options );
-          console.log(options)
         },
         fail: function() {
           return;
