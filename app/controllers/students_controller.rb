@@ -34,11 +34,33 @@ class StudentsController < ApplicationController
     end
   end
 
+  def student_tardy_list
+    respond_to do |format|
+      format.json {
+        @students = Student.current
+                    .select('students.id, students.name, students.family_no, grade_sections_students.grade_section_id,
+                    grade_sections_students.order_no, grade_sections.name as grade , grade_sections.homeroom_id, employees.name as homeroom')
+                    .order('students.name')
+        if params[:term].present?
+          @students = @students.student_tardy_search(params[:term])
+        end
+      }
+    end
+  end
   # GET /students/1
   # GET /students/1.json
   def show
     authorize! :read, Student
     @current_grade = @student.current_grade_section
+    respond_to do |format|
+      if @student
+        format.html 
+        format.json 
+      else
+        format.html { not_found }
+        format.json { render json: {errors:"Invalid Card"}, status: :unprocessable_entity }
+      end
+    end
   end
 
   # GET /students/new
@@ -115,7 +137,11 @@ class StudentsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_student
-      @student = Student.where(id: params[:id]).includes([:student_admission_info]).first
+      if params[:id].length > 9 
+        @student = Student.joins(:badge).where(badges: {code: params[:id]}).take
+      else
+        @student = Student.where(id: params[:id]).includes([:student_admission_info]).first
+      end      
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

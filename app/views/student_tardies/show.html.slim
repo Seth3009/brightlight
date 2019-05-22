@@ -1,0 +1,112 @@
+/ nav
+/   .nav-wrapper
+/     ul
+/       li
+/         = link_to student_tardies_url  
+/           i.material-icons chevron_left
+/     ul.right
+/         li        
+/           = link_to new_student_tardy_path, remote:true
+/             | New
+/             i.material-icons.left add
+/ .card-panel  
+h1 style="text-align:center;" Tardy Slip
+p.student_tardy_id style="display:none;"
+  = @student_tardy.id 
+.line
+    strong Name:
+    span.left_pos
+      = @student_tardy.student.name
+.line
+  strong Grade: 
+  span.left_pos
+    = @student_tardy.grade_section.name
+  strong Time: 
+  span.left_pos
+     = @student_tardy.created_at.try(:strftime, "%I:%M")
+.line
+  strong Reason: 
+.line
+  span.word_wrap.left_pos
+    = @student_tardy.reason 
+    
+br
+br
+.row   
+  .col.s6.center.offset-s6
+    strong 
+      = Date.today.try(:strftime, "%d %B %Y") + "\n"
+      br
+      | Acknowledged by,
+      br
+      br
+      br
+      | (#{current_user.name})
+br
+p -
+
+
+
+/ #show-modal.modal.modal-fixed-footer
+/   .modal-content
+/     #modal-content
+/   .modal-footer
+/     a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    
+/ #edit-modal.modal.modal-fixed-footer
+/   #edit-modal-content
+
+javascript:
+  
+  $(document).ready(function() {
+    if (window.location.pathname != "#{student_tardies_path}") {
+      window.print();
+      return false;
+    }
+  });
+
+  $(window).codeScanner({
+    minEntryChars: 10,
+    maxEntryTime: 500,
+    onScan: function($element, input) {             
+      var card = input.trim();       
+      $.getJSON("/students/" + card + ".json", null, function (student) {
+        console.log("Scanned student", student);
+        var url= "/student_tardies/new?student_id=" + student.id + "&student=" + student.name;
+        if (student != null) {          
+          $.rails.handleRemote($('<a>', { href: url, 'data-method': 'GET' }));
+        }
+      }).fail(function(xhr){
+        Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
+      });            
+    }
+  });
+  
+ 
+css:
+  .line {
+    display: flex;
+  }
+  .line > span  {  
+    box-sizing: border-box;  
+    border: 1px solid #000;
+    padding : 2px;
+    margin: 5px;
+    width: 95%;    
+  }
+  .word_wrap {
+    word-wrap:break-word;
+    }
+  
+  
+  @media print {
+    body {
+      font: 9pt Arial, sans-serif;
+      width:95%;
+      height:100%; 
+    }
+    .left_pos {
+      position: relative;
+      left: 2px;
+    }    
+  }

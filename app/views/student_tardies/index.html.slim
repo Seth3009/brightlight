@@ -1,0 +1,91 @@
+h4 Student Tardies
+
+nav
+  .nav-wrapper
+    - if can? :create, StudentTardy
+      ul        
+        li style="padding: 0 20px"         
+          | Date :
+        li
+          = date_field_tag 'from_date', params[:fd] || Date.today
+        li
+          | &nbsp to &nbsp &nbsp
+        li
+          = date_field_tag 'to_date', params[:td] || Date.today  
+        li
+          | &nbsp &nbsp &nbsp
+        li
+          .waves-effect.waves-light.btn.blue#btnrefresh
+            | Refresh
+      ul.right
+        li        
+          = link_to new_student_tardy_path, remote:true
+            | New
+            i.material-icons.left add
+
+.card-panel
+  table.compact.striped
+    thead
+      tr
+        th Date
+        th Student
+        th Grade
+        th Reason
+        th Teacher
+        th Academic year
+        th Actions
+        
+
+    tbody#student_tardies
+      - @student_tardies.each do |student_tardy|
+        tr id="row-#{student_tardy.id}"
+          = render partial: 'index_row', locals: {student_tardy: student_tardy}
+
+
+    
+#edit-modal.modal.modal-fixed-footer
+  #edit-modal-content
+
+javascript:
+  $(window).codeScanner({
+    minEntryChars: 10,
+    maxEntryTime: 500,
+    onScan: function($element, input) {             
+      var card = input.trim();       
+      $.getJSON("/students/" + card + ".json", null, function (student) {
+        console.log("Scanned student", student);
+        var url= "/student_tardies/new?student_id=" + student.id + "&student=" + student.name;
+        if (student != null) {          
+          $.rails.handleRemote($('<a>', { href: url, 'data-method': 'GET' }));
+        }
+      }).fail(function(xhr){
+        Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
+      });            
+    }
+  });
+
+  $(function(){
+      // bind click event to get data
+      $('#btnrefresh').on('click', function () {          
+          var date = $('#from_date').val(); 
+          var date2 = $('#to_date').val();
+          var url = new URL(window.location.href);                  
+          if (date) { // require a URL
+              window.location = "student_tardies?fd="+date+"&td="+date2; // redirect              
+          }
+          return false;
+      });
+    });
+
+  
+css:
+  table{
+    table-layout: fixed;
+  }
+  td {
+    word-wrap:break-word;
+    }
+  th {
+    width:100%;
+    }
+  

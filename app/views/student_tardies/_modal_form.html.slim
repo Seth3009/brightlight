@@ -1,0 +1,43 @@
+= form_for @student_tardy, remote:true do |f|
+  .modal-content
+    - if params[:student_id].present?
+      = render 'form', f:f
+    - else      
+      = render 'form_manual', f:f
+  .modal-footer
+    button.btn.btn-flat.waves-effect.waves-light.modal-action.modal-close type="submit" id="btn_save" data-disable=true Save
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+
+javascript:   
+  $(document).on('focus', '.homeroom_name', function() {
+    $(this).autocomplete({
+        source: "/employees?format=json",
+        max: 30,
+        minLength: 3,
+        create: function() {
+          $(this).data( "ui-autocomplete" )._renderItem = function( ul, employee ) {
+            return $( "<li>" )
+              .append( "<div>" + employee.name +"</div>" )
+              .appendTo( ul );
+          }
+        },
+        select: function( event, ui ) {
+          insert_homeroom_values(event.target, ui.item); 
+          return false;
+        }
+      });  
+    
+    function insert_homeroom_values(el, employee) {
+      let row = $(el).closest('tr');
+      $(el).val(employee.name);
+      $(".homeroom_id").val(employee.id);      
+      $(".homeroom_name").val(employee.name);      
+      console.log(employee);
+    }   
+  });
+  
+  $("form").on("keypress", function (e) {
+    if (e.keyCode == 13) {
+        return false;
+    }
+  });

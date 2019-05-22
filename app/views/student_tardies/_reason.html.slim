@@ -1,0 +1,17 @@
+.row id='radio_btn'
+  .input-field.col.s2
+    | Reason
+  .input-field.col.s3
+    = radio_button_tag 'radio','Wake up late'
+    = label_tag 'radio_Wake_up_late', 'Wake up late'
+  .input-field.col.s3
+    = radio_button_tag 'radio','Traffic jam'
+    = label_tag 'radio_Traffic_jam', 'Traffic jam'
+  br
+  .input-field.col.s12
+    = f.text_field :reason
+
+javascript:
+  $("#radio_btn input[name='radio']").click(function(){
+    $('#student_tardy_reason').val($('input:radio[name=radio]:checked').val());
+  });

@@ -122,6 +122,14 @@ class Ability
     
   end
 
+  def food_and_beverage
+    can :manage, Food
+  end
+  
+  def public_relations
+    can :manage, StudentTardy
+  end
+  
   def carpool
     can [:manage], Carpool
     can :read, :all

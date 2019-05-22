@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   resources :class_budgets
   resources :approvers
+  resources :student_tardies
   resources :diknas_conversions do
     member do
       get 'dry_run'
@@ -246,10 +247,11 @@ Rails.application.routes.draw do
   post 'student_books/finalize' => 'student_books#finalize', as: :finalize_student_books
   post 'student_books/prepare_student_books' => 'student_books#prepare', as: :prepare_student_books  
 
+  get 'students/tardy_list' => 'students#student_tardy_list', as: :student_tardy_list
   resources :students do
     resources :student_books, shallow: true
   end
-
+  
   # resources :book_loans
   resources :book_loans do
     collection do

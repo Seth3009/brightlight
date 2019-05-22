@@ -25,6 +25,7 @@ class Student < ActiveRecord::Base
 
 	scope :current, lambda { joins('INNER JOIN grade_sections_students ON grade_sections_students.student_id = students.id
 											INNER JOIN grade_sections ON grade_sections.id = grade_sections_students.grade_section_id')
+											.joins('INNER JOIN "employees" ON "employees"."id" = "grade_sections"."homeroom_id"')
 		.where(grade_sections_students: {academic_year: AcademicYear.current}) }
   
 	scope :with_academic_year, lambda {|academic_year|
@@ -47,6 +48,9 @@ class Student < ActiveRecord::Base
 	}
 
 	scope :search_name, lambda { |name| where('UPPER(students.name) LIKE ?', "%#{name.upcase}%") }
+
+	scope :student_tardy_search, lambda { |tardy_term| 
+				where('UPPER(students.name) LIKE ? or UPPER(grade_sections.name) LIKE ? or students.family_no LIKE ?', "%#{tardy_term.upcase}%","%#{tardy_term.upcase}%","%#{tardy_term.upcase}%") }
 
   filterrific(
     default_filter_params: { sorted_by: 'name_asc' },

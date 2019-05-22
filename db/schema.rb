@@ -1210,7 +1210,7 @@ ActiveRecord::Schema.define(version: 20190521072224) do
   create_table "gradebook", force: :cascade do |t|
     t.string   "studentname"
     t.string   "grade"
-    t.string   "gradeclass"
+    t.string   "class"
     t.decimal  "avg"
     t.string   "semester"
     t.datetime "created_at",  null: false
@@ -2018,6 +2018,23 @@ ActiveRecord::Schema.define(version: 20190521072224) do
   add_index "student_books", ["prev_academic_year_id"], name: "index_student_books_on_prev_academic_year_id", using: :btree
   add_index "student_books", ["student_id"], name: "index_student_books_on_student_id", using: :btree
 
+  create_table "student_tardies", force: :cascade do |t|
+    t.integer  "student_id"
+    t.string   "grade"
+    t.string   "reason"
+    t.integer  "employee_id"
+    t.integer  "academic_year_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.date     "date_tardy"
+    t.integer  "grade_section_id"
+  end
+
+  add_index "student_tardies", ["academic_year_id"], name: "index_student_tardies_on_academic_year_id", using: :btree
+  add_index "student_tardies", ["employee_id"], name: "index_student_tardies_on_employee_id", using: :btree
+  add_index "student_tardies", ["grade_section_id"], name: "index_student_tardies_on_grade_section_id", using: :btree
+  add_index "student_tardies", ["student_id"], name: "index_student_tardies_on_student_id", using: :btree
+
   create_table "students", force: :cascade do |t|
     t.string   "name"
     t.string   "first_name"
@@ -2423,6 +2440,9 @@ ActiveRecord::Schema.define(version: 20190521072224) do
   add_foreign_key "student_activities", "academic_years"
   add_foreign_key "student_activities", "activity_schedules"
   add_foreign_key "student_activities", "students"
+  add_foreign_key "student_tardies", "academic_years"
+  add_foreign_key "student_tardies", "employees"
+  add_foreign_key "student_tardies", "students"
   add_foreign_key "supplies_transaction_items", "item_categories"
   add_foreign_key "supplies_transaction_items", "item_units"
   add_foreign_key "supplies_transaction_items", "products"

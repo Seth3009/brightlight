@@ -1,0 +1,2 @@
+module StudentTardiesHelper
+end
