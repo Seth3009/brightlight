@@ -20,6 +20,8 @@ class RequisitionsController < ApplicationController
       @draft_requisitions = Requisition.draft.where(requester_id: @employee.id).order(:id)
       @rejected_requisitions = Requisition.rejected.where(requester_id: @employee.id).order(:id)
     end
+    # TODO: inform Purchasing of this action first
+    # Requisition.check_overdue
   end
 
   # GET /requisitions/list

@@ -1,0 +1,39 @@
+doctype html
+html
+  head
+    = stylesheet_link_tag "email", media: "all", 'data-turbolinks-track' => true
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+  body
+    div style="margin-left:30px; width=85%; font-size:16px"
+      p Dear Purchasing Dept,
+
+      p The following purchase request has not been processed and requires your attention.
+
+      table.description-list
+        tbody
+          tr
+            td Requester
+            td 
+              strong = @requisition.requester.try(:name)
+          tr 
+            td Req no
+            td 
+              strong = @requisition.id
+          tr 
+            td Description
+            td = @requisition.description
+          tr 
+            td Submitted Date
+            td = @requisition.sent_to_purchasing
+            td = "(#{(Date.today - @requisition.sent_to_purchasing).to_i} days ago)"
+          tr 
+            td Required Date
+            td = @requisition.date_required
+
+      p You can access the requisition from the following link.
+      p = link_to "Requisition No. #{@requisition.id}", @requisition, style:"text-decoration:underline"
+
+      p Thank you for using <i>Brightlight</i>. 
+    
+    = render 'footer' 

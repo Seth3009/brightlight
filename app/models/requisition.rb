@@ -51,7 +51,7 @@ class Requisition < ActiveRecord::Base
     .where('approvals.approve is null')
   }
   scope :pending_approval, lambda { where(aasm_state: ['level1', 'level2', 'level3']) }
-  scope :approved, lambda { where("aasm_state = 'approved' OR aasm_state = 'open'") }
+  scope :approved, lambda { where("aasm_state = 'approved' OR aasm_state = 'open' OR aasm_state ='overdue'") }
   scope :draft, lambda { where(aasm_state: 'draft') }
   scope :rejected, lambda { where(aasm_state: 'rejected') }
   scope :active, lambda { where(active: true) }
@@ -60,7 +60,7 @@ class Requisition < ActiveRecord::Base
     state :draft, initial: true
     state :approval_for_event
     state :level1, :level2, :level3
-    state :approved, :rejected
+    state :approved, :rejected, :overdue
     state :open, :canceled, :closed 
 
     event :submit do
@@ -122,7 +122,14 @@ class Requisition < ActiveRecord::Base
     end
 
     event :open_order do
-      transitions from: :approved, to: :open
+      transitions from: [:approved, :overdue], to: :open
+    end
+
+    event :set_overdue do
+      transitions from: :approved, to: :overdue
+      after do
+        send_overdue_reminder
+      end
     end
   
   end
@@ -207,6 +214,21 @@ class Requisition < ActiveRecord::Base
     self.sent_to_purchasing = Date.today
     self.is_submitted = true
     save
+  end
+
+  def send_overdue_reminder
+    unless self.status.start_with? 'REMINDER SENT'
+      email = RequisitionEmailer.reminder_for_purchasing(self)
+      email.deliver_now
+      notification = Message.new_from_email(email)
+      notification.save
+      self.status = "REMINDER SENT #{Date.today}"
+      save
+    end
+  end
+
+  def self.check_overdue
+    Requisition.where(aasm_state:'approved').where('sent_to_purchasing < ?', 1.week.ago).each { |r| r.set_overdue! }
   end
 
   def is_pending_approval_by(employee)

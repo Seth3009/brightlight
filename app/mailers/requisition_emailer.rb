@@ -33,4 +33,11 @@ class RequisitionEmailer < ActionMailer::Base
     requester_email = %("#{requester.name}" <#{requester.email}>)
     mail(to: PURCHASING_EMAIL_ADDRESS, cc: requester_email, subject: "Purchase Request No. #{requisition.id} submitted")
   end 
+
+  def reminder_for_purchasing(requisition)
+    @requisition = requisition
+    requester = requisition.requester
+    requester_email = %("#{requester.name}" <#{requester.email}>)
+    mail(to: PURCHASING_EMAIL_ADDRESS, cc: requester_email, subject: "Overdue Reminder for Purchase Request No. #{requisition.id}")
+  end
 end
