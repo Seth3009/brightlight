@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190521072224) do
+ActiveRecord::Schema.define(version: 20190523034049) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -2483,6 +2483,10 @@ ActiveRecord::Schema.define(version: 20190521072224) do
       book_loans.employee_no,
       book_loans.student_id,
       book_loans.deleted_flag,
+      book_loans.course_id,
+      book_loans.course_section_id,
+      courses.number AS course_number,
+      courses.name AS course_name,
       subjects.name AS subject,
       book_titles.subject_id,
       book_titles.tags,
@@ -2505,8 +2509,9 @@ ActiveRecord::Schema.define(version: 20190521072224) do
       l.notes AS check_notes,
       employees.id AS emp_id,
       employees.name AS emp_name
-     FROM ((((((((book_loans
+     FROM (((((((((book_loans
        JOIN book_copies ON (((book_copies.id = book_loans.book_copy_id) AND ((book_copies.disposed = false) OR (book_copies.disposed IS NULL)))))
+       LEFT JOIN courses ON ((book_loans.course_id = courses.id)))
        LEFT JOIN book_titles ON ((book_titles.id = book_loans.book_title_id)))
        LEFT JOIN book_editions e ON ((e.id = book_loans.book_edition_id)))
        LEFT JOIN book_categories c ON ((c.id = book_loans.book_category_id)))

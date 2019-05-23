@@ -167,6 +167,7 @@ div
               th = sort_link :barcode
               th = sort_link :title, 'Book title'
               td = sort_link :book_category_id, "Category"
+              th = sort_link :course_number, "Course"
               th = sort_link :return_date 
               th = sort_link :subject
               th = sort_link :check_id, "Checked?"       
@@ -183,6 +184,8 @@ div
                 td 
                   = link_to book_loan.title.truncate(50), book_edition_path(book_loan.edition_id), remote: true
                 td = book_loan.catg_code
+                td 
+                  span.tooltipped data-position="bottom" data-delay="10" data-tooltip="#{book_loan.course_name}" = book_loan.course_number
                 td 
                   - if book_loan.return_status == 'RI'
                     - str = '&#9745;'.html_safe + ' Inventory'

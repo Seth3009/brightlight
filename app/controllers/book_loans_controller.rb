@@ -406,7 +406,7 @@ class BookLoansController < ApplicationController
     end
 
     def sortable_columns 
-      [:subject, :title, :barcode, :return_status, :out_date, :return_date, :academic_year_id, :check_id, :book_category_id]
+      [:subject, :title, :barcode, :return_status, :out_date, :return_date, :academic_year_id, :check_id, :course_number, :book_category_id]
     end    
 
 end
