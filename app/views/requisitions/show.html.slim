@@ -6,17 +6,17 @@ nav
     ul
       li
         = link_to requisitions_path
-          | Purchase Requests
+          span.hide-on-small-only Purchase Requests
           i.material-icons.left chevron_left
       -if can? :process, Requisition
         li
           = link_to list_requisitions_path
-            | Process FPB
+            span.hide-on-small-only Process FPB
             i.material-icons.left list_alt
     ul.right
       li
         = link_to new_requisition_path
-          | New
+          span.hide-on-small-only New
           i.material-icons.left add
       li
         - unless @requisition.sent_to_supv
@@ -31,9 +31,9 @@ nav
       .collapsible-header.active
         | Detail
         i.material-icons.arrow.left chevron_right
-      .collapsible-body.container-padding
+      .collapsible-body
         ul.collection
-          li.collection-item.row
+          li.row.collection-item
             .col.s6.m2
               .label No.
               .item = @requisition.id
@@ -46,7 +46,7 @@ nav
             .col.s12.m6
               .label Description
               .item = @requisition.description
-          li.collection-item.row
+          li.row.collection-item
             .col.m2
               .label Department
               .item = @requisition.department  
@@ -55,8 +55,8 @@ nav
               .item = @requisition.requester            
             .col.m6
               .label Notes
-              .item = @requisition.notes      
-          li.collection-item.row
+              .item = @requisition.notes   
+          li.row.collection-item
             .col.s6.m2
               .label Budgeted?
               -if @requisition.is_budgeted
@@ -72,65 +72,57 @@ nav
               .label Budget notes
               .item = @requisition.budget_notes
           -if @requisition.event_id.present?
-            li.collection-item.row
+            li.row.collection-item
               .col.s6.m2
                 .label Event
                 .item = @requisition.event.name
               .col.s6.m6
                 .label Description
                 .item = @requisition.event.description
-          li.collection-item.row
+          li.row.collection-item
             = form_tag new_purchase_order_path, method: :get do
-              .label.left Requested Items
-              -if can? :process, Requisition
-                button.right.btn#create-po-button type="submit" data-disable=true disabled=true Create PO
-              table.compact.striped
-                thead
-                  tr
-                    th No
-                    th Description
-                    th Qty
-                    th Unit
-                    th Est. Unit Price
-                    th Req'd Date
-                    th PO No.
-
-                tbody
-                  - @req_items.each.with_index(1) do |req_item, i|
-                    tr
-                      td = "#{i}."
-                      td = req_item.description
-                      td = req_item.qty_reqd
-                      td = req_item.unit
-                      td = "#{req_item.currency}#{req_item.est_price}"
-                      td = req_item.needed_by_date
-                      td 
-                        -if req_item.order_item.present?
-                          = link_to purchase_order_path(req_item.order_item.purchase_order), target: 'blank'
-                            = req_item.order_item.purchase_order.order_num
-                            i.material-icons.left open_in_new
-                        -elsif can? :process, Requisition
-                          = hidden_field_tag :req, @requisition.id
-                          input.checkbox type="checkbox" id="reqitem-#{req_item.id}" name="items[#{req_item.id}]"
-                          / This label is required by Materialize CSS for the checkbox to work
-                          = label_tag "reqitem-#{req_item.id}", ""
+              .col.s12
+                .label.left Requested Items
+                -if can? :process, Requisition
+                  button.right.btn#create-po-button type="submit" data-disable=true disabled=true Create PO
+              .col.s1.m1.label No
+              .col.s11.m3.label Description
+              .col.s6.m2.label Qty
+              .col.s6.m2.label Est. Unit Price
+              .col.s6.m2.label Req'd Date
+              .col.s6.m2.label PO No.
+              - @req_items.each.with_index(1) do |req_item, i|
+                .row.collection-item
+                  .col.s1.m1 = "#{i}."
+                  .col.s11.m3 = req_item.description
+                  .col.s6.m2 = "#{req_item.qty_reqd} #{req_item.unit}"
+                  .col.s6.m2 = "#{req_item.currency}#{req_item.est_price}"
+                  .col.s6.m2 = req_item.needed_by_date
+                  .col.s6.m2 
+                    -if req_item.order_item.present?
+                      = link_to purchase_order_path(req_item.order_item.purchase_order), target: 'blank'
+                        = req_item.order_item.purchase_order.order_num
+                        i.material-icons.left open_in_new
+                    -elsif can? :process, Requisition
+                      = hidden_field_tag :req, @requisition.id
+                      input.checkbox type="checkbox" id="reqitem-#{req_item.id}" name="items[#{req_item.id}]"
+                      / This label is required by Materialize CSS for the checkbox to work
+                      = label_tag "reqitem-#{req_item.id}", ""
     li
       .collapsible-header.active
         | Approval
         i.material-icons.arrow.left chevron_right
-      .collapsible-body.container-padding
-        table.compact.striped
-          thead
-            tr
-              th Name
-              th Approval
-              th Date
-              th Notes
-          tbody
-            - [@level1_approvals, @budget_approvals].flatten.each do |approval|
-              tr 
-                td = approval.approver.try(:employee).try(:name) || "--"
-                td 
+      .collapsible-body
+        ul.collection
+          li.row.collection-item
+            .col.s12.m3.label Approver
+            .col.s6.m2.label Approval
+            .col.s6.m2.label Date
+            .col.s12.m5.label Notes
+          - [@level1_approvals, @budget_approvals].flatten.each do |approval|
+            li.row.collection-item
+              .col.s12.m3.item = approval.approver.try(:employee).try(:name) || "--"
+              .col.s6.m2.item
                   - if approval.approve == true
                     |Approved
                     i.material-icons.left check_box
@@ -139,8 +131,8 @@ nav
                     i.material-icons.left cancel
                   - else
                     i.material-icons.left check_box_outline_blank
-                td = approval.updated_at.strftime("%d %b %Y") if !approval.approve.nil?
-                td = approval.notes 
+              .col.s6.m2.item = approval.updated_at.strftime("%d %b %Y") if !approval.approve.nil?
+              .col.s12.m5.item = approval.notes 
 
     li.comment-section
       .collapsible-header.active
@@ -148,9 +140,9 @@ nav
         i.material-icons.arrow.left chevron_right
         .right
           = link_to "#"
-            |Add comment
+            span.hide-on-small-only Add comment
             i.material-icons.left add
-      .collapsible-body.container-padding
+      .collapsible-body
         = render 'comments/comment_widget'
 
 javascript:

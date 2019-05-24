@@ -261,6 +261,8 @@ class Requisition < ActiveRecord::Base
       "Approved"
     when 'rejected'
       "Rejected"
+    when 'overdue'
+      "Overdue"
     else
       "Closed"
     end

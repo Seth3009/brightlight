@@ -1,12 +1,12 @@
 .card-panel
   .row
-    strong.col.s3 Description
-    strong.col.s1 Qty
-    strong.col.s1 Unit
-    strong.col.s1 Currency
-    strong.col.s2 Unit price
-    strong.col.s2 Date Req'd
-    strong.col.s2 Action
+    strong.col.s12.m3 Description
+    strong.col.s6.m1 Qty
+    strong.col.s6.m1 Unit
+    strong.col.s6.m1 Currency
+    strong.col.s6.m2 Unit price
+    strong.col.s6.m2 Date Req'd
+    strong.col.s6.m2 Action
   #requisition
     = f.fields_for :req_items do |req_item|
       = render 'req_item_fields', f: req_item
