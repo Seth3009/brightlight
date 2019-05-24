@@ -21,8 +21,8 @@ html
 		main#main
 			.container
 				= render 'shared/flash_messages'
-				section
-					= yield :layout
+				
+				= yield :layout
 
 		footer.page-footer style="padding-top:0"
 			//= render 'shared/layout/footer'
