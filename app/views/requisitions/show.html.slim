@@ -123,14 +123,14 @@ nav
             li.row.collection-item
               .col.s12.m3.item = approval.approver.try(:employee).try(:name) || "--"
               .col.s6.m2.item
-                  - if approval.approve == true
-                    |Approved
-                    i.material-icons.left check_box
-                  - elsif approval.approve == false
-                    |Not approved
-                    i.material-icons.left cancel
-                  - else
-                    i.material-icons.left check_box_outline_blank
+                - if approval.approve == true
+                  |Approved
+                  i.material-icons.left check_box
+                - elsif approval.approve == false
+                  |Not approved
+                  i.material-icons.left cancel
+                - else
+                  i.material-icons.left check_box_outline_blank
               .col.s6.m2.item = approval.updated_at.strftime("%d %b %Y") if !approval.approve.nil?
               .col.s12.m5.item = approval.notes 
 
