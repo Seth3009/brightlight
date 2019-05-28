@@ -13,6 +13,7 @@ class BookCopy < ActiveRecord::Base
   has_many :book_receipts, dependent: :restrict_with_error
   has_many :student_books, dependent: :restrict_with_error
   has_many :loan_checks, dependent: :restrict_with_error
+  has_one  :book_title, through: :book_edition
 
   after_create :create_initial_condition
   before_save :upcase_and_trim_barcode
@@ -76,10 +77,6 @@ class BookCopy < ActiveRecord::Base
 
   def cover_image
     book_edition.try(:small_thumbnail) || 'book-icon.png'
-  end
-
-  def book_title
-    book_edition.try(:book_title)
   end
 
   def create_condition(condition_id, year_id, user_id)

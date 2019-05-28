@@ -71,15 +71,23 @@ class BookReceiptsController < ApplicationController
     respond_to do |format|
       format.json do
         @book_copy = BookCopy.where('UPPER(barcode) = ?', params[:barcode].upcase).includes(:book_edition => :book_title).take
-        if @book_copy.present?
-          year = params[:year].present? ? AcademicYear.find(params[:year]) : AcademicYear.current
-          receipt = BookReceipt.where(academic_year_id: year.id, book_copy:@book_copy).take
-          if receipt.present?
-            error_message = "#{@book_copy.barcode} was already added to #{receipt.grade_section.name} ##{receipt.roster_no}"
-            render json: {errors:error_message}, status: :unprocessable_entity
+        grade_level_id = GradeSection.find(params[:gs]).grade_level_id
+        standard_books = StandardBook.where(academic_year_id: params[:year], grade_level_id: grade_level_id).includes(:book_title).map(&:book_title)
+        puts "CHECK____"
+        puts "STD: #{standard_books.map &:id} >< Book #{@book_copy.book_title.id}"
+        if standard_books.include? @book_copy.book_title
+          if @book_copy.present?
+            year = params[:year].present? ? AcademicYear.find(params[:year]) : AcademicYear.current
+            receipt = BookReceipt.where(academic_year_id: year.id, book_copy:@book_copy).take
+            if receipt.present?
+              error_message = "#{@book_copy.barcode} was already added to #{receipt.grade_section.name} ##{receipt.roster_no}"
+              render json: {errors:error_message}, status: :unprocessable_entity
+            end
+          else
+            render json: {errors:"Invalid barcode"}, status: :unprocessable_entity
           end
         else
-          render json: {errors:"Invalid barcode"}, status: :unprocessable_entity
+          render json: {errors:"Book is not part of class standard"}, status: :unprocessable_entity
         end
       end
     end
