@@ -879,15 +879,16 @@ ActiveRecord::Schema.define(version: 20190523034049) do
     t.integer  "grade_section_id"
     t.integer  "academic_year_id"
     t.integer  "academic_term_id"
+    t.integer  "course_id"
     t.float    "average"
     t.text     "notes"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
-    t.integer  "course_id"
   end
 
   add_index "diknas_report_cards", ["academic_term_id"], name: "index_diknas_report_cards_on_academic_term_id", using: :btree
   add_index "diknas_report_cards", ["academic_year_id"], name: "index_diknas_report_cards_on_academic_year_id", using: :btree
+  add_index "diknas_report_cards", ["course_id"], name: "index_diknas_report_cards_on_course_id", using: :btree
   add_index "diknas_report_cards", ["grade_level_id"], name: "index_diknas_report_cards_on_grade_level_id", using: :btree
   add_index "diknas_report_cards", ["grade_section_id"], name: "index_diknas_report_cards_on_grade_section_id", using: :btree
   add_index "diknas_report_cards", ["student_id"], name: "index_diknas_report_cards_on_student_id", using: :btree

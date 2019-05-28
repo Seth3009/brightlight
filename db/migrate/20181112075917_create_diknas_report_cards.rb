@@ -6,7 +6,7 @@ class CreateDiknasReportCards < ActiveRecord::Migration
       t.belongs_to :grade_section, index: true, foreign_key: true
       t.belongs_to :academic_year, index: true, foreign_key: true
       t.belongs_to :academic_term, index: true, foreign_key: true
-      t.string :course_belongs_to
+      t.belongs_to :course, index: true, foreign_key: true
       t.float :average
       t.text :notes
 
