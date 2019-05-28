@@ -138,10 +138,14 @@ Rails.application.routes.draw do
   end
   
   resources :courses do
+    collection do 
+      post 'init'
+    end
     resources :course_texts, shallow: true do
       collection do 
         get 'copy'
         post 'init'
+        post 'filter'
       end
     end
     resources :course_sections, except: :new, shallow: true do
@@ -415,6 +419,7 @@ Rails.application.routes.draw do
   end
   
   get 'settings/inventory_mtce' => 'settings#inventory_mtce', as: :settings_inventory_mtce
+  get 'settings/courses_mtce' => 'settings#courses_mtce', as: :settings_courses_mtce
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

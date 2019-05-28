@@ -1,5 +1,5 @@
 class CourseTextsController < ApplicationController
-  before_action :set_course, only: [:index, :new, :create, :init, :copy]
+  before_action :set_course, only: [:index, :filter, :new, :create, :init, :copy]
   before_action :set_course_text, only: [:edit, :update, :destroy]
 
   # GET /course_texts
@@ -13,6 +13,20 @@ class CourseTextsController < ApplicationController
       @view_style = :list
       session[:view_style] = ''
     end
+  end
+
+  def filter
+    @course_texts = @course.course_texts
+      .where(book_category_id: params[:categories])
+      .order(:book_category_id).includes(:book_title, :book_category)
+    if params[:v] == 'block'
+      @view_style = :block
+      session[:view_style] = 'block'
+    else
+      @view_style = :list
+      session[:view_style] = ''
+    end
+    render :index
   end
 
   # GET /course_texts/new

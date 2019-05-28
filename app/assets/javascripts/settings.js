@@ -26,6 +26,7 @@ $(document).on("ready page:load", function(){
 	};
 
 	init_checkboxes("initialize_standard_books");
+	init_checkboxes("initialize_courses");
 	init_checkboxes("finalize_student_books");
 	init_checkboxes("prepare_book_receipts");
 	init_checkboxes("finalize_condition_book_receipts");

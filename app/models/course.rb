@@ -27,4 +27,24 @@ class Course < ActiveRecord::Base
     "#{number} - #{name}"
   end
 
+  def self.initialize_from_previous_year (prev_academic_year_id, new_academic_year_id, grade_levels)
+    Course.where(academic_year_id: prev_academic_year_id, grade_level_id: grade_levels).each do |c|
+      nc = Course.create name: c.name, number: c.number, description: c.description, grade_level_id: c.grade_level_id, 
+            academic_year_id:new_academic_year_id, employee_id: c.employee_id, slug: c.slug, subject_id: c.subject_id, 
+            course_department_id: c.course_department_id, level: c.level
+      
+      c.course_sections.each do |cs|
+        CourseSection.create name: cs.name, course_id: nc.id, grade_section_id: cs.grade_section_id, 
+          instructor_id: cs.instructor_id, slug: cs.slug, instructor2_id: cs.instructor2_id, 
+          aide_id: cs.aide_id, sem1: cs.sem1, sem2: cs.sem2, location_id: cs.location_id
+      end
+
+      c.course_texts.each do |ct|
+        CourseText.create course_id: nc.id, book_title_id: ct.book_title_id, order_no: ct.order_no, 
+          book_category_id: ct.book_category_id, book_edition_id: ct.book_edition_id, notes: ct.notes
+      end
+    end
+
+  end
+
 end

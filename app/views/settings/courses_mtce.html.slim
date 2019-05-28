@@ -1,0 +1,31 @@
+h4 Courses Maintenance
+.card-panel.red.lighten-3
+  | These actions should only be run once per academic year. Please make sure you set the correct academic year.
+    
+ul class="collapsible" data-collapsible="expandable"
+  li 
+    .collapsible-header.waves-effect.waves-light.large-letter      
+      | Courses
+      i.material-icons.right chevron_right
+    .collapsible-body
+      .container-padding
+        = form_tag init_courses_path, remote:true do 
+          #initialize_courses.row
+            .col.s2
+              .label New Academic Year
+              = select_tag :new_course_year, options_from_collection_for_select(@academic_years,'id','name', @current_year_id), include_blank: 'None'
+            .col.s2
+              .label Select Grades
+              input.allcheckboxes type="checkbox" id="initialize_courses-all" name="initialize_courses[all]" data-total="#{GradeLevel.count}"
+              = label_tag "initialize_courses-all", "All grades"
+              - @grade_levels.each do |grade|
+                div style="width:300px"
+                  input.checkbox.initialize_courses type="checkbox" id="initialize_courses-#{grade.id}" name="initialize_courses[#{grade.id}]"
+                  = label_tag "initialize_courses-#{grade.id}", grade.name
+            .col.s7 
+              h6 Initialize New Courses
+              .label Description
+              .card-panel        
+                | This will create new Courses based on previous academic year's Courses
+                br
+                button.btn.waves-effect.waves-light type="submit" class="initialize_courses-button" disabled="disabled" data-disable=true Create 

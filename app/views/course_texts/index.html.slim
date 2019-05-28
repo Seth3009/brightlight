@@ -8,6 +8,7 @@ nav
       li
         = link_to @course
           i.material-icons chevron_left
+        
     ul.right
       li
         = link_to copy_course_course_texts_path(@course), remote: true
@@ -27,6 +28,14 @@ nav
 - if @view_style == :list
   .card-panel
     .label Course texts
+
+    = form_tag({action:'filter'}) do
+      .input-field
+        = hidden_field_tag :course_id, params[:course_id]
+        = hidden_field_tag :view, params[:view]
+        = select_tag :categories, options_from_collection_for_select(BookCategory.all,:id,:name), multiple: true, size: BookCategory.count, prompt: "Please select"
+        = submit_tag 'Filter'
+
     table.compact.striped
       thead
         tr
