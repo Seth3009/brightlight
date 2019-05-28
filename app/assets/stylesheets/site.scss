@@ -1740,7 +1740,10 @@ section {
 			border: 0.5px solid grey;
 		}
 	} 
-	
+	   
+  .no-print, .no-print * {
+		display: none !important;
+	}
 }
 
 

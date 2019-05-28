@@ -1,4 +1,6 @@
-h4 Course texts for #{@course.name} (#{@course.number})
+- title = "Course texts: #{@course.name} (#{@course.number})"
+.label Course   
+h4 #{@course.name} (#{@course.number}) [#{@course.grade_level.name}]
 
 nav
   .nav-wrapper
@@ -32,7 +34,7 @@ nav
           th Author
           th Publisher
           th Category
-          th Actions
+          th.no-print Actions
 
       tbody
         - @course_texts.each do |course_text|
@@ -47,7 +49,7 @@ nav
               td
               td
               td
-            td
+            td.no-print
               = link_to edit_course_text_path(course_text), remote: true
                 i.material-icons edit
               = remote_link_to_delete course_text, message: "Book has been removed", class: "left waves-effect waves-light red-text"
