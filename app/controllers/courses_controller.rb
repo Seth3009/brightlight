@@ -99,7 +99,7 @@ class CoursesController < ApplicationController
           @error = "Error: records are not empty for selected grade(s) in the academic year #{AcademicYear.find(academic_year_id).name}"
         else
           Course.initialize_from_previous_year academic_year_id-1, academic_year_id, grade_levels
-          @message = "Standard books initialized."
+          @message = "Courses successfully initialized."
         end
       end
     end
