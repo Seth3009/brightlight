@@ -10,6 +10,7 @@ class OrderItem < ActiveRecord::Base
   validates :req_item_id, presence: true
   validates_uniqueness_of :req_item_id, message: "Requested item has been ordered before."
   validates_numericality_of :quantity, greater_than_or_equal_to: 0
+  validates_presence_of :quantity, :unit_price, :discount, :est_tax, :non_recurring, :shipping
 
   after_save :calc_line_amount
   after_save :sync_req_item
