@@ -112,6 +112,7 @@ class DiknasConvertedsController < ApplicationController
   #get /diknas_converteds/reports
   def reports
     authorize! :read, DiknasConverted 
+    @types = ["Default","New"]
     @year_id = params[:year] || AcademicYear.current_id    
     @academic_year = AcademicYear.find @year_id
     @term_ids = AcademicTerm.where(academic_year_id:@year_id) if @year_id.present?

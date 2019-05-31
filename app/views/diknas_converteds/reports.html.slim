@@ -27,13 +27,20 @@ ul#term-options.dropdown-content
   - @term_ids.each do |term|
     li 
       = link_to term.name, converted_reports_path(year:@year_id,term:term.id)
+ul#type-options.dropdown-content
+  li
+    - @types.each do |type|
+      li
+        = link_to type, url_for(params.merge(type: type))
+      
   
 nav
   .nav-wrapper
     ul
       li
         = link_to "#", onclick: 'window.print();return false;'
-          i.material-icons print          
+          i.material-icons print  
+
     ul.right
       li 
         a.dropdown-button href="#!" data-activates="year-options" data-beloworigin="true" 
@@ -55,6 +62,12 @@ nav
         a#student-menu.dropdown-button href="#!" data-activates="student-options" data-beloworigin="true" 
           span#student = 'Choose student'
           i.material-icons.right arrow_drop_down
+    
+      li
+        a.dropdown-button href="#!" data-activates="type-options"
+          span#type = 'Report type'
+          i.material-icons.right arrow_drop_down
+
       
 - if @diknas.present?
   = render 'table_a'
