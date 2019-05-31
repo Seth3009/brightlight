@@ -46,19 +46,22 @@
         - @aspek.each.with_index do |aspek,idx|
           tr
             td.center style="width:70px !important;" = idx+1
-            td style="width:60% !important;" = @aspek[idx]          
-            - if idx==0
-              td.center rowspan=@aspek.length style="width:30% !important; font-size:8pt;"
-                | Fileld with 3 options, according to the student's condition :
-                br
-                | 1. Sangat Baik ( very good ) 
-                br
-                | 2. Baik ( good )
-                br
-                | 3. Kurang baik ( Not good )
-                br
-                | preferably we fill this space with 
-                a style="text-decoration:underline;" baik
+            td style="width:60% !important;" = @aspek[idx] 
+            -if params[:type].downcase == 'new'
+              td 
+            - else
+              - if idx==0
+                td.center rowspan=@aspek.length style="width:30% !important; font-size:8pt;"
+                  | Fileld with 3 options, according to the student's condition :
+                  br
+                  | 1. Sangat Baik ( very good ) 
+                  br
+                  | 2. Baik ( good )
+                  br
+                  | 3. Kurang baik ( Not good )
+                  br
+                  | preferably we fill this space with 
+                  a style="text-decoration:underline;" baik
                 
             
     br
