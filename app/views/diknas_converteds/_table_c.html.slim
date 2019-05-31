@@ -47,7 +47,7 @@
           tr
             td.center style="width:70px !important;" = idx+1
             td style="width:60% !important;" = @aspek[idx] 
-            -if params[:type].downcase == 'new'
+            - if params[:type].try(:downcase) == 'new'
               td 
             - else
               - if idx==0
