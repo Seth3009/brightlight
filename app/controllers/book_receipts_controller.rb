@@ -6,7 +6,9 @@ class BookReceiptsController < ApplicationController
   def index
     authorize! :read, BookReceipt
     @academic_year = AcademicYear.where(id:params[:year]).take || AcademicYear.current
-    @max_roster_nos = BookReceipt.where(academic_year_id:18).group(:grade_section_id).order(:grade_section_id).maximum(:roster_no)
+    @max_roster_nos = BookReceipt.where(academic_year_id:@academic_year.id-1)
+                      .group(:grade_section_id).order(:grade_section_id)
+                      .maximum(:roster_no)
     
     if params[:gs].present?
       @grade_section = GradeSection.find params[:gs]
