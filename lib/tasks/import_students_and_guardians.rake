@@ -4,7 +4,7 @@ namespace :data do
 
     # create_families
 
-    xl = Roo::Spreadsheet.open('lib/tasks/StudentDataExport.xlsx')
+    xl = Roo::Spreadsheet.open('lib/tasks/StudentDataExport20192020.xlsx')
     sheet = xl.sheet('COMBINED')
     puts sheet.row(1)
 
@@ -39,7 +39,7 @@ namespace :data do
       else 
         student = Student.new(
                     student_no: row[:student_no],
-                    family_no:  row[:family_no],
+                    family_no:  format("%05d",row[:family_no]),
                     family_id:  family.id,
                     name:       row[:name],
                     religion:   row[:denomination],
@@ -65,23 +65,25 @@ def create_guardians(family, student, data)
       name:         data[:fathers_name],
       # home_phone:   data[:ft_contact],
       mobile_phone: data[:fathers_cell],
+      address_line1: data[:street],
       other_phone:  data[:fathers_cell_2],
       email:        data[:fathers_email],
       email2:       data[:fathers_email_2],
       family_id:    family.id
   }
-  father = Guardian.where(name: ft_params[:name], family_id: ft_params[:family_id]).first_or_create(ft_params)
+  father = Guardian.where('lower(name) = ?', ft_params[:name].downcase).where(family_id: ft_params[:family_id]).first_or_create(ft_params)
 
   mt_params = {
       name:         data[:mothers_name],
       # home_phone:   data[:mt_contact],
       mobile_phone: data[:mothers_cell],
+      address_line1: data[:street],
       other_phone:  data[:mothers_cell_2],
       email:        data[:mothers_email],
       email2:       data[:mothers_email_2],
       family_id:    family.id
   }
-  mother = Guardian.where(name: mt_params[:name], family_id: mt_params[:family_id]).first_or_create(mt_params)
+  mother = Guardian.where('lower(name) = ?', mt_params[:name].downcase).where(family_id: mt_params[:family_id]).first_or_create(mt_params)
   family.family_members << FamilyMember.new(guardian: mother, relation: 'mother')
   family.family_members << FamilyMember.new(guardian: father, relation: 'father')
   family.family_members << FamilyMember.new(student: student, relation: 'child')
