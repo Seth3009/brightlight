@@ -2,7 +2,7 @@ class Approver < ActiveRecord::Base
   belongs_to :employee
   belongs_to :department
   belongs_to :event
-  has_many :approvals
+  has_many :approvals, dependent: :nullify
   
   validates :employee, presence: true
   validates :category, presence: true

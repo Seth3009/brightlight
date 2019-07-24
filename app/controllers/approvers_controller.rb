@@ -72,6 +72,7 @@ class ApproversController < ApplicationController
     @approver.destroy
     respond_to do |format|
       format.html { redirect_to approvers_url, notice: 'Approver was successfully destroyed.' }
+      format.js   { head :no_content }
       format.json { head :no_content }
     end
   end
