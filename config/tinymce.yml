@@ -3,9 +3,9 @@ default:
   statusbar: false
   plugins: 
     - advlist autolink lists link image charmap print preview anchor textcolor searchreplace visualblocks fullscreen 
-    - insertdatetime media contextmenu paste code wordcount
+    - insertdatetime media table contextmenu paste code wordcount
   toolbar: 
-    - undo redo | bold italic forecolor backcolor  | alignleft aligncenter alignright alignjustify
+    - undo redo | bold italic forecolor backcolor  | alignleft aligncenter alignright alignjustify | table
 
 extended:
   menubar: false
