@@ -1,3 +1,17 @@
+- title "Book Loan Records for #{@borrower.try(:name)}"
+h4 Book Loan Receipt
+
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to employee_book_loans_path(@teacher)
+          i.material-icons.left chevron_left
+    ul.right
+      li
+        = link_to teacher_receipt_book_loans_path(params.merge(format: :pdf)), target: '_blank'
+          | PDF
+          i.material-icons.left picture_as_pdf      
 .row
  .s12.card
    - if @template
@@ -6,6 +20,7 @@
     .container
       table.t_receipt_border
         thead 
+          tr
           tr.grey.lighten-2.t_receipt_border
             th.t_receipt_border.text-align.center #
             th.t_receipt_border.text-align.center Subject

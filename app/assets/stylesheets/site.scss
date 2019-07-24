@@ -1740,12 +1740,25 @@ section {
 			border: 0.5px solid grey;
 		}
 	} 
-	   
+	
+	thead { display: table-header-group !important }
+	tfoot { display: table-row-group !important }
+	tr { page-break-inside: avoid !important }
+
+	table { page-break-inside:auto }
+	
+	thead th { height: 2cm; }
+
   .no-print, .no-print * {
 		display: none !important;
 	}
 }
 
+thead { display: table-header-group !important }
+tfoot { display: table-row-group !important }
+tr { page-break-inside: avoid !important }
+
+table { page-break-inside:auto }
 
 // ============================================ Card ===========================================
 

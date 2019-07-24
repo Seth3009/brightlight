@@ -391,6 +391,19 @@ class BookLoansController < ApplicationController
         }
       end
     end
+    
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf:               "Teacher's Books Receipt -#{@teacher.name}",
+                disposition:      'inline',
+                template:         'book_loans/teacher_receipt.pdf.slim',
+                layout:           'pdf.html',
+                header:           { left: "Teacher's Books Receipt", right: '[page] of [topage]' },
+                print_media_type: true,
+                show_as_html:     params.key?('debug')
+      end
+    end
   end
 
   private
