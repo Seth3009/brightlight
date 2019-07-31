@@ -19,10 +19,10 @@ table.compact.striped
         td = leave_request.hour
         td = leave_request.category? ? leave_request.category : "--"
         td 
-          - if leave_request.leave_type == 'Sick' 
-            | Sick Without Medical Note
-          - else 
-            = leave_request.leave_type
+          / - if leave_request.leave_type == 'Sick' 
+          /   | Sick Without Medical Note
+          / - else 
+          = leave_request.leave_type
         td 
           -if leave_request.leave_subtitute == true
             |Required

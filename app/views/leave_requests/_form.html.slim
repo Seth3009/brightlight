@@ -45,7 +45,7 @@
         = f.label :leave_type, class:'active'
           |Choose type of leave
           .right.red-text *
-        = f.select :leave_type, [['Sick Without Medical Note','Sick'],'Special Leave','School Related Duty','Personal Permission'], prompt: true  
+        = f.select :leave_type, ['Sick With Medical Note','Sick Without Medical Note','Special Leave','School Related Duty','Personal Permission'], prompt: true  
       .input-field.col.s8
         = f.label :leave_note, class: 'active'
           |Leave notes or description

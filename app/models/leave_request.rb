@@ -132,7 +132,7 @@ class LeaveRequest < ActiveRecord::Base
   end
 
   def requires_supervisor_approval?
-    leave_type == 'Personal Permission' || leave_type == 'School Related Duty' || leave_type == 'Sick' 
+    leave_type == 'Personal Permission' || leave_type == 'School Related Duty' || leave_type[0..3] == 'Sick' 
   end
 
   def pending_spv_approval?
