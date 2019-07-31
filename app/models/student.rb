@@ -25,7 +25,7 @@ class Student < ActiveRecord::Base
 
 	scope :current, lambda { joins('INNER JOIN grade_sections_students ON grade_sections_students.student_id = students.id
 											INNER JOIN grade_sections ON grade_sections.id = grade_sections_students.grade_section_id')
-											.joins('INNER JOIN "employees" ON "employees"."id" = "grade_sections"."homeroom_id"')
+											.joins('LEFT JOIN "employees" ON "employees"."id" = "grade_sections"."homeroom_id"')
 		.where(grade_sections_students: {academic_year: AcademicYear.current}) }
   
 	scope :with_academic_year, lambda {|academic_year|
