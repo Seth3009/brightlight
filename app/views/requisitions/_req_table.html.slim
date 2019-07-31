@@ -32,7 +32,7 @@
           td.wd10
             = link_to requisition
               i.material-icons visibility
-            - if (requisition.approved? || requisition.overdue?) && requisition.status != 'CLOSE' && can?(:process, requisition)
+            - if (requisition.open? || requisition.approved? || requisition.overdue?) && requisition.status != 'CLOSE' && can?(:process, requisition)
               = link_to new_purchase_order_path(req: requisition.id)
                 i.material-icons shop
             - if requisition.draft?
