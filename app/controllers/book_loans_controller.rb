@@ -395,11 +395,15 @@ class BookLoansController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
+        orientation = params[:orientation] || 'Portrait'
+        paper_size = params[:paper_size] || 'A4'
         render pdf:               "Teacher's Books Receipt -#{@teacher.name}",
                 disposition:      'inline',
                 template:         'book_loans/teacher_receipt.pdf.slim',
                 layout:           'pdf.html',
                 header:           { left: "Teacher's Books Receipt", right: '[page] of [topage]' },
+                orientation:      orientation,
+                paper_size:       paper_size,
                 print_media_type: true,
                 show_as_html:     params.key?('debug')
       end

@@ -9,7 +9,7 @@ nav
           i.material-icons.left chevron_left
     ul.right
       li
-        = link_to teacher_receipt_book_loans_path(params.merge(format: :pdf)), target: '_blank'
+        = link_to "#pdf-options", class: 'modal-trigger'
           | PDF
           i.material-icons.left picture_as_pdf      
 .row
@@ -52,4 +52,31 @@ nav
 
     = @template.substituted :closing
     = @template.substituted :footer
+
+#pdf-options.modal.modal-fixed-footer.small
+  = form_tag teacher_receipt_book_loans_path(params.merge(format: :pdf)), method: :get, target: '_blank' do
+    .modal-content
+      h4 PDF Page Setup
+      .row
+        .col.s12 Orientation
+        .input-field
+          = radio_button_tag 'orientation', 'Portrait', checked=true
+          label for="orientation_Portrait" Portrait        
+        .input-field
+          = radio_button_tag 'orientation', 'Landscape'
+          label for="orientation_Landscape" Landscape
+
+      .row
+        .col.s12 Paper size
+        .input-field
+          = radio_button_tag 'paper_size', 'A4', checked=true
+          label for="paper_size_A4" A4
+        .input-field
+          = radio_button_tag 'paper_size', 'Letter'
+          label for="paper_size_Letter" Letter
+
+    .modal-footer
+      = link_to "Close", "#!", class:"modal-action modal-close waves-effect waves-light btn-flat"
+      button.btn.btn-primary.waves-effect.waves-light Submit 
+
 
