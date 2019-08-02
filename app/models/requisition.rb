@@ -80,10 +80,14 @@ class Requisition < ActiveRecord::Base
     event :l1_approve do
       transitions from: :level1, to: :approved, if: :budgeted?
       transitions from: :level1, to: :level2, unless: :budgeted?
+      transitions from: :level1, to: :level3, if: :skip_l2_approval?
       after do
         set_inactive level: 1
         if is_budgeted
           notify_purchasing 
+        elsif skip_l2_approval?
+          set_approvals level: 3
+          notify_approvers level: 3
         else
           set_approvals level: 2
           notify_approvers level: 2
@@ -157,6 +161,10 @@ class Requisition < ActiveRecord::Base
 
   def budgeted?
     self.is_budgeted
+  end
+
+  def skip_l2_approval?
+    Approver.where(department: self.department, category: 'PR', level:2).blank?
   end
 
   def l1_approved?
