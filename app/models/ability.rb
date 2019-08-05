@@ -106,7 +106,7 @@ class Ability
     can :read, :all
     can [:create,:read, :update, :destroy], Requisition, requester: @user.employee
     can :approve, Requisition do |req|
-      req.approvers.includes(approver: :employee).map {|a| a.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
+      req.approvers.includes(:employee).map {|a| a.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
     end
     can :read, PurchaseOrder, requestor: @user.employee
     can_manage_own_leave_request
