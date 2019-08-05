@@ -60,7 +60,7 @@ class Ability
     can_manage_own_requisition
     can :review, Requisition
     can :approve, Requisition do |req|
-      req.approvals.map {|a| a.approver.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
+      req.approvers.map {|a| a.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
     end
     can :manage, Budget, budget_holder: @user.employee
     can :manage, BudgetItem do |budget_item| 
@@ -89,7 +89,7 @@ class Ability
     can [:create,:read,:update,:destroy], Carpool
     can [:create,:read, :update, :destroy], Requisition, requester: @user.employee
     can :approve, Requisition do |req|
-      req.approvals.map {|a| a.approver.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
+      req.approvers.map {|a| a.employee.id}.include? @user.employee.id         # User can only approve requisition that is sent to the respective user
     end
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
@@ -106,7 +106,7 @@ class Ability
     can :read, :all
     can [:create,:read, :update, :destroy], Requisition, requester: @user.employee
     can :approve, Requisition do |req|
-      req.approvals.includes(approver: :employee).map {|a| a.approver.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
+      req.approvers.includes(approver: :employee).map {|a| a.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
     end
     can :read, PurchaseOrder, requestor: @user.employee
     can_manage_own_leave_request

@@ -18,6 +18,7 @@ class Requisition < ActiveRecord::Base
   has_many :po_reqs
   has_many :purchase_orders, through: :po_reqs
   has_many :approvals, as: :approvable
+  has_many :approvers, through: :approvals
 
   accepts_nested_attributes_for :req_items, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :approvals, reject_if: :all_blank
