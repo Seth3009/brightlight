@@ -61,10 +61,8 @@ nav
               .label Budgeted?
               -if @requisition.is_budgeted
                 |Yes
-                i.material-icons.left.green-text check_box
               -else
                 |No
-                i.material-icons.left check_box_outline_blank
             .col.s6.m4
               .label Budget
               .item = @requisition.account.try(:description) || "--"
@@ -103,7 +101,7 @@ nav
                       = link_to purchase_order_path(req_item.order_item.purchase_order), target: 'blank'
                         = req_item.order_item.purchase_order.order_num
                         i.material-icons.left open_in_new
-                    -elsif can? :process, Requisition
+                    -if @requisition.approved? && can?(:process, Requisition)
                       = hidden_field_tag :req, @requisition.id
                       input.checkbox type="checkbox" id="reqitem-#{req_item.id}" name="items[#{req_item.id}]"
                       / This label is required by Materialize CSS for the checkbox to work
@@ -125,12 +123,15 @@ nav
               .col.s6.m2.item
                 - if approval.approve == true
                   |Approved
-                  i.material-icons.left check_box
                 - elsif approval.approve == false
                   |Not approved
-                  i.material-icons.left cancel
                 - else
-                  i.material-icons.left check_box_outline_blank
+                  - if @requisition.is_pending_approval_by current_user.employee
+                    = link_to approve_requisition_path(@requisition), class:'btn btn-small'
+                      |Approval
+                    div style="font-size:0.8em; color: #f5494d" Click to go to approval page
+                  - else
+                    |--
               .col.s6.m2.item = approval.updated_at.strftime("%d %b %Y") if !approval.approve.nil?
               .col.s12.m5.item = approval.notes 
 

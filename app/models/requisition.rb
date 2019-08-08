@@ -80,8 +80,8 @@ class Requisition < ActiveRecord::Base
 
     event :l1_approve do
       transitions from: :level1, to: :approved, if: :budgeted?
-      transitions from: :level1, to: :level2, unless: :budgeted?
       transitions from: :level1, to: :level3, if: :skip_l2_approval?
+      transitions from: :level1, to: :level2, unless: :budgeted?
       after do
         set_inactive level: 1
         if is_budgeted
