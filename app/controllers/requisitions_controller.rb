@@ -27,6 +27,7 @@ class RequisitionsController < ApplicationController
   # GET /requisitions/list
   def list
     authorize! :process, Requisition
+    params[:direction] ||= 'desc'
     @pending_approval = Requisition.pending_approval.order("#{sort_column} #{sort_direction}")
     @approved_requisitions = Requisition.approved.order("#{sort_column} #{sort_direction}")
     @draft_requisitions = Requisition.draft.order("#{sort_column} #{sort_direction}")
