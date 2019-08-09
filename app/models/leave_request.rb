@@ -45,7 +45,7 @@ class LeaveRequest < ActiveRecord::Base
 
   scope :hrlist_archive, ->  { 
     submitted
-    .select('leave_requests.*,employees.name as employee_name')
+    .select('leave_requests.*')
     .archive 
   }
 

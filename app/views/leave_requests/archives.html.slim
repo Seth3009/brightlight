@@ -1,13 +1,26 @@
-h4 Leave Requests (Archive)
+-if (params[:view] == "hr") && (can? :read_hr, LeaveRequest)
+  -if params[:dept] != 'all' && params[:dept].present?
+    h4 #{@dept_filter.name } Department
+  -else
+    h4 All Employees Archive
+-elsif (params[:view] == "spv")
+  h4 My Department Archives
+-else
+  h4 My Leave Requests Archive
 
 nav
   .nav-wrapper    
     -if (params[:view] == "hr") && (can? :read_hr, LeaveRequest)
       ul.right
         li
+          a.dropdown-button href="#!" data-activates="export-menu"
+            i.material-icons more_vert
+        li
           a.dropdown-button href="#!" data-activates="dept-options"
             span#dept = @dept_filter.present? ? "#{@dept_filter.name}" : "Department" 
             i.material-icons.right arrow_drop_down
+        
+        
         
 
     ul        
@@ -29,8 +42,15 @@ ul#dept-options.dropdown-content
     = link_to 'All', archive_path(params.merge(dept:'all').symbolize_keys)
   - Department.all.each do |dept|
     li 
-      = link_to dept.name, archive_path(params.merge(dept: dept.code).symbolize_keys)  
-
+      = link_to dept.name, archive_path(params.merge(dept: dept.id).symbolize_keys)  
+ul#export-menu.dropdown-content.menu  
+  li
+    = link_to '#'
+      |Export to PDF
+      i.material-icons.left picture_as_pdf
+    = link_to archive_path(params.merge(format: 'xls')), target: '_blank'
+      |Export to Excel
+      = image_tag 'xls80-orange.png', class: 'left'
 
     
 .card-panel

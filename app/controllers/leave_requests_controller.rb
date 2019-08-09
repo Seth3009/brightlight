@@ -40,10 +40,12 @@ class LeaveRequestsController < ApplicationController
     @hrmanager = @dept.manager
     @vice_hrmanager = @dept.vice_manager
     @leave_requests = LeaveRequest.with_employees_and_departments
-
+    @working_day = [1,2,3,4,5]
     if params[:view] == "hr" && @department.id == @dept.id
       @hr_approval_list = @leave_requests.hrlist_archive.where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
                           .order("#{sort_column} #{sort_direction}").order(:form_submit_date)
+      
+      
     elsif params[:view] == "spv"
       @supv_approval_list = @leave_requests.spv_archive(@employee)
                             .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today)).order("#{sort_column} #{sort_direction}")
@@ -51,10 +53,28 @@ class LeaveRequestsController < ApplicationController
       @own_leave_requests = @leave_requests.empl(@employee).archive.order("#{sort_column} #{sort_direction}")
                             .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
     end
-   
+    
     if params[:dept].present? && params[:dept] != 'all'
-      @dept_filter = Department.find_by(code: params[:dept])
-      @hr_approval_list = @hr_approval_list.where(departments: {code: params[:dept]})      
+      @dept_filter = Department.find_by(id: params[:dept])
+      @hr_approval_list = @hr_approval_list.where(departments: {id: params[:dept]})      
+    end
+      @count = 3
+
+    respond_to do |format|
+      format.html      
+      # format.pdf do
+      #   @book_loans = @book_loans.order('subject asc, barcode')
+      #   render pdf:         "Teacher's Books -#{@teacher.name}",
+      #          disposition: 'inline',
+      #          template:    'book_loans/list.pdf.slim',
+      #          layout:      'pdf.html',
+      #          header:      { left: "Teacher's Books", right: '[page] of [topage]' },
+      #          show_as_html: params.key?('debug')
+      # end
+      format.xls { 
+        filename = "Leave Request #{params[:ld]}-#{params[:lde]}".parameterize
+        response.headers["Content-Disposition"] = "attachment; filename=\"#{filename}.xls\"" 
+      }
     end
     
   end
