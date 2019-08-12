@@ -41,11 +41,11 @@ class LeaveRequestsController < ApplicationController
     @vice_hrmanager = @dept.vice_manager
     @leave_requests = LeaveRequest.with_employees_and_departments
     @working_day = [1,2,3,4,5]
+    @status = ['All','Approved','Rejected','Canceled']
     if params[:view] == "hr" && @department.id == @dept.id
       @hr_approval_list = @leave_requests.hrlist_archive.where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
                           .order("#{sort_column} #{sort_direction}").order(:form_submit_date)
-      
-      
+                          .status(params[:stat])
     elsif params[:view] == "spv"
       @supv_approval_list = @leave_requests.spv_archive(@employee)
                             .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today)).order("#{sort_column} #{sort_direction}")
@@ -61,16 +61,7 @@ class LeaveRequestsController < ApplicationController
       @count = 3
 
     respond_to do |format|
-      format.html      
-      # format.pdf do
-      #   @book_loans = @book_loans.order('subject asc, barcode')
-      #   render pdf:         "Teacher's Books -#{@teacher.name}",
-      #          disposition: 'inline',
-      #          template:    'book_loans/list.pdf.slim',
-      #          layout:      'pdf.html',
-      #          header:      { left: "Teacher's Books", right: '[page] of [topage]' },
-      #          show_as_html: params.key?('debug')
-      # end
+      format.html    
       format.xls { 
         filename = "Leave Request #{params[:ld]}-#{params[:lde]}".parameterize
         response.headers["Content-Disposition"] = "attachment; filename=\"#{filename}.xls\"" 

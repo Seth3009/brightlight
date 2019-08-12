@@ -57,6 +57,22 @@ class LeaveRequest < ActiveRecord::Base
 
   scope :draft, -> { where(form_submit_date: nil) }
   
+  scope :filter_status, -> (stat){
+    case stat.downcase
+    when 'approved'
+      where('hr_approval = ? and is_canceled = ?', true, false)
+    when 'rejected'
+      where('(hr_approval= ? or spv_approval= ?) and is_canceled = ?', false, false, false)
+    when 'canceled'
+      where(is_canceled:true)
+    end
+    }
+
+  scope :status, -> (stat) {
+    if stat.present? && stat.downcase != 'all'
+      self.filter_status(stat)
+    end
+  }
   
 
   # def auto_approve
@@ -155,6 +171,8 @@ class LeaveRequest < ActiveRecord::Base
   def is_canceled?
     is_canceled
   end
+  
+  
 
   def fill_hour_column
     if self.leave_day == 1

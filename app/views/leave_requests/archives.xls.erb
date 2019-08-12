@@ -63,10 +63,10 @@
   end
   %></Data></Cell>
   <Cell><Data ss:Type="Number"><%=
-    if (leave_request.category.include? "Early") || (leave_request.category.include? "Late")
-      days-1
-    else
+    if (leave_request.category.present?) && (leave_request.category.include? "Full Day")
       days
+    else
+      days - 1
     end
      %></Data></Cell>
   </Row>
