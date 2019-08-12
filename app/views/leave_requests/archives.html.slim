@@ -21,6 +21,10 @@ nav
             span#dept = @dept_filter.present? ? "#{@dept_filter.name}" : "Department" 
             i.material-icons.right arrow_drop_down
         li
+          a.dropdown-button href="#!" data-activates="empl-options"
+            span#empl = @e.present? ? @e : "Employee" 
+            i.material-icons.right arrow_drop_down
+        li
           a.dropdown-button href="#!" data-activates="stat-options"
             span#stat = params[:stat].present? ? params[:stat] : 'Status' 
             i.material-icons.right arrow_drop_down
@@ -45,6 +49,12 @@ ul#dept-options.dropdown-content
   - Department.all.each do |dept|
     li 
       = link_to dept.name, archive_path(params.merge(dept: dept.id).symbolize_keys) 
+ul#empl-options.dropdown-content
+  li  
+    = link_to 'All', archive_path(params.merge(e:'all').symbolize_keys)
+  - @employees.each do |empl|
+    li 
+      = link_to empl.name, archive_path(params.merge(e: empl.id).symbolize_keys)
 ul#stat-options.dropdown-content
   - @status.each do |stat|
     li 

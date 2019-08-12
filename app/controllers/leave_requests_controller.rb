@@ -42,6 +42,7 @@ class LeaveRequestsController < ApplicationController
     @leave_requests = LeaveRequest.with_employees_and_departments
     @working_day = [1,2,3,4,5]
     @status = ['All','Approved','Rejected','Canceled']
+    @employees = Employee.active.all
     if params[:view] == "hr" && @department.id == @dept.id
       @hr_approval_list = @leave_requests.hrlist_archive.where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
                           .order("#{sort_column} #{sort_direction}").order(:form_submit_date)
@@ -57,8 +58,13 @@ class LeaveRequestsController < ApplicationController
     if params[:dept].present? && params[:dept] != 'all'
       @dept_filter = Department.find_by(id: params[:dept])
       @hr_approval_list = @hr_approval_list.where(departments: {id: params[:dept]})      
+      @employees = @employees.where(department_id: @dept_filter.id)
     end
-      @count = 3
+    
+    if params[:e].present? && params[:e] != 'all'
+      @hr_approval_list = @hr_approval_list.where(employees: {id: params[:e]})
+      @e = @employees.find(params[:e]).name
+    end 
 
     respond_to do |format|
       format.html    
