@@ -160,7 +160,7 @@ li
             - if can? :approve, LeaveRequest
               = link_to 'My Dept Archives', archive_url(view: 'spv', ld:(Date.today-7.days), lde:Date.today)
             - if can? :validate, LeaveRequest
-              = link_to 'All Employee Archives', archive_url(view: 'hr', ld:(Date.today-7.days), lde:Date.today)
+              = link_to 'All Employee Archives', archive_url(dept: 'all', e: 'all', view: 'hr', ld:(Date.today-7.days), lde:Date.today)
 
 li
 	.collapsible-header.waves-effect.waves-cyan

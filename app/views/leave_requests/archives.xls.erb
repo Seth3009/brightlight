@@ -26,6 +26,31 @@
 <Column ss:AutoFitWidth="1" ss:Width="110"/>
 <Column ss:AutoFitWidth="1" ss:Width="110"/>
 <Row>
+  <Cell ss:StyleID="s62"><Data ss:Type="String"><%= 
+    if params[:e] != 'all' && params[:e].present?
+      @e
+    elsif params[:dept] != 'all' && params[:dept].present?
+      @dept_filter.name + ' Department'
+    else
+      'All Employees'
+    end
+    %></Data>
+  </Cell>
+  <Cell></Cell>
+  <Cell></Cell>
+  <Cell></Cell>
+  <Cell></Cell>
+  <Cell></Cell>
+  <Cell></Cell>
+  <Cell ss:StyleID="s62"><Data ss:Type="String">Leave Request Status:</Data></Cell>
+  <Cell ss:StyleID="s62"><Data ss:Type="String"><%= params[:stat].present? ? params[:stat] : 'All' %></Data></Cell>
+</Row>
+<Row>
+  <Cell ss:StyleID="s62"><Data ss:Type="String">Periode</Data></Cell>
+  <Cell ss:StyleID="s62"><Data ss:Type="String"><%= Date.parse(params[:ld]).try(:strftime,"%d %b %Y")%> s/d <%= Date.parse(params[:lde]).try(:strftime,"%d %b %Y")%></Data></Cell>
+</Row>
+<Row></Row>
+<Row>
   <Cell ss:StyleID="s62"><Data ss:Type="String">NIK</Data></Cell>
   <Cell ss:StyleID="s62"><Data ss:Type="String">Employee</Data></Cell>
   <Cell ss:StyleID="s62"><Data ss:Type="String">Leave Date</Data></Cell>

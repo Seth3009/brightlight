@@ -73,6 +73,16 @@ class LeaveRequest < ActiveRecord::Base
       self.filter_status(stat)
     end
   }
+
+  scope :check_param, -> (dept,emp) {
+    if (dept == 'all' || dept.nil?) && emp != 'all'
+      where(employees: {id: emp}).order(:form_submit_date)
+    elsif dept != 'all' && (emp == 'all' || emp.nil?)
+      where(employees: {department_id: dept}).order(:form_submit_date)
+    elsif dept != 'all' && emp != 'all'
+      where(employees: {department_id: dept, id: emp}).order(:form_submit_date)
+    end     
+  }
   
 
   # def auto_approve

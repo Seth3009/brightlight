@@ -1,5 +1,7 @@
 -if (params[:view] == "hr") && (can? :read_hr, LeaveRequest)
-  -if params[:dept] != 'all' && params[:dept].present?
+  -if params[:e] != 'all' && params[:e].present?
+    h4 #{@e}
+  -elsif params[:dept] != 'all' && params[:dept].present?
     h4 #{@dept_filter.name } Department
   -else
     h4 All Employees Archive
@@ -12,10 +14,6 @@ nav
   .nav-wrapper    
     -if (params[:view] == "hr") && (can? :read_hr, LeaveRequest)
       ul.right
-        li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Export data to Excel Format"
-          = link_to archive_path(params.merge(format: 'xls')), target: '_blank'
-            | Export to Excel
-            = image_tag 'xls80-orange.png', class: 'left'
         li
           a.dropdown-button href="#!" data-activates="dept-options"
             span#dept = @dept_filter.present? ? "#{@dept_filter.name}" : "Department" 
@@ -28,6 +26,10 @@ nav
           a.dropdown-button href="#!" data-activates="stat-options"
             span#stat = params[:stat].present? ? params[:stat] : 'Status' 
             i.material-icons.right arrow_drop_down
+        li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Export data to Excel Format"
+          = link_to archive_path(params.merge(format: 'xls')), target: '_blank'
+            | Export
+            = image_tag 'xls80-orange.png', class: 'left'
 
     ul        
       li style="padding: 0 20px"         
@@ -78,7 +80,7 @@ javascript:
           var url = new URL(window.location.href);
           var page = url.searchParams.get("view");        
           if (date) { // require a URL
-              window.location = "archives?view="+page+"&ld="+date+"&lde="+date2; // redirect              
+              window.location = "archives?dept=all&e=all&view="+page+"&ld="+date+"&lde="+date2; // redirect              
           }
           return false;
       });
