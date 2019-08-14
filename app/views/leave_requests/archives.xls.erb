@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="https://www.w3.org/TR/html401/">
+<Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s62">
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"
+    ss:Bold="1"/>
+  </Style>
+</Styles>
+<Worksheet ss:Name="Sheet1">
+<Table>
+<Column ss:AutoFitWidth="1"/>
+<Column ss:AutoFitWidth="1" ss:Width="110"/>
+<Column ss:AutoFitWidth="1" ss:Width="110"/>
+<Column ss:AutoFitWidth="1" ss:Width="110"/>
+<Column ss:AutoFitWidth="1" ss:Width="110"/>
+<Column ss:AutoFitWidth="1" ss:Width="110"/>
+<Column ss:AutoFitWidth="1" ss:Width="110"/>
+<Column ss:AutoFitWidth="1" ss:Width="110"/>
+<Row>
+  <Cell ss:StyleID="s62"><Data ss:Type="String"><%= 
+    if params[:e] != 'all' && params[:e].present?
+      @e
+    elsif params[:dept] != 'all' && params[:dept].present?
+      @dept_filter.name + ' Department'
+    else
+      'All Employees'
+    end
+    %></Data>
+  </Cell>
+  <Cell></Cell>
+  <Cell></Cell>
+  <Cell></Cell>
+  <Cell></Cell>
+  <Cell></Cell>
+  <Cell></Cell>
+  <Cell ss:StyleID="s62"><Data ss:Type="String">Leave Request Status:</Data></Cell>
+  <Cell ss:StyleID="s62"><Data ss:Type="String"><%= params[:stat].present? ? params[:stat] : 'All' %></Data></Cell>
+</Row>
+<Row>
+  <Cell ss:StyleID="s62"><Data ss:Type="String">Periode</Data></Cell>
+  <Cell ss:StyleID="s62"><Data ss:Type="String"><%= Date.parse(params[:ld]).try(:strftime,"%d %b %Y")%> s/d <%= Date.parse(params[:lde]).try(:strftime,"%d %b %Y")%></Data></Cell>
+</Row>
+<Row></Row>
+<Row>
+  <Cell ss:StyleID="s62"><Data ss:Type="String">NIK</Data></Cell>
+  <Cell ss:StyleID="s62"><Data ss:Type="String">Employee</Data></Cell>
+  <Cell ss:StyleID="s62"><Data ss:Type="String">Leave Date</Data></Cell>
+  <Cell ss:StyleID="s62"><Data ss:Type="String">Leave Notes</Data></Cell>
+  <Cell ss:StyleID="s62"><Data ss:Type="String">Category</Data></Cell>
+  <Cell ss:StyleID="s62"><Data ss:Type="String">Leave Type</Data></Cell>
+  <Cell ss:StyleID="s62"><Data ss:Type="String">Leave Reason</Data></Cell>
+  <Cell ss:StyleID="s62"><Data ss:Type="String">Status</Data></Cell>
+  <Cell ss:StyleID="s62"><Data ss:Type="String">Days</Data></Cell>
+</Row>
+
+<% @hr_approval_list.each do |leave_request| %>
+<%= days = (leave_request.start_date..leave_request.end_date).to_a.count {|k| @working_day.include?(k.wday) } %>  
+  <Row>
+  <Cell><Data ss:Type="String"><%= leave_request.employee.employee_number %></Data></Cell>
+  <Cell><Data ss:Type="String"><%= leave_request.employee %></Data></Cell>
+  <Cell><Data ss:Type="String"><%= leave_request.start_date.try(:strftime,"%d %b %Y")+' to '+leave_request.end_date.try(:strftime,"%d %b %Y") %></Data></Cell>
+  <Cell><Data ss:Type="String"><%= leave_request.hour %></Data></Cell>
+  <Cell><Data ss:Type="String"><%= leave_request.category? ? leave_request.category : "--" %></Data></Cell>
+  <Cell><Data ss:Type="String"><%= leave_request.leave_type %></Data></Cell>
+  <Cell><Data ss:Type="String"><%= leave_request.leave_note? ? leave_request.leave_note : "--" %></Data></Cell>
+  <Cell><Data ss:Type="String"><%= 
+  if leave_request.is_canceled? 
+    'Canceled'
+  elsif leave_request.employee_canceled?
+    'Empl. Canceled'
+  else
+    if leave_request.hr_approval.nil? && leave_request.spv_approval != false
+      'Progress'
+    elsif leave_request.hr_approval == true
+      'Approved'
+    else
+      'Rejected'
+    end
+  end
+  %></Data></Cell>
+  <Cell><Data ss:Type="Number"><%=
+    if (leave_request.category.present?) && (leave_request.category.include? "Full Day")
+      days
+    else
+      days - 1
+    end
+     %></Data></Cell>
+  </Row>
+<% end %>
+</Table>
+</Worksheet>
+</Workbook>
