@@ -1,14 +1,14 @@
-.container style="margin-top: 20px"
+.main-menu style="margin-top: 20px"
   .row
-    .col.m6
+    .col.m6.s12
       = image_tag 'cbcs-logo.jpg', class:'center-align', style:"height: 70px"
-    .col.m6
+    .col.m6.s12
       h4.orange-text 
         = image_tag 'lightbulb-icon.png', class: "right small-logo-icon", style:"height: 50px"
         span.right Brightlight
         
   .row.dashboard
-    .col.m4.s6
+    .col.m4.s12
       .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
           = image_tag 'book_loans.jpg', class:'activator'
@@ -31,7 +31,7 @@
               li
                 = link_to 'Standard Books', standard_books_path
 
-    .col.m4.s6
+    .col.m4.s12
       .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
           = image_tag 'textbooks.jpg', class:'activator'
@@ -68,7 +68,7 @@
                   = link_to 'List of book loans', teachers_book_loans_path
 
     - if can? :manage, BookFine
-      .col.m4.s6
+      .col.m4.s12
         .card.horizontal.widget
           .card-image.waves-effect.waves-block.waves-light
             = image_tag 'book_inventory.jpg', class:'activator'
@@ -113,7 +113,7 @@
                     = link_to 'Disposed Books', book_copies_disposed_index_path
 
     - if can? :manage, BookFine
-      .col.m4.s6
+      .col.m4.s12
         .card.horizontal.widget
           .card-image.waves-effect.waves-block.waves-light
             = image_tag 'gears.jpg', class:'activator'
@@ -149,7 +149,7 @@
                   li
                     = link_to 'Book Maintenance', settings_inventory_mtce_path	
 
-    .col.m4.s6
+    .col.m4.s12
       .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
           = image_tag 'schooldropoff.jpg', class:'activator'
@@ -186,7 +186,7 @@
                 li
                   = link_to 'TV Car Riders', "/phx?ready=1"
 
-    .col.m4.s6
+    .col.m4.s12
       .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
           = image_tag 'cbcs-building.jpg', class:'activator'
@@ -223,7 +223,7 @@
                 li
                   = link_to 'Employees', employees_path
 
-    .col.m4.s6
+    .col.m4.s12
       .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
           = image_tag 'HR.jpg', class:'activator'
@@ -259,7 +259,7 @@
                     = link_to 'Employees', employees_path
     
     -if can? :manage, SuppliesTransaction
-      .col.m4.s6
+      .col.m4.s12
         .card.horizontal.widget
           .card-image.waves-effect.waves-block.waves-light
             = image_tag 'stationery.jpg', class:'activator'
@@ -300,7 +300,7 @@
                   li
                     = link_to 'Products', products_url
 
-    .col.m4.s6
+    .col.m4.s12
       .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
           = image_tag 'purchase-order.jpg', class:'activator'
@@ -345,7 +345,7 @@
                     li = link_to 'Accounts', accounts_path
 
     - if signed_in? and current_user.admin?
-      .col.m4.s6
+      .col.m4.s12
         .card.horizontal.widget
           .card-image.waves-effect.waves-block.waves-light
             = image_tag 'accesscontrol.jpg', class:'activator'
@@ -369,7 +369,7 @@
                   = link_to 'Activity Schedules', activity_schedules_path
 
     - if can? :manage, DiknasReportCard
-      .col.m4.s6
+      .col.m4.s12
         .card.horizontal.widget
           .card-image.waves-effect.waves-block.waves-light
             = image_tag 'raport_diknas.jpg', class:'activator'
