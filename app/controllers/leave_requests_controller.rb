@@ -40,10 +40,18 @@ class LeaveRequestsController < ApplicationController
     @hrmanager = @dept.manager
     @vice_hrmanager = @dept.vice_manager
     @leave_requests = LeaveRequest.with_employees_and_departments
-
+    @working_day = [1,2,3,4,5]
+    @status = ['All','Approved','Rejected','Canceled']
+    @employees = Employee.active.all
+    @filename = 'All Employees'
     if params[:view] == "hr" && @department.id == @dept.id
       @hr_approval_list = @leave_requests.hrlist_archive.where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
-                          .order("#{sort_column} #{sort_direction}").order(:form_submit_date)
+                          .order("#{sort_column} #{sort_direction}").order(:start_date)
+                          .status(params[:stat])
+      if (params[:dept].present? && params[:dept] != 'all') || (params[:e].present? && params[:e] != 'all')
+        @hr_approval_list = @hr_approval_list.check_param(params[:dept],params[:e])
+      end
+
     elsif params[:view] == "spv"
       @supv_approval_list = @leave_requests.spv_archive(@employee)
                             .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today)).order("#{sort_column} #{sort_direction}")
@@ -51,10 +59,24 @@ class LeaveRequestsController < ApplicationController
       @own_leave_requests = @leave_requests.empl(@employee).archive.order("#{sort_column} #{sort_direction}")
                             .where(start_date:(params[:ld] || Date.today)..(params[:lde] || Date.today))
     end
-   
+    
     if params[:dept].present? && params[:dept] != 'all'
-      @dept_filter = Department.find_by(code: params[:dept])
-      @hr_approval_list = @hr_approval_list.where(departments: {code: params[:dept]})      
+      @dept_filter = Department.find_by(id: params[:dept])
+      @employees = @employees.where(department_id: @dept_filter.id)
+      @filename = @dept_filter.name
+    end
+    
+    if params[:e].present? && params[:e] != 'all' 
+      @e = @employees.find(params[:e]).name
+      @filename = @e
+    end 
+
+    respond_to do |format|
+      format.html    
+      format.xls { 
+        filename = "LR #{@filename} #{Date.parse(params[:ld]).try(:strftime,"%d%m%Y")}-#{Date.parse(params[:lde]).try(:strftime,"%d%m%Y")}".parameterize
+        response.headers["Content-Disposition"] = "attachment; filename=\"#{filename}.xls\"" 
+      }
     end
     
   end

@@ -45,7 +45,7 @@ class LeaveRequest < ActiveRecord::Base
 
   scope :hrlist_archive, ->  { 
     submitted
-    .select('leave_requests.*,employees.name as employee_name')
+    .select('leave_requests.*')
     .archive 
   }
 
@@ -57,6 +57,32 @@ class LeaveRequest < ActiveRecord::Base
 
   scope :draft, -> { where(form_submit_date: nil) }
   
+  scope :filter_status, -> (stat){
+    case stat.downcase
+    when 'approved'
+      where('hr_approval = ? and is_canceled = ?', true, false)
+    when 'rejected'
+      where('(hr_approval= ? or spv_approval= ?) and is_canceled = ?', false, false, false)
+    when 'canceled'
+      where(is_canceled:true)
+    end
+    }
+
+  scope :status, -> (stat) {
+    if stat.present? && stat.downcase != 'all'
+      self.filter_status(stat)
+    end
+  }
+
+  scope :check_param, -> (dept,emp) {
+    if (dept == 'all' || dept.nil?) && emp != 'all'
+      where(employees: {id: emp}).order(:form_submit_date)
+    elsif dept != 'all' && (emp == 'all' || emp.nil?)
+      where(employees: {department_id: dept}).order(:form_submit_date)
+    elsif dept != 'all' && emp != 'all'
+      where(employees: {department_id: dept, id: emp}).order(:form_submit_date)
+    end     
+  }
   
 
   # def auto_approve
@@ -155,6 +181,8 @@ class LeaveRequest < ActiveRecord::Base
   def is_canceled?
     is_canceled
   end
+  
+  
 
   def fill_hour_column
     if self.leave_day == 1
