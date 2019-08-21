@@ -101,7 +101,7 @@ nav
                       = link_to purchase_order_path(req_item.order_item.purchase_order), target: 'blank'
                         = req_item.order_item.purchase_order.order_num
                         i.material-icons.left open_in_new
-                    -if @requisition.approved? && can?(:process, Requisition)
+                    -if (@requisition.approved? || @requisition.open?) && can?(:process, Requisition)
                       = hidden_field_tag :req, @requisition.id
                       input.checkbox type="checkbox" id="reqitem-#{req_item.id}" name="items[#{req_item.id}]"
                       / This label is required by Materialize CSS for the checkbox to work
