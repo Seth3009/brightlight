@@ -1,5 +1,5 @@
 .row.compact.nested-fields
-  .input-field.col.s12.m3
+  .input-field.col.s12.m2
     = f.text_field :description
   .input-field.col.s6.m1
     = f.number_field :qty_reqd
@@ -10,7 +10,9 @@
   .input-field.col.s6.m2
     = f.number_field :est_price
   .input-field.col.s6.m2
-    = f.date_field :needed_by_date
+    = text_field_tag :line_total, ((f.object.qty_reqd || 0) * (f.object.est_price || 0))
   .input-field.col.s6.m2
+    = f.date_field :needed_by_date
+  .input-field.col.s6.m1
     = link_to_remove_association f, class: "waves-effect waves-teal red-text"
       i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete

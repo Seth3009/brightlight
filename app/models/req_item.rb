@@ -4,7 +4,7 @@ class ReqItem < ActiveRecord::Base
   belongs_to :last_updated_by, class_name: 'User'
   belongs_to :order_item
 
-  validates :description, presence: true
+  validates :description, :est_price, :qty_reqd, presence: true
 
   scope :incomplete, lambda { where(order_item:nil).order(:created_at).includes([requisition: :requester]) }
 

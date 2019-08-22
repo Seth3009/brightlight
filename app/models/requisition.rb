@@ -56,7 +56,8 @@ class Requisition < ActiveRecord::Base
   scope :draft, lambda { where(aasm_state: 'draft') }
   scope :rejected, lambda { where(aasm_state: 'rejected') }
   scope :active, lambda { where(active: true) }
-
+  scope :for_dept, lambda { |dept_id| where(department_id: dept_id) }
+  
   aasm do
     state :draft, initial: true
     state :approval_for_event
@@ -315,6 +316,10 @@ class Requisition < ActiveRecord::Base
       update_columns(status: Requisition.status_code(:appvd))
     end
   end
+
+  def sum_total
+    self.req_items.reduce(0) {|acc, x| acc + ((x.est_price || 0.0) * (x.qty_reqd || 0.0)) }
+  end
   
   private
 
@@ -326,6 +331,6 @@ class Requisition < ActiveRecord::Base
     end
 
     def update_total
-      self.total_amt = self.req_items.sum :est_price
+      self.total_amt = sum_total
     end
 end

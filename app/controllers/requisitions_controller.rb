@@ -10,16 +10,17 @@ class RequisitionsController < ApplicationController
     @i_am_approver = approver_list.present?
     params[:my] = "action" if params[:my].blank? && @i_am_approver
     if params[:my] == "action"
-      @approved_requisitions = Requisition.approved.with_approval_by(@employee).order(:id)
-      @pending_approval = Requisition.pending_approval.with_approval_by(@employee).order(:id)
-      @draft_requisitions = Requisition.draft.with_approval_by(@employee).order(:id)
-      @rejected_requisitions = Requisition.rejected.with_approval_by(@employee).order(:id)
+      @approved_requisitions = Requisition.approved.with_approval_by(@employee).order(id: :desc)
+      @pending_approval = Requisition.pending_approval.with_approval_by(@employee).order(id: :desc)
+      @draft_requisitions = Requisition.draft.with_approval_by(@employee).order(id: :desc)
+      @rejected_requisitions = Requisition.rejected.with_approval_by(@employee).order(id: :desc)
     elsif params[:my] == "list" || params[:my].blank?
-      @approved_requisitions = Requisition.approved.where(requester_id: @employee.id).order(:id)
-      @pending_approval = Requisition.pending_approval.where(requester_id: @employee.id).order(:id)
-      @draft_requisitions = Requisition.draft.where(requester_id: @employee.id).order(:id)
-      @rejected_requisitions = Requisition.rejected.where(requester_id: @employee.id).order(:id)
+      @approved_requisitions = Requisition.approved.where(requester_id: @employee.id).order(id: :desc)
+      @pending_approval = Requisition.pending_approval.where(requester_id: @employee.id).order(id: :desc)
+      @draft_requisitions = Requisition.draft.where(requester_id: @employee.id).order(id: :desc)
+      @rejected_requisitions = Requisition.rejected.where(requester_id: @employee.id).order(id: :desc)
     end
+    @non_budgeted = Requisition.approved.where(is_budgeted: false).order(id: :desc)
     # TODO: inform Purchasing of this action first
     # Requisition.check_overdue
   end

@@ -33,6 +33,9 @@ ul.tabs.z-depth-1
     a href='#tab3' Draft
   li.tab.col.s3
     a href='#tab4' Rejected
+  - if can? :view_unbudgeted, Requisition
+    li.tab.col.s3
+      a href='#tab5' Non-budgeted
           
 .card-panel
   #tab1.tab-content
@@ -46,6 +49,10 @@ ul.tabs.z-depth-1
       
   #tab4.tab-content
     == render partial: 'req_table', locals: { requisitions: @rejected_requisitions }
+  
+  - if can? :view_unbudgeted, Requisition
+    #tab5.tab-content
+      == render partial: 'req_table', locals: { requisitions: @non_budgeted }
 
 #show-modal.modal.modal-fixed-footer
   .modal-content

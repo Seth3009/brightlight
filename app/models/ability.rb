@@ -4,7 +4,7 @@ class Ability
   def initialize(user)
 
 		@user = user || User.new # guest user (not logged in)
-
+    @hos_dept = Department.where(code: 'HOS').take
 		@user.roles << 'guest' if @user.new_record?
 
 		# This one calls each method according to the roles
@@ -61,6 +61,9 @@ class Ability
     can :review, Requisition
     can :approve, Requisition do |req|
       req.approvers.map {|a| a.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
+    end
+    can :view_unbudgeted, Requisition do |req|
+      @user.department == @hos_dept
     end
     can :manage, Budget, budget_holder: @user.employee
     can :manage, BudgetItem do |budget_item| 
