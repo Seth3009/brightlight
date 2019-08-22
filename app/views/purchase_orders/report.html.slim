@@ -7,26 +7,47 @@ nav
     ul
       li
         = link_to purchase_orders_path
-          | Purchase Orders
           i.material-icons.left chevron_left
-      = form_tag(report_purchase_orders_path, method: :get) do
-        li
-          = date_field_tag :date, params[:date]
-        li 
-          = select_tag :item, options_from_collection_for_select(@items, :description, :description, params[:item]), prompt: 'Select Item'
-        li
-          = select_tag :account, options_from_collection_for_select(@accounts, :id, :description, params[:account]), prompt: 'Select Account'
-        li 
-          = select_tag :supplier, options_from_collection_for_select(@suppliers, :id, :company_name, params[:supplier]), prompt: 'Select Supplier'
-        li 
-          = submit_tag "Filter", class: "btn btn-flat btn-small grey"
+    /   = form_tag(report_purchase_orders_path, method: :get) do
+    /     li style="width:100px"
+    /       = date_field_tag :start_date, params[:start_date]
+    /     li style="width:100px"
+    /       = date_field_tag :end_date, params[:end_date]
+    /     li
+    /       = select_tag :item, options_from_collection_for_select(@items, :description, :description, params[:item]), prompt: 'Select Item'
+    /     li
+    /       = select_tag :account, options_from_collection_for_select(@accounts, :id, :description, params[:account]), prompt: 'Select Account'
+    /     li
+    /       = select_tag :supplier, options_from_collection_for_select(@suppliers, :id, :company_name, params[:supplier]), prompt: 'Select Supplier'
+    /     li style="width:80px"
+    /       = submit_tag "Filter", class: "btn btn-flat btn-small grey"
     ul.right
-      li
-        = link_to 'Status Report', status_purchase_orders_path
       li
         = link_to "#", onclick: 'window.print();return false;'
           i.material-icons print
-br
+
+.card-panel.no-print style="padding: 10px 10px 0px 10px"
+  .label Filter
+  ul.row
+    = form_tag(report_purchase_orders_path, method: :get) do
+      li.col.s6.m6.l2
+        = label_tag :start_date
+        = date_field_tag :start_date, params[:start_date]
+      li.col.s6.m6.l2
+        = label_tag :end_date 
+        = date_field_tag :end_date, params[:end_date]
+      li.col.s6.m6.l2
+        = label_tag :item
+        = select_tag :item, options_from_collection_for_select(@items, :description, :description, params[:item]), prompt: 'Select Item'
+      li.col.s6.m6.l2
+        = label_tag :account
+        = select_tag :account, options_from_collection_for_select(@accounts, :id, :description, params[:account]), prompt: 'Select Account'
+      li.col.s6.m6.l2
+        = label_tag :supplier
+        = select_tag :supplier, options_from_collection_for_select(@suppliers, :id, :company_name, params[:supplier]), prompt: 'Select Supplier'
+      li.col.s6.m6.l2
+        = submit_tag "Filter", class: "btn btn-small"
+
 table.compact.bordered.striped
   thead
     tr

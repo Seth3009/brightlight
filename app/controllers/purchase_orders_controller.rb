@@ -16,12 +16,13 @@ class PurchaseOrdersController < ApplicationController
   # GET /purchase_orders/report.json
   def report
     authorize! :read, PurchaseOrder
-    @date = Date.parse(params[:date]) rescue Date.today
+    @start_date = Date.parse(params[:start_date]) rescue Date.today
+    @end_date = Date.parse(params[:end_date]) rescue Date.today
     @supplier = params[:supplier]
     @account = params[:account]
     @item = params[:item]
     @items = OrderItem.po_records(
-        date: @date, 
+        date: @start_date..@end_date, 
         supplier: @supplier,
         account: @account,
         item: @item
@@ -31,10 +32,10 @@ class PurchaseOrdersController < ApplicationController
                   .joins('join req_items on requisitions.id = req_items.requisition_id')
                   .joins('join order_items on order_items.id = req_items.order_item_id')
                   .joins('join purchase_orders on purchase_orders.id = order_items.purchase_order_id')
-                  .where(purchase_orders: {order_date: @date})
+                  .where(purchase_orders: {order_date: @start_date..@end_date})
                   .uniq
     @suppliers = Supplier.joins(:purchase_orders)
-                  .where(purchase_orders: {order_date: @date})
+                  .where(purchase_orders: {order_date: @start_date..@end_date})
 
     @est_total = @items.sum :line_amount
     @act_total = @items.sum :actual_amt
