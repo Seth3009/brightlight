@@ -6,8 +6,10 @@ nav
     - if can? :create, PurchaseOrder
       ul
         li 
-          = link_to "Process FPB", list_requisitions_path
-      ul.right
+          = link_to list_requisitions_path
+            |Process FPB
+            i.material-icons.left chevron_left
+      ul.right.hide-on-med-and-down
         li
           = link_to "Purchase Report", report_purchase_orders_path
         li
@@ -17,7 +19,21 @@ nav
             | New PO
             i.material-icons.left add
 
-.card-panel
+    a.right.button-collapse.sidenav-trigger href="#" data-activates="sidenav-menu"
+      i.material-icons menu
+
+    .side-nav#sidenav-menu
+      ul
+        li
+          = link_to "Purchase Report", report_purchase_orders_path
+        li
+          = link_to "Status Report", status_purchase_orders_path
+        li        
+          = link_to new_purchase_order_path
+            | New PO
+            i.material-icons.left add
+
+.card-panel.horizontal-scroll
   table.striped.compact
     thead
       tr
