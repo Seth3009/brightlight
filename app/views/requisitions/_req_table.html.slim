@@ -1,47 +1,48 @@
 -unless requisitions.blank?
-  table.compact.striped
-    thead
-      tr
-        th
-        th = sort_link "id", "Req no"
-        th = sort_link "description", "Description"
-        th = sort_link "sent_to_purchasing", "Date submitted"
-        th = sort_link "date_required", "Required date"
-        th Requester
-        th Approval
-        th.right-align Total
-        th Actions
-
-    tbody
-      - requisitions.each do |requisition|
+  .horizontal-scroll
+    table.compact.striped
+      thead
         tr
-          td 
-            -if requisition.pending_supv_approval? || requisition.pending_budget_approval?
-              i.material-icons.blue-text lens
-            -if requisition.overdue?
-              i.material-icons.red-text lens
-            -elsif requisition.status == 'ALLORDERED'
-              i.material-icons.green-text done_all
-          td = requisition.id
-          td = requisition.description
-          td = requisition.sent_to_purchasing
-          td = requisition.date_required
-          td = requisition.requester
-          td.wd10 = requisition.approval_string
-          td.wd10.right-align = requisition.total_amt
-          td.wd10
-            = link_to requisition
-              i.material-icons visibility
-            - if (requisition.open? || requisition.approved? || requisition.overdue?) && requisition.status != 'CLOSE' && can?(:process, requisition)
-              = link_to new_purchase_order_path(req: requisition.id)
-                i.material-icons shop
-            - if requisition.draft?
-              = link_to edit_requisition_path(requisition)
-                i.material-icons edit
-              = remote_link_to_delete requisition, message: "Purchase request was successfully deleted"
-                  i.material-icons delete
+          th
+          th = sort_link "id", "Req no"
+          th = sort_link "description", "Description"
+          th = sort_link "sent_to_purchasing", "Date submitted"
+          th = sort_link "date_required", "Required date"
+          th Requester
+          th Approval
+          th.right-align Total
+          th Actions
 
-            |&nbsp;&nbsp;
-            - if requisition.is_pending_approval_by current_user.employee
-              = link_to approve_requisition_path(requisition), class:'btn btn-small'
-                |Approval
+      tbody
+        - requisitions.each do |requisition|
+          tr
+            td 
+              -if requisition.pending_supv_approval? || requisition.pending_budget_approval?
+                i.material-icons.blue-text lens
+              -if requisition.overdue?
+                i.material-icons.red-text lens
+              -elsif requisition.status == 'ALLORDERED'
+                i.material-icons.green-text done_all
+            td = requisition.id
+            td = requisition.description
+            td = requisition.sent_to_purchasing
+            td = requisition.date_required
+            td = requisition.requester
+            td.wd10 = requisition.approval_string
+            td.wd10.right-align = requisition.total_amt
+            td.wd10
+              = link_to requisition
+                i.material-icons visibility
+              - if (requisition.open? || requisition.approved? || requisition.overdue?) && requisition.status != 'CLOSE' && can?(:process, requisition)
+                = link_to new_purchase_order_path(req: requisition.id)
+                  i.material-icons shop
+              - if requisition.draft?
+                = link_to edit_requisition_path(requisition)
+                  i.material-icons edit
+                = remote_link_to_delete requisition, message: "Purchase request was successfully deleted"
+                    i.material-icons delete
+
+              |&nbsp;&nbsp;
+              - if requisition.is_pending_approval_by current_user.employee
+                = link_to approve_requisition_path(requisition), class:'btn btn-small'
+                  |Approval

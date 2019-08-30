@@ -5,9 +5,9 @@ h5
     i.material-icons arrow_drop_down
 
 ul#borrowers-options.dropdown-content
-  / - @teachers.all.each do |teacher|
-  /   li 
-  /     = link_to teacher.name, employee_book_loans_path(teacher,year:@academic_year.id)
+  - @teachers.all.each do |teacher|
+    li 
+      = link_to teacher.name, employee_book_loans_path(teacher,year:@academic_year.id)
 ul#year-options.dropdown-content
   li  
     = link_to 'All', employee_book_loans_path(params.merge(year:'all').symbolize_keys)
@@ -15,7 +15,7 @@ ul#year-options.dropdown-content
     li 
       = link_to year.name, employee_book_loans_path(params.merge(year: year.id).symbolize_keys)
 ul#catg-options.dropdown-content
-  li 
+  li
     = link_to 'All', employee_book_loans_path(params.merge(book_catg:'all').symbolize_keys)
   - BookCategory.all.each do |catg|
     li
@@ -87,45 +87,32 @@ ul#inventory-menu.dropdown-content.menu
       a href="#" data-activates="sidenav-menu" class="right button-collapse" style="margin-right:10px"
         i.material-icons menu
 
-      .sidenav#sidenav-menu
+      .side-nav#sidenav-menu
         ul
+          li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Scan book to check/return"
+            = link_to scan_employee_book_loans_path(@teacher, check:'only', year: @academic_year.id)              
+              | Check only
+              = image_tag 'barcode-white.png', class:"left"
           li
-            a#borrowers-menu.dropdown-button href="#!" data-activates="borrowers-options" data-year="#{@academic_year.id}" data-beloworigin="true" 
-              span#teacher = @teacher.present? ? "#{@teacher.name}" : "Teacher name" 
-              i.material-icons.right arrow_drop_down
-          li
-            a.dropdown-button href="#!" data-activates="year-options" data-beloworigin="true" 
-              span#year = params[:year].present? && params[:year].downcase == 'all' ? 'All' : (@academic_year.present? ? "#{@academic_year.name}" : "Academic Year") 
-              i.material-icons.right arrow_drop_down
-          li
-            a.dropdown-button href="#!" data-activates="catg-options" data-beloworigin="true" 
-              span#catg = @book_catg.present? ? "#{@book_catg.name}" : "Category" 
-              i.material-icons.right arrow_drop_down
-          li 
             = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg])
               | Book Receipt
-              i.material-icons.left receipt
-          li 
+              i.material-icons.left receipt 
+          li
             -if @academic_year.present?
               = link_to employee_book_loans_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg], format: :pdf), target: '_blank'
-                | Export to PDF
+                |Export to PDF
                 i.material-icons.left picture_as_pdf
             - else
               = link_to employee_book_loans_path(@teacher, format: :pdf), target: '_blank'
-                | Export to PDF
+                Export to PDF
                 i.material-icons.left picture_as_pdf
           li
-            = link_to employee_book_loans_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg], format: :xls), target: '_blank'            
-              | Export to Excel
+            = link_to employee_book_loans_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg], format: :xls), target: '_blank'
+              |Export to Excel
               = image_tag 'xls80-black.png', class:'left'
-          / -if can? :manage, BookLoan
-          /   li  
-          /     = link_to fix_check_employee_book_loans_path(@teacher, year: @academic_year.id), data: {:confirm => confirm_msg}
-          /       | Change all Return status to Check
-          /       i.material-icons.left checkbox
           li
-            = link_to scan_employee_book_loans_path(@teacher, year: @academic_year.id)
-              | Scan book to check or return
+            = link_to scan_employee_book_loans_path(@teacher, check:'out', year: @academic_year.id)              
+              | EOY Checkout
               = image_tag 'barcode-black.png', class:'left'
           - if can? :manage, BookLoan
             li
@@ -156,15 +143,16 @@ ul#inventory-menu.dropdown-content.menu
             button.icon type='submit' name='delete' data-disable=true data-confirm="Are you sure to delete selected book loan records?"
               i.material-icons.red-text delete
 
-  .card-panel
+  .card-panel.compact
     .horizontal-scroll
       - unless @error.present?
         table.compact.striped
           thead
             tr
-              th
-                input.checkbox-toggle type="checkbox" id="checkbox-toggle"
-                = label_tag "checkbox-toggle", ""
+              - if can? :manage, BookLoan
+                th
+                  input.checkbox-toggle type="checkbox" id="checkbox-toggle"
+                  = label_tag "checkbox-toggle", ""
               th No
               th = sort_link :barcode
               th = sort_link :title, 'Book title'
@@ -178,9 +166,10 @@ ul#inventory-menu.dropdown-content.menu
           tbody
             - @book_loans.each_with_index do |book_loan, i|
               tr id="row-#{book_loan.id}"
-                td
-                  input.checkbox type="checkbox" id="add_#{book_loan.id}" name="add[#{book_loan.id}]"
-                  = label_tag "add[#{book_loan.id}]", ""
+                - if can? :manage, BookLoan
+                  td
+                    input.checkbox type="checkbox" id="add_#{book_loan.id}" name="add[#{book_loan.id}]"
+                    = label_tag "add[#{book_loan.id}]", ""
                 td = @book_loans.offset + i + 1
                 td = link_to book_loan.barcode, book_copy_path(book_loan.book_copy_id)
                 td 
@@ -257,9 +246,9 @@ javascript:
     });
   }
   $(document).on('page:load ready', function(){
-    $('.sidenav').sidenav();
     prepare_menu();    
   });
+
 
 
 

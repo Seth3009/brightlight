@@ -59,6 +59,10 @@ $navbar-placeholder-text-color: #666;
 	overflow-x: auto;
 }
 
+.card-panel.compact {
+	padding: 0px;
+}
+
 // ============================================ Table ===============================================
 table {
 		td.wd3  { width:  3%; }
@@ -610,6 +614,10 @@ nav {
 	ul {
 		li {
 			a {
+				max-width: 150px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
 				&:hover {
 					background-color: rgba(0,0,0,.3);
 				}

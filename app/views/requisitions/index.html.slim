@@ -24,7 +24,7 @@ ul#show-options.dropdown-content
 ul.tabs.z-depth-1
   li.tab.col.s3
     a.active href='#tab1' 
-      |Pending Approval
+      |Pending
       - if @pending_approval.count > 0
         span.emblem = @pending_approval.count
   li.tab.col.s3
@@ -35,9 +35,9 @@ ul.tabs.z-depth-1
     a href='#tab4' Rejected
   - if can? :view_unbudgeted, Requisition
     li.tab.col.s3
-      a href='#tab5' Non-budgeted
+      a href='#tab5' Non budgeted
           
-.card-panel
+.card-panel.compact
   #tab1.tab-content
     == render partial: 'req_table', locals: { requisitions: @pending_approval }
       
