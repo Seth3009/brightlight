@@ -614,7 +614,7 @@ nav {
 	ul {
 		li {
 			a {
-				max-width: 150px;
+				max-width: 250px;
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow: ellipsis;
@@ -764,6 +764,21 @@ nav.light {
 	nav, nav .nav-wrapper i, nav a.button-collapse, nav a.button-collapse i {
     height: 54px;
     line-height: 54px;
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	nav {
+		ul {
+			li {
+				a {
+					max-width: 150px;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+			}
+		}
 	}
 }
 
