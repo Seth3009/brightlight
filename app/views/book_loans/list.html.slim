@@ -25,7 +25,7 @@ ul#inventory-menu.dropdown-content.menu
   li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Scan book to check/return"
     = link_to scan_employee_book_loans_path(@teacher, check:'only', year: @academic_year.id)              
       | Check only
-      = image_tag 'barcode-white.png', class:"left"
+      = image_tag 'barcode-orange.png', class:"left"
   li
     = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg])
       | Book Receipt
@@ -46,19 +46,63 @@ ul#inventory-menu.dropdown-content.menu
 
 
 = form_tag list_action_book_loans_path(employee_id:params[:employee_id], year: @academic_year.id, page:params[:page]), remote:true do 
+  #move-to-menu.modal.modal-fixed-footer.small
+    .modal-content
+      h5 Move selected book loans
+      div
+        .label From:
+        = @teacher.name
+      div
+        = @academic_year.name
+      hr
+      div
+        .label To:
+        = select_tag :to_teacher, options_from_collection_for_select(Employee.all.order(:name),:id,:name)
+      div
+        = select_tag :to_year, options_from_collection_for_select(AcademicYear.list_for_menu,:id,:name,AcademicYear.current_id)
+    .modal-footer
+      button.btn.modal-close type='submit' name='move' data-disable=true OK
+      a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+
+  #edit-menu.modal.modal-fixed-footer.small
+    .modal-content  
+      h5 Edit selected records
+      ul
+        li 
+          = label_tag :convert
+          = select_tag :convert, options_for_select([['Return to check','return_to_check'], ['Check to return','check_to_return']]), prompt: "Convert"
+        li
+          = label_tag :return_type      
+          = select_tag :batch_return, options_for_select([['Return','R'], ['Return to inventory','RI']]), prompt: "Return type"
+        li 
+          = label_tag :book_category
+          = select_tag :book_catg, options_from_collection_for_select(BookCategory.all, :id, :name), prompt: "Category"
+        li 
+          = label_tag :course
+          = select_tag :book_loan_course_id, options_from_collection_for_select(Course.current, :id, :number_and_name), prompt: "Course"
+        / li 
+        /   = select_tag :book_loan_course_section_id, []
+    .modal-footer
+      button.btn.modal-close type='submit' name='batch' data-disable=true OK
+      a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+      .left
+        - if can? :delete, BookLoan
+          button.btn.btn-flat.modal-close type='submit' name='delete' data-disable=true data-confirm="Are you sure to delete selected book loan records?"
+            i.material-icons.red-text delete
+            
   nav
     .nav-wrapper
-      .context-menus style="display:none;"
-        ul.left  
-          - if can? :manage, BookLoan      
-            li 
-              .cat Move to:
-            li style="width:200px"             
-              = select_tag :to_teacher, options_from_collection_for_select(Employee.all.order(:name),:id,:name)
-            li style="width:110px" class="text-align:center"
-              = select_tag :to_year, options_from_collection_for_select(AcademicYear.list_for_menu,:id,:name,AcademicYear.current_id)
-            li  
-              button.btn type='submit' name='move' data-disable=true Go!
+      - if can? :manage, BookLoan
+        .context-menus style="display:none;"
+          ul.left     
+            li
+              a href="#move-to-menu" class="modal-trigger" 
+                | Move
+                i.material-icons.left forward
+            li
+              a href="#edit-menu" class="modal-trigger" 
+                | Edit
+                i.material-icons.left edit
 
       #default-buttons
         ul
@@ -92,7 +136,7 @@ ul#inventory-menu.dropdown-content.menu
           li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Scan book to check/return"
             = link_to scan_employee_book_loans_path(@teacher, check:'only', year: @academic_year.id)              
               | Check only
-              = image_tag 'barcode-white.png', class:"left"
+              = image_tag 'barcode-black.png', class:"left"
           li
             = link_to employee_book_loans_receipt_path(@teacher, year: @academic_year.id, book_catg: params[:book_catg])
               | Book Receipt
@@ -119,29 +163,6 @@ ul#inventory-menu.dropdown-content.menu
               = link_to new_employee_book_loans_path(@teacher)
                 | Add New Book
                 i.material-icons.left add
-
-  nav.context-menus style="display:none"
-    .nav-wrapper
-      ul
-        - if can? :manage, BookLoan
-          li
-            .cat Edit:
-          li 
-            = select_tag :convert, options_for_select([['Return to check','return_to_check'], ['Check to return','check_to_return']]), prompt: "Convert"
-          li           
-            = select_tag :batch_return, options_for_select([['Return','R'], ['Return to inventory','RI']]), prompt: "Return type"
-          li 
-            = select_tag :book_catg, options_from_collection_for_select(BookCategory.all, :id, :name), prompt: "Category"
-          li 
-            = select_tag :book_loan_course_id, options_from_collection_for_select(Course.current, :id, :number_and_name), prompt: "Course"
-          li 
-            = select_tag :book_loan_course_section_id, []
-          li 
-            button.btn type='submit' name='batch' data-disable=true Go!
-        - if can? :delete, BookLoan
-          li style="height: 54px"
-            button.icon type='submit' name='delete' data-disable=true data-confirm="Are you sure to delete selected book loan records?"
-              i.material-icons.red-text delete
 
   .card-panel.compact
     .horizontal-scroll

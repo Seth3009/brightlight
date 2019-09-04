@@ -315,6 +315,7 @@ class BookLoansController < ApplicationController
     selected_ids = params[:add].map &:first
     completed = []
     ids_to_remove = []
+
     if params[:move]
       BookLoan.not_disposed.where(id:selected_ids).each do |loan|
         success = loan.move_book to:target, to_year:year
@@ -322,43 +323,45 @@ class BookLoansController < ApplicationController
         ids_to_remove << loan.id.to_s if success and year == loan.academic_year
       end
       failed = selected_ids - completed
-    end
-    if params[:book_catg].present?
-      BookLoan.not_disposed.where(id:selected_ids).update_all book_category_id: params[:book_catg]
-      @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
-    end
-    if params[:batch_return].present?
-      BookLoan.not_disposed.where(id:selected_ids).each do |bl| 
-        bl.update return_status: params[:batch_return], return_date: Date.today
+    
+    elsif params[:batch]
+      if params[:book_catg].present?
+        BookLoan.not_disposed.where(id:selected_ids).update_all book_category_id: params[:book_catg]
+        @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
       end
-      @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
-    end
-    if params[:book_loan_course_id].present?
-      BookLoan.not_disposed.where(id:selected_ids).update_all course_id: params[:book_loan_course_id]
-      @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
-    end
-    if params[:book_loan_course_section_id].present?
-      BookLoan.not_disposed.where(id:selected_ids).update_all course_section_id: params[:book_loan_course_section_id]
-      @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
-    end
-    if params[:convert].present?
-      case params[:convert]
-      when 'return_to_check'
-        BookLoan.not_disposed.where(id:selected_ids).change_status_return_to_check(employee_id: params[:employee_id], year_id: params[:year])
-      when 'check_to_return'
-        BookLoan.not_disposed.where(id:selected_ids).change_status_check_to_return(employee_id: params[:employee_id], year_id: params[:year])
+      if params[:batch_return].present?
+        BookLoan.not_disposed.where(id:selected_ids).each do |bl| 
+          bl.update return_status: params[:batch_return], return_date: Date.today
+        end
+        @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
       end
-      @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
-    end
-    if params[:delete]
+      if params[:book_loan_course_id].present?
+        BookLoan.not_disposed.where(id:selected_ids).update_all course_id: params[:book_loan_course_id]
+        @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
+      end
+      if params[:book_loan_course_section_id].present?
+        BookLoan.not_disposed.where(id:selected_ids).update_all course_section_id: params[:book_loan_course_section_id]
+        @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
+      end
+      if params[:convert].present?
+        case params[:convert]
+        when 'return_to_check'
+          BookLoan.not_disposed.where(id:selected_ids).change_status_return_to_check(employee_id: params[:employee_id], year_id: params[:year])
+        when 'check_to_return'
+          BookLoan.not_disposed.where(id:selected_ids).change_status_check_to_return(employee_id: params[:employee_id], year_id: params[:year])
+        end
+        @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
+      end
+
+    elsif params[:delete]
       BookLoan.not_disposed.where(id:selected_ids).destroy_all
       ids_to_remove = selected_ids
     end
+
     ids_to_uncheck = completed - ids_to_remove
     @rows_to_remove = ids_to_remove.present? ? ids_to_remove.map{|id| '#row-'+id.to_s}.join(', ') : ""
     @failed_barcodes = failed.present? ? failed.map {|x| BookLoan.not_disposed.where(id:x).take.try(:barcode)} : ""
     @rows_to_uncheck = ids_to_uncheck.present? ? ids_to_uncheck.map{|id| '#add_'+id.to_s}.join(', ') : ""
-    puts "RETURN PATH #{@return_path}"
     respond_to :js
   end
 
