@@ -25,8 +25,9 @@ html
             td Comment
             td = @comment.comment
 
+      p style="color:red" Do NOT reply to this email. Please reply using Brightlight application only.
       p You can access the #{@comment.commentable_type} from the following link.
-      p = link_to "No. #{@comment.commentable.id}", @comment.commentable, style:"text-decoration:underline"
+      p = link_to "#{@comment.commentable_type} No. #{@comment.commentable.id}", @comment.commentable, style:"text-decoration:underline"
 
       p Thank you for using <i>Brightlight</i>. 
     
