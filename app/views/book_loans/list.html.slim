@@ -45,7 +45,7 @@ ul#inventory-menu.dropdown-content.menu
       = image_tag 'xls80-orange.png', class: 'left'
 
 
-= form_tag list_action_book_loans_path(employee_id:params[:employee_id], year: @academic_year.id, page:params[:page]), remote:true do 
+= form_tag list_action_book_loans_path(employee_id:params[:employee_id], year: @academic_year.id, page:params[:page], column:params[:column], direction:params[:direction]), remote:true do 
   #move-to-menu.modal.modal-fixed-footer.small
     .modal-content
       h5 Move selected book loans

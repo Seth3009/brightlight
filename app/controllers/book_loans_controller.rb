@@ -325,9 +325,10 @@ class BookLoansController < ApplicationController
       failed = selected_ids - completed
     
     elsif params[:batch]
+      path_params = {employee_id: params[:employee_id], page:params[:page], column:params[:column], direction:params[:direction]}
       if params[:book_catg].present?
         BookLoan.not_disposed.where(id:selected_ids).update_all book_category_id: params[:book_catg]
-        @return_path = "#{employee_book_loans_path(employee_id: params[:employee_id], page:params[:page])}" 
+        @return_path = "#{employee_book_loans_path(path_params)}" 
       end
       if params[:batch_return].present?
         BookLoan.not_disposed.where(id:selected_ids).each do |bl| 
