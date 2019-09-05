@@ -2,15 +2,15 @@
   .input-field.col.s12.m2
     = f.text_field :description
   .input-field.col.s6.m1
-    = f.number_field :qty_reqd
+    = f.number_field :qty_reqd, style:"text-align: right"
   .input-field.col.s6.m1
     = f.text_field :unit
   .input-field.col.s6.m1
     = f.select :currency, [['IDR', 'IDR'], ['USD', 'USD'], ['SGD', 'SGD'], ['AUD', 'AUD'], ['GBP', 'GBP']]
   .input-field.col.s6.m2
-    = f.number_field :est_price
+    = f.number_field :est_price, style:"text-align: right"
   .input-field.col.s6.m2
-    = text_field_tag :line_total, ((f.object.qty_reqd || 0) * (f.object.est_price || 0))
+    = text_field_tag :line_total, ((f.object.qty_reqd || 0) * (f.object.est_price || 0)), disabled: true, style:"text-align: right"
   .input-field.col.s6.m2
     = f.date_field :needed_by_date
   .input-field.col.s6.m1
