@@ -12,7 +12,7 @@ class RoomsController < ApplicationController
   # GET /rooms/1.json
   def show
     authorize! :read, Room
-    @badges = RoomAccess.where(room_id:@room)
+    @room_accesses = RoomAccess.where(room_id:@room).includes(:badge)
   end
 
   # GET /rooms/new
