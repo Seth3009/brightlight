@@ -30,4 +30,13 @@ class ActivitySchedule < ActiveRecord::Base
     end
     .where('start_date <= ? AND end_date >= ?',Date.today,Date.today)
   }
+
+  scope :permit_for_badge_id, lambda { |id|
+    joins('left join student_activities on student_activities.activity_schedule_id = activity_schedules.id')
+    .joins('left join students on students.id = student_activities.student_id')
+    .joins('left join badges on badges.student_id = students.id')
+    .select('students.name, badges.code, badges.student_id, badges.kind, activity_schedules.academic_year_id')
+    .where(is_active:true)
+    .where(badges: {id: id}).first 
+  }
 end

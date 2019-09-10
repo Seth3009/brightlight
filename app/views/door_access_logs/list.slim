@@ -1,10 +1,10 @@
 .row
   .col.s6
-    h4 Door Access Logs
+    h4 Room Access
+    h6 Tap ID card on the scanner
   .col.s5
-    = form_tag({controller:'door_access_logs', action:'index'}, {method:'get'}) do
+    = form_tag({controller:'door_access_logs', action:'list'}, {method:'get'}) do
       .input-field
-        input type="hidden" name="v" value=@view_style
         - if params[:search].present?
           i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
             | highlight_off
@@ -13,23 +13,23 @@
         input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]
     javascript:
       function reset_form() {
-        window.location="#{door_access_logs_path(v:'list')}"
+        window.location="#{list_door_access_logs_path}"
       }
 
 ul#location-options.dropdown-content
-  - if @locations.present?
-    li = link_to 'All', door_access_logs_path
-    - @locations.each do |location| 
-      li = link_to location.location, door_access_logs_path(loc:location.location)
+  - if @rooms.present?
+    li = link_to 'All', list_door_access_logs_path
+    - @rooms.each do |room| 
+      li = link_to room.room_name, list_door_access_logs_path(id:room.id)
 nav
   .nav-wrapper   
     ul
       li
         a#location-menu.dropdown-button href="#!" data-activates="location-options" data-beloworigin="true" 
-          span#location = 'Choose location'
+          span#location = @room_name || 'Choose location'
           i.material-icons.right arrow_drop_down
     
-.card-panel
+.card-panel#room data-ip="#{@ip}" data-room_name="#{@room_name}"
   table.compact.striped
     thead
       tr
@@ -38,18 +38,15 @@ nav
         th = sort_link "card"
         th = sort_link "name"
         th = sort_link "kind", "Status"
-    tbody
-      - @logs.each do |log|
-        tr
-          td = log.created_at.strftime("%d/%m/%y %H:%M:%S")
-          td = log.location
-          td = log.card
-          td = log.name
-          td = log.kind
+    tbody#access-log
+      - if @logs
+        - @logs.each do |log|
+          tr
+            td = log.created_at.strftime("%d/%m/%y %H:%M:%S")
+            td = log.location
+            td = log.card
+            td = log.name
+            td = log.kind
 
-- if @logs.count >= @item_per_pages
-  .toolbar.z-depth-1
-    = will_paginate @logs
-
-
-
+.toolbar.z-index-1
+  = will_paginate @logs

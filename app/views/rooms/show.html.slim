@@ -26,7 +26,7 @@ h5 Badges
       .col.s2 Badge
       .col.s2.center Action
     #employees.row.compact
-      = f.fields_for :room_accesses, @badges do |room_access|
+      = f.fields_for :room_accesses, @room_accesses do |room_access|
           .nested-fields
             = render 'room_accesses_fields', f: room_access
             
