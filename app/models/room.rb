@@ -1,7 +1,7 @@
 class Room < ActiveRecord::Base
 
   has_many :room_accesses, dependent: :destroy
-  has_many :badges, through: :room_access
+  has_many :badges, through: :room_accesses
 
   validates :room_name, presence: true
   validates :ip_address, uniqueness: true

@@ -12,7 +12,7 @@ class RoomsController < ApplicationController
   # GET /rooms/1.json
   def show
     authorize! :read, Room
-    @room_accesses = RoomAccess.where(room_id:@room).includes(:badge)
+    @room_accesses = RoomAccess.where(room: @room).includes(:badge)
   end
 
   # GET /rooms/new
@@ -72,17 +72,16 @@ class RoomsController < ApplicationController
   end
 
   def badges
-    @grade_sections = GradeSection.all
-         
     @filterrific = initialize_filterrific(
-      Badge.order(:name),
+      Badge.with_grade_section.order(:name),
       params[:filterrific],
+      available_filters: [:search_query, :sorted_by, :by_kind, :by_grade_section],
       select_options: {
         filtered_by: Badge.options_for_sorted_by        
       }
     ) or return
 
-     @badges = @filterrific.find.page(params[:page])
+    @badges = @filterrific.find.page(params[:page])
 
     respond_to do |format|
       format.html

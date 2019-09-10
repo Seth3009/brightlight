@@ -33,7 +33,7 @@ class Api::GatesController < Api::BaseController
                     .select('students.name,badges.code, badges.student_id, badges.kind, activity_schedules.academic_year_id')
                     .where(is_active:true)
                     .where(badges: {code: params[:id]}).first                                                                        
-          if (@student.present? && @room_access.present?)
+          if (@student.present? && @room_access.present?) || @room.public_access?
             DoorAccessLog.insert_door_log(@student.student_id, @student.kind, params[:id],params[:loc],@student.name)
             render json: "code:"+@student.code + " name:" + @student.name + " kind:" + @student.kind
             response.header["result"] = 'name:' + @student.name + ' kind:' + @student.kind + '^'
