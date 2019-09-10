@@ -22,8 +22,25 @@ class DoorAccessLogsController < ApplicationController
         end
         @locations = DoorAccessLog.select(:location).uniq.order(:location)
       }
-      
     end   
+  end
+
+  def list
+    authorize! :read, DoorAccessLog
+    
+    @items_per_page = 30
+    @rooms = Room.all
+    if params[:id]
+      room = Room.find params[:id]
+      @room_name = room.room_name rescue nil
+      @ip = room.ip_address rescue nil
+      @logs = DoorAccessLog.loc_params(room.location)
+              .order(:created_at => "desc")
+              .order("#{sort_column} #{sort_direction}")
+              .paginate(page: params[:page], per_page: @items_per_page)
+      @logs = @logs.where('UPPER(door_access_logs.name) LIKE ?', "%#{params[:search].upcase}%") if params[:search]
+    end
+    respond_to :html
   end
 
   private

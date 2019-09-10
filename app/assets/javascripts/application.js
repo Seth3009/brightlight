@@ -33,6 +33,7 @@
 //= require book_loans
 //= require messages
 //= require settings
+//= require gate_tap
 //= require jquery.timepicker.min.js
 //= require jquery.combobox
 //= require tinymce

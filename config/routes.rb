@@ -388,6 +388,8 @@ Rails.application.routes.draw do
 
   resources :badges, only: [:new, :create, :edit, :update, :destroy]
   resources :door_access_logs, only: [:index]
+  get '/door_tap/:id' => "door_access_logs#list", as: :list_door_access_logs
+
   get  '/search' => "search#index"
   post '/search' => "search#index"
 
@@ -416,6 +418,7 @@ Rails.application.routes.draw do
     end
 
     post "/gates" => 'gates#create'
+    post "/tap"   => 'gates#tap'
   end
   
   get 'settings/inventory_mtce' => 'settings#inventory_mtce', as: :settings_inventory_mtce
