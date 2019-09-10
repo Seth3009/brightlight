@@ -11,8 +11,8 @@ class Api::GatesController < Api::BaseController
                     .select('employees.name as nama,badges.*')
                     .where(badges: {code: params[:id]}).first
           if (@employee.present? && @room_access.present?) || @room.public_access?
-            DoorAccessLog.insert_door_log(@employee.employee_id, @employee.kind, params[:id],@room.room_name,@employee.nama)            
-            render json: {code: @employee.code, name: @employee.nama, kind: @employee.kind}
+            DoorAccessLog.insert_door_log(@employee.employee_id, @employee.kind, params[:id],params[:loc],@employee.nama)            
+            render json: "code:"+@employee.code + " name:" + @employee.nama + " kind:" + @employee.kind
             response.header["result"] = 'name:' + @employee.nama + ' kind:' + @employee.kind + '^'
             # @name_part = @employee.nama.split
             # response.header["code"] = @employee.code
@@ -34,8 +34,8 @@ class Api::GatesController < Api::BaseController
                     .where(is_active:true)
                     .where(badges: {code: params[:id]}).first                                                                        
           if (@student.present? && @room_access.present?)
-            DoorAccessLog.insert_door_log(@student.student_id, @student.kind, params[:id],@room.room_name,@student.name)
-            render json: {code: @student.code, name: @student.name, kind: @student.kind}
+            DoorAccessLog.insert_door_log(@student.student_id, @student.kind, params[:id],params[:loc],@student.name)
+            render json: "code:"+@student.code + " name:" + @student.name + " kind:" + @student.kind
             response.header["result"] = 'name:' + @student.name + ' kind:' + @student.kind + '^'
             # @name_part = @student.name.split
             # response.header["code"] = @student.code
@@ -67,7 +67,7 @@ class Api::GatesController < Api::BaseController
         if @badge.kind == "Employee"
           @employee = @badge.employee
           if (@employee.present? && @room_access.present?) || @room.public_access?
-            DoorAccessLog.insert_door_log(@employee.id, @badge.kind, params[:id], @room.room_name, @employee.name)            
+            DoorAccessLog.insert_door_log(@employee.id, @badge.kind, params[:id], @room.location, @employee.name)            
             render json: {code: @badge.code, name: @employee.name, kind: @badge.kind}
           else
             render json: {errors:"Denied"}, status: :unprocessable_entity
@@ -75,7 +75,7 @@ class Api::GatesController < Api::BaseController
         elsif @badge.kind == "Student"        
           @permit = ActivitySchedule.filter_day.permit_for_badge_id @badge.id                                                                       
           if (@permit.present? && @room_access.present?)
-            DoorAccessLog.insert_door_log(@permit.student_id, @permit.kind, params[:id], @room.room_name, @permit.name)
+            DoorAccessLog.insert_door_log(@permit.student_id, @permit.kind, params[:id], @room.location, @permit.name)
             render json: {code: @permit.code, name: @permit.name, kind: @permit.kind}
           else
             render json: {errors:"Denied"}, status: :unprocessable_entity

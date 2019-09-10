@@ -4,8 +4,8 @@ $(document).on("ready page:load page:change", function() {
     minEntryChars: 9,
     onScan: function($element, input) {
       var badgeId = input.trim();
-      var room_name = $("#room").data("room_name")
-      var dataToSend = { ip: $("#room").data("ip"), id: input.trim() };
+      var location = $("#room").data("location")
+      var dataToSend = { ip: $("#room").data("ip"), id: badgeId };
       var jsonData = JSON.stringify(dataToSend);
       var url = "/api/tap";
       console.log("DATA", jsonData);
@@ -22,7 +22,7 @@ $(document).on("ready page:load page:change", function() {
       .success(function(data) {
         var time = new Date;
         console.log("SUCCESS", data);
-        $("tbody#access-log").prepend("<tr><td>"+time.toLocaleDateString()+" "+time.toLocaleTimeString()+"</td><td>"+room_name+"</td><td>"+data.code+"</td><td>"+data.name+"</td><td>"+data.kind+"</td></tr>");
+        $("tbody#access-log").prepend("<tr><td>"+time.toLocaleDateString()+" "+time.toLocaleTimeString()+"</td><td>"+location+"</td><td>"+data.code+"</td><td>"+data.name+"</td><td>"+data.kind+"</td></tr>");
       })
       .error(function(xhr) {
         Materialize.toast('ID not recognized', 5000, 'red');

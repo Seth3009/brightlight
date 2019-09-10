@@ -29,7 +29,7 @@ nav
           span#location = @room_name || 'Choose location'
           i.material-icons.right arrow_drop_down
     
-.card-panel#room data-ip="#{@ip}" data-room_name="#{@room_name}"
+.card-panel#room data-ip="#{@ip}" data-location="#{@location}"
   table.compact.striped
     thead
       tr
@@ -48,5 +48,6 @@ nav
             td = log.name
             td = log.kind
 
-.toolbar.z-index-1
-  = will_paginate @logs
+- if @logs
+  .toolbar.z-index-1
+    = will_paginate @logs

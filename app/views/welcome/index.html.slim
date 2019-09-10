@@ -356,7 +356,11 @@
                 li
                   = link_to 'Door Access Logs', door_access_logs_path
                 li
+                  = link_to 'Door Tap', list_door_access_logs_path
+                li
                   = link_to 'Activity Schedules', activity_schedules_path
+                li
+				        	= link_to "Rooms", rooms_path
 
     - if can? :manage, DiknasReportCard
       .col.m4.s12

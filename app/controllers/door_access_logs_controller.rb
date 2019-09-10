@@ -32,7 +32,7 @@ class DoorAccessLogsController < ApplicationController
     @rooms = Room.all
     if params[:id]
       room = Room.find params[:id]
-      @room_name = room.room_name rescue nil
+      @location = room.location rescue nil
       @ip = room.ip_address rescue nil
       @logs = DoorAccessLog.loc_params(room.location)
               .order(:created_at => "desc")

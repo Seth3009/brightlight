@@ -388,7 +388,8 @@ Rails.application.routes.draw do
 
   resources :badges, only: [:new, :create, :edit, :update, :destroy]
   resources :door_access_logs, only: [:index]
-  get '/door_tap/:id' => "door_access_logs#list", as: :list_door_access_logs
+  get '/door_tap'     => "door_access_logs#list", as: :list_door_access_logs
+  get '/door_tap/:id' => "door_access_logs#list"
 
   get  '/search' => "search#index"
   post '/search' => "search#index"
