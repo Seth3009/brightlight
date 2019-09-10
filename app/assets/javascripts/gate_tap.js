@@ -3,11 +3,11 @@ $(document).on("ready page:load page:change", function() {
   $("#access-log").codeScanner({
     minEntryChars: 9,
     onScan: function($element, input) {
-      let badgeId = input.trim();
-      let room_name = $("#room").data("room_name")
-      let dataToSend = { ip: $("#room").data("ip"), id: badgeId };
+      var badgeId = input.trim();
+      var room_name = $("#room").data("room_name")
+      var dataToSend = { ip: $("#room").data("ip"), id: input.trim() };
       var jsonData = JSON.stringify(dataToSend);
-      let url = "/api/tap";
+      var url = "/api/tap";
       console.log("DATA", jsonData);
       $.ajax({
         type: 'POST',
