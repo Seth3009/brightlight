@@ -26,7 +26,7 @@ nav
     ul
       li
         a#location-menu.dropdown-button href="#!" data-activates="location-options" data-beloworigin="true" 
-          span#location = 'Choose location'
+          span#location = @room_name || 'Choose location'
           i.material-icons.right arrow_drop_down
     
 .card-panel#room data-ip="#{@ip}" data-room_name="#{@room_name}"
