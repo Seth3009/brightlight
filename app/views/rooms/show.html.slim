@@ -20,14 +20,15 @@ nav.light
 h5 Badges
 = form_for @room do |f|
   .card-panel
-    .row.header.compact
-      .col.s4 Name 
-      .col.s2 Kind
-      .col.s2 Badge
-      .col.s3.center Action
-    #employees.row.compact
-      = f.fields_for :room_accesses, @room_accesses do |room_access|
-        .nested-fields
+    table.compact 
+      thead 
+        tr
+          th Name 
+          th Kind
+          th Badge
+          th Action
+      tbody#employees
+        = f.fields_for :room_accesses, @room_accesses do |room_access|
           = render 'room_accesses_fields', f: room_access
             
   .toolbar.z-depth-1

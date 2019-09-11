@@ -1,14 +1,14 @@
-
-.col.s4
-  - if f.object.badge
-      = f.object.badge.name
-  - else
-    span.red-text Error! Badge card invalid.
-.col.s2
-  - if f.object.badge
-    = f.object.badge.kind
-.col.s2
-  - if f.object.badge
-    = f.object.badge.code
-.col.s3 
-  = link_to_remove_association "Remove", f, class: "red-text"
+tr.nested-fields
+  td
+    - if f.object.badge
+        = f.object.badge.name
+    - else
+      span.red-text Error! Badge card invalid.
+  td
+    - if f.object.badge
+      = f.object.badge.kind
+  td
+    - if f.object.badge
+      = f.object.badge.code
+  td 
+    = link_to_remove_association "Remove", f, class: "red-text"

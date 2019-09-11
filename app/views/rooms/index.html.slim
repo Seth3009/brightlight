@@ -21,9 +21,8 @@ nav
         th IP Address
         th Public
         th Actions
-        
-      
-      tbody#rooms
+          
+    tbody#rooms
       - @rooms.each do |room|
         tr id="row-#{room.id}"
             = render partial: 'index_row', locals: {room: room}
