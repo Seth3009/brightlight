@@ -1,9 +1,9 @@
 .row
   .col.s6
-    h4 Room Access
+    h4 Attendance: #{@room ? @room.room_name : nil}
     h6 Tap ID card on the scanner
   .col.s5
-    = form_tag({controller:'door_access_logs', action:'list'}, {method:'get'}) do
+    = form_tag({controller:'door_access_logs', action:'list', id:params[:id]}, {method:'get'}) do
       .input-field
         - if params[:search].present?
           i.material-icons.prefix onclick='reset_form()' style='cursor:pointer'
@@ -13,7 +13,7 @@
         input.icon-prefix type="text" name="search" placeholder="Search" value=params[:search]
     javascript:
       function reset_form() {
-        window.location="#{list_door_access_logs_path}"
+        window.location="#{list_door_access_logs_path(id:params[:id])}"
       }
 
 ul#location-options.dropdown-content
@@ -26,7 +26,7 @@ nav
     ul
       li
         a#location-menu.dropdown-button href="#!" data-activates="location-options" data-beloworigin="true" 
-          span#location = @room_name || 'Choose location'
+          span#location = @room.room_name rescue 'Choose location'
           i.material-icons.right arrow_drop_down
     
 .card-panel#room data-ip="#{@ip}" data-location="#{@location}"

@@ -31,10 +31,10 @@ class DoorAccessLogsController < ApplicationController
     @items_per_page = 30
     @rooms = Room.all
     if params[:id]
-      room = Room.find params[:id]
-      @location = room.location rescue nil
-      @ip = room.ip_address rescue nil
-      @logs = DoorAccessLog.loc_params(room.location)
+      @room = Room.find params[:id]
+      @location = @room.location rescue nil
+      @ip = @room.ip_address rescue nil
+      @logs = DoorAccessLog.loc_params(@room.location)
               .order(:created_at => "desc")
               .order("#{sort_column} #{sort_direction}")
               .paginate(page: params[:page], per_page: @items_per_page)
