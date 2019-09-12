@@ -79,6 +79,7 @@ nav
                 .item = @requisition.event.description
           li.row.collection-item
             = form_tag new_purchase_order_path, method: :get do
+              = hidden_field_tag :req, @requisition.id
               .col.s12
                 .label.left Requested Items
                 -if can? :process, Requisition
@@ -94,8 +95,7 @@ nav
                   .col.s1.m1 = "#{i}."
                   .col.s11.m3 = req_item.description
                   .col.s6.m2 = "#{req_item.qty_reqd} #{req_item.unit}"
-                  .col.s6.m2.right-align
-                     = currency(req_item.est_price, currency:req_item.currency)
+                  .col.s6.m2.right-align = currency(req_item.est_price, currency:req_item.currency) || '--'
                   .col.s6.m2 = req_item.needed_by_date
                   .col.s6.m2 
                     -if req_item.order_item.present?
@@ -103,7 +103,6 @@ nav
                         = req_item.order_item.purchase_order.order_num
                         i.material-icons.left open_in_new
                     -elsif (@requisition.approved? || @requisition.open?) && can?(:process, Requisition)
-                      = hidden_field_tag :req, @requisition.id
                       input.checkbox type="checkbox" id="reqitem-#{req_item.id}" name="items[#{req_item.id}]"
                       / This label is required by Materialize CSS for the checkbox to work
                       = label_tag "reqitem-#{req_item.id}", ""
