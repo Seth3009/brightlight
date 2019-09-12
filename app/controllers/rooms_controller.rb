@@ -1,5 +1,6 @@
 class RoomsController < ApplicationController
   before_action :set_room, only: [:show, :edit, :update, :destroy, :badges, :add_badges]
+  before_action :sortable_columns, only: [:show]
 
   # GET /rooms
   # GET /rooms.json
@@ -12,7 +13,9 @@ class RoomsController < ApplicationController
   # GET /rooms/1.json
   def show
     authorize! :read, Room
-    @room_accesses = RoomAccess.where(room: @room).includes(:badge)
+    @room_accesses = RoomAccess.with_student_and_current_grade_section
+                      .where(room: @room)
+                      .order("#{sort_column} #{sort_direction}")
   end
 
   # GET /rooms/new
@@ -123,5 +126,10 @@ class RoomsController < ApplicationController
     def room_params
       params.require(:room).permit(:room_code, :room_name, :location, :ip_address, :public_access,
                           {:room_accesses_attributes => [:id, :badge_id, :room_id, :_destroy]})
+    end
+
+    private
+    def sortable_columns     
+      [:name, :gs_name, :kind, :code ]
     end
 end

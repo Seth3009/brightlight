@@ -1,14 +1,14 @@
 tr.nested-fields
   td
-    - if f.object.badge
-        = f.object.badge.name
+    - if f.object.name
+        = f.object.name
     - else
       span.red-text Error! Badge card invalid.
   td
-    - if f.object.badge
-      = f.object.badge.kind
+    = f.object.gs_name
   td
-    - if f.object.badge
-      = f.object.badge.code
+    = f.object.kind
+  td
+    = f.object.code
   td 
     = link_to_remove_association "Remove", f, class: "red-text"

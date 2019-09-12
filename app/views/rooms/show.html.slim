@@ -23,9 +23,10 @@ h5 Badges
     table.compact 
       thead 
         tr
-          th Name 
-          th Kind
-          th Badge
+          th = sort_link "name" 
+          th = sort_link "gs_name", "Grade Section"
+          th = sort_link "kind"
+          th = sort_link "code", "Badge"
           th Action
       tbody#employees
         = f.fields_for :room_accesses, @room_accesses do |room_access|
