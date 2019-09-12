@@ -130,11 +130,11 @@ class Student < ActiveRecord::Base
   end
 
 	def current_grade_section
-		grade_section_with_academic_year_id(AcademicYear.current_id)
+		grade_section_with_academic_year_id(AcademicYear.current_id || AcademicYear.current.id)
 	end
 
 	def current_roster_no
-		roster_no_with_academic_year_id(AcademicYear.current_id)
+		roster_no_with_academic_year_id(AcademicYear.current_id || AcademicYear.current.id)
 	end
 
 	def roster_no_with_academic_year_id(academic_year_id)
