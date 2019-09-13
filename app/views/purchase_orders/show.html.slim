@@ -79,50 +79,61 @@ nav
 
 h5 Items
 .card-panel
-  table.compact.striped
-    thead
-      tr
-        th.wd25 Description
-        th.right-align Qty
-        th Unit
-        th.right-align Unit price
-        th.right-align Disc.
-        th.right-align Est.Tax
-        th.right-align Non-reccuring
-        th.right-align Shipping
-        th.right-align Total
-        -unless @purchase_order.requested?
-          th.right-align Actual
-        th.right-align Link
-
-    tbody
-      - @purchase_order.order_items.each do |item|
-        tr.compact
-          td.wd25 
-            = item.description
-            i.material
-          td.right-align = item.quantity
-          td = item.unit
-          td.right-align = currency(item.unit_price, currency: item.currency)
-          td.right-align = currency(item.discount, currency: item.currency)
-          td.right-align = currency(item.est_tax, currency: item.currency)
-          td.right-align = currency(item.non_recurring, currency: item.currency)
-          td.right-align = currency(item.shipping, currency: item.currency)
-          td.right-align = currency(item.line_amount, currency: item.currency)
+  = form_tag new_delivery_path, method: :get do
+    = hidden_field_tag :po, @purchase_order.id
+    .right-align
+      -if can? :create, Delivery
+        button.right.btn#create-delivery-button type="submit" data-disable=true disabled=true Receiving
+    table.compact.striped
+      thead
+        tr
+          th.wd25 Description
+          th.right-align Qty
+          th Unit
+          th.right-align Unit price
+          th.right-align Disc.
+          th.right-align Est.Tax
+          th.right-align Non-reccuring
+          th.right-align Shipping
+          th.right-align Total
           -unless @purchase_order.requested?
-            td.right-align = currency(item.actual_amt, currency: item.currency) || 'N/A'
-          td 
-            -if item.req_item.requisition
-              = link_to item.req_item.requisition, target: 'blank'
-                i.material-icons.right.tooltipped data-position="bottom" data-delay="50" data-tooltip="Purchase Request" open_in_new
-            -if item.remark.present?
-              i.material-icons.right.orange-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="#{item.remark}" speaker_notes
-    tfoot
-      tr.compact
-        td.right-align colspan=8 Subtotal
-        td.right-align = currency(@purchase_order.order_items.sum(:line_amount), currency: @purchase_order.currency) || 'N/A'
-        -unless @purchase_order.requested?
-          td.right-align = currency(@purchase_order.order_items.sum(:actual_amt), currency: @purchase_order.currency) || 'N/A'
+            th.right-align Actual
+          th.right-align P.R.
+          th.right-align Receiving
+
+      tbody
+        - @purchase_order.order_items.each do |item|
+          tr.compact
+            td.wd25 
+              = item.description
+              i.material
+            td.right-align = item.quantity
+            td = item.unit
+            td.right-align = currency(item.unit_price, currency: item.currency)
+            td.right-align = currency(item.discount, currency: item.currency)
+            td.right-align = currency(item.est_tax, currency: item.currency)
+            td.right-align = currency(item.non_recurring, currency: item.currency)
+            td.right-align = currency(item.shipping, currency: item.currency)
+            td.right-align = currency(item.line_amount, currency: item.currency)
+            -unless @purchase_order.requested?
+              td.right-align = currency(item.actual_amt, currency: item.currency) || 'N/A'
+            td 
+              -if item.req_item.requisition
+                = link_to item.req_item.requisition, target: 'blank'
+                  i.material-icons.right.tooltipped data-position="bottom" data-delay="50" data-tooltip="Purchase Request" open_in_new
+              -if item.remark.present?
+                i.material-icons.right.orange-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="#{item.remark}" speaker_notes
+            td.right-align
+              - if can?(:create, Delivery)
+                input.checkbox type="checkbox" id="item-#{item.id}" name="item[#{item.id}]"
+                / This label is required by Materialize CSS for the checkbox to work
+                = label_tag "item-#{item.id}", ""
+      tfoot
+        tr.compact
+          td.right-align colspan=8 Subtotal
+          td.right-align = currency(@purchase_order.order_items.sum(:line_amount), currency: @purchase_order.currency) || 'N/A'
+          -unless @purchase_order.requested?
+            td.right-align = currency(@purchase_order.order_items.sum(:actual_amt), currency: @purchase_order.currency) || 'N/A'
 .row
   .col.s12.m8
     .card-panel
@@ -159,3 +170,13 @@ h5 Items
       .display-field
         .label Remaining Amount
         .item = currency(@purchase_order.total_amount - @purchase_order.down_payment, currency: @purchase_order.currency) rescue nil
+
+javascript:
+  $(document).on("click", "input.checkbox", function(event) {
+    var checked = $("input.checkbox:checked").length;
+    if (checked > 0) {
+      $("#create-delivery-button").prop("disabled", false);
+    } else {
+      $("#create-delivery-button").prop("disabled", true)
+    }
+  })

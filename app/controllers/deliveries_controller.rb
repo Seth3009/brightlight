@@ -14,7 +14,9 @@ class DeliveriesController < ApplicationController
 
   # GET /deliveries/new
   def new
-    @delivery = Delivery.new
+    @po = PurchaseOrder.find params[:po]
+    @delivery = Delivery.new_from_po @po
+    @delivery_items = @delivery.delivery_items
   end
 
   # GET /deliveries/1/edit

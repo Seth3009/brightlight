@@ -5,35 +5,87 @@
       ul
         - @delivery.errors.full_messages.each do |message|
           li = message
+  .row
+    .col.s12.m3
+      .card-panel
+        .card-panel-header Supplier
+        .row
+          .col.s12
+            i.material-icons.prefix store
+            .label Supplier
+            .item = @po.supplier.company_name if @po
+          .col.s12
+            i.material-icons.prefix account_circle
+            .label Contact
+            .item = @po.contact if @po
+          .col.s12
+            i.material-icons.prefix phone
+            .label Phone
+            .item = @po.phone_contact if @po
+    .col.s12.m4
+      .card-panel
+        .card-panel-header Purchase Order
+        .row
+          = hidden_field_tag :po, params[:po]
+          .col.s6
+            .label Order No
+            .item = @po.order_num
+          .col.s6
+            .label Order date
+            .item = @po.order_date
+          .col.s12
+            .label Description
+            .item = @po.description
+          .col.s6
+            .label Requestor
+            .item = @po.requestor.name
+          .col.s6
+            .label Department
+            .item = @po.department.name
+          .col.s6
+            .label Due date
+            .item = @po.due_date
+          .col.s6
+            .label Buyer
+            .item = @po.buyer.name
+    .col.s12.m5
+      .card-panel
+        .card-panel-header Delivery
+        .row
+          .input-field.col.s6
+            = f.label :delivery_date, class: "active"
+            = f.date_field :delivery_date, value: Date.today
+          .input-field.col.s6
+            = f.label :status
+            = f.text_field :status, disabled: true, value: @delivery.status
+          .input-field.col.s6
+            = f.label :accepted_by
+            = f.text_field :accepted_by, disabled: true
+          .input-field.col.s6
+            = f.label "Date accepted", class: "active"
+            = f.date_field :accepted_date
+          .input-field.col.s6
+            = f.label :checked_by
+            = f.text_field :checked_by, disabled: true
+          .input-field.col.s6
+            = f.label "Date checked", class: "active"
+            = f.date_field :checked_date
+          .input-field.col.s12
+            = f.label :notes
+            = f.text_field :notes
 
-  .field
-    = f.label :purchase_order
-    = f.text_field :purchase_order
-  .field
-    = f.label :delivery_date
-    = f.text_field :delivery_date
-  .field
-    = f.label :address,
-    = f.text_field :address,
-  .field
-    = f.label :accepted_by
-    = f.text_field :accepted_by
-  .field
-    = f.label :accepted_date
-    = f.text_field :accepted_date
-  .field
-    = f.label :checked_by
-    = f.text_field :checked_by
-  .field
-    = f.label :checked_date
-    = f.text_field :checked_date
-  .field
-    = f.label :notes,
-    = f.text_field :notes,
-  .field
-    = f.label :method,
-    = f.text_field :method,
-  .field
-    = f.label :status
-    = f.text_field :status
-  .actions = f.submit
+  nav.light
+    .nav-wrapper
+      .brand-logo.hide-on-med-and-down style="margin-left: 20px; font-size:1.5em"
+        | Items
+      ul.right
+        li
+          = link_to_add_association f, :delivery_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#deliveries'
+            ' Add Item
+            i.material-icons.left playlist_add
+  
+  = render 'delivery_items', f: f
+
+  .toolbar.z-depth-1 
+    = link_to 'Cancel', purchase_order_path(@po), class: "waves-effect waves-teal btn-flat"
+    button.btn.waves-effect.waves-light type="submit" data-disable=true Save

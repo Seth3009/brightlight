@@ -1,0 +1,19 @@
+.card-panel
+  .horizontal-scroll
+    table.compact.striped
+      thead
+        tr
+          th Description
+          th.right-align Qty
+          th Unit
+          th Accept
+          th Reject
+          th Notes
+          th colspan=2 Action
+      tbody#deliveries
+        -if @delivery_items.present?
+          = f.fields_for :delivery_items, @delivery_items do |delivery_item|
+            = render 'delivery_item_fields', f: delivery_item
+        -else
+          = f.fields_for :delivery_items do |delivery_item|
+            = render 'delivery_item_fields', f: delivery_item
