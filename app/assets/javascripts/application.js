@@ -34,6 +34,7 @@
 //= require messages
 //= require settings
 //= require gate_tap
+//= require filterrific_checkbox
 //= require jquery.timepicker.min.js
 //= require jquery.combobox
 //= require tinymce
