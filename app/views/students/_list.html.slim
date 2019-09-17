@@ -7,6 +7,8 @@
     table.compact.striped
       tr
         th 
+          = check_box_tag "add_all"
+          = label_tag "add_all", "All"
         th Name
         th Grade 
         th Family number
@@ -14,7 +16,6 @@
       - students.each do |student|
         tr
           td
-            /input.checkbox type="checkbox" id="cb-#{student.id}"
             = check_box_tag "add[#{student.id}]"
             = label_tag "add[#{student.id}]", ""
           td = student.name

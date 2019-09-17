@@ -23,11 +23,16 @@ ul#location-options.dropdown-content
       li = link_to room.room_name, list_door_access_logs_path(id:room.id)
 nav
   .nav-wrapper   
-    ul
-      li
-        a#location-menu.dropdown-button href="#!" data-activates="location-options" data-beloworigin="true" 
-          span#location = @room.room_name rescue 'Choose location'
-          i.material-icons.right arrow_drop_down
+    = form_tag({controller:'door_access_logs', action:'list', id:params[:id]}, {method:'get'}) do
+      ul
+        li
+          a#location-menu.dropdown-button href="#!" data-activates="location-options" data-beloworigin="true" 
+            span#location = @room.room_name rescue 'Choose location'
+            i.material-icons.right arrow_drop_down
+        li
+          = date_field nil, :date, value: params[:date] || Date.today
+        li
+          button.btn type="submit" Go
     
 .card-panel#room data-ip="#{@ip}" data-location="#{@location}"
   table.compact.striped

@@ -35,6 +35,7 @@ class DoorAccessLogsController < ApplicationController
       @location = @room.location rescue nil
       @ip = @room.ip_address rescue nil
       @logs = DoorAccessLog.loc_params(@room.location)
+              .for_date(params[:date].to_date || Date.today)
               .order(:created_at => "desc")
               .order("#{sort_column} #{sort_direction}")
               .paginate(page: params[:page], per_page: @items_per_page)

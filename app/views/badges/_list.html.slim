@@ -27,10 +27,3 @@
   .card-action
     button.btn.waves-effect.waves-light type="submit" Add
     = link_to "Close", room_path(params[:id]), class: "waves-effect waves-light btn-flat"
-
-javascript:
-  $(document).on('page:load ready', function(){
-    $("#add_all").change( function() {
-      $("[name^='add']").prop('checked', $("#add_all").is(":checked"));
-    }); 
-  });

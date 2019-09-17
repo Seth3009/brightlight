@@ -20,10 +20,13 @@ class ActivitySchedulesController < ApplicationController
   # GET /activity_schedules/1.json
   def show   
     authorize! :read, ActivitySchedule                        
-    @students = StudentActivity.where(academic_year:@year_id,activity_schedule:@activity_schedule)    
-    @grade_sections = GradeSectionsStudent.joins('left join grade_sections on grade_sections.id = grade_sections_students.grade_section_id')
-                      .select('student_id','grade_sections.name as name')
-                      .where(academic_year_id:@year_id)
+    @activities = StudentActivity.student_query
+                  .where(activity_schedule: @activity_schedule)
+                  .order("#{sort_column} #{sort_direction}")
+    # @students = StudentActivity.where(academic_year:@year_id,activity_schedule:@activity_schedule)    
+    # @grade_sections = GradeSectionsStudent.joins('left join grade_sections on grade_sections.id = grade_sections_students.grade_section_id')
+    #                   .select('student_id','grade_sections.name as name')
+    #                   .where(academic_year_id:@year_id)
   end
 
   # GET /activity_schedules/new
@@ -113,16 +116,22 @@ class ActivitySchedulesController < ApplicationController
   def add_students    
     authorize! :update, ActivitySchedule 
     academic_year_id = params[:year]
-    params[:add].map {|id,on| Student.find(id)}.each do |student|
-      @sa = StudentActivity.new(student_id:student.id, activity_schedule_id:@activity_schedule.id, academic_year_id:@year_id)
-      if @sa.save
-        next
-      else
-        #render :students
-        redirect_to students_activity_schedule_url, alert: 'Students already added' and return
-      end
+    if params[:add].present?
+      @activity_schedule.student_activities.create params[:add].map {|id, on| {academic_year_id: academic_year_id, student_id: id}}
+      redirect_to activity_schedule_path(@activity_schedule, year:params[:year]), notice: 'Badge Card successfully added'
+    else
+      head :no_content
     end
-    redirect_to activity_schedule_path(@activity_schedule, year:params[:year]), notice: 'Students successfully added'
+    # params[:add].map {|id,on| Student.find(id)}.each do |student|
+    #   @sa = StudentActivity.new(student_id:student.id, activity_schedule_id:@activity_schedule.id, academic_year_id:@year_id)
+    #   if @sa.save
+    #     next
+    #   else
+    #     #render :students
+    #     redirect_to students_activity_schedule_url, alert: 'Students already added' and return
+    #   end
+    # end
+    # redirect_to activity_schedule_path(@activity_schedule, year:params[:year]), notice: 'Students successfully added'
   end
 
   private
@@ -140,5 +149,9 @@ class ActivitySchedulesController < ApplicationController
     def activity_schedule_params
       params.require(:activity_schedule).permit(:activity, :start_date, :end_date, :sun_start, :sun_end, :mon_start, :mon_end, :tue_start, :tue_end, :wed_start, :wed_end, :thu_start, :thu_end, :fri_start, :fri_end, :sat_start, :sat_end, :is_active, :academic_year_id,
                                                 {:student_activities_attributes => [:id, :student_id, :activity_schedule_id, :_destroy]})
+    end
+
+    def sortable_columns     
+      [:name, :gs_id]
     end
 end

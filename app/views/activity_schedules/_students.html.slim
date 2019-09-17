@@ -15,13 +15,13 @@ nav.light
     .label Student List
 
     .row.header.compact
-      .col.s4 Name 
-      .col.s2 Grade
+      .col.s4 = sort_link :name
+      .col.s2 = sort_link :gs_id, "Grade" 
       .col.s2.center Action
     #students.row.compact
-      = f.fields_for :student_activities, @students do |student_activity|
-          .nested-fields
-            = render 'student_activities_fields', f: student_activity
+      = f.fields_for :student_activities, @activities do |student_activity|
+        .nested-fields
+          = render 'student_activities_fields', f: student_activity
             
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" Save

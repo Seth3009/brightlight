@@ -9,6 +9,9 @@ class DoorAccessLog < ActiveRecord::Base
       DoorAccessLog.all
     end
   }
+
+  scope :for_date, -> date { where(created_at: date.beginning_of_day..date.end_of_day) }
+
   def self.insert_door_log(person_id,kind,card,location,name)
     if kind == "Employee"
       DoorAccessLog.create(employee_id:person_id, kind:kind, card:card, location:location, name:name)
