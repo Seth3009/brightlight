@@ -6,6 +6,7 @@ class LeaveRequestsController < ApplicationController
   # GET /leave_requests
   # GET /leave_requests.json
   def index
+    authorize! :read, LeaveRequest
     @dept = Department.find_by_code('HR')              
     @hrmanager = @dept.manager
     @hrvicemanager = @dept.vice_manager
@@ -33,7 +34,7 @@ class LeaveRequestsController < ApplicationController
   def archives
     # authorize! :approve, @leave_request if params[:page] == 'spv'
     # authorize! :validate, LeaveRequest if params[:page] == 'hr'
-
+    authorize! :read, LeaveRequest
    
     @department = @employee.department       
     @dept = Department.find_by_code('HR')              
@@ -83,7 +84,8 @@ class LeaveRequestsController < ApplicationController
   
   # GET /leave_requests/1
   # GET /leave_requests/1.json
-  def show    
+  def show
+    authorize! :read, @leave_request
     if @leave_request.employee == @employee || can?(:update,@leave_request)    
       @commentable = @leave_request      
     else
@@ -95,6 +97,7 @@ class LeaveRequestsController < ApplicationController
 
   # GET /leave_requests/new
   def new
+    authorize! :create, LeaveRequest
     @leave_request = LeaveRequest.new
   end
 
@@ -106,6 +109,7 @@ class LeaveRequestsController < ApplicationController
   # POST /leave_requests
   # POST /leave_requests.json
   def create
+    authorize! :create, LeaveRequest
     @leave_request = LeaveRequest.new(leave_request_params)
     authorize! :create, @leave_request
 
@@ -231,7 +235,7 @@ class LeaveRequestsController < ApplicationController
 
   # DELETE /leave_requests/1/cancel
   def cancel
-     authorize! :cancel, @leave_request
+    authorize! :cancel, @leave_request
     if params[:byemp] == "yes"
       @leave_request.cancel_by_employee
     else

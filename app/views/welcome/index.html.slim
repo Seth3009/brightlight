@@ -140,43 +140,44 @@
                 ul
                   li
                     = link_to 'Book Maintenance', settings_inventory_mtce_path	
-
-    .col.m4.s12
-      .card.horizontal.widget
-        .card-image.waves-effect.waves-block.waves-light
-          = image_tag 'schooldropoff.jpg', class:'activator'
-        .card-stacked
-          .card-content
-            span.card-title.activator.grey-text.text-darken-4 
+    
+    - if can? :read, Carpool
+      .col.m4.s12
+        .card.horizontal.widget
+          .card-image.waves-effect.waves-block.waves-light
+            = image_tag 'schooldropoff.jpg', class:'activator'
+          .card-stacked
+            .card-content
+              span.card-title.activator.grey-text.text-darken-4 
+                |Carpool
+                i.material-icons.right more_vert
+              p Carpool app for callers and display for TV
+          .card-reveal
+            span.card-title.grey-text.text-darken-4
               |Carpool
-              i.material-icons.right more_vert
-            p Carpool app for callers and display for TV
-        .card-reveal
-          span.card-title.grey-text.text-darken-4
-            |Carpool
-            i.material-icons.right close
-          .card-tabs
-            ul.tabs.tabs-fixed-width.tabs-transparent
-              li.tab
-                a.active href="#tab-carpool1" Tasks
-              li.tab
-                a href="#tab-carpool2" Display
-          .card-content
-            #tab-carpool1
-              ul
-                li
-                  = link_to 'Manage Carpool', "/phx"
-                - if can? :manage, Carpool
-                  li 
-                    = link_to 'Manage Transports and Smartcards', transports_path(type:'shuttle')
-            #tab-carpool2
-              ul
-                li
-                  = link_to 'TV Shuttle GS', "/phx?shuttle=gs"
-                li
-                  = link_to 'TV Shuttle SOL/SOR', "/phx?shuttle=sol"
-                li
-                  = link_to 'TV Car Riders', "/phx?ready=1"
+              i.material-icons.right close
+            .card-tabs
+              ul.tabs.tabs-fixed-width.tabs-transparent
+                li.tab
+                  a.active href="#tab-carpool1" Tasks
+                li.tab
+                  a href="#tab-carpool2" Display
+            .card-content
+              #tab-carpool1
+                ul
+                  li
+                    = link_to 'Manage Carpool', "/phx"
+                  - if can? :manage, Carpool
+                    li 
+                      = link_to 'Manage Transports and Smartcards', transports_path(type:'shuttle')
+              #tab-carpool2
+                ul
+                  li
+                    = link_to 'TV Shuttle GS', "/phx?shuttle=gs"
+                  li
+                    = link_to 'TV Shuttle SOL/SOR', "/phx?shuttle=sol"
+                  li
+                    = link_to 'TV Car Riders', "/phx?ready=1"
 
     .col.m4.s12
       .card.horizontal.widget
@@ -215,41 +216,42 @@
                 li
                   = link_to 'Employees', employees_path
 
-    .col.m4.s12
-      .card.horizontal.widget
-        .card-image.waves-effect.waves-block.waves-light
-          = image_tag 'HR.jpg', class:'activator'
-        .card-stacked
-          .card-content
-            span.card-title.activator.grey-text.text-darken-4 
+    - if can? :create, LeaveRequest
+      .col.m4.s12
+        .card.horizontal.widget
+          .card-image.waves-effect.waves-block.waves-light
+            = image_tag 'HR.jpg', class:'activator'
+          .card-stacked
+            .card-content
+              span.card-title.activator.grey-text.text-darken-4 
+                |HR
+                i.material-icons.right more_vert
+              p Submit and manage your Leave Requests
+              = link_to leave_requests_path
+                .left Leave Request
+                i.material-icons chevron_right
+          .card-reveal
+            span.card-title.grey-text.text-darken-4
               |HR
-              i.material-icons.right more_vert
-            p Submit and manage your Leave Requests
-            = link_to leave_requests_path
-              .left Leave Request
-              i.material-icons chevron_right
-        .card-reveal
-          span.card-title.grey-text.text-darken-4
-            |HR
-            i.material-icons.right close
-          .card-tabs
-            ul.tabs.tabs-fixed-width.tabs-transparent
-              li.tab
-                a.active href="#tab-leave-requests" Leave Requests
-              -if can? :manage, Employee
+              i.material-icons.right close
+            .card-tabs
+              ul.tabs.tabs-fixed-width.tabs-transparent
                 li.tab
-                  a href="#tab-hrd" HR Department
-          .card-content
-            #tab-leave-requests
-              ul
-                li
-                  = link_to 'Leave Request', leave_requests_path
-            -if can? :manage, Employee
-              #tab-hrd
+                  a.active href="#tab-leave-requests" Leave Requests
+                -if can? :manage, Employee
+                  li.tab
+                    a href="#tab-hrd" HR Department
+            .card-content
+              #tab-leave-requests
                 ul
-                  li 
-                    = link_to 'Employees', employees_path
-    
+                  li
+                    = link_to 'Leave Request', leave_requests_path
+              -if can? :manage, Employee
+                #tab-hrd
+                  ul
+                    li 
+                      = link_to 'Employees', employees_path
+      
     -if can? :manage, SuppliesTransaction
       .col.m4.s12
         .card.horizontal.widget

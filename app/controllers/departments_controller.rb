@@ -4,30 +4,35 @@ class DepartmentsController < ApplicationController
   # GET /departments
   # GET /departments.json
   def index
+    authorize! :read, Department
     @departments = Department.all.order(:name)
   end
 
   # GET /departments/1
   # GET /departments/1.json
   def show
+    authorize! :read, Department
     @manager = @department.manager
     @members = @department.employees
   end
 
   # GET /departments/new
   def new
+    authorize! :create, Department
     @department = Department.new
     @employees = Employee.all
   end
 
   # GET /departments/1/edit
   def edit
+    authorize! :update, Department
     @employees = Employee.all
   end
 
   # POST /departments
   # POST /departments.json
   def create
+    authorize! :create, Department
     @department = Department.new(department_params)
 
     respond_to do |format|
@@ -45,6 +50,7 @@ class DepartmentsController < ApplicationController
   # PATCH/PUT /departments/1
   # PATCH/PUT /departments/1.json
   def update
+    authorize! :update, Department
     respond_to do |format|
       if @department.update(department_params)
         format.html { redirect_to departments_url, notice: 'Department was successfully updated.' }
@@ -60,7 +66,7 @@ class DepartmentsController < ApplicationController
   # DELETE /departments/1
   # DELETE /departments/1.json
   def destroy
-    
+    authorize! :destroy, Department
     respond_to do |format|
       if @department.destroy
         format.html { redirect_to departments_url, notice: 'Department was successfully destroyed.' }
