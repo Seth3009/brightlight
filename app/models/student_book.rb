@@ -124,9 +124,6 @@ class StudentBook < ActiveRecord::Base
   end
 
   def self.create_book_loan(sb)
-    logger.debug "Creating associated book_loan"
-    #sb ||= self
-    logger.debug sb
     book_title_id = sb.book_edition.try(:book_title_id)
     book_title = BookTitle.where(id: book_title_id).take
     standard_book = StandardBook.where(book_title_id: book_title_id, academic_year_id:sb.academic_year_id).take
@@ -155,8 +152,6 @@ class StudentBook < ActiveRecord::Base
 
   private
     def create_associated_book_loan
-      logger.debug "SB Callback on create: Creating associated book_loan"
-      logger.debug self.book_copy_id
       book_title_id = self.book_edition.try(:book_title_id)
       book_title = BookTitle.where(id: book_title_id).take
       standard_book = StandardBook.where(book_title_id: book_title_id, academic_year_id:self.academic_year_id).take
