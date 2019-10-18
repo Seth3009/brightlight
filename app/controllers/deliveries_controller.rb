@@ -10,13 +10,24 @@ class DeliveriesController < ApplicationController
   # GET /deliveries/1
   # GET /deliveries/1.json
   def show
+    @po = @delivery.purchase_order
   end
 
   # GET /deliveries/new
   def new
-    @po = PurchaseOrder.find params[:po]
-    @delivery = Delivery.new_from_po @po
-    @delivery_items = @delivery.delivery_items
+    authorize! :create, Delivery
+    if params[:po]
+      @po = PurchaseOrder.find params[:po]
+      @delivery = Delivery.new_from_po @po
+      if params[:items]
+        order_items = OrderItem.where(id: params[:items].map(&:first))
+        @delivery_items = DeliveryItem.new_from_order_items(order_items) 
+      else
+        @delivery_items = @delivery.delivery_items
+      end
+    else
+      @delivery = Delivery.new
+    end
   end
 
   # GET /deliveries/1/edit
@@ -71,6 +82,8 @@ class DeliveriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def delivery_params
-      params.require(:delivery).permit(:purchase_order_id, :delivery_date, :address, :accepted_by_id, :accepted_date, :checked_by_id, :checked_date, :notes, :method, :status)
+      params.require(:delivery).permit(:purchase_order_id, :delivery_date, :address, :accepted_by_id, :accepted_date, 
+        :checked_by_id, :checked_date, :notes, :method, :status,
+        {:delivery_items_attributes => [:quantity, :unit, :order_item_id, :is_accepted, :notes, :_destroy, :id ]})
     end
 end

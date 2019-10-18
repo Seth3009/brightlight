@@ -1,36 +1,123 @@
-p#notice = notice
+-title = 'Received delivery'
+h4 Received delivery (PO: #{@delivery.purchase_order ? @delivery.purchase_order.order_num : "Missing order" })
 
-p
-  strong Purchase order:
-  = @delivery.purchase_order
-p
-  strong Delivery date:
-  = @delivery.delivery_date
-p
-  strong Address,:
-  = @delivery.address,
-p
-  strong Accepted by:
-  = @delivery.accepted_by
-p
-  strong Accepted date:
-  = @delivery.accepted_date
-p
-  strong Checked by:
-  = @delivery.checked_by
-p
-  strong Checked date:
-  = @delivery.checked_date
-p
-  strong Notes,:
-  = @delivery.notes,
-p
-  strong Method,:
-  = @delivery.method,
-p
-  strong Status:
-  = @delivery.status
+nav.light
+  .nav-wrapper
+    ul
+      li
+        = link_to deliveries_path
+          |Deliveries
+          i.material-icons.left chevron_left
+      li
+        = link_to 'Purchase Order', purchase_order_path(@po)
+      
+    ul.right
+      -if can? :update, @delivery
+        li 
+          = link_to edit_delivery_path(@delivery)
+            i.material-icons edit
 
-= link_to 'Edit', edit_delivery_path(@delivery)
-'|
-= link_to 'Back', deliveries_path
+.card-panel
+  .row
+    .col.s12.m3
+      .card-panel
+        .card-panel-header Supplier
+        .row
+          .col.s12
+            i.material-icons.prefix store
+            .label Supplier
+            .item = @po.supplier.company_name if @po
+          .col.s12
+            i.material-icons.prefix account_circle
+            .label Contact
+            .item = @po.contact if @po
+          .col.s12
+            i.material-icons.prefix phone
+            .label Phone
+            .item = @po.phone_contact if @po
+    .col.s12.m4
+      .card-panel
+        .card-panel-header Purchase Order
+        .row
+          .col.s6
+            .label Order No
+            .item = @po.order_num
+          .col.s6
+            .label Order date
+            .item = @po.order_date
+          .col.s12
+            .label Description
+            .item = @po.description
+          .col.s6
+            .label Requestor
+            .item = @po.requestor.name
+          .col.s6
+            .label Department
+            .item = @po.department.name
+          .col.s6
+            .label Due date
+            .item = @po.due_date
+          .col.s6
+            .label Buyer
+            .item = @po.buyer.name
+    .col.s12.m5
+      .card-panel
+        .card-panel-header Delivery
+        .row
+          .col.s6
+            .label Delivery Date
+            .item = @delivery.delivery_date
+          .col.s6
+            .label Status
+            .item = @delivery.status
+          .col.s6
+            .label Accepted By
+            .item = @delivery.accepted_by
+          .col.s6
+            .label Accepted Date
+            .item = @delivery.accepted_date
+          .col.s6
+            .label Checked By
+            .item = @delivery.checked_by
+          .col.s6
+            .label Checked Date
+            .item = @delivery.checked_date
+          .col.s12
+            .label Notes
+            .item = @delivery.notes
+
+  nav.light
+    .nav-wrapper
+      .brand-logo.hide-on-med-and-down style="margin-left: 20px; font-size:1.5em"
+        | Items
+
+  .card-panel
+    .horizontal-scroll
+      table.compact.striped
+        thead
+          tr
+            th Description
+            th.right-align Qty
+            th Unit
+            th Accept
+            th Notes
+            th Action
+        tbody#deliveries
+          - @delivery.delivery_items.each do |item|
+            tr
+              td.wd25
+                = item.order_item.description
+              td.right-align
+                = item.quantity
+              td
+                = item.unit
+              td
+                = item.is_accepted? ? "Accepted" : "Rejected"
+              td
+                = item.notes
+              td
+                
+
+/ = link_to 'Edit', edit_delivery_path(@delivery)
+/ '|
+/ = link_to 'Back', deliveries_path

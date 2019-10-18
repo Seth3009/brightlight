@@ -1,9 +1,9 @@
 tr.compact.nested-fields
-  /= f.hidden_field :order_item_id
+  = f.hidden_field :order_item_id
   td.wd25
     .input-field
-      /-if f.object.order_item.present? 
-        /= f.text_field, value: f.object.order_item.description, readonly: true
+      -if f.object.order_item.present? 
+        = text_field_tag :description, f.object.order_item.description, readonly: true
   td
     .input-field
       = f.number_field :quantity, class: "right-align"
@@ -12,15 +12,15 @@ tr.compact.nested-fields
       = f.text_field :unit
   td
     .input-field
-      = f.check_box :is_accepted
-      = f.label :is_accepted
+      = f.radio_button :is_accepted, true, {class: "with-gap"}
+      = f.label :is_accepted, "Yes", value: true
   td
     .input-field
-      = f.check_box :is_rejected
-      = f.label :is_rejected
+      = f.radio_button :is_accepted, false, {class: "with-gap"}
+      = f.label :is_accepted, "No", value: false
   td
     .input-field
       = f.text_field :notes
   td
-    /= link_to_remove_association f, class: "waves-effect waves-teal red-text"
-      /i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete
+    = link_to_remove_association f, class: "waves-effect waves-teal red-text"
+      i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete

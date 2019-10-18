@@ -1,4 +1,8 @@
 = form_for @delivery do |f|
+  = f.hidden_field :purchase_order_id
+  = f.hidden_field :checked_by, value: current_user.id
+  = f.hidden_field :checked_date, value: Date.today
+
   - if @delivery.errors.any?
     #error_explanation
       h2 = "#{pluralize(@delivery.errors.count, "error")} prohibited this delivery from being saved:"
@@ -26,7 +30,6 @@
       .card-panel
         .card-panel-header Purchase Order
         .row
-          = hidden_field_tag :po, params[:po]
           .col.s6
             .label Order No
             .item = @po.order_num

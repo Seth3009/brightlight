@@ -124,8 +124,11 @@ h5 Items
               -if item.remark.present?
                 i.material-icons.right.orange-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="#{item.remark}" speaker_notes
             td.right-align
+              - if item.delivery_items.present?
+                = link_to delivery_path(item.delivery_items.first.delivery)
+                  i.material-icons.right visibility
               - if can?(:create, Delivery)
-                input.checkbox type="checkbox" id="item-#{item.id}" name="item[#{item.id}]"
+                input.checkbox type="checkbox" id="item-#{item.id}" name="items[#{item.id}]"
                 / This label is required by Materialize CSS for the checkbox to work
                 = label_tag "item-#{item.id}", ""
       tfoot

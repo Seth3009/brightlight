@@ -5,8 +5,10 @@ class Delivery < ActiveRecord::Base
   belongs_to :created_by, class_name: 'User'
   belongs_to :last_updated_by, class_name: 'User'
 
-  has_many :delivery_items
+  has_many :delivery_items, dependent: :destroy
   has_many :order_items, through: :delivery_items
+
+  accepts_nested_attributes_for :delivery_items, reject_if: :all_blank, allow_destroy: true
 
   def self.new_from_po(po)
     delivery = Delivery.new 
