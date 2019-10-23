@@ -1,0 +1,128 @@
+-title = 'Purchase Receive'
+h4 Purchase Receive (PO: #{@purchase_receive.purchase_order ? @purchase_receive.purchase_order.order_num : "Missing order" })
+
+nav.light
+  .nav-wrapper
+    ul
+      li
+        = link_to purchase_receives_path
+          |Purchase Receive List
+          i.material-icons.left chevron_left
+      li
+        = link_to 'Purchase Order', purchase_order_path(@po)
+      
+    ul.right
+      -if can? :update, @purchase_receive
+        li 
+          = link_to edit_purchase_receive_path(@purchase_receive)
+            i.material-icons edit
+
+.card-panel
+  .row
+    .col.s12.m3
+      .card-panel
+        .card-panel-header 
+          |Supplier
+          = link_to @po.supplier
+            i.material-icons.right visibility
+        .row
+          .col.s12
+            i.material-icons.prefix store
+            .label Supplier
+            .item = @po.supplier.company_name if @po
+          .col.s12
+            i.material-icons.prefix account_circle
+            .label Contact
+            .item = @po.contact if @po
+          .col.s12
+            i.material-icons.prefix phone
+            .label Phone
+            .item = @po.phone_contact if @po
+    .col.s12.m4
+      .card-panel
+        .card-panel-header 
+          |Purchase Order
+          = link_to @po
+            i.material-icons.right visibility
+        .row
+          .col.s6
+            .label Order No
+            .item = @po.order_num
+          .col.s6
+            .label Order date
+            .item = @po.order_date
+          .col.s12
+            .label Description
+            .item = @po.description
+          .col.s6
+            .label Requestor
+            .item = @po.requestor.name
+          .col.s6
+            .label Department
+            .item = @po.department.name
+          .col.s6
+            .label Due date
+            .item = @po.due_date
+          .col.s6
+            .label Buyer
+            .item = @po.buyer.name
+    .col.s12.m5
+      .card-panel
+        .card-panel-header Purchase Receive
+        .row
+          .col.s6
+            .label Date Received
+            .item = @purchase_receive.date_received
+          .col.s6
+            .label Status
+            .item = @purchase_receive.status ? @purchase_receive.status : "--"
+          .col.s6
+            .label Received By
+            .item = @purchase_receive.receiver ? @purchase_receive.receiver.name : "--"
+          .col.s6
+            .label Checked By
+            .item = @purchase_receive.checker ? @purchase_receive.checker.name : "--"
+          .col.s6
+            .label Date Checked
+            .item = @purchase_receive.date_checked
+          .col.s12
+            .label Notes
+            .item = @purchase_receive.notes
+
+  nav.light
+    .nav-wrapper
+      .brand-logo.hide-on-med-and-down style="margin-left: 20px; font-size:1.5em"
+        | Items
+
+  .card-panel
+    .horizontal-scroll
+      table.compact.striped
+        thead
+          tr
+            th Description
+            th.right-align Quantity
+            th Unit
+            th.right-align Qty Accepted
+            th.right-align Qty Rejected
+            th.right-align Partial?
+            th Notes
+
+        tbody#deliveries
+          - @purchase_receive.receive_items.each do |item|
+            tr
+              td.wd25
+                = item.order_item.description
+              td.right-align
+                = item.quantity
+              td
+                = item.unit
+              td.right-align
+                = item.qty_accepted
+              td.right-align
+                = item.qty_rejected
+              td.right-align
+                = item.partial? ? "Yes" : "No"
+              td
+                = item.notes
+
+                

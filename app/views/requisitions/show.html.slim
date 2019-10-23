@@ -96,7 +96,7 @@ nav
                   .col.s11.m3 = req_item.description
                   .col.s6.m2 = "#{req_item.qty_reqd} #{req_item.unit}"
                   .col.s6.m2.right-align = currency(req_item.est_price, currency:req_item.currency) || '--'
-                  .col.s6.m2 = req_item.needed_by_date
+                  .col.s6.m2 = req_item.needed_by_date || "--"
                   .col.s6.m2 
                     -if req_item.order_item.present?
                       = link_to purchase_order_path(req_item.order_item.purchase_order), target: 'blank'

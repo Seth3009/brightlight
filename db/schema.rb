@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190523034049) do
+ActiveRecord::Schema.define(version: 20191018065423) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1601,6 +1601,34 @@ ActiveRecord::Schema.define(version: 20190523034049) do
   add_index "products", ["item_category_id"], name: "index_products_on_item_category_id", using: :btree
   add_index "products", ["item_unit_id"], name: "index_products_on_item_unit_id", using: :btree
 
+  create_table "provider_members", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "employee_id"
+    t.string   "role"
+    t.string   "notes"
+    t.integer  "provider_id"
+    t.boolean  "active"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "provider_members", ["employee_id"], name: "index_provider_members_on_employee_id", using: :btree
+  add_index "provider_members", ["provider_id"], name: "index_provider_members_on_provider_id", using: :btree
+  add_index "provider_members", ["user_id"], name: "index_provider_members_on_user_id", using: :btree
+
+  create_table "providers", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "department_id"
+    t.integer  "manager_id"
+    t.string   "notes"
+    t.boolean  "active"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "providers", ["department_id"], name: "index_providers_on_department_id", using: :btree
+  add_index "providers", ["manager_id"], name: "index_providers_on_manager_id", using: :btree
+
   create_table "purchase_orders", force: :cascade do |t|
     t.string   "order_num"
     t.integer  "department_id"
@@ -1651,6 +1679,21 @@ ActiveRecord::Schema.define(version: 20190523034049) do
   add_index "purchase_orders", ["requestor_id"], name: "index_purchase_orders_on_requestor_id", using: :btree
   add_index "purchase_orders", ["term_of_payment_id"], name: "index_purchase_orders_on_term_of_payment_id", using: :btree
 
+  create_table "purchase_receives", force: :cascade do |t|
+    t.integer  "purchase_order_id"
+    t.date     "date_received"
+    t.date     "date_checked"
+    t.integer  "receiver_id"
+    t.integer  "checker_id"
+    t.string   "notes"
+    t.boolean  "partial"
+    t.string   "status"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "purchase_receives", ["purchase_order_id"], name: "index_purchase_receives_on_purchase_order_id", using: :btree
+
   create_table "raw_foods", force: :cascade do |t|
     t.string   "name"
     t.boolean  "is_stock"
@@ -1661,6 +1704,22 @@ ActiveRecord::Schema.define(version: 20190523034049) do
     t.string   "unit"
     t.string   "food_type",  default: "-"
   end
+
+  create_table "receive_items", force: :cascade do |t|
+    t.integer  "purchase_receive_id"
+    t.integer  "order_item_id"
+    t.float    "quantity"
+    t.string   "unit"
+    t.boolean  "partial"
+    t.float    "qty_accepted"
+    t.float    "qty_rejected"
+    t.string   "notes"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "receive_items", ["order_item_id"], name: "index_receive_items_on_order_item_id", using: :btree
+  add_index "receive_items", ["purchase_receive_id"], name: "index_receive_items_on_purchase_receive_id", using: :btree
 
   create_table "recipes", force: :cascade do |t|
     t.integer  "food_id"
@@ -1861,6 +1920,19 @@ ActiveRecord::Schema.define(version: 20190523034049) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "service_categories", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "provider_id"
+    t.integer  "default_assignee_id"
+    t.string   "notes"
+    t.boolean  "active"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "service_categories", ["default_assignee_id"], name: "index_service_categories_on_default_assignee_id", using: :btree
+  add_index "service_categories", ["provider_id"], name: "index_service_categories_on_provider_id", using: :btree
 
   create_table "smart_cards", force: :cascade do |t|
     t.string   "code"
@@ -2212,6 +2284,41 @@ ActiveRecord::Schema.define(version: 20190523034049) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "ticket_assignees", force: :cascade do |t|
+    t.integer  "ticket_id"
+    t.integer  "assignee_id"
+    t.string   "notes"
+    t.boolean  "active"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "ticket_assignees", ["assignee_id"], name: "index_ticket_assignees_on_assignee_id", using: :btree
+
+  create_table "tickets", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "employee_id"
+    t.integer  "provider_id"
+    t.integer  "service_category_id"
+    t.string   "kind"
+    t.string   "title"
+    t.string   "body"
+    t.boolean  "active"
+    t.date     "reqd_date"
+    t.boolean  "has_attachments"
+    t.string   "addressee"
+    t.string   "cc"
+    t.string   "aasm_state"
+    t.string   "notes"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "tickets", ["employee_id"], name: "index_tickets_on_employee_id", using: :btree
+  add_index "tickets", ["provider_id"], name: "index_tickets_on_provider_id", using: :btree
+  add_index "tickets", ["service_category_id"], name: "index_tickets_on_service_category_id", using: :btree
+  add_index "tickets", ["user_id"], name: "index_tickets_on_user_id", using: :btree
+
   create_table "transports", force: :cascade do |t|
     t.string   "category"
     t.string   "name"
@@ -2282,7 +2389,6 @@ ActiveRecord::Schema.define(version: 20190523034049) do
   add_foreign_key "account_departments", "departments"
   add_foreign_key "activity_schedules", "academic_years"
   add_foreign_key "approvals", "approvers"
-  add_foreign_key "approvers", "departments"
   add_foreign_key "approvers", "employees"
   add_foreign_key "approvers", "events"
   add_foreign_key "batch_students", "batches"
@@ -2357,7 +2463,6 @@ ActiveRecord::Schema.define(version: 20190523034049) do
   add_foreign_key "diknas_report_cards", "grade_levels"
   add_foreign_key "diknas_report_cards", "grade_sections"
   add_foreign_key "diknas_report_cards", "students"
-  add_foreign_key "door_access_logs", "employees"
   add_foreign_key "door_access_logs", "students"
   add_foreign_key "employee_smartcards", "employees"
   add_foreign_key "events", "academic_years"
@@ -2387,12 +2492,10 @@ ActiveRecord::Schema.define(version: 20190523034049) do
   add_foreign_key "loan_checks", "academic_years"
   add_foreign_key "loan_checks", "book_copies"
   add_foreign_key "loan_checks", "book_loans"
-  add_foreign_key "loan_checks", "users"
   add_foreign_key "lunch_menus", "academic_years"
   add_foreign_key "lunch_menus", "foods"
   add_foreign_key "message_recipients", "messages"
   add_foreign_key "message_recipients", "msg_groups"
-  add_foreign_key "message_recipients", "users", column: "recipient_id"
   add_foreign_key "messages", "users", column: "creator_id"
   add_foreign_key "msg_folders", "msg_folders", column: "parent_id"
   add_foreign_key "msg_groups", "users", column: "creator_id"
@@ -2407,12 +2510,20 @@ ActiveRecord::Schema.define(version: 20190523034049) do
   add_foreign_key "po_reqs", "purchase_orders"
   add_foreign_key "po_reqs", "requisitions"
   add_foreign_key "po_reqs", "users"
+  add_foreign_key "provider_members", "employees"
+  add_foreign_key "provider_members", "providers"
+  add_foreign_key "provider_members", "users"
+  add_foreign_key "providers", "departments"
+  add_foreign_key "providers", "users", column: "manager_id"
   add_foreign_key "purchase_orders", "departments"
   add_foreign_key "purchase_orders", "employees", column: "approver_id"
   add_foreign_key "purchase_orders", "employees", column: "requestor_id"
   add_foreign_key "purchase_orders", "suppliers"
   add_foreign_key "purchase_orders", "users", column: "created_by_id"
   add_foreign_key "purchase_orders", "users", column: "last_updated_by_id"
+  add_foreign_key "purchase_receives", "purchase_orders"
+  add_foreign_key "receive_items", "order_items"
+  add_foreign_key "receive_items", "purchase_receives"
   add_foreign_key "recipes", "foods"
   add_foreign_key "recipes", "raw_foods"
   add_foreign_key "reminders", "messages"
@@ -2432,10 +2543,10 @@ ActiveRecord::Schema.define(version: 20190523034049) do
   add_foreign_key "requisitions", "employees", column: "requester_id"
   add_foreign_key "requisitions", "employees", column: "supervisor_id"
   add_foreign_key "requisitions", "events"
-  add_foreign_key "requisitions", "users", column: "created_by_id"
-  add_foreign_key "requisitions", "users", column: "last_updated_by_id"
   add_foreign_key "room_accesses", "badges"
   add_foreign_key "room_accesses", "rooms"
+  add_foreign_key "service_categories", "providers"
+  add_foreign_key "service_categories", "users", column: "default_assignee_id"
   add_foreign_key "smart_cards", "transports"
   add_foreign_key "standard_books", "subjects"
   add_foreign_key "student_activities", "academic_years"
@@ -2451,6 +2562,11 @@ ActiveRecord::Schema.define(version: 20190523034049) do
   add_foreign_key "supplies_transactions", "employees"
   add_foreign_key "templates", "academic_years"
   add_foreign_key "templates", "users"
+  add_foreign_key "ticket_assignees", "users", column: "assignee_id"
+  add_foreign_key "tickets", "employees"
+  add_foreign_key "tickets", "providers"
+  add_foreign_key "tickets", "service_categories"
+  add_foreign_key "tickets", "users"
   add_foreign_key "user_mesg_groups", "msg_groups"
   add_foreign_key "user_mesg_groups", "users", column: "recipient_id"
 

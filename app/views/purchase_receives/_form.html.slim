@@ -1,0 +1,91 @@
+= form_for @purchase_receive do |f|
+  = f.hidden_field :purchase_order_id
+  = f.hidden_field :receiver_id, value: current_user.employee.id
+  = f.hidden_field :checker_id, value: current_user.employee.id
+
+  - if @purchase_receive.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@purchase_receive.errors.count, "error")} prohibited this purchase receive from being saved:"
+      ul
+        - @purchase_receive.errors.full_messages.each do |message|
+          li = message
+  .row
+    .col.s12.m3
+      .card-panel
+        .card-panel-header Supplier
+        .row
+          .col.s12
+            i.material-icons.prefix store
+            .label Supplier
+            .item = @po.supplier.company_name if @po
+          .col.s12
+            i.material-icons.prefix account_circle
+            .label Contact
+            .item = @po.contact if @po
+          .col.s12
+            i.material-icons.prefix phone
+            .label Phone
+            .item = @po.phone_contact if @po
+    .col.s12.m4
+      .card-panel
+        .card-panel-header Purchase Order
+        .row
+          .col.s6
+            .label Order No
+            .item = @po.order_num
+          .col.s6
+            .label Order date
+            .item = @po.order_date
+          .col.s12
+            .label Description
+            .item = @po.description
+          .col.s6
+            .label Requestor
+            .item = @po.requestor.name
+          .col.s6
+            .label Department
+            .item = @po.department.name
+          .col.s6
+            .label Due date
+            .item = @po.due_date
+          .col.s6
+            .label Buyer
+            .item = @po.buyer.name
+    .col.s12.m5
+      .card-panel
+        .card-panel-header Purchase receive
+        .row
+          .input-field.col.s6
+            = f.label :date_received, class: "active"
+            = f.date_field :date_received, value: Date.today
+          .input-field.col.s6
+            = f.label :status
+            = f.text_field :status, disabled: true, value: @purchase_receive.status
+          .input-field.col.s6
+            = f.label :receiver
+            = f.text_field :receiver, disabled: true
+          .input-field.col.s6
+            = f.label :checker
+            = f.text_field :checker, disabled: true
+          .input-field.col.s6
+            = f.label :partial, class: "active"
+            = f.check_box :partial
+          .input-field.col.s12
+            = f.label :notes
+            = f.text_field :notes
+
+  nav.light
+    .nav-wrapper
+      .brand-logo.hide-on-med-and-down style="margin-left: 20px; font-size:1.5em"
+        | Items
+      / ul.right
+      /   li
+      /     = link_to_add_association f, :receive_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#deliveries'
+      /       ' Add Item
+      /       i.material-icons.left playlist_add
+  
+  = render 'receive_items', f: f
+
+  .toolbar.z-depth-1 
+    = link_to 'Cancel', purchase_order_path(@po), class: "waves-effect waves-teal btn-flat"
+    button.btn.waves-effect.waves-light type="submit" data-disable=true Save

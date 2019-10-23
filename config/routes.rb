@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :purchase_receives
   resources :class_budgets
   resources :approvers
   resources :student_tardies

@@ -6,6 +6,7 @@ class OrderItem < ActiveRecord::Base
   belongs_to :last_updated_by, class_name: 'User'
 
   has_many :delivery_items
+  has_many :receive_items
 
   validates :req_item_id, presence: true
   validates_uniqueness_of :req_item_id, message: "Requested item has been ordered before."
@@ -54,6 +55,10 @@ class OrderItem < ActiveRecord::Base
 
   def requestor
     requisition.try(:requester)
+  end
+
+  def all_received?
+    receive_items.sum(:qty_accepted) == quantity
   end
 
   private

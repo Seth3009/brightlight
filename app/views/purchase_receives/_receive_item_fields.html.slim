@@ -1,0 +1,24 @@
+tr.compact.nested-fields
+  = f.hidden_field :order_item_id
+  td.wd25
+    .input-field
+      -if f.object.order_item.present? 
+        = text_field_tag :description, f.object.order_item.description, readonly: true
+  td
+    .input-field
+      = f.number_field :quantity, class: "right-align"
+  td
+    .input-field
+      = f.text_field :unit
+  td
+    .input-field
+      = f.number_field :qty_accepted, class: "right-align"
+  td
+    .input-field
+      = f.number_field :qty_rejected, class: "right-align"
+  td
+    .input-field
+      = f.text_field :notes
+  td
+    = link_to_remove_association f, class: "waves-effect waves-teal red-text"
+      i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete
