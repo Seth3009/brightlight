@@ -93,7 +93,7 @@ nav
         .brand-logo.hide-on-med-and-down style="margin-left: 20px; font-size:1.5em"
           | Order Items
         ul.right
-          -if can? :create, Delivery
+          -if can? :create, PurchaseReceive
             li 
               button.btn#create-delivery-button type="submit" data-disable=true disabled=true 
                 |New Receive

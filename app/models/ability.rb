@@ -45,6 +45,7 @@ class Ability
     can :manage, ItemUnit
     can :manage, ItemCategory
     can :manage, BookCategory
+    can :manage, PurchaseReceive
 	end
 
 	def manager
@@ -144,6 +145,7 @@ class Ability
     can [:create,:read,:update,:destroy], PurchaseOrder
     can [:create,:read,:update,:destroy], OrderItem
     can [:create,:read,:update,:destroy], Supplier
+    can :manage, PurchaseReceive
   end
 
   def buyer
