@@ -4,7 +4,12 @@ class PurchaseReceivesController < ApplicationController
   # GET /purchase_receives
   # GET /purchase_receives.json
   def index
-    @purchase_receives = PurchaseReceive.all
+    items_per_page = 30
+    if current_user.can? :manage, PurchaseReceive
+      @purchase_receives = PurchaseReceive.all.paginate(page: params[:page], per_page: items_per_page)
+    else
+      @purchase_receives = PurchaseReceive.for_requester(current_user.employee).paginate(page: params[:page], per_page: items_per_page)
+    end
   end
 
   # GET /purchase_receives/1

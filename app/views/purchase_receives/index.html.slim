@@ -1,35 +1,38 @@
-h1 Listing purchase_receives
+-title = 'Listing Purchase receives'
+h4 Listing purchase receives
 
-table
-  thead
-    tr
-      th Purchase order
-      th Date received
-      th Date checked
-      th Receiver
-      th Checker
-      th Notes
-      th Partial
-      th Status
-      th
-      th
-      th
+.card-panel 
+  .horizontal-scroll
+    table.compact.striped
+      thead
+        tr
+          th Purchase order
+          th Date received
+          th Date checked
+          th Receiver
+          th Checker
+          th Notes
+          th Partial
+          th Status
+          th
 
-  tbody
-    - @purchase_receives.each do |purchase_receive|
-      tr
-        td = purchase_receive.purchase_order
-        td = purchase_receive.date_received
-        td = purchase_receive.date_checked
-        td = purchase_receive.receiver_id
-        td = purchase_receive.checker_id
-        td = purchase_receive.notes
-        td = purchase_receive.partial
-        td = purchase_receive.status
-        td = link_to 'Show', purchase_receive
-        td = link_to 'Edit', edit_purchase_receive_path(purchase_receive)
-        td = link_to 'Destroy', purchase_receive, data: {:confirm => 'Are you sure?'}, :method => :delete
 
-br
+      tbody
+        - @purchase_receives.each do |purchase_receive|
+          tr
+            td = "#{purchase_receive.purchase_order.order_num} - #{purchase_receive.purchase_order.description}"
+            td = purchase_receive.date_received
+            td = purchase_receive.date_checked
+            td = purchase_receive.receiver ? purchase_receive.receiver.name : "--"
+            td = purchase_receive.checker ? purchase_receive.checker.name : "--"
+            td = purchase_receive.notes
+            td = purchase_receive.partial? ? "Yes" : "No"
+            td = purchase_receive.status
+            td 
+              = link_to purchase_receive
+                i.material-icons visibility
+              = link_to edit_purchase_receive_path(purchase_receive)
+                i.material-icons edit
 
-= link_to 'New Purchase receive', new_purchase_receive_path
+.toolbar.z-index-1
+  = will_paginate @purchase_receives

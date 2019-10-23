@@ -8,6 +8,11 @@ class PurchaseReceive < ActiveRecord::Base
 
   accepts_nested_attributes_for :receive_items, reject_if: :all_blank, allow_destroy: true
 
+  scope :for_requester, lambda {|requester| 
+    joins(:purchase_order)
+    .where('purchase_orders.requestor_id = ? OR receiver_id = ? OR checker_id = ?', requester.id, requester.id, requester.id)
+  }
+
   def self.new_from_po(po)
     purchase_receive = PurchaseReceive.new 
     purchase_receive.purchase_order = po
