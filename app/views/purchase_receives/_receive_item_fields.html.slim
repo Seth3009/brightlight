@@ -12,10 +12,16 @@ tr.compact.nested-fields
       = f.text_field :unit
   td
     .input-field
-      = f.number_field :qty_accepted, class: "right-align"
+      = f.number_field :qty_accepted, in: 0..f.object.quantity, class: "right-align", value: (f.object.qty_accepted || f.object.quantity)
   td
     .input-field
-      = f.number_field :qty_rejected, class: "right-align"
+      = f.number_field :qty_rejected, in: 0..f.object.quantity, class: "right-align"
+  td
+    .input-field
+      = f.text_field :location
+  td
+    .input-field
+      = f.text_field :code 
   td
     .input-field
       = f.text_field :notes

@@ -27,15 +27,12 @@ nav.light
             i.material-icons.right visibility
         .row
           .col.s12
-            i.material-icons.prefix store
             .label Supplier
             .item = @po.supplier.company_name if @po
           .col.s12
-            i.material-icons.prefix account_circle
             .label Contact
             .item = @po.contact if @po
           .col.s12
-            i.material-icons.prefix phone
             .label Phone
             .item = @po.phone_contact if @po
     .col.s12.m4
@@ -53,7 +50,7 @@ nav.light
             .item = @po.order_date
           .col.s12
             .label Description
-            .item = @po.description
+            .item = @po.description.present? ? @po.description : "--"
           .col.s6
             .label Requestor
             .item = @po.requestor.name
@@ -74,55 +71,80 @@ nav.light
             .label Date Received
             .item = @purchase_receive.date_received
           .col.s6
-            .label Status
-            .item = @purchase_receive.status ? @purchase_receive.status : "--"
-          .col.s6
             .label Received By
             .item = @purchase_receive.receiver ? @purchase_receive.receiver.name : "--"
+          .col.s6
+            .label Date Checked
+            .item = @purchase_receive.date_checked
           .col.s6
             .label Checked By
             .item = @purchase_receive.checker ? @purchase_receive.checker.name : "--"
           .col.s6
-            .label Date Checked
-            .item = @purchase_receive.date_checked
+            .label Status
+            .item = @purchase_receive.status ? @purchase_receive.status : "--"
           .col.s12
             .label Notes
             .item = @purchase_receive.notes
 
-  nav.light
-    .nav-wrapper
-      .brand-logo.hide-on-med-and-down style="margin-left: 20px; font-size:1.5em"
-        | Items
+  = form_tag new_purchase_receive_path, method: :get do
+    = hidden_field_tag :po, @po.id
+    nav.light
+      .nav-wrapper
+        .brand-logo.hide-on-med-and-down style="margin-left: 20px; font-size:1.5em"
+          | Items
+        ul.right
+          -if can? :create, PurchaseReceive
+            li 
+              button.btn#create-receive-button type="submit" data-disable=true disabled=true 
+                |New Receive
+                i.material-icons.left add
 
-  .card-panel
-    .horizontal-scroll
-      table.compact.striped
-        thead
-          tr
-            th Description
-            th.right-align Quantity
-            th Unit
-            th.right-align Qty Accepted
-            th.right-align Qty Rejected
-            th.right-align Partial?
-            th Notes
-
-        tbody#deliveries
-          - @purchase_receive.receive_items.each do |item|
+    .card-panel
+      .horizontal-scroll
+        table.compact.striped
+          thead
             tr
-              td.wd25
-                = item.order_item.description
-              td.right-align
-                = item.quantity
-              td
-                = item.unit
-              td.right-align
-                = item.qty_accepted
-              td.right-align
-                = item.qty_rejected
-              td.right-align
-                = item.partial? ? "Yes" : "No"
-              td
-                = item.notes
+              th Description
+              th.right-align Quantity
+              th Unit
+              th.right-align Qty Accepted
+              th.right-align Qty Rejected
+              th Location
+              th Code
+              th Notes
+              th
 
+          tbody#deliveries
+            - @purchase_receive.receive_items.each do |item|
+              tr
+                td.wd25
+                  = item.order_item.description
+                td.right-align
+                  = item.quantity
+                td
+                  = item.unit
+                td.right-align
+                  = item.qty_accepted
+                td.right-align
+                  = item.qty_rejected
+                td
+                  = item.location
+                td
+                  = item.code
+                td
+                  = item.notes
+                td.right-align
+                  - if can?(:create, PurchaseReceive) && !item.order_item.all_received?
+                    input.checkbox type="checkbox" id="rcvitem-#{item.id}" name="rcvitems[#{item.id}]"
+                    = label_tag "rcvitem-#{item.id}", ""
+
+javascript:
+  $(document).on("click", "input.checkbox", function(event) {
+    var checked = $("input.checkbox:checked").length;
+    if (checked > 0) {
+      $("#create-receive-button").prop("disabled", false);
+    } else {
+      $("#create-receive-button").prop("disabled", true)
+    }
+  })
                 

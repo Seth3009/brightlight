@@ -15,15 +15,12 @@
         .card-panel-header Supplier
         .row
           .col.s12
-            i.material-icons.prefix store
             .label Supplier
             .item = @po.supplier.company_name if @po
           .col.s12
-            i.material-icons.prefix account_circle
             .label Contact
             .item = @po.contact if @po
           .col.s12
-            i.material-icons.prefix phone
             .label Phone
             .item = @po.phone_contact if @po
     .col.s12.m4
@@ -38,7 +35,7 @@
             .item = @po.order_date
           .col.s12
             .label Description
-            .item = @po.description
+            .item = @po.description.present? ? @po.description : "--"
           .col.s6
             .label Requestor
             .item = @po.requestor.name
@@ -59,21 +56,23 @@
             = f.label :date_received, class: "active"
             = f.date_field :date_received, value: Date.today
           .input-field.col.s6
-            = f.label :status
-            = f.text_field :status, disabled: true, value: @purchase_receive.status
-          .input-field.col.s6
             = f.label :receiver
             = f.text_field :receiver, disabled: true
           .input-field.col.s6
+            = f.label :date_checked, class: "active"
+            = f.date_field :date_checked
+          .input-field.col.s6
             = f.label :checker
             = f.text_field :checker, disabled: true
-          .input-field.col.s6
-            = f.label :partial, class: "active"
-            = f.check_box :partial
           .input-field.col.s12
             = f.label :notes
             = f.text_field :notes
-
+          / .input-field.col.s6
+          /   = f.label :partial, class: "active"
+          /   = f.check_box :partial
+          / .input-field.col.s6
+          /   = f.label :status
+          /   = f.text_field :status, disabled: true, value: @purchase_receive.status
   nav.light
     .nav-wrapper
       .brand-logo.hide-on-med-and-down style="margin-left: 20px; font-size:1.5em"

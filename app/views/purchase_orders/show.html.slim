@@ -95,7 +95,7 @@ nav
         ul.right
           -if can? :create, PurchaseReceive
             li 
-              button.btn#create-delivery-button type="submit" data-disable=true disabled=true 
+              button.btn#create-receive-button type="submit" data-disable=true disabled=true 
                 |New Receive
                 i.material-icons.left add
     = hidden_field_tag :po, @purchase_order.id
@@ -188,7 +188,9 @@ nav
               th.wd25 Description
               th.right-align Quantity 
               th Unit
-              th.right-align Total Accepted
+              th.right-align Qty Accepted
+              th Location
+              th Code
               th.right-align New receive
 
           tbody
@@ -204,10 +206,13 @@ nav
                     = link_to purchase_receive_path(item.receive_items.first.purchase_receive)
                       = item.receive_items.sum :qty_accepted
                       i.material-icons.right visibility
+                td = item.receive_items.map(&:location).join(", ")
+                td = item.receive_items.map(&:code).join(", ")
                 td.right-align
                   - if can?(:create, PurchaseReceive) && !item.all_received?
                     input.checkbox type="checkbox" id="item-#{item.id}" name="items[#{item.id}]"
                     = label_tag "item-#{item.id}", ""
+                
     .row
       .col.offset-m8.s12.m4
         .card-panel.blue-grey.lighten-4
@@ -239,8 +244,8 @@ javascript:
   $(document).on("click", "input.checkbox", function(event) {
     var checked = $("input.checkbox:checked").length;
     if (checked > 0) {
-      $("#create-delivery-button").prop("disabled", false);
+      $("#create-receive-button").prop("disabled", false);
     } else {
-      $("#create-delivery-button").prop("disabled", true)
+      $("#create-receive-button").prop("disabled", true)
     }
   })

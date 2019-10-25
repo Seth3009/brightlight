@@ -28,6 +28,10 @@ class PurchaseReceivesController < ApplicationController
       if params[:items]
         order_items = OrderItem.where(id: params[:items].map(&:first))
         @receive_items = ReceiveItem.new_from_order_items(order_items) 
+      elsif params[:rcvitems]
+        @receive_items = @purchase_receive.receive_items.where(id: params[:rcvitems].map(&:first))
+        puts "Receive Items"
+        puts @receive_items.count
       else
         @receive_items = @purchase_receive.receive_items
       end
@@ -91,6 +95,7 @@ class PurchaseReceivesController < ApplicationController
     def purchase_receive_params
       params.require(:purchase_receive).permit(:purchase_order_id, :date_received, :date_checked, :receiver_id, 
         :checker_id, :notes, :partial, :status,
-        {:receive_items_attributes => [:quantity, :unit, :partial, :qty_accepted, :qty_rejected, :receiver_id, :checker_id, :purchase_receive_id, :order_item_id, :notes, :_destroy, :id ]})
+        {:receive_items_attributes => [:quantity, :unit, :partial, :location, :code, :qty_accepted, :qty_rejected, 
+         :receiver_id, :checker_id, :purchase_receive_id, :order_item_id, :notes, :_destroy, :id ]})
     end
 end
