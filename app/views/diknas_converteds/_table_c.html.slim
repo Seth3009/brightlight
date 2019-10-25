@@ -48,7 +48,7 @@
             td.center style="width:70px !important;" = idx+1
             td style="width:60% !important;" = @aspek[idx] 
             - if params[:type].try(:downcase) == 'new'
-              td 
+              td.center Baik
             - else
               - if idx==0
                 td.center rowspan=@aspek.length style="width:30% !important; font-size:8pt;"
