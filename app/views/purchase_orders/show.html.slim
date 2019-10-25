@@ -95,7 +95,7 @@ nav
         ul.right
           -if can? :create, PurchaseReceive
             li 
-              button.btn#create-receive-button type="submit" data-disable=true disabled=true 
+              button.btn.check-togglable type="submit" data-disable=true disabled=true 
                 |New Receive
                 i.material-icons.left add
     = hidden_field_tag :po, @purchase_order.id
@@ -210,7 +210,7 @@ nav
                 td = item.receive_items.map(&:code).join(", ")
                 td.right-align
                   - if can?(:create, PurchaseReceive) && !item.all_received?
-                    input.checkbox type="checkbox" id="item-#{item.id}" name="items[#{item.id}]"
+                    input.checkbox.toggle-trigger type="checkbox" id="item-#{item.id}" name="items[#{item.id}]"
                     = label_tag "item-#{item.id}", ""
                 
     .row
@@ -240,12 +240,3 @@ nav
           .display-field
             .label Remaining Amount
             .item = currency(@purchase_order.total_amount - @purchase_order.down_payment, currency: @purchase_order.currency) rescue nil
-javascript:
-  $(document).on("click", "input.checkbox", function(event) {
-    var checked = $("input.checkbox:checked").length;
-    if (checked > 0) {
-      $("#create-receive-button").prop("disabled", false);
-    } else {
-      $("#create-receive-button").prop("disabled", true)
-    }
-  })

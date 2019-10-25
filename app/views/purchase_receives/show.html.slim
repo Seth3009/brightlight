@@ -95,7 +95,7 @@ nav.light
         ul.right
           -if can? :create, PurchaseReceive
             li 
-              button.btn#create-receive-button type="submit" data-disable=true disabled=true 
+              button.btn.check-togglable type="submit" data-disable=true disabled=true 
                 |New Receive
                 i.material-icons.left add
 
@@ -135,16 +135,7 @@ nav.light
                   = item.notes
                 td.right-align
                   - if can?(:create, PurchaseReceive) && !item.order_item.all_received?
-                    input.checkbox type="checkbox" id="rcvitem-#{item.id}" name="rcvitems[#{item.id}]"
+                    input.checkbox.toggle-trigger type="checkbox" id="rcvitem-#{item.id}" name="rcvitems[#{item.id}]"
                     = label_tag "rcvitem-#{item.id}", ""
 
-javascript:
-  $(document).on("click", "input.checkbox", function(event) {
-    var checked = $("input.checkbox:checked").length;
-    if (checked > 0) {
-      $("#create-receive-button").prop("disabled", false);
-    } else {
-      $("#create-receive-button").prop("disabled", true)
-    }
-  })
                 

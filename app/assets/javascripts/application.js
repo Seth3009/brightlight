@@ -34,6 +34,7 @@
 //= require messages
 //= require settings
 //= require gate_tap
+//= require checkbox-toggle-button
 //= require jquery.timepicker.min.js
 //= require jquery.combobox
 //= require tinymce
