@@ -23,9 +23,11 @@ class PurchaseOrder < ActiveRecord::Base
   aasm column: 'status' do
     state :requested, initial: true
     state :ordered
-    state :pending_delivery
-    state :received
+    state :acknowledged
+    state :partial
+    state :complete
     state :canceled
+    state :close
 
     event :order do
       transitions from: :requested, to: :ordered
@@ -35,21 +37,22 @@ class PurchaseOrder < ActiveRecord::Base
     end
 
     event :acknowledge do
-      transitions from: :ordered, to: :pending_delivery
+      transitions from: :ordered, to: :acknowledged
       after do
         fill_in_actuals
       end
     end
 
     event :receive do
-      transitions from: [:ordered, :pending_delivery], to: :received
+      transitions from: [:ordered, :acknowledged], to: :partial, if: :pending_delivery?
+      transitions from: [:ordered, :acknowledged, :partial], to: :complete
       after do
         notify_requesters
       end
     end
 
     event :cancel do
-      transitions from: [:requested, :ordered, :pending_delivery], to: :canceled
+      transitions from: [:requested, :ordered, :acknowledged], to: :canceled
       after do
         notify_requesters
       end
@@ -98,6 +101,10 @@ class PurchaseOrder < ActiveRecord::Base
       item.actual_amt = item.line_amount
       item.save
     end
+  end
+
+  def pending_delivery?
+    !order_items.all? &:all_received?
   end
 
   private

@@ -16,4 +16,17 @@ class ReceiveItem < ActiveRecord::Base
       )
     }
   end
+
+  def self.new_from_other_items(id_list)
+    where(id: id_list).map {|item|
+      new(quantity: item.quantity - item.qty_accepted,
+        unit: item.unit,
+        order_item_id: item.order_item_id,
+        purchase_receive_id: item.purchase_receive_id,
+        partial: true,
+        location: item.location,
+        code: item.code
+      )
+    }
+  end
 end

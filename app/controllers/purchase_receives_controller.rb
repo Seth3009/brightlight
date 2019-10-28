@@ -29,9 +29,7 @@ class PurchaseReceivesController < ApplicationController
         order_items = OrderItem.where(id: params[:items].map(&:first))
         @receive_items = ReceiveItem.new_from_order_items(order_items) 
       elsif params[:rcvitems]
-        @receive_items = @purchase_receive.receive_items.where(id: params[:rcvitems].map(&:first))
-        puts "Receive Items"
-        puts @receive_items.count
+        @receive_items = ReceiveItem.new_from_other_items(params[:rcvitems].map &:first)
       else
         @receive_items = @purchase_receive.receive_items
       end
