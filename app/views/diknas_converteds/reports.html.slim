@@ -36,10 +36,11 @@ ul#type-options.dropdown-content
   
 nav
   .nav-wrapper
-    ul
+    ul  
       li
-        = link_to "#", onclick: 'window.print();return false;'
+        = link_to "#", id:"btnprint"
           i.material-icons print  
+      
 
     ul.right
       li 
@@ -67,7 +68,8 @@ nav
         a.dropdown-button href="#!" data-activates="type-options"
           span#type = 'Report type'
           i.material-icons.right arrow_drop_down
-
+      li       
+        = date_field_tag 'print_date', params[:dt] || Date.today
       
 - if @diknas.present?
   = render 'table_a'
@@ -103,6 +105,23 @@ javascript:
       $("#student-menu").dropdown();
     });    
   }
+
+  
+
+  $(function(){
+      // bind click event to get data
+      $('#print_date').on('change', function () {          
+          var date = $(this).val(); 
+          var url = new URL(window.location.href);
+          var page = url.searchParams.set("dt",date); 
+          document.location = url;       
+          if (date) { // require a URL
+              window.print();
+              return false;              
+          }
+          return false;
+      });
+    });
 
 css:  
   @media print {    
