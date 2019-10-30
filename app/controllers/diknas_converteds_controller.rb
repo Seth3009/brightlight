@@ -113,6 +113,13 @@ class DiknasConvertedsController < ApplicationController
   def reports
     authorize! :read, DiknasConverted 
     @types = ["Default","New"]
+    bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"]
+    if params[:dt].present?
+      tanggal = Date.parse(params[:dt]) 
+    else
+      tanggal = Date.today
+    end
+    @tanggal = tanggal.day.to_s + " " +bulan[tanggal.month.to_i-1].to_s + " " + tanggal.year.to_s
     @year_id = params[:year] || AcademicYear.current_id    
     @academic_year = AcademicYear.find @year_id
     @term_ids = AcademicTerm.where(academic_year_id:@year_id) if @year_id.present?
