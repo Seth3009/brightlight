@@ -38,7 +38,7 @@ nav
   .nav-wrapper
     ul  
       li
-        = link_to "#", id:"btnprint"
+        = link_to "#", onclick: 'window.print(); return false;'
           i.material-icons print  
       
 
@@ -73,10 +73,11 @@ nav
       
 - if @diknas.present?
   = render 'table_a'
+    .page-break
 
   = render 'table_b'
-
-  = render 'table_c'
+    .page-break
+  = render 'table_c'    
 - else
   #message.card-panel.grey.lighten-1
       .center.white-text Please choose another Grade Level, Class and Student
@@ -114,11 +115,7 @@ javascript:
           var date = $(this).val(); 
           var url = new URL(window.location.href);
           var page = url.searchParams.set("dt",date); 
-          document.location = url;       
-          if (date) { // require a URL
-              window.print();
-              return false;              
-          }
+          document.location = url;               
           return false;
       });
     });
@@ -131,7 +128,7 @@ css:
     }
     html, body {
       display: block; 
-      background: white;         
+      background: white;           
     }    
   	
     .row {
@@ -145,7 +142,7 @@ css:
    
     @page {
       size: A4;
-      margin: none;     
+      margin: none;  
     }  
     
     .page-footer {
@@ -155,7 +152,7 @@ css:
     }
     .section {
       size: A4;
-      margin-top: 1.5cm !important;      
+      margin-top: 0.5cm !important;       
     }	
     div.section1 {
       page: section1;
