@@ -18,10 +18,10 @@ class OrderItem < ActiveRecord::Base
 
   scope :with_po_records, lambda { 
     joins(:purchase_order)
-    .joins('left join employees on employees.id = purchase_orders.requestor_id')
     .joins('left join suppliers on suppliers.id = purchase_orders.supplier_id')
     .joins(:req_item)
     .joins('left join requisitions on requisitions.id = req_items.requisition_id')
+    .joins('left join employees on employees.id = requisitions.requester_id')
     .joins('left join accounts on accounts.id = requisitions.account_id')
     .select('order_items.*, purchase_orders.currency as currency, requisitions.id as fpb, employees.name as requestor_name, accounts.description as budget, suppliers.company_name as supplier')
     .order('requisitions.id')
