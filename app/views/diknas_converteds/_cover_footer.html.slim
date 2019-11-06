@@ -1,0 +1,30 @@
+
+
+.footline
+  .left
+    |RAPOR - #{@student.name.upcase}
+  | 1
+  .right
+    |Dicetak dari eRapor SMA 2018
+
+
+.page-break
+
+
+css:
+    .footline {
+      display: none;
+    }
+  @media print {     
+    .footline {   
+        text-align: center;
+        border-top: 1px solid black;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        position: fixed;
+        left: 1cm;
+        bottom: 0.5cm;
+        width:90%;    
+      }
+  }

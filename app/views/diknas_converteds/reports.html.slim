@@ -68,8 +68,12 @@ nav
           span#type = 'Report type'
           i.material-icons.right arrow_drop_down
 
-      
+  
 - if @diknas.present?
+  = render 'cover_1'
+
+  = render 'cover_2'
+
   = render 'table_a'
 
   = render 'table_b'
@@ -145,4 +149,6 @@ css:
     .page-break	{ 
       display: block; 
       page-break-after: always; }
+
+    
   }  
