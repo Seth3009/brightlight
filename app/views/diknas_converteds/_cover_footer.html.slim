@@ -1,0 +1,59 @@
+
+
+.footline.bottom
+  .row
+    .col.s4.left
+      |RAPOR - #{@student.name.upcase}
+    .col.s4.center
+      #number
+    .col.s4 style="text-align:right"
+      |Dicetak dari eRapor SMA 2018
+
+.page-break
+
+
+css:
+  
+  body {
+    /* Set "my-sec-counter" to 0 */
+      counter-reset: my-sec-counter;
+  }
+
+  #number::before {
+    /* Increment "my-sec-counter" by 1 */
+    counter-increment: my-sec-counter;
+    content: counter(my-sec-counter);
+  } 
+
+  .footline {   
+    border-top: 1px solid black;
+    margin-left: auto;
+    margin-right: auto;
+    
+  }
+
+  @media print{
+    .bottom {
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      position: fixed;
+      left: 1cm;
+      bottom: 0.5cm;
+      width:90%;    
+    }
+  }
+
+  /*@media print { 
+      .footline {   
+      text-align: center;
+      border-top: 1px solid black;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      position: fixed;
+      left: 1cm;
+      bottom: 0.5cm;
+      width:90%;    
+    }
+  } */ 

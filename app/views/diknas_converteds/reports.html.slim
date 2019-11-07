@@ -72,6 +72,10 @@ nav
         = date_field_tag 'print_date', params[:dt] || Date.today
       
 - if @diknas.present?
+  = render 'cover_1'
+
+  = render 'cover_2'
+
   = render 'table_a'
     .page-break
 
@@ -166,4 +170,6 @@ css:
     .page-break	{ 
       display: block; 
       page-break-after: always; }
+
+    
   }  
