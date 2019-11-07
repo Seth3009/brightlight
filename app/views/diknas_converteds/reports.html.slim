@@ -72,9 +72,10 @@ nav
         = date_field_tag 'print_date', params[:dt] || Date.today
       
 - if @diknas.present?
-  = render 'cover_1'
-  = render 'cover_2'
-  = render 'cover_3'
+  / = render 'cover_1'
+  / = render 'cover_2'
+  / = render 'cover_3'
+  = render 'cover_5'
 
   = render 'table_a'
   = render 'table_b'
