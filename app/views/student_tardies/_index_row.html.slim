@@ -18,8 +18,7 @@ javascript:
   function printExternal(url) {   
     var printWindow = window.open( url, 'Print', 'width=950, height=500, toolbar=0, resizable=0');
     printWindow.addEventListener('load', function(){
-        printWindow.print();
-        printWindow.close();
+        printWindow.print();        
     }, true);
   }
   
