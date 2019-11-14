@@ -24,7 +24,7 @@
               -elsif requisition.status == 'ALLORDERED'
                 i.material-icons.green-text done_all
             td = requisition.id
-            td = requisition.description ? "#{requisition.description.truncate(40)}#{requisition.description.last(10)}" : "---"
+            td = fitted(requisition.description) || "---"
             td = requisition.sent_to_purchasing
             td = requisition.date_required
             td = requisition.requester

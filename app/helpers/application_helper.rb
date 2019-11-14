@@ -74,4 +74,14 @@ module ApplicationHelper
   def impersonating?
     session[:impersonated_user_id].present?
   end 
+
+  def fitted(string, length: 50)
+    if string
+      if string.length > length
+        "#{string.truncate(length-10)}#{string.last(10)}" 
+      else
+        string
+      end
+    end
+  end
 end
