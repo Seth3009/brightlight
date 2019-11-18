@@ -1,7 +1,8 @@
 = form_for @purchase_receive do |f|
   = f.hidden_field :purchase_order_id
-  = f.hidden_field :receiver_id, value: current_user.employee.id
-  = f.hidden_field :checker_id, value: current_user.employee.id
+  = f.hidden_field :receiver_id, value: current_user.employee.id if params[:check].blank?
+  = f.hidden_field :checker_id, value: current_user.employee.id if params[:check] == 'y'
+  / = f.hidden_field :date_checked, value: Date.today if params[:check] == 'y'
 
   - if @purchase_receive.errors.any?
     #error_explanation
@@ -54,34 +55,24 @@
         .row
           .input-field.col.s6
             = f.label :date_received, class: "active"
-            = f.date_field :date_received, value: Date.today
+            = f.date_field :date_received, value: f.object.date_received || Date.today
           .input-field.col.s6
             = f.label :receiver
             = f.text_field :receiver, disabled: true
           .input-field.col.s6
             = f.label :date_checked, class: "active"
-            = f.date_field :date_checked
+            = f.date_field :date_checked, value: f.object.date_checked || (Date.today if params[:check] == 'y')
           .input-field.col.s6
             = f.label :checker
             = f.text_field :checker, disabled: true
           .input-field.col.s12
             = f.label :notes
             = f.text_field :notes
-          / .input-field.col.s6
-          /   = f.label :partial, class: "active"
-          /   = f.check_box :partial
-          / .input-field.col.s6
-          /   = f.label :status
-          /   = f.text_field :status, disabled: true, value: @purchase_receive.status
+
   nav.light
     .nav-wrapper
       .brand-logo.hide-on-med-and-down style="margin-left: 20px; font-size:1.5em"
         | Items
-      / ul.right
-      /   li
-      /     = link_to_add_association f, :receive_items, class: "waves-effect waves-teal", 'data-association-insertion-method' => 'append', 'data-association-insertion-node' => '#deliveries'
-      /       ' Add Item
-      /       i.material-icons.left playlist_add
   
   = render 'receive_items', f: f
 

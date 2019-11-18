@@ -3,7 +3,7 @@ class PurchaseReceive < ActiveRecord::Base
   belongs_to :receiver, class_name: 'Employee'
   belongs_to :checker, class_name: 'Employee'
 
-  has_many :receive_items
+  has_many :receive_items, dependent: :destroy
   has_many :order_items, through: :receive_items
 
   accepts_nested_attributes_for :receive_items, reject_if: :all_blank, allow_destroy: true
@@ -25,5 +25,13 @@ class PurchaseReceive < ActiveRecord::Base
       )
     end
     purchase_receive
+  end
+
+  def notify_requesters
+    purchase_order.unique_requests.each do |req|
+      email = yield req, purchase_order, self
+      email.deliver_now
+      Message.create_from_email(email)
+    end
   end
 end

@@ -32,7 +32,7 @@ class PurchaseOrder < ActiveRecord::Base
     event :order do
       transitions from: :requested, to: :ordered
       after do
-        notify_requesters
+        notify_requesters { |req, po| PurchaseOrderEmailer.open_po req, po }
       end
     end
 
@@ -46,15 +46,15 @@ class PurchaseOrder < ActiveRecord::Base
     event :receive do
       transitions from: [:ordered, :acknowledged], to: :partial, if: :pending_delivery?
       transitions from: [:ordered, :acknowledged, :partial], to: :complete
-      after do
-        notify_requesters
-      end
+      # after do
+      #   notify_requesters { |req, po| PurchaseOrderEmailer.purchase_receive req, po }
+      # end
     end
 
     event :cancel do
       transitions from: [:requested, :ordered, :acknowledged], to: :canceled
       after do
-        notify_requesters
+        notify_requesters { |req, po| PurchaseOrderEmailer.cancel_po req, po }
       end
     end
   end
@@ -90,7 +90,8 @@ class PurchaseOrder < ActiveRecord::Base
     self.unique_requests.each do |req|
       unless req.open?
         req.open_order!
-        email = PurchaseOrderEmailer.notify_requesters(req, self).deliver_now
+        email = yield req, self
+        email.deliver_now
         Message.create_from_email(email)
       end
     end

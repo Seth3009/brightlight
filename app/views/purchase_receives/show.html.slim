@@ -15,7 +15,13 @@ nav.light
       -if can? :update, @purchase_receive
         li 
           = link_to edit_purchase_receive_path(@purchase_receive)
-            i.material-icons edit
+            |edit
+            i.material-icons.left edit
+      -if can? :check, @purchase_receive
+        li 
+          = link_to edit_purchase_receive_path(@purchase_receive, check:'y')
+            |Check
+            i.material-icons.left edit
 
 .card-panel
   .row

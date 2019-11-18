@@ -11,7 +11,7 @@ class ReceiveItem < ActiveRecord::Base
       new(quantity: order_item.quantity,
         unit: order_item.unit,
         order_item_id: order_item.id,
-        qty_accepted: order_item.quantity,
+        qty_accepted: 0,
         qty_rejected: 0
       )
     }

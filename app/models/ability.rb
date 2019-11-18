@@ -72,6 +72,9 @@ class Ability
     end
     can :read, :all
     can :read, PurchaseOrder, requestor: @user.employee
+    can :check, PurchaseReceive do |pr| 
+      pr.purchase_order.requestor == @user.employee
+    end
     can :review, LeaveRequest
     can [:approve, :read, :update], LeaveRequest do |lr|
       lr.employee.approver_id == @user.employee.id || lr.employee.approver_assistant_id == @user.employee.id  # Manager can only approve leave requests of employees in his/her department
@@ -98,6 +101,9 @@ class Ability
     can [:manage], ReqItem, requester: @user.employee
     can :read, :all
     can :read, PurchaseOrder, requestor: @user.employee
+    can :check, PurchaseReceive do |pr| 
+      pr.purchase_order.requestor == @user.employee
+    end
     can [:create,:read,:update], Event, creator: @user.employee
     can_manage_own_leave_request
     can_manage_own_requisition    
@@ -113,6 +119,9 @@ class Ability
       req.approvers.includes(:employee).map {|a| a.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
     end
     can :read, PurchaseOrder, requestor: @user.employee
+    can :check, PurchaseReceive do |pr| 
+      pr.purchase_order.requestor == @user.employee
+    end
     can_manage_own_leave_request
     can_manage_own_requisition    
   end

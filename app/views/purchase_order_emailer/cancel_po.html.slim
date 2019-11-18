@@ -7,7 +7,7 @@ html
   body
     div style="margin-left:30px; width=85%; font-size:16px"
 
-      p A Purchase Order has been created for your purchase request.
+      p A Purchase Order related to your purchase request has changed status.
 
       table.description-list
         tbody
@@ -25,7 +25,7 @@ html
             td New status
             td = @po.aasm.current_state.upcase
 
-      P Please contact Purchasing (Ms. #{config.purchasing_pic_name}, ext. 37) for any question.
+      P Please contact Purchasing (Ms. Nori, ext. 36) for any question.
 
       p Thank you for using <i>Brightlight</i>. 
     
