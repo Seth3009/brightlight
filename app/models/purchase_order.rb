@@ -14,7 +14,8 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :po_reqs, dependent: :destroy
   has_many :requisitions, through: :po_reqs
   has_many :req_items, through: :order_items
-
+  has_many :receive_items, through: :order_items
+  
   accepts_nested_attributes_for :order_items, reject_if: :all_blank, allow_destroy: true
   #validate  :at_least_one_order_item
 

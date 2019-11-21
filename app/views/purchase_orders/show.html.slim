@@ -186,33 +186,49 @@ nav
           thead
             tr
               th.wd25 Description
-              th.right-align Quantity 
+              th.right-align Qty Ordered
               th Unit
+              th.right-align Qty Received
               th.right-align Qty Accepted
+              th.right-align Qty Rejected
               th Location
               th Code
-              th.right-align New receive
+              th.left-align Actions
+              th
 
           tbody
             - @purchase_order.order_items.each do |item|
-              tr.compact
-                td.wd25 
-                  = item.description
-                  i.material
-                td.right-align = item.quantity
-                td = item.unit
-                td.right-align
-                  - if item.receive_items.present?
-                    = link_to purchase_receive_path(item.receive_items.first.purchase_receive)
-                      = item.receive_items.sum :qty_accepted
-                      i.material-icons.right visibility
-                td = item.receive_items.map(&:location).join(", ")
-                td = item.receive_items.map(&:code).join(", ")
-                td.right-align
-                  - if can?(:create, PurchaseReceive) && !item.all_received?
-                    input.checkbox.toggle-trigger type="checkbox" id="item-#{item.id}" name="items[#{item.id}]"
-                    = label_tag "item-#{item.id}", ""
-                
+              - if item.receive_items.blank?
+                tr.compact
+                  td.wd25 
+                    = item.description
+                  td.right-align = item.quantity
+                  td = item.unit
+                  td colspan=6 &nbsp;
+                  td
+                    - if can? :create, PurchaseReceive
+                      input.checkbox.toggle-trigger type="checkbox" id="item-#{item.id}" name="items[#{item.id}]"
+                      = label_tag "item-#{item.id}", ""
+              - else
+                -item.receive_items.each.with_index do |receive_item, index|
+                  tr.compact
+                    td.wd25
+                      = item.description if index == 0
+                    td.right-align = item.quantity if index == 0
+                    td = receive_item.unit if index == 0
+                    td.right-align = receive_item.quantity
+                    td.right-align = receive_item.qty_accepted
+                    td.right-align = receive_item.qty_rejected
+                    td = receive_item.location
+                    td = receive_item.code
+                    td 
+                      = link_to purchase_receive_path(receive_item.purchase_receive)
+                        i.material-icons.left visibility
+                    td
+                      - if can?(:create, PurchaseReceive) && !item.all_received? && index == 0
+                        input.checkbox.toggle-trigger type="checkbox" id="item-#{item.id}" name="items[#{item.id}]"
+                        = label_tag "item-#{item.id}", ""
+                  
     .row
       .col.offset-m8.s12.m4
         .card-panel.blue-grey.lighten-4
