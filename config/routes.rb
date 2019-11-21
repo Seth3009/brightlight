@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :purchase_receives
   resources :class_budgets
   resources :approvers
   resources :student_tardies
@@ -28,8 +29,6 @@ Rails.application.routes.draw do
   resources :employee_smartcards
   resources :stock_categories
   resources :stock_items
-  resources :delivery_items
-  resources :deliveries
   resources :req_items
   resources :supplies_transaction_items
   resources :warehouses

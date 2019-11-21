@@ -59,10 +59,6 @@ $navbar-placeholder-text-color: #666;
 	overflow-x: auto;
 }
 
-.card-panel.compact {
-	padding: 0px;
-}
-
 // ============================================ Table ===============================================
 table {
 		td.wd3  { width:  3%; }
@@ -1865,6 +1861,15 @@ table { page-break-inside:auto }
 	display: block;
 	line-height: 32px;
 	margin-bottom: 8px;
+}
+
+.card-panel {
+	.card-panel-header {
+		background-color: lightgrey;
+		margin: -20px -20px 10px;
+		padding: 12px 20px;
+		font-size: 1.1em;
+	}
 }
 
 // ============================================ Left Sidebar ===========================================

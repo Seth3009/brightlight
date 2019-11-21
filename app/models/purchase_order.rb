@@ -14,7 +14,8 @@ class PurchaseOrder < ActiveRecord::Base
   has_many :po_reqs, dependent: :destroy
   has_many :requisitions, through: :po_reqs
   has_many :req_items, through: :order_items
-
+  has_many :receive_items, through: :order_items
+  
   accepts_nested_attributes_for :order_items, reject_if: :all_blank, allow_destroy: true
   #validate  :at_least_one_order_item
 
@@ -23,35 +24,38 @@ class PurchaseOrder < ActiveRecord::Base
   aasm column: 'status' do
     state :requested, initial: true
     state :ordered
-    state :pending_delivery
-    state :received
+    state :acknowledged
+    state :partial
+    state :complete
     state :canceled
+    state :close
 
     event :order do
       transitions from: :requested, to: :ordered
       after do
-        notify_requesters
+        notify_requesters { |req, po| PurchaseOrderEmailer.open_po req, po }
       end
     end
 
     event :acknowledge do
-      transitions from: :ordered, to: :pending_delivery
+      transitions from: :ordered, to: :acknowledged
       after do
         fill_in_actuals
       end
     end
 
     event :receive do
-      transitions from: [:ordered, :pending_delivery], to: :received
-      after do
-        notify_requesters
-      end
+      transitions from: [:ordered, :acknowledged], to: :partial, if: :pending_delivery?
+      transitions from: [:ordered, :acknowledged, :partial], to: :complete
+      # after do
+      #   notify_requesters { |req, po| PurchaseOrderEmailer.purchase_receive req, po }
+      # end
     end
 
     event :cancel do
-      transitions from: [:requested, :ordered, :pending_delivery], to: :canceled
+      transitions from: [:requested, :ordered, :acknowledged], to: :canceled
       after do
-        notify_requesters
+        notify_requesters { |req, po| PurchaseOrderEmailer.cancel_po req, po }
       end
     end
   end
@@ -87,7 +91,8 @@ class PurchaseOrder < ActiveRecord::Base
     self.unique_requests.each do |req|
       unless req.open?
         req.open_order!
-        email = PurchaseOrderEmailer.notify_requesters(req, self).deliver_now
+        email = yield req, self
+        email.deliver_now
         Message.create_from_email(email)
       end
     end
@@ -98,6 +103,10 @@ class PurchaseOrder < ActiveRecord::Base
       item.actual_amt = item.line_amount
       item.save
     end
+  end
+
+  def pending_delivery?
+    !order_items.all? &:all_received?
   end
 
   private

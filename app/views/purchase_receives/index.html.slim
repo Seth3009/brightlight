@@ -1,0 +1,37 @@
+-title = 'Listing Purchase receives'
+h4 Listing purchase receives
+
+.card-panel 
+  .horizontal-scroll
+    table.compact.striped
+      thead
+        tr
+          th Purchase order
+          th Date received
+          th Date checked
+          th Receiver
+          th Checker
+          th Notes
+          th Partial
+          th Status
+          th
+
+      tbody
+        - @purchase_receives.each do |purchase_receive|
+          tr
+            td = "#{purchase_receive.purchase_order.order_num} - #{purchase_receive.purchase_order.description}"
+            td = purchase_receive.date_received
+            td = purchase_receive.date_checked
+            td = purchase_receive.receiver ? purchase_receive.receiver.name : "--"
+            td = purchase_receive.checker ? purchase_receive.checker.name : "--"
+            td = purchase_receive.notes
+            td = purchase_receive.partial? ? "Yes" : "No"
+            td = purchase_receive.status
+            td 
+              = link_to purchase_receive
+                i.material-icons visibility
+              = link_to edit_purchase_receive_path(purchase_receive)
+                i.material-icons edit
+
+.toolbar.z-index-1
+  = will_paginate @purchase_receives

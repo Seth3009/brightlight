@@ -7,7 +7,9 @@ html
   body
     div style="margin-left:30px; width=85%; font-size:16px"
 
-      p A Purchase Order has been created for your purchase request.
+      p Your order has arrived! 
+      p Please check the items received and process it using the following link. 
+      p = link_to "Purchase Receive", edit_purchase_receive_path(@purchase_receive, check:'y')
 
       table.description-list
         tbody

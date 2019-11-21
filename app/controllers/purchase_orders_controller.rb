@@ -92,7 +92,9 @@ class PurchaseOrdersController < ApplicationController
     @purchase_order = PurchaseOrder.new(purchase_order_params)
     respond_to do |format|
       if @purchase_order.save
-        @purchase_order.notify_requesters
+        @purchase_order.notify_requesters { |req, po| 
+          PurchaseOrderEmailer.notify_requesters req, po
+        }
         format.html { 
           if params[:req]
             requisition = Requisition.find params[:req] 

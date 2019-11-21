@@ -45,9 +45,14 @@ nav
           .item = @purchase_order.phone_contact
       - if @purchase_order.ordered? && can?(:update, @purchase_order)
         .card-panel
-          div PO letter has been sent and received by vendor. Change status to pending delivery. 
-          .right = link_to 'Yes', mark_purchase_order_path(mark:'acknowledge'), class:'btn btn-small'
-          br
+          div PO letter has been sent and received by vendor. 
+          div 
+            = link_to 'OK', mark_purchase_order_path(mark:'acknowledge'), class:'btn btn-small right'
+            |Change status to pending delivery. 
+      .card-panel
+        .record-field
+          .label Instructions to supplier
+          .item = @purchase_order.instructions
 
     .col.s12.m6
       .card-panel
@@ -76,86 +81,178 @@ nav
           .record-field.s2
             .label Status
             .item = @purchase_order.status.humanize
+          .record-field
+            .label Notes
+            .item = @purchase_order.notes
 
-h5 Items
-.card-panel
-  table.compact.striped
-    thead
-      tr
-        th.wd25 Description
-        th.right-align Qty
-        th Unit
-        th.right-align Unit price
-        th.right-align Disc.
-        th.right-align Est.Tax
-        th.right-align Non-reccuring
-        th.right-align Shipping
-        th.right-align Total
-        -unless @purchase_order.requested?
-          th.right-align Actual
-        th.right-align Link
+= form_tag new_purchase_receive_path, method: :get do
+  
+  .card-panel
+    nav.light
+      .nav-wrapper
+        .brand-logo.hide-on-med-and-down style="margin-left: 20px; font-size:1.5em"
+          | Order Items
+        ul.right
+          -if can? :create, PurchaseReceive
+            li 
+              button.btn.check-togglable type="submit" data-disable=true disabled=true 
+                |New Receive
+                i.material-icons.left add
+    = hidden_field_tag :po, @purchase_order.id
 
-    tbody
-      - @purchase_order.order_items.each do |item|
-        tr.compact
-          td.wd25 
-            = item.description
-            i.material
-          td.right-align = item.quantity
-          td = item.unit
-          td.right-align = currency(item.unit_price, currency: item.currency)
-          td.right-align = currency(item.discount, currency: item.currency)
-          td.right-align = currency(item.est_tax, currency: item.currency)
-          td.right-align = currency(item.non_recurring, currency: item.currency)
-          td.right-align = currency(item.shipping, currency: item.currency)
-          td.right-align = currency(item.line_amount, currency: item.currency)
-          -unless @purchase_order.requested?
-            td.right-align = currency(item.actual_amt, currency: item.currency) || 'N/A'
-          td 
-            -if item.req_item.requisition
-              = link_to item.req_item.requisition, target: 'blank'
-                i.material-icons.right.tooltipped data-position="bottom" data-delay="50" data-tooltip="Purchase Request" open_in_new
-            -if item.remark.present?
-              i.material-icons.right.orange-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="#{item.remark}" speaker_notes
-    tfoot
-      tr.compact
-        td.right-align colspan=8 Subtotal
-        td.right-align = currency(@purchase_order.order_items.sum(:line_amount), currency: @purchase_order.currency) || 'N/A'
-        -unless @purchase_order.requested?
-          td.right-align = currency(@purchase_order.order_items.sum(:actual_amt), currency: @purchase_order.currency) || 'N/A'
-.row
-  .col.s12.m8
-    .card-panel
-      .record-field
-        .label Instructions to supplier
-        .item = @purchase_order.instructions
-      .record-field
-        .label Notes
-        .item = @purchase_order.notes
+    ul.tabs.z-depth-1
+      li.tab.col.s2
+        a.active href='#tab1' Purchase Order
+      li.tab.col.s2
+        a.active href='#tab2' Purchase Request
+      li.tab.col.s2
+        a href='#tab3' PO Receives
 
-  .col.s12.m4
-    .card-panel.blue-grey.lighten-4
-      .display-field
-        .label Subtotal
-        .item = currency(@purchase_order.subtotal, currency: @purchase_order.currency)
-      .display-field
-        .label Discounts
-        .item = currency(@purchase_order.discounts, currency: @purchase_order.currency)
-      .display-field
-        .label Est. tax
-        .item = currency(@purchase_order.est_tax, currency: @purchase_order.currency)
-      .display-field
-        .label Non recurring
-        .item = currency(@purchase_order.non_recurring, currency: @purchase_order.currency)
-      .display-field
-        .label Shipping
-        .item = currency(@purchase_order.shipping, currency: @purchase_order.currency)
-      .display-field
-        .label Total Amount
-        .item = currency(@purchase_order.total_amount, currency: @purchase_order.currency)
-      .display-field
-        .label Down Payment
-        .item = currency(@purchase_order.down_payment, currency: @purchase_order.currency)
-      .display-field
-        .label Remaining Amount
-        .item = currency(@purchase_order.total_amount - @purchase_order.down_payment, currency: @purchase_order.currency) rescue nil
+    #tab1.tab-content
+      .horizontal-scroll
+        table.compact.striped
+          thead
+            tr
+              th.wd25 Description
+              th.right-align Qty
+              th Unit
+              th.right-align Unit price
+              th.right-align Disc.
+              th.right-align Est.Tax
+              th.right-align Non-reccuring
+              th.right-align Shipping
+              th.right-align Total
+              -unless @purchase_order.requested?
+                th.right-align Actual
+              th.right-align Remark
+
+          tbody
+            - @purchase_order.order_items.each do |item|
+              tr.compact
+                td.wd25 
+                  = item.description
+                  i.material
+                td.right-align = item.quantity
+                td = item.unit
+                td.right-align = currency(item.unit_price, currency: item.currency)
+                td.right-align = currency(item.discount, currency: item.currency)
+                td.right-align = currency(item.est_tax, currency: item.currency)
+                td.right-align = currency(item.non_recurring, currency: item.currency)
+                td.right-align = currency(item.shipping, currency: item.currency)
+                td.right-align = currency(item.line_amount, currency: item.currency)
+                -unless @purchase_order.requested?
+                  td.right-align = currency(item.actual_amt, currency: item.currency) || 'N/A'
+                td 
+                  -if item.remark.present?
+                    i.material-icons.right.orange-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="#{item.remark}" speaker_notes
+          tfoot
+            tr.compact
+              td.right-align colspan=8 Subtotal
+              td.right-align = currency(@purchase_order.order_items.sum(:line_amount), currency: @purchase_order.currency) || 'N/A'
+              -unless @purchase_order.requested?
+                td.right-align = currency(@purchase_order.order_items.sum(:actual_amt), currency: @purchase_order.currency) || 'N/A'
+
+    #tab2.tab-content
+      .horizontal-scroll
+        table.compact.striped
+          thead
+            tr
+              th.wd25 Description
+              th.right-align Qty Requested
+              th Unit
+              th.right-align Est. unit price
+              th.right-align Date Req'd
+              th.right-align Link
+          tbody
+            - @purchase_order.order_items.each do |item|
+              tr.compact
+                -if item.req_item
+                  td.wd25 
+                    = item.req_item.description
+                    i.material
+                  td.right-align = item.req_item.qty_reqd
+                  td = item.req_item.unit
+                  td.right-align = currency(item.req_item.est_price, currency:item.req_item.currency) || '--'
+                  td.right-align = item.req_item.needed_by_date
+                  td
+                    = link_to item.req_item.requisition, target: 'blank'
+                      i.material-icons.right.tooltipped data-position="bottom" data-delay="50" data-tooltip="Purchase Request" open_in_new
+                -else
+                  td.red-text = 'Error: missing requisition item'
+
+    #tab3.tab-content
+      .horizontal-scroll
+        table.compact.striped
+          thead
+            tr
+              th.wd25 Description
+              th.right-align Qty Ordered
+              th Unit
+              th.right-align Qty Received
+              th.right-align Qty Accepted
+              th.right-align Qty Rejected
+              th Location
+              th Code
+              th.left-align Actions
+              th
+
+          tbody
+            - @purchase_order.order_items.each do |item|
+              - if item.receive_items.blank?
+                tr.compact
+                  td.wd25 
+                    = item.description
+                  td.right-align = item.quantity
+                  td = item.unit
+                  td colspan=6 &nbsp;
+                  td
+                    - if can? :create, PurchaseReceive
+                      input.checkbox.toggle-trigger type="checkbox" id="item-#{item.id}" name="items[#{item.id}]"
+                      = label_tag "item-#{item.id}", ""
+              - else
+                -item.receive_items.each.with_index do |receive_item, index|
+                  tr.compact
+                    td.wd25
+                      = item.description if index == 0
+                    td.right-align = item.quantity if index == 0
+                    td = receive_item.unit if index == 0
+                    td.right-align = receive_item.quantity
+                    td.right-align = receive_item.qty_accepted
+                    td.right-align = receive_item.qty_rejected
+                    td = receive_item.location
+                    td = receive_item.code
+                    td 
+                      = link_to purchase_receive_path(receive_item.purchase_receive)
+                        i.material-icons.left visibility
+                    td
+                      - if can?(:create, PurchaseReceive) && !item.all_received? && index == 0
+                        input.checkbox.toggle-trigger type="checkbox" id="item-#{item.id}" name="items[#{item.id}]"
+                        = label_tag "item-#{item.id}", ""
+                  
+    .row
+      .col.offset-m8.s12.m4
+        .card-panel.blue-grey.lighten-4
+          .display-field
+            .label Subtotal
+            .item = currency(@purchase_order.subtotal, currency: @purchase_order.currency)
+          .display-field
+            .label Discounts
+            .item = currency(@purchase_order.discounts, currency: @purchase_order.currency)
+          .display-field
+            .label Est. tax
+            .item = currency(@purchase_order.est_tax, currency: @purchase_order.currency)
+          .display-field
+            .label Non recurring
+            .item = currency(@purchase_order.non_recurring, currency: @purchase_order.currency)
+          .display-field
+            .label Shipping
+            .item = currency(@purchase_order.shipping, currency: @purchase_order.currency)
+          .display-field
+            .label Total Amount
+            .item = currency(@purchase_order.total_amount, currency: @purchase_order.currency)
+          .display-field
+            .label Down Payment
+            .item = currency(@purchase_order.down_payment, currency: @purchase_order.currency)
+          .display-field
+            .label Remaining Amount
+            .item = currency(@purchase_order.total_amount - @purchase_order.down_payment, currency: @purchase_order.currency) rescue nil
