@@ -1,13 +1,17 @@
 .card-panel
   .horizontal-scroll
-    table.compact.striped
+    table.compact
       thead
         tr
           th Description
           th.right-align Qty
           th Unit
-          th.right-align Accepted
-          th.right-align Rejected
+          -if params[:check]=='y'
+            th.right-align Accepted
+            th.right-align Rejected
+          -else
+            th.right-align.grey-text Accepted
+            th.right-align.grey-text Rejected
           th Location
           th Code
           th Notes

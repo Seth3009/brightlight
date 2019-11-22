@@ -547,6 +547,24 @@ input[type=text]:disabled, input[type=text][readonly="readonly"], input[type=pas
 	margin: 2px;
 }
 
+// ========================================== Icon Buttons ==========================================
+
+.red-icon-button {
+	border-radius: 4px;
+	display: inline-block;
+	padding: 1px 5px;
+	background-color: salmon;
+	
+	i.material-icons, i.material-icons.left {
+		margin-right: 1px !important;
+		color: #C62828 !important;
+	}
+	a {
+		color: #C62828 !important;
+	}
+
+}
+
 // ============================================= Navbar =============================================
 nav.top-navbar {
 	background-color: #eceff1 !important;

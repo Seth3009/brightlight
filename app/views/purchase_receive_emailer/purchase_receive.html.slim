@@ -19,15 +19,15 @@ html
               strong = @requisition.requester.try(:name)
           tr 
             td Purchase Request
-            td = link_to "Purchase Request No. #{@requisition.id}", @requisition
+            td = link_to "Purchase Request No. #{@requisition.id}: #{@requisition.description}", @requisition
           tr 
             td Purchase Order
-            td = link_to "Purchase Request No. #{@po.id}", @po
+            td = link_to "Purchase Order No. #{@po.id}: #{@po.description}", @po
           tr 
             td New status
             td = @po.aasm.current_state.upcase
 
-      P Please contact Purchasing (Ms. #{config.purchasing_pic_name}, ext. 37) for any question.
+      P Please contact Purchasing (#{Rails.application.config.purchasing_pic_name}, ext. 37) for any question.
 
       p Thank you for using <i>Brightlight</i>. 
     

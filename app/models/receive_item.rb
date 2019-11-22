@@ -6,7 +6,7 @@ class ReceiveItem < ActiveRecord::Base
 
   def self.new_from_order_items(order_items)
     order_items.map {|order_item|
-      new(quantity: order_item.quantity,
+      new(quantity: 0,
         unit: order_item.unit,
         order_item_id: order_item.id,
         qty_accepted: 0,
@@ -17,7 +17,7 @@ class ReceiveItem < ActiveRecord::Base
 
   def self.new_from_other_items(id_list)
     where(id: id_list).map {|item|
-      new(quantity: item.quantity - item.qty_accepted,
+      new(quantity: 0,
         unit: item.unit,
         order_item_id: item.order_item_id,
         purchase_receive_id: item.purchase_receive_id,
