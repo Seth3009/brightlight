@@ -11,11 +11,11 @@ tr.compact.nested-fields
     .input-field
       = f.text_field :unit
   td
-    .input-field
-      = f.number_field :qty_accepted, in: 0..f.object.quantity, class: "right-align"
+    .input-field class="#{'red lighten-4' if params[:check] == 'y'}"
+      = f.number_field :qty_accepted, in: 0..f.object.quantity, class: "right-align", disabled: (params[:check] != 'y')
   td
-    .input-field
-      = f.number_field :qty_rejected, in: 0..f.object.quantity, class: "right-align"
+    .input-field class="#{'red lighten-4' if params[:check] == 'y'}"
+      = f.number_field :qty_rejected, in: 0..f.object.quantity, class: "right-align", disabled: (params[:check] != 'y')
   td
     .input-field
       = f.text_field :location

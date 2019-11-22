@@ -25,7 +25,7 @@ html
             td New status
             td = @po.aasm.current_state.upcase
 
-      P Please contact Purchasing (Ms. #{config.purchasing_pic_name}, ext. 37) for any question.
+      P Please contact Purchasing (#{Rails.application.config.purchasing_pic_name}, ext. 37) for any question.
 
       p Thank you for using <i>Brightlight</i>. 
     
