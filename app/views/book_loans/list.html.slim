@@ -1,4 +1,5 @@
 .label Teacher Books
+h5 #{@tulisan}
 h5 
   a#borrowers-menu.dropdown-button href="#!" data-activates="borrowers-options" data-year="#{@academic_year.id}" data-beloworigin="true" 
     span#teacher = @teacher.present? ? "#{@teacher.name}" : "Teacher name" 
@@ -86,9 +87,14 @@ ul#inventory-menu.dropdown-content.menu
       button.btn.modal-close type='submit' name='batch' data-disable=true OK
       a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
       .left
+        - if can? :update, BookCopy
+          button.btn.btn-flat.modal-close style="padding-left:2mm; padding-right:2mm;" type='submit' name='dispose' data-disable=true data-confirm="Are you sure to dispose selected book loan records?"
+            | Dispose
+            / i.material-icons.green-text delete
         - if can? :delete, BookLoan
           button.btn.btn-flat.modal-close type='submit' name='delete' data-disable=true data-confirm="Are you sure to delete selected book loan records?"
             i.material-icons.red-text delete
+        
             
   nav
     .nav-wrapper
@@ -103,6 +109,7 @@ ul#inventory-menu.dropdown-content.menu
               a href="#edit-menu" class="modal-trigger" 
                 | Edit
                 i.material-icons.left edit
+          
 
       #default-buttons
         ul
@@ -164,9 +171,9 @@ ul#inventory-menu.dropdown-content.menu
                 | Add New Book
                 i.material-icons.left add
 
-  .card-panel.compact
+  .card-panel.compact    
     .horizontal-scroll
-      - unless @error.present?
+      - unless @error.present?        
         table.compact.striped
           thead
             tr
@@ -192,7 +199,8 @@ ul#inventory-menu.dropdown-content.menu
                     input.checkbox type="checkbox" id="add_#{book_loan.id}" name="add[#{book_loan.id}]"
                     = label_tag "add[#{book_loan.id}]", ""
                 td = @book_loans.offset + i + 1
-                td = link_to book_loan.barcode, book_copy_path(book_loan.book_copy_id)
+                td name="book_copy[#{book_loan.book_copy_id}]" 
+                  = link_to book_loan.barcode, book_copy_path(book_loan.book_copy_id)
                 td 
                   = link_to book_loan.title.truncate(50), book_edition_path(book_loan.edition_id), remote: true
                 td = book_loan.catg_code

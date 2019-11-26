@@ -357,6 +357,13 @@ class BookLoansController < ApplicationController
     elsif params[:delete]
       BookLoan.not_disposed.where(id:selected_ids).destroy_all
       ids_to_remove = selected_ids
+    elsif params[:dispose]
+      @bc_ids = BookLoan.where({id:selected_ids,loan_status:nil}).pluck(:book_copy_id)
+      @failed_disposes = BookLoan.where({id:selected_ids,loan_status:'B'}).pluck(:barcode).join(", ")
+      if @bc_ids.present?
+        @dispose = BookCopy.where(id:@bc_ids).update_all(disposed:true)
+        ids_to_remove = selected_ids       
+      end      
     end
 
     ids_to_uncheck = completed - ids_to_remove
