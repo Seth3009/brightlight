@@ -16,8 +16,8 @@
           li = message
 
   .card-panel
-    | The following placeholders are available for the template: #receipt_no#, #student_name#, #student_no#, #grade_section#, 
-      #academic_year#, #invoice_date#, #receipt_amount#, #receipt_amount_in_words#, #received_by#, #paid_by#
+    | The following placeholders are available for the template: 
+    = @placeholders
     
   .card-panel
     .row
@@ -77,4 +77,4 @@
 
     = f.hidden_field :user, value: current_user
     
-    = tinymce
+    = tinymce relative_urls: false

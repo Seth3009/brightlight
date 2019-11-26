@@ -15,17 +15,19 @@ class TemplatesController < ApplicationController
   # GET /templates/new
   def new
     @template = Template.new
+    @placeholders = ""
   end
 
   # GET /templates/1/edit
   def edit
+    @placeholders = @template.template_target.placeholders.split(", ").map{|x| "##{x.strip}#"}.join(", ")
   end
 
   # POST /templates
   # POST /templates.json
   def create
     @template = Template.new(template_params)
-
+    @placeholders = ""
     respond_to do |format|
       if @template.save
         format.html { redirect_to @template, notice: 'Template was successfully created.' }
@@ -40,6 +42,7 @@ class TemplatesController < ApplicationController
   # PATCH/PUT /templates/1
   # PATCH/PUT /templates/1.json
   def update
+    @placeholders = @template.template_target.placeholders.split(", ").map{|x| "##{x}#"}.join(", ")
     respond_to do |format|
       if @template.update(template_params)
         format.html { redirect_to @template, notice: 'Template was successfully updated.' }

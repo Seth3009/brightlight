@@ -150,11 +150,7 @@ class PurchaseOrdersController < ApplicationController
     if @supplier.blank?
       redirect_to @purchase_order, alert: 'Supplier info is missing'
     else
-      if params[:template].present?
-        letter_using_template(params[:template])
-      else
-        letter_html
-      end
+      letter_using_template
     end
   end
 
@@ -179,16 +175,15 @@ class PurchaseOrdersController < ApplicationController
     def letter_html
     end
 
-    def letter_using_template(template_name)
-      @template = Template.find template_name
-      @template = Template.where(target:'purchase_order_letter').where(active:'true').take unless @template
+    def letter_using_template
+      @template = Template.find_by(target:'po_letter', active:'true')
 
       if @template
         @template.placeholders = {
-          order_date: @purchase_order.order_date,
+          order_date: @purchase_order.order_date.strftime("%d %B %Y"),
           order_num: @purchase_order.order_num,
           supplier_name: @purchase_order.supplier.company_name,
-          supplier_address: @purchase_order.full_address,
+          supplier_address: @purchase_order.supplier.full_address,
           supplier_phone: @purchase_order.supplier.phone,
           supplier_fax: @purchase_order.supplier.fax,
           supplier_contact: @purchase_order.supplier.contact_name,

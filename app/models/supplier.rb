@@ -5,6 +5,10 @@ class Supplier < ActiveRecord::Base
   
   validates :company_name, presence: true
 
+  def full_address
+    %Q(#{address1}#{"<br>"+address2 if address2.present?}#{"<br>"+city if city.present?}#{"<br>"+province if province.present?}#{', '+post_code if post_code.present?})
+  end
+
   def self.import_xlsx(file_path)
     # Read from file
     xl = Roo::Spreadsheet.open(file_path)

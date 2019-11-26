@@ -1,52 +1,5 @@
-nav
-  .nav-wrapper
-    ul
-      li 
-        = link_to purchase_orders_path
-          | All Purchase Orders
-          i.material-icons.left chevron_left
-      li 
-        = link_to list_requisitions_path
-          | Process FPB
-          i.material-icons.left play 
-    ul.right
-      = link_to print_purchase_order_path(@purchase_order), remote: true, class: 'go-print'
-        | Print
-        i.material-icons.left print
-
-.center
-  = image_tag "cbcs-headline.jpg", alt: "Kop Surat"
-
-br
--date = @purchase_order.order_date || Date.today
-div
-  | Bandung, #{date.strftime("%d %B %Y")}
-br
-div
-  span style="display: inline-block; width: 65px" No. PO
-  span = @purchase_order.order_num
-div 
-  span style="display: inline-block; width: 65px" Hal
-  span = @purchase_order.description
-br
--if @supplier
-  |Kepada
-  div
-    strong = @supplier.company_name
-  div
-    = @supplier.address1
-  div
-    = @supplier.address2
-  div
-    = "#{@supplier.city} #{@supplier.post_code}"
-  div
-    span style="display: inline-block; padding-right:10px" No. Telp/Fax
-    = "#{@supplier.phone} / #{@supplier.fax || '-'}"
-  div
-    strong = "u.p #{@supplier.contact_name}"
-
-p Dengan hormat,
-p Melalui surat pemesanan ini, kami <strong>Cahaya Bangsa Classical School</strong> bermaksud memesan barang sebagai berikut:
+= @template.substituted :header
+= @template.substituted :opening
 
 table.compact.bordered
   thead
@@ -88,43 +41,6 @@ table.compact.bordered
       td.right-align = currency(@purchase_order.total_amount, currency: @purchase_order.currency)
       td
 
-p Adapun ketentuan waktu pengiriman dan pembayaran adalah sbb.:
 
-table.compact.bordered
-  tbody
-    tr.grey.lighten-2
-      td.wd50 Waktu dan Tempan Pengiriman Barang
-      td.wd50 Pembayaran Tagihan
-    tr
-      td 
-        |Tanggal: ASAP
-        br Pukul 09:00 - 14:00 WIB
-        br Alamat:
-
-      td rowspan=3
-        ul
-          li Pembayaran akan ditransfer segera setelah barang pesanan kami terima.
-          li Kwitansi asli mohon dikirimkan bersamaan dengan barang pesanan (kwitansi bermeterai Rp6.000)
-          li Data Rekening: #{@supplier.bank} Cab. #{@supplier.bank_branch}
-          li
-            strong a.c : #{@supplier.bank_acct_no}
-          li
-            strong a.n : #{@supplier.bank_acct_name}
-    tr.grey.lighten-2
-      td Catatan untuk supplier
-    tr
-      td = @purchase_order.instructions || "--"
-
-
-p Demikianlah pesanan barang yang dapat kami sampaikan, untuk contact person dapat menghubungi Bag. Pembelian di no. telp 022-86813919.
-p Atas perhatian dan kerjasamanya kami ucapkan terima kasih.
-
-table
-  tr
-    td Hormat kami
-    td Mengetahui
-  td
-    td
-  tr
-    td Nori M. Onggeleng <br> Purchasing Staff
-    td Muliani Tjiptoatmadja <br> Head of Business Operation
+= @template.substituted :closing
+= @template.substituted :footer

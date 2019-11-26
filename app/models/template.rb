@@ -46,4 +46,8 @@ class Template < ActiveRecord::Base
     end
   end
 
+  def template_target
+    TemplateTarget.find_by code: target
+  end
+
 end
