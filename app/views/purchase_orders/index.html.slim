@@ -65,4 +65,6 @@ nav
               = link_to purchase_order, data: {:confirm => 'Are you sure?'}, :method => :delete
                 i.material-icons.tooltipped.red-text data-position="bottom" data-delay="50" data-tooltip="Delete" delete
 
+.toolbar.z-depth-1
+  = will_paginate @employees
 

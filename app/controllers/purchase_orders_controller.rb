@@ -5,11 +5,17 @@ class PurchaseOrdersController < ApplicationController
   # GET /purchase_orders.json
   def index
     authorize! :read, PurchaseOrder
+    items_per_page = 20
+
     if can? :process, Requisition
-      @purchase_orders = PurchaseOrder.all.includes([:requestor, :supplier, :order_items]).order(:id)
+      @purchase_orders = PurchaseOrder.all
     else
-      @purchase_orders = PurchaseOrder.where(requestor: current_employee).includes([:requestor, :supplier, :order_items]).order(:id)
+      @purchase_orders = PurchaseOrder.where(requestor: current_employee)
     end
+    @purchase_orders = @purchase_orders        
+      .includes([:requestor, :supplier, :order_items])
+      .order(id: :desc)
+      .paginate(page: params[:page], per_page: items_per_page)
   end
 
   # GET /purchase_orders/report
