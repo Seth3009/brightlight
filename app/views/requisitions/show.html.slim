@@ -37,23 +37,29 @@ nav
             .col.s6.m2
               .label No.
               .item = @requisition.id
-            .col.s6.m2
-              .label Required Date
+            .col.s6.m1
+              .label Created
+              .item = @requisition.created_at.strftime("%Y-%m-%d")
+            .col.s6.m1
+              .label Date Req'd
               .item = @requisition.date_required
+            .col.s6.m1
+              .label To Purchasing
+              .item = @requisition.sent_to_purchasing
             .col.s6.m2
               .label Status
               .item = @requisition.aasm.current_state.to_s.humanize
-            .col.s12.m6
+            .col.s12.m4
               .label Description
               .item = @requisition.description
           li.row.collection-item
-            .col.m2
+            .col.s6.m2
               .label Department
               .item = @requisition.department  
-            .col.m4
+            .col.s6.m4
               .label Requester
               .item = @requisition.requester            
-            .col.m6
+            .col.s12.m6
               .label Notes
               .item = @requisition.notes   
           li.row.collection-item
@@ -120,7 +126,8 @@ nav
           li.row.collection-item
             .col.s12.m3.label Approver
             .col.s6.m2.label Approval
-            .col.s6.m2.label Date
+            .col.s6.m1.label Date
+            .col.s6.m1.label Submitted
             .col.s12.m5.label Notes
           - [@level1_approvals, @budget_approvals].flatten.each do |approval|
             li.row.collection-item
@@ -137,7 +144,8 @@ nav
                     div style="font-size:0.8em; color: #f5494d" Click to go to approval page
                   - else
                     |--
-              .col.s6.m2.item = approval.updated_at.strftime("%d %b %Y") if !approval.approve.nil?
+              .col.s6.m1.item = approval.updated_at.strftime("%d %b %Y") if approval.approve.present?
+              .col.s6.m1.item = approval.created_at.strftime("%d %b %Y")
               .col.s12.m5.item = approval.notes 
 
     li.comment-section
