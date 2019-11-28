@@ -39,7 +39,7 @@
             = f.collection_select :department_id, Department.all, :id, :name, prompt: "Select department"
           .input-field.col.s6
             = f.label :order_date, class: "active"
-            = f.date_field :order_date, value: Date.today
+            = f.date_field :order_date, value: @purchase_order.order_date || Date.today
           .input-field.col.s6
             = f.label :due_date, class: "active"
             = f.date_field :due_date
