@@ -43,12 +43,6 @@ nav
           i.material-icons.prefix phone
           .label Phone
           .item = @purchase_order.phone_contact
-      - if @purchase_order.ordered? && can?(:update, @purchase_order)
-        .card-panel
-          div PO letter has been sent and received by vendor. 
-          div 
-            = link_to 'OK', mark_purchase_order_path(mark:'acknowledge'), class:'btn btn-small right'
-            |Change status to pending delivery. 
       .card-panel
         .record-field
           .label Instructions to supplier
