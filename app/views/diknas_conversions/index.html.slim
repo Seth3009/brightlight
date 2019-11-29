@@ -14,10 +14,25 @@ nav
           i.material-icons.right arrow_drop_down
     ul.right
       li
-      = link_to new_diknas_conversion_path
-        | New
-        i.material-icons.left add
-          
+        a href="#edit-menu" class="modal-trigger" 
+          | Copy List
+          i.material-icons.left library_books
+      li
+        = link_to new_diknas_conversion_path
+          | New
+          i.material-icons.left add
+
+= form_tag list_action_book_loans_path(employee_id:params[:grade], year: 18, page:params[:term], column:1, direction:1), remote:true do 
+  #edit-menu.modal.modal-fixed-footer.small
+    .modal-content  
+      h5 Edit selected records
+      ul
+        
+    .modal-footer
+      button.btn.modal-close type='submit' name='batch' data-disable=true OK
+      a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+      
+
 ul#term-options.dropdown-content
   li  
   - AcademicTerm.list_for_menu(5,0).each do |term|

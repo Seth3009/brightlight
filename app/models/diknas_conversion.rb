@@ -43,7 +43,18 @@ class DiknasConversion < ActiveRecord::Base
       item.conversion.value_for student_id
     }
   end
+  
+  def self.duplicate(from_term,from_grade,to_term,to_year)
+    source = self.where({academic_term_id:from_term,grade_level_id:from_grade})
+    source.each do |s|
+      dest = s.dup
+      dest.academic_term_id = to_term
+      dest.academic_year_id = to_year
+      dest.save
+    end
 
+  end
+  
   private
     def has_at_least_one_diknas_conversion_item     
       errors.add :diknas_conversion, 'must have at least one item' if diknas_conversion_items.empty?
