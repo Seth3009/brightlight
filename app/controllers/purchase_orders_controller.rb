@@ -12,9 +12,8 @@ class PurchaseOrdersController < ApplicationController
     else
       @purchase_orders = PurchaseOrder.where(requestor: current_employee)
     end
-    @purchase_orders = @purchase_orders        
-      .includes([:requestor, :supplier, :order_items])
-      .order(id: :desc)
+    @purchase_orders = @purchase_orders.index_table
+      .order("#{sort_column} #{sort_direction}")
       .paginate(page: params[:page], per_page: items_per_page)
   end
 
@@ -215,5 +214,9 @@ class PurchaseOrdersController < ApplicationController
         {:order_items_attributes => [:stock_item__id, :quantity, :unit, :min_delivery_qty, :pending_qty, :type, :line_amount, 
           :unit_price, :currency, :deleted, :description, :status, :line_num, :extra1, :extra2, :req_item_id, :remark,
           :discount, :est_tax, :non_recurring, :shipping, :actual_amt, :_destroy, :id ]})
+    end
+
+    def sortable_columns 
+      [:id, :supplier_name, :requestor_name, :order_date, :order_status]
     end
 end

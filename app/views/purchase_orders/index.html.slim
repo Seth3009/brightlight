@@ -37,29 +37,31 @@ nav
   table.striped.compact
     thead
       tr
-        th Order num
-        th Supplier
+        th = sort_link :id, "Order num"
+        th = sort_link :supplier_name, "Supplier"
         th Items
-        th Order date
+        th = sort_link :order_date, "Order date"
         th.right-align Total amount
-        th Requestor
-        th Status
+        th = sort_link :requestor_name, "Requestor"
+        th = sort_link :order_status, "Status"
         th Actions
 
     tbody
       - @purchase_orders.each do |purchase_order|
+        -if purchase_order.id == 125
+          -puts "#{purchase_order.order_num} #{purchase_order.id} #{purchase_order.requestor_name}"
         tr
           td = purchase_order.order_num
           td = purchase_order.supplier.try(:company_name)
           td = purchase_order.order_items.map {|item| item.description}.join(", ").truncate(130) if purchase_order.order_items
           td = purchase_order.order_date
           td.right-align = currency(purchase_order.total_amount, currency: purchase_order.currency)
-          td = purchase_order.requestor
+          td = purchase_order.requestor_name
           td = purchase_order.status_description
           td.actions
             = link_to purchase_order
               i.material-icons visibility
-            - if can? :update, PurchaseOrder
+            - if can? :update, purchase_order
               = link_to edit_purchase_order_path(purchase_order)
                 i.material-icons edit
               = link_to purchase_order, data: {:confirm => 'Are you sure?'}, :method => :delete

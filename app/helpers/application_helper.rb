@@ -37,7 +37,7 @@ module ApplicationHelper
     icon = sort_direction == "asc" ? "keyboard_arrow_up" : "keyboard_arrow_down"
     icon = column == sc ? icon : ""
     link_to "#{title} <i class='material-icons vmiddle'>#{icon}</i>".html_safe, 
-      params.merge({column: column, direction: direction})
+      params.merge({column: column, direction: direction}).reject {|k,v| k == :page }
   end
 
   def number_of_unread_message

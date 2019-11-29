@@ -109,6 +109,12 @@ class PurchaseOrder < ActiveRecord::Base
     !order_items.all? &:all_received?
   end
 
+  def self.index_table
+    joins('left join suppliers on purchase_orders.supplier_id = suppliers.id')
+    .joins('left join employees on purchase_orders.requestor_id = employees.id')
+    .select('purchase_orders.*, purchase_orders.status as order_status, suppliers.company_name as supplier_name, employees.name as requestor_name')
+  end
+
   private
 
     def at_least_one_order_item
