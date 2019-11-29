@@ -58,7 +58,7 @@ class OrderItem < ActiveRecord::Base
   end
 
   def all_received?
-    receive_items.sum(:qty_accepted) == quantity
+    receive_items.sum(:qty_accepted) >= quantity
   end
 
   private

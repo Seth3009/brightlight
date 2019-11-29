@@ -26,7 +26,7 @@ class PurchaseOrder < ActiveRecord::Base
     state :ordered
     state :acknowledged
     state :partial
-    state :complete
+    state :completed
     state :canceled
     state :close
 
@@ -44,12 +44,12 @@ class PurchaseOrder < ActiveRecord::Base
       end
     end
 
-    event :receive do
-      transitions from: [:ordered, :acknowledged], to: :partial, if: :pending_delivery?
-      transitions from: [:ordered, :acknowledged, :partial], to: :complete
-      # after do
-      #   notify_requesters { |req, po| PurchaseOrderEmailer.purchase_receive req, po }
-      # end
+    event :receive_partial do
+      transitions from: [:requested, :completed, :ordered, :acknowledged, :partial], to: :partial
+    end
+
+    event :receive_full do
+      transitions from: [:requested, :ordered, :acknowledged, :partial], to: :completed
     end
 
     event :cancel do
@@ -114,6 +114,15 @@ class PurchaseOrder < ActiveRecord::Base
     .joins('left join employees on purchase_orders.requestor_id = employees.id')
     .select('purchase_orders.*, purchase_orders.status as order_status, suppliers.company_name as supplier_name, employees.name as requestor_name')
   end
+
+  def receive
+    pending_delivery? ? receive_partial : receive_full
+  end
+
+  def receive!
+    pending_delivery? ? receive_partial! : receive_full!
+  end
+
 
   private
 

@@ -10,6 +10,7 @@ class PurchaseReceive < ActiveRecord::Base
 
   after_create :set_received_status
   after_save   :set_checked_status
+  after_save   :update_po_status
 
   scope :for_requester, lambda {|requester| 
     joins(:purchase_order)
@@ -43,7 +44,16 @@ class PurchaseReceive < ActiveRecord::Base
     update status: "Checked" if date_checked.present? && status != "Checked"
   end
 
+  def update_po_status
+    purchase_order.receive! if qty_changed?
+  end
+
   def set_received_status
     update status: "Received"
   end
+
+  def qty_changed?
+    receive_items.any?(&:quantity_changed?) || receive_items.any?(&:qty_accepted_changed?)
+  end
+
 end

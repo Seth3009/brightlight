@@ -50,6 +50,7 @@ class PurchaseReceivesController < ApplicationController
 
     respond_to do |format|
       if @purchase_receive.save
+        @purchase_receive.purchase_order.receive!
         @purchase_receive.notify_requesters { |req, po, purchase_receive| PurchaseReceiveEmailer.purchase_receive req, po, purchase_receive }
         format.html { redirect_to @purchase_receive, notice: 'Purchase receive was successfully created.' }
         format.json { render :show, status: :created, location: @purchase_receive }
@@ -65,6 +66,7 @@ class PurchaseReceivesController < ApplicationController
   def update
     respond_to do |format|
       if @purchase_receive.update(purchase_receive_params)
+        @purchase_receive.purchase_order.receive!
         format.html { redirect_to @purchase_receive, notice: 'Purchase receive was successfully updated.' }
         format.json { render :show, status: :ok, location: @purchase_receive }
       else
