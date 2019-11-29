@@ -12,9 +12,14 @@ class PurchaseOrdersController < ApplicationController
     else
       @purchase_orders = PurchaseOrder.where(requestor: current_employee)
     end
-    @purchase_orders = @purchase_orders.index_table
-      .order("#{sort_column} #{sort_direction}")
-      .paginate(page: params[:page], per_page: items_per_page)
+
+    unless params[:column].present? && params[:direction].present?
+      @purchase_orders = @purchase_orders.index_table.order(id: :desc)
+    else
+      @purchase_orders = @purchase_orders.index_table.order("#{sort_column} #{sort_direction}")                            
+    end
+
+    @purchase_orders = @purchase_orders.paginate(page: params[:page], per_page: items_per_page)
   end
 
   # GET /purchase_orders/report
