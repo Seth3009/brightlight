@@ -2,8 +2,7 @@ class DiknasConversion < ActiveRecord::Base
   belongs_to :diknas_course
   belongs_to :academic_year
   belongs_to :academic_term
-  belongs_to :grade_level
-  belongs_to :diknas_conversion
+  belongs_to :grade_level    
 
   has_many :diknas_conversion_items, dependent: :destroy
   has_many :diknas_conversion_lists
