@@ -11,6 +11,12 @@ $("<%=j @rows_to_uncheck %>").prop("checked",false);
   Materialize.toast("Book loans records updated.", 5000, "green");
 <% elsif params[:delete] %>
   Materialize.toast("Book loans deleted", 5000, "green");
+<% elsif params[:dispose] %>
+  <% if @dispose.present? %>
+    Materialize.toast("Book loans disposed", 5000, "green");
+  <% else %>
+    Materialize.toast("Error disposed: <%= @failed_disposes %>", 5000, "red");
+  <% end %>
 <% end %>
 update_borrowers_menu();
 toggle_menu();
