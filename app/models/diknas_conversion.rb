@@ -12,9 +12,11 @@ class DiknasConversion < ActiveRecord::Base
   accepts_nested_attributes_for :diknas_conversion_lists, reject_if: :all_blank, allow_destroy: true
 
   def self.list_for_select
-    DiknasConversion.joins([:diknas_course, :grade_level, :academic_term])
-      .select(:id, "(diknas_courses.name || ' - ' || grade_levels.name || ' - ' || academic_terms.name) as name")
-      .order([:academic_term_id, :grade_level_id, 'diknas_courses.name'])
+    DiknasConversion.joins([:diknas_course, :grade_level, :academic_term, :academic_year])
+      .select(:id, "(grade_levels.name || ' - ' || academic_terms.name || ' - ' || diknas_courses.name) as name")
+      .where(academic_year:AcademicYear.current_id-3..AcademicYear.current_id-1)
+      .order([:academic_year_id, :grade_level_id, 'diknas_courses.name', :academic_term_id])
+      # .select(:id, "(diknas_courses.name || ' - ' || grade_levels.name || ' - ' || academic_terms.name) as name")
   end
 
   def self.value_for(student_id, diknas_course_id, academic_term_id)
