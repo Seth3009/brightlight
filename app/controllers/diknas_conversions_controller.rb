@@ -83,6 +83,16 @@ class DiknasConversionsController < ApplicationController
     end
   end
 
+  def duplicate
+    @conversions = DiknasConversion.where({grade_level_id:params[:from_grade],academic_term_id:params[:to_term]})
+    if @conversions.length == 0
+      if params[:conversion_copy]    
+        DiknasConversion.duplicate(params[:from_term],params[:from_grade],params[:to_term],AcademicTerm.find(params[:to_term]).academic_year_id)
+      end
+    end
+    respond_to :js
+  end
+
   def dry_run
     authorize! :read, DiknasConversion 
     respond_to do |format|

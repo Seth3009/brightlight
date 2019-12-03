@@ -1,0 +1,7 @@
+<% if params[:conversion_copy] %> 
+  <% if @conversions.length > 0 %>
+    Materialize.toast("Conversion settings already exist", 5000, "red");
+  <% else %>
+    Materialize.toast("Completed copy conversion settings", 5000, "green");
+  <% end %>
+<% end %>
