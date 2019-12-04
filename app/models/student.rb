@@ -53,11 +53,12 @@ class Student < ActiveRecord::Base
 				where('UPPER(students.name) LIKE ? or UPPER(grade_sections.name) LIKE ? or students.family_no LIKE ?', "%#{tardy_term.upcase}%","%#{tardy_term.upcase}%","%#{tardy_term.upcase}%") }
 
   filterrific(
-    default_filter_params: { sorted_by: 'name_asc' },
+    default_filter_params: { with_grade_level_id: 1, sorted_by: 'name_asc' },
     available_filters: [
       :sorted_by,
 			:search_query,
 			:with_grade_level_id,
+			:with_grade_section_id,
       :filtered_by
     ]
 	)
@@ -65,6 +66,11 @@ class Student < ActiveRecord::Base
 	scope :with_grade_level_id, lambda { |grade_level_id|
 		with_grade_section
 		.where('grade_levels.id = ?', grade_level_id)
+	}
+
+	scope :with_grade_section_id, lambda { |grade_section_id|
+		with_grade_section
+		.where('grade_section.id = ?', grade_section_id)
 	}
 
   scope :search_query, lambda { |query|
