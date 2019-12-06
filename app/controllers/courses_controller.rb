@@ -12,8 +12,14 @@ class CoursesController < ApplicationController
       @courses = @courses.with_grade_level(params[:grade])
       @grade = GradeLevel.where(id: params[:grade])
     end
-    @academic_year = AcademicYear.find(params[:year]) rescue AcademicYear.current
-    @courses = @courses.where(academic_year_id: @academic_year.id)
+    if params[:year] == 'none'
+      @academic_year = nil
+      academic_year_id = nil
+    else
+      @academic_year = AcademicYear.find(params[:year]) rescue AcademicYear.current
+      academic_year_id = @academic_year.id
+    end
+    @courses = @courses.where(academic_year_id: @academic_year_id)
       .order(:grade_level_id)
       .paginate(page: params[:page], per_page: items_per_page)
   end

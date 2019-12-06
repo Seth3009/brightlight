@@ -10,7 +10,7 @@ nav
           i.material-icons.left filter_list
       li
         a.dropdown-button href="#!" data-activates="year-options" data-beloworigin="true" 
-          span#year = params[:year].present? && params[:year].downcase == 'all' ? 'All' : (@academic_year.present? ? "#{@academic_year.name}" : "Academic Year") 
+          span#year = params[:year].present? && params[:year].downcase == 'none' ? 'None' : (@academic_year.present? ? "#{@academic_year.name}" : "Academic Year") 
           i.material-icons.right arrow_drop_down
     ul.right
       li.tooltipped data-position="bottom" data-delay="50" data-tooltip="Create new course"
@@ -27,7 +27,7 @@ nav
             = "#{grade.name}"
     ul#year-options.dropdown-content
       li  
-        = link_to 'All', courses_path(params.merge(year:'all').symbolize_keys)
+        = link_to 'None', courses_path(params.merge(year:'none').symbolize_keys)
       - AcademicYear.list_for_menu.each do |year|
         li 
           = link_to year.name, courses_path(params.merge(year: year.id).symbolize_keys)
