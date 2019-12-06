@@ -23,6 +23,9 @@
 /public/assets/images/F*.PNG
 /public/assets/images/SPL-*.PNG
 
+# Ignore uploaded files
+/public/uploads/*
+
 # Ignore vscode stuff
 /.vscode
 
