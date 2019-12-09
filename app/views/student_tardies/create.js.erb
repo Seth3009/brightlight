@@ -2,6 +2,5 @@ $("tbody#student_tardies").append("<%=j render partial:'index_row', locals: {stu
 Materialize.toast("Tardy slip for <%= @student_tardy.try(:student).try(:name)%> created.", 4000, "green")
 var printWindow = window.open( "<%= student_tardy_url(@student_tardy.id) %>", 'Print', 'width=950, height=500, toolbar=0, resizable=0');
 printWindow.addEventListener('load', function(){
-    printWindow.print();
-    printWindow.close();
+    printWindow.print();    
 }, true);

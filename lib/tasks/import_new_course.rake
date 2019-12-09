@@ -2,7 +2,7 @@ namespace :data do
 	desc "Import new course"
 	task import_new_course: :environment do
 
-    xl = Roo::Spreadsheet.open('lib/tasks/courses.xlsx')
+    xl = Roo::Spreadsheet.open('lib/tasks/coursesG12-2019.xlsx')
     sheet = xl.sheet('Sheet1')
 
     header = {no:'no',name:'name',number:'number', description:'description', grade_level_id:'grade_level_id',
@@ -13,8 +13,9 @@ namespace :data do
 			next if i < 1
 
       puts "Importing row #{i}. #{row[:number]}"
-      Course.find_or_create_by(
-        name: row[:number],
+      course = Course.find_or_create_by(number: row[:number], academic_year_id:nil)
+      course.update(
+        name: row[:name],
         number: row[:number],
         description: row[:description],
         grade_level_id: row[:grade_level_id],

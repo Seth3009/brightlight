@@ -53,7 +53,9 @@ Rails.application.routes.draw do
   resources :copy_conditions
   resources :book_conditions
   resources :student_activities
-  
+
+
+  post 'diknas_conversions/copy' => 'diknas_conversions#duplicate', as: :duplicate_diknas_conversions
   get 'diknas_converteds/reports' => 'diknas_converteds#reports', as: :converted_reports
   resources :diknas_converteds
   
@@ -149,7 +151,7 @@ Rails.application.routes.draw do
     end
     resources :course_sections, except: :new, shallow: true do
       member do
-        get  'edit_students'
+        get  'students'
         post 'add_students'
       end
     end

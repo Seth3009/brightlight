@@ -17,7 +17,10 @@
       .col.s4
         .label Filter term
         = f.text_field :search_query, class: 'filterrific-periodically-observed'
-      .col.s3
+      .col.s2
+        .label Grade
+        = f.select :with_grade_level_id, @filterrific.select_options[:with_grade_level_id], { include_blank: '- Any -' }
+      .col.s2
         .label Sorted by
         = f.select :sorted_by, @filterrific.select_options[:sorted_by]
       .col.s3

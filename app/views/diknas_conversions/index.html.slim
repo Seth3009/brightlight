@@ -14,10 +14,34 @@ nav
           i.material-icons.right arrow_drop_down
     ul.right
       li
-      = link_to new_diknas_conversion_path
-        | New
-        i.material-icons.left add
-          
+        a href="#edit-menu" class="modal-trigger" 
+          | Copy List
+          i.material-icons.left library_books
+      li
+        = link_to new_diknas_conversion_path
+          | New
+          i.material-icons.left add
+
+= form_tag duplicate_diknas_conversions_path(from_term:params[:from_term],from_grade:params[:from_grade],to_term:params[:to_term],to_year:params[:to_year]), remote:true do 
+  #edit-menu.modal.modal-fixed-footer.small
+    .modal-content  
+      h5 Copy Diknas Conversion
+      ul
+        li 
+          = label_tag :grade
+          = select_tag :from_grade, options_from_collection_for_select(GradeLevel.option_list_diknas_conversion, :id, :name), prompt: "Grade"
+        li
+          = label_tag :from_term
+          = select_tag :from_term, options_from_collection_for_select(AcademicTerm.option_list_from_term, :id, :name), prompt: "From Term"
+        li
+          = label_tag :to_term
+          = select_tag :to_term, options_from_collection_for_select(AcademicTerm.option_list_to_term.order(:id), :id, :name), prompt: "To Term"
+          / User.where.not(id: Teacher.pluck(:user_id).reject {|x| x.nil?}
+    .modal-footer
+      button.btn.modal-close type='submit' name='conversion_copy' data-disable=true OK
+      a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+      
+
 ul#term-options.dropdown-content
   li  
   - AcademicTerm.list_for_menu(5,0).each do |term|

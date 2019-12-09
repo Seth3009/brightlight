@@ -1,11 +1,11 @@
 .nested-fields
-  .col.s5
+  .col.s6
     .input-field
       = f.select :conversion_id, options_from_collection_for_select(DiknasConversion.list_for_select, :id, :name, f.object.conversion_id), prompt: true
   .col.s1
     .input-field
       = f.text_field :weight
-  .col.s5
+  .col.s4
     .input-field
       = f.text_field :notes
   .col.s1

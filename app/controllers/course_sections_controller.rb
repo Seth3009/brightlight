@@ -1,6 +1,6 @@
 class CourseSectionsController < ApplicationController
-  before_action :set_course_section, only: [:show, :edit, :edit_students, :update, :destroy]
-  load_and_authorize_resource
+  before_action :set_course_section, only: [:show, :edit, :students, :add_students, :update, :destroy]
+  # load_and_authorize_resource
 
   # GET /course_sections
   # GET /course_sections.json
@@ -26,8 +26,8 @@ class CourseSectionsController < ApplicationController
     authorize! :update, @course_section
   end
 
-  # GET /course_sections/1/edit_students
-  def edit_students
+  # GET /course_sections/1/students
+  def students
     authorize! :update, @course_section
     @academic_year = params[:year] ? AcademicYear.find(params[:year]) : AcademicYear.current
     @filterrific = initialize_filterrific(

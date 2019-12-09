@@ -26,12 +26,10 @@ nav
           td = template_target.code
           td = template_target.description
           td 
-             = link_to template_target
-              i.material-icons visibility
-             - if can? :update, template_target
+            - if can? :update, template_target
               = link_to edit_template_target_path(template_target)
                 i.material-icons edit
-             - if can? :destroy,template_target
+            - if can? :destroy,template_target
               = remote_link_to_delete template_target, message: "Template target deleted", class: "left waves-effect waves-light red-text"
                 i.material-icons delete
 
