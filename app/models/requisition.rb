@@ -281,10 +281,10 @@ class Requisition < ActiveRecord::Base
   # Call back from comment
   def create_email_from_comment(comment)
     # Purchasing email is set in Rails configuration file
-    purchasing_email = Rails.application.config.purchasing_email_address
-    purchasing = Employee.find_by_email /<(.+)>/.match(purchasing_email)[1]
+    default_buyer_email_address = Rails.application.config.default_buyer_email_address
+    default_buyer = Employee.find_by_email /<(.+)>/.match(default_buyer_email_address)[1]
     # Send email to requester, supervisor and purchasing, except the comment originator
-    addressee = [self.requester, purchasing].reject {|n| n.id == comment.user.employee.try(:id)}
+    addressee = [self.requester, default_buyer].reject {|n| n.id == comment.user.employee.try(:id)}
     EmailNotification.new_comment comment, addressee.map { |e| %("#{e.name}" <#{e.try(:email)}>) }
   end
 
