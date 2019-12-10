@@ -1,9 +1,9 @@
 namespace :data do
-	desc "Import new course"
-	task import_new_course: :environment do
+	desc "Import new course, call with `bundle exec rake data:import_new_course['xl_file.xlsx','SheetName']`"
+	task :import_new_course, [:xl_file, :xl_sheet] => [:environment] do |task, args|
 
-    xl = Roo::Spreadsheet.open('lib/tasks/coursesG12-2019.xlsx')
-    sheet = xl.sheet('Sheet1')
+    xl = Roo::Spreadsheet.open(args[:xl_file])
+    sheet = xl.sheet(args[:xl_sheet])
 
     header = {no:'no',name:'name',number:'number', description:'description', grade_level_id:'grade_level_id',
               academic_year_id:'academic_year_id', academic_term_id:'academic_term_id', employee_id:'employee_id'}
