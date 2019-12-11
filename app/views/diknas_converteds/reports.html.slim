@@ -6,7 +6,7 @@ ul#grade-options.dropdown-content
     li 
       = link_to grade.name, "#!", onclick:"filterSectionOptions(#{grade.id}, '#{grade.name}');"
 
-ul#section-options.dropdown-content
+ul#section-options.dropdown-content style="min-width:120px"
   - @grade_sections.each do |section|
     li
       = link_to section.name, "#!", class:"grade-#{section.grade_level_id}", onclick:"filterStudentOptions(#{section.grade_level_id},#{section.id}, '#{section.name}');"
