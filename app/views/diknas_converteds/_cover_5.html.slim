@@ -1,22 +1,24 @@
 .card-panel
   span style="padding-top:2cm; display:block;"
     .page-width
+      p.center style="font-size:larger;" KETERANGAN PINDAH SEKOLAH
+      br
+      p NAMA PESERTA DIDIK #{": " + "." * 60}
+      p NOMOR INDUK &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp#{": " + "." * 60}
+      
       table.compact.bordered 
           thead
             tr 
               th colspan=4 KELUAR         
             tr style="border-bottom: 3px double grey"
-              th style="width:10%" Tanggal
-              th style="width:10%" Kelas yang ditinggalkan
-              th style="width:30%" Sebab-sebab Keluar atau Atas Permintaan (Tertulis)
-              th style="width:50%" Tanda Tangan Kepala Sekolah, Stempel Sekolah, dan Tanda Tangan Orang Tua/Wali
+              th style="width:2cm" Tanggal
+              th style="width:2.5cm" Kelas yang ditinggalkan
+              th style="width:3cm" Sebab-sebab Keluar atau Atas Permintaan (Tertulis)
+              th style="width:3cm" Tanda Tangan Kepala Sekolah, Stempel Sekolah, dan Tanda Tangan Orang Tua/Wali
           tbody
-            tr
-              td
-              td
-              td
-              td
-                = "." * 20
+            = render 'tr_cover5' 
+            = render 'tr_cover5'
+            = render 'tr_cover5'                      
 .page-break
 
 css:
@@ -24,4 +26,18 @@ css:
     margin-left: 2cm;
     margin-right: 2cm;
     width:80%;
-  }     
+  }   
+
+  .addcolon:after {
+    content: ' \003A';
+  } 
+
+  hr.solid {
+    padding-top: 0;
+    border: 0.5px solid;
+  }
+
+  hr.dotted {
+    height: 0;
+    border: 0.5px dotted;
+  }
