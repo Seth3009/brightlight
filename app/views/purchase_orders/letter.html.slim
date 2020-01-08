@@ -66,7 +66,11 @@ table.compact.bordered
       td.right-align colspan=7 Down Payment 
       td.right-align = currency(@purchase_order.down_payment, currency: @purchase_order.currency)
       td  
-
+    tr
+      td
+      td.right-align colspan=7 Sisa Pembayaran 
+      td.right-align = currency(@purchase_order.total_amount - @purchase_order.down_payment, currency: @purchase_order.currency) rescue nil
+      td 
 
 = @template.substituted :closing
 = @template.substituted :footer
