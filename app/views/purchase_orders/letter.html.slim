@@ -7,39 +7,65 @@ table.compact.bordered
       td No
       td Item
       td Order
-      td Code
       td.right-align Unit Price
-      td.right-align Total (incl. disc)
+      td.right-align Discount
+      td.right-align Tax
+      td.right-align N/R
+      td.right-align Shipping
+      td.right-align Line total
       td Notes
   tbody
     - discount = total = 0
     - @purchase_order.order_items.each.with_index(1) do |item, i|
-      - discount += item.discount if item.discount
-      - total += item.line_amount if item.line_amount
+      /- discount += item.discount if item.discount
+      /- total += item.line_amount if item.line_amount
       tr 
         td = "#{i}."
         td = item.description
         td = "#{item.quantity} #{item.unit}"
-        td = item.code
         td.right-align = currency(item.unit_price, currency: item.currency)
+        td.right-align = currency(item.discount, currency: item.currency)
+        td.right-align = currency(item.est_tax, currency: item.currency)
+        td.right-align = currency(item.non_recurring, currency: item.currency)
+        td.right-align = currency(item.shipping, currency: item.currency)
         td.right-align = currency(item.line_amount, currency: item.currency)
         td = item.notes
   tfoot style="background-color: lightgrey"
     tr
       td
-      td.right-align colspan=4 Jumlah
-      td.right-align = currency(total, currency: @purchase_order.currency)
+      td.right-align colspan=7 Jumlah
+      td.right-align = currency(@purchase_order.subtotal, currency: @purchase_order.currency)
       td
     tr
       td
-      td.right-align colspan=4 Discount 
-      td.right-align = currency(discount, currency: @purchase_order.currency)
+      td.right-align colspan=7 Discount 
+      td.right-align = currency(@purchase_order.discounts, currency: @purchase_order.currency)
       td
     tr
       td
-      td.right-align colspan=4 Total Tagihan 
+      td.right-align colspan=7 Pajak 
+      td.right-align = currency(@purchase_order.est_tax, currency: @purchase_order.currency)
+      td
+    tr
+      td
+      td.right-align colspan=7 Non recurring 
+      td.right-align = currency(@purchase_order.non_recurring, currency: @purchase_order.currency)
+      td
+    tr
+      td
+      td.right-align colspan=7 Shipping 
+      td.right-align = currency(@purchase_order.shipping, currency: @purchase_order.currency)
+      td      
+    tr
+      td
+      td.right-align colspan=7 Total Tagihan 
       td.right-align = currency(@purchase_order.total_amount, currency: @purchase_order.currency)
       td
+    tr
+      td
+      td.right-align colspan=7 Down Payment 
+      td.right-align = currency(@purchase_order.down_payment, currency: @purchase_order.currency)
+      td  
 
 
 = @template.substituted :closing

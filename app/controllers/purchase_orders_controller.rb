@@ -192,6 +192,7 @@ class PurchaseOrdersController < ApplicationController
         @template.placeholders = {
           order_date: @purchase_order.order_date.strftime("%d %B %Y"),
           order_num: @purchase_order.order_num,
+          instructions: @purchase_order.instructions,
           supplier_name: @purchase_order.supplier.company_name,
           supplier_address: @purchase_order.supplier.full_address,
           supplier_phone: @purchase_order.supplier.phone,
