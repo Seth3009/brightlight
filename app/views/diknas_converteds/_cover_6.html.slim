@@ -1,0 +1,45 @@
+.card-panel
+  span style="padding-top:2cm; display:block;"
+    .page-width
+      p.center style="font-size:larger;" KETERANGAN PINDAH SEKOLAH
+      br
+      p NAMA PESERTA DIDIK #{": " + "." * 60}
+      p NOMOR INDUK &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp#{": " + "." * 60}
+      
+      table.compact.bordered 
+          thead
+            tr 
+              th style="width:1cm" NO.
+              / th colspan=3 MASUK 
+              th
+              th
+              th                    
+          tbody
+            = render 'tr_cover6'            
+            = render 'tr_cover6'
+            = render 'tr_cover6'                      
+.page-break
+
+css:
+  .page-width {
+    margin-left: 2cm;
+    margin-right: 2cm;
+    width:80%;
+  }   
+
+  .addcolon:after {
+    content: ' \003A';
+  } 
+
+  hr.solid {
+    padding-top: 0;
+    padding-bottom: 0;
+    border: 0.5px solid;
+  }
+
+  hr.dotted {
+    height: 0;
+    border: 0.5px dotted;
+  }
+
+  
