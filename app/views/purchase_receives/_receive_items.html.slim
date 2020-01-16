@@ -6,7 +6,7 @@
           th Description
           th.right-align Qty
           th Unit
-          -if params[:check]=='y'
+          -if checking
             th.right-align Accepted
             th.right-align Rejected
           -else
@@ -15,11 +15,12 @@
           th Location
           th Code
           th Notes
-          th colspan=2 Action
+          -if !checking
+            th colspan=2 Action
       tbody#deliveries
         -if @receive_items.present?
-          = f.fields_for :receive_items, @receive_items do |item|
-            = render 'receive_item_fields', f: item
+          = f.fields_for :receive_items, receive_items do |item|
+            = render 'receive_item_fields', f: item, checking: checking
         -else
           = f.fields_for :receive_items do |item|
-            = render 'receive_item_fields', f: item
+            = render 'receive_item_fields', f: item, checking: checking

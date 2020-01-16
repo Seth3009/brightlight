@@ -1,0 +1,61 @@
+-if @purchase_receives.blank?
+  #error_explanation
+    |No new items to receive
+.row
+  - @purchase_receives.each do |receipt|
+    - po = receipt.purchase_order
+    .card id="rcpt-#{receipt.id}"
+      .col.s12.m4
+        .card-panel
+          .card-panel-header Purchase Order
+          .row
+            .col.s6
+              .label Order No
+              .item = po.order_num
+            .col.s6
+              .label Order date
+              .item = po.order_date
+            .col.s12
+              .label Description
+              .item = po.description.present? ? @po.description : "--"
+            .col.s6
+              .label Requestor
+              .item = po.requestor.name
+            .col.s6
+              .label Department
+              .item = po.department.name
+      .col.s12.m5
+        .card-panel
+          .card-panel-header 
+            | Purchase Receipt
+            -if receipt.status=='Received'
+              span.right.red-text New
+          .row
+            .col.s6
+              .label Date received
+              .item = receipt.date_received
+            .col.s6
+              .label Receiver
+              .item = receipt.receiver
+            .col.s12
+              .label Items
+              ol
+                -receipt.receive_items.each do |item|
+                  li = item.order_item.description
+
+      .col.s12.m3
+        .card-panel
+          .card-panel-header 
+            | Action
+            
+          p Click here to check and receive the items
+          = link_to edit_purchase_receive_path(receipt, check:'y', checker: @requester.id), remote: true, class: "btn", id: "btn-rcpt-#{receipt.id}"
+            | Receive
+            i.material-icons.left check_circle
+          button.btn.disabled id="btn-disabled-#{receipt.id}" style="display: none"
+            | Receive
+            i.material-icons.left check_circle
+
+      .modal.modal-fixed-footer.wide id="show-modal-#{receipt.id}"
+
+      .col.s12 id="rcpt-detail-#{receipt.id}"

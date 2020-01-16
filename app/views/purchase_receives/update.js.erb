@@ -1,0 +1,5 @@
+Materialize.toast("Your receipt has been successfully updated", 5000, "green");
+
+$("#rcpt-detail-<%= params[:id]%>").html("<%=j render 'item_detail'%>");
+$("#btn-rcpt-<%= params[:id]%>").remove();
+$("#btn-disabled-<%= params[:id]%>").toggle();

@@ -1,0 +1,34 @@
+.card-panel
+  .horizontal-scroll
+    table.compact
+      thead
+        tr
+          th Description
+          th.right-align Qty
+          th Unit
+          th.right-align Accepted
+          th.right-align Rejected
+          th Location
+          th Code
+          th Notes
+
+      tbody
+        - @purchase_receive.receive_items.each do |item|
+          tr.compact
+            td.wd25
+              -if item.order_item.present? 
+                = item.order_item.description
+            td.right-align
+              = item.quantity
+            td
+              = item.unit
+            td.right-align
+              = item.qty_accepted
+            td.right-align
+              = item.qty_rejected
+            td
+              = item.location
+            td
+              = item.code 
+            td
+              = item.notes

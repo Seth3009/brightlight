@@ -5,7 +5,13 @@
       
     - else
       h4 Daily Supplies Transaction #{if params[:trx_date].present? then params[:trx_date].to_date.strftime('%d %b %Y') else Date.today.strftime('%d %b %Y') }
-      
+  .col.s6
+    .right style="padding-top: 10px"
+      = link_to check_purchase_receives_path, class: "btn btn-large waves-effect waves-light blue" 
+        |Purchase Receipt
+        i.material-icons.left local_shipping
+
+    
 nav
   .nav-wrapper    
     ul.right

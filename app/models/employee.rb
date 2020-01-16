@@ -28,6 +28,11 @@ class Employee < ActiveRecord::Base
     .where(book_loans: {academic_year_id: year || AcademicYear.current_id})
 		.order(:name).uniq
   }
+
+  scope :with_badge_code, lambda { |code|
+    joins(:badge)
+    .where(badges: {code: code})
+  }
   
 	scope :department_heads, lambda { 
     joins('join departments on employees.id = departments.manager_id or employees.id = departments.vice_manager_id')

@@ -5,12 +5,9 @@ nav.light
   .nav-wrapper
     ul
       li
-        = link_to purchase_receives_path
-          |Purchase Receipt List
+        = link_to purchase_order_path(@po)
+          | Purchase Order
           i.material-icons.left chevron_left
-      li
-        = link_to 'Purchase Order', purchase_order_path(@po)
-      
     ul.right
       -if can? :update, @purchase_receive
         li 
