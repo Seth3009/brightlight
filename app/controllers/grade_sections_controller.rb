@@ -57,8 +57,7 @@ class GradeSectionsController < ApplicationController
       Student,
       params[:filterrific],
       select_options: {
-        sorted_by: Student.options_for_sorted_by,
-        with_grade_level_id: GradeLevel.options_for_select
+        sorted_by: Student.options_for_sorted_by
       }
     ) or return
 

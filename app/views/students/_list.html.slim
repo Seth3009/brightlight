@@ -19,7 +19,7 @@
             = check_box_tag "add[#{student.id}]"
             = label_tag "add[#{student.id}]", ""
           td = student.name
-          td = student.gs_name
+          td = student.gs_name rescue nil
           td = student.family_no
 
     = will_paginate students 
