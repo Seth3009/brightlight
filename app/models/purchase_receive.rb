@@ -9,12 +9,20 @@ class PurchaseReceive < ActiveRecord::Base
   accepts_nested_attributes_for :receive_items, reject_if: :all_blank, allow_destroy: true
 
   after_create :set_received_status
-  after_save   :set_checked_status
+  after_save   :set_delivered_status
   after_save   :update_po_status
 
   scope :for_requester, lambda {|requester| 
     joins(:purchase_order)
     .where('purchase_orders.requestor_id = ? OR receiver_id = ? OR checker_id = ?', requester.id, requester.id, requester.id)
+  }
+
+  scope :received, lambda { 
+    where(status: 'Received')
+  }
+
+  scope :delivered, lambda { 
+    where(status: 'Delivered')
   }
 
   def self.new_from_po(po)
@@ -40,8 +48,8 @@ class PurchaseReceive < ActiveRecord::Base
 
   private
 
-  def set_checked_status
-    update status: "Checked" if date_checked.present? && status != "Checked"
+  def set_delivered_status
+    update status: "Delivered" if date_checked.present? && status != "Delivered"
   end
 
   def update_po_status

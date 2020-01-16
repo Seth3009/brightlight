@@ -1,0 +1,11 @@
+= form_for @receipt, remote:true do |f|
+  = f.hidden_field :status, value: 'Delivered'
+  .modal-content
+    h4 Check & Receive Items
+    p You should physically check and count the received items. And then, please fill in the number of items accepted/rejected. 
+      You may fill in notes, codes and locations (where the items will be placed eventually) as necessary.
+    p.red-text You may not change the accepted/rejected quantities after the form is submitted.
+    = render 'receive_items', f: f, checking: true
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+    button.btn.btn-primary.waves-effect.waves-light.modal-action.modal-close data-disable=true Submit 

@@ -16,6 +16,7 @@ class PurchaseReceivesController < ApplicationController
   # GET /purchase_receives/1.json
   def show
     @po = @purchase_receive.purchase_order
+    authorize! :read, @po
   end
 
   # GET /purchase_receives/new
@@ -38,14 +39,39 @@ class PurchaseReceivesController < ApplicationController
     end
   end
 
+  def check
+    respond_to do |format|
+      format.html
+      format.js {
+        @requester = Employee.with_badge_code(params[:code]).take
+        if @requester
+          @purchase_receives = PurchaseReceive.received.for_requester(@requester).order(updated_at: :desc, created_at: :desc)
+          unless @purchase_receives.present?
+            @errors = "No new purchase receipt found"
+          end 
+        else
+          @errors = "Invalid badge"
+        end
+      }
+    end
+  end
+
   # GET /purchase_receives/1/edit
   def edit
+    authorize! :update, @purchase_receive
+    @receipt = @purchase_receive
     @po = @purchase_receive.purchase_order
+    @checking = params[:check] == 'y' && @purchase_receive.status == 'Received'
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /purchase_receives
   # POST /purchase_receives.json
   def create
+    authorize! :create, PurchaseReceive
     @purchase_receive = PurchaseReceive.new(purchase_receive_params)
 
     respond_to do |format|
@@ -64,14 +90,17 @@ class PurchaseReceivesController < ApplicationController
   # PATCH/PUT /purchase_receives/1
   # PATCH/PUT /purchase_receives/1.json
   def update
+    authorize! :update, @purchase_receive
     respond_to do |format|
       if @purchase_receive.update(purchase_receive_params)
         @purchase_receive.purchase_order.receive!
         format.html { redirect_to @purchase_receive, notice: 'Purchase receive was successfully updated.' }
         format.json { render :show, status: :ok, location: @purchase_receive }
+        format.js
       else
         format.html { render :edit }
         format.json { render json: @purchase_receive.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -79,6 +108,7 @@ class PurchaseReceivesController < ApplicationController
   # DELETE /purchase_receives/1
   # DELETE /purchase_receives/1.json
   def destroy
+    authorize! :destroy, @purchase_receive
     @purchase_receive.destroy
     respond_to do |format|
       format.html { redirect_to purchase_receives_url, notice: 'Purchase receive was successfully destroyed.' }

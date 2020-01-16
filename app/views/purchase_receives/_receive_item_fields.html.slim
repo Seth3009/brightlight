@@ -11,11 +11,11 @@ tr.compact.nested-fields
     .input-field
       = f.text_field :unit
   td
-    .input-field class="#{'red lighten-4' if params[:check] == 'y'}"
-      = f.number_field :qty_accepted, in: 0..f.object.quantity, class: "right-align", disabled: (params[:check] != 'y')
+    .input-field class="#{'red lighten-4' if checking}"
+      = f.number_field :qty_accepted, in: 0..f.object.quantity, class: "right-align", disabled: (!checking)
   td
-    .input-field class="#{'red lighten-4' if params[:check] == 'y'}"
-      = f.number_field :qty_rejected, in: 0..f.object.quantity, class: "right-align", disabled: (params[:check] != 'y')
+    .input-field class="#{'red lighten-4' if checking}"
+      = f.number_field :qty_rejected, in: 0..f.object.quantity, class: "right-align", disabled: (!checking)
   td
     .input-field
       = f.text_field :location
@@ -25,6 +25,7 @@ tr.compact.nested-fields
   td
     .input-field
       = f.text_field :notes
-  td
-    = link_to_remove_association f, class: "waves-effect waves-teal red-text"
-      i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete
+  -if !checking
+    td
+      = link_to_remove_association f, class: "waves-effect waves-teal red-text"
+        i.material-icons.small.tooltipped data-position="bottom" data-delay="50" data-tooltip="Remove item" delete

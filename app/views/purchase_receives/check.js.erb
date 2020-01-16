@@ -1,0 +1,5 @@
+<% if @errors.present? %>
+  Materialize.toast('<%= @errors %>', 5000, 'red');
+<% else %>
+  $("#receipt-list").html("<%=j render 'receipt_list'%>");
+<% end %>

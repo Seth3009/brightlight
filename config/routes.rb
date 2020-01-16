@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :purchase_receives
   resources :class_budgets
   resources :approvers
   resources :student_tardies
@@ -362,6 +361,12 @@ Rails.application.routes.draw do
       get 'letter'
       get 'print'
       get 'mark'
+    end
+  end
+
+  resources :purchase_receives do
+    collection do
+      get 'check'
     end
   end
 

@@ -884,6 +884,14 @@ span.emblem {
 	top: -8px;
 }
 
+span.badge.new {
+	font-weight: 300;
+	font-size: 0.8rem;
+	color: #fff;
+	background-color: #26a69a;
+	border-radius: 2px;
+}
+
 // =========================================== Main Menu ============================================
 .main-menu {
 	margin-top: 20px;
@@ -1383,6 +1391,11 @@ ul {
 .modal.medium {
 	max-height: 550px !important;
 	width: 600px !important;
+}
+
+.modal.wide {
+	max-height: 80% !important;
+	width: 95% !important;
 }
 
 // =========================================== Carpool =========================================

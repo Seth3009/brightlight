@@ -36,6 +36,7 @@
 //= require gate_tap
 //= require filterrific_checkbox
 //= require requisitions
+
 //= require checkbox-toggle-button
 //= require jquery.timepicker.min.js
 //= require jquery.combobox

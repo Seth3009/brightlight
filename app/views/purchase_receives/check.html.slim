@@ -1,0 +1,30 @@
+-title = 'Receiving'
+.row 
+  .col.s6
+    h4 
+      |Check purchase receipt
+  .col.s6
+    .right style="padding-top: 10px"
+      = link_to supplies_transactions_path, class: "btn btn-large waves-effect waves-light blue" 
+        |Back to Supplies
+        i.material-icons.left chevron_left
+
+#receipt-list
+  .card-panel
+    .center
+      h3 Scan your badge
+
+javascript:
+  $(document).on('page:load ready', function() {
+    $(window).codeScanner({
+      minEntryChars: 10,
+      maxEntryTime: 500,
+      onScan: function($element, input) {             
+        var card = input.trim();     
+        $.ajax({
+          url: "/purchase_receives/check.js?code="+card
+        })        
+      }
+    });
+  });
+

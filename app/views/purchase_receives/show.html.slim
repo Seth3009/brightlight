@@ -1,16 +1,13 @@
--title = 'Purchase Receive'
-h4 Purchase Receive (PO: #{@purchase_receive.purchase_order ? @purchase_receive.purchase_order.order_num : "Missing order" })
+-title = 'Purchase Receipt'
+h4 Purchase Receipt (PO: #{@purchase_receive.purchase_order ? @purchase_receive.purchase_order.order_num : "Missing order" })
 
 nav.light
   .nav-wrapper
     ul
       li
-        = link_to purchase_receives_path
-          |Purchase Receive List
+        = link_to purchase_order_path(@po)
+          | Purchase Order
           i.material-icons.left chevron_left
-      li
-        = link_to 'Purchase Order', purchase_order_path(@po)
-      
     ul.right
       -if can? :update, @purchase_receive
         li 
@@ -66,7 +63,7 @@ nav.light
             .item = @po.buyer.name
     .col.s12.m5
       .card-panel
-        .card-panel-header Purchase Receive
+        .card-panel-header Purchase Receipt
         .row
           .col.s6
             .label Date Received

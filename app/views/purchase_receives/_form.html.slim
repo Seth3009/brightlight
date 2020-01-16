@@ -1,12 +1,12 @@
 = form_for @purchase_receive do |f|
   = f.hidden_field :purchase_order_id
   = f.hidden_field :receiver_id, value: current_user.employee.id if params[:check].blank?
-  = f.hidden_field :checker_id, value: current_user.employee.id if params[:check] == 'y'
+  = f.hidden_field :checker_id, value: current_user.employee.id if params[:checker].blank?
   / = f.hidden_field :date_checked, value: Date.today if params[:check] == 'y'
 
   - if @purchase_receive.errors.any?
     #error_explanation
-      h2 = "#{pluralize(@purchase_receive.errors.count, "error")} prohibited this purchase receive from being saved:"
+      h2 = "#{pluralize(@purchase_receive.errors.count, "error")} prohibited this Purchase Receipt from being saved:"
       ul
         - @purchase_receive.errors.full_messages.each do |message|
           li = message
@@ -51,7 +51,7 @@
             .item = @po.buyer.name
     .col.s12.m5
       .card-panel
-        .card-panel-header Purchase receive
+        .card-panel-header Purchase Receipt
         .row
           .input-field.col.s6
             = f.label :date_received, class: "active"
@@ -74,7 +74,7 @@
       .brand-logo.hide-on-med-and-down style="margin-left: 20px; font-size:1.5em"
         | Items
   
-  = render 'receive_items', f: f
+  = render 'receive_items', f: f, receive_items: @receive_items, checking: @checking
 
   .toolbar.z-depth-1 
     = link_to 'Cancel', purchase_order_path(@po), class: "waves-effect waves-teal btn-flat"
