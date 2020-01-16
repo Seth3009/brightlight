@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190523034049) do
+ActiveRecord::Schema.define(version: 20200116035743) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -725,56 +725,6 @@ ActiveRecord::Schema.define(version: 20190523034049) do
 
   add_index "currencies", ["user_id"], name: "index_currencies_on_user_id", using: :btree
 
-  create_table "deliveries", force: :cascade do |t|
-    t.integer  "purchase_order_id"
-    t.date     "delivery_date"
-    t.string   "address"
-    t.integer  "accepted_by_id"
-    t.date     "accepted_date"
-    t.integer  "checked_by_id"
-    t.date     "checked_date"
-    t.string   "notes"
-    t.string   "delivery_method"
-    t.string   "status"
-    t.integer  "created_by_id"
-    t.integer  "last_updated_by_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-  end
-
-  add_index "deliveries", ["accepted_by_id"], name: "index_deliveries_on_accepted_by_id", using: :btree
-  add_index "deliveries", ["checked_by_id"], name: "index_deliveries_on_checked_by_id", using: :btree
-  add_index "deliveries", ["created_by_id"], name: "index_deliveries_on_created_by_id", using: :btree
-  add_index "deliveries", ["last_updated_by_id"], name: "index_deliveries_on_last_updated_by_id", using: :btree
-  add_index "deliveries", ["purchase_order_id"], name: "index_deliveries_on_purchase_order_id", using: :btree
-
-  create_table "delivery_items", force: :cascade do |t|
-    t.integer  "delivery_id"
-    t.integer  "order_item_id"
-    t.float    "quantity"
-    t.string   "unit"
-    t.integer  "accepted_by_id"
-    t.date     "accepted_date"
-    t.integer  "checked_by_id"
-    t.string   "checked_date"
-    t.string   "notes"
-    t.boolean  "is_accepted"
-    t.boolean  "is_rejected"
-    t.string   "reject_notes"
-    t.string   "accept_notes"
-    t.integer  "created_by_id"
-    t.integer  "last_updated_by_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-  end
-
-  add_index "delivery_items", ["accepted_by_id"], name: "index_delivery_items_on_accepted_by_id", using: :btree
-  add_index "delivery_items", ["checked_by_id"], name: "index_delivery_items_on_checked_by_id", using: :btree
-  add_index "delivery_items", ["created_by_id"], name: "index_delivery_items_on_created_by_id", using: :btree
-  add_index "delivery_items", ["delivery_id"], name: "index_delivery_items_on_delivery_id", using: :btree
-  add_index "delivery_items", ["last_updated_by_id"], name: "index_delivery_items_on_last_updated_by_id", using: :btree
-  add_index "delivery_items", ["order_item_id"], name: "index_delivery_items_on_order_item_id", using: :btree
-
   create_table "departments", force: :cascade do |t|
     t.string   "name"
     t.string   "code"
@@ -1239,6 +1189,7 @@ ActiveRecord::Schema.define(version: 20190523034049) do
     t.string   "slug"
     t.string   "email"
     t.string   "email2"
+    t.string   "occupations"
   end
 
   add_index "guardians", ["person_id"], name: "index_guardians_on_person_id", using: :btree
@@ -1651,6 +1602,21 @@ ActiveRecord::Schema.define(version: 20190523034049) do
   add_index "purchase_orders", ["requestor_id"], name: "index_purchase_orders_on_requestor_id", using: :btree
   add_index "purchase_orders", ["term_of_payment_id"], name: "index_purchase_orders_on_term_of_payment_id", using: :btree
 
+  create_table "purchase_receives", force: :cascade do |t|
+    t.integer  "purchase_order_id"
+    t.date     "date_received"
+    t.date     "date_checked"
+    t.integer  "receiver_id"
+    t.integer  "checker_id"
+    t.string   "notes"
+    t.boolean  "partial"
+    t.string   "status"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "purchase_receives", ["purchase_order_id"], name: "index_purchase_receives_on_purchase_order_id", using: :btree
+
   create_table "raw_foods", force: :cascade do |t|
     t.string   "name"
     t.boolean  "is_stock"
@@ -1661,6 +1627,24 @@ ActiveRecord::Schema.define(version: 20190523034049) do
     t.string   "unit"
     t.string   "food_type",  default: "-"
   end
+
+  create_table "receive_items", force: :cascade do |t|
+    t.integer  "purchase_receive_id"
+    t.integer  "order_item_id"
+    t.float    "quantity"
+    t.string   "unit"
+    t.boolean  "partial"
+    t.float    "qty_accepted"
+    t.float    "qty_rejected"
+    t.string   "notes"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.string   "location"
+    t.string   "code"
+  end
+
+  add_index "receive_items", ["order_item_id"], name: "index_receive_items_on_order_item_id", using: :btree
+  add_index "receive_items", ["purchase_receive_id"], name: "index_receive_items_on_purchase_receive_id", using: :btree
 
   create_table "recipes", force: :cascade do |t|
     t.integer  "food_id"
@@ -2088,6 +2072,10 @@ ActiveRecord::Schema.define(version: 20190523034049) do
     t.string   "language"
     t.string   "nisn"
     t.string   "nis"
+    t.string   "child_order"
+    t.string   "school_from"
+    t.string   "accepted_grade"
+    t.date     "accepted_date"
   end
 
   add_index "students", ["family_no"], name: "index_students_on_family_no", using: :btree
@@ -2178,8 +2166,9 @@ ActiveRecord::Schema.define(version: 20190523034049) do
     t.string   "name"
     t.string   "code"
     t.string   "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "placeholders"
   end
 
   create_table "templates", force: :cascade do |t|
@@ -2325,17 +2314,6 @@ ActiveRecord::Schema.define(version: 20190523034049) do
   add_foreign_key "courses", "course_departments"
   add_foreign_key "courses", "subjects"
   add_foreign_key "currencies", "users"
-  add_foreign_key "deliveries", "employees", column: "accepted_by_id"
-  add_foreign_key "deliveries", "employees", column: "checked_by_id"
-  add_foreign_key "deliveries", "purchase_orders"
-  add_foreign_key "deliveries", "users", column: "created_by_id"
-  add_foreign_key "deliveries", "users", column: "last_updated_by_id"
-  add_foreign_key "delivery_items", "deliveries"
-  add_foreign_key "delivery_items", "employees", column: "accepted_by_id"
-  add_foreign_key "delivery_items", "employees", column: "checked_by_id"
-  add_foreign_key "delivery_items", "order_items"
-  add_foreign_key "delivery_items", "users", column: "created_by_id"
-  add_foreign_key "delivery_items", "users", column: "last_updated_by_id"
   add_foreign_key "diknas_conversion_items", "academic_terms"
   add_foreign_key "diknas_conversion_items", "academic_years"
   add_foreign_key "diknas_conversion_items", "courses"
@@ -2413,6 +2391,9 @@ ActiveRecord::Schema.define(version: 20190523034049) do
   add_foreign_key "purchase_orders", "suppliers"
   add_foreign_key "purchase_orders", "users", column: "created_by_id"
   add_foreign_key "purchase_orders", "users", column: "last_updated_by_id"
+  add_foreign_key "purchase_receives", "purchase_orders"
+  add_foreign_key "receive_items", "order_items"
+  add_foreign_key "receive_items", "purchase_receives", column: "purchase_receive_id"
   add_foreign_key "recipes", "foods"
   add_foreign_key "recipes", "raw_foods"
   add_foreign_key "reminders", "messages"
