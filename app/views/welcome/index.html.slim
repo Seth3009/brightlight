@@ -362,11 +362,14 @@
           .card-tabs
             ul.tabs.tabs-fixed-width.tabs-transparent
               li.tab
-                  a href="#tab-requisition" Purchase Requests
+                a href="#tab-requisition" 
+                  = can?(:process, Requisition) ? "FPB" : "Purchase Requests"
               -if can? :process, Requisition
                 li.tab
                   a.active href="#tab-purchasing" Purchasing
-                
+              - if can? :create, PurchaseReceive
+                li.tab
+                  a.active href="#tab-receiving" Receiving
           .card-content
             #tab-requisition
               ul
@@ -385,6 +388,11 @@
                     li = link_to 'Budgets', budgets_path
                   - if can? :manage, Account
                     li = link_to 'Accounts', accounts_path
+            - if can? :create, PurchaseReceive
+              #tab-receiving
+                ul
+                  li = link_to 'Purchase Orders', purchase_orders_path
+                  li = link_to 'List Purchase Receipts', purchase_receives_path
 
     - if signed_in? and current_user.admin?
       .col.m4.s12
