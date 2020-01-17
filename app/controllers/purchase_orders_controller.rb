@@ -7,7 +7,7 @@ class PurchaseOrdersController < ApplicationController
     authorize! :read, PurchaseOrder
     items_per_page = 20
 
-    if can? :process, Requisition
+    if can?(:process, Requisition) || can?(:manage, PurchaseReceive)
       @purchase_orders = PurchaseOrder.all
     else
       @purchase_orders = PurchaseOrder.where(requestor: current_employee)
