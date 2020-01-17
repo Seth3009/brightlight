@@ -48,7 +48,7 @@ module ApplicationHelper
     if datetime > Time.now.beginning_of_day && datetime < Time.now.end_of_day
       datetime.strftime("%H:%M")
     else
-      datetime.strftime("%b %d") + (datetime.year != Time.now.year ? ", " + datetime.strftime : "")
+      datetime.strftime("%b %d") + (datetime.year != Time.now.year ? ", " + datetime.strftime("%Y") : "")
     end
   end
 
