@@ -72,12 +72,12 @@ nav
         = date_field_tag 'print_date', params[:dt] || Date.today
       
 - if @diknas.present?
-  / = render 'cover_1'
-  / = render 'cover_2'
-  / = render 'cover_3'
+  = render 'cover_1'
+  = render 'cover_2'
+  = render 'cover_3'
   = render 'cover_4'
-  / = render 'cover_5'
-  / = render 'cover_6'
+  = render 'cover_5'
+  = render 'cover_6'
 
   = render 'table_a'
   = render 'table_b'
@@ -125,6 +125,7 @@ javascript:
     });
 
 css:  
+  
   @media print {    
     h5 , .top-navbar {
       margin: none;
@@ -173,3 +174,5 @@ css:
 
     
   }  
+
+  

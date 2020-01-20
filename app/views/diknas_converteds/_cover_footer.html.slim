@@ -1,13 +1,13 @@
 
 
-.footline.bottom
+.footline#bottom
   .row
-    .col.s4.left
+    .col.s5.left
       |RAPOR - #{@student.name.upcase}
-    .col.s4.center
+    .col.s2.center
       #number
-    .col.s4 style="text-align:right"
-      |Dicetak dari eRapor SMA 2018
+    .col.s5 style="text-align:right"
+      |SMA Cahaya Bangsa Classical School
 
 .page-break
 
@@ -15,33 +15,32 @@
 css:
   
   body {
-    /* Set "my-sec-counter" to 0 */
-      counter-reset: my-sec-counter;
+    /* Set "my-sec-counter" to 0  */
+      counter-reset: page;
   }
 
   #number::before {
     /* Increment "my-sec-counter" by 1 */
-    counter-increment: my-sec-counter;
-    content: counter(my-sec-counter);
+    counter-increment: page;
+    content: counter(page);
   } 
 
   .footline {   
     border-top: 1px solid black;
     margin-left: auto;
-    margin-right: auto;
-    
+    margin-right: auto;  
   }
+  
 
   @media print{
-    .bottom {
+    #bottom {
       margin-left: auto;
       margin-right: auto;
-      display: block;
       position: fixed;
       left: 1cm;
       bottom: 0.5cm;
       width:90%;    
-    }
+    }    
   }
 
   /*@media print { 
