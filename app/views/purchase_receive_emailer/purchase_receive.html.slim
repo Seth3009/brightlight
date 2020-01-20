@@ -8,8 +8,8 @@ html
     div style="margin-left:30px; width=85%; font-size:16px"
 
       p Your order has arrived! 
-      p Please check the items received and process it using the following link. 
-      p = link_to "Purchase Receipt", edit_purchase_receive_path(@purchase_receive, check:'y')
+      
+      p Please check and pick up your order at the Inventory Office. Don't forget bring your ID badge with you, as you will need it to do the transaction.
 
       table.description-list
         tbody
@@ -20,12 +20,11 @@ html
           tr 
             td Purchase Request
             td = link_to "Purchase Request No. #{@requisition.id}: #{@requisition.description}", @requisition
-          tr 
-            td Purchase Order
-            td = link_to "Purchase Order No. #{@po.id}: #{@po.description}", @po
-          tr 
-            td New status
-            td = @po.aasm.current_state.upcase
+           
+      p Items received #{'on ' + @purchase_receive.date_received.strftime("%b %d, %Y") if @purchase_receive.date_received}
+      ol
+        - @req_items.each do |req_item|
+          li = "#{req_item.description}"
 
       P Please contact Purchasing (#{Rails.application.config.purchasing_pic_name}, ext. 37) for any question.
 

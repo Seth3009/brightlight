@@ -4,6 +4,7 @@ class PurchaseReceiveEmailer < ActionMailer::Base
 
   def purchase_receive(requisition, po, purchase_receive)
     @requisition = requisition
+    @req_items = purchase_receive.receive_items.map {|received_item| received_item.order_item.req_item rescue nil }
     @requester = requisition.requester
     @po = po
     @purchase_receive = purchase_receive
