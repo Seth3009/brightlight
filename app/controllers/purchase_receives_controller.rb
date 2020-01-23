@@ -43,9 +43,9 @@ class PurchaseReceivesController < ApplicationController
     respond_to do |format|
       format.html
       format.js {
-        @requester = Employee.with_badge_code(params[:code]).take
-        if @requester
-          @purchase_receives = PurchaseReceive.received.for_requester(@requester).order(updated_at: :desc, created_at: :desc)
+        @checker = Employee.with_badge_code(params[:code]).take
+        if @checker
+          @purchase_receives = PurchaseReceive.received.for_requester(@checker).order(updated_at: :desc, created_at: :desc)
           unless @purchase_receives.present?
             @errors = "No new purchase receipt found"
           end 
@@ -61,6 +61,7 @@ class PurchaseReceivesController < ApplicationController
     authorize! :update, @purchase_receive
     @receipt = @purchase_receive
     @po = @purchase_receive.purchase_order
+    @checker_id = params[:checker]
     @checking = params[:check] == 'y' && @purchase_receive.status == 'Received'
     respond_to do |format|
       format.html

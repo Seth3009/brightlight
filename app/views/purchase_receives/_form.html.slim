@@ -1,8 +1,7 @@
 = form_for @purchase_receive do |f|
   = f.hidden_field :purchase_order_id
   = f.hidden_field :receiver_id, value: current_user.employee.id if params[:check].blank?
-  = f.hidden_field :checker_id, value: current_user.employee.id if params[:checker].blank?
-  / = f.hidden_field :date_checked, value: Date.today if params[:check] == 'y'
+  = f.hidden_field :checker_id, value: params[:checker] if params[:checker].present?
 
   - if @purchase_receive.errors.any?
     #error_explanation

@@ -1,5 +1,7 @@
 = form_for @receipt, remote:true do |f|
   = f.hidden_field :status, value: 'Delivered'
+  = f.hidden_field :checker_id, value: @checker_id
+  = f.hidden_field :date_checked, value: Date.today
   .modal-content
     h4 Check & Receive Items
     p You should physically check and count the received items. And then, please fill in the number of items accepted/rejected. 

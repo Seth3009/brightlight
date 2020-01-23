@@ -49,7 +49,7 @@
             | Action
             
           p Click here to check and receive the items
-          = link_to edit_purchase_receive_path(receipt, check:'y', checker: @requester.id), remote: true, class: "btn", id: "btn-rcpt-#{receipt.id}"
+          = link_to edit_purchase_receive_path(receipt, check:'y', checker: @checker.id), remote: true, class: "btn", id: "btn-rcpt-#{receipt.id}"
             | Receive
             i.material-icons.left check_circle
           button.btn.disabled id="btn-disabled-#{receipt.id}" style="display: none"
