@@ -218,7 +218,7 @@ nav
                     td 
                       = link_to purchase_receive_path(receive_item.purchase_receive)
                         i.material-icons.left.tooltipped data-position="bottom" data-delay="30" data-tooltip="View" visibility
-                      - if can?(:check, receive_item.purchase_receive) && receive_item.purchase_receive.status != "Checked"
+                      - if can?(:check, receive_item.purchase_receive) && receive_item.purchase_receive.status != "Delivered"
                         .red-icon-button
                           = link_to edit_purchase_receive_path(receive_item.purchase_receive, check:'y'), class:"tooltipped", data: {position:"bottom", delay:"30", tooltip:"Check & update accepted/rejected quantities"}
                             |Check
