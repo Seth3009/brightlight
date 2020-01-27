@@ -1,0 +1,39 @@
+h5 Disposed Book Copies
+
+nav
+  .nav-wrapper
+    ul.right
+      li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Print List"
+        = link_to "#", onclick: 'window.print(); return false;'
+          i.material-icons print 
+    ul        
+      li style="padding: 0 20px"         
+        | Disposed Date :
+      li
+        = date_field_tag 'disp_s', params[:disp_s] || Date.today
+      li
+        | &nbsp to &nbsp &nbsp
+      li
+        = date_field_tag 'disp_e', params[:disp_e] || Date.today  
+      li
+        | &nbsp &nbsp &nbsp
+      li
+        .waves-effect.waves-light.btn.blue#btnrefresh
+          | Refresh
+
+.card-panel
+
+javascript:
+  $(function(){
+      // bind click event to get data
+      $('#btnrefresh').on('click', function () {          
+          var date = $('#disp_s').val(); 
+          var date2 = $('#disp_e').val();
+          var url = new URL(window.location.href);
+          var page = url.searchParams.get("view");        
+          if (date) { // require a URL
+              window.location = "dispose_books?&disp_s="+date+"&disp_e="+date2; // redirect              
+          }
+          return false;
+      });
+    });

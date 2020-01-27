@@ -15,5 +15,3 @@
 			.col.s6
 				= f.collection_select :status_id, Status.all, :id, :name, {selected: 1}
 				/= f.hidden_field :status_id, value: Status.where(name:'Available').first.id
-
-

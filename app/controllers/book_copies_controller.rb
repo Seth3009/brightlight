@@ -245,6 +245,11 @@ class BookCopiesController < ApplicationController
                       .count
   end
 
+  # GET /book_copies/dispose_books
+  def dispose_books
+  
+  end
+
   # GET /book_editions/1/book_copies/disposed
   def disposed
     authorize! :manage, BookCopy
