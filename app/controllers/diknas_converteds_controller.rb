@@ -137,7 +137,7 @@ class DiknasConvertedsController < ApplicationController
       @student = Student.find params[:st]
       @religion = ['Protestant','Catholic','Buddhist','Hindu','Islam']
       @agama = ['Kristen','Katolik','Budha','Hindu','Islam']
-      @tanggal_masuk = @student.accepted_date.day.to_s + " " +bulan[@student.accepted_date.month.to_i-1].to_s + " " + @student.accepted_date.year.to_s
+      @tanggal_masuk = @student.accepted_date.present? ? (@student.accepted_date.day.to_s + " " +bulan[@student.accepted_date.month.to_i-1].to_s + " " + @student.accepted_date.year.to_s) : "-"
       @guardians = Guardian.where(family_id:@student.family_id)
         @guardians.each do |guardian|
           @fm = FamilyMember.where(guardian_id: guardian.id).first

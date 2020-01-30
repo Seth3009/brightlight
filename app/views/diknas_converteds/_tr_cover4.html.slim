@@ -2,7 +2,7 @@ tr
   td 1.
   td Nama Peserta Didik (Lengkap)
   td &#58;
-  td = @student.name.titlecase
+  td style="font-size:12pt; font-weight: bold;" = @student.name.titlecase
 tr
   td 2.
   td Nomor Induk/NISN
@@ -41,7 +41,7 @@ tr style="height:50px;"
   td.top 8.
   td.top Alamat Peserta Didik
   td.top &#58;
-  td.top = @student.address_line1
+  td.top = @student.address_line1.titlecase
 tr
   td 9.
   td Nomor Telepon Rumah
@@ -76,17 +76,17 @@ tr
   td
   td a. Ayah
   td &#58;
-  td = @dad
+  td = @dad.titlecase
 tr
   td
   td b. Ibu
   td &#58;
-  td = @mom 
+  td = @mom.titlecase 
 tr style="height:50px;" 
   td.top 13.
   td.top Alamat Orang Tua
   td.top &#58;
-  td.top = @student.address_line1
+  td.top = @student.address_line1.titlecase
 tr
   td 
   td Nomor Telepon Rumah
@@ -123,13 +123,14 @@ tr
   td &#58;
   td 
 tr
-  td 17.
-  td Pekerjaan Wali Peserta Didik
-  td &#58;
-  td 
+  td style="vertical-align:top;" 17.
+  td style="vertical-align:top;" Pekerjaan Wali Peserta Didik
+  td style="vertical-align:top;" &#58;
+  td style="height:2cm;"
+
 tr
   td
-  td style="text-align:right; padding-right:10%;"
+  td style="text-align:right; padding-right:5%;"
     span.box3.center
       p style="padding-left:25%;"
         | Foto 4 x 3
@@ -144,7 +145,7 @@ tr
     br
     br
     | Tony Hen, S.Si.
-    | NIP.
+    
 
 css:
   .top {
