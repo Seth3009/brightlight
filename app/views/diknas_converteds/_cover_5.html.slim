@@ -3,8 +3,21 @@
     .page-width
       p.center style="font-size:larger;" KETERANGAN PINDAH SEKOLAH
       br
-      p NAMA PESERTA DIDIK #{": " + "." * 60}
-      p NOMOR INDUK &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp#{": " + "." * 60}
+      .row
+        .col.sm2
+          | NAMA PESERTA DIDIK 
+        .col.sm1
+          | :
+        .col.sm9
+          = @student.name
+      .row
+        .col.sm2
+          | NOMOR INDUK / NISN
+        .col.sm1
+          | :
+        .col.sm9
+          = @student.nis + " / " + @student.nisn
+      
       
       table.compact.bordered 
           thead
