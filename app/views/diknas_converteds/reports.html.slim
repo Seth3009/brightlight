@@ -40,6 +40,12 @@ nav
       li
         = link_to "#", onclick: 'window.print(); return false;'
           i.material-icons print  
+      li
+        = link_to "#", onclick: 'showcover();'
+          - if params[:page] == 'cover'
+            | Show Rapor
+          - else
+            | Show Cover
       
 
     ul.right
@@ -72,16 +78,17 @@ nav
         = date_field_tag 'print_date', params[:dt] || Date.today
       
 - if @diknas.present?
-  = render 'cover_1'
-  = render 'cover_2'
-  = render 'cover_3'
-  = render 'cover_4'
-  = render 'cover_5'
-  = render 'cover_6'
-
-  = render 'table_a'
-  = render 'table_b'
-  = render 'table_c'    
+  - if params[:page] == 'cover'
+    = render 'cover_1'
+    = render 'cover_2'
+    = render 'cover_3'
+    = render 'cover_4'
+    = render 'cover_5'
+    = render 'cover_6'
+  - else
+    = render 'table_a'
+    = render 'table_b'
+    = render 'table_c'    
 - else
   #message.card-panel.grey.lighten-1
       .center.white-text Please choose another Grade Level, Class and Student
@@ -123,7 +130,21 @@ javascript:
           return false;
       });
     });
-
+  
+  function showcover() {
+    
+    var params = new URLSearchParams(window.location.search);
+    var btncover = params.get('page');
+    console.log(btncover);
+    if (btncover == 'cover') {
+      cover = params.set('page','rapor');
+    }
+    else {
+      cover = params.set('page','cover');
+    };    
+    window.location.replace('reports?'+params);
+  };
+  
 css:   
   @media print {    
     h5 , .top-navbar {

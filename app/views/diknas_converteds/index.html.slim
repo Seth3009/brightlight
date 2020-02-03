@@ -48,7 +48,7 @@ ul#grade-options.dropdown-content
           td = diknas_converted.grade_level.name
           td 
             - grade_section_id = GradeSectionsStudent.where(academic_year: diknas_converted.academic_year_id, student_id: diknas_converted.student_id).take.grade_section_id
-            = link_to converted_reports_path(s: grade_section_id, st: diknas_converted.student_id, year: diknas_converted.academic_year_id, term: diknas_converted.academic_term_id)
+            = link_to converted_reports_path(page:'rapor', s: grade_section_id, st: diknas_converted.student_id, year: diknas_converted.academic_year_id, term: diknas_converted.academic_term_id)
               i.material-icons.left import_contacts
           td
             = link_to diknas_converted
