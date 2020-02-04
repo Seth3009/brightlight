@@ -11,7 +11,7 @@ tr
     br
     br
     br
-    br
+    = Department.find_by_code('SOR').try(:manager).try(:name)
     hr.dotted 
     hr.solid
     br

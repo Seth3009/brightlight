@@ -42,7 +42,7 @@ nav
           i.material-icons print  
       li
         = link_to "#", onclick: 'showcover();'
-          - if params[:page] == 'cover'
+          - if params[:view] == 'cover'
             | Show Rapor
           - else
             | Show Cover
@@ -78,7 +78,7 @@ nav
         = date_field_tag 'print_date', params[:dt] || Date.today
       
 - if @diknas.present?
-  - if params[:page] == 'cover'
+  - if params[:view] == 'cover'
     = render 'cover_1'
     = render 'cover_2'
     = render 'cover_3'
@@ -134,13 +134,13 @@ javascript:
   function showcover() {
     
     var params = new URLSearchParams(window.location.search);
-    var btncover = params.get('page');
+    var btncover = params.get('view');
     console.log(btncover);
     if (btncover == 'cover') {
-      cover = params.set('page','rapor');
+      cover = params.set('view','rapor');
     }
     else {
-      cover = params.set('page','cover');
+      cover = params.set('view','cover');
     };    
     window.location.replace('reports?'+params);
   };
