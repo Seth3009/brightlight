@@ -1,0 +1,58 @@
+.card-panel
+  span style="padding-top:2cm; display:block;"
+    .page-width
+      p.center style="font-size:larger;" KETERANGAN PINDAH SEKOLAH
+      br
+      .row
+        .col.sm2
+          | NAMA PESERTA DIDIK 
+        .col.sm1
+          | :
+        .col.sm9
+          = @student.name
+      .row
+        .col.sm2
+          | NOMOR INDUK / NISN
+        .col.sm1
+          | :
+        .col.sm9
+          = @student.nis + " / " + @student.nisn
+      
+      table.compact.bordered 
+          thead
+            tr 
+              th style="width:1cm" NO.
+              / th colspan=3 MASUK 
+              th
+              th
+              th                    
+          tbody
+            = render 'tr_cover6a'            
+            = render 'tr_cover6'
+            = render 'tr_cover6'                      
+  br
+  = render 'cover_footer'
+.page-break
+css:
+  .page-width {
+    margin-left: 2cm;
+    margin-right: 2cm;
+    width:80%;
+  }   
+
+  .addcolon:after {
+    content: ' \003A';
+  } 
+
+  hr.solid {
+    padding-top: 0;
+    padding-bottom: 0;
+    border: 0.5px solid;
+  }
+
+  hr.dotted {
+    height: 0;
+    border: 0.5px dotted;
+  }
+
+  

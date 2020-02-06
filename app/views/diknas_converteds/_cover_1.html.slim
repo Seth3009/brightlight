@@ -1,0 +1,74 @@
+.card-panel
+  span style="display:block; height:3.5cm"
+  = image_tag 'tutwuri.png', class: "style_image"
+  br
+  h4.title.center
+    |RAPOR
+    br
+    |SEKOLAH MENENGAH ATAS
+    br
+    |( SMA )
+  span style="display:block; height:4cm"
+
+  h4.center.title style="font-size:14pt !important"
+    |NAMA SISWA
+  
+  .box style="font-size:17pt; font-weight: bold;"
+    | #{@student.name.upcase}
+  span style="display:block; height:1cm"
+
+  h4.center.title style="font-size:14pt !important"
+    |NISN
+  .box.nisn style="font-size:17pt; font-weight: bold;"
+    | #{@student.nisn.to_s} 
+  span style="display:block; height:2cm"
+
+  h4.title.center style="font-size:18pt !important"
+    |KEMENTERIAN PENDIDIKAN DAN KEBUDAYAAN
+    br
+    |REPUBLIK INDONESIA
+    br
+
+  
+  
+
+.page-break
+  
+
+
+
+css:
+  .style_image {
+    height: 5cm;
+    width: 5cm;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .center {
+    text-align: center;
+  }
+  .title {        
+    font-weight: bold;
+    font-size: 20pt;
+    font-family: Arial;
+  }
+
+  .box {   
+    text-align: center;
+    border: 1px solid black;
+    padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    width:80%;
+  }
+
+  .nisn {
+    width:200px !important;
+  }
+ 
+
+  
+  
+
+  

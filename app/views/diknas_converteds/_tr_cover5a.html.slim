@@ -1,0 +1,25 @@
+tr
+  td
+  td
+  td
+  td
+    = "." * 50 + " ," + "." * 8
+    br
+    = "Kepala Sekolah"
+    br
+    br
+    br
+    br
+    br
+    = Department.find_by_code('SOR').try(:manager).try(:name)
+    hr.dotted 
+    hr.solid
+    br
+    = "Orang Tua/Wali,"
+    br
+    br
+    br
+    br
+    br
+    hr.dotted 
+    hr.solid  

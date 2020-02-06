@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191125065521) do
+ActiveRecord::Schema.define(version: 20200116035743) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1189,6 +1189,7 @@ ActiveRecord::Schema.define(version: 20191125065521) do
     t.string   "slug"
     t.string   "email"
     t.string   "email2"
+    t.string   "occupations"
   end
 
   add_index "guardians", ["person_id"], name: "index_guardians_on_person_id", using: :btree
@@ -2071,6 +2072,10 @@ ActiveRecord::Schema.define(version: 20191125065521) do
     t.string   "language"
     t.string   "nisn"
     t.string   "nis"
+    t.string   "child_order"
+    t.string   "school_from"
+    t.string   "accepted_grade"
+    t.date     "accepted_date"
   end
 
   add_index "students", ["family_no"], name: "index_students_on_family_no", using: :btree
@@ -2388,7 +2393,7 @@ ActiveRecord::Schema.define(version: 20191125065521) do
   add_foreign_key "purchase_orders", "users", column: "last_updated_by_id"
   add_foreign_key "purchase_receives", "purchase_orders"
   add_foreign_key "receive_items", "order_items"
-  add_foreign_key "receive_items", "purchase_receives"
+  add_foreign_key "receive_items", "purchase_receives", column: "purchase_receive_id"
   add_foreign_key "recipes", "foods"
   add_foreign_key "recipes", "raw_foods"
   add_foreign_key "reminders", "messages"

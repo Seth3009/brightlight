@@ -1,0 +1,52 @@
+.footline#bottom
+  .row
+    .col.s6.left
+      |RAPOR - #{@student.name.upcase}
+    
+    .col.s6 style="text-align:right"
+      |SMA Cahaya Bangsa Classical School
+/ .page-break
+
+
+css:
+  
+  body {
+    /* Set "my-sec-counter" to 0  */
+      counter-reset: page;
+  }
+
+  #number::before {
+    /* Increment "my-sec-counter" by 1 */
+    counter-increment: page;
+    content: counter(page);
+   
+  } 
+
+  .footline {   
+    border-top: 1px solid black;
+    margin-left: auto;
+    margin-right: auto; 
+    width:90%; 
+    
+  }
+  
+
+  @media print{
+    #bottom {
+      width:90%;      
+      position:fixed;
+      margin-left: auto;
+      margin-right: auto;
+      left: 1cm;
+      bottom:0.5cm;
+      height:30px;
+      background:#999;  
+      page-break-after: always;         
+    }
+
+    /* IE 6 */
+    * html #bottom {
+      position:fixed;
+      top:expression((0-(footer.offsetHeight)+(document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight)+(ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop))+'px');
+    }   
+  }

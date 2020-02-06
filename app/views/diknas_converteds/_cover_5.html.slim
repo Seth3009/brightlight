@@ -1,0 +1,58 @@
+.card-panel
+  span style="padding-top:2cm; display:block;"
+    .page-width
+      p.center style="font-size:larger;" KETERANGAN PINDAH SEKOLAH
+      br
+      .row
+        .col.sm2
+          | NAMA PESERTA DIDIK 
+        .col.sm1
+          | :
+        .col.sm9
+          = @student.name
+      .row
+        .col.sm2
+          | NOMOR INDUK / NISN
+        .col.sm1
+          | :
+        .col.sm9
+          = @student.nis + " / " + @student.nisn
+      
+      
+      table.compact.bordered 
+          thead
+            tr 
+              th colspan=4 KELUAR         
+            tr style="border-bottom: 3px double grey"
+              th style="width:2cm" Tanggal
+              th style="width:2.5cm" Kelas yang ditinggalkan
+              th style="width:3cm" Sebab-sebab Keluar atau Atas Permintaan (Tertulis)
+              th style="width:3cm" Tanda Tangan Kepala Sekolah, Stempel Sekolah, dan Tanda Tangan Orang Tua/Wali
+          tbody
+            = render 'tr_cover5a' 
+            = render 'tr_cover5'
+            = render 'tr_cover5'                      
+  br
+  = render 'cover_footer'
+.page-break
+
+css:
+  .page-width {
+    margin-left: 2cm;
+    margin-right: 2cm;
+    width:80%;
+  }   
+
+  .addcolon:after {
+    content: ' \003A';
+  } 
+
+  hr.solid {
+    padding-top: 0;
+    border: 0.5px solid;
+  }
+
+  hr.dotted {
+    height: 0;
+    border: 0.5px dotted;
+  }
