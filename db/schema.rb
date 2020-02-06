@@ -2393,7 +2393,7 @@ ActiveRecord::Schema.define(version: 20200116035743) do
   add_foreign_key "purchase_orders", "users", column: "last_updated_by_id"
   add_foreign_key "purchase_receives", "purchase_orders"
   add_foreign_key "receive_items", "order_items"
-  add_foreign_key "receive_items", "purchase_receives", column: "purchase_receive_id"
+  add_foreign_key "receive_items", "purchase_receives"
   add_foreign_key "recipes", "foods"
   add_foreign_key "recipes", "raw_foods"
   add_foreign_key "reminders", "messages"
