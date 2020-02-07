@@ -1,0 +1,39 @@
+= form_for @nat_exam do |f|
+  - if @nat_exam.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@nat_exam.errors.count, "error")} prohibited this nat_exam from being saved:"
+      ul
+        - @nat_exam.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :student
+    = f.text_field :student
+  .field
+    = f.label :grade_level
+    = f.text_field :grade_level
+  .field
+    = f.label :academic_year
+    = f.text_field :academic_year
+  .field
+    = f.label :diknas_course
+    = f.text_field :diknas_course
+  .field
+    = f.label :try_out_1
+    = f.text_field :try_out_1
+  .field
+    = f.label :try_out_2
+    = f.text_field :try_out_2
+  .field
+    = f.label :try_out_3
+    = f.text_field :try_out_3
+  .field
+    = f.label :ujian_sekolah
+    = f.text_field :ujian_sekolah
+  .field
+    = f.label :nilai_sekolah
+    = f.text_field :nilai_sekolah
+  .field
+    = f.label :ujian_nasional
+    = f.text_field :ujian_nasional
+  .actions = f.submit

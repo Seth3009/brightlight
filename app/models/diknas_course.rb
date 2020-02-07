@@ -1,7 +1,10 @@
 class DiknasCourse < ActiveRecord::Base
   has_many :diknas_conversions
 
+  TRYOUTCOURSES = ["BAHASA INDONESIA","BAHASA INGGRIS","MATEMATIKA"]
 
+  scope :un_courses, -> { where(name: TRYOUTCOURSES) }
+  
   def self.grade_option(grade)
     case grade
     when 10

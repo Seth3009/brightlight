@@ -1,0 +1,26 @@
+-title = 'Nilai Ujian Nasional'
+h4 Nilai Ujian Nasional
+
+nav
+  .nav-wrapper
+    - if can? :manage, NatExam
+      ul.right
+        li
+          = link_to "Import", import_nat_exams_path
+
+.card-panel.horizontal-scroll
+  table.striped.compact
+    thead
+      tr
+        th Student
+        th
+
+    tbody
+      - @students.each do |student|
+        tr
+          td = student.try(:name) || '--'
+          td 
+            = link_to nat_exam
+              i.material-icons visibility
+
+

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :nat_exams
   resources :class_budgets
   resources :approvers
   resources :student_tardies

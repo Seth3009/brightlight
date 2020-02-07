@@ -40,6 +40,10 @@ module ApplicationHelper
       params.merge({column: column, direction: direction}).reject {|k,v| k == :page }
   end
 
+  def link_to_print
+    link_to "Print <i class='material-icons left'>print</i>".html_safe, "#", onclick: 'window.print();return false;' 
+  end
+
   def number_of_unread_message
     Message.unread(current_user).count
   end
