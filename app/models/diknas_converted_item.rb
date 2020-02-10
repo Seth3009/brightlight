@@ -9,14 +9,34 @@ class DiknasConvertedItem < ActiveRecord::Base
     .where(diknas_courses: {name: DiknasCourse::TRYOUTCOURSES})
   }
 
-  scope :school_scores, lambda { |student_id:, academic_year_id:|
+  scope :school_scores, lambda { |academic_year_id:|
     un_courses
     .joins(:diknas_converted)
     .joins('join students on diknas_converteds.student_id = students.id')
-    .where(diknas_converteds: {student_id: student_id, academic_year_id: academic_year_id})
-    .select('diknas_converted_items.*, students.id as student_id, students.name as name, 
-             diknas_courses.id as course_id, diknas_courses.name as course')
+    .where(diknas_converteds: {academic_year_id: [academic_year_id - 1, academic_year_id]})
+    .select("students.id as sid, students.name as student_name, 
+             diknas_courses.id as course_id, diknas_courses.name as course, 
+             diknas_converteds.grade_level_id as grade_level,
+             AVG(p_score) as avg_score")
+    .group('sid, student_name, course_id, course, grade_level')
   }
+
+  scope :student_scores, lambda {|student_id:, academic_year_id:|
+    school_scores(academic_year_id: academic_year_id)
+    .where(diknas_converteds: {student_id: student_id} )
+  }
+
+  # SELECT students.id as sid, students.name as student_name, 
+  #            diknas_courses.id as course_id, diknas_courses.name as course, 
+  #            AVG(p_score) as avg_score 
+  # FROM "diknas_converted_items" 
+  # INNER JOIN "diknas_conversions" 
+  # ON "diknas_conversions"."id" = "diknas_converted_items"."diknas_conversion_id" 
+  # INNER JOIN "diknas_converteds" ON "diknas_converteds"."id" = "diknas_converted_items"."diknas_converted_id" 
+  # join diknas_courses on diknas_courses.id=diknas_conversions.diknas_course_id 
+  # join students on diknas_converteds.student_id = students.id 
+  # WHERE "diknas_courses"."name" IN ('BAHASA INDONESIA', 'BAHASA INGGRIS', 'MATEMATIKA', 'FISIKA', 'BIOLOGI', 'KIMIA', 'SEJARAH', 'SOSIOLOGI') AND "diknas_converteds"."academic_year_id" IN (18, 19) AND "diknas_converteds"."student_id" = 577 
+  # GROUP BY sid, student_name, course_id, course
 
   def self.in_words(int)
     huruf = Array.new

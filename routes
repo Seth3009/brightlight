@@ -1,12 +1,4 @@
                               Prefix Verb     URI Pattern                                                       Controller#Action
-                   purchase_receives GET      /purchase_receives(.:format)                                      purchase_receives#index
-                                     POST     /purchase_receives(.:format)                                      purchase_receives#create
-                new_purchase_receive GET      /purchase_receives/new(.:format)                                  purchase_receives#new
-               edit_purchase_receive GET      /purchase_receives/:id/edit(.:format)                             purchase_receives#edit
-                    purchase_receive GET      /purchase_receives/:id(.:format)                                  purchase_receives#show
-                                     PATCH    /purchase_receives/:id(.:format)                                  purchase_receives#update
-                                     PUT      /purchase_receives/:id(.:format)                                  purchase_receives#update
-                                     DELETE   /purchase_receives/:id(.:format)                                  purchase_receives#destroy
                        class_budgets GET      /class_budgets(.:format)                                          class_budgets#index
                                      POST     /class_budgets(.:format)                                          class_budgets#create
                     new_class_budget GET      /class_budgets/new(.:format)                                      class_budgets#new
@@ -311,6 +303,17 @@
                                      PATCH    /student_activities/:id(.:format)                                 student_activities#update
                                      PUT      /student_activities/:id(.:format)                                 student_activities#update
                                      DELETE   /student_activities/:id(.:format)                                 student_activities#destroy
+                    scores_nat_exams GET      /nat_exams/scores(.:format)                                       nat_exams#scores
+                    import_nat_exams GET      /nat_exams/import(.:format)                                       nat_exams#import
+                           nat_exams GET      /nat_exams(.:format)                                              nat_exams#index
+                                     POST     /nat_exams(.:format)                                              nat_exams#create
+                        new_nat_exam GET      /nat_exams/new(.:format)                                          nat_exams#new
+                       edit_nat_exam GET      /nat_exams/:id/edit(.:format)                                     nat_exams#edit
+                            nat_exam GET      /nat_exams/:id(.:format)                                          nat_exams#show
+                                     PATCH    /nat_exams/:id(.:format)                                          nat_exams#update
+                                     PUT      /nat_exams/:id(.:format)                                          nat_exams#update
+                                     DELETE   /nat_exams/:id(.:format)                                          nat_exams#destroy
+        duplicate_diknas_conversions POST     /diknas_conversions/copy(.:format)                                diknas_conversions#duplicate
                    converted_reports GET      /diknas_converteds/reports(.:format)                              diknas_converteds#reports
                    diknas_converteds GET      /diknas_converteds(.:format)                                      diknas_converteds#index
                                      POST     /diknas_converteds(.:format)                                      diknas_converteds#create
@@ -458,7 +461,7 @@
                                      PATCH    /course_texts/:id(.:format)                                       course_texts#update
                                      PUT      /course_texts/:id(.:format)                                       course_texts#update
                                      DELETE   /course_texts/:id(.:format)                                       course_texts#destroy
-        edit_students_course_section GET      /course_sections/:id/edit_students(.:format)                      course_sections#edit_students
+             students_course_section GET      /course_sections/:id/students(.:format)                           course_sections#students
          add_students_course_section POST     /course_sections/:id/add_students(.:format)                       course_sections#add_students
               course_course_sections GET      /courses/:course_id/course_sections(.:format)                     course_sections#index
                                      POST     /courses/:course_id/course_sections(.:format)                     course_sections#create
@@ -727,6 +730,15 @@ autocomplete_student_name_book_fines GET      /book_fines/autocomplete_student_n
                                      PATCH    /purchase_orders/:id(.:format)                                    purchase_orders#update
                                      PUT      /purchase_orders/:id(.:format)                                    purchase_orders#update
                                      DELETE   /purchase_orders/:id(.:format)                                    purchase_orders#destroy
+             check_purchase_receives GET      /purchase_receives/check(.:format)                                purchase_receives#check
+                   purchase_receives GET      /purchase_receives(.:format)                                      purchase_receives#index
+                                     POST     /purchase_receives(.:format)                                      purchase_receives#create
+                new_purchase_receive GET      /purchase_receives/new(.:format)                                  purchase_receives#new
+               edit_purchase_receive GET      /purchase_receives/:id/edit(.:format)                             purchase_receives#edit
+                    purchase_receive GET      /purchase_receives/:id(.:format)                                  purchase_receives#show
+                                     PATCH    /purchase_receives/:id(.:format)                                  purchase_receives#update
+                                     PUT      /purchase_receives/:id(.:format)                                  purchase_receives#update
+                                     DELETE   /purchase_receives/:id(.:format)                                  purchase_receives#destroy
                      edit_order_item GET      /order_items/:id/edit(.:format)                                   order_items#edit
                           order_item PATCH    /order_items/:id(.:format)                                        order_items#update
                                      PUT      /order_items/:id(.:format)                                        order_items#update

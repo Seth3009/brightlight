@@ -1,0 +1,25 @@
+-title = 'Nilai Ujian Nasional'
+h4 Nilai Ujian Nasional
+
+nav
+  .nav-wrapper
+    ul
+      li = @exam_scores.first.student.name
+    ul.right
+      li
+        = link_to "Try Out 2", letter_ii_nat_exams_path(student_id: params[:student_id])
+
+.card-panel.horizontal-scroll
+  table.striped.compact
+    thead
+      tr
+        th Mata Pelajaran
+        th Nilai Sekolah
+        th Nilai Try Out II
+
+    tbody
+      - @exam_scores.each do |score|
+        tr
+          td = score.diknas_course.name
+          td = score.nilai_sekolah
+          td = score.try_out_2
