@@ -4,7 +4,7 @@ class NatExamsController < ApplicationController
   # GET /nat_exams
   # GET /nat_exams.json
   def index
-    @students = NatExam.students academic_year: AcademicYear.current
+    @students = NatExam.students(academic_year: AcademicYear.current)
   end
 
   # GET /nat_exams/1

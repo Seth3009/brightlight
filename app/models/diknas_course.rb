@@ -1,7 +1,7 @@
 class DiknasCourse < ActiveRecord::Base
   has_many :diknas_conversions
 
-  TRYOUTCOURSES = ["BAHASA INDONESIA","BAHASA INGGRIS","MATEMATIKA", "FISIKA", "BIOLOGI", "KIMIA", "SEJARAH", "SOSIOLOGI"]
+  TRYOUTCOURSES = ["BAHASA INDONESIA","BAHASA INGGRIS","MATEMATIKA", "FISIKA", "KIMIA", "BIOLOGI", "EKONOMI", "SOSIOLOGI"]
 
   scope :un_courses, -> { where(name: TRYOUTCOURSES) }
 

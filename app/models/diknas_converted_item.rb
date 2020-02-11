@@ -16,14 +16,18 @@ class DiknasConvertedItem < ActiveRecord::Base
     .where(diknas_converteds: {academic_year_id: [academic_year_id - 1, academic_year_id]})
     .select("students.id as sid, students.name as student_name, 
              diknas_courses.id as course_id, diknas_courses.name as course, 
-             diknas_converteds.grade_level_id as grade_level,
-             AVG(p_score) as avg_score")
-    .group('sid, student_name, course_id, course, grade_level')
+             ROUND(AVG(p_score)) as avg_score")
+    .group('sid, student_name, course_id, course')
   }
 
   scope :student_scores, lambda {|student_id:, academic_year_id:|
     school_scores(academic_year_id: academic_year_id)
     .where(diknas_converteds: {student_id: student_id} )
+  }
+
+  scope :student_score_for_diknas_course, lambda { |student_id:, academic_year_id:, diknas_course_id:|
+    student_scores(student_id: student_id, academic_year_id: academic_year_id)
+    .where(diknas_conversions: {diknas_course_id: diknas_course_id})
   }
 
   # SELECT students.id as sid, students.name as student_name, 
