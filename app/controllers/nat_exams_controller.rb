@@ -11,6 +11,7 @@ class NatExamsController < ApplicationController
   # GET /nat_exams/1.json
   def scores
     @exam_scores = NatExam.scores_for student_id: params[:student_id], academic_year_id: AcademicYear.current_id
+    @avg_pilihan = @exam_scores.avg_pilihan.take
   end
 
   # GET /nat_exams/new
@@ -19,7 +20,16 @@ class NatExamsController < ApplicationController
   end
 
   def letter_ii
-    @scores = NatExam.scores_for student_id: params[:student_id], academic_year_id: AcademicYear.current_id
+    @academic_year = AcademicYear.find params[:year] || AcademicYear.current
+    @student = Student.find(params[:student_id])
+    @exam_scores = NatExam.scores_for student_id: params[:student_id], academic_year_id: @academic_year.id
+    @avg_pilihan = @exam_scores.avg_pilihan.take
+    @template = Template.where(target:'to_ii_letter').where(active:'true').take
+    if @template
+      @template.placeholders = {
+        student_name: @student.name
+      }
+    end
   end
 
   # GET /nat_exams/1/edit

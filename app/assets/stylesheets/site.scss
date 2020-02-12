@@ -206,12 +206,23 @@ table.bordered {
 	tr, td { 
 		border: 1px solid grey;
 	}
-}
-table.bordered {
 	th { 
 		text-align: center; 
 		border-bottom: 1px solid grey; 
 		border-right: 1px solid grey;
+	}
+}
+table.section-bordered {
+	border: 2px solid black;
+	thead {
+		tr:last-child {
+			border-bottom: 2px solid black;
+		}
+	}
+	tfoot {
+		tr:first-child {
+			border-top: 2px solid black;
+		}
 	}
 }
 
@@ -1777,7 +1788,7 @@ section {
 		padding-left: 0;
 	}
 	html, body {
-		font: 10pt Roboto, Cambria, Arial, sans-serif;
+		font: 12pt Roboto, Cambria, Arial, sans-serif;
 		line-height: 1.1;
 	}
 	.card, .card-panel {
@@ -1809,18 +1820,34 @@ section {
 		td {
 			border: 0.5px solid grey;
 		}
-	} 
+	}
+	table.section-bordered {
+		border: 2px solid black;
+		thead {
+			tr:last-child {
+				border-bottom: 2px solid black;
+			}
+		}
+		tfoot {
+			tr:first-child {
+				border-top: 2px solid black;
+			}
+		}
+	}
 	
 	thead { display: table-header-group !important }
 	tfoot { display: table-row-group !important }
 	tr { page-break-inside: avoid !important }
 
 	table { page-break-inside:auto }
-	
-	thead th { height: 2cm; }
 
   .no-print, .no-print * {
 		display: none !important;
+	}
+
+	.letter-page {
+		font-family: "Cambria, Calibri, Times Roman, serif";
+		margin: 1.8in 0.3in 0.3in 0.25in;
 	}
 }
 
@@ -1829,6 +1856,21 @@ tfoot { display: table-row-group !important }
 tr { page-break-inside: avoid !important }
 
 table { page-break-inside:auto }
+
+// ======================================= Preview print =======================================
+
+.page-background {
+	background-color: $light-grey;
+
+	.letter-page {
+		background-color: white;
+		width: 8.5in;
+		box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+		font-family: "Cambria, Calibri, Times Roman, serif";
+		padding: 1.8in 0.3in 0.3in 0.25in;
+		margin: 0px auto;
+	}
+}
 
 // ============================================ Card ===========================================
 
