@@ -6,9 +6,7 @@
           = link_to book_fines_path(st:@student.id, year:@academic_year.id)
             i.material-icons chevron_left
         li
-          = link_to '#', onclick: 'window.print();return false;' 
-            | Print
-            i.material-icons.left print
+          = link_to_print
         li
           = link_to payment_book_fines_path(st:@student.id, year:@academic_year.id, format: :pdf), target: '_blank'
             | PDF

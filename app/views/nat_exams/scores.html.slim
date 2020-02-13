@@ -1,0 +1,44 @@
+-title = 'Daftar Nilai'
+h4 Daftar Nilai untuk #{@exam_scores.take.student.try(:name)}
+
+nav
+  .nav-wrapper
+    ul
+      li 
+        = link_to nat_exams_path
+          |Back
+          i.material-icons.left chevron_left
+    ul.right
+      li
+        = link_to letter_ii_nat_exams_path(student_id: params[:student_id])
+          | Letter
+          i.material-icons.left drafts
+
+.card-panel.horizontal-scroll
+  table.striped.compact
+    thead
+      tr
+        th Mata Pelajaran
+        th Nilai Sekolah
+        th Nilai Try Out II
+
+    tbody
+      - @exam_scores.each do |score|
+        tr
+          td = score.diknas_course.try(:name)
+          td = score.nilai_sekolah
+          td = score.try_out_2
+    
+    tfoot
+      tr style="font-weight: bold; border-top: 1px solid grey"
+        td Average
+        td = @exam_scores.average(:nilai_sekolah).round(1)
+        td = @exam_scores.average(:try_out_2).round(1)
+      tr
+        td Lowest Score
+        td = @exam_scores.minimum(:nilai_sekolah)
+        td = @exam_scores.minimum(:try_out_2)
+      tr
+        td Rata-rata Mata Pelajaran Pilihan
+        td = @avg_pilihan.ns
+        td = @avg_pilihan.to2

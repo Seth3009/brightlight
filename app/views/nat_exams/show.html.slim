@@ -1,0 +1,49 @@
+-title = 'Nilai Ujian Nasional'
+h4 Nilai Ujian Nasional
+
+nav
+  .nav-wrapper
+    ul
+      li 
+        = link_to nat_exams_path
+          i.material-icons.left chevron_left
+    ul.right
+      li
+        = link_to_print
+
+
+.card-panel.horizontal-scroll
+  table.striped.compact
+    thead
+      tr
+        th Student
+        th Grade level
+        th Academic year
+        th Diknas course
+        th Try out 1
+        th Try out 2
+        th Try out 3
+        th Ujian sekolah
+        th Nilai sekolah
+        th Ujian nasional
+        th
+        th
+        th
+
+    tbody
+      - @nat_exams.each do |nat_exam|
+        tr
+          td = nat_exam.student
+          td = nat_exam.grade_level
+          td = nat_exam.academic_year
+          td = nat_exam.diknas_course
+          td = nat_exam.try_out_1
+          td = nat_exam.try_out_2
+          td = nat_exam.try_out_3
+          td = nat_exam.ujian_sekolah
+          td = nat_exam.nilai_sekolah
+          td = nat_exam.ujian_nasional
+          td = link_to 'Show', nat_exam
+          td = link_to 'Edit', edit_nat_exam_path(nat_exam)
+          td = link_to 'Destroy', nat_exam, data: {:confirm => 'Are you sure?'}, :method => :delete
+

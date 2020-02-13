@@ -53,6 +53,13 @@ Rails.application.routes.draw do
   resources :book_conditions
   resources :student_activities
 
+  resources :nat_exams do 
+    collection do
+      get 'letter_ii'
+      get 'scores'
+      get 'import'
+    end
+  end
 
   post 'diknas_conversions/copy' => 'diknas_conversions#duplicate', as: :duplicate_diknas_conversions
   get 'diknas_converteds/reports' => 'diknas_converteds#reports', as: :converted_reports
