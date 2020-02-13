@@ -123,6 +123,10 @@ class PurchaseOrder < ActiveRecord::Base
     pending_delivery? ? receive_partial! : receive_full!
   end
 
+  def delivery_address
+    "#{dlvry_address}<br>#{dlvry_address2}<br>#{dlvry_city} #{dlvry_post_code}".html_safe
+  end
+
 
   private
 

@@ -202,7 +202,8 @@ class PurchaseOrdersController < ApplicationController
           supplier_bank: @purchase_order.supplier.bank,
           supplier_bank_branch: @purchase_order.supplier.bank_branch,
           supplier_bank_acct_no: @purchase_order.supplier.bank_acct_no,
-          supplier_bank_acct_name: @purchase_order.supplier.bank_acct_name
+          supplier_bank_acct_name: @purchase_order.supplier.bank_acct_name,
+          delivery_address: @purchase_order.delivery_address
         }
       end
     end
@@ -217,6 +218,7 @@ class PurchaseOrdersController < ApplicationController
       params.require(:purchase_order).permit(:order_num, :requestor_id, :order_date, :due_date, :total_amount, :requestor, :department_id, 
         :is_active, :currency, :deleted, :notes, :completed_date, :supplier_id, :contact, :phone_contact, :user_id, :status, :buyer_id, 
         :instructions, :subtotal, :discounts, :est_tax, :non_recurring, :shipping, :down_payment, :description,
+        :dlvry_address, :dlvry_address2, :dlvry_city, :dlvry_post_code,
         {:order_items_attributes => [:stock_item__id, :quantity, :unit, :min_delivery_qty, :pending_qty, :type, :line_amount, 
           :unit_price, :currency, :deleted, :description, :status, :line_num, :extra1, :extra2, :req_item_id, :remark,
           :discount, :est_tax, :non_recurring, :shipping, :actual_amt, :_destroy, :id ]})

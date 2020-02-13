@@ -8,6 +8,7 @@
   .row
     .col.s12.m6
       .card-panel
+        .label Supplier
         .row
           .input-field.col.s12
             i.material-icons.prefix store
@@ -21,8 +22,24 @@
             i.material-icons.prefix phone
             = f.label :phone_contact, class: 'active'
             = f.text_field :phone_contact, placeholder: "Contact's phone number"
+      .card-panel
+        .label Delivery Address
+        .row
+          .input-field.col.s12
+            = f.label 'Address Line 1'
+            = f.text_field :dlvry_address, value: 'Jl. Bujangga Manik Kav. 1'
+          .input-field.col.s12
+            = f.label 'Address Line 2'
+            = f.text_field :dlvry_address2, value: 'Kota Baru Parahyangan'
+          .input-field.col.s8
+            = f.label 'City'
+            = f.text_field :dlvry_city, value: 'Padalarang'
+          .input-field.col.s4
+            = f.label 'Post Code'
+            = f.text_field :dlvry_post_code, value: '40553'
     .col.s12.m6
       .card-panel
+        .label PO Detail
         .row
           = hidden_field_tag :req, params[:req]
           .input-field.col.s6

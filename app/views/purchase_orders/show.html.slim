@@ -47,6 +47,11 @@ nav
         .record-field
           .label Instructions to supplier
           .item = @purchase_order.instructions
+      .card-panel
+        .record-field
+          .label Delivery Address
+          br
+          .item = @purchase_order.delivery_address
 
     .col.s12.m6
       .card-panel

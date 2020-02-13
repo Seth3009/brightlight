@@ -15,66 +15,64 @@
         - @template.errors.full_messages.each do |message|
           li = message
 
-  .card-panel
-    | The following placeholders are available for the template: 
-    = @placeholders
-    
-  .card-panel
+  .card-panel  
     .row
-      .col.s6
+      .col.s2
         .input-field
           = f.label :name
           = f.text_field :name
-      .col.s6
+      .col.s2
         .input-field
           = f.label :target, class:'active'
           = f.collection_select :target, TemplateTarget.all, :code, :name, {prompt:'Please select'}
-      .col.s3
+      .col.s2
         .input-field
           = f.label :group
           = f.text_field :group
-      .col.s3
+      .col.s2
         .input-field
           = f.label :category
           = f.text_field :category
-      .col.s3
+      .col.s2
         .input-field
           = f.label :active, class:'active'
           = f.select :active, options_for_select([['Yes', true], ['No', false]]), {prompt:'Please select'}
-      / .col.s3
-      /   .input-field
-      /   = f.label :academic_year
-      /   = f.text_field :academic_year
-      .col.s3
+      .col.s2
         .input-field
           = f.label :language
           = f.text_field :language
-    .row
       .col.s12
-        .label Header
-        .input-field
-          = f.text_area :header, class:"tinymce", rows: 10, cols: 120
-    .row
-      .col.s12
-        .label Opening
-        .input-field
-          = f.text_area :opening, class:"tinymce", rows: 50, cols: 120
-    .row
-      .col.s12
-        .label Body
-        .input-field
-          = f.text_area :body, class:"tinymce", rows: 20, cols: 120
-    .row
-      .col.s12
-        .label Closing
-        .input-field
-          = f.text_area :closing, class:"tinymce", rows: 50, cols: 120
-    .row
-      .col.s12
-        .label Footer
-        .input-field
-          = f.text_area :footer, class:"tinymce", rows: 2, cols: 120
+        | The following placeholders are available for the template: 
+        = @placeholders
+      
+    .page-background
+      .letter-page
+        .row
+          .col.s12
+            .label Header
+            .input-field
+              = f.text_area :header, class:"tinymce", rows: 10, cols: 120
+        .row
+          .col.s12
+            .label Opening
+            .input-field
+              = f.text_area :opening, class:"tinymce", rows: 50, cols: 120
+        .row
+          .col.s12
+            .label Body
+            .input-field
+              = f.text_area :body, class:"tinymce", rows: 20, cols: 120
+        .row
+          .col.s12
+            .label Closing
+            .input-field
+              = f.text_area :closing, class:"tinymce", rows: 50, cols: 120
+        .row
+          .col.s12
+            .label Footer
+            .input-field
+              = f.text_area :footer, class:"tinymce", rows: 2, cols: 120
 
-    = f.hidden_field :user, value: current_user
-    
-    = tinymce relative_urls: false
+        = f.hidden_field :user, value: current_user
+        
+        = tinymce relative_urls: false
