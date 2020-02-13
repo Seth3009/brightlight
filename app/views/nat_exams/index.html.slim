@@ -1,5 +1,5 @@
--title = 'Nilai Ujian Nasional'
-h4 Nilai Ujian Nasional
+-title = 'Try Out Letters'
+h4 Try Out Letters
 
 nav
   .nav-wrapper
@@ -19,7 +19,8 @@ nav
     thead
       tr
         th Student
-        th
+        th Data
+        th Letter
 
     tbody
       - @students.each do |student|
@@ -28,6 +29,7 @@ nav
           td 
             = link_to scores_nat_exams_path(student_id: student.id)
               i.material-icons visibility
+          td
             = link_to letter_ii_nat_exams_path(student_id: student.id)
               i.material-icons drafts
 

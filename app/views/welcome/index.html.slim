@@ -431,20 +431,31 @@
                 |Raport Diknas
                 i.activator.material-icons.right more_vert
               p SOR Raport Diknas
+              p Print Try Out letters
           .card-reveal
             span.card-title.grey-text.text-darken-4
               |Raport Diknas
               i.material-icons.right close
+            .card-tabs
+              ul.tabs.tabs-fixed-width.tabs-transparent
+                li.tab
+                  a.active href="#tab-rapor-diknas" Rapor Diknas
+                li.tab
+                  a href="#tab-try-out" Letters
             .card-content
-              ul
-                li
-                  = link_to 'Import Grade Book', diknas_report_cards_path
-                - if can? :read, DiknasConversion
+              #tab-rapor-diknas
+                ul
                   li
-                    = link_to 'Conversion Setting', diknas_conversions_path 
-                li
-                  = link_to 'Convert Grade Book', diknas_converteds_path
-
+                    = link_to 'Import Grade Book', diknas_report_cards_path
+                  - if can? :read, DiknasConversion
+                    li
+                      = link_to 'Conversion Setting', diknas_conversions_path 
+                  li
+                    = link_to 'Convert Grade Book', diknas_converteds_path
+              #tab-try-out
+                ul
+                  li
+                    = link_to "Try Out Letters", nat_exams_path
   .row
     .col.m6.s12
       = image_tag 'cbcs-logo.jpg', class:'center-align', style:"height: 70px"

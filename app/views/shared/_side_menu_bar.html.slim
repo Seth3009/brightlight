@@ -196,10 +196,16 @@ li
 			ul
 				li
 					= link_to 'Import Grade Book', diknas_report_cards_path
+				li
 					- if can? :read, DiknasConversion
 						= link_to 'Conversion Setting', diknas_conversions_path 
+				li
 					= link_to 'Convert Grade Book', diknas_converteds_path
+				li
 					= link_to 'Diknas Course', diknas_courses_path
+				li
+					= link_to "Try Out Letters", nat_exams_path
+
 					
 - if can? :manage, Food
 	li
