@@ -5,7 +5,12 @@ nav
         = link_to templates_path 
           | All templates
           i.material-icons.left chevron_left
-      li.right
+    ul.right
+      li
+        = link_to template_target_path(@template.template_target) 
+          | Settings
+          i.material-icons.left settings
+      li
         = link_to edit_template_path(@template) 
           | Edit 
           i.material-icons.left edit

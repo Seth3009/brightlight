@@ -4,8 +4,9 @@ default:
   plugins: 
     - advlist autolink lists link image charmap print preview anchor textcolor searchreplace visualblocks fullscreen 
     - insertdatetime media table contextmenu paste code wordcount
+    - autoresize
   toolbar: 
-    - undo redo | bold italic underline forecolor backcolor  | alignleft aligncenter alignright alignjustify | table
+    - undo redo | bold italic underline forecolor backcolor | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | table
 
 extended:
   menubar: false

@@ -20,7 +20,9 @@ class TemplatesController < ApplicationController
 
   # GET /templates/1/edit
   def edit
-    @placeholders = @template.template_target.placeholders.split(", ").map{|x| "##{x.strip}#"}.join(", ")
+    unless @template.template_target.placeholders.blank?
+      @placeholders = @template.template_target.placeholders.split(", ").map{|x| "##{x.strip}#"}.join(", ")
+    end
   end
 
   # POST /templates
