@@ -7,7 +7,7 @@
             i.material-icons delete
       ul.right#add-row
           li
-            = link_to "#", onclick: 'add_row();'
+            = link_to dispose_row_path(), remote:true
               | Add Row
               i.material-icons.left playlist_add
 
@@ -57,13 +57,12 @@ javascript:
     }
   });
 
-  function add_row() { 
-    var newrow = '<tr>' + 
-                '<td class="wd10"><div class="input-field"><input class="barcode" type="text"></input></div></td>' + 
-                '<td class="wd30"><div class="input-field"><input class="booktitle" type="text" disabled="true"></input></div></td>' + 
-                '<td class="wd20"><div class="input-field"><input class="authors" type="text" disabled="true"></input></div></td>' + 
-                '<td display="none" class="wd10"><a href="/book_copies/20685/undispose"><i class="material-icons tooltipped" data-delay="50" data-position="bottom" data-tooltip="Undispose">undo</i></a></td>' + 
-                 '</tr>'
-    $('tbody#book_copy').append(newrow);
-  
-  }
+ $("#barcode").keydown(function(e) {
+    var oldvalue=$(this).val();
+    var field=this;
+    setTimeout(function () {
+        if(field.value.indexOf('INV-') !== 0) {
+            $(field).val(oldvalue);
+        } 
+    }, 1);
+  });

@@ -1,13 +1,13 @@
 tr
   td.wd10
     .input-field     
-      = f.text_field :barcode, class:'barcode'
+      = text_field_tag 'barcode', 'INV-', maxlength: 11
   td.wd30
     .input-field     
-      = f.text_field :booktitle, class:'booktitle', disabled:"true" 
+      = text_field_tag 'booktitle','',disabled: true
   td.wd20
     .input-field     
-      = f.text_field :authors, class:'authors', disabled:"true"  
+      = text_field_tag 'authors','',disabled: true
   td.wd10
-    .input-field     
-      = f.text_field :authors, class:'authors', disabled:"true"  
+    = link_to '#'
+      i.material-icons delete
