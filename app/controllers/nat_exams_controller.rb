@@ -21,15 +21,14 @@ class NatExamsController < ApplicationController
 
   def letter_ii
     @academic_year = AcademicYear.find params[:year] || AcademicYear.current
-    @student = Student.find(params[:student_id])
-    @exam_scores = NatExam.scores_for student_id: params[:student_id], academic_year_id: @academic_year.id
-    @avg_pilihan = @exam_scores.avg_pilihan.take
+    @students = []
     @template = Template.where(target:'to_ii_letter').where(active:'true').take
-    if @template
-      @template.placeholders = {
-        student_name: @student.name
-      }
+    if params[:student_id].present?
+      @students << Student.find(params[:student_id])
+    else
+      @students = NatExam.students(academic_year: @academic_year)
     end
+    @exam_scores = NatExam.for_academic_year @academic_year.id
   end
 
   # GET /nat_exams/1/edit

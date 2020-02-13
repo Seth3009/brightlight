@@ -1,54 +1,18 @@
 -title = 'Surat Try Out II'
 
+nav
+  .nav-wrapper
+    ul
+      li 
+        - param_hash = {student_id:params[:student_id]} if params[:student_id]
+        = link_to scores_nat_exams_path(param_hash)
+          i.material-icons chevron_left
+    ul.right
+      li
+        = link_to_print
+
 - if @template
-
-  nav
-    .nav-wrapper
-      ul
-        li 
-          = link_to scores_nat_exams_path(student_id:params[:student_id])
-            i.material-icons chevron_left
-        li.right
-          = link_to_print
-
-  .page-background
-    .letter-page
-      = @template.substituted :header
-      = @template.substituted :opening
-
-      .container style="width:400px; margin:10px auto"
-        table.compact.bordered.section-bordered
-          thead 
-            tr
-              th Mata Pelajaran
-              th Nilai Sekolah 
-              th Nilai TO II 
-          tbody 
-            - @exam_scores.wajib.each do |score|
-              tr 
-                td = score.diknas_course.try(:name).try(:titleize)
-                td.center = score.nilai_sekolah
-                td.center = score.try_out_2
-            tr
-              td Mata Pelajaran Pilihan
-              td.center = @avg_pilihan.ns
-              td.center = @avg_pilihan.to2
-          tfoot
-            tr
-              td Total
-              td.center = @exam_scores.sum(:nilai_sekolah)
-              td.center = @exam_scores.sum(:try_out_2)
-            tr
-              td Rata-rata
-              td.center = @exam_scores.average(:nilai_sekolah).round(1)
-              td.center = @exam_scores.average(:try_out_2).round(1)
-            tr
-              td Nilai terkecil
-              td.center = @exam_scores.minimum(:nilai_sekolah)
-              td.center = @exam_scores.minimum(:try_out_2)
-        p * Nilai Sekolah di atas adalah nilai rata-rata rapor kelas 11
-
-      = @template.substituted :closing
-      = @template.substituted :footer
-
+  - @students.each do |student|
+    - @template.placeholders = { student_name: student.name }
+    = render partial: 'one_letter_ii', locals: {exam_scores: @exam_scores.scores_for(student_id: student.id)}
 

@@ -1,0 +1,39 @@
+.page-background
+  .letter-page
+    = @template.substituted :header
+    = @template.substituted :opening
+
+    .container style="width:400px; margin:10px auto"
+      table.compact.bordered.section-bordered
+        thead 
+          tr
+            th Mata Pelajaran
+            th Nilai Sekolah 
+            th Nilai TO II 
+        tbody 
+          - exam_scores.wajib.each do |score|
+            tr 
+              td = score.diknas_course.try(:name).try(:titleize)
+              td.center = score.nilai_sekolah
+              td.center = score.try_out_2
+          tr
+            td Mata Pelajaran Pilihan
+            td.center = exam_scores.avg_pilihan.take.ns.round(1)
+            td.center = exam_scores.avg_pilihan.take.to2.round(1)
+        tfoot
+          tr
+            td Total
+            td.center = exam_scores.sum(:nilai_sekolah)
+            td.center = exam_scores.sum(:try_out_2)
+          tr
+            td Rata-rata
+            td.center = exam_scores.average(:nilai_sekolah).round(1)
+            td.center = exam_scores.average(:try_out_2).round(1)
+          tr
+            td Nilai terkecil
+            td.center = exam_scores.minimum(:nilai_sekolah)
+            td.center = exam_scores.minimum(:try_out_2)
+      p * Nilai Sekolah di atas adalah nilai rata-rata rapor kelas 11
+
+    = @template.substituted :closing
+    = @template.substituted :footer

@@ -5,9 +5,8 @@ class NatExam < ActiveRecord::Base
   belongs_to :diknas_course
 
   scope :for_academic_year, lambda { | year | where(academic_year_id: year) }
-  scope :scores_for, lambda { |student_id:, academic_year_id: AcademicYear.current_id|
-    for_academic_year(academic_year_id)
-    .where(student_id: student_id)
+  scope :scores_for, lambda { |student_id:|
+    where(student_id: student_id)
   }
   scope :wajib, lambda {
     joins(:diknas_course)
