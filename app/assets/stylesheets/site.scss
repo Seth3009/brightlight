@@ -1863,8 +1863,7 @@ table { page-break-inside:auto }
 .page-background {
 	background-color: $light-grey;
 	padding: 20px 0;
-	page-break-after: always;
-	
+
 	.letter-page {
 		background-color: white;
 		width: 8.5in;
@@ -1872,6 +1871,7 @@ table { page-break-inside:auto }
 		font-family: "Cambria, Calibri, Times Roman, serif";
 		padding: 1.05in 1.05in 1.05in 1.0in;
 		margin: 0px auto;
+		page-break-after: always;
 	}
 }
 
