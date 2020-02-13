@@ -1,0 +1,69 @@
+= form_for :book_copies do |f|
+  nav
+    .nav-wrapper
+      ul
+        li
+          button.btn.red formaction="#{dispose_book_copies_path}"
+            i.material-icons delete
+      ul.right#add-row
+          li
+            = link_to "#", onclick: 'add_row();'
+              | Add Row
+              i.material-icons.left playlist_add
+
+  ul.collapsible data-collapsible="expandable"
+    li
+      .collapsible-header                
+        div.right 
+          input.checkbox-toggle type="checkbox" id="use-scanner"
+          = label_tag "use-scanner", "Use scanner"
+  .card-panel
+    .row
+      table#mytable.compact
+        thead
+          th  Barcode
+          th  Title
+          th  Authors
+          th  Action
+        tbody#book_copy
+          = f.fields_for :book_copies do |book_copy|
+            = render partial: 'book_copies/book_dispose_row', locals: { f: book_copy }
+
+
+javascript:
+  $(document).ready(function(){
+    $("#use-scanner").attr('checked','checked')
+    $("#use-scanner").change();
+  });
+
+  $("#use-scanner").change(function() {
+    $("tr.nested-fields").each(function(){
+      v = $(this).find(".product_id").attr('value');
+      if (v == undefined) {
+        if ($("#use-scanner").is(":checked")) {
+          $(this).hide();
+        } else {
+          $(this).show();
+        }
+      } 
+    });
+    if (!$("#use-scanner").is(":checked")) {
+      if ($("tr:last").find(".barcode").val() != "") {
+        $(".add_fields").trigger('click');
+      }
+      $("#add-row").show();
+    } else {
+      $("#add-row").hide();
+    }
+  });
+
+  function add_row() { 
+    var newrow = '<tr>' + 
+                '<td class="wd10"><div class="input-field"><input class="barcode" type="text"></input></div></td>' + 
+                '<td class="wd30"><div class="input-field"><input class="booktitle" type="text" disabled="true"></input></div></td>' + 
+                '<td class="wd20"><div class="input-field"><input class="authors" type="text" disabled="true"></input></div></td>' + 
+                '<td display="none" class="wd10"><a href="/book_copies/20685/undispose"><i class="material-icons tooltipped" data-delay="50" data-position="bottom" data-tooltip="Undispose">undo</i></a></td>' + 
+                 '</tr>'
+    $('tbody#book_copy').append(newrow);
+  
+  }

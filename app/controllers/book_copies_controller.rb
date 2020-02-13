@@ -247,7 +247,12 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/dispose_books
   def dispose_books
-  
+    @book_copies = BookCopy.unscoped.where(disposed: true, disposed_at: (params[:dts] || Date.today)..(params[:dte] || Date.today))
+  end
+
+  # GET /book_copies/dispose_books/new_list
+  def new_book_dispose
+    @book_copies = BookCopy.new
   end
 
   # GET /book_editions/1/book_copies/disposed
