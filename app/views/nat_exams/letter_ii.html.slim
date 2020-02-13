@@ -4,9 +4,12 @@ nav
   .nav-wrapper
     ul
       li 
-        - param_hash = {student_id:params[:student_id]} if params[:student_id]
-        = link_to scores_nat_exams_path(param_hash)
-          i.material-icons chevron_left
+        - if params[:student_id]
+          = link_to scores_nat_exams_path(student_id:params[:student_id])
+            i.material-icons chevron_left
+        - else
+          = link_to nat_exams_path
+            i.material-icons chevron_left
     ul.right
       li
         = link_to @template, target: '_blank'

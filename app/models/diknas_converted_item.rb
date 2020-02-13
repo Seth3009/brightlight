@@ -13,7 +13,7 @@ class DiknasConvertedItem < ActiveRecord::Base
     un_courses
     .joins(:diknas_converted)
     .joins('join students on diknas_converteds.student_id = students.id')
-    .where(diknas_converteds: {academic_year_id: [academic_year_id - 1, academic_year_id]})
+    .where(diknas_converteds: {academic_year_id: [academic_year_id.to_i - 1, academic_year_id.to_i]})
     .select("students.id as sid, students.name as student_name, 
              diknas_courses.id as course_id, diknas_courses.name as course, 
              ROUND(AVG(p_score)) as avg_score")

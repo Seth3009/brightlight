@@ -10,7 +10,7 @@ class NatExamsController < ApplicationController
   # GET /nat_exams/1
   # GET /nat_exams/1.json
   def scores
-    @exam_scores = NatExam.scores_for student_id: params[:student_id], academic_year_id: AcademicYear.current_id
+    @exam_scores = NatExam.for_academic_year(AcademicYear.current_id).scores_for student_id: params[:student_id]
     @avg_pilihan = @exam_scores.avg_pilihan.take
   end
 
@@ -72,6 +72,28 @@ class NatExamsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to nat_exams_url, notice: 'Nat exam was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  # POST /import
+  def import
+    authorize! :create, NatExam
+    uploaded_io = params[:filename] 
+    path = Rails.root.join('public', 'uploads', uploaded_io.original_filename)
+    File.open(path, 'wb') do |file|
+      file.write(uploaded_io.read)
+      if uploaded_io.content_type =~ /office.xlsx/ || uploaded_io.content_type =~ /officedocument/
+        begin
+          NatExam.import_to_ii_scores(xlsx_file:file, sheet:params[:sheet], academic_year_id:params[:academic_year_id])
+        rescue  StandardError => e
+          puts "Rescued: #{e.inspect}"
+          redirect_to nat_exams_path, alert: e.inspect
+          return
+        end
+        redirect_to nat_exams_url, notice: "Import succeeded"
+      else
+        redirect_to nat_exams_url, alert: 'Import failed: selected file is not an Excel file'
+      end
     end
   end
 

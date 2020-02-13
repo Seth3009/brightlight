@@ -6,7 +6,13 @@ nav
     - if can? :manage, NatExam
       ul.right
         li
-          = link_to "Import", import_nat_exams_path
+          = link_to letter_ii_nat_exams_path
+            | All letters
+            i.material-icons.left drafts
+        li
+          = link_to "#form-upload-modal", class:"modal-trigger" 
+            | Import
+            i.material-icons.left input
 
 .card-panel.horizontal-scroll
   table.striped.compact
@@ -25,4 +31,18 @@ nav
             = link_to letter_ii_nat_exams_path(student_id: student.id)
               i.material-icons drafts
 
+#form-upload-modal.modal
+  = form_tag({action: :import}, multipart: true) do
+    .modal-content
+      h4 Import Try Out Scores
 
+      p Select Excel file to upload
+      = file_field_tag 'filename'
+      .input-field
+        = text_field_tag(:sheet, '', {placeholder:'Sheet name'})
+      .input-field
+        = select_tag :academic_year_id, options_from_collection_for_select(AcademicYear.list_for_menu,:id,:name, AcademicYear.current_id)
+
+    .modal-footer
+      a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+      button.btn.btn-primary.waves-effect.waves-light data-disable=true Submit
