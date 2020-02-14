@@ -36,7 +36,11 @@ class BookCopiesController < ApplicationController
         Barcode.new(@book_copy.barcode).write_image if @book_copy.present?
       end
       format.json do
-        @book_copy = BookCopy.where('UPPER(barcode) = ?', params[:id].upcase).includes(:book_edition => :book_title).take
+        if params[:status]
+          @book_copy = BookCopy.where(status_id:params[:status]).where('UPPER(barcode) = ?', params[:id].upcase).includes(:book_edition => :book_title).take
+        else
+          @book_copy = BookCopy.where('UPPER(barcode) = ?', params[:id].upcase).includes(:book_edition => :book_title).take
+        end
         if @book_copy.present?
           @book_edition = @book_copy.book_edition
           @book_title = @book_edition.try(:book_title)
@@ -175,12 +179,16 @@ class BookCopiesController < ApplicationController
   # POST /book_copies/dispose
   def dispose
     authorize! :destroy, BookCopy
-    if params[:book_copy]
-      @book_copies = BookCopy.where(id: params[:book_copy].map{|id, on| id})
+    if params[:book_copy] || params[:s_book_copy]
+      @book_copies = BookCopy.where(id: (params[:book_copy].present? ? params[:book_copy].map{|id, on| id} : params[:s_book_copy].map{|id, on| id}))
       book_edition = @book_copies.last.book_edition
       if @book_copies.map{|x| x.borrowed_in_year(AcademicYear.current_id)}.reject{|x| !x}.empty?
-        @book_copies.update_all(disposed: true)
-        redirect_to book_edition_book_copies_path(book_edition), notice: 'Selected book copies were successfully deleted.'
+        @book_copies.update_all(disposed: true, disposed_at: Date.today)
+        if params[:book_copy]
+          redirect_to book_edition_book_copies_path(book_edition), notice: 'Selected book copies were successfully deleted.'
+        else
+          redirect_to book_copies_dispose_books_path(), notice: 'Selected book copies were successfully deleted.'
+        end
       else
         redirect_to book_edition_book_copies_path(book_edition), alert: 'Error: Some selected book copies are still borrowed.'
       end
