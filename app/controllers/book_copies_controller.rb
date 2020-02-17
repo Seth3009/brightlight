@@ -202,8 +202,13 @@ class BookCopiesController < ApplicationController
     authorize! :manage, BookCopy
     @book_copy = BookCopy.unscoped.find params[:id]
     @book_copy.disposed = false
+    @book_copy.disposed_at = nil
     if @book_copy.save
-      redirect_to @book_copy, notice: "Successfully changed disposed status of book #{@book_copy.barcode}"
+      if params[:undo] == 'yes'
+        redirect_to :back, notice: "Successfully changed disposed status of book #{@book_copy.barcode}"
+      else
+        redirect_to @book_copy, notice: "Successfully changed disposed status of book #{@book_copy.barcode}"
+      end
     else
       redirect_to @book_copy, alert: "Failed to change disposed status of book #{@book_copy.barcode}"
     end  

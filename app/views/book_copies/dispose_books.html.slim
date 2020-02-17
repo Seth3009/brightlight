@@ -1,9 +1,12 @@
-h5 Disposed Book Copies
 
-nav
+.row.title 
+  h5.center Disposed Book Copies
+  p.center Date Range #{params[:dts] || Date.today} - #{params[:dte] || Date.today} 
+hr style="display:none;"
+nav"
   .nav-wrapper
     ul.right
-      li.tooltipped data-position="bottom" data-delay="10" data-tooltip="Print List"
+      li
         = link_to "#", onclick: 'window.print(); return false;'
           i.material-icons print
       li
@@ -35,7 +38,7 @@ nav
         th Barcode
         th Title
         th Authors
-        th Actions
+        th.hide_print Actions
     tbody
       - @book_copies.each_with_index do |book_copy,idx|
         tr
@@ -49,9 +52,39 @@ nav
             = book_copy.book_edition.title
           td.wd15
             = book_copy.book_edition.authors
-          td.wd5
-            = link_to undispose_book_copy_path(book_copy.id)
+          td.wd5.hide_print
+            = link_to undispose_book_copy_path(id:book_copy.id,undo:'yes')
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Undispose" undo
+
+css:
+  @media print {
+    
+    .hide_print {
+      display:none;
+    }
+
+    h5 {
+      font-size:2rem;
+      font-weight: bold;
+      text-decoration:underline;
+    }
+
+    .title {
+      margin-top:1cm;
+    }
+
+   
+
+    hr { 
+      display: block !important;
+      margin-top: 0;
+      margin-bottom: 0;
+      margin-left: auto;
+      margin-right: auto;
+      border-style: inset;
+      border-width: 0.5px;
+    } 
+  }
 
 javascript:
   $(function(){
