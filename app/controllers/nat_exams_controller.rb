@@ -10,8 +10,7 @@ class NatExamsController < ApplicationController
   # GET /nat_exams/1
   # GET /nat_exams/1.json
   def scores
-    @exam_scores = NatExam.for_academic_year(AcademicYear.current_id).scores_for student_id: params[:student_id]
-    @avg_pilihan = @exam_scores.avg_pilihan.take
+    @exam_scores = NatExam.scores_for student_id: params[:student_id], academic_year_id: AcademicYear.current_id
   end
 
   # GET /nat_exams/new
@@ -28,7 +27,6 @@ class NatExamsController < ApplicationController
     else
       @students = NatExam.students(academic_year: @academic_year)
     end
-    @exam_scores = NatExam.for_academic_year @academic_year.id
   end
 
   # GET /nat_exams/1/edit

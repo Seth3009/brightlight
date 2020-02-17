@@ -5,35 +5,21 @@ class NatExam < ActiveRecord::Base
   belongs_to :diknas_course
 
   scope :for_academic_year, lambda { | year | where(academic_year_id: year) }
-  scope :scores_for, lambda { |student_id:|
-    where(student_id: student_id)
-  }
+  # scope :scores_for, lambda { |student_id:|
+  #   where(student_id: student_id)
+  # }
   scope :wajib, lambda {
     joins(:diknas_course)
     .where(diknas_courses: {name: ["BAHASA INDONESIA", "BAHASA INGGRIS", "MATEMATIKA"] })
   }
 
-  scope :avg_pilihan, lambda {
-    joins(:diknas_course)
-    .where.not(diknas_courses: {name: ["BAHASA INDONESIA", "BAHASA INGGRIS", "MATEMATIKA"] })
-    .select('AVG(nilai_sekolah) as ns, AVG(try_out_2) as to2')
-}
-
-  # def self.scores_for(student_id:, academic_year_id:)
-  #   DiknasConvertedItem.student_scores(student_id: student_id, academic_year_id: academic_year_id)
-  # end
-  
   def self.students(academic_year:)
     Student.where(id: NatExam.for_academic_year(academic_year).pluck(:student_id))
     .order(:name)
   end
 
-  def self.mock_data
-    DiknasConvertedItem.school_scores(academic_year_id:19).each {|dci| 
-      NatExam.create student_id:dci.student_id, 
-        academic_year_id:19, grade_level_id:dci.grade_level_id, diknas_course_id:dci.course_id, 
-        nilai_sekolah:dci.p_score, try_out_2:rand(dci.p_score-8..dci.p_score+5).round(0)
-    }
+  def self.scores_for(student_id:, academic_year_id: AcademicYear.current_id)
+    DiknasConvertedItem.student_scores student_id: student_id, academic_year_id: academic_year_id
   end
 
   def self.import_to_ii_scores(xlsx_file:, sheet:, academic_year_id:)
@@ -45,7 +31,7 @@ class NatExam < ActiveRecord::Base
     
     sheet.each_with_index(header) do |row, i| 
       next if i < 1 
-      DiknasCourse::TRYOUTCOURSES.each do |diknas_course_name|
+      DiknasCourse.all.order(:sort_num).each do |diknas_course_name|
         nilai_sekolah = DiknasConvertedItem.student_score_for_diknas_course(student_id:row["ID"], academic_year_id: academic_year_id, diknas_course_id: header[diknas_course_name]).take
         if nilai_sekolah.present? || row[diknas_course_name].present?
           record = NatExam.find_or_create_by student_id: row["ID"], 

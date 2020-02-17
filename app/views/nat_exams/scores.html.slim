@@ -1,5 +1,5 @@
 -title = 'Daftar Nilai'
-h4 Daftar Nilai untuk #{@exam_scores.take.student.try(:name)}
+h4 Daftar Nilai untuk #{@exam_scores.take.student_name}
 
 nav
   .nav-wrapper
@@ -25,20 +25,8 @@ nav
     tbody
       - @exam_scores.each do |score|
         tr
-          td = score.diknas_course.try(:name)
+          td = score.course
           td = score.nilai_sekolah
           td = score.try_out_2
     
-    tfoot
-      tr style="font-weight: bold; border-top: 1px solid grey"
-        td Average
-        td = @exam_scores.average(:nilai_sekolah).round(1)
-        td = @exam_scores.average(:try_out_2).round(1)
-      tr
-        td Lowest Score
-        td = @exam_scores.minimum(:nilai_sekolah)
-        td = @exam_scores.minimum(:try_out_2)
-      tr
-        td Rata-rata Mata Pelajaran Pilihan
-        td = @avg_pilihan.ns
-        td = @avg_pilihan.to2
+
