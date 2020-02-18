@@ -3,25 +3,23 @@ class DiknasConvertedItem < ActiveRecord::Base
   belongs_to :diknas_conversion
   validates :p_score, :t_score, presence: true
 
-  scope :un_courses, lambda { 
+  scope :with_courses, lambda { 
     joins(:diknas_conversion)
     .joins('join diknas_courses on diknas_courses.id=diknas_conversions.diknas_course_id')
   }
 
   scope :school_scores, lambda { |academic_year_id:|
-    un_courses
+    with_courses
     .joins(:diknas_converted)
     .joins('join students on diknas_converteds.student_id = students.id')
     .where(diknas_converteds: {academic_year_id: [academic_year_id.to_i - 1, academic_year_id.to_i]})
-    .joins('left outer join nat_exams ne on ne.student_id=students.id and  ne.diknas_course_id=diknas_courses.id').where('diknas_converteds.academic_year_id=19')
+    .joins('left outer join nat_exams ne on ne.student_id=students.id and  ne.diknas_course_id=diknas_courses.id')
     .group('students.id, students.name, diknas_courses.id, diknas_courses.name, ne.try_out_2')
     .select("students.id as sid, students.name as student_name, 
               diknas_courses.id as course_id, diknas_courses.name as course, 
               ROUND(AVG(p_score)) as nilai_sekolah, ne.try_out_2 as try_out_2")
     .order('diknas_courses.id')
   }
-
-
 
   scope :student_scores, lambda {|student_id:, academic_year_id:|
     school_scores(academic_year_id: academic_year_id)
