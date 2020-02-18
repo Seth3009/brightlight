@@ -1845,7 +1845,7 @@ section {
 		display: none !important;
 	}
 
-	.letter-page {
+	.paper-page {
 		font-family: "Cambria, Calibri, Times Roman, serif";
 		padding: 0.3in 0.3in 0.3in 0.25in !important;
 		box-shadow: none !important;
@@ -1864,7 +1864,7 @@ table { page-break-inside:auto }
 	background-color: $light-grey;
 	padding: 20px 0;
 
-	.letter-page {
+	.paper-page {
 		background-color: white;
 		width: 8.5in;
 		box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
