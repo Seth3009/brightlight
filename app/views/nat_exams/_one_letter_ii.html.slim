@@ -3,7 +3,7 @@
     = @template.substituted :header
     = @template.substituted :opening
 
-    .container style="width:400px; margin:10px auto"
+    .container style="width:500px; margin:10px auto"
       table.compact.bordered.section-bordered
         thead 
           tr
@@ -13,7 +13,7 @@
         tbody 
           - exam_scores.each do |score|
             tr 
-              td = score.course.try(:titleize)
+              td = score.course.try(:titleize).try(:tr,"*)","")
               td.center = score.nilai_sekolah
               td.center = score.try_out_2
       
