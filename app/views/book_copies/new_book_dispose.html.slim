@@ -57,7 +57,7 @@ javascript:
     }
   });
 
- $("#barcode").keydown(function(e) {
+ /*$("#barcode").keydown(function(e) {
     var oldvalue=$(this).val();
     var field=this;
     setTimeout(function () {
@@ -65,7 +65,7 @@ javascript:
             $(field).val(oldvalue);
         } 
     }, 1);
-  });
+  });*/
 
   /* =================== search book copies function ============== */
 
@@ -114,13 +114,11 @@ javascript:
     el.find("[name$='[barcode]']").val(bc.barcode);
     el.find(".booktitle").val(bc.book_edition.title);
     el.find(".authors").val(bc.book_edition.authors);
-    /*el.find(".units").html("<p>"+product.unit+"</p>");    
-    el.find(".product_id").val(product.id);
-    el.find("[name$='[item_unit_id]']").val(product.item_unit_id);
-    el.find(".trx_type").val($( "select.select_type").val());
-    el.find(".qty-field").val(1);*/
   };
 
   $(document).on('click', '.btn', function() {
     $(this).parent().parent('tr').remove();
   });
+
+
+  

@@ -1,4 +1,4 @@
-tr
+tr.nested-fields
   td style="display:none;"
     input.checkbox.bookid type='checkbox' checked='true' 
     = label_tag 'bookid','', :class => 'bookid'
@@ -14,3 +14,23 @@ tr
   td.wd10
     = link_to '#', class:'btn'
       i.material-icons delete
+
+
+javascript:
+  /* ====================== Scanner ================================*/
+  $("[name$='[barcode]']").codeScanner({
+    minEntryChars: 7, onScan: function($element, input) {        
+    var barcode = input.trim();
+    alert(text);
+    $.getJSON("/book_copies/" + text + "?status=1&format=json", null, function (data) {
+      if ($("tr:last").find("[name$='[barcode]']").val() != "") {
+        $(".add_fields").trigger('click');
+      } else if (!$("tr:last").is(":visible")) {
+        $("tr:last").show();
+      }
+      insert_values(data,$("tr:last"));        
+    }).fail(function(xhr){
+      Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
+    });            
+    }
+  });
