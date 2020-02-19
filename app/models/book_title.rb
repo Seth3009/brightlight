@@ -7,6 +7,7 @@ class BookTitle < ActiveRecord::Base
   has_many :standard_books, dependent: :restrict_with_error
   has_many :book_loans, dependent: :restrict_with_error
   has_many :book_loan_histories
+  has_many :book_copies, through: :book_editions
 
   belongs_to :subject
   belongs_to :grade_level
