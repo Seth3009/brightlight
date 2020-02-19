@@ -10,7 +10,8 @@ class NatExamsController < ApplicationController
   # GET /nat_exams/1
   # GET /nat_exams/1.json
   def scores
-    @exam_scores = NatExam.scores_for student_id: params[:student_id], academic_year_id: AcademicYear.current_id
+    @student = Student.find params[:student_id]
+    @exam_scores = NatExam.detail_scores_for student_id: params[:student_id], academic_year_id: AcademicYear.current_id
   end
 
   # GET /nat_exams/new

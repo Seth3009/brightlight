@@ -22,6 +22,42 @@ class NatExam < ActiveRecord::Base
     DiknasConvertedItem.student_scores student_id: student_id, academic_year_id: academic_year_id
   end
 
+  def self.detail_scores_for(student_id:, academic_year_id: AcademicYear.current_id)
+    sid = Student.find(student_id).id
+    curr_year = AcademicYear.find(academic_year_id)
+    prev_year = AcademicYear.find(academic_year_id-1)
+    terms = prev_year.academic_terms.map(&:id)
+    terms << curr_year.academic_terms.first.id
+    query = %Q{
+SELECT * FROM \
+crosstab($$ \
+select course.id, course.name as course_name, conv.academic_term_id as term, dci.p_score as score from diknas_converted_items dci \
+join diknas_conversions conv on conv.id = dci.diknas_conversion_id \
+join diknas_converteds rapor on rapor.id = dci.diknas_converted_id \
+join diknas_courses course on course.id = conv.diknas_course_id \
+where conv.academic_year_id in (#{prev_year.id},#{curr_year.id}) \
+and rapor.student_id = #{sid} \
+UNION \
+select course.id, course.name as course_name, 999 as term, round(avg(dci.p_score)) as score from diknas_converted_items dci \
+join diknas_conversions conv on conv.id = dci.diknas_conversion_id \
+join diknas_converteds rapor on rapor.id = dci.diknas_converted_id \
+join diknas_courses course on course.id = conv.diknas_course_id \
+where conv.academic_year_id in (#{prev_year.id},#{curr_year.id}) and rapor.student_id = #{sid} \
+group by course.id, course_name \
+UNION \
+select diknas_course_id, course.name as course_name, 1000 as term, try_out_2 as score \
+from nat_exams \
+join diknas_courses course on course.id = nat_exams.diknas_course_id \
+where academic_year_id =#{curr_year.id} and student_id = #{sid} \
+order by 1,2 \
+$$, $$values (#{terms.first}), (#{terms.second}), (#{terms.third}), (999), (1000)$$ \
+) \
+AS ct(course_id int, course varchar, "sem3" float, "sem4" float, "sem5" float, "avg" float, "to2" float) \
+}
+    puts query
+    NatExam.find_by_sql(query)
+  end
+
   def self.import_to_ii_scores(xlsx_file:, sheet:, academic_year_id:)
     xl = Roo::Spreadsheet.open(xlsx_file)
     sheet = xl.sheet(sheet)

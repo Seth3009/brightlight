@@ -1,5 +1,5 @@
 -title = 'Daftar Nilai'
-h4 Daftar Nilai untuk #{@exam_scores.take.student_name}
+h4 Daftar Nilai untuk #{@student.name}
 
 nav
   .nav-wrapper
@@ -18,15 +18,23 @@ nav
   table.striped.compact
     thead
       tr
-        th Mata Pelajaran
-        th Nilai Rata-rata Rapor
-        th Nilai Try Out II
+        th rowspan=2 Mata Pelajaran
+        th.center colspan=5 style="border-bottom:1px solid grey" Nilai
+      tr
+        th Sem 3
+        th Sem 4
+        th Sem 5
+        th Rata-rata
+        th Try Out II
 
     tbody
       - @exam_scores.each do |score|
         tr
-          td = score.course
-          td = score.nilai_sekolah
-          td = score.try_out_2
+          td = score.course.try(:tr,"*)","")
+          td = score.sem3
+          td = score.sem4
+          td = score.sem5
+          td = score.avg
+          td = score.to2
     
 

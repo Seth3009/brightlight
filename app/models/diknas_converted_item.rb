@@ -8,6 +8,9 @@ class DiknasConvertedItem < ActiveRecord::Base
     .joins('join diknas_courses on diknas_courses.id=diknas_conversions.diknas_course_id')
   }
 
+  # school_scores calculate Nilai Sekolah as average of 3 values of last year Semester I and II scores and this year's Semester I score
+  # Try Out 2 scores is taken from nat_exams.try_out_2 value
+  # Grouped by Student and Diknas Course
   scope :school_scores, lambda { |academic_year_id:|
     with_courses
     .joins(:diknas_converted)
