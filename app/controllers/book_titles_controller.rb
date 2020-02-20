@@ -18,7 +18,7 @@ class BookTitlesController < ApplicationController
       @view_style = :block
       session[:view_style] = ''
     end
-
+    @statuses = Status.all
     respond_to do |format|
       format.html {
         @subjects = Subject.joins(:book_titles).uniq

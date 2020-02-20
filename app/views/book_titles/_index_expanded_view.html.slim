@@ -27,6 +27,15 @@ table.striped
               dd.col.s4
                 .label Total copies:
                 .item = book_title.number_of_copies
+            dl.row
+              - @statuses.each do |status|
+                dd.col.s2
+                  .label = status.name
+                  .item = book_title.book_copies.where(status_id:status.id).count
+              dd.col.s2
+                .label N/A
+                .item = book_title.book_copies.where(status_id:nil).count
+              
         td 
           = link_to book_title
             i.material-icons visibility
