@@ -4,7 +4,7 @@ tr.nested-fields
     = label_tag 'bookid','', :class => 'bookid'
   td.wd10
     .input-field     
-      = text_field_tag 'barcode', 'INV-', maxlength: 11, class: 'barcode_autocomplete'
+      = text_field_tag 'barcode', '', maxlength: 11, class: 'barcode'
   td.wd30
     .input-field     
       = text_field_tag 'booktitle','', class:'booktitle',disabled: true
@@ -12,25 +12,5 @@ tr.nested-fields
     .input-field     
       = text_field_tag 'authors','', class:'authors',disabled: true
   td.wd10
-    = link_to '#', class:'btn'
-      i.material-icons delete
-
-
-javascript:
-  /* ====================== Scanner ================================*/
-  $("[name$='[barcode]']").codeScanner({
-    minEntryChars: 7, onScan: function($element, input) {        
-    var barcode = input.trim();
-    alert(text);
-    $.getJSON("/book_copies/" + text + "?status=1&format=json", null, function (data) {
-      if ($("tr:last").find("[name$='[barcode]']").val() != "") {
-        $(".add_fields").trigger('click');
-      } else if (!$("tr:last").is(":visible")) {
-        $("tr:last").show();
-      }
-      insert_values(data,$("tr:last"));        
-    }).fail(function(xhr){
-      Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
-    });            
-    }
-  });
+    = link_to '#', class:'btndel'
+      | remove
