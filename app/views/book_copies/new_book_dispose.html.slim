@@ -21,17 +21,16 @@
     .row
       table#mytable.compact
         thead
-          th  Barcode
-          th  Title
-          th  Authors
-          th  Action
+          th Barcode
+          th Title
+          th Authors
+          th Action
         tbody#book_copy
-          = f.fields_for :book_copies do |book_copy|
-            = render partial: 'book_copies/book_dispose_row'
+          = render partial: 'book_copies/book_dispose_row'
 
 
 javascript:
-  $(document).ready(function(){
+ $(document).ready(function(){
     $("#use-scanner").attr('checked','checked')
     $("#use-scanner").change();
   });
@@ -64,7 +63,7 @@ javascript:
     if ($(this).val().length >= 10) {
       var text = $(this).val();
       $(this).autocomplete({        
-          source: "/book_copies/" + text + "?status=1&format=json",
+          source: "/book_copies/" + text + ".json",
           max: 11,
           minLength: 11,
           create: function() {
@@ -83,8 +82,12 @@ javascript:
       function insert_product_values(el, bc) {
         let row = $(el).closest('tr');
         $(el).val(bc.barcode);
-        console.log(bc);       
-        insert_values(bc, row);
+        console.log(bc); 
+        if (bc.loans) { 
+          Materialize.toast("Book is Borrowed", 4000, 'red');
+        } else {
+          insert_values(bc, row);
+        }
       } 
     }  
   });
@@ -114,13 +117,18 @@ javascript:
   $(".barcode").codeScanner({ 
     minEntryChars: 11,
     onScan: function($element, barcode) {
-      $.getJSON("/book_copies/"+barcode+".json?status=1", null, function (data) {        
+      $.getJSON("/book_copies/"+barcode+".json?", null, function (data) {        
         if ($("tr:last").find(".barcode").val() != "") {
-          $.rails.handleRemote($('<a>', { href: '/book_copies/dispose_row', 'data-method': 'GET' }));
+          /*$.rails.handleRemote($('<a>', { href: '/book_copies/dispose_row', 'data-method': 'GET' }));*/
+          $('#add-row').trigger('click');
         } else if (!$("tr:last").is(":visible")) {
           $("tr:last").show();
         }
-        insert_values_scan(data, $("tr:last"));
+        if (data.book_copy.loans) {
+          Materialize.toast("Book is Borrowed", 4000, 'red');
+        } else {
+          insert_values_scan(data, $("tr:last"));
+        }
       }).fail(function(xhr){
         Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
       });                 
