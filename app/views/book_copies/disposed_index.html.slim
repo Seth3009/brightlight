@@ -5,7 +5,11 @@ h4 Disposed Books
 nav class="brown lighten-1"
   .nav-wrapper
     .brand-logo.nav-menu.left style="margin-left: 20px; font-size:1.5em"
-      | Disposed Book Copies    
+      | Disposed Book Copies 
+    ul.right
+      = link_to new_employee_path
+        | Dispose Books
+        i.material-icons.left delete
 
 .card-panel  
   table.compact.striped

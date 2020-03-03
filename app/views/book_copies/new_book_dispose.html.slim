@@ -1,0 +1,150 @@
+= form_for :book_copies do |f|
+  nav
+    .nav-wrapper
+      ul
+        li
+          button.btn.red formaction="#{dispose_book_copies_path}"
+            i.material-icons delete
+      ul.right#add-row
+          li
+            = link_to dispose_row_path(), remote:true
+              | Add Row
+              i.material-icons.left playlist_add
+
+  ul.collapsible data-collapsible="expandable"
+    li
+      .collapsible-header                
+        div.right 
+          input.checkbox-toggle type="checkbox" id="use-scanner"
+          = label_tag "use-scanner", "Use scanner"
+  .card-panel
+    .row
+      table#mytable.compact
+        thead
+          th Barcode
+          th Title
+          th Authors
+          th Action
+        tbody#book_copy
+          = render partial: 'book_copies/book_dispose_row'
+
+
+javascript:
+ $(document).ready(function(){
+    $("#use-scanner").attr('checked','checked')
+    $("#use-scanner").change();
+  });
+
+  $("#use-scanner").change(function() {
+    $("tr.nested-fields").each(function(){
+      v = $(this).find(".bookid").attr('value');
+      if (v == undefined) {
+        if ($("#use-scanner").is(":checked")) {
+          $(this).hide();
+        } else {
+          $(this).show();
+        }
+      } 
+    });
+    if (!$("#use-scanner").is(":checked")) {
+      if ($("tr:last").find(".barcode").val() != "") {
+        $(".add-row").trigger('click');
+      }
+      $("#add-row").show();      
+    } else {
+      $("#add-row").hide();
+    }
+  });
+
+  /* =================== search book copies function ============== */
+
+  $(document).on('keyup', '.barcode', function() {
+    $(this).val($(this).val().toUpperCase());
+    if ($(this).val().length >= 10) {
+      var text = $(this).val();
+      $(this).autocomplete({        
+          source: "/book_copies/" + text + ".json",
+          max: 11,
+          minLength: 11,
+          create: function() {
+            $(this).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+              return $( "<li>" )
+                .append( "<div>" + item.barcode + " " + item.book_edition.title + "</div>" )
+                .appendTo( ul );
+            }
+          },
+          select: function( event, ui ) {
+            insert_product_values(event.target, ui.item); 
+            return false;
+          }
+        });  
+      
+      function insert_product_values(el, bc) {
+        let row = $(el).closest('tr');
+        $(el).val(bc.barcode);
+        console.log(bc); 
+        if (bc.loans) { 
+          Materialize.toast("Book is Borrowed", 4000, 'red');
+        } else {
+          insert_values(bc, row);
+        }
+      } 
+    }  
+  });
+
+  var insert_values = function (data, el) {
+    var bc = data;
+    el.find(".rowcopies").attr("id",bc.id)
+    el.find(".bookid").val(bc.id);
+    el.find(".bookid").attr("id","s_book_copy-"+bc.id)
+    el.find(".bookid").attr("name","s_book_copy["+bc.id+"]")
+    el.find(".barcode").val(bc.barcode);
+    el.find(".booktitle").val(bc.book_edition.title);
+    el.find(".authors").val(bc.book_edition.authors);
+  };
+
+  $(document).on('click', '.btndel', function() {
+    $(this).parent().parent('tr').remove();
+  });
+
+  $("form").on("keypress", function (e) {
+    if (e.keyCode == 13) {
+        return false;
+    }
+  });
+
+  /* ====================== Scanner ================================*/
+  $(".barcode").codeScanner({ 
+    minEntryChars: 11,
+    onScan: function($element, barcode) {
+      $.getJSON("/book_copies/"+barcode+".json?", null, function (data) {        
+        if ($("tr:last").find(".barcode").val() != "") {
+          $('#add-row').trigger('click');
+        } else if (!$("tr:last").is(":visible")) {
+          $("tr:last").show();
+        }
+        if (data.book_copy.loans) {
+          Materialize.toast("Book is Borrowed", 4000, 'red');
+        } else {
+          insert_values_scan(data, $("tr:last"));
+        }
+      }).fail(function(xhr){
+        Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');
+      });                 
+    }
+  });
+
+  var insert_values_scan = function (data, el) {
+    var bc = data;
+    el.find(".rowcopies").attr("id",bc.book_copy.id)
+    el.find(".bookid").val(bc.book_copy.id);
+    el.find(".bookid").attr("id","s_book_copy-"+bc.book_copy.id)
+    el.find(".bookid").attr("name","s_book_copy["+bc.book_copy.id+"]")
+    el.find(".barcode").val(bc.book_copy.barcode);
+    el.find(".booktitle").val(bc.book_copy.book_edition.title);
+    el.find(".authors").val(bc.book_copy.book_edition.authors);
+  };
+
+  
+    
+  
