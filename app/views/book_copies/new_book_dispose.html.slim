@@ -119,7 +119,6 @@ javascript:
     onScan: function($element, barcode) {
       $.getJSON("/book_copies/"+barcode+".json?", null, function (data) {        
         if ($("tr:last").find(".barcode").val() != "") {
-          /*$.rails.handleRemote($('<a>', { href: '/book_copies/dispose_row', 'data-method': 'GET' }));*/
           $('#add-row').trigger('click');
         } else if (!$("tr:last").is(":visible")) {
           $("tr:last").show();
