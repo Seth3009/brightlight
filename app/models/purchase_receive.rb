@@ -14,7 +14,7 @@ class PurchaseReceive < ActiveRecord::Base
 
   scope :for_requester, lambda {|requester| 
     joins(:purchase_order)
-    .where('purchase_orders.requestor_id = ? OR receiver_id = ? OR checker_id = ?', requester.id, requester.id, requester.id)
+    .where('purchase_orders.requestor_id = ? OR checker_id = ?', requester.id, requester.id)
   }
 
   scope :received, lambda { 
