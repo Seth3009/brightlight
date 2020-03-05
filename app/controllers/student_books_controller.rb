@@ -311,18 +311,18 @@ class StudentBooksController < ApplicationController
       @grade_level = @grade_section.grade_level
                     
       all_books = StudentBook.for_grade(academic_year_id:@year_id, grade_section_id: @grade_section)
-      @all_titles = all_books.unique_book_editions
+      @all_titles = all_books.unique_book_titles
 
       if params[:t].present?
         # A book title is selected, here we load only the specified book title
-        @book_edition_id = params[:t]
-        @title = BookEdition.find(@book_edition_id).title
-        @book_titles = @all_titles.for_edition @book_edition_id
-        @student_books = all_books.including_conditions.by_editions.for_edition @book_edition_id
+        @book_title_id = params[:t]
+        @title = BookTitle.find(@book_title_id).title
+        @book_titles = @all_titles.for_title @book_title_id
+        @student_books = all_books.including_conditions.by_titles.for_title @book_title_id
       else
         # No book title is selected, here we load ALL book titles for the grade_section
         @book_titles = @all_titles
-        @student_books = all_books.by_editions.including_conditions
+        @student_books = all_books.by_titles.including_conditions
       end
     end
 

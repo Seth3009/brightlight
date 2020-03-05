@@ -50,9 +50,9 @@ ul#year-options.dropdown-content
             i.material-icons.right arrow_drop_down
             
   - if @student_books.present?
-    - @book_titles.each do |edition|
-      h4 = edition.title
-      - @book_list = @student_books.where(book_edition_id:edition.id)
+    - @book_titles.each do |book_title|
+      h4 = book_title.title
+      - @book_list = @student_books.for_title book_title.id
       = render partial: 'book_title_table', locals: {student_books: @book_list}
       .page-break    
     - if !@disable_edit
