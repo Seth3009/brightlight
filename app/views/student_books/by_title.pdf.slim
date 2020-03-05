@@ -1,7 +1,7 @@
 - if @student_books.present?
-  - @book_titles.each_with_index do |edition, i|
+  - @book_titles.each_with_index do |book_title, i|
     h5 Book List By Title (#{@grade_section.name})
-    h5 = edition.title
+    h5 = book_title.title
     table.compact
       thead
         tr.compact-row
@@ -25,7 +25,7 @@
           th.wd5 style='text-align:center;font-size:0.9rem' binding 
           th style='text-align:center;' Notes
       tbody
-        - book_list = @student_books.where(book_edition_id:edition.id)
+        - book_list = @student_books.for_title book_title.id
         - if book_list.present?
           - book_list.each_with_index do |book, i|
             - book_copy = book.book_copy || BookCopy.unscoped.where(id:book.book_copy_id).take
