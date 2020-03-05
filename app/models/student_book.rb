@@ -87,6 +87,49 @@ class StudentBook < ActiveRecord::Base
     .select('student_books.*, fs.percentage as fine_pct')
   }
 
+  scope :for_grade, lambda { |academic_year_id:, grade_section_id:|
+    where(academic_year_id:academic_year_id, grade_section_id: grade_section_id)
+  }
+
+  scope :unique_book_editions, lambda {
+    joins(:book_edition)
+    .group('book_edition_id, book_editions.title')
+    .select('book_edition_id as id, book_editions.title as title')
+    .order('book_editions.title')
+  }
+
+  scope :unique_book_titles, lambda { 
+    joins(:book_edition)
+    .joins('join book_titles on book_titles.id = book_editions.book_title_id')
+    .group('book_titles.id, book_titles.title')
+    .select('book_titles.id as id, book_titles.title as title')
+    .order('book_titles.title')
+  }
+
+  scope :including_conditions, lambda {
+    includes({book_copy: :book_label}, :initial_copy_condition, :end_copy_condition)
+  }
+
+  scope :by_editions, lambda {
+    joins(:book_edition)
+    .order('book_editions.title, CAST(roster_no as INT)')
+  }
+
+  scope :by_titles, lambda {
+    joins(:book_edition)
+    .joins('join book_titles on book_titles.id = book_editions.book_title_id')
+    .order('book_titles.title, CAST(roster_no as INT)')
+  }
+
+  scope :for_edition, lambda { |book_edition_id|
+    where(book_edition_id: book_edition_id)
+  }
+
+  scope :for_title, lambda { |book_title_id|
+    where(book_titles: {id: book_title_id} )
+  }
+
+
   # def fine_applies
   #   initial_copy_condition_id.present? && end_copy_condition_id.present?
   #   && (end_copy_condition_id - initial_copy_condition_id > 2 || end_copy_condition_id == 5)
