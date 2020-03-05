@@ -26,6 +26,6 @@ class BookLabel < ActiveRecord::Base
 
   def self.for_select
     [[ "None", [["--", nil]]]] +
-    GradeSection.order(:name).includes(:book_labels).all.map {|gs| [gs.name, gs.book_labels.map {|x| [x.name, x.id]} ]}
+    GradeSection.order(:parallel_code).includes(:book_labels).all.map {|gs| [gs.name, gs.book_labels.map {|x| [x.name, x.id]} ]}
   end
 end
