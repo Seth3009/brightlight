@@ -373,6 +373,7 @@ class StudentBooksController < ApplicationController
       @student_list = @all_students   
       @student_books = StudentBook.for_grade(academic_year_id:@year_id, grade_section_id: @grade_section.id)
                           .by_titles.including_conditions
+    end
 
     respond_to do |format|
       format.html do
