@@ -1,5 +1,5 @@
 class BookCopiesController < ApplicationController
-  before_action :set_book_copy, only: [:edit, :destroy, :checks]
+  before_action :set_book_copy, only: [:edit, :destroy, :checks, :update_book_copy]
   before_action :sortable_columns, only: [:index]
 
   # GET /book_copies
@@ -265,7 +265,26 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/dispose_books/new_list
   def new_book_dispose
-    @book_copies = BookCopy.new
+    authorize! :update, @book_copy
+    if params[:id].present?
+      @book_copy = BookCopy.unscoped.find(params[:id])
+      if @book_copy.update(disposed:true, disposed_at:Date.today) 
+        flash[:notice] = 'Book copy was successfully updated.'
+      end
+    end
+  end
+
+  # PATCH/PUT /book_copies/dispose_books/new_list/1.json
+  def update_book_copy
+    authorize! :update, BookCopy
+    # @book_copy = BookCopy.unscoped.find(params[:id])
+    respond_to do |format|
+      if @book_copy.update(disposed:true, disposed_at:Date.today)        
+        format.json { render :show, status: :ok, location: @book_copy }
+      else
+        format.json {flash[:alert] = 'Book copy was not successfully updated.'}
+      end
+    end
   end
 
   # GET /book_editions/1/book_copies/disposed

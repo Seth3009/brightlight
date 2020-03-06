@@ -1,43 +1,83 @@
-= form_for :book_copies do |f|
-  nav
-    .nav-wrapper
-      ul
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to dispose_books_path
+          | Dispose Books
+          i.material-icons.left chevron_left          
+    ul.right#add-row
         li
-          button.btn.red formaction="#{dispose_book_copies_path}"
-            i.material-icons delete
-      ul.right#add-row
-          li
-            = link_to dispose_row_path(), remote:true
-              | Add Row
-              i.material-icons.left playlist_add
+          = link_to '#', onclick: 'clone_row();'
+            | Add Row
+            i.material-icons.left playlist_add
 
-  ul.collapsible data-collapsible="expandable"
-    li
-      .collapsible-header                
-        div.right 
-          input.checkbox-toggle type="checkbox" id="use-scanner"
-          = label_tag "use-scanner", "Use scanner"
-  .card-panel
-    .row
-      table#mytable.compact
-        thead
-          th Barcode
-          th Title
-          th Authors
-          th Action
-        tbody#book_copy
-          = render partial: 'book_copies/book_dispose_row'
+ul.collapsible data-collapsible="expandable"
+  li
+    .collapsible-header                
+      div.right 
+        input.checkbox-toggle type="checkbox" id="use-scanner"
+        = label_tag "use-scanner", "Use scanner"
+      
+.card-panel
+  .row
+    table#mytable.compact
+      thead
+        th Barcode
+        th Title
+        th Authors
+      tbody#book_copy
+        tr.nested-fields style="display:none;"          
+          td.wd15
+            .input-field  
+              = text_field_tag 'barcode', '', maxlength: 11, class: 'barcode'
+          td.wd55
+            .input-field     
+              = text_field_tag 'booktitle','', class:'booktitle',disabled: true
+          td.wd50
+            .input-field     
+              = text_field_tag 'authors','', class:'authors',disabled: true
+          
 
 
 javascript:
- $(document).ready(function(){
+  function clone_row() {
+   // make a copy of an existing row. We choose the last row of table
+    var rowToAdd = $("#mytable tbody tr:first").clone();
+    
+    //add it to table
+    $("#mytable tbody").append(rowToAdd);
+    $('tr:last').removeAttr("style")
+  }
+
+  function save_row(barcode) {
+    var url = "/book_copies/dispose_books/new_list/"+barcode
+    var dataToSend = new Object();
+        dataToSend = { barcode: barcode };
+    var jsonData = JSON.stringify(dataToSend);
+    
+    $.ajax({
+      type: 'PUT',
+      contentType: "application/json; charset=utf-8",
+      url: url,
+      data: jsonData,
+      dataType: 'json'
+    })
+    .done(function(m) {
+        Materialize.toast('Book disposed', 5000, 'green');
+    })
+    .fail(function(xhr) {
+      Materialize.toast('Book check error', 5000, 'red');
+    });
+  }
+
+  $(document).ready(function(){
     $("#use-scanner").attr('checked','checked')
     $("#use-scanner").change();
   });
 
   $("#use-scanner").change(function() {
     $("tr.nested-fields").each(function(){
-      v = $(this).find(".bookid").attr('value');
+      v = $(this).find(".booktitle").attr('value');
       if (v == undefined) {
         if ($("#use-scanner").is(":checked")) {
           $(this).hide();
@@ -53,6 +93,7 @@ javascript:
       $("#add-row").show();      
     } else {
       $("#add-row").hide();
+
     }
   });
 
@@ -74,7 +115,7 @@ javascript:
             }
           },
           select: function( event, ui ) {
-            insert_product_values(event.target, ui.item); 
+            insert_product_values(event.target, ui.item);             
             return false;
           }
         });  
@@ -94,13 +135,11 @@ javascript:
 
   var insert_values = function (data, el) {
     var bc = data;
-    el.find(".rowcopies").attr("id",bc.id)
-    el.find(".bookid").val(bc.id);
-    el.find(".bookid").attr("id","s_book_copy-"+bc.id)
-    el.find(".bookid").attr("name","s_book_copy["+bc.id+"]")
     el.find(".barcode").val(bc.barcode);
     el.find(".booktitle").val(bc.book_edition.title);
     el.find(".authors").val(bc.book_edition.authors);
+    el.find(".status").val("Disposed")
+    save_row(bc.id);
   };
 
   $(document).on('click', '.btndel', function() {
@@ -118,14 +157,10 @@ javascript:
     minEntryChars: 11,
     onScan: function($element, barcode) {
       $.getJSON("/book_copies/"+barcode+".json?", null, function (data) {        
-        if ($("tr:last").find(".barcode").val() != "") {
-          $('#add-row').trigger('click');
-        } else if (!$("tr:last").is(":visible")) {
-          $("tr:last").show();
-        }
         if (data.book_copy.loans) {
           Materialize.toast("Book is Borrowed", 4000, 'red');
         } else {
+          clone_row();            
           insert_values_scan(data, $("tr:last"));
         }
       }).fail(function(xhr){
@@ -136,13 +171,14 @@ javascript:
 
   var insert_values_scan = function (data, el) {
     var bc = data;
-    el.find(".rowcopies").attr("id",bc.book_copy.id)
-    el.find(".bookid").val(bc.book_copy.id);
-    el.find(".bookid").attr("id","s_book_copy-"+bc.book_copy.id)
-    el.find(".bookid").attr("name","s_book_copy["+bc.book_copy.id+"]")
+    if ($("tr:last").find(".barcode").val() != "") {
+      el.find(".barcode").val("");
+    }
     el.find(".barcode").val(bc.book_copy.barcode);
     el.find(".booktitle").val(bc.book_copy.book_edition.title);
     el.find(".authors").val(bc.book_copy.book_edition.authors);
+    el.find(".status").val("Disposed");
+    save_row(bc.book_copy.id);
   };
 
   
