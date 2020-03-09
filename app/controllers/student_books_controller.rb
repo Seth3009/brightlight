@@ -436,17 +436,12 @@ class StudentBooksController < ApplicationController
   end
 
   def titles
-    # grade_level = params[:l]
     grade_section = params[:s]
     year = params[:year]
-    all_books = StudentBook.joins(:book_edition)
-                  .where(academic_year_id: year, grade_section: grade_section)
-                  .not_disposed
-    book_titles = all_books.group('book_edition_id, book_editions.title')
-                  .select('book_edition_id, book_editions.title as title')
-                  .order('book_editions.title')
+    all_books = StudentBook.for_grade(academic_year_id:year, grade_section_id: grade_section)
+    book_titles = all_books.unique_book_titles
     respond_to do |format|
-      format.json { render json: book_titles.map {|book| {id:book.book_edition_id, title:book.title}} }
+      format.json { render json: book_titles.map {|book| {id:book.id, title:book.title}} }
     end
   end 
 
