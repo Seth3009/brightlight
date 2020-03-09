@@ -1,14 +1,17 @@
 
-.row.title 
-  h5.center Disposed Book Copies
-  p.center Date Range #{params[:dts] || Date.today} - #{params[:dte] || Date.today} 
-hr style="display:none;"
+/ .row.title 
+/   h5.center Disposed Book Copies
+/   p.center Date Range #{params[:dts] || Date.today} - #{params[:dte] || Date.today} 
+/ hr style="display:none;"
+- title 'Disposed'
+h5 Disposed Book Copies
 nav
   .nav-wrapper
     ul.right
       li
-        = link_to "#", onclick: 'window.print(); return false;'
-          i.material-icons print
+        = link_to dispose_books_path(dts:@start_date, dte:@end_date, format: :pdf), target: '_blank'
+          | Export to PDF
+          i.material-icons.left picture_as_pdf
       li
         = link_to new_book_dispose_path()
           | Add Book Dispose
@@ -31,13 +34,14 @@ nav
 
 .card-panel
   table.compact.striped
-    thead
-      tr
-        th No
+    thead 
+      tr style="height:1pt;"
+        th No.
         th Dispose Date
         th Barcode
         th Title
         th Authors
+        th Dispose Notes
         th.hide_print Actions
     tbody
       - @book_copies.each_with_index do |book_copy,idx|
@@ -52,6 +56,8 @@ nav
             = book_copy.book_edition.title
           td.wd15
             = book_copy.book_edition.authors
+          td.wd20
+            = book_copy.disposed_notes || '-'
           td.wd5.hide_print
             = link_to undispose_book_copy_path(id:book_copy.id,undo:'yes')
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Undispose" undo
@@ -73,7 +79,7 @@ css:
       margin-top:1cm;
     }
 
-   
+    th { padding-top: 0;}  
 
     hr { 
       display: block !important;

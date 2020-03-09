@@ -1,0 +1,2 @@
+$("tbody#book_copies").append("<%=j render partial:'book_dispose_row', locals: {book_copy: @book_copy}%>");
+Materialize.toast("Deparment <%= @book_copy.try(:barcode)%> created.", 4000, "green")

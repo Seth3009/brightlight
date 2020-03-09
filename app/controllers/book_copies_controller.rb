@@ -1,5 +1,5 @@
 class BookCopiesController < ApplicationController
-  before_action :set_book_copy, only: [:edit, :destroy, :checks]
+  before_action :set_book_copy, only: [:edit, :destroy, :checks, :update_book_copy]
   before_action :sortable_columns, only: [:index]
 
   # GET /book_copies
@@ -260,12 +260,45 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/dispose_books
   def dispose_books
-    @book_copies = BookCopy.unscoped.where(disposed: true, disposed_at: (params[:dts] || Date.today)..(params[:dte] || Date.today))
+    @start_date = params[:dts].present? ?  params[:dts] : Date.today
+    @end_date = params[:dte].present? ?  params[:dte] : Date.today
+    @book_copies = BookCopy.unscoped.where(disposed: true, disposed_at: (@start_date)..(@end_date))
+    respond_to do |format|
+      format.html 
+      format.pdf do
+        @book_copies = @book_copies.order('disposed_at, barcode')
+        render pdf:         "Teacher's Books - Periode #{@start_date} to #{@end_date}",
+               disposition: 'inline',
+               template:    'book_copies/dispose_books.pdf.slim',
+               layout:      'pdf.html',
+               header:      { left: "Disposed Books", right: '[page] of [topage]' },
+               show_as_html: params.key?('debug')
+      end
+    end
   end
 
   # GET /book_copies/dispose_books/new_list
   def new_book_dispose
-    @book_copies = BookCopy.new
+    authorize! :update, @book_copy
+    if params[:id].present?
+      @book_copy = BookCopy.unscoped.find(params[:id])
+      if @book_copy.update(disposed:true, disposed_at:Date.today) 
+        flash[:notice] = 'Book copy was successfully updated.'
+      end
+    end
+  end
+
+  # PATCH/PUT /book_copies/dispose_books/new_list/1.json
+  def update_book_copy
+    authorize! :update, BookCopy
+    # @book_copy = BookCopy.unscoped.find(params[:id])
+    respond_to do |format|
+      if @book_copy.update(disposed:true, disposed_at:Date.today, disposed_notes:params[:notes])        
+        format.json { render :show, status: :ok, location: @book_copy }
+      else
+        format.json {flash[:alert] = 'Book copy was not successfully updated.'}
+      end
+    end
   end
 
   # GET /book_editions/1/book_copies/disposed

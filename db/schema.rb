@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200219080242) do
+ActiveRecord::Schema.define(version: 20200309022106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,23 @@ ActiveRecord::Schema.define(version: 20200219080242) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  create_table "activities", force: :cascade do |t|
+    t.integer  "trackable_id"
+    t.string   "trackable_type"
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.string   "key"
+    t.text     "parameters"
+    t.integer  "recipient_id"
+    t.string   "recipient_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "activities", ["owner_id", "owner_type"], name: "index_activities_on_owner_id_and_owner_type", using: :btree
+  add_index "activities", ["recipient_id", "recipient_type"], name: "index_activities_on_recipient_id_and_recipient_type", using: :btree
+  add_index "activities", ["trackable_id", "trackable_type"], name: "index_activities_on_trackable_id_and_trackable_type", using: :btree
 
   create_table "activity_schedules", force: :cascade do |t|
     t.string   "activity"
@@ -230,6 +247,7 @@ ActiveRecord::Schema.define(version: 20200219080242) do
     t.string   "notes"
     t.boolean  "disposed"
     t.date     "disposed_at"
+    t.string   "disposed_notes"
   end
 
   add_index "book_copies", ["barcode"], name: "index_book_copies_on_barcode", unique: true, using: :btree
