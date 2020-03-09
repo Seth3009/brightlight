@@ -1,0 +1,108 @@
+
+/ .row.title 
+/   h5.center Disposed Book Copies
+/   p.center Date Range #{params[:dts] || Date.today} - #{params[:dte] || Date.today} 
+/ hr style="display:none;"
+- title 'Disposed'
+h5 Disposed Book Copies
+nav
+  .nav-wrapper
+    ul.right
+      li
+        = link_to dispose_books_path(dts:@start_date, dte:@end_date, format: :pdf), target: '_blank'
+          | Export to PDF
+          i.material-icons.left picture_as_pdf
+      li
+        = link_to new_book_dispose_path()
+          | Add Book Dispose
+          i.material-icons.left add
+    ul        
+      li style="padding: 0 20px"         
+        | Disposed Date :
+      li
+        = date_field_tag 'dts', params[:dts] || Date.today
+      li
+        | &nbsp to &nbsp &nbsp
+      li
+        = date_field_tag 'dte', params[:dte] || Date.today  
+      li
+        | &nbsp &nbsp &nbsp
+      li
+        .waves-effect.waves-light.btn.blue#btnrefresh
+          | Refresh
+    
+
+.card-panel
+  table.compact.striped
+    thead 
+      tr style="height:1pt;"
+        th No.
+        th Dispose Date
+        th Barcode
+        th Title
+        th Authors
+        th Dispose Notes
+        th.hide_print Actions
+    tbody
+      - @book_copies.each_with_index do |book_copy,idx|
+        tr
+          td.wd5
+            = idx+1
+          td.wd10
+            = book_copy.disposed_at.try(:strftime,"%d/%m/%Y")
+          td.wd10
+            = book_copy.barcode
+          td.wd40
+            = book_copy.book_edition.title
+          td.wd15
+            = book_copy.book_edition.authors
+          td.wd20
+            = book_copy.disposed_notes || '-'
+          td.wd5.hide_print
+            = link_to undispose_book_copy_path(id:book_copy.id,undo:'yes')
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Undispose" undo
+
+css:
+  @media print {
+    
+    .hide_print {
+      display:none;
+    }
+
+    h5 {
+      font-size:2rem;
+      font-weight: bold;
+      text-decoration:underline;
+    }
+
+    .title {
+      margin-top:1cm;
+    }
+
+    th { padding-top: 0;}  
+
+    hr { 
+      display: block !important;
+      margin-top: 0;
+      margin-bottom: 0;
+      margin-left: auto;
+      margin-right: auto;
+      border-style: inset;
+      border-width: 0.5px;
+    } 
+  }
+
+javascript:
+  $(function(){
+    // bind click event to get data
+    $('#btnrefresh').on('click', function () {          
+        var date = $('#dts').val(); 
+        var date2 = $('#dte').val();
+        var url = new URL(window.location.href);
+        var page = url.searchParams.get("view");        
+        if (date) { // require a URL
+            window.location = "dispose_books?&dts="+date+"&dte="+date2; // redirect              
+        }
+        return false;
+    });
+  });

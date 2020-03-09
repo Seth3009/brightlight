@@ -1,0 +1,44 @@
+              
+table.loose style="width:100%"
+  thead
+    tr
+      th colspan=4
+        h5 style="margin:0" = "Periode #{@start_date.to_date.try(:strftime,"%d %b %Y")} - #{@end_date.to_date.try(:strftime,"%d %b %Y")}"
+    tr
+      th.wd5
+        div No
+      th.wd10
+        div Dispose Date
+      th.wd25
+        div Barcode
+      th.wd20
+        div Title
+      th.wd20
+        div Authors
+      th.wd20
+        div Dispose Notes
+      
+
+  tbody
+    - @book_copies.each.with_index(1) do |book_copy,idx|     
+      tr style='height:10px important!; border-bottom:1px solid gainsboro'
+        td.wd5
+          div = "#{idx}."      
+        td.wd15
+          = book_copy.disposed_at.try(:strftime,"%d/%m/%Y")
+        td.wd15
+          div = book_copy.barcode
+        td.wd30
+          div = book_copy.book_edition.title
+        td.wd30
+          div = book_copy.book_edition.authors
+        td.wd20
+          div = book_copy.disposed_notes || '-'
+          
+    
+/ Important to avoid overlapping text with repeated header 
+/ See: https://github.com/wkhtmltopdf/wkhtmltopdf/issues/1524#issuecomment-85072480
+css:
+  tr, td, th {
+      page-break-inside: avoid !important;
+  }

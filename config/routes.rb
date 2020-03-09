@@ -164,6 +164,9 @@ Rails.application.routes.draw do
   end
 
   get  'book_copies/disposed_index' => 'book_copies#disposed_index', as: :book_copies_disposed_index
+  get  'book_copies/dispose_books' => 'book_copies#dispose_books', as: :dispose_books
+  get  'book_copies/dispose_books/new_list' => 'book_copies#new_book_dispose', as: :new_book_dispose
+  put 'book_copies/dispose_books/new_list/:id' => 'book_copies#update_book_copy', as: :update_book_copy
   resources :book_editions do
     collection do
       get 'summary'
@@ -189,6 +192,7 @@ Rails.application.routes.draw do
   post 'book_copies/dispose' => 'book_copies#dispose', as: :dispose_book_copies
   get  'book_copies/:id/undispose' => 'book_copies#undispose', as: :undispose_book_copy
   post 'book_copies/update_multiple' => 'book_copies#update_multiple', as: :update_multiple_book_copies
+  
 
   resources :book_titles do
     collection do

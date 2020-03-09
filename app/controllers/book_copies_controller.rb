@@ -1,5 +1,5 @@
 class BookCopiesController < ApplicationController
-  before_action :set_book_copy, only: [:edit, :destroy, :checks]
+  before_action :set_book_copy, only: [:edit, :destroy, :checks, :update_book_copy]
   before_action :sortable_columns, only: [:index]
 
   # GET /book_copies
@@ -36,7 +36,11 @@ class BookCopiesController < ApplicationController
         Barcode.new(@book_copy.barcode).write_image if @book_copy.present?
       end
       format.json do
-        @book_copy = BookCopy.where('UPPER(barcode) = ?', params[:id].upcase).includes(:book_edition => :book_title).take
+        if params[:status]
+          @book_copy = BookCopy.where(status_id:params[:status]).where('UPPER(barcode) = ?', params[:id].upcase).includes(:book_edition => :book_title).take
+        else
+          @book_copy = BookCopy.where('UPPER(barcode) = ?', params[:id].upcase).includes(:book_edition => :book_title).take
+        end
         if @book_copy.present?
           @book_edition = @book_copy.book_edition
           @book_title = @book_edition.try(:book_title)
@@ -175,12 +179,16 @@ class BookCopiesController < ApplicationController
   # POST /book_copies/dispose
   def dispose
     authorize! :destroy, BookCopy
-    if params[:book_copy]
-      @book_copies = BookCopy.where(id: params[:book_copy].map{|id, on| id})
+    if params[:book_copy] || params[:s_book_copy]
+      @book_copies = BookCopy.where(id: (params[:book_copy].present? ? params[:book_copy].map{|id, on| id} : params[:s_book_copy].map{|id, on| id}))
       book_edition = @book_copies.last.book_edition
       if @book_copies.map{|x| x.borrowed_in_year(AcademicYear.current_id)}.reject{|x| !x}.empty?
-        @book_copies.update_all(disposed: true)
-        redirect_to book_edition_book_copies_path(book_edition), notice: 'Selected book copies were successfully deleted.'
+        @book_copies.update_all(disposed: true, disposed_at: Date.today)
+        if params[:book_copy]
+          redirect_to book_edition_book_copies_path(book_edition), notice: 'Selected book copies were successfully deleted.'
+        else
+          redirect_to book_copies_dispose_books_path(), notice: 'Selected book copies were successfully deleted.'
+        end
       else
         redirect_to book_edition_book_copies_path(book_edition), alert: 'Error: Some selected book copies are still borrowed.'
       end
@@ -194,8 +202,13 @@ class BookCopiesController < ApplicationController
     authorize! :manage, BookCopy
     @book_copy = BookCopy.unscoped.find params[:id]
     @book_copy.disposed = false
+    @book_copy.disposed_at = nil
     if @book_copy.save
-      redirect_to @book_copy, notice: "Successfully changed disposed status of book #{@book_copy.barcode}"
+      if params[:undo] == 'yes'
+        redirect_to :back, notice: "Successfully changed disposed status of book #{@book_copy.barcode}"
+      else
+        redirect_to @book_copy, notice: "Successfully changed disposed status of book #{@book_copy.barcode}"
+      end
     else
       redirect_to @book_copy, alert: "Failed to change disposed status of book #{@book_copy.barcode}"
     end  
@@ -243,6 +256,49 @@ class BookCopiesController < ApplicationController
                       .group(:book_edition_id, 'book_editions.title', 'book_editions.authors')
                       .joins(:book_edition)
                       .count
+  end
+
+  # GET /book_copies/dispose_books
+  def dispose_books
+    @start_date = params[:dts].present? ?  params[:dts] : Date.today
+    @end_date = params[:dte].present? ?  params[:dte] : Date.today
+    @book_copies = BookCopy.unscoped.where(disposed: true, disposed_at: (@start_date)..(@end_date))
+    respond_to do |format|
+      format.html 
+      format.pdf do
+        @book_copies = @book_copies.order('disposed_at, barcode')
+        render pdf:         "Teacher's Books - Periode #{@start_date} to #{@end_date}",
+               disposition: 'inline',
+               template:    'book_copies/dispose_books.pdf.slim',
+               layout:      'pdf.html',
+               header:      { left: "Disposed Books", right: '[page] of [topage]' },
+               show_as_html: params.key?('debug')
+      end
+    end
+  end
+
+  # GET /book_copies/dispose_books/new_list
+  def new_book_dispose
+    authorize! :update, @book_copy
+    if params[:id].present?
+      @book_copy = BookCopy.unscoped.find(params[:id])
+      if @book_copy.update(disposed:true, disposed_at:Date.today) 
+        flash[:notice] = 'Book copy was successfully updated.'
+      end
+    end
+  end
+
+  # PATCH/PUT /book_copies/dispose_books/new_list/1.json
+  def update_book_copy
+    authorize! :update, BookCopy
+    # @book_copy = BookCopy.unscoped.find(params[:id])
+    respond_to do |format|
+      if @book_copy.update(disposed:true, disposed_at:Date.today, disposed_notes:params[:notes])        
+        format.json { render :show, status: :ok, location: @book_copy }
+      else
+        format.json {flash[:alert] = 'Book copy was not successfully updated.'}
+      end
+    end
   end
 
   # GET /book_editions/1/book_copies/disposed
