@@ -260,7 +260,21 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/dispose_books
   def dispose_books
-    @book_copies = BookCopy.unscoped.where(disposed: true, disposed_at: (params[:dts] || Date.today)..(params[:dte] || Date.today))
+    @start_date = params[:dts].present? ?  params[:dts] : Date.today
+    @end_date = params[:dte].present? ?  params[:dte] : Date.today
+    @book_copies = BookCopy.unscoped.where(disposed: true, disposed_at: (@start_date)..(@end_date))
+    respond_to do |format|
+      format.html 
+      format.pdf do
+        @book_copies = @book_copies.order('disposed_at, barcode')
+        render pdf:         "Teacher's Books - Periode #{@start_date} to #{@end_date}",
+               disposition: 'inline',
+               template:    'book_copies/dispose_books.pdf.slim',
+               layout:      'pdf.html',
+               header:      { left: "Disposed Books", right: '[page] of [topage]' },
+               show_as_html: params.key?('debug')
+      end
+    end
   end
 
   # GET /book_copies/dispose_books/new_list
