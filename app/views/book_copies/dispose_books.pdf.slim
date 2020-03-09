@@ -15,11 +15,13 @@ table.loose style="width:100%"
         div Title
       th.wd20
         div Authors
+      th.wd20
+        div Dispose Notes
       
 
   tbody
     - @book_copies.each.with_index(1) do |book_copy,idx|     
-      tr style='border-bottom:1px solid gainsboro'
+      tr style='height:10px important!; border-bottom:1px solid gainsboro'
         td.wd5
           div = "#{idx}."      
         td.wd15
@@ -30,6 +32,8 @@ table.loose style="width:100%"
           div = book_copy.book_edition.title
         td.wd30
           div = book_copy.book_edition.authors
+        td.wd20
+          div = book_copy.disposed_notes || '-'
           
     
 / Important to avoid overlapping text with repeated header 

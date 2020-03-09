@@ -41,6 +41,7 @@ nav
         th Barcode
         th Title
         th Authors
+        th Dispose Notes
         th.hide_print Actions
     tbody
       - @book_copies.each_with_index do |book_copy,idx|
@@ -55,6 +56,8 @@ nav
             = book_copy.book_edition.title
           td.wd15
             = book_copy.book_edition.authors
+          td.wd20
+            = book_copy.disposed_notes || '-'
           td.wd5.hide_print
             = link_to undispose_book_copy_path(id:book_copy.id,undo:'yes')
               i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Undispose" undo

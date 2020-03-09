@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191125065521) do
+ActiveRecord::Schema.define(version: 20200309022106) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -229,6 +229,7 @@ ActiveRecord::Schema.define(version: 20191125065521) do
     t.string   "notes"
     t.boolean  "disposed"
     t.date     "disposed_at"
+    t.string   "disposed_notes"
   end
 
   add_index "book_copies", ["barcode"], name: "index_book_copies_on_barcode", unique: true, using: :btree
@@ -1189,6 +1190,7 @@ ActiveRecord::Schema.define(version: 20191125065521) do
     t.string   "slug"
     t.string   "email"
     t.string   "email2"
+    t.string   "occupations"
   end
 
   add_index "guardians", ["person_id"], name: "index_guardians_on_person_id", using: :btree
@@ -1409,6 +1411,26 @@ ActiveRecord::Schema.define(version: 20191125065521) do
   end
 
   add_index "msg_groups", ["creator_id"], name: "index_msg_groups_on_creator_id", using: :btree
+
+  create_table "nat_exams", force: :cascade do |t|
+    t.integer  "student_id"
+    t.integer  "grade_level_id"
+    t.integer  "academic_year_id"
+    t.integer  "diknas_course_id"
+    t.float    "try_out_1"
+    t.float    "try_out_2"
+    t.float    "try_out_3"
+    t.float    "ujian_sekolah"
+    t.float    "nilai_sekolah"
+    t.float    "ujian_nasional"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "nat_exams", ["academic_year_id"], name: "index_nat_exams_on_academic_year_id", using: :btree
+  add_index "nat_exams", ["diknas_course_id"], name: "index_nat_exams_on_diknas_course_id", using: :btree
+  add_index "nat_exams", ["grade_level_id"], name: "index_nat_exams_on_grade_level_id", using: :btree
+  add_index "nat_exams", ["student_id"], name: "index_nat_exams_on_student_id", using: :btree
 
   create_table "order_items", force: :cascade do |t|
     t.integer  "purchase_order_id"
@@ -2071,6 +2093,10 @@ ActiveRecord::Schema.define(version: 20191125065521) do
     t.string   "language"
     t.string   "nisn"
     t.string   "nis"
+    t.string   "child_order"
+    t.string   "school_from"
+    t.string   "accepted_grade"
+    t.date     "accepted_date"
   end
 
   add_index "students", ["family_no"], name: "index_students_on_family_no", using: :btree
@@ -2369,6 +2395,10 @@ ActiveRecord::Schema.define(version: 20191125065521) do
   add_foreign_key "messages", "users", column: "creator_id"
   add_foreign_key "msg_folders", "msg_folders", column: "parent_id"
   add_foreign_key "msg_groups", "users", column: "creator_id"
+  add_foreign_key "nat_exams", "academic_years"
+  add_foreign_key "nat_exams", "diknas_courses"
+  add_foreign_key "nat_exams", "grade_levels"
+  add_foreign_key "nat_exams", "students"
   add_foreign_key "order_items", "purchase_orders"
   add_foreign_key "order_items", "req_items"
   add_foreign_key "order_items", "stock_items"

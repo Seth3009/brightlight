@@ -1,3 +1,9 @@
+.card-panel
+  .row
+    .input-field.col.m2
+      = label_tag 'Dispose Notes'
+    .input-field.col.m10
+      = text_field_tag :disposed_notes,'', placeholder: "You can fill notes for disposal here"
 nav
   .nav-wrapper
     ul
@@ -49,8 +55,9 @@ javascript:
     $('tr:last').removeAttr("style")
   }
 
-  function save_row(barcode) {
-    var url = "/book_copies/dispose_books/new_list/"+barcode
+  function save_row(barcode) {    
+    var notes = $('#disposed_notes').val();
+    var url = "/book_copies/dispose_books/new_list/"+barcode+"?notes="+notes
     var dataToSend = new Object();
         dataToSend = { barcode: barcode };
     var jsonData = JSON.stringify(dataToSend);
@@ -127,7 +134,11 @@ javascript:
         if (bc.loans) { 
           Materialize.toast("Book is Borrowed", 4000, 'red');
         } else {
-          insert_values(bc, row);
+          if ($('#disposed_notes').val() == '') {
+            Materialize.toast('Please fill the notes first!', 3000, 'orange');
+          } else {
+            insert_values(bc, row);
+          }
         }
       } 
     }  
@@ -139,7 +150,7 @@ javascript:
     el.find(".booktitle").val(bc.book_edition.title);
     el.find(".authors").val(bc.book_edition.authors);
     el.find(".status").val("Disposed")
-    save_row(bc.id);
+    save_row(bc.id);    
   };
 
   $(document).on('click', '.btndel', function() {
@@ -160,8 +171,12 @@ javascript:
         if (data.book_copy.loans) {
           Materialize.toast("Book is Borrowed", 4000, 'red');
         } else {
-          clone_row();            
-          insert_values_scan(data, $("tr:last"));
+          if ($('#disposed_notes').val() == '') {
+            Materialize.toast('Please fill the notes first!', 3000, 'orange');
+          } else {
+            clone_row();            
+            insert_values_scan(data, $("tr:last"));
+          }
         }
       }).fail(function(xhr){
         Materialize.toast($.parseJSON(xhr.responseText).errors, 4000, 'red');

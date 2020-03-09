@@ -293,7 +293,7 @@ class BookCopiesController < ApplicationController
     authorize! :update, BookCopy
     # @book_copy = BookCopy.unscoped.find(params[:id])
     respond_to do |format|
-      if @book_copy.update(disposed:true, disposed_at:Date.today)        
+      if @book_copy.update(disposed:true, disposed_at:Date.today, disposed_notes:params[:notes])        
         format.json { render :show, status: :ok, location: @book_copy }
       else
         format.json {flash[:alert] = 'Book copy was not successfully updated.'}
