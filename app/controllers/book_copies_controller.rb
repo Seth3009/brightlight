@@ -279,7 +279,7 @@ class BookCopiesController < ApplicationController
 
   # GET /book_copies/dispose_books/new_list
   def new_book_dispose
-    authorize! :update, @book_copy
+    authorize! :update, BookCopy
     if params[:id].present?
       @book_copy = BookCopy.unscoped.find(params[:id])
       if @book_copy.update(disposed:true, disposed_at:Date.today) 
