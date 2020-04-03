@@ -4,7 +4,8 @@ class NatExamsController < ApplicationController
   # GET /nat_exams
   # GET /nat_exams.json
   def index
-    @students = NatExam.students(academic_year: AcademicYear.current)
+    @academic_year = AcademicYear.current
+    @students = NatExam.students(academic_year: @academic_year)
   end
 
   # GET /nat_exams/1
@@ -15,11 +16,11 @@ class NatExamsController < ApplicationController
   end
 
   def scores_download
-    academic_year = AcademicYear.find(params[:year]) || AcademicYear.current
-    students = NatExam.students(academic_year: academic_year)
+    @academic_year = AcademicYear.find(params[:year]) || AcademicYear.current
+    students = NatExam.students(academic_year: @academic_year)
     @scores = []
     students.each do |student|
-      @scores << NatExam.detail_scores_for(student_id: student.id, academic_year_id:academic_year.id)
+      @scores << NatExam.detail_scores_for(student_id: student.id, academic_year_id: @academic_year.id)
     end
     attributes = %w{name section course_id course sem1 sem2 sem3 sem4 sem5 avg}
     csv_data = CSV.generate(headers: true) do |csv|

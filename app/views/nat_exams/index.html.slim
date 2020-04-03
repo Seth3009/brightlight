@@ -6,6 +6,10 @@ nav
     - if can? :manage, NatExam
       ul.right
         li
+          = link_to scores_download_nat_exams_path(year: @academic_year.id, format: 'csv')
+            | Download CSV
+            i.material-icons.left archive
+        li
           = link_to letter_ii_nat_exams_path
             | All letters
             i.material-icons.left drafts
