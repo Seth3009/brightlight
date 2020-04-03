@@ -34,28 +34,38 @@ class NatExam < ActiveRecord::Base
     query = %Q{
 SELECT * FROM \
 crosstab($$ \
-select course.id, course.name as course_name, conv.academic_term_id as term, dci.p_score as score from diknas_converted_items dci \
+select course.id, course.name as course_name, students.name as name, gs.name as section, conv.academic_term_id as term, dci.p_score as score from diknas_converted_items dci \
 join diknas_conversions conv on conv.id = dci.diknas_conversion_id \
 join diknas_converteds rapor on rapor.id = dci.diknas_converted_id \
 join diknas_courses course on course.id = conv.diknas_course_id \
+join students on students.id = rapor.student_id \
+join grade_sections_students gss on gss.student_id=rapor.student_id and gss.academic_year_id = #{curr_year.id} \
+join grade_sections gs on gs.id = gss.grade_section_id \
 where conv.academic_year_id in (#{grade10_year.id},#{grade11_year.id},#{curr_year.id}) \
 and rapor.student_id = #{sid} \
 UNION \
-select course.id, course.name as course_name, 999 as term, round(avg(dci.p_score)) as score from diknas_converted_items dci \
+select course.id, course.name as course_name, students.name as name, gs.name as section, 999 as term, round(avg(dci.p_score)) as score from diknas_converted_items dci \
 join diknas_conversions conv on conv.id = dci.diknas_conversion_id \
 join diknas_converteds rapor on rapor.id = dci.diknas_converted_id \
 join diknas_courses course on course.id = conv.diknas_course_id \
-where conv.academic_year_id in (#{grade10_year.id},#{grade11_year.id},#{curr_year.id}) and rapor.student_id = #{sid} \
-group by course.id, course_name \
+join students on students.id = rapor.student_id \
+join grade_sections_students gss on gss.student_id=rapor.student_id and gss.academic_year_id = #{curr_year.id} \
+join grade_sections gs on gs.id = gss.grade_section_id \
+where conv.academic_year_id in (#{grade10_year.id},#{grade11_year.id},#{curr_year.id}) \
+and rapor.student_id = #{sid} \
+group by students.name, gs.name, course.id, course_name \
 UNION \
-select diknas_course_id, course.name as course_name, 1000 as term, try_out_2 as score \
+select diknas_course_id, course.name as course_name, students.name as name, gs.name as section, 1000 as term, try_out_2 as score \
 from nat_exams \
 join diknas_courses course on course.id = nat_exams.diknas_course_id \
-where academic_year_id =#{curr_year.id} and student_id = #{sid} \
+join students on students.id = nat_exams.student_id \
+join grade_sections_students gss on gss.student_id=nat_exams.student_id and gss.academic_year_id = nat_exams.academic_year_id \
+join grade_sections gs on gs.id = gss.grade_section_id \
+where nat_exams.academic_year_id =#{curr_year.id} and nat_exams.student_id = #{sid} \
 order by 1,2 \
 $$, $$values (#{terms[0]}), (#{terms[1]}), (#{terms[2]}), (#{terms[3]}), (#{terms[4]}), (999), (1000)$$ \
 ) \
-AS ct(course_id int, course varchar, "sem1" float, "sem2" float, "sem3" float, "sem4" float, "sem5" float, "avg" float, "to2" float) \
+AS ct(course_id int, course varchar, name varchar, section varchar, "sem1" float, "sem2" float, "sem3" float, "sem4" float, "sem5" float, "avg" float, "to2" float) \
 }
     NatExam.find_by_sql(query)
   end

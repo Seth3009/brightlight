@@ -21,9 +21,9 @@ class NatExamsController < ApplicationController
     students.each do |student|
       @scores << NatExam.detail_scores_for(student_id: student.id, academic_year_id:academic_year.id)
     end
-    attributes = %w{course sem1 sem2 sem3 sem4 sem5 avg}
+    attributes = %w{name section course_id course sem1 sem2 sem3 sem4 sem5 avg}
     csv_data = CSV.generate(headers: true) do |csv|
-      csv << %w{Course Sem1 Sem2 Sem3 Sem4 Sem5 Avg}
+      csv << %w{Name Class No Course Sem1 Sem2 Sem3 Sem4 Sem5 Avg}
       @scores.each do |student_score|
         student_score.each do |score|
           csv << attributes.map{ |attr| score.send(attr) }
