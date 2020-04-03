@@ -57,6 +57,7 @@ Rails.application.routes.draw do
     collection do
       get 'letter_ii'
       get 'scores'
+      get 'scores_download'
       post 'import'
     end
   end
