@@ -21,6 +21,8 @@ nav
         th rowspan=2 Mata Pelajaran
         th.center colspan=5 style="border-bottom:1px solid grey" Nilai
       tr
+        th Sem 1
+        th Sem 2
         th Sem 3
         th Sem 4
         th Sem 5
@@ -31,6 +33,8 @@ nav
       - @exam_scores.each do |score|
         tr
           td = score.course.try(:tr,"*)","")
+          td = score.sem1
+          td = score.sem2
           td = score.sem3
           td = score.sem4
           td = score.sem5
