@@ -1,17 +1,21 @@
--title = 'Try Out Letters'
-h4 Try Out Letters
+-title = 'Nilai DIKNAS'
+h4 Nilai DIKNAS
 
 nav
   .nav-wrapper
     - if can? :manage, NatExam
       ul.right
         li
-          = link_to scores_download_nat_exams_path(year: @academic_year.id, format: 'csv')
-            | Download CSV
+          = link_to export_nat_exams_path(year: @academic_year.id, format: 'csv')
+            | Export CSV
+            i.material-icons.left archive
+        li
+          = link_to export_nat_exams_path(year: @academic_year.id, format: 'xls')
+            | Export XLS
             i.material-icons.left archive
         li
           = link_to letter_ii_nat_exams_path
-            | All letters
+            | T.O. II letters
             i.material-icons.left drafts
         li
           = link_to "#form-upload-modal", class:"modal-trigger" 
@@ -23,8 +27,8 @@ nav
     thead
       tr
         th Student
-        th Data
-        th Letter
+        th Data Nilai
+        th Try Out II
 
     tbody
       - @students.each do |student|

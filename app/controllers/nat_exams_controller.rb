@@ -15,7 +15,7 @@ class NatExamsController < ApplicationController
     @exam_scores = NatExam.detail_scores_for student_id: params[:student_id], academic_year_id: AcademicYear.current_id
   end
 
-  def scores_download
+  def export
     @academic_year = AcademicYear.find(params[:year]) || AcademicYear.current
     students = NatExam.students(academic_year: @academic_year)
     @scores = []
@@ -33,6 +33,7 @@ class NatExamsController < ApplicationController
     end
     respond_to do |format|
       format.csv { send_data csv_data, filename: "data.csv" }
+      format.xls
     end
   end
 
