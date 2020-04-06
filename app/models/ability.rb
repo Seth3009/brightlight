@@ -171,6 +171,7 @@ class Ability
     can :manage, DiknasConverted
     can :manage, DiknasCourse
     can :manage, Course
+    can :manage, NatExam
   end
 
   def student
