@@ -53,6 +53,38 @@ class NatExamsController < ApplicationController
     end
   end
 
+  def letter_of_grad
+    @academic_year = AcademicYear.find params[:year] || AcademicYear.current
+    @students = []
+    @template = Template.where(target:'letter_of_grad').where(active:'true').take  
+      
+    if params[:student_id].present?
+      @students << Student.find(params[:student_id])
+      
+      @diknas_ipa = DiknasConverted
+        .joins("left join diknas_converted_items on diknas_converted_items.diknas_converted_id = diknas_converteds.id")
+        .joins("left join diknas_conversions on diknas_conversions.id = diknas_converted_items.diknas_conversion_id")
+        .joins("left join diknas_courses on diknas_courses.id = diknas_conversions.diknas_course_id")
+        .where(diknas_converteds: {student_id: params[:student_id], academic_year_id: @academic_year}, diknas_courses: {name:"FISIKA"})
+      
+                
+
+      @ipa = @diknas_ipa.first
+      # @fisika = @nat_exam.map {|p| p.course}.any? {|s| s.upcase.include?('FISIKA')}
+      
+      if @ipa
+        @nat_exam = NatExam.detail_scores_for_sk_ipa(student_id: params[:student_id], academic_year_id:@academic_year.id)
+        @program = "ILMU PENGETAHUAN ALAM"
+      else
+        @nat_exam = NatExam.detail_scores_for_sk_ips(student_id: params[:student_id], academic_year_id:@academic_year.id)
+        @program = "ILMU PENGETAHUAN SOSIAL"
+      end
+      @rata = @nat_exam.map {|p| p.avg}.sum / @nat_exam.size
+    else
+      @students = NatExam.students(academic_year: @academic_year)
+    end
+  end
+
   # GET /nat_exams/1/edit
   def edit
   end

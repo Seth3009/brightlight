@@ -1,0 +1,34 @@
+.page-background
+  .paper-page
+    = @template.substituted :header
+    = @template.substituted :opening
+
+    .container style="width:500px; margin:10px auto"
+      table.compact.bordered.section-bordered
+        thead 
+          tr
+            th No
+            th Mata Pelajaran
+            th Nilai Ujian Sekolah
+             
+        tbody 
+          - exam_scores.each_with_index do |score,idx|
+            tr 
+              td.center = idx+1
+              td = score.course.try(:titleize).try(:tr,"*)","")
+              td.center = score.avg.round
+          tr
+            td.center colspan=2 Rata-rata
+            td.center = @rata.round
+      
+    = @template.substituted :closing
+    = @template.substituted :footer
+
+
+css:
+  p,td {
+    padding:0 5px;
+    margin:0;
+  }
+
+  

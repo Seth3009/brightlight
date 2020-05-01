@@ -56,6 +56,7 @@ Rails.application.routes.draw do
   resources :nat_exams do 
     collection do
       get 'letter_ii'
+      get 'letter_of_grad'
       get 'scores'
       get 'export'
       post 'import'

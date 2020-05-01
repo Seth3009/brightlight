@@ -1,0 +1,23 @@
+-title = 'SK Lulus'
+nav
+  .nav-wrapper
+    ul
+      li 
+        - if params[:student_id]
+          = link_to scores_nat_exams_path(student_id:params[:student_id])
+            i.material-icons chevron_left
+        - else
+          = link_to nat_exams_path
+            i.material-icons chevron_left
+    ul.right
+      li
+        = link_to @template, target: '_blank'
+          |Edit template
+          i.material-icons.left open_in_new
+      li
+        = link_to_print
+
+- if @template
+  - @students.each do |student|
+    - @template.placeholders = {student_name: student.name, pob: student.place_of_birth.try(:titleize), dob: student.date_of_birth, nis: student.nis, nisn:student.nisn, program: @program,no_sk: student.sk_lulus }
+    = render partial: 'letter_of_grad', locals: {exam_scores: @nat_exam}
