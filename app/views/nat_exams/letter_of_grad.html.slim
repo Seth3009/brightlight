@@ -19,5 +19,11 @@ nav
 
 - if @template
   - @students.each do |student|
-    - @template.placeholders = {student_name: student.name, pob: student.place_of_birth.try(:titleize), dob: student.date_of_birth, nis: student.nis, nisn:student.nisn, program: @program,no_sk: student.sk_lulus }
+    - @template.placeholders = {student_name: student.name,
+                                pob: student.place_of_birth.try(:titleize),
+                                dob: student.date_of_birth? ? ((student.date_of_birth.day.to_s) + " " + (@bulan[student.date_of_birth.month.to_i-1].to_s) + " " + (student.date_of_birth.year.to_s)) : "-",
+                                nis: student.nis,
+                                nisn:student.nisn,
+                                program: @program,
+                                no_sk: student.sk_lulus }
     = render partial: 'letter_of_grad', locals: {exam_scores: @nat_exam}

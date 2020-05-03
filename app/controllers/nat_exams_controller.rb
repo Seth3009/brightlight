@@ -65,14 +65,14 @@ class NatExamsController < ApplicationController
         .joins("left join diknas_converted_items on diknas_converted_items.diknas_converted_id = diknas_converteds.id")
         .joins("left join diknas_conversions on diknas_conversions.id = diknas_converted_items.diknas_conversion_id")
         .joins("left join diknas_courses on diknas_courses.id = diknas_conversions.diknas_course_id")
-        .where(diknas_converteds: {student_id: params[:student_id], academic_year_id: @academic_year}, diknas_courses: {name:"FISIKA"})
+        .where(diknas_converteds: {student_id: params[:student_id], academic_year_id: @academic_year}).where('lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ?',"fisika","biologi")
       
                 
-
-      @ipa = @diknas_ipa.first
-      # @fisika = @nat_exam.map {|p| p.course}.any? {|s| s.upcase.include?('FISIKA')}
+        
+        @bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"]
       
-      if @ipa
+        
+      if @diknas_ipa.first
         @nat_exam = NatExam.detail_scores_for_sk_ipa(student_id: params[:student_id], academic_year_id:@academic_year.id)
         @program = "ILMU PENGETAHUAN ALAM"
       else
