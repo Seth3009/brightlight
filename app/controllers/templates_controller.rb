@@ -44,7 +44,9 @@ class TemplatesController < ApplicationController
   # PATCH/PUT /templates/1
   # PATCH/PUT /templates/1.json
   def update
-    @placeholders = @template.template_target.placeholders.split(", ").map{|x| "##{x}#"}.join(", ")
+    unless @template.template_target.placeholders.blank?
+      @placeholders = @template.template_target.placeholders.split(", ").map{|x| "##{x}#"}.join(", ")
+    end
     respond_to do |format|
       if @template.update(template_params)
         format.html { redirect_to @template, notice: 'Template was successfully updated.' }
