@@ -22,7 +22,7 @@ class NatExam < ActiveRecord::Base
     DiknasConvertedItem.student_scores student_id: student_id, academic_year_id: academic_year_id
   end
 
-  def self.detail_scores_for(student_id:, academic_year_id: AcademicYear.current_id)
+  def self.detail_scores_for(student_id:, academic_year_id: AcademicYear.current_id, aux_query:nil)
     sid = Student.find(student_id).id
     curr_year = AcademicYear.find(academic_year_id)
     grade11_year = AcademicYear.find(academic_year_id-1)
@@ -67,7 +67,15 @@ $$, $$values (#{terms[0]}), (#{terms[1]}), (#{terms[2]}), (#{terms[3]}), (#{term
 ) \
 AS ct(course_id int, course varchar, name varchar, section varchar, "sem1" float, "sem2" float, "sem3" float, "sem4" float, "sem5" float, "avg" float, "to2" float) \
 }
-    NatExam.find_by_sql(query)
+    NatExam.find_by_sql("#{query} #{aux_query}")
+  end
+
+  def self.sk_scores_for(student_id:, academic_year_id: AcademicYear.current_id)
+    filter_ipa = "join diknas_courses dc on dc.id = ct.course_id and dc.ipa12 is not null order by dc.ipa12"
+    filter_ips = "join diknas_courses dc on dc.id = ct.course_id and dc.ips12 is not null order by dc.ips12"
+    filter = DiknasConverted.ipa_program?(student_id:student_id, academic_year_id:academic_year_id) ?
+                filter_ipa : filter_ips      
+    self.detail_scores_for(student_id:student_id, academic_year_id: academic_year_id, aux_query: filter)
   end
 
   def self.import_to_ii_scores(xlsx_file:, sheet:, academic_year_id:)

@@ -26,15 +26,19 @@ nav
   table.striped.compact
     thead
       tr
+        th No
         th Student
+        th Track
         th Data Nilai
         th Try Out II
         th SK Lulus
 
     tbody
-      - @students.each do |student|
+      - @students.each.with_index(1) do |student, i|
         tr
+          td = i
           td = student.try(:name) || '--'
+          td = student.grade_sections_students.where(academic_year_id:AcademicYear.current_id).take.track
           td 
             = link_to scores_nat_exams_path(student_id: student.id)
               i.material-icons visibility

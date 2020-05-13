@@ -21,5 +21,5 @@ nav
 - if @template
   - @students.each do |student|
     - @template.placeholders = { student_name: student.name }
-    = render partial: 'one_letter_ii', locals: {exam_scores: NatExam.scores_for(student_id: student.id, academic_year_id:@academic_year.id)}
+    = render partial: 'one_letter_ii', locals: {exam_scores: @exam_scores.call(student)}
 

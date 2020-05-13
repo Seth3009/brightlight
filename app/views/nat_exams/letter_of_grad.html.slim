@@ -21,7 +21,7 @@ nav
   - @students.each do |student|
     - @template.placeholders = {student_name: student.name,
                                 pob: student.place_of_birth.try(:titleize),
-                                dob: student.date_of_birth? ? ((student.date_of_birth.day.to_s) + " " + (@bulan[student.date_of_birth.month.to_i-1].to_s) + " " + (student.date_of_birth.year.to_s)) : "-",
+                                dob: l(student.date_of_birth, locale: @language.downcase),
                                 nis: student.nis,
                                 nisn:student.nisn,
                                 program: @program,

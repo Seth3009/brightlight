@@ -8,18 +8,23 @@
         thead 
           tr
             th No
-            th Mata Pelajaran
-            th Nilai Ujian Sekolah
+            th = t('report.diknas.subjects', locale: @language)
+            th = t('report.diknas.school_test_score', locale: @language)
              
         tbody 
           - exam_scores.each_with_index do |score,idx|
             tr 
               td.center = idx+1
-              td = score.course.try(:titleize).try(:tr,"*)","")
+              td 
+                - if @language == 'id'
+                  = score.course.try(:titleize).try(:tr,"*)","")
+                - elsif @language == 'en'
+                  /= score.title
+                  = score.respond_to?(:title) ? score.title : DiknasCourse.find(score.course_id).title
               td.center = score.avg.round
           tr
-            td.center colspan=2 Rata-rata
-            td.center = @rata.round
+            td.center colspan=2 = t('report.diknas.average', locale: @language)
+            td.center = (exam_scores.sum(&:avg)/exam_scores.size).round
       
     = @template.substituted :closing
     = @template.substituted :footer

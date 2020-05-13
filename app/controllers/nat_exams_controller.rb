@@ -51,12 +51,29 @@ class NatExamsController < ApplicationController
     else
       @students = NatExam.students(academic_year: @academic_year)
     end
+    @exam_scores = ->(s) { NatExam.scores_for(student_id: s.id, academic_year_id:@academic_year.id) }
+  end
+
+  def letters
+    @academic_year = AcademicYear.find params[:year] || AcademicYear.current
+    @students = []
+    @language = params[:locale] || 'id'
+    @template = Template.where(target:params[:target], language:@language, active:'true').take
+
+    if params[:student_id].present?
+      @students << Student.find(params[:student_id])
+    else
+      @students = NatExam.students(academic_year: @academic_year)
+    end
+    @exam_scores = ->(s) { NatExam.sk_scores_for(student_id: s.id, academic_year_id:@academic_year.id) }
   end
 
   def letter_of_grad
     @academic_year = AcademicYear.find params[:year] || AcademicYear.current
     @students = []
-    @template = Template.where(target:'letter_of_grad').where(active:'true').take  
+    @language = params[:lang] || 'id'
+
+    @template = Template.where(target:'letter_of_grad').where(active:'true', language:@language).take  
       
     if params[:student_id].present?
       @students << Student.find(params[:student_id])
@@ -65,12 +82,7 @@ class NatExamsController < ApplicationController
         .joins("left join diknas_converted_items on diknas_converted_items.diknas_converted_id = diknas_converteds.id")
         .joins("left join diknas_conversions on diknas_conversions.id = diknas_converted_items.diknas_conversion_id")
         .joins("left join diknas_courses on diknas_courses.id = diknas_conversions.diknas_course_id")
-        .where(diknas_converteds: {student_id: params[:student_id], academic_year_id: @academic_year}).where('lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ?',"fisika","biologi")
-      
-                
-        
-        @bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"]
-      
+        .where(diknas_converteds: {student_id: params[:student_id], academic_year_id: @academic_year}).where('lower(diknas_courses.name) = ? or lower(diknas_courses.name) = ?',"fisika","biologi")   
         
       if @diknas_ipa.first
         @nat_exam = NatExam.detail_scores_for_sk_ipa(student_id: params[:student_id], academic_year_id:@academic_year.id)
