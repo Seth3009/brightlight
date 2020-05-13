@@ -29,3 +29,16 @@ en:
   will_paginate:
     previous_label: "&#x3008;"
     next_label: "&#x3009;"
+  date:
+    formats:
+      default: "%B %d, %Y"
+      short: "%Y-%m-%d"
+  student:
+    tracks:
+      SS: "Social Sciences"
+      NS: "Natural Sciences"
+  report:
+    diknas:
+      subjects: "Subjects"
+      average: "Average"
+      school_test_score: "School Test Score"

@@ -53,13 +53,16 @@ Rails.application.routes.draw do
   resources :book_conditions
   resources :student_activities
 
-  resources :nat_exams do 
-    collection do
-      get 'letter_ii'
-      get 'letter_of_grad'
-      get 'scores'
-      get 'export'
-      post 'import'
+  scope "(:locale)", locale: /en|id/ do
+    resources :nat_exams do 
+      collection do
+        get 'letter_ii'
+        get 'letter_of_grad'
+        get 'letters'
+        get 'scores'
+        get 'export'
+        post 'import'
+      end
     end
   end
 
