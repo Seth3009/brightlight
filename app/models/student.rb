@@ -139,6 +139,12 @@ class Student < ActiveRecord::Base
 		grade_section_with_academic_year_id(AcademicYear.current_id || AcademicYear.current.id)
 	end
 
+	def current_track
+		grade_sections_students
+				.with_academic_year(AcademicYear.current_id || AcademicYear.current.id)
+				.pluck(:track).first
+	end
+
 	def current_roster_no
 		roster_no_with_academic_year_id(AcademicYear.current_id || AcademicYear.current.id)
 	end
