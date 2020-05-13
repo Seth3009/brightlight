@@ -3,6 +3,7 @@ tr id="row-#{diknas_course.id}"
   td.center = diknas_course.try('ipa')
   td.center = diknas_course.try('ips')
   td = diknas_course.name.titlecase
+  td = diknas_course.title.try :titlecase
   td = diknas_course.notes
   td.center
     = link_to edit_diknas_course_path(diknas_course), remote: true, class: "waves-effect waves-teal"

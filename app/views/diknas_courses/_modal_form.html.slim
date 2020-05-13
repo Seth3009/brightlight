@@ -33,10 +33,13 @@
             = f.text_field 'ips11'
         - else
             = f.text_field 'ips12'
-      .input-field.col.s4
+      .input-field.col.s3
         = f.label 'Mata Pelajaran', class: 'active'
         = f.text_field :name
-      .input-field.col.s5
+      .input-field.col.s3
+        = f.label 'Subject', class: 'active'
+        = f.text_field :title
+      .input-field.col.s3
         = f.label 'Catatan', class: 'active'
         = f.text_field :notes
   .modal-footer
