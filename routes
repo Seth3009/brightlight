@@ -303,16 +303,20 @@
                                      PATCH    /student_activities/:id(.:format)                                 student_activities#update
                                      PUT      /student_activities/:id(.:format)                                 student_activities#update
                                      DELETE   /student_activities/:id(.:format)                                 student_activities#destroy
-                    scores_nat_exams GET      /nat_exams/scores(.:format)                                       nat_exams#scores
-                    import_nat_exams GET      /nat_exams/import(.:format)                                       nat_exams#import
-                           nat_exams GET      /nat_exams(.:format)                                              nat_exams#index
-                                     POST     /nat_exams(.:format)                                              nat_exams#create
-                        new_nat_exam GET      /nat_exams/new(.:format)                                          nat_exams#new
-                       edit_nat_exam GET      /nat_exams/:id/edit(.:format)                                     nat_exams#edit
-                            nat_exam GET      /nat_exams/:id(.:format)                                          nat_exams#show
-                                     PATCH    /nat_exams/:id(.:format)                                          nat_exams#update
-                                     PUT      /nat_exams/:id(.:format)                                          nat_exams#update
-                                     DELETE   /nat_exams/:id(.:format)                                          nat_exams#destroy
+                 letter_ii_nat_exams GET      (/:locale)/nat_exams/letter_ii(.:format)                          nat_exams#letter_ii {:locale=>/en|id/}
+            letter_of_grad_nat_exams GET      (/:locale)/nat_exams/letter_of_grad(.:format)                     nat_exams#letter_of_grad {:locale=>/en|id/}
+                   letters_nat_exams GET      (/:locale)/nat_exams/letters(.:format)                            nat_exams#letters {:locale=>/en|id/}
+                    scores_nat_exams GET      (/:locale)/nat_exams/scores(.:format)                             nat_exams#scores {:locale=>/en|id/}
+                    export_nat_exams GET      (/:locale)/nat_exams/export(.:format)                             nat_exams#export {:locale=>/en|id/}
+                    import_nat_exams POST     (/:locale)/nat_exams/import(.:format)                             nat_exams#import {:locale=>/en|id/}
+                           nat_exams GET      (/:locale)/nat_exams(.:format)                                    nat_exams#index {:locale=>/en|id/}
+                                     POST     (/:locale)/nat_exams(.:format)                                    nat_exams#create {:locale=>/en|id/}
+                        new_nat_exam GET      (/:locale)/nat_exams/new(.:format)                                nat_exams#new {:locale=>/en|id/}
+                       edit_nat_exam GET      (/:locale)/nat_exams/:id/edit(.:format)                           nat_exams#edit {:locale=>/en|id/}
+                            nat_exam GET      (/:locale)/nat_exams/:id(.:format)                                nat_exams#show {:locale=>/en|id/}
+                                     PATCH    (/:locale)/nat_exams/:id(.:format)                                nat_exams#update {:locale=>/en|id/}
+                                     PUT      (/:locale)/nat_exams/:id(.:format)                                nat_exams#update {:locale=>/en|id/}
+                                     DELETE   (/:locale)/nat_exams/:id(.:format)                                nat_exams#destroy {:locale=>/en|id/}
         duplicate_diknas_conversions POST     /diknas_conversions/copy(.:format)                                diknas_conversions#duplicate
                    converted_reports GET      /diknas_converteds/reports(.:format)                              diknas_converteds#reports
                    diknas_converteds GET      /diknas_converteds(.:format)                                      diknas_converteds#index
@@ -479,6 +483,9 @@
                                      PUT      /courses/:id(.:format)                                            courses#update
                                      DELETE   /courses/:id(.:format)                                            courses#destroy
           book_copies_disposed_index GET      /book_copies/disposed_index(.:format)                             book_copies#disposed_index
+                       dispose_books GET      /book_copies/dispose_books(.:format)                              book_copies#dispose_books
+                    new_book_dispose GET      /book_copies/dispose_books/new_list(.:format)                     book_copies#new_book_dispose
+                    update_book_copy PUT      /book_copies/dispose_books/new_list/:id(.:format)                 book_copies#update_book_copy
                summary_book_editions GET      /book_editions/summary(.:format)                                  book_editions#summary
 edit_labels_book_edition_book_copies GET      /book_editions/:book_edition_id/book_copies/edit_labels(.:format) book_copies#edit_labels
    disposed_book_edition_book_copies GET      /book_editions/:book_edition_id/book_copies/disposed(.:format)    book_copies#disposed

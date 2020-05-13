@@ -46,8 +46,10 @@ nav
             = link_to letter_ii_nat_exams_path(student_id: student.id)
               i.material-icons drafts
           td
-            = link_to letter_of_grad_nat_exams_path(student_id: student.id)
-              i.material-icons drafts
+            = link_to letters_nat_exams_path(target:'letter_of_grad',student_id: student.id, locale:'id')
+              i.material-icons.red-text drafts 
+            = link_to letters_nat_exams_path(target:'letter_of_grad',student_id: student.id, locale:'en')
+              i.material-icons drafts 
 
 #form-upload-modal.modal
   = form_tag({action: :import}, multipart: true) do
