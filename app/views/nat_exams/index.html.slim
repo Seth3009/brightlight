@@ -6,21 +6,38 @@ nav
     - if can? :manage, NatExam
       ul.right
         li
-          = link_to export_nat_exams_path(year: @academic_year.id, format: 'csv')
-            | Export CSV
-            i.material-icons.left archive
-        li
-          = link_to export_nat_exams_path(year: @academic_year.id, format: 'xls')
-            | Export XLS
-            i.material-icons.left archive
+          a.dropdown-button href="#!" data-activates="export-options" data-beloworigin="true" 
+            | Export 
+            i.material-icons.right arrow_drop_down
         li
           = link_to letter_ii_nat_exams_path
             | T.O. II letters
             i.material-icons.left drafts
         li
+          a.dropdown-button href="#!" data-activates="sk-options" data-beloworigin="true" 
+            | SK Lulus 
+            i.material-icons.right arrow_drop_down
+        li
           = link_to "#form-upload-modal", class:"modal-trigger" 
             | Import
             i.material-icons.left input
+
+ul#sk-options.dropdown-content
+  li
+    = link_to letters_nat_exams_path(target:'letter_of_grad', locale:'id')
+      | SK Lulus (Bahasa Indonesia)
+  li
+    = link_to letters_nat_exams_path(target:'letter_of_grad', locale:'en')
+      | Certificate of Graduation (English)
+ul#export-options.dropdown-content
+  li
+    = link_to export_nat_exams_path(year: @academic_year.id, format: 'csv')
+      | Export CSV
+      i.material-icons.left archive
+  li
+    = link_to export_nat_exams_path(year: @academic_year.id, format: 'xls')
+      | Export XLS
+      i.material-icons.left archive
 
 .card-panel.horizontal-scroll
   table.striped.compact
@@ -47,9 +64,9 @@ nav
               i.material-icons drafts
           td
             = link_to letters_nat_exams_path(target:'letter_of_grad',student_id: student.id, locale:'id')
-              i.material-icons.red-text drafts 
+              i.material-icons.red-text.tooltipped data-position="bottom" data-delay="50" data-tooltip="Indonesian"  drafts 
             = link_to letters_nat_exams_path(target:'letter_of_grad',student_id: student.id, locale:'en')
-              i.material-icons drafts 
+              i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="English" drafts 
 
 #form-upload-modal.modal
   = form_tag({action: :import}, multipart: true) do
