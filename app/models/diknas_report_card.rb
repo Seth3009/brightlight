@@ -29,7 +29,7 @@ class DiknasReportCard < ActiveRecord::Base
       year = row[:year].slice(0..8)
       academic_year = AcademicYear.find_by_name(year)
       terms = academic_year.academic_terms.order(:start_date).map &:id
-      course = Course.where(id: row[:course], academic_year_id:nil).take
+      course = Course.where(id: row[:course]).take
 
       diknas_report_card = DiknasReportCard.find_by(student_id: student.id,
         grade_level_id:   row[:grade],
