@@ -14,8 +14,8 @@ class DiknasConversion < ActiveRecord::Base
   def self.list_for_select
     DiknasConversion.joins([:diknas_course, :grade_level, :academic_term, :academic_year])
       .select(:id, "(grade_levels.name || ' - ' || academic_terms.name || ' - ' || diknas_courses.name) as name")
-      .where(academic_year:AcademicYear.current_id-3..AcademicYear.current_id-1)
-      .order([:academic_year_id, :grade_level_id, 'diknas_courses.name', :academic_term_id])
+      .where(academic_year:AcademicYear.current_id-3..AcademicYear.current_id)
+      .order('diknas_conversions.academic_year_id DESC', :grade_level_id , :academic_term_id, 'diknas_courses.name')
       # .select(:id, "(diknas_courses.name || ' - ' || grade_levels.name || ' - ' || academic_terms.name) as name")
   end
 
