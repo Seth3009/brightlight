@@ -52,6 +52,19 @@ class DiknasConversion < ActiveRecord::Base
       dest.academic_term_id = to_term
       dest.academic_year_id = to_year
       dest.save
+      items = DiknasConversionItem.where(diknas_conversion_id:s.id)
+      if items.present?
+        items.each do |item|
+          dest.diknas_conversion_items.create(course_id:item.course_id,academic_year_id:to_year,academic_term_id:to_term)
+        end
+      end
+      list_items = DiknasConversionList.where(diknas_conversion_id:s.id)
+      if list_items.present?
+        list_items.each do |list|
+          link_course = self.where(diknas_course_id: self.find(list.conversion_id).diknas_course_id, academic_year_id:to_year, academic_term_id:to_term).first
+          DiknasConversionList.create(diknas_conversion_id:dest.id,conversion_id:link_course.id)
+        end
+      end
     end
 
   end
