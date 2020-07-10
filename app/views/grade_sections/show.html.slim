@@ -34,16 +34,18 @@ nav
 .card-panel
   .list_description
     dl.row
-      dd.col.s4
+      dd.col.s3
         .label Grade
         .item = link_to @grade_section.grade_level.name, @grade_section.grade_level
-      dd.col.s4
+      dd.col.s3
         .label Homeroom teacher
         .item = @homeroom.present? ? link_to(@homeroom.name, employee_path(@homeroom)) : '--'
-      dd.col.s4
+      dd.col.s3
         .label Academic Year
         .item = @academic_year.present? ? @academic_year.name : "--"
-
+      dd.col.s3
+        .label Capacity
+        .item = @grade_section.capacity
 .card
   .col.s12 style="margin-bottom: 15px; padding: 0px;"
     ul.tabs.z-depth-1

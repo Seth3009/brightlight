@@ -11,6 +11,9 @@
         = f.label :name
         = f.text_field :name
       .col.s4
+        = f.label :capacity
+        = f.text_field :capacity
+      .col.s4
         = f.label :homeroom
         = f.collection_select :homeroom_id, Employee.all.active, :id, :name, prompt: true
     
