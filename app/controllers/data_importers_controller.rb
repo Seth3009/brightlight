@@ -1,8 +1,10 @@
 class DataImportersController < ApplicationController
   def index
+    authorize! :manage, Student
   end
 
   def student_composition
+    authorize! :manage, Student
     uploaded_io = params[:filename] 
     path = Rails.root.join('public', 'uploads', uploaded_io.original_filename)
     File.open(path, 'wb') do |file|

@@ -164,7 +164,7 @@
           .card-stacked
             .card-content
               span.card-title.activator.grey-text.text-darken-4 
-                |Inventory Settings
+                |Settings & Maintenance
                 i.material-icons.right more_vert
               p Manage report templates, currency rates
               p Access to yearly maintenance tasks
@@ -192,6 +192,8 @@
                 ul
                   li
                     = link_to 'Book Maintenance', settings_inventory_mtce_path	
+                  li
+                    = link_to 'Import data into Brightlight', data_importers_path
     
     - if can? :read, Carpool
       .col.m4.s12
