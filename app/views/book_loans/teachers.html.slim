@@ -3,14 +3,24 @@
 ul#teacher-options.dropdown-content
   - @teachers.all.each do |teacher|
     li 
-      = link_to teacher.name, employee_book_loans_path(teacher)    
+      = link_to teacher.name, employee_book_loans_path(teacher, year:@academic_year.id)    
 ul#new-loans-options.dropdown-content
   - @employees.each do |employee|
     li 
       = link_to employee.name, new_employee_book_loans_path(employee)  
+ul#year-options.dropdown-content
+  li  
+    = link_to 'All', request.params.merge(year:'all')
+  - AcademicYear.list_for_menu.each do |year|
+    li 
+      = link_to year.name, request.params.merge(year: year.id)
 nav
   .nav-wrapper
     ul
+      li
+        a.dropdown-button href="#!" data-activates="year-options"
+          span#year = @academic_year.present? ? "#{@academic_year.name}" : AcademicYear.current.name
+          i.material-icons.right arrow_drop_down
       li
         a.dropdown-button href="#!" data-activates="teacher-options"
           span#teacher = @teacher.present? ? "#{@teacher.name}" : "Teacher name" 
