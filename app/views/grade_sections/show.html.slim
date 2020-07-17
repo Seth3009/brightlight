@@ -70,7 +70,7 @@ nav
                 = "#{gss.order_no}. "
               td
                 - if gss.student.present?
-                  = link_to gss.student.name, gss.student, remote: true
+                  = link_to gss.student.name, gss.student
                 - else
                   span.red-text Error! Student not found (##{gss.student_id})
               td 
