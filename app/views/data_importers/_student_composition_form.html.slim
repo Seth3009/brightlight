@@ -1,0 +1,21 @@
+= form_tag({action: :student_composition}, multipart: true) do
+  .row
+    .col.s6.m2
+      .label Academic Year
+      = select_tag :academic_year, options_from_collection_for_select(AcademicYear.list_for_menu,'id','name', @current_year_id), include_blank: 'None', required: true
+    .col.s6.m10
+      .label Choose file
+      = file_field_tag :filename, required: true, accept:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    .col.s6.offset-m2.m10
+      .label Sheet name
+      = text_field_tag :sheet_name, '', required: true
+  .row
+    .offset-m2.col.s6 
+      .card    
+        .card-content    
+          | This will import new data and update existing data from an Excel file.
+            Please ensure that the XLSX file has the right format and required columns 
+            with correct column heading
+          
+        .card-action
+          button.btn.btn-primary.waves-effect.waves-light data-disable=true Upload

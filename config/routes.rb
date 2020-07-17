@@ -447,6 +447,11 @@ Rails.application.routes.draw do
   get 'settings/inventory_mtce' => 'settings#inventory_mtce', as: :settings_inventory_mtce
   get 'settings/courses_mtce' => 'settings#courses_mtce', as: :settings_courses_mtce
 
+  controller :data_importers do
+    get 'data_importers' => :index, as: :data_importers
+    post 'data_importers/student_composition' => :student_composition, as: :import_student_composition
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
