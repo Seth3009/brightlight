@@ -3,18 +3,13 @@ namespace :db do
 	task populate_academic_years: :environment do
 		require 'populator'
 
-		AcademicYear.delete_all
-		AcademicTerm.delete_all
-
 		# Academic Years and Terms
-		n = 0
-		year = 2001
-		AcademicYear.populate 20 do |acad_year|
-			n += 1
+		year = 2000 + AcademicYear.last.id
+		AcademicYear.populate 9 do |acad_year|
 			year += 1
 			acad_year.name = "#{year}-#{year+1}"
-			acad_year.start_date = Date.new(year, 6, 1)
-			acad_year.end_date = Date.new(year+1, 5, 31)
+			acad_year.start_date = Date.new(year, 7, 1)
+			acad_year.end_date = Date.new(year+1, 6, 30)
 
 			t = 1
 			AcademicTerm.populate 1 do |term|
