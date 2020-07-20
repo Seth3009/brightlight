@@ -148,7 +148,7 @@ class BookLoansController < ApplicationController
   # GET book_loans/teachers
   def teachers
     authorize! :read, BookLoan
-    @academic_year = params[:year].present? ? AcademicYear.find(params[:year]) : AcademicYear.current_id
+    @academic_year = params[:year].present? ? AcademicYear.find(params[:year]) : AcademicYear.current
     @teachers = Employee.joins(:book_loans).where(book_loans: {academic_year_id: @academic_year.id}).order(:name).uniq
     @employees = Employee.where(is_active: 'true').where('email is not null').order(:name)
   end
