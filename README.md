@@ -3,7 +3,7 @@
 ### What is this repository for? ###
 
 * This is the repository for CBCS Brightlight application
-* Version 0.8
+* Version 0.9
 * Currently it covers: 
 - Books
 - Carpool
