@@ -52,7 +52,8 @@ class Carpool < ActiveRecord::Base
   end
 
   def self.end_of_morning_period
-    Date.today.noon + 1.hour  # 13:00
+    Date.today.noon             # 12:00
+    # Date.today.noon + 1.hour  # 13:00
   end
 
   private
