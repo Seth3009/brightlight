@@ -159,13 +159,15 @@ li
 		.collapsible-body
 			ul
 				li
-					  = link_to 'Leave Request', leave_requests_url 
-            = link_to 'My Archives', archive_url(view: 'empl', ld:(Date.today-7.days), lde:Date.today)
-            - if can? :approve, LeaveRequest
-              = link_to 'My Dept Archives', archive_url(view: 'spv', ld:(Date.today-7.days), lde:Date.today)
-            - if can? :validate, LeaveRequest
-              = link_to 'All Employee Archives', archive_url(dept: 'all', e: 'all', view: 'hr', ld:(Date.today-7.days), lde:Date.today)
-
+					= link_to 'Leave Request', leave_requests_url 
+					= link_to 'My Archives', archive_url(view: 'empl', ld:(Date.today-7.days), lde:Date.today)
+					- if can? :approve, LeaveRequest
+						= link_to 'My Dept Archives', archive_url(view: 'spv', ld:(Date.today-7.days), lde:Date.today)
+					- if can? :validate, LeaveRequest
+						= link_to 'All Employee Archives', archive_url(dept: 'all', e: 'all', view: 'hr', ld:(Date.today-7.days), lde:Date.today)
+				li	
+					a href="http://cahayabangsa.org/formlink/healthallowance.php" target="_blank"
+						| Health Allowance Form
 li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons school
@@ -244,7 +246,7 @@ li
 				a href="/guardians" Guardians
 			li
 				a href="/employees" Employees
-- if can? :read, Carpool
+- if can? :read, Carpool and signed_in? and (current_user.admin? or current_user.carpool?)
 	li 
 		.collapsible-header.waves-effect.waves-cyan
 			i.material-icons directions_car
@@ -297,16 +299,20 @@ li
 	.collapsible-header.waves-effect.waves-cyan
 		i.material-icons contact_support
 		i.mdi-navigation-chevron-right.right
-		span E-Ticketing System
+		span E-Ticket & Forms
 	.collapsible-body
 		ul
 			li
 				a href="http://cbticket.viewdns.net/"
 					| CBCS E-Ticketing System
 			li
-				a href="http://cahayabangsa.org/transport" target="_blank"
+				a href="http://cahayabangsa.org/formlink/transportrequest.php" target="_blank"
 					| Transportation Request Form
 			li	
-				a href="http://cahayabangsa.org/transportview" target="_blank"
+				a href="http://cahayabangsa.org/formlink/transportview.php" target="_blank"
 					| Transportation Bookings
+			- if signed_in? and (current_user.manager? or current_user.admin?)
+				li	
+					a href="http://cahayabangsa.org/formlink/workschedule.php" target="_blank"
+						| Working Schedules
 br

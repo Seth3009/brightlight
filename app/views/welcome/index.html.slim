@@ -7,34 +7,40 @@
         .card-stacked
           .card-content
             span.card-title.activator.grey-text.text-darken-4 
-              |E-Ticketing System
+              |E-Ticket & Forms
               i.material-icons.right more_vert
             p
               a href="http://cbticket.viewdns.net/" target="_blank"
                 .left CBCS E-ticket
                 i.material-icons chevron_right
             p
-              a href="http://cahayabangsa.org/transport" target="_blank"
+              a href="http://cahayabangsa.org/formlink/transportrequest.php" target="_blank"
                 .left Transportation Request Form
                 i.material-icons chevron_right 
             p
-              a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSv0qOiKu6pIch3lC4BSw3Tn0kfkzAT_cqSImSbVEv1XhsaEMDxuuIRCrCvdZZ1d00ZkPyYUn9A-JHi/pubhtml?gid=425614517&single=true" target="_blank"
+              a href="http://cahayabangsa.org/formlink/transportview.php" target="_blank"
                 .left Transportation Bookings
                 i.material-icons chevron_right
             p
               a href="http://forms.gle/2ZdyahZ6hYgcXY9K9" target="_blank"
                 .left EOY Maintenance Form
                 i.material-icons chevron_right
+            - if signed_in? and (current_user.manager? or current_user.admin?)
+              p
+                a href="http://cahayabangsa.org/formlink/workschedule.php" target="_blank"
+                  .left Working Schedules
+                  i.material-icons chevron_right
         .card-reveal
           span.card-title.grey-text.text-darken-4
-            |CBCS E-Ticketing
+            |CBCS E-Forms
             i.material-icons.right close
           .card-tabs
             ul.tabs.tabs-fixed-width.tabs-transparent
               li.tab
-                a.active href="#tab-eticket" E-Ticket
+                a.active href="#tab-eticket" E-Ticket & Schedule
               li.tab
                 a href="#tab-transport" Transportation
+              
           .card-content
             #tab-eticket
               ul
@@ -42,16 +48,23 @@
                   a href="http://cbticket.viewdns.net/" target="_blank"
                     .left CBCS E-ticket
                     i.material-icons chevron_right
+                - if signed_in? and (current_user.manager? or current_user.admin?)
+                  li
+                    a href="http://cahayabangsa.org/formlink/workschedule.php" target="_blank"
+                      .left Working Schedules
+                      i.material-icons chevron_right
             #tab-transport
               ul
                 li
-                  a href="http://cahayabangsa.org/transport" target="_blank"
+                  a href="http://cahayabangsa.org/formlink/transportrequest.php" target="_blank"
                     .left Submit Transportation Request
                     i.material-icons chevron_right 
                 li
-                  a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSv0qOiKu6pIch3lC4BSw3Tn0kfkzAT_cqSImSbVEv1XhsaEMDxuuIRCrCvdZZ1d00ZkPyYUn9A-JHi/pubhtml?gid=425614517&single=true" target="_blank"
+                  a href="http://cahayabangsa.org/formlink/transportview.php" target="_blank"
                     .left View Transportation Bookings
                     i.material-icons chevron_right
+            
+                
     .col.m4.s12
       .card.horizontal.widget
         .card-image.waves-effect.waves-block.waves-light
@@ -195,7 +208,7 @@
                   li
                     = link_to 'Import data into Brightlight', data_importers_path
     
-    - if can? :read, Carpool
+    - if can? :read, Carpool and signed_in? and (current_user.admin? or current_user.carpool?)
       .col.m4.s12
         .card.horizontal.widget
           .card-image.waves-effect.waves-block.waves-light
@@ -305,6 +318,9 @@
                   ul
                     li 
                       = link_to 'Employees', employees_path
+                    li	
+                      a href="http://cahayabangsa.org/formlink/healthallowance.php" target="_blank"
+                        | Health Allowance Form
       
     -if can? :manage, SuppliesTransaction
       .col.m4.s12
