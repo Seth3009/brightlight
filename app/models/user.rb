@@ -93,6 +93,14 @@ class User < ActiveRecord::Base
     self.has_role? :admin
   end
 
+  def manager?
+    self.has_role? :manager
+  end
+
+  def carpool?
+    self.has_role? :carpool
+  end
+
   # For API authentication
   def generate_auth_token
     token = SecureRandom.hex
