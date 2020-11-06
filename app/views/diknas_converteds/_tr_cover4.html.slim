@@ -26,7 +26,7 @@ tr
   td 5.
   td Agama
   td &#58;
-  td = @agama[@religion.index(@student.religion)] || '-'
+  td = @agama[@religion.index(@student.religion.titlecase)] || '-'
 tr
   td 6.
   td Status dalam Keluarga
@@ -41,7 +41,7 @@ tr style="height:50px;"
   td.top 8.
   td.top Alamat Peserta Didik
   td.top &#58;
-  td.top = @student.address_line1.titlecase
+  td.top = @student.address_line1
 tr
   td 9.
   td Nomor Telepon Rumah
@@ -86,7 +86,7 @@ tr style="height:50px;"
   td.top 13.
   td.top Alamat Orang Tua
   td.top &#58;
-  td.top = @student.address_line1.titlecase
+  td.top = @student.address_line1
 tr
   td 
   td Nomor Telepon Rumah
