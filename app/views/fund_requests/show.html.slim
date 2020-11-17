@@ -1,0 +1,54 @@
+p#notice = notice
+
+p
+  strong Requester:
+  = @fund_request.requester_id
+p
+  strong Date request:
+  = @fund_request.date_request
+p
+  strong Date needed:
+  = @fund_request.date_needed
+p
+  strong Description:
+  = @fund_request.description
+p
+  strong Amount:
+  = @fund_request.amount
+p
+  strong Payment type:
+  = @fund_request.payment_type
+p
+  strong Is budgeted:
+  = @fund_request.is_budgeted
+p
+  strong Budget notes:
+  = @fund_request.budget_notes
+p
+  strong Is spv approved:
+  = @fund_request.is_spv_approved
+p
+  strong Spv approval notes:
+  = @fund_request.spv_approval_notes
+p
+  strong Spv approval date:
+  = @fund_request.spv_approval_date
+p
+  strong Is hos approved:
+  = @fund_request.is_hos_approved
+p
+  strong Hos approval notes:
+  = @fund_request.hos_approval_notes
+p
+  strong Hos approval date:
+  = @fund_request.hos_approval_date
+p
+  strong Receiver:
+  = @fund_request.receiver_id
+p
+  strong Received date:
+  = @fund_request.received_date
+
+= link_to 'Edit', edit_fund_request_path(@fund_request)
+'|
+= link_to 'Back', fund_requests_path

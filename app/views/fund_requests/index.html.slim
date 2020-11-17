@@ -1,0 +1,51 @@
+h1 Listing fund_requests
+
+table
+  thead
+    tr
+      th Requester
+      th Date request
+      th Date needed
+      th Description
+      th Amount
+      th Payment type
+      th Is budgeted
+      th Budget notes
+      th Is spv approved
+      th Spv approval notes
+      th Spv approval date
+      th Is hos approved
+      th Hos approval notes
+      th Hos approval date
+      th Receiver
+      th Received date
+      th
+      th
+      th
+
+  tbody
+    - @fund_requests.each do |fund_request|
+      tr
+        td = fund_request.requester_id
+        td = fund_request.date_request
+        td = fund_request.date_needed
+        td = fund_request.description
+        td = fund_request.amount
+        td = fund_request.payment_type
+        td = fund_request.is_budgeted
+        td = fund_request.budget_notes
+        td = fund_request.is_spv_approved
+        td = fund_request.spv_approval_notes
+        td = fund_request.spv_approval_date
+        td = fund_request.is_hos_approved
+        td = fund_request.hos_approval_notes
+        td = fund_request.hos_approval_date
+        td = fund_request.receiver_id
+        td = fund_request.received_date
+        td = link_to 'Show', fund_request
+        td = link_to 'Edit', edit_fund_request_path(fund_request)
+        td = link_to 'Destroy', fund_request, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Fund request', new_fund_request_path
