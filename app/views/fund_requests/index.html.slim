@@ -1,51 +1,60 @@
-h1 Listing fund_requests
+h4 Fund Requests #{if params[:request_date].present? then params[:request_date].to_date.strftime('%d %b %Y') else Date.today.strftime('%d %b %Y') }
 
-table
-  thead
-    tr
-      th Requester
-      th Date request
-      th Date needed
-      th Description
-      th Amount
-      th Payment type
-      th Is budgeted
-      th Budget notes
-      th Is spv approved
-      th Spv approval notes
-      th Spv approval date
-      th Is hos approved
-      th Hos approval notes
-      th Hos approval date
-      th Receiver
-      th Received date
-      th
-      th
-      th
+nav
+  .nav-wrapper       
+    ul.right
+      li        
+        = link_to new_fund_request_path
+          | New
+          i.material-icons.left add
 
-  tbody
-    - @fund_requests.each do |fund_request|
-      tr
-        td = fund_request.requester_id
-        td = fund_request.date_request
-        td = fund_request.date_needed
-        td = fund_request.description
-        td = fund_request.amount
-        td = fund_request.payment_type
-        td = fund_request.is_budgeted
-        td = fund_request.budget_notes
-        td = fund_request.is_spv_approved
-        td = fund_request.spv_approval_notes
-        td = fund_request.spv_approval_date
-        td = fund_request.is_hos_approved
-        td = fund_request.hos_approval_notes
-        td = fund_request.hos_approval_date
-        td = fund_request.receiver_id
-        td = fund_request.received_date
-        td = link_to 'Show', fund_request
-        td = link_to 'Edit', edit_fund_request_path(fund_request)
-        td = link_to 'Destroy', fund_request, data: {:confirm => 'Are you sure?'}, :method => :delete
+ul.tabs.z-depth-1
+  li.tab.col.s3
+    a.active href='#tab1' 
+      |Pending
+  li.tab.col.s3
+    a href='#tab2' Approved
+  li.tab.col.s3
+    a href='#tab3' Draft
+  li.tab.col.s3
+    a href='#tab4' Rejected
+  - if can? :view_unbudgeted, Requisition
+    li.tab.col.s3
+      a href='#tab5' Non budgeted
 
-br
 
-= link_to 'New Fund request', new_fund_request_path
+.card-panel.compact
+  #tab1.tab-content
+
+    table
+      thead
+        tr      
+          th Date request
+          th Date needed
+          th Description
+          th Amount
+          th Payment type
+          th Budgeted?
+          
+          th Is spv approved      
+          th Is hos approved       
+          th Transfered
+          th
+
+      tbody
+        - @fund_requests.each do |fund_request|
+          tr
+            td = fund_request.date_request
+            td = fund_request.date_needed
+            td = fund_request.description
+            td = fund_request.amount
+            td = fund_request.is_cash
+            td = fund_request.is_budgeted
+            td = fund_request.budget_notes
+
+            td = fund_request.is_spv_approved       
+            td = fund_request.is_hos_approved        
+            td = fund_request.is_transfered
+            td = link_to 'Show', fund_request
+            td = link_to 'Edit', edit_fund_request_path(fund_request)
+            td = link_to 'Destroy', fund_request, data: {:confirm => 'Are you sure?'}, :method => :delete

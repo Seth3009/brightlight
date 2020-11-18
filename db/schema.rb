@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200508045259) do
+ActiveRecord::Schema.define(version: 20201112073330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1087,6 +1087,32 @@ ActiveRecord::Schema.define(version: 20200508045259) do
     t.boolean  "is_active",   default: true
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+  end
+
+  create_table "fund_requests", force: :cascade do |t|
+    t.integer  "requester_id"
+    t.date     "date_requested"
+    t.date     "date_needed"
+    t.string   "description"
+    t.decimal  "amount"
+    t.boolean  "is_cash"
+    t.string   "transfer_to"
+    t.string   "bank_name"
+    t.string   "bank_account_number"
+    t.string   "bank_city"
+    t.boolean  "is_budgeted"
+    t.string   "budget_notes"
+    t.boolean  "is_spv_approved"
+    t.string   "spv_approval_notes"
+    t.date     "spv_approval_date"
+    t.boolean  "is_hos_approved"
+    t.string   "hos_approval_notes"
+    t.date     "hos_approval_date"
+    t.integer  "receiver_id"
+    t.date     "received_date"
+    t.boolean  "is_transfered"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
   end
 
   create_table "grade_levels", force: :cascade do |t|
