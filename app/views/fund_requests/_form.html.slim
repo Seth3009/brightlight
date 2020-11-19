@@ -1,57 +1,95 @@
 = form_for @fund_request do |f|
-  - if @fund_request.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@fund_request.errors.count, "error")} prohibited this fund_request from being saved:"
-      ul
-        - @fund_request.errors.full_messages.each do |message|
-          li = message
+  .card-panel
+    - if @fund_request.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@fund_request.errors.count, "error")} prohibited this fund_request from being saved:"
+        ul
+          - @fund_request.errors.full_messages.each do |message|
+            li = message
+    .row
+      .input-field.col.s2        
+        = f.hidden_field :requester_id, value:@id
+        = f.label 'Date Requested (mm/dd/yyyy)', class: 'active'
+        = f.date_field :date_requested, :value => @fund_request.date_requested ? @fund_request.date_requested : Date.today.strftime('%Y-%m-%d'), class:'show_date',id:'date1'
+      .input-field.col.s2        
+        = f.label 'Date Needed (mm/dd/yyyy)', class: 'active'
+        = f.date_field :date_needed, :value => @fund_request.date_needed ? @fund_request.date_needed : Date.today.strftime('%Y-%m-%d'), class:'show_date',id:'date2'  
+      
+    .row
+      .input-field.col.s2
+        = f.label 'Total Amount Needed'
+        = f.text_field :amount
+      .input-field.col.s10
+        = f.label :description, class: 'active'
+        = f.text_field :description
+    .row
+      .col.s2
+        | Money needed in :
+      .col.s1       
+        = radio_button_tag 'is_cash', 'cash' ,(@fund_request.is_cash.present? ? true : false), class: 'cash_check'
+        = label_tag 'is_cash_cash', 'Cash'
+      .col.s1
+        = radio_button_tag 'is_cash', 'transfer' ,(@fund_request.is_cash.present? ? false : true), class: 'cash_check'
+        = label_tag 'is_cash_transfer', 'Transfer to'
+      .col.s2
+        = f.label :bank_account_number, class: 'active'
+        = f.text_field :bank_account_number
+      .col.s2
+        = f.label :transfer_to,'Account Name', class: 'active'
+        = f.text_field :transfer_to
+      .col.s2
+        = f.label :bank_name, class: 'active'
+        = f.text_field :bank_name
+      .col.s2
+        = f.label :bank_city, class: 'active'
+        = f.text_field :bank_city
 
-  .field
-    = f.label :requester_id
-    = f.number_field :requester_id
-  .field
-    = f.label :date_request
-    = f.date_select :date_request
-  .field
-    = f.label :date_needed
-    = f.date_select :date_needed
-  .field
-    = f.label :description
-    = f.text_field :description
-  .field
-    = f.label :amount
-    = f.text_field :amount
-  .field
-    = f.label :payment_type
-    = f.text_field :payment_type
-  .field
-    = f.label :is_budgeted
-    = f.check_box :is_budgeted
-  .field
-    = f.label :budget_notes
-    = f.text_field :budget_notes
-  .field
-    = f.label :is_spv_approved
-    = f.check_box :is_spv_approved
-  .field
-    = f.label :spv_approval_notes
-    = f.text_field :spv_approval_notes
-  .field
-    = f.label :spv_approval_date
-    = f.date_select :spv_approval_date
-  .field
-    = f.label :is_hos_approved
-    = f.check_box :is_hos_approved
-  .field
-    = f.label :hos_approval_notes
-    = f.text_field :hos_approval_notes
-  .field
-    = f.label :hos_approval_date
-    = f.date_select :hos_approval_date
-  .field
-    = f.label :receiver_id
-    = f.number_field :receiver_id
-  .field
-    = f.label :received_date
-    = f.date_select :received_date
-  .actions = f.submit
+    .row
+      .col.s2
+        | Already in budget :
+      .col.s1       
+        = radio_button_tag 'is_budgeted', 'no' ,(@fund_request.is_budgeted.present? ?  false : true), class: 'budget_check'
+        = label_tag 'is_budgeted_no', 'No'
+      .col.s1
+        = radio_button_tag 'is_budgeted', 'yes' ,(@fund_request.is_budgeted.present? ? @fund_request.is_budgeted? : false), class: 'budget_check'
+        = label_tag 'is_budgeted_yes', 'Yes'
+      
+      .col.s8
+        = f.label :budget_notes
+        = f.text_field :budget_notes
+    .red-text
+      em *
+        Note: If your request is already listed in this year budget, you only need acknowledgement from your supervisor.
+        If it is not, please ask for Head of School approval. For futher information regarding your budget, you may contact your supervisor.
+        Please return the receipt to Finance Staff, no later than 5 working days after receiving the fund.
+    
+.toolbar.z-depth-1
+  button.btn.waves-effect.waves-light.btnsubmit type="submit" data-disable=true name="save"  Save Draft 
+  button.btn.waves-effect.waves-light.btnsubmit type="submit" data-disable=true name="send" value="empl_submit" Send for Approval 
+  = link_to 'Cancel', leave_requests_path, class: "waves-effect waves-light btn-flat" 
+
+    / .field
+    /   = f.label :is_spv_approved
+    /   = f.check_box :is_spv_approved
+    / .field
+    /   = f.label :spv_approval_notes
+    /   = f.text_field :spv_approval_notes
+    / .field
+    /   = f.label :spv_approval_date
+    /   = f.date_select :spv_approval_date
+    / .field
+    /   = f.label :is_hos_approved
+    /   = f.check_box :is_hos_approved
+    / .field
+    /   = f.label :hos_approval_notes
+    /   = f.text_field :hos_approval_notes
+    / .field
+    /   = f.label :hos_approval_date
+    /   = f.date_select :hos_approval_date
+    / .field
+    /   = f.label :receiver_id
+    /   = f.number_field :receiver_id
+    / .field
+    /   = f.label :received_date
+    /   = f.date_select :received_date
+    

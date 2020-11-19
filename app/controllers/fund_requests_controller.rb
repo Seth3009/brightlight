@@ -15,6 +15,7 @@ class FundRequestsController < ApplicationController
   # GET /fund_requests/new
   def new
     @fund_request = FundRequest.new
+    @id = current_user.id
   end
 
   # GET /fund_requests/1/edit

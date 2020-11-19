@@ -44,7 +44,7 @@ ul.tabs.z-depth-1
       tbody
         - @fund_requests.each do |fund_request|
           tr
-            td = fund_request.date_request
+            td = fund_request.date_requested
             td = fund_request.date_needed
             td = fund_request.description
             td = fund_request.amount
@@ -55,6 +55,18 @@ ul.tabs.z-depth-1
             td = fund_request.is_spv_approved       
             td = fund_request.is_hos_approved        
             td = fund_request.is_transfered
-            td = link_to 'Show', fund_request
-            td = link_to 'Edit', edit_fund_request_path(fund_request)
-            td = link_to 'Destroy', fund_request, data: {:confirm => 'Are you sure?'}, :method => :delete
+            td
+              = link_to fund_request_path(fund_request)
+                i.material-icons visibility
+              - if fund_request.draft? && (can? :update, fund_request)
+                = link_to edit_fund_request_path(fund_request)
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+              - if fund_request.draft?
+                = link_to fund_request, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+              - if  fund_request.is_spv_approved.nil? && fund_request.is_employee_canceled == false && fund_request.submitted?
+                = link_to cancel_fund_request_path(fund_request,byemp:'yes'), data: {:confirm => 'You are going to cancel submitted leave request and your supervisor will be notified. Are you sure?'}, :method => :delete, class:'red-text'
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Cancel" delete
+            / td = link_to 'Show', fund_request
+            / td = link_to 'Edit', edit_fund_request_path(fund_request)
+            / td = link_to 'Destroy', fund_request, data: {:confirm => 'Are you sure?'}, :method => :delete

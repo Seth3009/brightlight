@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201112073330) do
+ActiveRecord::Schema.define(version: 20201118091350) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1111,8 +1111,12 @@ ActiveRecord::Schema.define(version: 20201112073330) do
     t.integer  "receiver_id"
     t.date     "received_date"
     t.boolean  "is_transfered"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.boolean  "is_submitted",         default: false, null: false
+    t.date     "date_submitted"
+    t.boolean  "is_fin_canceled",      default: false, null: false
+    t.boolean  "is_employee_canceled", default: false, null: false
   end
 
   create_table "grade_levels", force: :cascade do |t|
