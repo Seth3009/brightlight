@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :fund_requests
   resources :class_budgets
   resources :approvers
   resources :student_tardies
@@ -338,6 +337,19 @@ Rails.application.routes.draw do
   resources :smart_cards, only: [:show, :create, :destroy]
 
   resources :requisitions do
+    collection do
+      get 'list'
+    end
+    member do
+      get 'approve'
+      patch 'update_approval'
+      get 'edit_account'
+      patch 'update_account'
+      get 'submit'
+    end
+  end 
+
+  resources :fund_requests do
     collection do
       get 'list'
     end

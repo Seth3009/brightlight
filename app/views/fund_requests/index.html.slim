@@ -1,12 +1,25 @@
-h4 Fund Requests #{if params[:request_date].present? then params[:request_date].to_date.strftime('%d %b %Y') else Date.today.strftime('%d %b %Y') }
+- title 'Purchase Requests'
+h4 Fund Requests
 
 nav
-  .nav-wrapper       
+  .nav-wrapper
+    -if @i_am_approver
+      ul
+        li
+          a.dropdown-button href="#!" data-activates="show-options"
+            span = params[:my] == 'action' ? "Showing my approvals" : "Showing my requests"
+            i.material-icons.right arrow_drop_down
     ul.right
-      li        
+      li
         = link_to new_fund_request_path
           | New
           i.material-icons.left add
+
+ul#show-options.dropdown-content
+  li
+    = link_to "Show my approvals", requisitions_path(my: 'action') 
+  li
+    = link_to "Show my Requests", requisitions_path(my: 'list') 
 
 ul.tabs.z-depth-1
   li.tab.col.s3
@@ -27,6 +40,6 @@ ul.tabs.z-depth-1
 
 .card-panel.compact
   #tab1.tab-content
-    == render partial: 'fund_table', locals: { requisitions: @pending_approval }
+    == render partial: 'fund_table', locals: { fund_requests: @pending_approval }
 
     

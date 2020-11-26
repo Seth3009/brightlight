@@ -24,7 +24,7 @@ nav
 ul#category-options.dropdown-content
   li  
     = link_to 'All categories', approvers_path(params.merge(cat:'all').symbolize_keys)
-  - [['Leave Request','LR'], ['Purchase Request', 'PR'], ['Events','EV']].each do |cat|
+  - [['Leave Request','LR'], ['Purchase Request', 'PR'], ['Fund Request', 'FR'], ['Events','EV']].each do |cat|
     li 
       = link_to cat.first, approvers_path(params.merge(cat:cat.last))
 ul#department-options.dropdown-content

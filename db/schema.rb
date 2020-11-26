@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201118091350) do
+ActiveRecord::Schema.define(version: 20201126041720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1117,6 +1117,7 @@ ActiveRecord::Schema.define(version: 20201118091350) do
     t.date     "date_submitted"
     t.boolean  "is_fin_canceled",      default: false, null: false
     t.boolean  "is_employee_canceled", default: false, null: false
+    t.string   "aasm_state"
   end
 
   create_table "grade_levels", force: :cascade do |t|
