@@ -1,10 +1,18 @@
 class FundRequest < ActiveRecord::Base
   include AASM 
 
+  belongs_to :department
+  belongs_to :requester, class_name: 'Employee'
+  belongs_to :supervisor, class_name: 'Employee'
+  belongs_to :req_approver, class_name: 'Employee'
+  belongs_to :budget_approver, class_name: 'Employee'
+
   has_many :approvals, as: :approvable
   has_many :approvers, through: :approvals
   accepts_nested_attributes_for :approvals, reject_if: :all_blank
 
+  acts_as_commentable
+  accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
 
   Statuses = {:new    => {code: "NEW",    description: "New"},
               :wappr  => {code: "WAPPR",  description: "Waiting for Approval"},

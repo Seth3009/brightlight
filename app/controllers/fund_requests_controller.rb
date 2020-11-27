@@ -86,6 +86,11 @@ class FundRequestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def fund_request_params
-      params.require(:fund_request).permit(:requester_id, :date_request, :date_needed, :description, :amount, :payment_type, :is_budgeted, :budget_notes, :is_spv_approved, :spv_approval_notes, :spv_approval_date, :is_hos_approved, :hos_approval_notes, :hos_approval_date, :receiver_id, :received_date)
+      params.require(:fund_request).permit(:requester_id, :date_requested, :date_needed, :description, :amount, :is_cash, :transfer_to, :bank_name, :bank_account_number, :bank_city,
+                                          :is_budgeted, :budget_notes, :is_spv_approved, :spv_approval_notes, :spv_approval_date, :is_hos_approved, :hos_approval_notes, :hos_approval_date, 
+                                          :receiver_id, :received_date, :is_transfered, :is_submitted, :is_fin_canceled, :is_employee_canceled,
+                                          {comments_attributes: [:id, :title, :comment, :user_id, :commentable_id, :commentable_type, :role]},
+                                          {approvals_attributes: [:id, :level, :approver_id, :approve, :sign_date, :notes]}
+                                          )
     end
 end
