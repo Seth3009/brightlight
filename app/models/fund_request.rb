@@ -184,21 +184,21 @@ class FundRequest < ActiveRecord::Base
     self.approvals.level(3).any? {|x| x.approve == false}
   end
 
-  # def notify_requester(reason:, level:)
-  #   if reason == :rejected
-  #     email = FundRequestEmailer.not_approved(self, level: level)
-  #     email.deliver_now
-  #     notification = Message.new_from_email(email)
-  #     notification.save
-  #   end
-  # end
+  def notify_requester(reason:, level:)
+    if reason == :rejected
+      email = FundRequestEmailer.not_approved(self, level: level)
+      email.deliver_now
+      notification = Message.new_from_email(email)
+      notification.save
+    end
+  end
 
   def notify_approvers(level: 1, event: nil)
     approvers = self.approvals.level(level)
-    # email = FundRequestEmailer.approval(self, approvers)
-    # email.deliver_now
-    # notification = Message.new_from_email(email)
-    # notification.save
+    email = FundRequestEmailer.approval(self, approvers)
+    email.deliver_now
+    notification = Message.new_from_email(email)
+    notification.save
     if level == 1
       self.update_attributes sent_to_supv: Date.today
     else
@@ -206,27 +206,27 @@ class FundRequest < ActiveRecord::Base
     end
   end
 
-  # def notify_purchasing
-  #   email = FundRequestEmailer.fund_request_to_purchasing(self)
-  #   email.deliver_now
-  #   notification = Message.new_from_email(email)
-  #   notification.save
-  #   self.status = FundRequest.status_code(:appvd)
-  #   # self.sent_to_purchasing = Date.today
-  #   self.is_submitted = true
-  #   save
-  # end
+  def notify_finance
+    email = FundRequestEmailer.fund_request_to_finance(self)
+    email.deliver_now
+    notification = Message.new_from_email(email)
+    notification.save
+    self.status = FundRequest.status_code(:appvd)
+    # self.sent_to_purchasing = Date.today
+    self.is_submitted = true
+    save
+  end
 
-  # def send_overdue_reminder
-  #   unless self.status.start_with? 'REMINDER SENT'
-  #     email = FundRequestEmailer.reminder_for_purchasing(self)
-  #     email.deliver_now
-  #     notification = Message.new_from_email(email)
-  #     notification.save
-  #     self.status = "REMINDER SENT #{Date.today}"
-  #     save
-  #   end
-  # end
+  def send_overdue_reminder
+    unless self.status.start_with? 'REMINDER SENT'
+      email = FundRequestEmailer.reminder_for_finance(self)
+      email.deliver_now
+      notification = Message.new_from_email(email)
+      notification.save
+      self.status = "REMINDER SENT #{Date.today}"
+      save
+    end
+  end
 
   def self.check_overdue
     FundRequest.where(aasm_state:'approved').where('sent_to_purchasing < ?', 1.week.ago).each { |r| r.set_overdue! }

@@ -41,5 +41,8 @@ module Brightlight
     config.purchasing_pic_name = 'Purchasing'
     config.purchasing_email_address = "\"#{config.purchasing_pic_name}\" <purchasing@cahayabangsa.org>"
     config.default_buyer_email_address = "\"Silvi Natalia S.\" <silvi.sihombing@cahayabangsa.org>"
+
+    config.finance_pic_name = 'Finance'
+    config.finance_email_address = "\"#{config.finance_pic_name}\" <finance@cahayabangsa.org>"
   end
 end
