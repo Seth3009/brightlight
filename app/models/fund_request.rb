@@ -6,10 +6,18 @@ class FundRequest < ActiveRecord::Base
   belongs_to :supervisor, class_name: 'Employee'
   belongs_to :req_approver, class_name: 'Employee'
   belongs_to :budget_approver, class_name: 'Employee'
+  belongs_to :created_by, class_name: 'User'
+  belongs_to :last_updated_by, class_name: 'User'
+  belongs_to :event
 
   has_many :approvals, as: :approvable
   has_many :approvers, through: :approvals
   accepts_nested_attributes_for :approvals, reject_if: :all_blank
+
+  validates :department, presence: true
+  validates :requester, presence: true
+  validates :description, presence: true
+  validates_inclusion_of :is_budgeted, in: [true, false], message: 'is required. Please indicate whether the request is budgeted or not'
 
   acts_as_commentable
   accepts_nested_attributes_for :comments, reject_if: :all_blank, allow_destroy: true
@@ -28,15 +36,17 @@ class FundRequest < ActiveRecord::Base
     .uniq
   }
   
-  scope :pending_approval, lambda { where(aasm_state: ['level1', 'level2', 'level3']) }
-
-  scope :submitted, -> { where(is_submitted: true) }
-
-  scope :draft, -> { where(is_submitted: false) }
+  
 
 
 
   # ====================================== aasm and verification ============
+  scope :pending_approval, lambda { where(aasm_state: ['level1', 'level2', 'level3']) }
+  scope :approved, lambda { where("aasm_state = 'approved' OR aasm_state = 'open' OR aasm_state ='overdue'") }
+  scope :draft, lambda { where(aasm_state: 'draft') }
+  scope :rejected, lambda { where(aasm_state: 'rejected') }
+  scope :active, lambda { where(active: true) }
+  scope :for_dept, lambda { |dept_id| where(department_id: dept_id) }
 
   aasm do
     state :draft, initial: true
@@ -47,6 +57,7 @@ class FundRequest < ActiveRecord::Base
 
     event :submit do
       transitions from: :draft, to: :level1
+      
       transitions from: :draft, to: :approval_for_event, if: :event?
       after do
         if event?
@@ -122,12 +133,12 @@ class FundRequest < ActiveRecord::Base
 
   def set_approvals(level: nil, event: nil)
     if event.present?
-      approvers = Approver.for(category:'PR', event: event)
+      approvers = Approver.for(category:'FR', event: event)
     else
       approvers = if level == 3 
-                    Approver.for(category:'PR', level: level)
+                    Approver.for(category:'FR', level: level)
                   else
-                    Approver.for(category:'PR', department: self.department, level: level)  
+                    Approver.for(category:'FR', department: self.department, level: level)  
                   end
     end
     self.approvals << Approval.new_from_approvers(approvers) 
@@ -146,7 +157,7 @@ class FundRequest < ActiveRecord::Base
   end
 
   def skip_l2_approval?
-    Approver.where(department: self.department, category: 'PR', level:2).blank?
+    Approver.where(department: self.department, category: 'FR', level:2).blank?
   end
 
   def l1_approved?
@@ -173,21 +184,21 @@ class FundRequest < ActiveRecord::Base
     self.approvals.level(3).any? {|x| x.approve == false}
   end
 
-  def notify_requester(reason:, level:)
-    if reason == :rejected
-      email = RequisitionEmailer.not_approved(self, level: level)
-      email.deliver_now
-      notification = Message.new_from_email(email)
-      notification.save
-    end
-  end
+  # def notify_requester(reason:, level:)
+  #   if reason == :rejected
+  #     email = FundRequestEmailer.not_approved(self, level: level)
+  #     email.deliver_now
+  #     notification = Message.new_from_email(email)
+  #     notification.save
+  #   end
+  # end
 
   def notify_approvers(level: 1, event: nil)
     approvers = self.approvals.level(level)
-    email = RequisitionEmailer.approval(self, approvers)
-    email.deliver_now
-    notification = Message.new_from_email(email)
-    notification.save
+    # email = FundRequestEmailer.approval(self, approvers)
+    # email.deliver_now
+    # notification = Message.new_from_email(email)
+    # notification.save
     if level == 1
       self.update_attributes sent_to_supv: Date.today
     else
@@ -195,30 +206,30 @@ class FundRequest < ActiveRecord::Base
     end
   end
 
-  def notify_purchasing
-    email = RequisitionEmailer.requisition_to_purchasing(self)
-    email.deliver_now
-    notification = Message.new_from_email(email)
-    notification.save
-    self.status = Requisition.status_code(:appvd)
-    self.sent_to_purchasing = Date.today
-    self.is_submitted = true
-    save
-  end
+  # def notify_purchasing
+  #   email = FundRequestEmailer.fund_request_to_purchasing(self)
+  #   email.deliver_now
+  #   notification = Message.new_from_email(email)
+  #   notification.save
+  #   self.status = FundRequest.status_code(:appvd)
+  #   # self.sent_to_purchasing = Date.today
+  #   self.is_submitted = true
+  #   save
+  # end
 
-  def send_overdue_reminder
-    unless self.status.start_with? 'REMINDER SENT'
-      email = RequisitionEmailer.reminder_for_purchasing(self)
-      email.deliver_now
-      notification = Message.new_from_email(email)
-      notification.save
-      self.status = "REMINDER SENT #{Date.today}"
-      save
-    end
-  end
+  # def send_overdue_reminder
+  #   unless self.status.start_with? 'REMINDER SENT'
+  #     email = FundRequestEmailer.reminder_for_purchasing(self)
+  #     email.deliver_now
+  #     notification = Message.new_from_email(email)
+  #     notification.save
+  #     self.status = "REMINDER SENT #{Date.today}"
+  #     save
+  #   end
+  # end
 
   def self.check_overdue
-    Requisition.where(aasm_state:'approved').where('sent_to_purchasing < ?', 1.week.ago).each { |r| r.set_overdue! }
+    FundRequest.where(aasm_state:'approved').where('sent_to_purchasing < ?', 1.week.ago).each { |r| r.set_overdue! }
   end
 
   def is_pending_approval_by(employee)
@@ -228,12 +239,12 @@ class FundRequest < ActiveRecord::Base
   end
 
   def pending_supv_approval?
-    # status == Requisition.status_code(:wappr) # && sent_to_supv != nil && is_supv_approved == nil
+    status == FundRequest.status_code(:wappr) # && sent_to_supv != nil && is_supv_approved == nil
     self.level1? 
   end
 
   def pending_budget_approval?
-    # status == Requisition.status_code(:wbgapv) #&& !is_budgeted && sent_for_bgt_approval != nil && is_budget_approved == nil
+    status == FundRequest.status_code(:wbgapv) #&& !is_budgeted && sent_for_bgt_approval != nil && is_budget_approved == nil
     self.level2? || self.level3?
   end
 
@@ -283,34 +294,21 @@ class FundRequest < ActiveRecord::Base
   end
 
   def self.status_code(status)
-    Requisition::Statuses[status][:code]
+    FundRequest::Statuses[status][:code]
   end
 
   def update_status
     unordered_items_count = number_of_unordered_items
     if unordered_items_count == 0
-      update_columns(status: Requisition.status_code(:close))
+      update_columns(status: FundRequest.status_code(:close))
     elsif unordered_items_count != req_items.count
-      update_columns(status: Requisition.status_code(:open))
+      update_columns(status: FundRequest.status_code(:open))
     else
-      update_columns(status: Requisition.status_code(:appvd))
+      update_columns(status: FundRequest.status_code(:appvd))
     end
   end
 
-  def sum_total
-    self.req_items.reduce(0) {|acc, x| acc + ((x.est_price || 0.0) * (x.qty_reqd || 0.0)) }
-  end
+ 
   
-  private
-
-    def at_least_one_req_item
-      # when creating a new requisition: making sure at least one item exists
-      return errors.add :base, "Must have at least one item" unless req_items.length > 0
-      # when updating an existing contact: Making sure that at least one item would exist
-      return errors.add :base, "Must have at least one item" if req_items.reject{|item| item._destroy == true}.empty?
-    end
-
-    def update_total
-      self.total_amt = sum_total
-    end
+  
 end

@@ -42,4 +42,10 @@ ul.tabs.z-depth-1
   #tab1.tab-content
     == render partial: 'fund_table', locals: { fund_requests: @pending_approval }
 
-    
+
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close

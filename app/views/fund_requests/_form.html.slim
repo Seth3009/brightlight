@@ -17,20 +17,26 @@
       
     .row
       .input-field.col.s2
+          = f.label :requester, class: 'active'
+          = f.hidden_field :requester_id, value: @employee.id
+          = f.hidden_field :department_id, value: @department.id
+          = text_field_tag :requester, @employee.name, disabled: true
+      .input-field.col.s2
         = f.label 'Total Amount Needed'
         = f.text_field :amount
-      .input-field.col.s10
+      .input-field.col.s8
         = f.label :description, class: 'active'
         = f.text_field :description
     .row
-      .col.s2
-        | Money needed in :
-      .col.s1       
-        = radio_button_tag 'is_cash', 'cash' ,(@fund_request.is_cash.present? ? true : false), class: 'cash_check'
-        = label_tag 'is_cash_cash', 'Cash'
-      .col.s1
-        = radio_button_tag 'is_cash', 'transfer' ,(@fund_request.is_cash.present? ? false : true), class: 'cash_check'
-        = label_tag 'is_cash_transfer', 'Transfer to'
+      .input-field.col.s2.right-align
+        = f.label :is_cash, 'Cash?', class: 'active'
+        = f.radio_button :is_cash, true, {class: "with-gap"}
+        = f.label :is_cash, "Yes", value: true
+      .input-field.col.s2
+        = f.label :is_cash, class: 'active'
+          span.red-text = "(*required)"
+        = f.radio_button :is_cash, false, {class: "with-gap"}
+        = f.label :is_cash, "No", value: false
       .col.s2
         = f.label :bank_account_number, class: 'active'
         = f.text_field :bank_account_number
@@ -44,15 +50,22 @@
         = f.label :bank_city, class: 'active'
         = f.text_field :bank_city
 
-    .row
-      .col.s2
-        | Already in budget :
-      .col.s1       
-        = radio_button_tag 'is_budgeted', 'no' ,(@fund_request.is_budgeted.present? ?  false : true), class: 'budget_check'
-        = label_tag 'is_budgeted_no', 'No'
-      .col.s1
-        = radio_button_tag 'is_budgeted', 'yes' ,(@fund_request.is_budgeted.present? ? @fund_request.is_budgeted? : false), class: 'budget_check'
-        = label_tag 'is_budgeted_yes', 'Yes'
+    .row      
+      / .col.s1       
+      /   = radio_button_tag 'is_budgeted', 'no' ,(@fund_request.is_budgeted.present? ?  false : true), class: 'budget_check'
+      /   = label_tag 'is_budgeted_no', 'No'
+      / .col.s1
+      /   = radio_button_tag 'is_budgeted', 'yes' ,(@fund_request.is_budgeted.present? ? @fund_request.is_budgeted? : false), class: 'budget_check'
+      /   = label_tag 'is_budgeted_yes', 'Yes'
+      .input-field.col.s2.right-align
+        = f.label :is_budgeted, 'Budgeted?', class: 'active'
+        = f.radio_button :is_budgeted, true, {class: "with-gap"}
+        = f.label :is_budgeted, "Yes", value: true
+      .input-field.col.s2
+        = f.label :is_budgeted, class: 'active'
+          span.red-text = "(*required)"
+        = f.radio_button :is_budgeted, false, {class: "with-gap"}
+        = f.label :is_budgeted, "No", value: false
       
       .col.s8
         = f.label :budget_notes
@@ -63,10 +76,12 @@
         If it is not, please ask for Head of School approval. For futher information regarding your budget, you may contact your supervisor.
         Please return the receipt to Finance Staff, no later than 5 working days after receiving the fund.
     
-.toolbar.z-depth-1
-  button.btn.waves-effect.waves-light.btnsubmit type="submit" data-disable=true name="save"  Save Draft 
-  button.btn.waves-effect.waves-light.btnsubmit type="submit" data-disable=true name="send" value="empl_submit" Send for Approval 
-  = link_to 'Cancel', fund_requests_path, class: "waves-effect waves-light btn-flat" 
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" data-disable=true name="save" Save Draft
+    - if @fund_request.draft?
+      button.btn.waves-effect.waves-light type="submit" data-disable=true name="submit" Submit
+    = link_to 'Cancel', fund_requests_path, class: "waves-effect waves-light btn-flat"
+
 
     / .field
     /   = f.label :is_spv_approved
