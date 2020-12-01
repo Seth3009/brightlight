@@ -7,7 +7,7 @@ class FundRequestEmailer < ApplicationMailer
     @requester = fund_request.requester
     requester_email = %("#{@requester.name}" <#{@requester.email}>)
     @addressee = approvers.map { |approval| %("#{approval.approver.employee.name}" <#{approval.approver.employee.email}>) }
-    mail(to: @addressee, cc: requester_email, subject: "Approval required: Purchase Request No. #{fund_request.id}.")
+    mail(to: @addressee, cc: requester_email, subject: "Approval required: Fund Request No. #{fund_request.id}.")
   end
 
   def not_approved(fund_request, level:)

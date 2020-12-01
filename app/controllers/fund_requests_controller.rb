@@ -35,13 +35,18 @@ class FundRequestsController < ApplicationController
     @employee = current_user.employee
     if @employee.present?
       @department = @employee.department
-      # @accounts = Account.for_department_id(@employee.department_id) rescue []
+      @accounts = Account.for_department_id(@employee.department_id) rescue []
     end
     @fund_request = FundRequest.new
   end
 
   # GET /fund_requests/1/edit
   def edit
+    authorize! :update, @fund_request
+    @employee = @fund_request.requester || current_user.employee
+    @manager = @employee.manager || @employee.supervisor
+    @department = @fund_request.department || @employee.department
+    @accounts = Account.for_department_id(@employee.department_id) rescue []
   end
 
   # POST /fund_requests
@@ -67,7 +72,7 @@ class FundRequestsController < ApplicationController
         format.html { 
           @employee = @fund_request.requester || current_user.employee
           @department = @employee.department
-          # @accounts = Account.for_department_id(@employee.department_id) rescue []
+          @accounts = Account.for_department_id(@employee.department_id) rescue []
           render :new 
         }
         format.json { render json: @fund_request.errors, status: :unprocessable_entity }
@@ -90,7 +95,7 @@ class FundRequestsController < ApplicationController
     respond_to do |format|
       if @fund_request.update(fund_request_params)
         if params[:submit]
-          format.html { redirect_to submit_requisition_path(@fund_request) }
+          format.html { redirect_to submit_fund_request_path(@fund_request) }
         else
           @message = 'Fund request was successfully saved.'
           format.html { redirect_to @fund_request, notice: @message }
@@ -102,7 +107,7 @@ class FundRequestsController < ApplicationController
         format.html do 
           @employee = @fund_request.requester || current_user.employee
           @department = @fund_request.department || @employee.department
-          # @accounts = Account.for_department_id(@employee.department_id) rescue []
+          @accounts = Account.for_department_id(@employee.department_id) rescue []
           @supervisors = Employee.supervisors.all
           render :edit 
         end
@@ -133,7 +138,7 @@ class FundRequestsController < ApplicationController
       params.require(:fund_request).permit(:requester_id, :date_requested, :date_needed, :description, :amount, :is_cash, :transfer_to, :bank_name, :bank_account_number, :bank_city,
                                           :is_budgeted, :budget_notes, :is_spv_approved, :spv_approval_notes, :spv_approval_date, :is_hos_approved, :hos_approval_notes, :hos_approval_date, 
                                           :receiver_id, :received_date, :is_transfered, :is_submitted, :is_fin_canceled, :is_employee_canceled, 
-                                          :sent_for_bgt_approval, :sent_to_supv, :req_approver_id, :supervisor_id, :budget_approver_id, :department_id, :created_by, :last_updated_by,
+                                          :account_id, :budget_type, :class_budget_id, :sent_for_bgt_approval, :sent_to_supv, :req_approver_id, :supervisor_id, :budget_approver_id, :department_id, :created_by, :last_updated_by,
                                           {comments_attributes: [:id, :title, :comment, :user_id, :commentable_id, :commentable_type, :role]},
                                           {approvals_attributes: [:id, :level, :approver_id, :approve, :sign_date, :notes]}
                                           )

@@ -9,6 +9,9 @@ class FundRequest < ActiveRecord::Base
   belongs_to :created_by, class_name: 'User'
   belongs_to :last_updated_by, class_name: 'User'
   belongs_to :event
+  belongs_to :budget
+  belongs_to :account
+  belongs_to :budget_item
 
   has_many :approvals, as: :approvable
   has_many :approvers, through: :approvals

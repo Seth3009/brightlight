@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201130023050) do
+ActiveRecord::Schema.define(version: 20201201054721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1128,6 +1128,9 @@ ActiveRecord::Schema.define(version: 20201130023050) do
     t.integer  "req_approver_id"
     t.date     "sent_to_supv"
     t.date     "sent_for_bgt_approval"
+    t.integer  "account_id"
+    t.string   "budget_type"
+    t.integer  "class_budget_id"
   end
 
   create_table "grade_levels", force: :cascade do |t|

@@ -1,54 +1,166 @@
-p#notice = notice
+- title 'Fund Request'
+h4 Fund Request
 
-p
-  strong Requester:
-  = @fund_request.requester_id
-p
-  strong Date request:
-  = @fund_request.date_requested
-p
-  strong Date needed:
-  = @fund_request.date_needed
-p
-  strong Description:
-  = @fund_request.description
-p
-  strong Amount:
-  = @fund_request.amount
-p
-  strong Payment type:
-  = @fund_request.is_cash
-p
-  strong Is budgeted:
-  = @fund_request.is_budgeted
-p
-  strong Budget notes:
-  = @fund_request.budget_notes
-p
-  strong Is spv approved:
-  = @fund_request.is_spv_approved
-p
-  strong Spv approval notes:
-  = @fund_request.spv_approval_notes
-p
-  strong Spv approval date:
-  = @fund_request.spv_approval_date
-p
-  strong Is hos approved:
-  = @fund_request.is_hos_approved
-p
-  strong Hos approval notes:
-  = @fund_request.hos_approval_notes
-p
-  strong Hos approval date:
-  = @fund_request.hos_approval_date
-p
-  strong Receiver:
-  = @fund_request.receiver_id
-p
-  strong Received date:
-  = @fund_request.received_date
+nav
+  .nav-wrapper
+    ul
+      li
+        = link_to fund_requests_path
+          span.hide-on-small-only Fund Requests
+          i.material-icons.left chevron_left
+      -if can? :process, FundRequest
+        li
+          = link_to list_fund_requests_path
+            span.hide-on-small-only Process FPB
+            i.material-icons.left list_alt
+    ul.right
+      li
+        = link_to new_fund_request_path
+          span.hide-on-small-only New
+          i.material-icons.left add
+      li
+        - unless @fund_request.sent_to_supv
+          = link_to edit_fund_requests_path @fund_requests
+            i.material-icons edit
+        - else
+          i.material-icons.left lock
 
-= link_to 'Edit', edit_fund_request_path(@fund_request)
-'|
-= link_to 'Back', fund_requests_path
+.panel
+  ul.collapsible data-collapsible="expandable"
+    li
+      .collapsible-header.active
+        | Detail
+        i.material-icons.arrow.left chevron_right
+      .collapsible-body
+        ul.collection
+          li.row.collection-item
+            .col.s3.m2
+              .label Requested by
+              .item = @fund_request.requester
+            .col.s6.m4
+              .label Department
+              .item = @fund_request.department
+            .col.s2.m2
+              .label Date Requested
+              .item = @fund_request.created_at.strftime("%Y-%m-%d")
+            .col.s2.m2
+              .label Date Needed
+              .item = @fund_request.date_needed
+            / .col.s6.m2
+            /   .label No.
+            /   .item = @fund_request.id
+            
+            
+            / .col.s6.m1
+            /   .label To Supervisor
+            /   .item = @fund_request.sent_to_supv
+            .col.s4.m2
+              .label Status
+              .item = @fund_request.aasm.current_state.to_s.humanize
+            .col.s12.m4
+              .label Description
+              .item = @fund_request.description
+          li.row.collection-item
+            .col.s6.m2
+              .label Total Amount
+              .item = @fund_request.amount 
+          li.row.collection-item
+            .col.s6.m2
+              .label In Cash?
+              -if @fund_request.is_cash
+                |Yes
+              -else
+                |No
+            .col.s6.m2
+              .label Transfer To
+              .item = @fund_request.transfer_to            
+            .col.s6.m2
+              .label Account Number
+              .item = @fund_request.bank_account_number
+            .col.s6.m2
+              .label Bank
+              .item = @fund_request.bank_name
+            .col.s6.m2
+              .label Bank City
+              .item = @fund_request.bank_city
+            
+          li.row.collection-item
+            .col.s6.m2
+              .label Budgeted?
+              -if @fund_request.is_budgeted == false
+                |No
+              -else
+                |Yes
+            .col.s6.m4
+              .label Budget
+              .item = @fund_request.account.try(:description) || "--"
+            .col.s6.m6
+              .label Budget Notes
+              .item = @fund_request.try(:budget_notes) || "--"
+          -if @fund_request.event_id.present?
+            li.row.collection-item
+              .col.s6.m2
+                .label Event
+                .item = @fund_request.event.name
+              .col.s6.m6
+                .label Description
+                .item = @fund_request.event.description
+          
+    / li
+    /   .collapsible-header.active
+    /     | Approval
+    /     i.material-icons.arrow.left chevron_right
+    /   .collapsible-body
+    /     ul.collection
+    /       li.row.collection-item
+    /         .col.s12.m3.label Approver
+    /         .col.s6.m2.label Approval
+    /         .col.s6.m1.label Date
+    /         .col.s6.m1.label Submitted
+    /         .col.s12.m5.label Notes
+    /       - [@level1_approvals, @budget_approvals].flatten.each do |approval|
+    /         li.row.collection-item
+    /           .col.s12.m3.item = approval.approver.try(:employee).try(:name) || "--"
+    /           .col.s6.m2.item
+    /             - if approval.approve == true
+    /               |Approved
+    /             - elsif approval.approve == false
+    /               |Not approved
+    /             - else
+    /               - if @requisition.is_pending_approval_by current_user.employee
+    /                 = link_to approve_requisition_path(@requisition), class:'btn btn-small'
+    /                   |Approval
+    /                 div style="font-size:0.8em; color: #f5494d" Click to go to approval page
+    /               - else
+    /                 |--
+    /           .col.s6.m1.item = approval.updated_at.strftime("%d %b %Y") if approval.approve.present?
+    /           .col.s6.m1.item = approval.created_at.strftime("%d %b %Y")
+    /           .col.s12.m5.item = approval.notes 
+
+    / li.comment-section
+    /   .collapsible-header.active
+    /     | Comments (#{@commentable.comments.count})
+    /     i.material-icons.arrow.left chevron_right
+    /     .right
+    /       = link_to "#"
+    /         span.hide-on-small-only Add comment
+    /         i.material-icons.left add
+    /   .collapsible-body
+    /     = render 'comments/comment_widget'
+
+javascript:
+  $(document).on('ready page:load', function(){
+    $('.collapsible').collapsible({
+      accordion: false
+    });
+  });
+  $(document).on("click", "input.checkbox", function(event) {
+    var checked = $("input.checkbox:checked").length;
+    if (checked > 0) {
+      console.log("ON", checked);
+      $("#create-po-button").prop("disabled", false);
+    } else {
+      console.log("OFF", checked);
+      $("#create-po-button").prop("disabled", true)
+    }
+  })
