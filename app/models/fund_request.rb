@@ -80,7 +80,7 @@ class FundRequest < ActiveRecord::Base
       after do
         set_inactive level: 1
         if is_budgeted
-          notify_purchasing 
+          notify_finance 
         elsif skip_l2_approval?
           set_approvals level: 3
           notify_approvers level: 3

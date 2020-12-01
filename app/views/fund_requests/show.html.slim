@@ -8,11 +8,7 @@ nav
         = link_to fund_requests_path
           span.hide-on-small-only Fund Requests
           i.material-icons.left chevron_left
-      -if can? :process, FundRequest
-        li
-          = link_to list_fund_requests_path
-            span.hide-on-small-only Process FPB
-            i.material-icons.left list_alt
+
     ul.right
       li
         = link_to new_fund_request_path
@@ -20,7 +16,7 @@ nav
           i.material-icons.left add
       li
         - unless @fund_request.sent_to_supv
-          = link_to edit_fund_requests_path @fund_requests
+          = link_to edit_fund_request_path @fund_request
             i.material-icons edit
         - else
           i.material-icons.left lock
@@ -106,47 +102,47 @@ nav
                 .label Description
                 .item = @fund_request.event.description
           
-    / li
-    /   .collapsible-header.active
-    /     | Approval
-    /     i.material-icons.arrow.left chevron_right
-    /   .collapsible-body
-    /     ul.collection
-    /       li.row.collection-item
-    /         .col.s12.m3.label Approver
-    /         .col.s6.m2.label Approval
-    /         .col.s6.m1.label Date
-    /         .col.s6.m1.label Submitted
-    /         .col.s12.m5.label Notes
-    /       - [@level1_approvals, @budget_approvals].flatten.each do |approval|
-    /         li.row.collection-item
-    /           .col.s12.m3.item = approval.approver.try(:employee).try(:name) || "--"
-    /           .col.s6.m2.item
-    /             - if approval.approve == true
-    /               |Approved
-    /             - elsif approval.approve == false
-    /               |Not approved
-    /             - else
-    /               - if @requisition.is_pending_approval_by current_user.employee
-    /                 = link_to approve_requisition_path(@requisition), class:'btn btn-small'
-    /                   |Approval
-    /                 div style="font-size:0.8em; color: #f5494d" Click to go to approval page
-    /               - else
-    /                 |--
-    /           .col.s6.m1.item = approval.updated_at.strftime("%d %b %Y") if approval.approve.present?
-    /           .col.s6.m1.item = approval.created_at.strftime("%d %b %Y")
-    /           .col.s12.m5.item = approval.notes 
+    li
+      .collapsible-header.active
+        | Approval
+        i.material-icons.arrow.left chevron_right
+      .collapsible-body
+        ul.collection
+          li.row.collection-item
+            .col.s12.m3.label Approver
+            .col.s6.m2.label Approval
+            .col.s6.m1.label Date
+            .col.s6.m1.label Submitted
+            .col.s12.m5.label Notes
+          - [@level1_approvals, @budget_approvals].flatten.each do |approval|
+            li.row.collection-item
+              .col.s12.m3.item = approval.approver.try(:employee).try(:name) || "--"
+              .col.s6.m2.item
+                - if approval.approve == true
+                  |Approved
+                - elsif approval.approve == false
+                  |Not approved
+                - else
+                  - if @fund_request.is_pending_approval_by current_user.employee
+                    = link_to approve_fund_request_path(@fund_request), class:'btn btn-small'
+                      |Approval
+                    div style="font-size:0.8em; color: #f5494d" Click to go to approval page
+                  - else
+                    |--
+              .col.s6.m1.item = approval.updated_at.strftime("%d %b %Y") if approval.approve.present?
+              .col.s6.m1.item = approval.created_at.strftime("%d %b %Y")
+              .col.s12.m5.item = approval.notes 
 
-    / li.comment-section
-    /   .collapsible-header.active
-    /     | Comments (#{@commentable.comments.count})
-    /     i.material-icons.arrow.left chevron_right
-    /     .right
-    /       = link_to "#"
-    /         span.hide-on-small-only Add comment
-    /         i.material-icons.left add
-    /   .collapsible-body
-    /     = render 'comments/comment_widget'
+    li.comment-section
+      .collapsible-header.active
+        | Comments (#{@commentable.comments.count})
+        i.material-icons.arrow.left chevron_right
+        .right
+          = link_to "#"
+            span.hide-on-small-only Add comment
+            i.material-icons.left add
+      .collapsible-body
+        = render 'comments/comment_widget'
 
 javascript:
   $(document).on('ready page:load', function(){

@@ -6,75 +6,9 @@
         ul
           - @fund_request.errors.full_messages.each do |message|
             li = message
-    .row
-      .input-field.col.s2        
-        = f.hidden_field :requester_id, value:@id
-        = f.label 'Date Requested (mm/dd/yyyy)', class: 'active'
-        = f.date_field :date_requested, :value => @fund_request.date_requested ? @fund_request.date_requested : Date.today.strftime('%Y-%m-%d'), class:'show_date',id:'date1'
-      .input-field.col.s2        
-        = f.label 'Date Needed (mm/dd/yyyy)', class: 'active'
-        = f.date_field :date_needed, :value => @fund_request.date_needed ? @fund_request.date_needed : Date.today.strftime('%Y-%m-%d'), class:'show_date',id:'date2'  
-      
-    .row
-      .input-field.col.s2
-          = f.label :requester, class: 'active'
-          = f.hidden_field :requester_id, value: @employee.id
-          = f.hidden_field :department_id, value: @department.id
-          = text_field_tag :requester, @employee.name, disabled: true
-      .input-field.col.s2
-        = f.label 'Total Amount Needed'
-        = f.text_field :amount
-      .input-field.col.s8
-        = f.label :description, class: 'active'
-        = f.text_field :description
-    .row
-      .input-field.col.s2.right-align
-        = f.label :is_cash, 'Cash?', class: 'active'
-        = f.radio_button :is_cash, true, {class: "with-gap"}
-        = f.label :is_cash, "Yes", value: true
-      .input-field.col.s2
-        = f.label :is_cash, class: 'active'
-          span.red-text = "(*required)"
-        = f.radio_button :is_cash, false, {class: "with-gap"}
-        = f.label :is_cash, "No", value: false
-      .col.s2
-        = f.label :bank_account_number, class: 'active'
-        = f.text_field :bank_account_number
-      .col.s2
-        = f.label :transfer_to,'Account Name', class: 'active'
-        = f.text_field :transfer_to
-      .col.s2
-        = f.label :bank_name, class: 'active'
-        = f.text_field :bank_name
-      .col.s2
-        = f.label :bank_city, class: 'active'
-        = f.text_field :bank_city
 
-    .row      
-      / .col.s1       
-      /   = radio_button_tag 'is_budgeted', 'no' ,(@fund_request.is_budgeted.present? ?  false : true), class: 'budget_check'
-      /   = label_tag 'is_budgeted_no', 'No'
-      / .col.s1
-      /   = radio_button_tag 'is_budgeted', 'yes' ,(@fund_request.is_budgeted.present? ? @fund_request.is_budgeted? : false), class: 'budget_check'
-      /   = label_tag 'is_budgeted_yes', 'Yes'
-      .input-field.col.s2.right-align
-        = f.label :is_budgeted, 'Budgeted?', class: 'active'
-        = f.radio_button :is_budgeted, true, {class: "with-gap"}
-        = f.label :is_budgeted, "Yes", value: true
-      .input-field.col.s2
-        = f.label :is_budgeted, class: 'active'
-          span.red-text = "(*required)"
-        = f.radio_button :is_budgeted, false, {class: "with-gap"}
-        = f.label :is_budgeted, "No", value: false
-      
-      .col.s8
-        = f.label :budget_notes
-        = f.text_field :budget_notes
-    .red-text
-      em *
-        Note: If your request is already listed in this year budget, you only need acknowledgement from your supervisor.
-        If it is not, please ask for Head of School approval. For futher information regarding your budget, you may contact your supervisor.
-        Please return the receipt to Finance Staff, no later than 5 working days after receiving the fund.
+    = render 'req_detail', f: f
+
     
   .toolbar.z-depth-1
     button.btn.waves-effect.waves-light type="submit" data-disable=true name="save" Save Draft

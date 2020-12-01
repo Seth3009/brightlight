@@ -27,6 +27,14 @@ class FundRequestsController < ApplicationController
   # GET /fund_requests/1
   # GET /fund_requests/1.json
   def show
+    authorize! :read, @fund_request
+    
+    @level1_approvals = @fund_request.approvals.level(1).where.not(approve: nil).includes(approver: [:employee])
+    if @level1_approvals.blank? 
+      @level1_approvals = @fund_request.approvals.level(1).includes(approver: [:employee])
+    end
+    @budget_approvals = @fund_request.approvals.where(level: [2,3]).includes(approver: [:employee])
+    @commentable = @fund_request
   end
 
   # GET /fund_requests/new
@@ -114,6 +122,50 @@ class FundRequestsController < ApplicationController
         format.json { render json: @fund_request.errors, status: :unprocessable_entity }
         format.js
       end
+    end
+  end
+
+  # GET /requisitions/1/approve
+  def approve
+    authorize! :approve, @fund_request
+    @employee = @fund_request.requester
+    @department = @fund_request.department
+    @accounts = Account.for_department_id(@employee.department_id) rescue []
+    @approvals = @fund_request.approvals.joins(:approver)
+                  .where(approvers: {employee_id: current_user.employee.try(:id)})
+                  .where(approve: nil)
+                  .to_a
+    @approvals.reject! {|a| a.level == 1 if @fund_request.level2? }   # don't show level 1 approval if it's in level 2 already
+  end
+
+  # POST update_approval
+  def update_approval
+    authorize! :approve, @fund_request
+    approvals = @fund_request.approvals
+    respond_to do |format|
+      @fund_request.update(fund_request_params)
+      if @fund_request.level1?
+        @fund_request.supv_approved_date ||= Date.today
+        if approvals.level(1).any? {|a| a.approve == true }
+          @fund_request.l1_approve!
+        elsif approvals.level(1).any? {|a| a.approve == false }
+          @fund_request.reject! 1
+        end
+      elsif @fund_request.level2?
+        if approvals.level(2).any? {|a| a.approve == true }
+          @fund_request.l2_approve!
+        elsif approvals.level(2).any? {|a| a.approve == false }
+          @fund_request.reject! 2
+        end
+      elsif @fund_request.level3?
+        if approvals.level(3).any? {|a| a.approve == true }
+          @fund_request.l3_approve!
+        elsif approvals.level(3).any? {|a| a.approve == false }
+          @fund_request.reject! 3
+        end
+        @fund_request.budget_approved_date ||= Date.today 
+      end
+      format.html { redirect_to @fund_request }
     end
   end
 

@@ -1131,6 +1131,7 @@ ActiveRecord::Schema.define(version: 20201201054721) do
     t.integer  "account_id"
     t.string   "budget_type"
     t.integer  "class_budget_id"
+    t.date     "supv_approved_date"
   end
 
   create_table "grade_levels", force: :cascade do |t|

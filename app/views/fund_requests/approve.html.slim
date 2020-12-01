@@ -1,0 +1,57 @@
+- title 'Fund Request Approval'
+
+h4 Purchase Fund Approval
+
+= form_for @fund_request, url: {action: :update_approval} do |f|
+
+  = render 'req_detail', f: f
+
+  nav
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Approval Action
+  .card-panel
+    .row
+      - @fund_request.approvals.where(approve: true).each do |approval|
+        .input-field.col.s6.m3 
+          = approval.approver.try(:employee).try(:name) || "--"
+        .input-field.col.s6.m2 
+          - if approval.approve == true
+            |Approved
+          - elsif approval.approve == false
+            |Not approved
+          - else
+            i.material-icons.left check_box_outline_blank
+        .input-field.col.s6.m2  
+          = approval.updated_at.strftime("%d %b %Y") if approval.approve.present?
+        .input-field.col.s6.m5 
+          = approval.notes 
+    .row.red.lighten-4
+      = f.fields_for :approvals, @approvals do |ff|
+        .input-field.col.s6.m2
+          = current_user.employee.try(:name)
+          = ff.hidden_field :sign_date, value: Date.today
+        .input-field.col.s6.m1.right-align
+          = ff.label :approve, 'Approve?', class: 'active'
+          = ff.radio_button :approve, true, {class: "with-gap"}
+          = ff.label :approve, "Yes", value: true
+        .input-field.col.s6.m1
+          = ff.radio_button :approve, false, {class: "with-gap"}
+          = ff.label :approve, "No", value: false 
+        .input-field.col.s6.m8
+          = ff.label :notes, "Approval Notes"
+          = ff.text_field :notes
+
+  .toolbar.z-depth-1
+    - unless @fund_request.is_submitted
+      button.btn.waves-effect.waves-light type="submit" name="approve" Submit      
+      - if params[:appvl] == 'supv'
+        = button_tag class:"btn waves-effect waves-light", type: "submit", name:"send", id:"send_budget", value:"budget", disabled: (@button_state ? false : true), data: {disable: true}
+          | Send for Approval
+    - else
+      button.btn type="submit" data-disable=true disabled=true Already submitted
+    = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"
+
+  
+  
+ 

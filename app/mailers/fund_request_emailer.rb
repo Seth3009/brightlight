@@ -1,7 +1,7 @@
 class FundRequestEmailer < ApplicationMailer
   default from: "Brightlight <brightlight@cahayabangsa.org>"
   FINANCE_EMAIL_ADDRESS = Rails.application.config.finance_email_address
-
+  
   def approval(fund_request, approvers)
     @fund_request = fund_request
     @requester = fund_request.requester
