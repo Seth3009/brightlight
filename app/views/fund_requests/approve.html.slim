@@ -13,19 +13,20 @@ h4 Purchase Fund Approval
   .card-panel
     .row
       - @fund_request.approvals.where(approve: true).each do |approval|
-        .input-field.col.s6.m3 
-          = approval.approver.try(:employee).try(:name) || "--"
-        .input-field.col.s6.m2 
-          - if approval.approve == true
-            |Approved
-          - elsif approval.approve == false
-            |Not approved
-          - else
-            i.material-icons.left check_box_outline_blank
-        .input-field.col.s6.m2  
-          = approval.updated_at.strftime("%d %b %Y") if approval.approve.present?
-        .input-field.col.s6.m5 
-          = approval.notes 
+        .row
+          .input-field.col.s6.m3 
+            = approval.approver.try(:employee).try(:name) || "--"
+          .input-field.col.s6.m2 
+            - if approval.approve == true
+              |Approved
+            - elsif approval.approve == false
+              |Not approved
+            - else
+              i.material-icons.left check_box_outline_blank
+          .input-field.col.s6.m2  
+            = approval.updated_at.strftime("%d %b %Y") if approval.approve.present?
+          .input-field.col.s6.m5 
+            = approval.notes 
     .row.red.lighten-4
       = f.fields_for :approvals, @approvals do |ff|
         .input-field.col.s6.m2
@@ -50,7 +51,7 @@ h4 Purchase Fund Approval
           | Send for Approval
     - else
       button.btn type="submit" data-disable=true disabled=true Already submitted
-    = link_to 'Cancel', requisitions_path, class: "waves-effect waves-light btn-flat"
+    = link_to 'Cancel', fund_requests_path, class: "waves-effect waves-light btn-flat"
 
   
   

@@ -1,4 +1,4 @@
-- title 'Purchase Requests'
+- title 'Fund Requests'
 h4 Fund Requests
 
 nav
@@ -17,9 +17,9 @@ nav
 
 ul#show-options.dropdown-content
   li
-    = link_to "Show my approvals", requisitions_path(my: 'action') 
+    = link_to "Show my approvals", fund_requests_path(my: 'action') 
   li
-    = link_to "Show my Requests", requisitions_path(my: 'list') 
+    = link_to "Show my Requests", fund_requests_path(my: 'list') 
 
 ul.tabs.z-depth-1
   li.tab.col.s3
@@ -33,7 +33,7 @@ ul.tabs.z-depth-1
     a href='#tab3' Draft
   li.tab.col.s3
     a href='#tab4' Rejected
-  - if can? :view_unbudgeted, Requisition
+  - if can? :view_unbudgeted, FundRequest
     li.tab.col.s3
       a href='#tab5' Non budgeted
 
@@ -41,7 +41,19 @@ ul.tabs.z-depth-1
 .card-panel.compact
   #tab1.tab-content
     == render partial: 'fund_table', locals: { fund_requests: @pending_approval }
+  
+  #tab2.tab-content
+    == render partial: 'fund_table', locals: { fund_requests: @approved_fund_requests }
 
+  #tab3.tab-content
+    == render partial: 'fund_table', locals: { fund_requests: @draft_fund_requests }
+      
+  #tab4.tab-content
+    == render partial: 'fund_table', locals: { fund_requests: @rejected_fund_requests }
+  
+  - if can? :view_unbudgeted, FundRequest
+    #tab5.tab-content
+      == render partial: 'fund_table', locals: { fund_requests: @non_budgeted }
 
 
 #show-modal.modal.modal-fixed-footer

@@ -11,17 +11,17 @@ class FundRequestsController < ApplicationController
     @i_am_approver = approver_list.present?
     params[:my] = "action" if params[:my].blank? && @i_am_approver
     if params[:my] == "action"
-      # @approved_requisitions = Requisition.approved.with_approval_by(@employee).order(id: :desc)
+      @approved_fund_requests = FundRequest.approved.with_approval_by(@employee).order(id: :desc)
       @pending_approval = FundRequest.pending_approval.with_approval_by(@employee).order(id: :desc)
-      # @draft_requisitions = Requisition.draft.with_approval_by(@employee).order(id: :desc)
-      # @rejected_requisitions = Requisition.rejected.with_approval_by(@employee).order(id: :desc)
+      @draft_fund_requests = FundRequest.draft.with_approval_by(@employee).order(id: :desc)
+      @rejected_fund_requests = FundRequest.rejected.with_approval_by(@employee).order(id: :desc)
     elsif params[:my] == "list" || params[:my].blank?
-      # @approved_requisitions = Requisition.approved.where(requester_id: @employee.id).order(id: :desc)
+      @approved_fund_requests = FundRequest.approved.where(requester_id: @employee.id).order(id: :desc)
       @pending_approval = FundRequest.pending_approval.where(requester_id: @employee.id).order(id: :desc)
-      # @draft_requisitions = Requisition.draft.where(requester_id: @employee.id).order(id: :desc)
-      # @rejected_requisitions = Requisition.rejected.where(requester_id: @employee.id).order(id: :desc)
+      @draft_fund_requests = FundRequest.draft.where(requester_id: @employee.id).order(id: :desc)
+      @rejected_fund_requests = FundRequest.rejected.where(requester_id: @employee.id).order(id: :desc)
     end
-    # @non_budgeted = FundRequest.approved.where(is_budgeted: false).order(id: :desc)
+    @non_budgeted = FundRequest.approved.where(is_budgeted: false).order(id: :desc)
   end
 
   # GET /fund_requests/1

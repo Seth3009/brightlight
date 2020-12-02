@@ -12,7 +12,7 @@ class FundRequestEmailer < ApplicationMailer
 
   def not_approved(fund_request, level:)
     @fund_request = fund_request
-    @requester = requisition.requester
+    @requester = fund_request.requester
     requester_email = %("#{@requester.name}" <#{@requester.email}>)
     approvers = @fund_request.approvals.level(level)
     approvers_emails = approvers.map { |approval| %("#{approval.approver.employee.name}" <#{approval.approver.employee.email}>) }

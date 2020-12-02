@@ -6,12 +6,13 @@ class FundRequest < ActiveRecord::Base
   belongs_to :supervisor, class_name: 'Employee'
   belongs_to :req_approver, class_name: 'Employee'
   belongs_to :budget_approver, class_name: 'Employee'
-  belongs_to :created_by, class_name: 'User'
-  belongs_to :last_updated_by, class_name: 'User'
-  belongs_to :event
+  belongs_to :purch_receiver, class_name: 'Employee'
   belongs_to :budget
   belongs_to :account
   belongs_to :budget_item
+  belongs_to :created_by, class_name: 'User'
+  belongs_to :last_updated_by, class_name: 'User'
+  belongs_to :event
 
   has_many :approvals, as: :approvable
   has_many :approvers, through: :approvals
@@ -39,7 +40,10 @@ class FundRequest < ActiveRecord::Base
     .uniq
   }
   
-  
+  scope :pending_supv_approval, lambda { |employee|
+    with_approval_by(employee)
+    .where('approvals.approve is null')
+  }
 
 
 
@@ -59,8 +63,7 @@ class FundRequest < ActiveRecord::Base
     state :open, :canceled, :closed 
 
     event :submit do
-      transitions from: :draft, to: :level1
-      
+      transitions from: :draft, to: :level1      
       transitions from: :draft, to: :approval_for_event, if: :event?
       after do
         if event?
@@ -97,7 +100,7 @@ class FundRequest < ActiveRecord::Base
       after do
         set_inactive level: 2
         if is_budgeted
-          notify_purchasing 
+          notify_finance
         else
           set_approvals level: 3
           notify_approvers level: 3
@@ -109,7 +112,7 @@ class FundRequest < ActiveRecord::Base
       transitions from: :level3, to: :approved
       after do
         set_inactive level: 3
-        notify_purchasing if l3_approved?
+        notify_finance if l3_approved?
       end
     end
 
