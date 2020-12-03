@@ -20,7 +20,9 @@ class FundRequest < ActiveRecord::Base
 
   validates :department, presence: true
   validates :requester, presence: true
+  validates :amount, presence: true
   validates :description, presence: true
+  validates_inclusion_of :is_cash, in: [true, false], message: 'is required. Please indicate whether the request is cash or transfer'
   validates_inclusion_of :is_budgeted, in: [true, false], message: 'is required. Please indicate whether the request is budgeted or not'
 
   acts_as_commentable

@@ -24,29 +24,34 @@ ul#show-options.dropdown-content
 ul.tabs.z-depth-1
   li.tab.col.s3
     a.active href='#tab1' 
+      |Draft      
+      - if @draft_fund_requests.count > 0
+        span.emblem = @draft_fund_requests.count
+  li.tab.col.s3
+    a href='#tab2' 
       |Pending
       - if @pending_approval.count > 0
         span.emblem = @pending_approval.count
   li.tab.col.s3
-    a href='#tab2' Approved
-  li.tab.col.s3
-    a href='#tab3' Draft
+    a href='#tab3' Approved
   li.tab.col.s3
     a href='#tab4' Rejected
   - if can? :view_unbudgeted, FundRequest
     li.tab.col.s3
       a href='#tab5' Non budgeted
+  li.tab.col.s3 style="background-color:#A7FAA3;"
+    a href='#tab6' Delivered
 
 
 .card-panel.compact
   #tab1.tab-content
-    == render partial: 'fund_table', locals: { fund_requests: @pending_approval }
+    == render partial: 'fund_table', locals: { fund_requests: @draft_fund_requests }
   
   #tab2.tab-content
-    == render partial: 'fund_table', locals: { fund_requests: @approved_fund_requests }
+    == render partial: 'fund_table', locals: { fund_requests: @pending_approval }
 
   #tab3.tab-content
-    == render partial: 'fund_table', locals: { fund_requests: @draft_fund_requests }
+    == render partial: 'fund_table', locals: { fund_requests: @approved_fund_requests }
       
   #tab4.tab-content
     == render partial: 'fund_table', locals: { fund_requests: @rejected_fund_requests }

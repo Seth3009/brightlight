@@ -51,14 +51,13 @@
     /   = label_tag 'is_budgeted_yes', 'Yes'
     .col.s2
       = f.label :is_budgeted, 'Budgeted?', class: 'active'
+    .col.s1
+      = f.radio_button :is_budgeted, true, {class: "with-gap"}
+      = f.label :is_budgeted, "Yes", value: true
     .col.s1        
       = f.radio_button :is_budgeted, false, {class: "with-gap"}
       = f.label :is_budgeted, "No", value: false
-    .col.s1
-      / = f.label :is_budgeted, class: 'active'
-      /   span.red-text = "(*required)"
-      = f.radio_button :is_budgeted, true, {class: "with-gap"}
-      = f.label :is_budgeted, "Yes", value: true
+    
       
     .col.s12.m4
         = f.label 'Budget Account', class: 'active'
