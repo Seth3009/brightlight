@@ -59,7 +59,8 @@ ul.tabs.z-depth-1
   - if can? :view_unbudgeted, FundRequest
     #tab5.tab-content
       == render partial: 'fund_table', locals: { fund_requests: @non_budgeted }
-
+  #tab6.tab-content
+    == render partial: 'fund_delivered_table', locals: { fund_requests: @delivered_fund_requests }
 
 #show-modal.modal.modal-fixed-footer
   .modal-content

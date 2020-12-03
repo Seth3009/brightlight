@@ -42,13 +42,7 @@
       = f.label :bank_city, class: 'active'
       = f.text_field :bank_city
 
-  .row      
-    / .col.s1       
-    /   = radio_button_tag 'is_budgeted', 'no' ,(@fund_request.is_budgeted.present? ?  false : true), class: 'budget_check'
-    /   = label_tag 'is_budgeted_no', 'No'
-    / .col.s1
-    /   = radio_button_tag 'is_budgeted', 'yes' ,(@fund_request.is_budgeted.present? ? @fund_request.is_budgeted? : false), class: 'budget_check'
-    /   = label_tag 'is_budgeted_yes', 'Yes'
+  .row         
     .col.s2
       = f.label :is_budgeted, 'Budgeted?', class: 'active'
     .col.s1
@@ -57,6 +51,7 @@
     .col.s1        
       = f.radio_button :is_budgeted, false, {class: "with-gap"}
       = f.label :is_budgeted, "No", value: false
+  
     
       
     .col.s12.m4

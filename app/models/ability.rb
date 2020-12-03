@@ -170,6 +170,10 @@ class Ability
     can :manage, PurchaseReceive
   end
 
+  def finance
+    can [:update,:process], FundRequest
+  end
+
   def buyer
   end
 

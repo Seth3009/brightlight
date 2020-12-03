@@ -3,6 +3,7 @@ class FundRequest < ActiveRecord::Base
 
   belongs_to :department
   belongs_to :requester, class_name: 'Employee'
+  belongs_to :receiver, class_name: 'Employee'
   belongs_to :supervisor, class_name: 'Employee'
   belongs_to :req_approver, class_name: 'Employee'
   belongs_to :budget_approver, class_name: 'Employee'
@@ -54,6 +55,7 @@ class FundRequest < ActiveRecord::Base
   scope :approved, lambda { where("aasm_state = 'approved' OR aasm_state = 'open' OR aasm_state ='overdue'") }
   scope :draft, lambda { where(aasm_state: 'draft') }
   scope :rejected, lambda { where(aasm_state: 'rejected') }
+  scope :delivered, lambda { where(is_transfered: true) }
   scope :active, lambda { where(active: true) }
   scope :for_dept, lambda { |dept_id| where(department_id: dept_id) }
 
@@ -163,6 +165,8 @@ class FundRequest < ActiveRecord::Base
   def budgeted?
     self.is_budgeted
   end
+
+
 
   def skip_l2_approval?
     Approver.where(department: self.department, category: 'FR', level:2).blank?

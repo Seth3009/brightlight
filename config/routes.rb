@@ -358,6 +358,8 @@ Rails.application.routes.draw do
       patch 'update_approval'
       get 'edit_account'
       patch 'update_account'
+      get 'deliver'
+      patch 'deliver_fund'
       get 'submit'
     end
   end 

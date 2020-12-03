@@ -1,5 +1,5 @@
 class FundRequestsController < ApplicationController
-  before_action :set_fund_request, only: [:show, :edit, :submit, :update, :update_approval, :destroy, :approve]
+  before_action :set_fund_request, only: [:show, :edit, :submit, :update, :update_approval, :destroy, :approve, :deliver, :deliver_fund]
   # before_action :set_fund_request, only: [:show, :edit, :update, :destroy]
 
   # GET /fund_requests
@@ -20,6 +20,7 @@ class FundRequestsController < ApplicationController
       @pending_approval = FundRequest.pending_approval.where(requester_id: @employee.id).order(id: :desc)
       @draft_fund_requests = FundRequest.draft.where(requester_id: @employee.id).order(id: :desc)
       @rejected_fund_requests = FundRequest.rejected.where(requester_id: @employee.id).order(id: :desc)
+      @delivered_fund_requests = FundRequest.delivered.where(requester_id: @employee.id).order(id: :desc)
     end
     @non_budgeted = FundRequest.approved.where(is_budgeted: false).order(id: :desc)
   end
@@ -169,6 +170,35 @@ class FundRequestsController < ApplicationController
     end
   end
 
+  # GET /fund_request/1/deliver
+  def deliver
+    authorize! :update, @fund_request
+    @employee = @fund_request.requester
+    @department = @fund_request.department
+    @accounts = Account.for_department_id(@employee.department_id) rescue []
+    
+  end
+
+  def deliver_fund
+    authorize! :update, @fund_request
+    respond_to do |format|
+      if @fund_request.update(fund_request_params)
+        format.html { redirect_to @fund_request, notice: "Fund request delivered successfully"}
+      else
+        @error = 'Error updating fund request.'
+        format.html do 
+          @employee = @fund_request.requester || current_user.employee
+          @department = @fund_request.department || @employee.department
+          @accounts = Account.for_department_id(@employee.department_id) rescue []
+          @supervisors = Employee.supervisors.all
+          render :edit 
+        end
+        format.json { render json: @fund_request.errors, status: :unprocessable_entity }
+        format.js
+      end
+    end
+  end
+
   # DELETE /fund_requests/1
   # DELETE /fund_requests/1.json
   def destroy
@@ -191,6 +221,7 @@ class FundRequestsController < ApplicationController
                                           :is_budgeted, :budget_notes, :is_spv_approved, :spv_approval_notes, :spv_approval_date, :is_hos_approved, :hos_approval_notes, :hos_approval_date, 
                                           :receiver_id, :received_date, :is_transfered, :is_submitted, :is_fin_canceled, :is_employee_canceled, 
                                           :account_id, :budget_type, :class_budget_id, :sent_for_bgt_approval, :sent_to_supv, :req_approver_id, :supervisor_id, :budget_approver_id, :department_id, :created_by, :last_updated_by,
+                                          :budget_type, :class_budget_id, :supv_approved_date, :budget_approved_date, :total_expense,
                                           {comments_attributes: [:id, :title, :comment, :user_id, :commentable_id, :commentable_type, :role]},
                                           {approvals_attributes: [:id, :level, :approver_id, :approve, :sign_date, :notes]}
                                           )
