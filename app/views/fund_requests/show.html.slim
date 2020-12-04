@@ -11,10 +11,11 @@ nav
 
     ul.right
       - if (can? :update, @fund_request) and signed_in? and (current_user.admin? or current_user.finance?)
-        li
-          = link_to deliver_fund_request_path
-            span.hide-on-small-only Deliver
-            i.material-icons.left attach_money
+        - if @fund_request.aasm_state == 'approved' && @fund_request.is_transfered != true
+          li
+            = link_to deliver_fund_request_path
+              span.hide-on-small-only Deliver
+              i.material-icons.left attach_money
       li
         = link_to new_fund_request_path
           span.hide-on-small-only New
@@ -74,16 +75,16 @@ nav
                 |No
             .col.s6.m2
               .label Transfer To
-              .item = @fund_request.transfer_to            
+              .item = @fund_request.transfer_to || "--"           
             .col.s6.m2
               .label Account Number
-              .item = @fund_request.bank_account_number
+              .item = @fund_request.bank_account_number || "--"   
             .col.s6.m2
               .label Bank
-              .item = @fund_request.bank_name
+              .item = @fund_request.bank_name || "--"   
             .col.s6.m2
               .label Bank City
-              .item = @fund_request.bank_city
+              .item = @fund_request.bank_city || "--"   
             
           li.row.collection-item
             .col.s6.m2

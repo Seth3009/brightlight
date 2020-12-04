@@ -52,10 +52,11 @@ class FundRequest < ActiveRecord::Base
 
   # ====================================== aasm and verification ============
   scope :pending_approval, lambda { where(aasm_state: ['level1', 'level2', 'level3']) }
-  scope :approved, lambda { where("aasm_state = 'approved' OR aasm_state = 'open' OR aasm_state ='overdue'") }
+  scope :approved, lambda { where("aasm_state = 'approved' OR aasm_state = 'open' OR aasm_state ='overdue'")}
   scope :draft, lambda { where(aasm_state: 'draft') }
   scope :rejected, lambda { where(aasm_state: 'rejected') }
   scope :delivered, lambda { where(is_transfered: true) }
+  scope :not_delivered, lambda { where(is_transfered: nil) }
   scope :active, lambda { where(active: true) }
   scope :for_dept, lambda { |dept_id| where(department_id: dept_id) }
 

@@ -8,21 +8,27 @@ class FundRequestsController < ApplicationController
     authorize! :read, Requisition
     @employee = current_user.employee
     approver_list = Approver.for_fund_requests.where(employee: @employee)
+    @i_am_finance = current_user.finance?
     @i_am_approver = approver_list.present?
     params[:my] = "action" if params[:my].blank? && @i_am_approver
     if params[:my] == "action"
-      @approved_fund_requests = FundRequest.approved.with_approval_by(@employee).order(id: :desc)
+      @approved_fund_requests = FundRequest.approved.not_delivered.with_approval_by(@employee).order(id: :desc)
       @pending_approval = FundRequest.pending_approval.with_approval_by(@employee).order(id: :desc)
       @draft_fund_requests = FundRequest.draft.with_approval_by(@employee).order(id: :desc)
       @rejected_fund_requests = FundRequest.rejected.with_approval_by(@employee).order(id: :desc)
+      @delivered_fund_requests = FundRequest.delivered.with_approval_by(@employee).order(id: :desc)
     elsif params[:my] == "list" || params[:my].blank?
-      @approved_fund_requests = FundRequest.approved.where(requester_id: @employee.id).order(id: :desc)
+      @approved_fund_requests = FundRequest.approved.not_delivered.where(requester_id: @employee.id).order(id: :desc)
       @pending_approval = FundRequest.pending_approval.where(requester_id: @employee.id).order(id: :desc)
       @draft_fund_requests = FundRequest.draft.where(requester_id: @employee.id).order(id: :desc)
       @rejected_fund_requests = FundRequest.rejected.where(requester_id: @employee.id).order(id: :desc)
       @delivered_fund_requests = FundRequest.delivered.where(requester_id: @employee.id).order(id: :desc)
     end
-    @non_budgeted = FundRequest.approved.where(is_budgeted: false).order(id: :desc)
+    if @i_am_finance
+      @approved_fund_requests = FundRequest.approved.not_delivered.order(id: :desc)
+      @delivered_fund_requests = FundRequest.delivered.order(id: :desc)
+    end
+    # @non_budgeted = FundRequest.approved.where(is_budgeted: false).order(id: :desc)
   end
 
   # GET /fund_requests/1
@@ -91,7 +97,7 @@ class FundRequestsController < ApplicationController
 
   # GET /requisition/1/submit
   def submit
-    authorize! :update, @requisition
+    authorize! :update, @fund_request
     @fund_request.submit!
     redirect_to @fund_request, notice: 'Fund request has been saved and sent for approval.' 
   end

@@ -7,8 +7,9 @@
           th Date needed
           th Description
           th Amount
+          th Total Expense 
           th Payment type
-          th Total Expense        
+          th Budgeted?
           th.center Actions
 
       tbody
@@ -18,6 +19,7 @@
             td = fund_request.date_needed
             td = fund_request.description
             td = fund_request.amount
+            td = fund_request.total_expense || "--" 
             td.center              
               - if fund_request.is_cash == true
                 p.boks style="background-color:green;"
@@ -25,7 +27,14 @@
               - else
                 p.boks style="background-color:yellow;"
                   | Transfer
-            td = fund_request.total_expense || "--"             
+            td.center              
+              - if fund_request.is_budgeted == true
+                p.boks style="background-color:green;"
+                  | Yes
+              - else
+                p.boks style="background-color:red; color:white"
+                  | No
+                        
               
                 
             / td = fund_request.is_transfered

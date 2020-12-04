@@ -119,7 +119,8 @@ class Ability
     end
     can [:create,:read,:update], Event, creator: @user.employee
     can_manage_own_leave_request
-    can_manage_own_requisition    
+    can_manage_own_requisition  
+    can_manage_own_fund_request  
   end
 
   def staff
@@ -136,7 +137,8 @@ class Ability
       pr.purchase_order.requestor == @user.employee
     end
     can_manage_own_leave_request
-    can_manage_own_requisition    
+    can_manage_own_requisition 
+    can_manage_own_fund_request   
   end
 
   def hrd
@@ -179,6 +181,7 @@ class Ability
 
   def approve_budget
     can :approve_budget, Requisition
+    can :approve_budget, FundRequest
   end
   
   def administrative
