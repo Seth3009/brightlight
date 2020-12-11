@@ -8,18 +8,40 @@ class EmployeesController < ApplicationController
     authorize! :read, Employee
     respond_to do |format|
       format.html {
+        @active_variable = {'All' => 'all', 'Active Only' => 'ao', 'Inactive Only' => 'io'}
         items_per_page = 20
-        @employees = Employee
-            .joins('LEFT JOIN departments ON departments.id = employees.department_id')
-            .where(is_active: true)
-            .select('employees.*, departments.name as department')
-            .order("#{sort_column} #{sort_direction}")
-            .order('name')
-            .includes(:department, :badge)
-            .paginate(page: params[:page], per_page: items_per_page)
+        if (params[:vari].present? && params[:vari] == 'ao')
+          @employees = Employee
+              .joins('LEFT JOIN departments ON departments.id = employees.department_id') 
+              .where(is_active: true)             
+              .select('employees.*, departments.name as department')
+              .order("#{sort_column} #{sort_direction}")
+              .order('name')
+              .includes(:department, :badge)
+              .paginate(page: params[:page], per_page: items_per_page)
+        elsif (params[:vari].present? && params[:vari] == 'io')
+          @employees = Employee
+              .joins('LEFT JOIN departments ON departments.id = employees.department_id') 
+              .where(is_active: false)             
+              .select('employees.*, departments.name as department')
+              .order("#{sort_column} #{sort_direction}")
+              .order('name')
+              .includes(:department, :badge)
+              .paginate(page: params[:page], per_page: items_per_page)
+        else
+          @employees = Employee
+              .joins('LEFT JOIN departments ON departments.id = employees.department_id')              
+              .select('employees.*, departments.name as department')
+              .order("#{sort_column} #{sort_direction}")
+              .order('name')
+              .includes(:department, :badge)
+              .paginate(page: params[:page], per_page: items_per_page)
+        end
+              
         if params[:search]
           @employees = @employees.where('UPPER(employees.name) LIKE ?', "%#{params[:search].upcase}%")       
         end
+        
       }
       format.csv {
         @employees = Employee.all.where(is_active: true)
