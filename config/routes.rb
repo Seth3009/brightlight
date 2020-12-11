@@ -349,6 +349,21 @@ Rails.application.routes.draw do
     end
   end 
 
+  resources :fund_requests do
+    collection do
+      get 'list'
+    end
+    member do
+      get 'approve'
+      patch 'update_approval'
+      get 'edit_account'
+      patch 'update_account'
+      get 'deliver'
+      patch 'deliver_fund'
+      get 'submit'
+    end
+  end 
+
   resources :budgets do
     collection do
       post 'import'

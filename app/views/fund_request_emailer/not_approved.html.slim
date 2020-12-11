@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    = stylesheet_link_tag "application", media: "all", 'data-turbolinks-track' => true
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    
+  body
+    div style="margin-left:30px; width=85%; font-size:16px"      
+      p Dear #{@requester.name},
+
+      p The following purchase request no. #{@fund_request.id} has been rejected.  
+
+      = link_to "Purchase Request No. #{@fund_request.id}", @fund_request, style:"text-decoration:underline"
+
+      = render 'footer'

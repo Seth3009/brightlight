@@ -13,7 +13,7 @@
         = f.collection_select :employee_id, Employee.active.order(:name), :id, :name, prompt: true 
       .input-field.col.s2
         = f.label :category, class: 'active'
-        = f.select :category, options_for_select([['Leave Request', 'LR'],['Purchase Request','PR'], ['Event', 'EV']], f.object.category)
+        = f.select :category, options_for_select([['Leave Request', 'LR'],['Purchase Request','PR'], ['Fund Request', 'FR'], ['Event', 'EV']], f.object.category)
       .input-field.col.s2
         = f.label :department_id, class: 'active'
         = f.collection_select :department_id, Department.order(:name), :id, :name, prompt: true

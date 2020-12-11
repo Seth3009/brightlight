@@ -1,0 +1,33 @@
+doctype html
+html
+  head
+    = stylesheet_link_tag "email", media: "all", 'data-turbolinks-track' => true
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+
+  body
+    div style="margin-left:30px; width=85%; font-size:16px"
+      p The following fund request has been approved and submitted to Finance.
+
+      table.description-list
+        tbody
+          tr
+            td Requester
+            td 
+              strong = @fund_request.requester.try(:name)
+          tr 
+            td Req no
+            td 
+              strong = @fund_request.id
+          tr 
+            td Description
+            td = @fund_request.description
+          tr 
+            td Required Date
+            td = @fund_request.date_needed
+
+      p You can access the fund request from the following link.
+      p = link_to "Fund Request No. #{@fund_request.id}", @fund_request, style:"text-decoration:underline"
+
+      p Thank you for using <i>Brightlight</i>. 
+    
+    = render 'footer' 

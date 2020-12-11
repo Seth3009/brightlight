@@ -16,6 +16,7 @@ class Approver < ActiveRecord::Base
   }
   scope :for_leave_requests, -> { where(category: 'LR') }
   scope :for_purchase_requests, -> { where(category: 'PR') }
+  scope :for_fund_requests, -> { where(category: 'FR') }
   scope :for_events, -> { where(category: 'EV') }
   scope :level, -> (lvl) { where(level: lvl) }
   scope :for_department, -> (dept) { where(department: dept) }

@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
 
   # For authorization
   # Do not change the order! If you add an item, add at the end of the list.
-  ROLES = %i[admin manager student teacher staff employee inventory carpool librarian hrd purchasing buyer approve_budget administrative food_and_beverage public_relations] 
+  ROLES = %i[admin manager student teacher staff employee inventory carpool librarian hrd purchasing buyer approve_budget administrative food_and_beverage public_relations finance] 
 
   def self.all_roles
     ROLES
@@ -99,6 +99,10 @@ class User < ActiveRecord::Base
 
   def carpool?
     self.has_role? :carpool
+  end
+
+  def finance?
+    self.has_role? :finance
   end
 
   # For API authentication

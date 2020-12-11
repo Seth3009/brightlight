@@ -1,0 +1,44 @@
+= form_for @fund_request do |f|
+  .card-panel
+    - if @fund_request.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@fund_request.errors.count, "error")} prohibited this fund_request from being saved:"
+        ul
+          - @fund_request.errors.full_messages.each do |message|
+            li = message
+
+    = render 'req_detail', f: f
+
+    
+  .toolbar.z-depth-1
+    button.btn.waves-effect.waves-light type="submit" data-disable=true name="save" Save Draft
+    - if @fund_request.draft?
+      button.btn.waves-effect.waves-light type="submit" data-disable=true name="submit" Submit
+    = link_to 'Cancel', fund_requests_path, class: "waves-effect waves-light btn-flat"
+
+
+    / .field
+    /   = f.label :is_spv_approved
+    /   = f.check_box :is_spv_approved
+    / .field
+    /   = f.label :spv_approval_notes
+    /   = f.text_field :spv_approval_notes
+    / .field
+    /   = f.label :spv_approval_date
+    /   = f.date_select :spv_approval_date
+    / .field
+    /   = f.label :is_hos_approved
+    /   = f.check_box :is_hos_approved
+    / .field
+    /   = f.label :hos_approval_notes
+    /   = f.text_field :hos_approval_notes
+    / .field
+    /   = f.label :hos_approval_date
+    /   = f.date_select :hos_approval_date
+    / .field
+    /   = f.label :receiver_id
+    /   = f.number_field :receiver_id
+    / .field
+    /   = f.label :received_date
+    /   = f.date_select :received_date
+    

@@ -26,6 +26,19 @@ class EmailNotification < ActionMailer::Base
     mail(to: %("#{@requester.name}" <#{@requester.email}>), subject: "Your purchase request (#{requisition.id}) has been processed.")
   end
 
+  def fund_request_approval(fund_request, approver, type)
+    @approver = approver
+    @fund_request = fund_request
+    @type = type
+    mail(to: %("#{@approver.name}" <#{@approver.email}>), subject: "Approval required: Fund Request #{fund_request.id}.")
+  end 
+
+  def fund_request_to_finance(requisition, addressee)
+    @fund_request = fund_request
+    @addressee = addressee
+    mail(to: addressee, subject: "New Fund Request #{fund_request.id}.")
+  end 
+
   def leave_approval(leave_request, supervisor,vice_supervisor,hrmanager,hrvicemanager, sendto)
     @supervisor = Employee.find_by_id(supervisor)
     @vice_supervisor = Employee.find_by_id(vice_supervisor)
