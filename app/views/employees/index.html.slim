@@ -1,6 +1,12 @@
 .row
   .col.s6
-    h4 Employees
+    - if (params[:vari].present? && params[:vari] == 'ao')
+      h4 Employees (Active)
+    - elsif (params[:vari].present? && params[:vari] == 'io')
+      h4 Employees (Inactive)
+    -else
+      h4 All Employees
+      
   .col.s5
     = form_tag({controller:'employees', action:'index'}, {method:'get'}) do
       .input-field
@@ -16,8 +22,19 @@
         window.location="#{employees_path(v:'list')}"
       }
 
+ul#vari-options.dropdown-content
+  li  
+    - @active_variable.each do |key, value|
+      li 
+        = link_to key, employees_path(params.merge(vari:value).symbolize_keys)
 nav
   .nav-wrapper
+    ul
+      li
+        a.dropdown-button href="#!" data-activates="vari-options"
+          span#year Choose View
+          i.material-icons.right arrow_drop_down
+    
     ul.right
       li
         - if can? :manage, Employee
@@ -51,6 +68,7 @@ nav
               - if can? :manage, Badge
                 = link_to_delete_badge employee.badge, class:'red-text'
                   i.material-icons.left delete
+          
           - if can? :manage, Employee
             td.actions
               = link_to employee
@@ -64,3 +82,5 @@ nav
   = will_paginate @employees
 
 #scan-modal.modal.modal-fixed-footer
+
+
