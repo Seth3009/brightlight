@@ -42,16 +42,20 @@ ul#grade-options.dropdown-content
 
     tbody
       - @diknas_converteds.each do |diknas_converted|
-        tr
-          td = diknas_converted.student.name
-          td = diknas_converted.academic_term.name
-          td = diknas_converted.grade_level.name
-          td 
-            - grade_section_id = GradeSectionsStudent.where(academic_year: diknas_converted.academic_year_id, student_id: diknas_converted.student_id).take.grade_section_id
-            = link_to converted_reports_path(view:'rapor', s: grade_section_id, st: diknas_converted.student_id, year: diknas_converted.academic_year_id, term: diknas_converted.academic_term_id)
-              i.material-icons.left import_contacts
-          td
-            = link_to diknas_converted
-              i.material-icons visibility
+        - grade_section_id = GradeSectionsStudent.where(academic_year: diknas_converted.academic_year_id, student_id: diknas_converted.student_id)
+        - if grade_section_id.present?
+          tr
+            td = diknas_converted.student.name
+            td = diknas_converted.academic_term.name
+            td = diknas_converted.grade_level.name
+            
+            - if grade_section_id.present?
+              td 
+                  - gs_id = grade_section_id.take.grade_section_id
+                  = link_to converted_reports_path(view:'rapor', s: gs_id, st: diknas_converted.student_id, year: diknas_converted.academic_year_id, term: diknas_converted.academic_term_id)
+                    i.material-icons.left import_contacts
+              td
+                = link_to diknas_converted
+                  i.material-icons visibility
 .toolbar.z-depth-1
   = will_paginate @diknas_converteds
