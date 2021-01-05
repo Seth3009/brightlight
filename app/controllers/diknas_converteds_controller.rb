@@ -7,7 +7,8 @@ class DiknasConvertedsController < ApplicationController
     authorize! :read, DiknasConverted    
     respond_to do |format|
       format.html { 
-        @diknas_converteds = DiknasConverted.all
+        @diknas_converteds = DiknasConverted.joins('left join students on students.id = diknas_converteds.student_id')
+          .order('students.name').all          
           .paginate(page: params[:page], per_page: 30)
 
         if params[:term].present?
@@ -18,7 +19,7 @@ class DiknasConvertedsController < ApplicationController
           @diknas_converteds = @diknas_converteds.where(grade_level_id: params[:grade])
           @grade_level = GradeLevel.find params[:grade]
         end
-
+        
       }
     end
   end
