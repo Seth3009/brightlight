@@ -12,7 +12,7 @@ tr
   td 3.
   td Tempat ,Tanggal Lahir
   td &#58;
-  td = @student.place_of_birth.titlecase + ", " + @student.date_of_birth.try(:strftime,"%d %B %Y").to_s
+  td = @student.place_of_birth.titlecase + ", " + (@student.date_of_birth.present? ? @student.date_of_birth.day.to_s + " " + @bulan[@student.date_of_birth.month.to_i-1].to_s + " " + @student.date_of_birth.year.to_s : "-")
 tr
   td 4.
   td Jenis Kelamin

@@ -135,6 +135,7 @@ class DiknasConvertedsController < ApplicationController
     if params[:st].present?
       # A student is selected, here we load only the specified student
       @student = Student.find params[:st]
+      @bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"]
       @religion = ['Protestant','Catholic','Buddhist','Hindu','Islam']
       @agama = ['Kristen','Katolik','Budha','Hindu','Islam']
       @tanggal_masuk = @student.accepted_date.present? ? (@student.accepted_date.day.to_s + " " +bulan[@student.accepted_date.month.to_i-1].to_s + " " + @student.accepted_date.year.to_s) : "-"
