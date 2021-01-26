@@ -125,13 +125,16 @@ class DiknasConvertedsController < ApplicationController
     @academic_year = AcademicYear.find @year_id
     @term_ids = AcademicTerm.where(academic_year_id:@year_id) if @year_id.present?
     @aspek = ["Kedisiplinan","Kebersihan","Kesehatan","Tanggung Jawab", "Sopan Santun", "Percaya Diri","Kompetitif","Hubungan Sosial","Kejujuran","Pelaksanaan Ibadah Ritual"]
-    if params[:s].present?
+    if params[:s].present? 
       @grade_section = GradeSection.find(params[:s])
       @grade_level = @grade_section.grade_level
-      @all_students = @grade_section.students_for_academic_year(@year_id)            
+      @all_students = @grade_section.students_for_academic_year(@year_id) 
+      
     end
-    
+
     @term = AcademicTerm.find params[:term] if params[:term].present?
+
+   
 
     if params[:st].present?
       # A student is selected, here we load only the specified student
@@ -158,6 +161,13 @@ class DiknasConvertedsController < ApplicationController
       @next_in_list = @all_students.where(order_no: @student_list.take.try(:order_no) + 1).take
       gss = @student_list.take
       @grade_section = gss.try(:grade_section)
+      # @homeroom = @grade_section
+      if params[:s].present? && @year_id.to_i != AcademicYear.current_id
+        @homeroom = GradeSectionHistory.where('academic_year_id = ? and grade_section_id = ?',@year_id, params[:s]).first
+      else
+        @homeroom = @grade_section
+      end
+
       @roster_no = gss.order_no      
       @diknas = DiknasConvertedItem.where(diknas_converteds:{academic_year_id:@year_id,student_id:params[:st],academic_term_id:params[:term]}).all
               .joins('left join diknas_conversions on diknas_conversions.id = diknas_converted_items.diknas_conversion_id')
