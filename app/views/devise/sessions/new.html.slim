@@ -7,6 +7,12 @@
 			.row.center.zero-margin				
 				.input-field.col.s12
 					= link_to "Sign in with Google", user_omniauth_authorize_path(:google_oauth2), class:'btn blue waves-effect waves-light col s12'
+				.input-field.col.s12
+					a.btn.green.waves-effect.waves-light.col.s12 href="https://docs.google.com/forms/d/e/1FAIpQLSfmPsKShUEuBmRGo55NIb_dyHHCsok04AYi4MRmF7-QVqboww/viewform" target="_blank"
+						| eHAC filling form
+						 	
+				
+					
 		
 		= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: 'login-form'}) do |f|
 	
@@ -37,4 +43,3 @@
 					= link_to 'Sign up', new_user_registration_path
 				.input-field.col.s8.m8.l8.right-align
 					= link_to 'Forgot your password?', new_user_password_path
-
