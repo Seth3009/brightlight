@@ -8,6 +8,11 @@ nav.top-navbar
       li 
         a href="/"
           i.material-icons home
+      
+          
+            
+            
+                      
     ul.flush-right
       - if signed_in?
         li.right
@@ -36,6 +41,12 @@ nav.top-navbar
         a.dropdown-button href="#" data-activates="notification-list" data-beloworigin="true" data-alignment="right"  style="position: relative"
           i.material-icons.right style="margin-left: 0px" inbox 
           span.inbox-badge #{number_of_unread_message}
+      li.right
+          a href="https://docs.google.com/forms/d/e/1FAIpQLSfmPsKShUEuBmRGo55NIb_dyHHCsok04AYi4MRmF7-QVqboww/viewform" target="_blank"
+            span style="color:green;" eHAC form
+            i.material-icons.left style="margin-left: 0px; color:green;" verified_user
+           
+          
       li.fill-space
         = form_tag '/search', method: :get
           .input-field
@@ -128,3 +139,19 @@ ul#slide-out.side-nav
 
 #show-message-modal.modal.modal-fixed-footer
   #modal-message-content
+
+
+css:
+  .btn1 {
+    background-color: DodgerBlue; /* Blue background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 12px 16px; /* Some padding */
+    font-size: 16px; /* Set a font size */
+    cursor: pointer; /* Mouse pointer on hover */
+  }
+
+  /* Darker background on mouse-over */
+  .btn1:hover {
+    background-color: RoyalBlue;
+  }
