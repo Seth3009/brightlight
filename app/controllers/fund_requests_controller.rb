@@ -192,6 +192,7 @@ class FundRequestsController < ApplicationController
     authorize! :update, @fund_request
     respond_to do |format|
       if @fund_request.update(fund_request_params)
+        @fund_request.notify_deliver
         format.html { redirect_to @fund_request, notice: "Fund request delivered successfully"}
       else
         @error = 'Error updating fund request.'
@@ -221,6 +222,7 @@ class FundRequestsController < ApplicationController
     authorize! :update, @fund_request
     respond_to do |format|
       if @fund_request.update(fund_request_params)
+        @fund_request.notify_settlement
         format.html { redirect_to @fund_request, notice: "Fund request settlement success"}
       else
         @error = 'Error updating fund request.'

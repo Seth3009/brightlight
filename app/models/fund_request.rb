@@ -231,6 +231,29 @@ class FundRequest < ActiveRecord::Base
     save
   end
 
+
+  def notify_deliver
+    email = FundRequestEmailer.fund_request_delivered(self)
+    email.deliver_now
+    notification = Message.new_from_email(email)
+    notification.save
+    # self.status = FundRequest.status_code(:close)
+    # self.sent_to_purchasing = Date.today
+    self.is_transfered = true
+    save
+  end
+
+  def notify_settlement
+    email = FundRequestEmailer.fund_request_settled(self)
+    email.deliver_now
+    notification = Message.new_from_email(email)
+    notification.save
+    self.status = FundRequest.status_code(:close)
+    # self.sent_to_purchasing = Date.today
+    self.is_settled = true
+    save
+  end
+
   def send_overdue_reminder
     unless self.status.start_with? 'REMINDER SENT'
       email = FundRequestEmailer.reminder_for_finance(self)

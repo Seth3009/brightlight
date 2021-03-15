@@ -21,7 +21,7 @@ h4 Deliver Purchase Fund
           / = f.label :total_expense, "Total Delivered: "
           / = f.text_field :total_expense, value:@fund
           = f.hidden_field :receiver_id, value:current_user.employee.try(:id) 
-          = f.hidden_field :is_transfered, value:true
+          
   .toolbar.z-depth-1
     - unless @fund_request.is_transfered
       button.btn.waves-effect.waves-light type="submit" name="deliver" Submit      

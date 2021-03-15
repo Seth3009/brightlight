@@ -32,4 +32,22 @@ class FundRequestEmailer < ApplicationMailer
     requester_email = %("#{requester.name}" <#{requester.email}>)
     mail(to: FINANCE_EMAIL_ADDRESS, cc: requester_email, subject: "Overdue Reminder for Fund Request No. #{fund_request.id}")
   end
+
+  def fund_request_delivered(fund_request)
+    @fund_request = fund_request
+    @requester = fund_request.requester
+    requester_email = %("#{@requester.name}" <#{@requester.email}>)
+    # approvers = @fund_request.approvals.level(level)
+    # approvers_emails = approvers.map { |approval| %("#{approval.approver.employee.name}" <#{approval.approver.employee.email}>) }
+    mail(to: requester_email, cc: FINANCE_EMAIL_ADDRESS, subject: "Fund Request No. #{fund_request.id} has been delivered to #{@requester.name}.")
+  end
+
+  def fund_request_settled(fund_request)
+    @fund_request = fund_request
+    @requester = fund_request.requester
+    requester_email = %("#{@requester.name}" <#{@requester.email}>)
+    # approvers = @fund_request.approvals.level(level)
+    # approvers_emails = approvers.map { |approval| %("#{approval.approver.employee.name}" <#{approval.approver.employee.email}>) }
+    mail(to: requester_email, cc: FINANCE_EMAIL_ADDRESS, subject: "Fund Request No. #{fund_request.id} has been settled.")
+  end
 end
