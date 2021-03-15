@@ -43,6 +43,10 @@
                 i.material-icons visibility
               - if (can? :update, fund_request) and signed_in? and (current_user.admin? or current_user.finance?)
                 - if fund_request.aasm_state == 'approved' && fund_request.is_transfered == true
+                    - if fund_request.status.start_with? 'REMINDER SENT'
+                    - else
+                      = link_to reminder_fund_request_path(fund_request)
+                        i.material-icons email
                     = link_to settlement_fund_request_path(fund_request)
                       i.material-icons done_all
               - if fund_request.draft? && (can? :update, fund_request)

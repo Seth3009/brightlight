@@ -5,8 +5,9 @@ html
     meta name="viewport" content="width=device-width, initial-scale=1.0"
 
   body
-    div style="margin-left:30px; width=85%; font-size:16px"
-      p The following fund request has been approved and submitted to Finance.
+    div
+
+      p You have a pending fund request that requires your attention.
 
       table.description-list
         tbody
@@ -24,10 +25,12 @@ html
           tr 
             td Required Date
             td = @fund_request.date_needed
+          tr
+            td Link
+            td = link_to "Fund Request No. #{@fund_request.id}", @fund_request
 
-      p You can access the fund request from the following link.
-      p = link_to "Fund Request No. #{@fund_request.id}", @fund_request, style:"text-decoration:underline"
+      p You can access the approval page for the purchase request from the following link.
 
       p Thank you for using <i>Brightlight</i>. 
     
-    = render 'footer' 
+    = render 'footer'

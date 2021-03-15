@@ -44,7 +44,10 @@ ul.tabs.z-depth-1
   /   li.tab.col.s3
   /     a href='#tab5' Non budgeted
   li.tab.col.s3.add_border style="background-color:#A7FAA3; border-radius: 15px 15px 0 0;"
-    a href='#tab5' Delivered
+    a href='#tab5' 
+      |Delivered
+      - if current_user.finance? && @delivered_fund_requests.count > 0
+        span.emblem = @delivered_fund_requests.count
   li.tab.col.s3.add_border style="background-color:#59DF60; border-radius: 15px 15px 0 0;"
     a href='#tab6' Settled
 

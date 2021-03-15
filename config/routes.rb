@@ -363,6 +363,7 @@ Rails.application.routes.draw do
       get 'settlement'
       patch 'settlement_fund'
       get 'submit'
+      get 'reminder'
     end
   end 
 

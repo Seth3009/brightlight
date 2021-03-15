@@ -256,7 +256,7 @@ class FundRequest < ActiveRecord::Base
 
   def send_overdue_reminder
     unless self.status.start_with? 'REMINDER SENT'
-      email = FundRequestEmailer.reminder_for_finance(self)
+      email = FundRequestEmailer.reminder_for_requester(self)
       email.deliver_now
       notification = Message.new_from_email(email)
       notification.save

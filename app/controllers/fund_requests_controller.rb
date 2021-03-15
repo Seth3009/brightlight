@@ -1,5 +1,5 @@
 class FundRequestsController < ApplicationController
-  before_action :set_fund_request, only: [:show, :edit, :submit, :update, :update_approval, :destroy, :approve, :deliver, :deliver_fund, :settlement, :settlement_fund]
+  before_action :set_fund_request, only: [:show, :edit, :submit, :update, :update_approval, :destroy, :approve, :deliver, :deliver_fund, :settlement, :settlement_fund, :reminder]
   # before_action :set_fund_request, only: [:show, :edit, :update, :destroy]
 
   # GET /fund_requests
@@ -103,6 +103,13 @@ class FundRequestsController < ApplicationController
     authorize! :update, @fund_request
     @fund_request.submit!
     redirect_to @fund_request, notice: 'Fund request has been saved and sent for approval.' 
+  end
+
+   # GET /fund_request/1/reminder
+   def reminder
+    authorize! :update, @fund_request
+    @fund_request.send_overdue_reminder
+    redirect_to @fund_request, notice: 'Fund request settlement reminder has been sent.' 
   end
 
   # PATCH/PUT /fund_requests/1
