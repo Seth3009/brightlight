@@ -41,10 +41,7 @@
             td.center
               = link_to fund_request_path(fund_request)
                 i.material-icons visibility
-              - if (can? :update, fund_request) and signed_in? and (current_user.admin? or current_user.finance?)
-                - if fund_request.aasm_state == 'approved' && fund_request.is_transfered == true
-                    = link_to settlement_fund_request_path(fund_request)
-                      i.material-icons done_all
+              
               - if fund_request.draft? && (can? :update, fund_request)
                 = link_to edit_fund_request_path(fund_request)
                   i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit

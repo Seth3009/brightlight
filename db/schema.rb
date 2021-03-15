@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201203013849) do
+ActiveRecord::Schema.define(version: 20210222045551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1134,6 +1134,9 @@ ActiveRecord::Schema.define(version: 20201203013849) do
     t.date     "supv_approved_date"
     t.date     "budget_approved_date"
     t.decimal  "total_expense"
+    t.boolean  "is_settled",            default: false
+    t.date     "settlement_date"
+    t.string   "settlement_code"
   end
 
   create_table "grade_levels", force: :cascade do |t|

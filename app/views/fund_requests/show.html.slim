@@ -33,7 +33,7 @@ nav
       .collapsible-header.active
         | Detail
         i.material-icons.arrow.left chevron_right
-      .collapsible-body
+      .collapsible-body        
         ul.collection
           li.row.collection-item
             .col.s3.m2
@@ -65,7 +65,7 @@ nav
           li.row.collection-item
             .col.s6.m2
               .label Total Amount
-              .item = @fund_request.amount 
+              .item = @fund_request.try(:amount).present? ? sprintf("%0.1f", @fund_request.try(:amount)).gsub(/(\d)(?=\d{3}+\.)/, '\1,') : "--"
           li.row.collection-item
             .col.s6.m2
               .label In Cash?
@@ -109,14 +109,21 @@ nav
                 .item = @fund_request.event.description
           li.row.collection-item
             .col.s6.m2
-              .label Delivered to
-              .item = @fund_request.receiver || "--"
-            .col.s6.m4
-              .label Total Expense
-              .item = @fund_request.try(:total_expense) || "--"
-            .col.s6.m6
               .label Delivered date
               .item = @fund_request.try(:received_date) || "--"
+            .col.s6.m2
+              .label Delivered to
+              .item = @fund_request.receiver || "--"
+            .col.s6.m2
+              .label Settlement date
+              .item = @fund_request.settlement_date || "--"
+            .col.s6.m2
+              .label Total Expense
+              .item = @fund_request.try(:total_expense).present? ? sprintf("%0.1f", @fund_request.try(:total_expense)).gsub(/(\d)(?=\d{3}+\.)/, '\1,') : "--"
+            .col.s6.m4
+              .label Settlement Code
+              .item = @fund_request.try(:settlement_code) || "--"
+            
           
     li
       .collapsible-header.active
@@ -159,6 +166,10 @@ nav
             i.material-icons.left add
       .collapsible-body
         = render 'comments/comment_widget'
+
+
+
+
 
 javascript:
   $(document).on('ready page:load', function(){

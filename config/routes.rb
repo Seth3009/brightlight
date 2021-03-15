@@ -360,6 +360,8 @@ Rails.application.routes.draw do
       patch 'update_account'
       get 'deliver'
       patch 'deliver_fund'
+      get 'settlement'
+      patch 'settlement_fund'
       get 'submit'
     end
   end 

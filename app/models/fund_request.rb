@@ -55,8 +55,9 @@ class FundRequest < ActiveRecord::Base
   scope :approved, lambda { where("aasm_state = 'approved' OR aasm_state = 'open' OR aasm_state ='overdue'")}
   scope :draft, lambda { where(aasm_state: 'draft') }
   scope :rejected, lambda { where(aasm_state: 'rejected') }
-  scope :delivered, lambda { where(is_transfered: true) }
+  scope :delivered, lambda { where(is_transfered: true, is_settled: false) }
   scope :not_delivered, lambda { where(is_transfered: nil) }
+  scope :settled, lambda { where(is_settled: true, is_transfered: true) }
   scope :active, lambda { where(active: true) }
   scope :for_dept, lambda { |dept_id| where(department_id: dept_id) }
 

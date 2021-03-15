@@ -45,6 +45,8 @@ ul.tabs.z-depth-1
   /     a href='#tab5' Non budgeted
   li.tab.col.s3.add_border style="background-color:#A7FAA3; border-radius: 15px 15px 0 0;"
     a href='#tab5' Delivered
+  li.tab.col.s3.add_border style="background-color:#59DF60; border-radius: 15px 15px 0 0;"
+    a href='#tab6' Settled
 
 
 .card-panel.compact
@@ -65,6 +67,9 @@ ul.tabs.z-depth-1
   /     == render partial: 'fund_table', locals: { fund_requests: @non_budgeted }
   #tab5.tab-content
     == render partial: 'fund_delivered_table', locals: { fund_requests: @delivered_fund_requests }
+  
+  #tab6.tab-content
+    == render partial: 'fund_settlement', locals: { fund_requests: @settled_fund_requests }
 
 #show-modal.modal.modal-fixed-footer
   .modal-content

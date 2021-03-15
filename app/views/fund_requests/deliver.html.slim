@@ -9,7 +9,7 @@ h4 Deliver Purchase Fund
     .nav-wrapper
       .brand-logo style="margin-left: 20px; font-size:1.5em"
         | Deliver Fund
-  .card-panel
+  .card-panel.hide
     .row.red.lighten-4
         .input-field.col.s6.m2
           = current_user.employee.try(:name)
@@ -18,8 +18,8 @@ h4 Deliver Purchase Fund
           = f.date_field :received_date, value: Date.today
         
         .input-field.col.s6.m2
-          = f.label :total_expense, "Total Expenses"
-          = f.text_field :total_expense
+          / = f.label :total_expense, "Total Delivered: "
+          / = f.text_field :total_expense, value:@fund
           = f.hidden_field :receiver_id, value:current_user.employee.try(:id) 
           = f.hidden_field :is_transfered, value:true
   .toolbar.z-depth-1
@@ -31,5 +31,6 @@ h4 Deliver Purchase Fund
     = link_to 'Cancel', fund_requests_path, class: "waves-effect waves-light btn-flat"
 
   
-  
+css:
+ .hide {display: none;}
  

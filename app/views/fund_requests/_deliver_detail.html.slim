@@ -80,14 +80,18 @@
                 .item = @fund_request.event.description
           li.row.collection-item
             .col.s6.m2
+              .label Delivered date
+              .item = @fund_request.try(:received_date) || "--"
+            .col.s6.m4
               .label Delivered to
-              .item = @fund_request.receiver || "--"
+              .item = @fund_request.receiver || "--"            
+            
+            .col.s6.m2
+              .label Settlement date
+              .item = @fund_request.try(:settlement_date) || "--"
             .col.s6.m4
               .label Total Expense
               .item = @fund_request.try(:total_expense) || "--"
-            .col.s6.m6
-              .label Delivered date
-              .item = @fund_request.try(:received_date) || "--"
   .red-text
     em *
       Note: If your request is already listed in this year budget, you only need acknowledgement from your supervisor.
