@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200508045259) do
+ActiveRecord::Schema.define(version: 20210222045551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1087,6 +1087,56 @@ ActiveRecord::Schema.define(version: 20200508045259) do
     t.boolean  "is_active",   default: true
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+  end
+
+  create_table "fund_requests", force: :cascade do |t|
+    t.integer  "requester_id"
+    t.date     "date_requested"
+    t.date     "date_needed"
+    t.string   "description"
+    t.decimal  "amount"
+    t.boolean  "is_cash"
+    t.string   "transfer_to"
+    t.string   "bank_name"
+    t.string   "bank_account_number"
+    t.string   "bank_city"
+    t.boolean  "is_budgeted"
+    t.string   "budget_notes"
+    t.boolean  "is_spv_approved"
+    t.string   "spv_approval_notes"
+    t.date     "spv_approval_date"
+    t.boolean  "is_hos_approved"
+    t.string   "hos_approval_notes"
+    t.date     "hos_approval_date"
+    t.integer  "receiver_id"
+    t.date     "received_date"
+    t.boolean  "is_transfered"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.boolean  "is_submitted",          default: false, null: false
+    t.date     "date_submitted"
+    t.boolean  "is_fin_canceled",       default: false, null: false
+    t.boolean  "is_employee_canceled",  default: false, null: false
+    t.string   "aasm_state"
+    t.string   "status"
+    t.integer  "event_id"
+    t.integer  "created_by_id"
+    t.integer  "last_updated_by_id"
+    t.integer  "department_id"
+    t.integer  "budget_approver_id"
+    t.integer  "supervisor_id"
+    t.integer  "req_approver_id"
+    t.date     "sent_to_supv"
+    t.date     "sent_for_bgt_approval"
+    t.integer  "account_id"
+    t.string   "budget_type"
+    t.integer  "class_budget_id"
+    t.date     "supv_approved_date"
+    t.date     "budget_approved_date"
+    t.decimal  "total_expense"
+    t.boolean  "is_settled",            default: false
+    t.date     "settlement_date"
+    t.string   "settlement_code"
   end
 
   create_table "grade_levels", force: :cascade do |t|
@@ -2376,6 +2426,13 @@ ActiveRecord::Schema.define(version: 20200508045259) do
   add_foreign_key "food_packages_food_suppliers", "food_packages"
   add_foreign_key "food_packages_food_suppliers", "food_suppliers"
   add_foreign_key "food_packs", "academic_years"
+  add_foreign_key "fund_requests", "departments"
+  add_foreign_key "fund_requests", "employees", column: "budget_approver_id"
+  add_foreign_key "fund_requests", "employees", column: "req_approver_id"
+  add_foreign_key "fund_requests", "employees", column: "requester_id"
+  add_foreign_key "fund_requests", "employees", column: "supervisor_id"
+  add_foreign_key "fund_requests", "users", column: "created_by_id"
+  add_foreign_key "fund_requests", "users", column: "last_updated_by_id"
   add_foreign_key "invoices", "academic_years"
   add_foreign_key "invoices", "students"
   add_foreign_key "invoices", "users"

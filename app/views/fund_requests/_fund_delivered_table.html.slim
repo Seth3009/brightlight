@@ -1,0 +1,66 @@
+-unless fund_requests.blank?
+  .horizontal-scroll
+    table.compact.striped
+      thead
+        tr      
+          th Date request
+          th Date needed
+          th Description
+          th Amount
+          th Total Expense 
+          th Payment type
+          th Budgeted?
+          th.center Actions
+
+      tbody
+        - fund_requests.each do |fund_request|
+          tr
+            td = fund_request.date_requested
+            td = fund_request.date_needed
+            td = fund_request.description
+            td = fund_request.amount
+            td = fund_request.total_expense || "--" 
+            td.center              
+              - if fund_request.is_cash == true
+                p.boks style="background-color:green;"
+                  | Cash
+              - else
+                p.boks style="background-color:yellow;"
+                  | Transfer
+            td.center              
+              - if fund_request.is_budgeted == true
+                p.boks style="background-color:green;"
+                  | Yes
+              - else
+                p.boks style="background-color:red; color:white"
+                  | No
+                        
+              
+                
+            / td = fund_request.is_transfered
+            td.center
+              = link_to fund_request_path(fund_request)
+                i.material-icons visibility
+              - if (can? :update, fund_request) and signed_in? and (current_user.admin? or current_user.finance?)
+                - if fund_request.aasm_state == 'approved' && fund_request.is_transfered == true
+                    - if fund_request.status.start_with? 'REMINDER SENT'
+                    - else
+                      = link_to reminder_fund_request_path(fund_request)
+                        i.material-icons email
+                    = link_to settlement_fund_request_path(fund_request)
+                      i.material-icons done_all
+              - if fund_request.draft? && (can? :update, fund_request)
+                = link_to edit_fund_request_path(fund_request)
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Edit" edit
+              - if fund_request.draft?
+                = link_to fund_request, data: {:confirm => 'Are you sure?'}, :method => :delete, class:'red-text'
+                  i.material-icons.tooltipped data-position="bottom" data-delay="50" data-tooltip="Delete" delete
+              
+css:
+  .boks {
+    box-sizing: border-box;
+    width: 60pt !important;
+    border: solid black 1px;
+    border-radius: 2px 10px;
+    margin:5pt;
+  }

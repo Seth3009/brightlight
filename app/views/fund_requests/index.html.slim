@@ -1,0 +1,89 @@
+- title 'Fund Requests'
+h4 Fund Requests
+
+nav
+  .nav-wrapper
+    -if @i_am_approver
+      ul
+        li
+          a.dropdown-button href="#!" data-activates="show-options"
+            span = params[:my] == 'action' ? "Showing my approvals" : "Showing my requests"
+            i.material-icons.right arrow_drop_down
+    ul.right
+      li
+        = link_to new_fund_request_path
+          | New
+          i.material-icons.left add
+
+ul#show-options.dropdown-content
+  li
+    = link_to "Show my approvals", fund_requests_path(my: 'action') 
+  li
+    = link_to "Show my Requests", fund_requests_path(my: 'list') 
+
+ul.tabs.z-depth-1
+  li.tab.col.s3.add_border style="background-color:#FFF; border-radius: 15px 15px 0 0;"
+    a.active href='#tab1' 
+      |Draft      
+      - if @draft_fund_requests.count > 0
+        span.emblem = @draft_fund_requests.count
+  li.tab.col.s3.add_border style="background-color:#F3F998; border-radius: 15px 15px 0 0;"
+    a href='#tab2' 
+      |Pending
+      - if @pending_approval.count > 0
+        span.emblem = @pending_approval.count
+  li.tab.col.s3.add_border style="background-color:#94E7F9; border-radius: 15px 15px 0 0;"
+    a href='#tab3'
+      |Approved
+      - if current_user.finance? && @approved_fund_requests.count > 0
+        span.emblem = @approved_fund_requests.count
+
+  li.tab.col.s3.add_border style="background-color:#FFA1A1; border-radius: 15px 15px 0 0;"
+    a href='#tab4' Rejected
+  / - if can? :view_unbudgeted, FundRequest
+  /   li.tab.col.s3
+  /     a href='#tab5' Non budgeted
+  li.tab.col.s3.add_border style="background-color:#A7FAA3; border-radius: 15px 15px 0 0;"
+    a href='#tab5' 
+      |Delivered
+      - if current_user.finance? && @delivered_fund_requests.count > 0
+        span.emblem = @delivered_fund_requests.count
+  li.tab.col.s3.add_border style="background-color:#59DF60; border-radius: 15px 15px 0 0;"
+    a href='#tab6' Settled
+
+
+.card-panel.compact
+  #tab1.tab-content
+    == render partial: 'fund_table', locals: { fund_requests: @draft_fund_requests }
+  
+  #tab2.tab-content
+    == render partial: 'fund_table', locals: { fund_requests: @pending_approval }
+
+  #tab3.tab-content
+    == render partial: 'fund_approved', locals: { fund_requests: @approved_fund_requests }
+      
+  #tab4.tab-content
+    == render partial: 'fund_table', locals: { fund_requests: @rejected_fund_requests }
+  
+  / - if can? :view_unbudgeted, FundRequest
+  /   #tab5.tab-content
+  /     == render partial: 'fund_table', locals: { fund_requests: @non_budgeted }
+  #tab5.tab-content
+    == render partial: 'fund_delivered_table', locals: { fund_requests: @delivered_fund_requests }
+  
+  #tab6.tab-content
+    == render partial: 'fund_settlement', locals: { fund_requests: @settled_fund_requests }
+
+#show-modal.modal.modal-fixed-footer
+  .modal-content
+    #modal-content
+  .modal-footer
+    a.modal-action.modal-close.waves-effect.waves-light.btn-flat href="#!" Close
+
+css:
+  .add_border {
+    border-color: grey;
+    border-style: solid;
+    border-width: 1px 1px 0 1px;
+    margin-left: 2px;
+  }

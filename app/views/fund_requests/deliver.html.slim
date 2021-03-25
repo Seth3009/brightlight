@@ -1,0 +1,36 @@
+- title 'Deliver Fund Request'
+
+h4 Deliver Purchase Fund
+= render 'deliver_detail'
+
+= form_for @fund_request, url: {action: :deliver_fund} do |f|
+
+  nav
+    .nav-wrapper
+      .brand-logo style="margin-left: 20px; font-size:1.5em"
+        | Deliver Fund
+  .card-panel.hide
+    .row.red.lighten-4
+        .input-field.col.s6.m2
+          = current_user.employee.try(:name)
+        .input-field.col.s6.m2
+          = f.label :received_date, class: 'active'
+          = f.date_field :received_date, value: Date.today
+        
+        .input-field.col.s6.m2
+          / = f.label :total_expense, "Total Delivered: "
+          / = f.text_field :total_expense, value:@fund
+          = f.hidden_field :receiver_id, value:@employee.id
+          
+  .toolbar.z-depth-1
+    - unless @fund_request.is_transfered
+      button.btn.waves-effect.waves-light type="submit" name="deliver" Submit      
+      
+    - else
+      button.btn type="submit" data-disable=true disabled=true Already delivered
+    = link_to 'Cancel', fund_requests_path, class: "waves-effect waves-light btn-flat"
+
+  
+css:
+ .hide {display: none;}
+ 

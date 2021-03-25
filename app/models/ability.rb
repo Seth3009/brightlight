@@ -75,6 +75,19 @@ class Ability
     can :check, PurchaseReceive do |pr| 
       pr.purchase_order.requestor == @user.employee
     end
+
+    can [:create,:read,:update,:destroy], FundRequest, department: @user.employee.department
+    
+    can_manage_own_fund_request
+    can :review, FundRequest
+    can :approve, FundRequest do |req|
+      req.approvers.map {|a| a.employee.id}.include? @user.employee.id          # User can only approve requisition that is sent to the respective user
+    end
+    can :view_unbudgeted, FundRequest do |req|
+      @user.department == @hos_dept
+    end
+   
+
     can :review, LeaveRequest
     can [:approve, :read, :update], LeaveRequest do |lr|
       lr.employee.approver_id == @user.employee.id || lr.employee.approver_assistant_id == @user.employee.id  # Manager can only approve leave requests of employees in his/her department
@@ -106,7 +119,8 @@ class Ability
     end
     can [:create,:read,:update], Event, creator: @user.employee
     can_manage_own_leave_request
-    can_manage_own_requisition    
+    can_manage_own_requisition  
+    can_manage_own_fund_request  
   end
 
   def staff
@@ -123,7 +137,8 @@ class Ability
       pr.purchase_order.requestor == @user.employee
     end
     can_manage_own_leave_request
-    can_manage_own_requisition    
+    can_manage_own_requisition 
+    can_manage_own_fund_request   
   end
 
   def hrd
@@ -157,11 +172,16 @@ class Ability
     can :manage, PurchaseReceive
   end
 
+  def finance
+    can [:update,:process], FundRequest
+  end
+
   def buyer
   end
 
   def approve_budget
     can :approve_budget, Requisition
+    can :approve_budget, FundRequest
   end
   
   def administrative
@@ -196,6 +216,11 @@ class Ability
     def can_manage_own_requisition
       can [:create, :read, :cancel], Requisition, requester: @user.employee
       can [:update, :destroy], Requisition do |req| req.requester == @user.employee && req.draft? end
+    end
+
+    def can_manage_own_fund_request
+      can [:create, :read, :cancel], FundRequest, requester: @user.employee
+      can [:update, :destroy], FundRequest do |req| req.requester == @user.employee && req.draft? end
     end
 
     def can_view_own_account
