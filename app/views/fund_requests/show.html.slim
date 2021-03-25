@@ -122,9 +122,10 @@ nav
               .label Total Expense
               .item = @fund_request.try(:total_expense).present? ? sprintf("%0.1f", @fund_request.try(:total_expense)).gsub(/(\d)(?=\d{3}+\.)/, '\1,') : "--"
             .col.s6.m4
-              .label Settlement Code
-              .item = @fund_request.try(:settlement_code) || "--"
-            
+              - if (can? :update, @fund_request) and signed_in? and (current_user.admin? or current_user.finance?)
+                .label Settlement Code
+                .item = @fund_request.try(:settlement_code) || "--"
+              
           
     li
       .collapsible-header.active

@@ -20,7 +20,7 @@ h4 Deliver Purchase Fund
         .input-field.col.s6.m2
           / = f.label :total_expense, "Total Delivered: "
           / = f.text_field :total_expense, value:@fund
-          = f.hidden_field :receiver_id, value:current_user.employee.try(:id) 
+          = f.hidden_field :receiver_id, value:@employee.id
           
   .toolbar.z-depth-1
     - unless @fund_request.is_transfered

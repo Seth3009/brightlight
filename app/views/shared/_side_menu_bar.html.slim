@@ -150,6 +150,18 @@ li
 					- if can? :manage, Account
 						= link_to 'Accounts', accounts_path
 
+- if can? :create, FundRequest
+	li 
+		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons monetization_on
+			i.mdi-navigation-chevron-right.right
+			| Finance
+		.collapsible-body
+			ul
+				li				
+					= link_to 'Fund Requests', fund_requests_path
+					
+
 - if can? :create, LeaveRequest
 	li 
 		.collapsible-header.waves-effect.waves-cyan
@@ -168,28 +180,30 @@ li
 				li	
 					a href="http://cahayabangsa.org/formlink/healthallowance.php" target="_blank"
 						| Health Allowance Form
-li
-	.collapsible-header.waves-effect.waves-cyan
-		i.material-icons school
-		i.mdi-navigation-chevron-right.right
-		| School
-	.collapsible-body
-		ul
-			-if can? :manage, GradeLevel
-				li
-					= link_to 'Grade Levels', grade_levels_path
-			-if can? :manage, Department
-				li
-					= link_to 'Departments', departments_path
-			-if can? :manage, Course
-				li
-					= link_to 'Courses', courses_path
-			-if can? :manage, Event
-				li
-					= link_to 'Events', events_path
-			-if can? :manage, StudentTardy
-				li
-					= link_to 'Student Tardy', student_tardies_url
+
+-if (can? :manage, GradeLevel) || (can? :manage, Department) || (can? :manage, Course) || (can? :manage, Event) || (can? :manage, StudentTardy)
+	li
+		.collapsible-header.waves-effect.waves-cyan
+			i.material-icons school
+			i.mdi-navigation-chevron-right.right
+			| School
+		.collapsible-body
+			ul
+				-if can? :manage, GradeLevel
+					li
+						= link_to 'Grade Levels', grade_levels_path
+				-if can? :manage, Department
+					li
+						= link_to 'Departments', departments_path
+				-if can? :manage, Course
+					li
+						= link_to 'Courses', courses_path
+				-if can? :manage, Event
+					li
+						= link_to 'Events', events_path
+				-if can? :manage, StudentTardy
+					li
+						= link_to 'Student Tardy', student_tardies_url
 - if can? :manage, DiknasReportCard
 	li
 		.collapsible-header.waves-effect.waves-cyan
